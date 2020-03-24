@@ -129,8 +129,6 @@ abstract class Manager extends Application
 
             if ($previewExists)
             {
-                $classes = ($isDisplayAction ? 'selected' : 'not-selected');
-
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('DisplayPreview'),
@@ -138,7 +136,7 @@ abstract class Manager extends Application
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
                         SubButton::DISPLAY_ICON_AND_LABEL,
                         false,
-                        $classes));
+                        array(), null, ($isDisplayAction ? true : false)));
             }
 
             if ($isDisplayAction && $previewExists && $this->getPreview()->supports_reset())
@@ -166,7 +164,7 @@ abstract class Manager extends Application
             foreach ($views as $view)
             {
                 $isRenditionAction = $this->get_action() == self::ACTION_RENDITION;
-                $classes = ($isRenditionAction && $this->getCurrentView() == $view ? 'selected' : 'not-selected');
+                $isActive = ($isRenditionAction && $this->getCurrentView() == $view ? true : false);
 
                 $dropdownButton->addSubButton(
                     new SubButton(
@@ -179,14 +177,14 @@ abstract class Manager extends Application
                                 self::PARAM_VIEW => $view)),
                         SubButton::DISPLAY_ICON_AND_LABEL,
                         false,
-                        $classes));
+                        array(), null, $isActive));
             }
 
             if ($this->has_reporting())
             {
                 $dropdownButton->addSubButton(new SubButtonDivider());
 
-                $classes = (self::PARAM_ACTION == self::ACTION_REPORTING ? 'selected' : 'not-selected');
+                $isActive = (self::PARAM_ACTION == self::ACTION_REPORTING ? true : false);
 
                 $dropdownButton->addSubButton(
                     new SubButton(
@@ -195,7 +193,7 @@ abstract class Manager extends Application
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)),
                         SubButton::DISPLAY_ICON_AND_LABEL,
                         false,
-                        $classes));
+                        array(), null, $isActive));
             }
         }
 

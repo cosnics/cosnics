@@ -23,15 +23,14 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -101,38 +100,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Gets the table which shows the learning objects in the currently active category
-     */
-    private function get_content_objects_html()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $renderer = ContentObjectRenderer::factory($this->get_renderer(), $this);
-
-        return $renderer->as_html();
-    }
-
-    public function get_renderer()
-    {
-        $renderer = Request::get(self::PARAM_RENDERER);
-
-        if ($renderer && in_array($renderer, $this->get_available_renderers()))
-        {
-            return $renderer;
-        }
-        else
-        {
-            $renderers = $this->get_available_renderers();
-
-            return $renderers[0];
-        }
-    }
-
-    public function get_available_renderers()
-    {
-        return array(
-            ContentObjectRenderer::TYPE_TABLE, ContentObjectRenderer::TYPE_GALLERY,
-            ContentObjectRenderer::TYPE_SLIDESHOW
-        );
+        $breadcrumbtrail->add_help('repository_browser');
     }
 
     public function getButtonToolbarRenderer()
@@ -213,12 +183,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                     if ($this->get_renderer() != $renderer)
                     {
                         $action = $this->get_url(array(self::PARAM_RENDERER => $renderer));
-                        $classes = 'not-selected';
+                        $isActive = false;
                     }
                     else
                     {
                         $action = '';
-                        $classes = 'selected';
+                        $isActive = true;
                     }
 
                     $viewActions->addSubButton(
@@ -226,7 +196,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, Utilities::COMMON_LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, $classes
+                            ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
                         )
                     );
                 }
@@ -239,6 +209,26 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    public function get_additional_parameters()
+    {
+        return parent::get_additional_parameters(
+            array(
+                self::PARAM_RENDERER,
+                ContentObject::PROPERTY_PARENT_ID,
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID
+            )
+        );
+    }
+
+    public function get_available_renderers()
+    {
+        return array(
+            ContentObjectRenderer::TYPE_TABLE,
+            ContentObjectRenderer::TYPE_GALLERY,
+            ContentObjectRenderer::TYPE_SLIDESHOW
+        );
     }
 
     public function get_condition()
@@ -280,24 +270,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         return new AndCondition($conditions);
     }
 
-    private function get_parent_id()
+    /**
+     * Gets the table which shows the learning objects in the currently active category
+     */
+    private function get_content_objects_html()
     {
-        return FilterData::getInstance($this->getWorkspace())->get_filter_property(FilterData::FILTER_CATEGORY);
-    }
+        $renderer = ContentObjectRenderer::factory($this->get_renderer(), $this);
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_browser');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent::get_additional_parameters(
-            array(
-                self::PARAM_RENDERER, ContentObject::PROPERTY_PARENT_ID,
-                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID
-            )
-        );
+        return $renderer->as_html();
     }
 
     /**
@@ -307,6 +287,27 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_filter_type()
     {
         return TypeSelector::get_selection();
+    }
+
+    private function get_parent_id()
+    {
+        return FilterData::getInstance($this->getWorkspace())->get_filter_property(FilterData::FILTER_CATEGORY);
+    }
+
+    public function get_renderer()
+    {
+        $renderer = Request::get(self::PARAM_RENDERER);
+
+        if ($renderer && in_array($renderer, $this->get_available_renderers()))
+        {
+            return $renderer;
+        }
+        else
+        {
+            $renderers = $this->get_available_renderers();
+
+            return $renderers[0];
+        }
     }
 
     /**

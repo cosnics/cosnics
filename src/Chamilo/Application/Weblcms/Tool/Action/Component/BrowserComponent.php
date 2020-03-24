@@ -518,19 +518,19 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $action = $this->get_url(
                             array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => $browser_type)
                         );
-                        $classes = 'not-selected';
+                        $isActive = false;
                     }
                     else
                     {
                         $action = '';
-                        $classes = 'selected';
+                        $isActive = true;
                     }
 
                     $filterActions[] = new SubButton(
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
                             'View', null, Utilities::COMMON_LIBRARIES
-                        ), null, $action, Button::DISPLAY_LABEL, false, $classes
+                        ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
                     );
                 }
 
@@ -553,40 +553,37 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->isCourseAdmin())
             {
                 $isSelected =
-                    ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL ? 'selected' :
-                        'not-selected');
+                    ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL ? true:false);
 
                 $filterActions[] = new SubButton(
                     Translation::get('AllPublications'), null, $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL
                     )
-                ), Button::DISPLAY_LABEL, false, $isSelected
+                ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
                 );
             }
 
             $isSelected =
-                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME ? 'selected' :
-                    'not-selected');
+                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME ? true:false);
 
             $filterActions[] = new SubButton(
                 Translation::get('PublishedForMe'), null, $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME
                 )
-            ), Button::DISPLAY_LABEL, false, $isSelected
+            ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
             );
 
             $isSelected =
-                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME ? 'selected' :
-                    'not-selected');
+                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME ? true:false);
 
             $filterActions[] = new SubButton(
                 Translation::get('MyPublications'), null, $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME
                 )
-            ), Button::DISPLAY_LABEL, false, $isSelected
+            ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
             );
 
             $filterAction->addSubButtons($filterActions);

@@ -245,7 +245,6 @@ class GalleryHTMLTable extends HtmlTable
                 $label = Translation::get(
                     (string) StringUtilities::getInstance()->createString($property->get_name())->upperCamelize());
                 $isSelected = $currentFirstOrderColumn == $propertyIndex;
-                $classes = ($isSelected ? 'selected' : 'not-selected');
 
                 $subButtons[] = new SubButton(
                     $label,
@@ -253,7 +252,7 @@ class GalleryHTMLTable extends HtmlTable
                     $propertyUrl->getUrl(),
                     SubButton::DISPLAY_LABEL,
                     false,
-                    $classes);
+                    array(), null, $isSelected);
             }
         }
 
@@ -282,7 +281,6 @@ class GalleryHTMLTable extends HtmlTable
             $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = array(SORT_ASC);
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
-            $classes = ($isSelected ? 'selected' : 'not-selected');
 
             $subButtons[] = new SubButton(
                 Translation::get('ASC'),
@@ -290,12 +288,11 @@ class GalleryHTMLTable extends HtmlTable
                 $propertyUrl->getUrl(),
                 SubButton::DISPLAY_LABEL,
                 false,
-                $classes);
+                array(), null, $isSelected);
 
             $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = SORT_DESC;
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
-            $classes = ($isSelected ? 'selected' : 'not-selected');
 
             $subButtons[] = new SubButton(
                 Translation::get('DESC'),
@@ -303,7 +300,7 @@ class GalleryHTMLTable extends HtmlTable
                 $propertyUrl->getUrl(),
                 SubButton::DISPLAY_LABEL,
                 false,
-                $classes);
+                array(), null, $isSelected);
         }
 
         return $subButtons;

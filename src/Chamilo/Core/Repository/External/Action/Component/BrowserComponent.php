@@ -170,12 +170,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $action = $this->get_url(
                             array(\Chamilo\Core\Repository\External\Manager::PARAM_RENDERER => $renderer)
                         );
-                        $classes = '';
+                        $isActive = false;
                     }
                     else
                     {
                         $action = '';
-                        $classes = 'selected';
+                        $isActive = true;
                     }
 
                     $viewActions->addSubButton(
@@ -183,7 +183,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, Utilities::COMMON_LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, $classes
+                            ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
                         )
                     );
                 }

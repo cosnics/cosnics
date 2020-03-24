@@ -10,7 +10,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
  */
 class SubButtonRenderer extends AbstractButtonRenderer
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ActionButtonRendererTrait;
+    use ActionButtonRendererTrait;
 
     /**
      *
@@ -20,7 +20,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
     {
         $html = array();
 
-        $html[] = '<li>';
+        $html[] = '<li' . ($this->getButton()->isActive() ? ' class="active"' : '') . '>';
         $html[] = parent::render();
         $html[] = '</li>';
 
@@ -37,7 +37,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
 
         $classes[] = $this->getButton()->getClasses();
 
-        if (! $this->getButton()->getAction())
+        if (!$this->getButton()->getAction())
         {
             $classes[] = 'disabled';
         }

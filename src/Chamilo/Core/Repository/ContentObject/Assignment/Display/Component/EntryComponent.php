@@ -7,14 +7,16 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\FormHandler\SetScoreFormHandler;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -35,6 +37,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 
@@ -45,7 +48,7 @@ use Symfony\Component\Form\FormInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport, TableSupport
+class EntryComponent extends Manager implements FeedbackSupport, TableSupport
 {
 
     /**
@@ -59,15 +62,15 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected $score;
 
     /**
+     * @var EntryNavigator
+     */
+    protected $entryNavigator;
+
+    /**
      *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
-
-    /**
-     * @var EntryNavigator
-     */
-    protected $entryNavigator;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -97,28 +100,20 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         );
     }
 
-    /**
-     *
-     */
-    protected function initializeEntry()
+    protected function buildBridgeServices()
     {
-        try
-        {
-            parent::initializeEntry();
-        }
-        catch (\Exception $ex)
-        {
-            $this->entry =
-                $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
-        }
+        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
+        $assignmentFeedbackServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
 
-        if (!$this->entry instanceof Entry)
-        {
-            $breadcrumbTrail = BreadcrumbTrail::getInstance();
-            $breadcrumbTrail->get_last()->set_name(
-                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
-            );
-        }
+        $feedbackServiceBridge = new FeedbackServiceBridge($assignmentFeedbackServiceBridge);
+        $feedbackServiceBridge->setEntry($this->entry);
+
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
+
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
     }
 
     /**
@@ -143,245 +138,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     * @param FormInterface $scoreForm
-     *
-     * @return array|string[]
-     */
-    protected function getTemplateProperties(FormInterface $scoreForm = null)
-    {
-        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
-        $assignment = $this->get_root_content_object();
-
-        $baseParameters = [
-            'HAS_ENTRY' => false, 'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
-                $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
-            ), 'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
-            'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
-            'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
-            'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
-            'ASSIGNMENT_RENDITION' => $this->renderAssignment(), 'ATTACHMENT_VIEWER_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT, self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
-                ]
-            )
-        ];
-
-        $baseParameters = $this->getAvailableEntitiesParameters($baseParameters);
-
-        if (!$this->getEntry() instanceof Entry)
-        {
-            return $baseParameters;
-        }
-
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
-
-        $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
-        $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
-
-        $this->buildBridgeServices();
-
-        $feedbackManager = $this->getApplicationFactory()->getApplication(
-            "Chamilo\Core\Repository\Feedback", $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
-        );
-
-        $feedbackManagerHtml = $feedbackManager->run();
-
-        $contentObjects = $assignment->getAutomaticFeedbackObjects();
-
-        $extendParameters = [
-            'HAS_ENTRY' => true, 'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
-                $this->getEntry()->getContentObject()->get_title() :
-                Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
-            'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
-            'FEEDBACK_MANAGER' => $feedbackManagerHtml, 'FEEDBACK_COUNT' => $this->count_feedbacks(),
-            'SUBMITTED_DATE' => $submittedDate,
-            'SUBMITTED_BY' => $this->getUserService()->getUserFullNameByIdentifier($this->getEntry()->getUserId()),
-            'SCORE_FORM' => $scoreForm->createView(), 'SCORE' => $this->getScore(),
-            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
-            'ENTRY_TABLE' => $this->renderEntryTable(),
-            'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
-                $this->getEntityType(), $this->getEntityIdentifier()
-            ), 'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
-            'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
-            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects, 'UPLOAD_ENTRY_ATTACHMENT_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_UPLOAD_ENTRY_ATTACHMENT,
-                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
-                ]
-            ), 'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT
-                ]
-            ), 'ATTACHMENT_VIEWER_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
-                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__', self::PARAM_ENTRY_ID => $this->getEntry()->getId()
-                ]
-            ), 'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
-            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(
-                ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
-            )
-        ];
-
-        return array_merge($baseParameters, $extendParameters);
-    }
-
-    protected function buildBridgeServices()
-    {
-        /** @var FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge */
-        $assignmentFeedbackServiceBridge =
-            $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
-
-        $feedbackServiceBridge = new FeedbackServiceBridge($assignmentFeedbackServiceBridge);
-        $feedbackServiceBridge->setEntry($this->entry);
-
-        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
-        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
-
-        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
-        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
-    }
-
-    /**
-     * @param FormInterface $scoreForm
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    protected function processSubmittedData(FormInterface $scoreForm)
-    {
-        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
-        {
-            return false;
-        }
-
-        $scoreFormHandler = new SetScoreFormHandler($this->scoreService);
-        $scoreFormHandler->setScoringUser($this->getUser());
-
-        $success = $scoreFormHandler->handle($scoreForm, $this->getRequest());
-        if ($success)
-        {
-            $score = $scoreForm->getData();
-            $this->getNotificationServiceBridge()->createNotificationForNewScore(
-                $this->getUser(), $this->getEntry(), $score
-            );
-        }
-
-        return $success;
-    }
-
-    /**
-     * @return int|null
-     */
-    protected function getScore()
-    {
-        if (!is_null($this->score))
-        {
-            return $this->score->getScore();
-        }
-        else
-        {
-            return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : null;
-        }
-    }
-
-    /**
-     * @return Score
-     */
-    protected function getScoreDataClass()
-    {
-        if (!$this->getEntry() instanceof Entry)
-        {
-            return null;
-        }
-
-        return $this->getDataProvider()->findScoreByEntry($this->getEntry());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function renderContentObject()
-    {
-        $contentObject = $this->getEntry()->getContentObject();
-
-        $display = ContentObjectRenditionImplementation::factory(
-            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
-        );
-
-        return $display->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function renderAssignment()
-    {
-        $contentObject = $this->get_root_content_object();
-
-        $display = ContentObjectRenditionImplementation::factory(
-            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
-        );
-
-        return $display->render();
-    }
-
-    /**
-     * @return Form|\Symfony\Component\Form\FormInterface
-     */
-    protected function getScoreForm()
-    {
-        $this->score = $this->getScoreDataClass();
-
-        if (empty($this->score))
-        {
-            $this->score = $this->getDataProvider()->initializeScore();
-
-            if ($this->getEntry() instanceof Entry)
-            {
-                $this->score->setEntryId($this->getEntry()->getId());
-            }
-        }
-
-        $formFactory = $this->getForm();
-
-        return $formFactory->create(ScoreFormType::class, $this->score);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function renderEntryTable()
-    {
-        $table = $this->getDataProvider()->getEntryTableForEntityTypeAndId(
-            $this, $this->getEntityType(), $this->getEntityIdentifier()
-        );
-
-        if (!empty($table))
-        {
-            return $table->render();
-        }
-
-        return '';
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
-     */
-    public function retrieve_feedbacks($count, $offset)
-    {
-        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
-    }
-
-    /**
      *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::count_feedbacks()
      */
@@ -391,61 +147,45 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedback()
+     * @return array
      */
-    public function retrieve_feedback($feedbackIdentifier)
+    protected function getAttachedContentObjects()
     {
-        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
-    }
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return [];
+        }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::get_feedback()
-     */
-    public function get_feedback()
-    {
-        $feedback = $this->getDataProvider()->initializeFeedback();
-        $feedback->setEntryId($this->getEntry()->getId());
+        $entryAttachments = $this->getDataProvider()->findAttachmentsByEntry($this->getEntry());
 
-        return $feedback;
-    }
+        if (empty($entryAttachments))
+        {
+            return [];
+        }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_view_feedback()
-     */
-    public function is_allowed_to_view_feedback()
-    {
-        return true;
-    }
+        $contentObjectAttachments = [];
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_create_feedback()
-     */
-    public function is_allowed_to_create_feedback()
-    {
-        return true;
-    }
+        foreach ($entryAttachments as $entryAttachment)
+        {
+            /** @var ContentObject $contentObject */
+            $contentObject = DataManager::retrieve_by_id(
+                ContentObject::class, $entryAttachment->getAttachmentId()
+            );
 
-    /**
-     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
-     *
-     * @return bool
-     */
-    public function is_allowed_to_update_feedback($feedback)
-    {
-        return $feedback->get_user_id() == $this->getUser()->getId();
-    }
+            $owner = $this->getUserService()->getUserFullNameByIdentifier($contentObject->get_owner_id());
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_delete_feedback()
-     */
-    public function is_allowed_to_delete_feedback($feedback)
-    {
-        return $feedback->get_user_id() == $this->getUser()->getId();
+            $contentObjectAttachments[] = [
+                'attachment_id' => $entryAttachment->getId(),
+                'content_object' => [
+                    'id' => $contentObject->getId(),
+                    'title' => $contentObject->get_title(),
+                    'user' => $owner,
+                    'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
+                ]
+            ];
+        }
+
+        return $contentObjectAttachments;
     }
 
     protected function getButtonToolbarRenderer()
@@ -510,7 +250,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 $splitDropdownButton = new SplitDropdownButton(
                     Translation::get('DownloadAll'), new FontAwesomeGlyph('download'), $this->get_url(
                     [
-                        self::PARAM_ACTION => self::ACTION_DOWNLOAD, self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                        self::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                        self::PARAM_ENTITY_TYPE => $this->getEntityType(),
                         self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
                     ], [self::PARAM_ENTRY_ID]
                 )
@@ -562,6 +303,19 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
 
         return $this->actionBar;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator
+     */
+    protected function getEntryNavigator()
+    {
+        if (!isset($this->entryNavigator))
+        {
+            $this->entryNavigator = new EntryNavigator();
+        }
+
+        return $this->entryNavigator;
     }
 
     /**
@@ -640,7 +394,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             {
                 if ($entity->getId() == $this->getEntityIdentifier())
                 {
-                    $classes = 'selected';
+                    $isActive = true;
                     $url = '';
                 }
                 else
@@ -649,14 +403,14 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                         array(self::PARAM_ENTITY_ID => $entity->getId()), array(self::PARAM_ENTRY_ID)
                     );
 
-                    $classes = 'not-selected';
+                    $isActive = false;
                 }
 
                 $selectEntityButton->addSubButton(
                     new SubButton(
                         $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
                             $this->getEntityType(), $entity
-                        ), null, $url, SubButton::DISPLAY_LABEL, false, $classes
+                        ), null, $url, SubButton::DISPLAY_LABEL, false, array(), null, $isActive
                     )
                 );
             }
@@ -696,18 +450,20 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     /**
      * @return string
      */
-    protected function getPreviousEntryUrl()
+    protected function getNextEntityUrl()
     {
-        $previousEntry = $this->getEntryNavigator()->getPreviousEntry(
+        $nextEntity = $this->getEntryNavigator()->getNextEntity(
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (!$previousEntry instanceof Entry)
+        if (!$nextEntity instanceof DataClass)
         {
             return null;
         }
 
-        return $this->get_url(array(self::PARAM_ENTRY_ID => $previousEntry->getId()));
+        return $this->get_url(
+            array(self::PARAM_ENTITY_ID => $nextEntity->getId()), array(self::PARAM_ENTRY_ID)
+        );
     }
 
     /**
@@ -749,20 +505,195 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     /**
      * @return string
      */
-    protected function getNextEntityUrl()
+    protected function getPreviousEntryUrl()
     {
-        $nextEntity = $this->getEntryNavigator()->getNextEntity(
+        $previousEntry = $this->getEntryNavigator()->getPreviousEntry(
             $this->getDataProvider(), $this->getEntry(), $this->getEntityType(), $this->getEntityIdentifier()
         );
 
-        if (!$nextEntity instanceof DataClass)
+        if (!$previousEntry instanceof Entry)
         {
             return null;
         }
 
-        return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $nextEntity->getId()), array(self::PARAM_ENTRY_ID)
+        return $this->get_url(array(self::PARAM_ENTRY_ID => $previousEntry->getId()));
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getScore()
+    {
+        if (!is_null($this->score))
+        {
+            return $this->score->getScore();
+        }
+        else
+        {
+            return $this->getScoreDataClass() instanceof Score ? $this->getScoreDataClass()->getScore() : null;
+        }
+    }
+
+    /**
+     * @return Score
+     */
+    protected function getScoreDataClass()
+    {
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return null;
+        }
+
+        return $this->getDataProvider()->findScoreByEntry($this->getEntry());
+    }
+
+    /**
+     * @return Form|\Symfony\Component\Form\FormInterface
+     */
+    protected function getScoreForm()
+    {
+        $this->score = $this->getScoreDataClass();
+
+        if (empty($this->score))
+        {
+            $this->score = $this->getDataProvider()->initializeScore();
+
+            if ($this->getEntry() instanceof Entry)
+            {
+                $this->score->setEntryId($this->getEntry()->getId());
+            }
+        }
+
+        $formFactory = $this->getForm();
+
+        return $formFactory->create(ScoreFormType::class, $this->score);
+    }
+
+    /**
+     * @param FormInterface $scoreForm
+     *
+     * @return array|string[]
+     */
+    protected function getTemplateProperties(FormInterface $scoreForm = null)
+    {
+        /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
+        $assignment = $this->get_root_content_object();
+
+        $baseParameters = [
+            'HAS_ENTRY' => false,
+            'IS_USER_PART_OF_ENTITY' => $this->getDataProvider()->isUserPartOfEntity(
+                $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
+            ),
+            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
+            'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
+            'NAVIGATOR_BUTTON_TOOLBAR' => $this->getNavigatorButtonToolbarRenderer()->render(),
+            'ASSIGNMENT_TITLE' => $this->get_root_content_object()->get_title(),
+            'ASSIGNMENT_RENDITION' => $this->renderAssignment(),
+            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__'
+                ]
+            )
+        ];
+
+        $baseParameters = $this->getAvailableEntitiesParameters($baseParameters);
+
+        if (!$this->getEntry() instanceof Entry)
+        {
+            return $baseParameters;
+        }
+
+        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
+
+        $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+        $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
+
+        $this->buildBridgeServices();
+
+        $feedbackManager = $this->getApplicationFactory()->getApplication(
+            "Chamilo\Core\Repository\Feedback", $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
+
+        $feedbackManagerHtml = $feedbackManager->run();
+
+        $contentObjects = $assignment->getAutomaticFeedbackObjects();
+
+        $extendParameters = [
+            'HAS_ENTRY' => true,
+            'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
+                $this->getEntry()->getContentObject()->get_title() :
+                Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
+            'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
+            'FEEDBACK_MANAGER' => $feedbackManagerHtml,
+            'FEEDBACK_COUNT' => $this->count_feedbacks(),
+            'SUBMITTED_DATE' => $submittedDate,
+            'SUBMITTED_BY' => $this->getUserService()->getUserFullNameByIdentifier($this->getEntry()->getUserId()),
+            'SCORE_FORM' => $scoreForm->createView(),
+            'SCORE' => $this->getScore(),
+            'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
+            'ENTRY_TABLE' => $this->renderEntryTable(),
+            'ENTRY_COUNT' => $this->getDataProvider()->countEntriesForEntityTypeAndId(
+                $this->getEntityType(), $this->getEntityIdentifier()
+            ),
+            'SHOW_AUTOMATIC_FEEDBACK' => $assignment->isAutomaticFeedbackVisible(),
+            'AUTOMATIC_FEEDBACK_TEXT' => $assignment->get_automatic_feedback_text(),
+            'AUTOMATIC_FEEDBACK_CONTENT_OBJECTS' => $contentObjects,
+            'UPLOAD_ENTRY_ATTACHMENT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_UPLOAD_ENTRY_ATTACHMENT,
+                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                ]
+            ),
+            'DELETE_ENTRY_ATTACHMENT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager::ACTION_DELETE_ENTRY_ATTACHMENT
+                ]
+            ),
+            'ATTACHMENT_VIEWER_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                    self::PARAM_ATTACHMENT_ID => '__ATTACHMENT_ID__',
+                    self::PARAM_ENTRY_ID => $this->getEntry()->getId()
+                ]
+            ),
+            'ATTACHED_CONTENT_OBJECTS' => $this->getAttachedContentObjects(),
+            'SHOW_COMPACT_FEEDBACK' => $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
+            )
+        ];
+
+        return array_merge($baseParameters, $extendParameters);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getService(UserService::class);
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::get_feedback()
+     */
+    public function get_feedback()
+    {
+        $feedback = $this->getDataProvider()->initializeFeedback();
+        $feedback->setEntryId($this->getEntry()->getId());
+
+        return $feedback;
     }
 
     /**
@@ -777,68 +708,158 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         // TODO: Implement get_table_condition() method.
     }
 
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
-    }
-
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryNavigator
+     *
      */
-    protected function getEntryNavigator()
+    protected function initializeEntry()
     {
-        if (!isset($this->entryNavigator))
+        try
         {
-            $this->entryNavigator = new EntryNavigator();
+            parent::initializeEntry();
+        }
+        catch (Exception $ex)
+        {
+            $this->entry =
+                $this->getDataProvider()->findLastEntryForEntity($this->getEntityType(), $this->getEntityIdentifier());
         }
 
-        return $this->entryNavigator;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAttachedContentObjects()
-    {
-        if (!$this->getEntry() instanceof Entry)
+        if (!$this->entry instanceof Entry)
         {
-            return [];
-        }
-
-        $entryAttachments = $this->getDataProvider()->findAttachmentsByEntry($this->getEntry());
-
-        if (empty($entryAttachments))
-        {
-            return [];
-        }
-
-        $contentObjectAttachments = [];
-
-        foreach ($entryAttachments as $entryAttachment)
-        {
-            /** @var ContentObject $contentObject */
-            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class, $entryAttachment->getAttachmentId()
+            $breadcrumbTrail = BreadcrumbTrail::getInstance();
+            $breadcrumbTrail->get_last()->set_name(
+                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
             );
-
-            $owner = $this->getUserService()->getUserFullNameByIdentifier($contentObject->get_owner_id());
-
-            $contentObjectAttachments[] = [
-                'attachment_id' => $entryAttachment->getId(), 'content_object' => [
-                    'id' => $contentObject->getId(), 'title' => $contentObject->get_title(), 'user' => $owner,
-                    'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
-                ]
-            ];
         }
-
-        return $contentObjectAttachments;
     }
 
     /**
-     * @return \Chamilo\Core\User\Service\UserService
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_create_feedback()
      */
-    protected function getUserService()
+    public function is_allowed_to_create_feedback()
     {
-        return $this->getService(UserService::class);
+        return true;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_delete_feedback()
+     */
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->getUser()->getId();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     *
+     * @return bool
+     */
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->getUser()->getId();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_view_feedback()
+     */
+    public function is_allowed_to_view_feedback()
+    {
+        return true;
+    }
+
+    /**
+     * @param FormInterface $scoreForm
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    protected function processSubmittedData(FormInterface $scoreForm)
+    {
+        if (!$this->getDataProvider()->canEditAssignment() || !$this->getEntry() instanceof Entry)
+        {
+            return false;
+        }
+
+        $scoreFormHandler = new SetScoreFormHandler($this->scoreService);
+        $scoreFormHandler->setScoringUser($this->getUser());
+
+        $success = $scoreFormHandler->handle($scoreForm, $this->getRequest());
+        if ($success)
+        {
+            $score = $scoreForm->getData();
+            $this->getNotificationServiceBridge()->createNotificationForNewScore(
+                $this->getUser(), $this->getEntry(), $score
+            );
+        }
+
+        return $success;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderAssignment()
+    {
+        $contentObject = $this->get_root_content_object();
+
+        $display = ContentObjectRenditionImplementation::factory(
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
+        );
+
+        return $display->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderContentObject()
+    {
+        $contentObject = $this->getEntry()->getContentObject();
+
+        $display = ContentObjectRenditionImplementation::factory(
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
+        );
+
+        return $display->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderEntryTable()
+    {
+        $table = $this->getDataProvider()->getEntryTableForEntityTypeAndId(
+            $this, $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        if (!empty($table))
+        {
+            return $table->render();
+        }
+
+        return '';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedback()
+     */
+    public function retrieve_feedback($feedbackIdentifier)
+    {
+        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
+     */
+    public function retrieve_feedbacks($count, $offset)
+    {
+        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
     }
 }

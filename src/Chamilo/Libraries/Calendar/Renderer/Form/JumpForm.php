@@ -92,8 +92,8 @@ class JumpForm
                 mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
                 $this->getNavigationUrl());
 
-            $classes = date('j', $this->getCurrentTime()) == $day ? 'selected' : 'not-selected';
-            $dateButton->addSubButton(new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, $classes));
+            $isActive = date('j', $this->getCurrentTime()) == $day ? true:false;
+            $dateButton->addSubButton(new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
         }
 
         $months = $this->getMonths();
@@ -106,9 +106,9 @@ class JumpForm
                 mktime(null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())),
                 $this->getNavigationUrl());
 
-            $classes = date('n', $this->getCurrentTime()) == $month ? 'selected' : 'not-selected';
+            $isActive = date('n', $this->getCurrentTime()) == $month ? true:false;
             $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, $classes));
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
         }
 
         $yearButton = new DropdownButton(date('Y', $this->getCurrentTime()));
@@ -120,8 +120,8 @@ class JumpForm
                 mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
                 $this->getNavigationUrl());
 
-            $classes = date('Y', $this->getCurrentTime()) == $year ? 'selected' : 'not-selected';
-            $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, $classes));
+            $isActive = date('Y', $this->getCurrentTime()) == $year ? true:false;
+            $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
         }
 
         $buttonGroup->addButton($dateButton);

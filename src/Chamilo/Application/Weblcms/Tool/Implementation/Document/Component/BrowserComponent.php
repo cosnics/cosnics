@@ -53,7 +53,7 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButton(
             Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL, false, $filter == '' ? 'selected' : 'not-selected'
+            Button::DISPLAY_LABEL, false, array(), null, ($filter == '' ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -62,7 +62,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
             )
-        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_TODAY ? 'selected' : 'not-selected'
+        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_TODAY ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -71,7 +71,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
             )
-        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected'
+        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_WEEK ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -80,7 +80,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH
             )
-        ), Button::DISPLAY_LABEL, false, $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected'
+        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_MONTH ? true : false)
         );
 
         $showActions[] = new SubButtonDivider();

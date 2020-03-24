@@ -258,8 +258,8 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,
-                    $currentRendererType == $rendererType ? 'selected' : 'not-selected'
+                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,array(), null,
+                    $currentRendererType == $rendererType ? true:false
                 )
             );
         }

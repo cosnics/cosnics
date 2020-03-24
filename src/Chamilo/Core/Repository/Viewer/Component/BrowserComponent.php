@@ -227,13 +227,13 @@ class BrowserComponent extends Manager implements TableSupport
 
                 while ($workspace = $workspaces->next_result())
                 {
-                    $class = ($workspace->getId() == $this->getWorkspace()->getId()) ? 'selected' : 'not-selected';
+                    $isActive = ($workspace->getId() == $this->getWorkspace()->getId()) ? true:false;
 
                     $button->addSubButton(
                         new SubButton(
                             $workspace->getTitle(), null,
                             $this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())),
-                            SubButton::DISPLAY_LABEL, false, $class
+                            SubButton::DISPLAY_LABEL, false, array(), null, $isActive
                         )
                     );
                 }

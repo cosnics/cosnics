@@ -81,20 +81,6 @@ body.cke_editable {
     margin-left: 10px;
 }
 
-.dropdown-menu > li > a.selected > img, .dropdown-menu > li > a.selected > span.glyphicon {
-    display: none;
-}
-
-.dropdown-menu > li > a.selected, .dropdown-menu > li > a.not-selected {
-    padding-left: 46px;
-}
-
-.dropdown-menu > li > a.selected, .dropdown-menu > li > a:hover.selected {
-    background-image: url("../../Images/Aqua/Background/Checkmark.png");
-    background-position: 20px center;
-    background-repeat: no-repeat;
-}
-
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,
 .action-bar-search:focus {
     padding: 0px;
