@@ -7,14 +7,22 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Class TeamNotFoundException
+ *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Exception
  */
 class TeamNotFoundException extends UserException
 {
     /**
-     * TooManyUsersException constructor.
+     * @var string
      */
-    public function __construct()
+    protected $teamId;
+
+    /**
+     * TeamNotFoundException constructor.
+     *
+     * @param string $teamId
+     */
+    public function __construct($teamId)
     {
         parent::__construct(
             Translation::getInstance()->getTranslator()->trans("TeamNotFoundException", [], 'Chamilo\\Libraries')
