@@ -2,39 +2,21 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
-use Diff;
-use Diff_Renderer_Html_SideBySide;
+use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\ForumTopic\Common
  *
- * @package repository.lib.content_object.forum_topic
- */
-
-/**
- * This class can be used to get the difference between forum topics
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ForumTopicDifference extends ContentObjectDifference
 {
 
-    public function render()
+    /**
+     * @return string[]
+     */
+    public function getAdditionalPropertyNames()
     {
-        $object = $this->get_object();
-        $version = $this->get_version();
-
-        $object_string = $object->get_locked();
-        $object_string = explode(PHP_EOL, strip_tags($object_string));
-
-        $version_string = $version->get_locked();
-        $version_string = explode(PHP_EOL, strip_tags($version_string));
-
-        $html = array();
-        $html[] = parent::render();
-
-        $difference = new Diff($version_string, $object_string);
-        $renderer = new Diff_Renderer_Html_SideBySide();
-
-        $html[] = $difference->Render($renderer);
-
-        return implode(PHP_EOL, $html);
+        return array(ForumTopic::PROPERTY_LOCKED);
     }
 }

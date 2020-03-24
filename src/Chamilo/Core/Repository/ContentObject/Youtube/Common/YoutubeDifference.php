@@ -2,31 +2,42 @@
 namespace Chamilo\Core\Repository\ContentObject\Youtube\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
-use Diff;
-use Diff_Renderer_Html_SideBySide;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Youtube\Common
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class YoutubeDifference extends ContentObjectDifference
 {
+    const VIDEO_URL = 'video_url';
 
-    public function render()
+    /**
+     * @return string[]
+     */
+    public function getAdditionalPropertyNames()
     {
-        $object = $this->get_object();
-        $version = $this->get_version();
+        return array(self::VIDEO_URL);
+    }
 
-        $object_string = $object->get_url();
-        $object_string = explode(PHP_EOL, strip_tags($object_string));
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualAdditionalPropertyValue(ContentObject $contentObject, string $propertyName)
+    {
+        switch ($propertyName)
+        {
+            case self::VIDEO_URL:
+                $content = $contentObject->get_video_url();
+                break;
+            default:
+                $content = parent::getVisualAdditionalPropertyValue($contentObject, $propertyName);
+        }
 
-        $version_string = $version->get_url();
-        $version_string = explode(PHP_EOL, strip_tags($version_string));
-
-        $html = array();
-        $html[] = parent::render();
-
-        $difference = new Diff($version_string, $object_string);
-        $renderer = new Diff_Renderer_Html_SideBySide();
-
-        $html[] = $difference->Render($renderer);
-
-        return implode(PHP_EOL, $html);
+        return explode(PHP_EOL, $content);
     }
 }

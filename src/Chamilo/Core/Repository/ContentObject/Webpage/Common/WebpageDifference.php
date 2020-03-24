@@ -2,41 +2,43 @@
 namespace Chamilo\Core\Repository\ContentObject\Webpage\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
-use Diff;
-use Diff_Renderer_Html_SideBySide;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Webpage\Common
  *
- * @package repository.lib.content_object.document
- */
-
-/**
- * This class can be used to get the difference between documents
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WebpageDifference extends ContentObjectDifference
 {
+    const PAGE_PROPERTIES = 'page_properties';
 
-    public function render()
+    /**
+     * @return string[]
+     */
+    public function getAdditionalPropertyNames()
     {
-        $object = $this->get_object();
-        $version = $this->get_version();
+        return array(self::PAGE_PROPERTIES);
+    }
 
-        $object_string =
-            $object->get_filename() . ' (' . number_format($object->get_filesize() / 1024, 2, '.', '') . ' kb)';
-        $object_string = explode(PHP_EOL, strip_tags($object_string));
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualAdditionalPropertyValue(ContentObject $contentObject, string $propertyName)
+    {
+        switch ($propertyName)
+        {
+            case self::PAGE_PROPERTIES:
+                $content = $contentObject->get_filename() . ' (' .
+                    number_format($contentObject->get_filesize() / 1024, 2, '.', '') . ' kb)';
+                break;
+            default:
+                $content = parent::getVisualAdditionalPropertyValue($contentObject, $propertyName);
+        }
 
-        $version_string =
-            $version->get_filename() . ' (' . number_format($version->get_filesize() / 1024, 2, '.', '') . ' kb)';
-        $version_string = explode(PHP_EOL, strip_tags($version_string));
-
-        $html = array();
-        $html[] = parent::render();
-
-        $difference = new Diff($version_string, $object_string);
-        $renderer = new Diff_Renderer_Html_SideBySide();
-
-        $html[] = $difference->Render($renderer);
-
-        return implode(PHP_EOL, $html);
+        return explode(PHP_EOL, $content);
     }
 }

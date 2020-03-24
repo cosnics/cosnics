@@ -2,33 +2,41 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
+use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Common
  *
- * @package repository.lib.content_object.open_question
- */
-/**
- * This class can be used to get the difference between open question
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AssessmentOpenQuestionDifference extends ContentObjectDifference
 {
 
-    public function render()
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualAdditionalPropertyValue(ContentObject $contentObject, string $propertyName)
     {
-        $object = $this->get_object();
-        $version = $this->get_version();
+        switch ($propertyName)
+        {
+            case AssessmentOpenQuestion::PROPERTY_QUESTION_TYPE:
+                $questionTypes = $contentObject->get_types();
+                $content = $questionTypes[$contentObject->get_question_type()];
+                break;
+            case AssessmentOpenQuestion::PROPERTY_HINT:
+                $content = $this->processHtmlPropertyValue($contentObject->get_hint());
+                break;
+            case AssessmentOpenQuestion::PROPERTY_FEEDBACK:
+                $content = $this->processHtmlPropertyValue($contentObject->get_feedback());
+                break;
+            default:
+                $content = parent::getVisualAdditionalPropertyValue($contentObject, $propertyName);
+        }
 
-        $object_string = $object->get_question_type();
-        $version_string = $version->get_question_type();
-
-        $html = array();
-        $html[] = parent::render();
-
-        $difference = new \Diff($version_string, $object_string);
-        $renderer = new \Diff_Renderer_Html_SideBySide();
-
-        $html[] = $difference->Render($renderer);
-
-        return implode(PHP_EOL, $html);
+        return explode(PHP_EOL, $content);
     }
 }

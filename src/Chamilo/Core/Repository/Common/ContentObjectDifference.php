@@ -128,7 +128,7 @@ abstract class ContentObjectDifference
         switch ($propertyName)
         {
             case ContentObject::PROPERTY_DESCRIPTION:
-                $content = strip_tags($contentObject->get_description());
+                $content = $this->processHtmlPropertyValue($contentObject->get_description());
                 break;
             case ContentObject::PROPERTY_MODIFICATION_DATE:
                 $content = DatetimeUtilities::format_locale_date(
@@ -141,6 +141,16 @@ abstract class ContentObjectDifference
         }
 
         return explode(PHP_EOL, $content);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function processHtmlPropertyValue($value)
+    {
+        return strip_tags(html_entity_decode($value));
     }
 
 }

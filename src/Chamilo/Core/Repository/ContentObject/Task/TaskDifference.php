@@ -2,48 +2,284 @@
 namespace Chamilo\Core\Repository\ContentObject\Task;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
+use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Diff;
-use Diff_Renderer_Html_SideBySide;
 
 /**
  * This class can be used to get the difference between tasks
  */
 class TaskDifference extends ContentObjectDifference
 {
+    const PROPERTY_DATES = 'dates';
 
-    public function render()
+    /**
+     * @return string[]
+     */
+    public function getAdditionalPropertyNames()
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-
-        $object = $this->get_object();
-        $version = $this->get_version();
-
-        $object_string = htmlentities(
-            Translation::get('From') . ' ' .
-            DatetimeUtilities::format_locale_date($date_format, $object->get_start_date()) . ' ' .
-            Translation::get('Until') . ' ' .
-            DatetimeUtilities::format_locale_date($date_format, $object->get_due_date())
+        return array(
+            self::PROPERTY_DATES,
+            Task::PROPERTY_CATEGORY,
+            Task::PROPERTY_PRIORITY,
+            Task::PROPERTY_FREQUENCY
         );
-        $object_string = explode(PHP_EOL, strip_tags($object_string));
+    }
 
-        $version_string = htmlentities(
-            Translation::get('From') . ' ' .
-            DatetimeUtilities::format_locale_date($date_format, $version->get_start_date()) . ' ' .
-            DatetimeUtilities::format_locale_date($date_format, $version->get_due_date())
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task $contentObject
+     *
+     * @return string
+     */
+    public function getDatesString(ContentObject $contentObject)
+    {
+        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+
+        return Translation::get(
+            'TaskDate', array(
+                'START' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_start_date()),
+                'END' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_due_date())
+            )
         );
-        $version_string = explode(PHP_EOL, strip_tags($version_string));
+    }
 
-        $html = array();
-        $html[] = parent::render();
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task $contentObject
+     *
+     * @return string
+     */
+    public function getFrequencyString(ContentObject $contentObject)
+    {
+        $repeats = $contentObject->has_frequency();
+        $content = array();
 
-        $difference = new Diff($version_string, $object_string);
-        $renderer = new Diff_Renderer_Html_SideBySide();
+        if ($repeats)
+        {
+            switch ($contentObject->get_frequency())
+            {
 
-        $html[] = $difference->Render($renderer);
+                case 1 :
+                    if ($contentObject->get_frequency_interval() == 1)
+                    {
+                        $content[] = Translation::get('EveryDay');
+                    }
+                    else
+                    {
+                        $content[] =
+                            Translation::get('EveryXDays', array('DAYS' => $contentObject->get_frequency_interval()));
+                    }
+                    break;
+                case 2 :
+                    $days = array();
+                    foreach (explode(',', $contentObject->get_byday()) as $day)
+                    {
+                        $days[] = Task::get_day_string($day);
+                    }
+                    if ($contentObject->get_frequency_interval() == 1)
+                    {
+                        $content[] = Translation::get('EveryWeek', array('DAYS' => implode(', ', $days)));
+                    }
+                    else
+                    {
+                        $content[] = Translation::get(
+                            'EveryXWeeksOnY',
+                            array('WEEKS' => $contentObject->get_frequency_interval(), 'DAYS' => implode(', ', $days))
+                        );
+                    }
+                    break;
+                case 5 :
+                    if ($contentObject->get_bymonthday())
+                    {
+                        if ($contentObject->get_frequency_interval() == 1)
+                        {
+                            if (count($contentObject->get_bymonthday()) > 1)
+                            {
+                                $content[] = Translation::get(
+                                    'EveryMonthOnDaysY', array('DAYS' => $contentObject->get_bymonthday())
+                                );
+                            }
+                            else
+                            {
+                                $content[] = Translation::get(
+                                    'EveryMonthOnDayY', array('DAY' => $contentObject->get_bymonthday())
+                                );
+                            }
+                        }
+                        else
+                        {
+                            if (count($contentObject->get_bymonthday()) > 1)
+                            {
+                                $content[] = Translation::get(
+                                    'EveryXMonthsOnDaysY', array(
+                                        'MONTHS' => $contentObject->get_frequency_interval(),
+                                        'DAYS' => $contentObject->get_bymonthday()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                $content[] = Translation::get(
+                                    'EveryXMonthsOnDayY', array(
+                                        'MONTHS' => $contentObject->get_frequency_interval(),
+                                        'DAY' => $contentObject->get_bymonthday()
+                                    )
+                                );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $byday = Task::get_byday_parts($contentObject->get_byday());
+                        $byday = $byday[0];
+                        if ($contentObject->get_frequency_interval() == 1)
+                        {
+                            $content[] = Translation::get(
+                                'EveryMonthOnRankDay', array(
+                                    'RANK' => Task::get_rank_string($byday[0]),
+                                    'DAY' => Task::get_day_string($byday[1])
+                                )
+                            );
+                        }
+                        else
+                        {
+                            $content[] = Translation::get(
+                                'EveryXMonthsOnRankDay', array(
+                                    'MONTHS' => $contentObject->get_frequency_interval(),
+                                    'RANK' => Task::get_rank_string($byday[0]),
+                                    'DAY' => Task::get_day_string($byday[1])
+                                )
+                            );
+                        }
+                    }
+                    break;
+                case 6 :
+                    if ($contentObject->get_bymonthday())
+                    {
+                        if ($contentObject->get_frequency_interval() == 1)
+                        {
+                            if (count($contentObject->get_bymonthday()) > 1)
+                            {
+                                $content[] = Translation::get(
+                                    'EveryYearOnDaysYOfMonthZ', array(
+                                        'YEARS' => $contentObject->get_frequency_interval(),
+                                        'DAYS' => $contentObject->get_bymonthday(),
+                                        'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                $content[] = Translation::get(
+                                    'EveryYearOnDayOfMonthZ', array(
+                                        'DAYS' => $contentObject->get_bymonthday(),
+                                        'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                    )
+                                );
+                            }
+                        }
+                        else
+                        {
+                            if (count($contentObject->get_bymonthday()) > 1)
+                            {
+                                $content[] = Translation::get(
+                                    'EveryXYearsOnDaysYOfMonthZ', array(
+                                        'YEARS' => $contentObject->get_frequency_interval(),
+                                        'DAYS' => $contentObject->get_bymonthday(),
+                                        'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                $content[] = Translation::get(
+                                    'EveryXYearsOnDayOfMonthZ', array(
+                                        'YEARS' => $contentObject->get_frequency_interval(),
+                                        'DAYS' => $contentObject->get_bymonthday(),
+                                        'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                    )
+                                );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ($contentObject->get_frequency_interval() == 1)
+                        {
+                            $byday = Task::get_byday_parts($contentObject->get_byday());
+                            $byday = $byday[0];
+                            $content[] = Translation::get(
+                                'EveryYearOnRankDayOfMonthZ', array(
+                                    'RANK' => Task::get_rank_string($byday[0]),
+                                    'DAY' => Task::get_day_string($byday[1]),
+                                    'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                )
+                            );
+                        }
+                        else
+                        {
+                            $byday = Task::get_byday_parts($contentObject->get_byday());
+                            $byday = $byday[0];
+                            $content[] = Translation::get(
+                                'EveryXYearsOnRankDayOfMonthZ', array(
+                                    'YEARS' => $contentObject->get_frequency_interval(),
+                                    'RANK' => Task::get_rank_string($byday[0]),
+                                    'DAY' => Task::get_day_string($byday[1]),
+                                    'MONTH' => Task::get_bymonth_string($contentObject->get_bymonth())
+                                )
+                            );
+                        }
+                    }
+                    break;
+            }
 
-        return implode(PHP_EOL, $html);
+            if ($contentObject->get_frequency_count() || $contentObject->get_until())
+            {
+                $content[] = PHP_EOL;
+                $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+
+                if ($contentObject->get_frequency_count())
+                {
+                    $content[] =
+                        Translation::get('OccursXTimes', array('TIMES' => $contentObject->get_frequency_count()));
+                }
+                if ($contentObject->get_until())
+                {
+                    $content[] = Translation::get(
+                        'RepeatUntilDate', array(
+                            'DATE' => DatetimeUtilities::format_locale_date(
+                                $dateFormat, $contentObject->get_until()
+                            )
+                        )
+                    );
+                }
+            }
+        }
+
+        return implode('', $content);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $propertyName
+     *
+     * @return string[]
+     */
+    public function getVisualAdditionalPropertyValue(ContentObject $contentObject, string $propertyName)
+    {
+        switch ($propertyName)
+        {
+            case self::PROPERTY_DATES:
+                $content = $this->getDatesString($contentObject);
+                break;
+            case Task::PROPERTY_FREQUENCY:
+                $content = $this->getFrequencyString($contentObject);
+                break;
+            default:
+                $content = parent::getVisualAdditionalPropertyValue($contentObject, $propertyName);
+        }
+
+        return explode(PHP_EOL, $content);
     }
 }
