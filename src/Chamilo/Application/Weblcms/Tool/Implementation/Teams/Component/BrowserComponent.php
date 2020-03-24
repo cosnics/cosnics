@@ -26,8 +26,18 @@ class BrowserComponent extends Manager
     public function run(): string
     {
         $courseTeamService = $this->getCourseTeamService();
-        $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
         $courseTeamName = null;
+
+        // TODO: emergency bugfix for courses that could not be found, maybe a better solution should be put in place later.
+        try
+        {
+            $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
+        }
+        catch(GraphException $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+            $hasTeam = false;
+        }
 
         if ($hasTeam)
         {
