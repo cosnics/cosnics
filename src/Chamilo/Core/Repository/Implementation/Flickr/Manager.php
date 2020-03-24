@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Flickr;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -131,7 +131,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             $my_photos['title'] = Translation::get('MyPhotos');
             $my_photos['url'] = $this->get_url(
                 array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MY_PHOTOS),
-                array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
+                array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
             );
 
             $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
@@ -143,8 +143,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $general = array();
         $general['title'] = Translation::get('Public');
         $general['url'] = $this->get_url(
-            array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL),
-            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
+            array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL), array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
         $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
@@ -156,7 +155,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $most_recent['title'] = Translation::get('MostRecent');
         $most_recent['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MOST_RECENT),
-            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
+            array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
         $glyph = new FontAwesomeGlyph('history', array(), null, 'fas');
@@ -168,7 +167,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $most_interesting['title'] = Translation::get('MostInteresting');
         $most_interesting['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MOST_INTERESTING),
-            array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
+            array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
         $glyph = new FontAwesomeGlyph('star', array(), null, 'fas');

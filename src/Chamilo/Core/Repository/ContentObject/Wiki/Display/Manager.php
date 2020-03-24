@@ -6,8 +6,6 @@ use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWiki
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -29,12 +27,9 @@ use MediawikiParser;
 use MediawikiParserContext;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display
  *
- * @package repository.lib.complex_display.assessment
- */
-
-/**
- * This tool allows a user to publish assessments in his or her course.
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
@@ -58,20 +53,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_WIKI_PAGE_ID = 'wiki_page_id';
     const PARAM_WIKI_VERSION_ID = 'wiki_version_id';
 
-    private $search_form;
-
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param string $user
-     * @param string $parent
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent::__construct($applicationConfiguration);
-
-        $this->search_form = new ActionBarSearchForm($this->get_url());
-    }
+    private $buttonToolBarRenderer;
 
     /**
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
@@ -188,6 +173,61 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 )
             );
         }
+    }
+
+    public function getButtonToolBarRenderer(ComplexWikiPage $complexWikiPage = null)
+    {
+        if (!isset($this->buttonToolBarRenderer))
+        {
+            $buttonToolBar = new ButtonToolBar($this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)));
+            $buttonToolBar->addClass('btn-action-toolbar-vertical');
+
+            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonToolBar->addButtonGroup($buttonGroup);
+
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('AddWikiPage'), new FontAwesomeGlyph('plus'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $this->addDisplayActions($buttonToolBar, $complexWikiPage);
+
+            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonToolBar->addButtonGroup($buttonGroup);
+
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('MainPage'), new FontAwesomeGlyph('home'), $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_VIEW_WIKI,
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
+                    )
+                ), Button::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Contents'), new FontAwesomeGlyph('folder'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+        }
+
+        return $this->buttonToolBarRenderer;
     }
 
     public function get_breadcrumbtrail()
@@ -320,11 +360,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_parent()->get_publication();
     }
 
-    public function get_search_form()
-    {
-        return $this->search_form;
-    }
-
     public static function get_wiki_homepage($wiki_id)
     {
         $conditions[] = new EqualityCondition(
@@ -386,54 +421,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $html[] = '</div>';
         }
 
-        $buttonToolBar = new ButtonToolBar();
-        $buttonToolBar->addClass('btn-action-toolbar-vertical');
-
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
-        $buttonToolBar->addButtonGroup($buttonGroup);
-
-        $buttonGroup->addButton(
-            new Button(
-                Translation::get('AddWikiPage'), new FontAwesomeGlyph('plus'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
-
-        $this->addDisplayActions($buttonToolBar, $complexWikiPage);
-
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
-        $buttonToolBar->addButtonGroup($buttonGroup);
-
-        $buttonGroup->addButton(
-            new Button(
-                Translation::get('MainPage'), new FontAwesomeGlyph('home'), $this->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_VIEW_WIKI,
-                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                )
-            ), Button::DISPLAY_ICON_AND_LABEL
-            )
-        );
-
-        $buttonGroup->addButton(
-            new Button(
-                Translation::get('Contents'), new FontAwesomeGlyph('folder'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
-        $buttonGroup->addButton(
-            new Button(
-                Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
-
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        $html[] = $buttonToolBarRenderer->render();
+        $html[] = $this->getButtonToolBarRenderer()->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -443,14 +431,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function render_footer()
     {
-        $glyph = new FontAwesomeGlyph('chevron-up', array(), Translation::get('BackToTop'), 'fas');
         $html = array();
 
-        $html[] = '<div class="wiki-pane-top"><a href=#top>' . $glyph->render() . '</a></div>';
         $html[] = '</div>';
-
         $html[] = '</div>';
-
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);

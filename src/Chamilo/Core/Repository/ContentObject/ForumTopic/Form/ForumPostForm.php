@@ -168,13 +168,7 @@ class ForumPostForm extends FormValidator
         $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'
-        )
-        );
-        $this->addElement(
-            'category', '<a href="#">' . Translation::get('Attachments') . '</a>',
-            'content_object_attachments collapsible collapsed'
+            'category', '<a href="#">' . Translation::get('Attachments') . '</a>'
         );
 
         $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);

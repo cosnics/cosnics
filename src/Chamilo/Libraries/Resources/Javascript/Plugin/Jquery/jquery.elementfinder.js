@@ -66,11 +66,6 @@
                         .addClass("collapse");
                     $("ul li:last-child:has(ul) > div", self).addClass(
                         "lastCollapse");
-
-                    // $("ul li:has(ul) > div", self).toggle(collapseItem,
-                    // expandItem);
-                    // $("ul li:has(ul) > div > a",
-                    // self).click(function(e){e.stopPropagation();});
                 }
 
                 function displayMessage(message, element) {
@@ -261,27 +256,6 @@
                     }
                 }
 
-                // function disableElement(theElementObject)
-                // {
-                // var theElements = $('#' + theElementObject.attr('id'),
-                // inactiveBox);
-                //
-                // $.each(theElements, function(i, theElement){
-                // theElement = $(theElement);
-                //
-                // if(theElement.css("background-image"))
-                // {
-                // if (!theElement.hasClass('disabled'))
-                // {
-                // theElement.addClass('disabled');
-                // theElement.css("background-image",
-                // theElement.css("background-image").replace(".png",
-                // "Na.png"));
-                // }
-                // }
-                // });
-                // }
-
                 function disableActivatedElements() {
                     $
                         .each(
@@ -357,34 +331,6 @@
                                                 );
                                         }
                                     );
-
-                                // var currentElementParent =
-                                // currentElement.parent().parent();
-                                //
-                                // disableElement(currentElement);
-                                //
-                                // var subElements = $('ul:first div
-                                // a',
-                                // currentElementParent);
-                                //
-                                // $.each(subElements, function(i,
-                                // subElement){
-                                // subElementObject = $(subElement);
-                                //
-                                // // Remove the child-elements in
-                                // case they were
-                                // previously activated
-                                // removeActivatedElement(subElementObject.attr('id'));
-                                // var currentSubElement = $('#' +
-                                // subElementObject.attr('id'),
-                                // activeBox);
-                                // currentSubElement.parent().parent().remove();
-                                //
-                                // // Disabled the child-elements in
-                                // the inactive tree
-                                // box
-                                // disableElement(subElementObject);
-                                // });
                             }
                         );
 
@@ -410,25 +356,6 @@
                         ));
                     }
                 }
-
-                // function enableElement(theElementObject)
-                // {
-                // var theElements = $('#' + theElementObject.attr('id'),
-                // inactiveBox);
-                //
-                // $.each(theElements, function(i, theElement){
-                // theElement = $(theElement);
-                //
-                // if (typeof theElement.css("background-image") !==
-                // 'undefined')
-                // {
-                // theElement.removeClass('disabled');
-                // theElement.css("background-image",
-                // theElement.css("background-image").replace("Na.png",
-                // ".png"));
-                // }
-                // });
-                // }
 
                 function deactivateElement(e) {
                     e.preventDefault();
@@ -500,20 +427,6 @@
                     processFinderTree();
                 }
 
-                function showElementFinder(e) {
-                    e.preventDefault();
-                    $(this).hide();
-                    $('#' + settings.name + '_collapse_button').show();
-                    $('#tbl_' + settings.name).show();
-                }
-
-                function hideElementFinder(e) {
-                    e.preventDefault();
-                    $(this).hide();
-                    $('#' + settings.name + '_expand_button').show();
-                    $('#tbl_' + settings.name).hide();
-                }
-
                 function init() {
                     id = $(self).attr('id');
                     inactiveBox = $('#elf_' + settings.name + '_inactive');
@@ -565,11 +478,6 @@
                             "default"
                         );
                     }
-
-                    $('#' + settings.name + '_expand_button').click(
-                        showElementFinder);
-                    $('#' + settings.name + '_collapse_button').click(
-                        hideElementFinder);
 
                     $('#' + settings.name + '_search_field')
                         .keypress(

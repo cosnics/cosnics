@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Flickr;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -216,7 +216,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public static function get_sort_properties()
     {
         $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm::get_query();
+        $query = ButtonSearchForm::get_query();
 
         if (($feed_type == Manager::FEED_TYPE_GENERAL && $query) || $feed_type == Manager::FEED_TYPE_MY_PHOTOS)
         {

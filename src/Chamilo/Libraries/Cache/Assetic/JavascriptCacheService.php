@@ -61,7 +61,6 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'Highlight/highlight.pack.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $pluginPath . 'phpjs.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Utilities.js');
-        $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Notifications.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Help.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'Visit.js');
         $assets[] = new FileAsset($this->getPathBuilder(), $javascriptPath . 'InitHighlight.js');

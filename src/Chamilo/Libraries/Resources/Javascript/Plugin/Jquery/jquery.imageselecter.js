@@ -235,20 +235,6 @@ dropzoneCallbacks.chamilo.core.repository.importImage = {
                 }
             }
 
-            function showElementFinder(e) {
-                e.preventDefault();
-                $(this).hide();
-                $('#' + settings.name + '_collapse_button').show();
-                $('#tbl_' + settings.name).show();
-            }
-
-            function hideElementFinder(e) {
-                e.preventDefault();
-                $(this).hide();
-                $('#' + settings.name + '_expand_button').show();
-                $('#tbl_' + settings.name).hide();
-            }
-
             function init() {
                 // Setup the actual image finder
                 id = $(self).attr('id');
@@ -268,9 +254,6 @@ dropzoneCallbacks.chamilo.core.repository.importImage = {
                 if (!settings.nodesSelectable) {
                     $("a.category", inactiveBox).css("cursor", "default");
                 }
-
-                $('#' + settings.name + '_expand_button').click(showElementFinder);
-                $('#' + settings.name + '_collapse_button').click(hideElementFinder);
 
                 $('#' + settings.name + '_search_field').keypress(function (event) {
                     // Avoid searches being started after every character

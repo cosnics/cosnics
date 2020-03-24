@@ -6,9 +6,9 @@ use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Table\Publication\PublicationTable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -142,7 +142,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $translator = $this->getTranslator();
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $type = $this->get_type();

@@ -45,34 +45,6 @@ footer.chamilo-footer {
     color: #f00;
 }
 
-.notification {
-    float: right;
-    position: relative;
-    border-width: 1px;
-    border-style: dotted;
-    margin-bottom: 1px;
-    margin-left: 1px;
-    background-repeat: no-repeat;
-    background-position: 10px 50%;
-    /* 	padding: 10px 36px 10px 36px; */
-    text-align: justify;
-    position: relative;
-}
-
-.notification_mini {
-    overflow: hidden;
-    width: 0px;
-    height: 16px;
-    padding: 10px 0px 10px 36px;
-}
-
-.notification h2 {
-    padding: 0px 0px 5px 0px;
-    margin: 0px;
-    font-size: 120%;
-    font-weight: bold;
-}
-
 .notifications {
     position: fixed;
     right: 15px;
@@ -564,7 +536,7 @@ ul.toolbar li span.legend, ul.toolbar_horizontal li span.legend, ul.toolbar_vert
 }
 
 a.help-modal-close {
-    background: url(../../Images/Aqua/Action/CloseModal.png) no-repeat;
+    background-color: red;
     width: 16px;
     height: 16px;
     display: inline;
@@ -573,6 +545,9 @@ a.help-modal-close {
     top: 5px;
     right: 5px;
     cursor: pointer;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
 }
 
 #repoViewerModalContainer {
@@ -587,141 +562,6 @@ a.help-modal-close {
 
 #overlay {
     background-color: red;
-}
-
-/**********************************
- * Drag And Drop TreeMenu
- **********************************/
-.myTree, .myTree ul {
-    list-style: none;
-    padding-left: 22px;
-}
-
-.expandImage {
-    margin-right: 0px;
-    vertical-align: middle;
-}
-
-.textHolder {
-    height: 16px;
-    line-height: 16px;
-    padding-left: 3px;
-}
-
-.dropOver {
-    background-color: #00c;
-    color: #fff;
-    height: 16px;
-    line-height: 16px;
-    padding-left: 4px;
-}
-
-.treeItem {
-    list-style: none;
-    vertical-align: middle;
-}
-
-.folderImage {
-    vertical-align: middle;
-}
-
-.togglePlus {
-    background: url(../../Images/Aqua/Treemenu/BulletTogglePlus.png) no-repeat;
-    height: 16px;
-    width: 13px;
-    margin-right: 0px;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.toggleMinus {
-    background: url(../../Images/Aqua/Treemenu/BulletToggleMinus.png) no-repeat;
-    height: 16px;
-    width: 13px;
-    margin-right: 0px;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.toggleSpacer {
-    height: 16px;
-    width: 13px;
-    margin-right: 0px;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-/**********************************
- * AJAX loading... icons
- **********************************/
-.statusConfirmation {
-    background-image: url(../../Images/Aqua/Status/ConfirmationHuge.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    width: 64px;
-    height: 64px;
-    display: inline-block;
-}
-
-.statusError {
-    background-image: url(../../Images/Aqua/Status/ErrorHuge.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    width: 64px;
-    height: 64px;
-    display: inline-block;
-}
-
-.close_normal_message, .close_error_message, .close_warning_message {
-    float: right;
-    width: 16px;
-    height: 16px;
-    z-index: 3200;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    margin-top: -8px;
-    cursor: pointer;
-}
-
-.close_normal_message {
-    background: url(../../Images/Aqua/Action/CloseNormalMessage.png) no-repeat;
-}
-
-.close_error_message {
-    background: url(../../Images/Aqua/Action/CloseErrorMessage.png) no-repeat;
-}
-
-.close_warning_message {
-    background: url(../../Images/Aqua/Action/CloseWarningMessage.png) no-repeat;
-}
-
-.rightTrue {
-    background: url(../../Images/Aqua/Action/SettingTrue.png) no-repeat;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-}
-
-.rightFalse {
-    background: url(../../Images/Aqua/Action/SettingFalse.png) no-repeat;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-}
-
-.rightInheritTrue {
-    background: url(../../Images/Aqua/Action/SettingTrueInherit.png) no-repeat;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-}
-
-.rightInheritFalse {
-    background: url(../../Images/Aqua/Action/SettingFalseInherit.png) no-repeat;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
 }
 
 /*********************************************
@@ -866,8 +706,10 @@ div.reporting_center {
     position: relative;
     top: 50%;
     margin-top: -32px;
-	text-align:center;
-}/************************
+    text-align: center;
+}
+
+/************************
  * APPLICATION SELECTER *
  ************************/
 div.create_block {

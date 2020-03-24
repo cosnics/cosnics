@@ -75,7 +75,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
 
     public function get_search_condition()
     {
-        $query = $this->get_search_form()->get_query();
+        $query = $this->getButtonToolBarRenderer()->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(

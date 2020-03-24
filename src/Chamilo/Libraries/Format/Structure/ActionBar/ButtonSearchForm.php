@@ -19,14 +19,20 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ButtonSearchForm extends FormValidator implements TableSupportedSearchFormInterface
 {
     /**
+     * Name of the search form
+     */
+    const FORM_NAME = 'search';
+
+    /**
      * #@+ Search parameter
      */
     const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
-     * Name of the search form
+     *
+     * @var string
      */
-    const FORM_NAME = 'search';
+    protected $actionURL;
 
     /**
      * The renderer used to display the form
@@ -34,12 +40,6 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      * @var \HTML_QuickForm_Renderer_Default
      */
     private $renderer;
-
-    /**
-     *
-     * @var string
-     */
-    protected $actionURL;
 
     /**
      * Creates a new search form
@@ -62,6 +62,16 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         }
 
         $this->buildForm();
+    }
+
+    /**
+     * Display the form
+     */
+    public function render()
+    {
+        $this->accept($this->renderer);
+
+        return $this->renderer->toHTML();
     }
 
     /**
@@ -99,13 +109,22 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     }
 
     /**
-     * Display the form
+     *
+     * @return boolean
      */
-    public function render()
+    public function clearFormSubmitted()
     {
-        $this->accept($this->renderer);
+        return !is_null(Request::post('clear'));
+    }
 
-        return $this->renderer->toHTML();
+    /**
+     * Returns the action URL
+     *
+     * @return string
+     */
+    public function getActionURL()
+    {
+        return $this->actionURL;
     }
 
     /**
@@ -126,12 +145,22 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     }
 
     /**
-     *
-     * @return boolean
+     * @return string
+     * @deprecated Use getQuery() now
      */
-    public function clearFormSubmitted()
+    public function get_query()
     {
-        return !is_null(Request::post('clear'));
+        return $this->getQuery();
+    }
+
+    /**
+     * Registers the form parameters in the table
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     */
+    public function registerSearchFormParametersInTable(Table $table)
+    {
+        $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
     }
 
     /**
@@ -147,25 +176,5 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         }
 
         $this->updateAttributes(array('action' => $this->actionURL));
-    }
-
-    /**
-     * Registers the form parameters in the table
-     *
-     * @param \Chamilo\Libraries\Format\Table\Table $table
-     */
-    public function registerSearchFormParametersInTable(Table $table)
-    {
-        $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
-    }
-
-    /**
-     * Returns the action URL
-     *
-     * @return string
-     */
-    public function getActionURL()
-    {
-        return $this->actionURL;
     }
 }

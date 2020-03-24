@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -268,7 +268,7 @@ abstract class ContentObjectRenderer implements TableSupport
             $parameters[TypeSelector::PARAM_SELECTION] = $selected_types;
         }
 
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->get_repository_browser()->getButtonToolbarRenderer()->getSearchForm()->getQuery();
 
         return $parameters;

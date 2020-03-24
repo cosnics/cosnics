@@ -6,9 +6,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Table\Admin\AdminUserTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -62,45 +62,9 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function get_user_html()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $table = new AdminUserTable($this);
-
-        $html = array();
-        $html[] = '<div style="float: right; width: 100%;">';
-        $html[] = $table->as_html();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_parameters()
-    {
-        $parameters = parent::get_parameters();
-        if (isset($this->buttonToolbarRenderer))
-        {
-            $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-                $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        }
-
-        return $parameters;
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.NewObjectTableSupport::get_object_table_condition()
-     */
-    public function get_table_condition($class_name)
-    {
-        // construct search properties
-        $search_properties = array();
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
-
-        // get conditions
-        return $this->buttonToolbarRenderer->getConditions($search_properties);
+        $breadcrumbtrail->add_help('user_browser');
     }
 
     public function getButtonToolbarRenderer()
@@ -122,9 +86,10 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
                 );
 
                 $commonActions->addButton(
-                    new Button(Translation::get('Reporting', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('chart-pie', array(), null, 'fas'),
-                        $this->get_reporting_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new Button(
+                        Translation::get('Reporting', null, Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('chart-pie', array(), null, 'fas'), $this->get_reporting_url(),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -144,8 +109,45 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    /*
+     * (non-PHPdoc) @see common\libraries.NewObjectTableSupport::get_object_table_condition()
+     */
+
+    public function get_parameters()
     {
-        $breadcrumbtrail->add_help('user_browser');
+        $parameters = parent::get_parameters();
+        if (isset($this->buttonToolbarRenderer))
+        {
+            $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+                $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        }
+
+        return $parameters;
+    }
+
+    public function get_table_condition($class_name)
+    {
+        // construct search properties
+        $search_properties = array();
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
+        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
+
+        // get conditions
+        return $this->buttonToolbarRenderer->getConditions($search_properties);
+    }
+
+    public function get_user_html()
+    {
+        $table = new AdminUserTable($this);
+
+        $html = array();
+        $html[] = '<div style="float: right; width: 100%;">';
+        $html[] = $table->as_html();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }

@@ -7,9 +7,9 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PlatformInstance;
 use Chamilo\Core\Repository\Instance\Table\Instance\InstanceTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -17,13 +17,12 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements TableSupport
@@ -45,7 +44,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $tabs = new DynamicTabsRenderer('instances');
@@ -75,14 +74,6 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_table($type)
-    {
-        $this->type = $type;
-        $table = new InstanceTable($this);
-
-        return $table->as_html();
     }
 
     public function getButtonToolbarRenderer()
@@ -118,6 +109,14 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    public function get_table($type)
+    {
+        $this->type = $type;
+        $table = new InstanceTable($this);
+
+        return $table->as_html();
     }
 
     /**

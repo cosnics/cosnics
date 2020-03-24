@@ -5,23 +5,22 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRigh
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\User\UserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -75,7 +74,7 @@ class UserComponent extends ItemComponent implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         $this->set_parameter(
-            ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery()
+            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery()
         );
 
         // Handle a virtual user selection
@@ -128,9 +127,8 @@ class UserComponent extends ItemComponent implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('folder'), $this->get_url(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -152,16 +150,13 @@ class UserComponent extends ItemComponent implements TableSupport
     {
         $properties = array();
         $properties[] = new PropertyConditionVariable(
-            User::class_name(),
-            User::PROPERTY_FIRSTNAME
+            User::class_name(), User::PROPERTY_FIRSTNAME
         );
         $properties[] = new PropertyConditionVariable(
-            User::class_name(),
-            User::PROPERTY_LASTNAME
+            User::class_name(), User::PROPERTY_LASTNAME
         );
         $properties[] = new PropertyConditionVariable(
-            User::class_name(),
-            User::PROPERTY_OFFICIAL_CODE
+            User::class_name(), User::PROPERTY_OFFICIAL_CODE
         );
 
         $searchConditions = $this->buttonToolbarRenderer->getConditions($properties);
@@ -175,22 +170,19 @@ class UserComponent extends ItemComponent implements TableSupport
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                User::class_name(),
-                User::PROPERTY_PLATFORMADMIN
+                User::class_name(), User::PROPERTY_PLATFORMADMIN
             ), new StaticConditionVariable(0)
         );
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    User::class_name(),
-                    User::PROPERTY_OFFICIAL_CODE
+                    User::class_name(), User::PROPERTY_OFFICIAL_CODE
                 ), new StaticConditionVariable('')
             )
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                User::class_name(),
-                User::PROPERTY_ACTIVE
+                User::class_name(), User::PROPERTY_ACTIVE
             ), new StaticConditionVariable(1)
         );
 

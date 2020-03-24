@@ -444,50 +444,6 @@ ol.breadcrumb a {
     color: #555555;
 }
 
-/***********************
- * Alert			   *
- ***********************/
-.alert-message {
-    z-index: 9999;
-    position: relative;
-    margin: 10px auto 10px -250px;
-    width: 500px;
-    left: 50%;
-    right: 50%;
-    padding: 10px 36px 10px 36px;
-    text-align: justify;
-    background-repeat: no-repeat;
-    background-position: 10px 50%;
-}
-
-@media ( max-width: 768px) {
-    .alert-message {
-        margin: 10px 0 0 0;
-        width: 100%;
-        left: 0;
-        right: 0;
-    }
-}
-
-.alert-message h2 {
-    padding: 0 0 5px 0;
-    margin: 0;
-    font-size: 120%;
-    font-weight: bold;
-}
-
-.alert-message.alert-info {
-    background-image: url('../../Images/Aqua/Status/NormalMini.png');
-}
-
-.alert-message.alert-danger {
-    background-image: url('../../Images/Aqua/Status/ErrorMini.png');
-}
-
-.alert-message.alert-warning {
-    background-image: url('../../Images/Aqua/Status/WarningMini.png');
-}
-
 /***************
  * FILE UPLOAD *
  ***************/
