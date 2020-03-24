@@ -300,7 +300,7 @@ class CourseGroupOffice365Connector
 
                 try
                 {
-                    $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+                    $this->groupService->addOwnerToGroup($reference->getOffice365GroupId(), $user);
                 }
                 catch (AzureUserNotExistsException $ex)
                 {
