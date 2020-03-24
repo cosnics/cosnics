@@ -16,38 +16,12 @@ class PdfExport extends Export
     const EXPORT_TYPE = 'pdf';
 
     /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::render_data()
-     */
-    public function render_data()
-    {
-        $data = $this->get_data();
-        if (is_array($data))
-        {
-            require_once Path::getInstance()->getPluginPath() . 'ezpdf/class.ezpdf.php';
-            $pdf = new Cezpdf();
-            $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
-            foreach ($data as $datapair)
-            {
-                $title = $datapair['key'];
-                $table_data = $datapair['data'];
-                $pdf->ezTable($table_data, null, $title, array('fontSize' => 5));
-            }
-            return $pdf->ezOutput();
-        }
-        else
-        {
-            $pdf = new Html2Pdf('p', 'A4', 'en');
-            $pdf->writeHtml($this->getHtmlFromPage($data));
-            return $pdf->output('', 'S');
-        }
-    }
-
-    /**
      * convert the HTML of a real page, to a code adapted to HTML2PDF
      *
      * @access public
-     * @param  string HTML of a real page
+     *
+     * @param string HTML of a real page
+     *
      * @return string HTML adapted to HTML2PDF
      */
     public function getHtmlFromPage($html)
@@ -56,18 +30,26 @@ class PdfExport extends Export
         $html = str_replace('</BODY', '</body', $html);
         // extract the content
         $res = explode('<body', $html);
-        if (count($res)<2) return $html;
-        $content = '<page'.$res[1];
+        if (count($res) < 2)
+        {
+            return $html;
+        }
+        $content = '<page' . $res[1];
         $content = explode('</body', $content);
-        $content = $content[0].'</page>';
+        $content = $content[0] . '</page>';
         // extract the link tags
         preg_match_all('/<link([^>]*)>/isU', $html, $match);
         foreach ($match[0] as $src)
-            $content = $src.'</link>'.$content;
+        {
+            $content = $src . '</link>' . $content;
+        }
         // extract the css style tags
         preg_match_all('/<style[^>]*>(.*)<\/style[^>]*>/isU', $html, $match);
         foreach ($match[0] as $src)
-            $content = $src.$content;
+        {
+            $content = $src . $content;
+        }
+
         return $content;
     }
 
@@ -78,5 +60,34 @@ class PdfExport extends Export
     public function get_type()
     {
         return self::EXPORT_TYPE;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     */
+    public function render_data()
+    {
+        $data = $this->get_data();
+        if (is_array($data))
+        {
+            $pdf = new Cezpdf();
+            $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
+            foreach ($data as $datapair)
+            {
+                $title = $datapair['key'];
+                $table_data = $datapair['data'];
+                $pdf->ezTable($table_data, null, $title, array('fontSize' => 5));
+            }
+
+            return $pdf->ezOutput();
+        }
+        else
+        {
+            $pdf = new Html2Pdf('p', 'A4', 'en');
+            $pdf->writeHtml($this->getHtmlFromPage($data));
+
+            return $pdf->output('', 'S');
+        }
     }
 }

@@ -23,6 +23,11 @@
     "require": {
         "php": ">=7.2.0"
     },
+    "autoload": {
+        "classmap": [
+            "src/Chamilo/Core/Repository/Implementation/Flickr/Plugin/phpflickr-3.1.1/"
+        ]
+    },
     "extra": {
         "cosnics": {
             "name": "Flickr",

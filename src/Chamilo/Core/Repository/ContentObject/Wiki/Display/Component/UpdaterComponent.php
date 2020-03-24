@@ -11,6 +11,11 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class UpdaterComponent extends Manager implements DelegateComponent
 {
 
@@ -38,8 +43,8 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = parent::render_header($complex_wiki_page);
-        $html[] = '<h3 id="page-title">' . Translation::get('Edit', null, Utilities::COMMON_LIBRARIES) . ' ' . $wiki_page->get_title() .
-            '</h3>';
+        $html[] = '<h3 id="page-title">' . Translation::get('Edit', null, Utilities::COMMON_LIBRARIES) . ' ' .
+            $wiki_page->get_title() . '</h3>';
 
         return implode(PHP_EOL, $html);
     }

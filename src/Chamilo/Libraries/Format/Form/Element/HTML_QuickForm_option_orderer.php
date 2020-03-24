@@ -1,6 +1,8 @@
 <?php
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element
@@ -32,14 +34,11 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 
     /**
      *
-     * @see HTML_QuickForm_input::toHtml()
+     * @see HTML_QuickForm_input::exportValue()
      */
-    public function toHtml()
+    public function exportValue()
     {
-        $html = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js');
-        $html .= $this->getFrozenHtml();
-        return $html;
+        return $this->getValue();
     }
 
     /**
@@ -56,6 +55,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         }
         $html .= '</ol>';
         $html .= parent::toHtml();
+
         return $html;
     }
 
@@ -70,10 +70,15 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 
     /**
      *
-     * @see HTML_QuickForm_input::exportValue()
+     * @see HTML_QuickForm_input::toHtml()
      */
-    public function exportValue()
+    public function toHtml()
     {
-        return $this->getValue();
+        $html = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js'
+        );
+        $html .= $this->getFrozenHtml();
+
+        return $html;
     }
 }

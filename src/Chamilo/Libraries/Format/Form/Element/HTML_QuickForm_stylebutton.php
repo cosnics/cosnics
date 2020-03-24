@@ -1,6 +1,6 @@
 <?php
 
-use \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  *
@@ -60,6 +60,32 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
+     * @see HTML_QuickForm_element::exportValue()
+     */
+    public function exportValue(&$submitValues, $assoc = false)
+    {
+        $type = $this->getType();
+        if ('reset' == $type || 'button' == $type)
+        {
+            return null;
+        }
+        else
+        {
+            return parent::exportValue($submitValues, $assoc);
+        }
+    }
+
+    /**
+     *
+     * @see HTML_QuickForm_element::getFrozenHtml()
+     */
+    function getFrozenHtml()
+    {
+        return '';
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
      */
     public function getGlyph()
@@ -78,34 +104,6 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
-     * @return string
-     */
-    public function getStyleButtonLabel()
-    {
-        return $this->styleButtonLabel;
-    }
-
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->_type = $type;
-        $this->updateAttributes(array('type' => $type));
-    }
-
-    /**
-     *
-     * @see HTML_QuickForm_element::setName()
-     */
-    public function setName($name)
-    {
-        $this->updateAttributes(array('name' => $name));
-    }
-
-    /**
-     *
      * @see HTML_QuickForm_element::getName()
      */
     public function getName()
@@ -115,11 +113,11 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
-     * @see HTML_QuickForm_element::setValue()
+     * @return string
      */
-    public function setValue($value)
+    public function getStyleButtonLabel()
     {
-        $this->updateAttributes(array('value' => $value));
+        return $this->styleButtonLabel;
     }
 
     /**
@@ -129,48 +127,6 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     public function getValue()
     {
         return $this->getAttribute('value');
-    }
-
-    /**
-     *
-     * @see HTML_Common::toHtml()
-     */
-    public function toHtml()
-    {
-        if ($this->_flagFrozen)
-        {
-            return $this->getFrozenHtml();
-        }
-        else
-        {
-            $html = array();
-
-            $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
-
-            if ($this->getGlyph())
-            {
-                $html[] =
-                    $this->_getTabs() . $this->getGlyph()->render() . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
-            }
-
-            if ($this->getStyleButtonLabel())
-            {
-                $html[] = $this->_getTabs() . $this->getStyleButtonLabel();
-            }
-
-            $html[] = $this->_getTabs() . '</button>';
-
-            return implode(PHP_EOL, $html);
-        }
-    }
-
-    /**
-     *
-     * @see HTML_QuickForm_element::getFrozenHtml()
-     */
-    function getFrozenHtml()
-    {
-        return '';
     }
 
     /**
@@ -203,18 +159,62 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     /**
      *
-     * @see HTML_QuickForm_element::exportValue()
+     * @see HTML_QuickForm_element::setName()
      */
-    public function exportValue(&$submitValues, $assoc = false)
+    public function setName($name)
     {
-        $type = $this->getType();
-        if ('reset' == $type || 'button' == $type)
+        $this->updateAttributes(array('name' => $name));
+    }
+
+    /**
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->_type = $type;
+        $this->updateAttributes(array('type' => $type));
+    }
+
+    /**
+     *
+     * @see HTML_QuickForm_element::setValue()
+     */
+    public function setValue($value)
+    {
+        $this->updateAttributes(array('value' => $value));
+    }
+
+    /**
+     *
+     * @see HTML_Common::toHtml()
+     */
+    public function toHtml()
+    {
+        if ($this->_flagFrozen)
         {
-            return null;
+            return $this->getFrozenHtml();
         }
         else
         {
-            return parent::exportValue($submitValues, $assoc);
+            $html = array();
+
+            $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
+
+            if ($this->getGlyph())
+            {
+                $html[] =
+                    $this->_getTabs() . $this->getGlyph()->render() . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
+            }
+
+            if ($this->getStyleButtonLabel())
+            {
+                $html[] = $this->_getTabs() . $this->getStyleButtonLabel();
+            }
+
+            $html[] = $this->_getTabs() . '</button>';
+
+            return implode(PHP_EOL, $html);
         }
     }
 }

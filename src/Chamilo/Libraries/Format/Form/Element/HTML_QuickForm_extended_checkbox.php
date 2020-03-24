@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Extension on the HTML Quickform Checkbox element to support returnable values if the checkbox is not selected
  *
@@ -25,16 +26,18 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      *        or an associative array
      * @param string $value (optional)The value for the checkbox
      * @param string $return_value (optional)The return value when the checkbox is not selected
+     *
+     * @return void
      * @since 1.0
      * @access public
-     * @return void
      */
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
-        $return_value = null)
+    public function __construct(
+        $elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, $return_value = null
+    )
     {
         HTML_QuickForm_checkbox::__construct($elementName, $elementLabel, $text, $attributes);
 
-        if ($value && ! is_null($value))
+        if ($value && !is_null($value))
         {
             $this->setValue($value);
         }
@@ -66,6 +69,15 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      *
      * @return string
      */
+    function getCheckboxClasses()
+    {
+        return 'checkbox no-toggle-style';
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getReturnValue()
     {
         return $this->return_value;
@@ -78,15 +90,6 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     public function setReturnValue($return_value)
     {
         $this->return_value = $return_value;
-    }
-
-    /**
-     *
-     * @see HTML_QuickForm_checkbox::setValue()
-     */
-    function setValue($value)
-    {
-        $this->updateAttributes(array('value' => $value));
     }
 
     /**
@@ -135,7 +138,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                 // do not use submit values for button-type elements
                 $type = $this->getType();
                 if (('updateValue' != $event) ||
-                     ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type))
+                    ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type))
                 {
                     switch ($event)
                     {
@@ -166,6 +169,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                         case 'setGroupValue' :
                             $this->setValue($arg);
                     }
+
                     return true;
                 }
                 else
@@ -180,9 +184,20 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                         $this->setValue($value);
                     }
                 }
+
                 return true;
         }
+
         return true;
+    }
+
+    /**
+     *
+     * @see HTML_QuickForm_checkbox::setValue()
+     */
+    function setValue($value)
+    {
+        $this->updateAttributes(array('value' => $value));
     }
 
     /**
@@ -191,7 +206,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      */
     function toHtml()
     {
-        if (! $this->isFrozen())
+        if (!$this->isFrozen())
         {
             $html = array();
 
@@ -206,14 +221,5 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         }
 
         return parent::toHtml();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    function getCheckboxClasses()
-    {
-        return 'checkbox no-toggle-style';
     }
 }

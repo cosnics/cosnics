@@ -9,12 +9,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  *
- * @package repository.lib.complex_display.wiki.component
- */
-/*
- * This viewer will show the selected wiki_page. You'll be redirected here from the wiki_viewer page by clicking on the
- * name of a wiki_page Author: Stefan Billiet Author: Nick De Feyter
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class VersionReverterComponent extends Manager
 {
@@ -27,15 +24,15 @@ class VersionReverterComponent extends Manager
         {
             $version_object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
-                ComplexWikiPage::class_name(),
-                $complex_wiki_page_id);
+                ComplexWikiPage::class_name(), $complex_wiki_page_id
+            );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             if ($version_object_id)
             {
                 $version_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
-                    $version_object_id);
+                    ContentObject::class_name(), $version_object_id
+                );
                 if ($version_object && $version_object->get_object_number() == $wiki_page->get_object_number())
                 {
                     if ($version_object->version())
@@ -44,50 +41,50 @@ class VersionReverterComponent extends Manager
                         if ($complex_wiki_page->update())
                         {
                             $this->redirect(
-                                Translation::get('WikiPageReverted'),
-                                false,
-                                array(
+                                Translation::get('WikiPageReverted'), false, array(
                                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
-                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
+                                )
+                            );
                         }
                         else
                         {
                             $this->redirect(
-                                Translation::get('WikiPageRevertedPublicationNotUpdated'),
-                                true,
-                                array(
+                                Translation::get('WikiPageRevertedPublicationNotUpdated'), true, array(
                                     self::PARAM_ACTION => self::ACTION_HISTORY,
-                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
+                                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
+                                )
+                            );
                         }
                     }
                     else
                     {
                         $this->redirect(
-                            Translation::get('WikiPageNotReverted'),
-                            true,
-                            array(
+                            Translation::get('WikiPageNotReverted'), true, array(
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
+                            )
+                        );
                     }
                 }
                 else
                 {
                     $this->redirect(
-                        Translation::get('WikiPageNotReverted'),
-                        true,
-                        array(
+                        Translation::get('WikiPageNotReverted'), true, array(
                             self::PARAM_ACTION => self::ACTION_HISTORY,
-                            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
+                            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
+                        )
+                    );
                 }
             }
             else
             {
                 $this->redirect(
-                    Translation::get('WikiPageNotReverted'),
-                    true,
-                    array(
+                    Translation::get('WikiPageNotReverted'), true, array(
                         self::PARAM_ACTION => self::ACTION_HISTORY,
-                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
+                        self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
+                    )
+                );
             }
         }
         else

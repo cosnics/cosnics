@@ -40,8 +40,8 @@ class ComparerComponent extends Manager
 
         if ($object_ids)
         {
-            $object_id = $object_ids[0];
-            $version_id = $object_ids[1];
+            $object_id = $object_ids[1];
+            $version_id = $object_ids[0];
         }
         else
         {
@@ -87,12 +87,10 @@ class ComparerComponent extends Manager
             $this->force_menu_url($this->get_recycle_bin_url());
         }
 
-        $differenctRenderer = new ContentObjectDifferenceRenderer();
-
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $differenctRenderer->render($contentObject->get_difference($version_id));
+        $html[] = $this->getContentObjectDifferenceRenderer()->render($contentObject->get_difference($version_id));
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -143,6 +141,14 @@ class ComparerComponent extends Manager
         }
 
         return $contentObject;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer
+     */
+    protected function getContentObjectDifferenceRenderer()
+    {
+        return $this->getService(ContentObjectDifferenceRenderer::class);
     }
 
     public function get_additional_parameters($additionalParameters = array())

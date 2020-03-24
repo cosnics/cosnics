@@ -52,18 +52,16 @@ abstract class ContentObjectDifference
         foreach ($defaultPropertyNames as $defaultPropertyName)
         {
             $differences[$defaultPropertyName] = new Diff(
-                $this->getVisualDefaultPropertyValue($this->getContentObject(), $defaultPropertyName),
-                $this->getVisualDefaultPropertyValue($this->getContentObjectVersion(), $defaultPropertyName)
-
+                $this->getVisualDefaultPropertyValue($this->getContentObjectVersion(), $defaultPropertyName),
+                $this->getVisualDefaultPropertyValue($this->getContentObject(), $defaultPropertyName)
             );
         }
 
         foreach ($this->getAdditionalPropertyNames() as $additionalPropertyName)
         {
             $differences[$additionalPropertyName] = new Diff(
-                $this->getVisualAdditionalPropertyValue($this->getContentObject(), $additionalPropertyName),
-                $this->getVisualAdditionalPropertyValue($this->getContentObjectVersion(), $additionalPropertyName)
-
+                $this->getVisualAdditionalPropertyValue($this->getContentObjectVersion(), $additionalPropertyName),
+                $this->getVisualAdditionalPropertyValue($this->getContentObject(), $additionalPropertyName)
             );
         }
 

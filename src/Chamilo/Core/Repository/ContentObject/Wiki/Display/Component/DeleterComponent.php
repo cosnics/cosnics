@@ -4,6 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DeleterComponent extends Manager
 {
 
@@ -11,6 +16,7 @@ class DeleterComponent extends Manager
     {
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Display\Action\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 }

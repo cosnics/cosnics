@@ -521,3 +521,4 @@ CouldNotRetrieveSelectedNode = "Het systeem is er niet in geslaagd om de geselec
 ContentObjectTemplateSynchronizerDescription = "Synchroniseert de templates van een specifiek content object type"
 UnknownImportType = "Het gegeven import type {TYPE} bestaat niet"
 RepositoryManagerBrowserComponent = "Browser"
+DifferenceProperty = "Property: {PROPERTY}"

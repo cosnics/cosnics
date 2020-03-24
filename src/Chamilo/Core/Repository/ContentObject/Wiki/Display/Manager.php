@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -28,9 +27,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
-
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
 
 /**
  *

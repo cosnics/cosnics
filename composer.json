@@ -63,7 +63,7 @@
             "Chamilo\\": "src/Chamilo/"
         },
         "classmap": [
-            "src/Chamilo/Libraries/Format/Form/Element/"
+            "src/Chamilo/Libraries/Format/Form/Element/", "src/Chamilo/Configuration/Plugin"
         ],
         "exclude-from-classmap": [
             "src/Chamilo/Libraries/Format/Form/Element/AdvancedElementFinder"

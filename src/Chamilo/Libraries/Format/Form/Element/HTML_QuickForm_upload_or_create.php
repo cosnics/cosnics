@@ -1,8 +1,10 @@
 <?php
+
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+
 /**
  * Form element to upload or create a document This element contains 2 radio- buttons.
  * One with label 'upload document'
@@ -14,8 +16,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
 {
     const ELEMENT_CHOICE = 'choice';
-    const ELEMENT_FILE = 'file';
+
     const ELEMENT_EDITOR = 'html_content';
+
+    const ELEMENT_FILE = 'file';
+
     const ELEMENT_UNCOMPRESS = 'uncompress';
 
     /**
@@ -40,23 +45,19 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
     public function _createElements()
     {
         $this->_elements[0] = new HTML_QuickForm_Radio(
-            self::ELEMENT_CHOICE,
-            '',
-            Translation::get('Upload', null, Utilities::COMMON_LIBRARIES),
-            '0',
-            array(
+            self::ELEMENT_CHOICE, '', Translation::get('Upload', null, Utilities::COMMON_LIBRARIES), '0', array(
                 'onclick' => 'javascript:editor_hide(\'editor_html_content\'); javascript:uncompress_show(\'' .
-                     self::ELEMENT_UNCOMPRESS . '\')'));
+                    self::ELEMENT_UNCOMPRESS . '\')'
+            )
+        );
         $this->_elements[0]->setChecked(true);
         $this->_elements[1] = new HTML_QuickForm_file(self::ELEMENT_FILE, '');
         $this->_elements[2] = new HTML_QuickForm_Radio(
-            self::ELEMENT_CHOICE,
-            '',
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
-            '1',
-            array(
+            self::ELEMENT_CHOICE, '', Translation::get('Create', null, Utilities::COMMON_LIBRARIES), '1', array(
                 'onclick' => 'javascript:editor_show(\'editor_html_content\'); javascript:editor_hide(\'' .
-                     self::ELEMENT_UNCOMPRESS . '\')'));
+                    self::ELEMENT_UNCOMPRESS . '\')'
+            )
+        );
         $this->_elements[3] = new HTML_QuickForm_textarea(self::ELEMENT_EDITOR, '');
         // $this->_elements[4] = new HTML_QuickForm_checkbox(self ::
         // ELEMENT_UNCOMPRESS, '', Translation :: get('Uncompress', null, Utilities
@@ -66,30 +67,11 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
 
     /**
      *
-     * @see HTML_QuickForm_group::toHtml()
+     * @see HTML_QuickForm_group::accept()
      */
-    public function toHtml()
+    public function accept($renderer, $required = false, $error = null)
     {
-        $html[] = $this->_elements[0]->toHtml();
-        $html[] = '<div style="display: inline;" id="' . self::ELEMENT_UNCOMPRESS . '">';
-        $html[] = $this->_elements[1]->toHtml();
-        // $html[] = $this->_elements[4]->toHtml();
-        $html[] = '</div>';
-        $html[] = '<br />';
-        $html[] = $this->_elements[2]->toHtml();
-        $html[] = '<div style="margin-left:20px;display:block;" id="editor_html_content">';
-        // $html[] = $this->_elements[3]->toHtml();
-
-        $html_editor = new FormValidatorHtmlEditor(
-            self::ELEMENT_EDITOR,
-            '',
-            false,
-            array(FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '500'));
-
-        $html[] = $html_editor->render();
-        $html[] = '</div>';
-        $html[] = $this->getElementJS();
-        return implode(PHP_EOL, $html);
+        $renderer->renderElement($this, $required, $error);
     }
 
     /**
@@ -114,15 +96,34 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
 					}
 					</script>
 				";
+
         return $js;
     }
 
     /**
      *
-     * @see HTML_QuickForm_group::accept()
+     * @see HTML_QuickForm_group::toHtml()
      */
-    public function accept($renderer, $required = false, $error = null)
+    public function toHtml()
     {
-        $renderer->renderElement($this, $required, $error);
+        $html[] = $this->_elements[0]->toHtml();
+        $html[] = '<div style="display: inline;" id="' . self::ELEMENT_UNCOMPRESS . '">';
+        $html[] = $this->_elements[1]->toHtml();
+        // $html[] = $this->_elements[4]->toHtml();
+        $html[] = '</div>';
+        $html[] = '<br />';
+        $html[] = $this->_elements[2]->toHtml();
+        $html[] = '<div style="margin-left:20px;display:block;" id="editor_html_content">';
+        // $html[] = $this->_elements[3]->toHtml();
+
+        $html_editor = new FormValidatorHtmlEditor(
+            self::ELEMENT_EDITOR, '', false, array(FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '500')
+        );
+
+        $html[] = $html_editor->render();
+        $html[] = '</div>';
+        $html[] = $this->getElementJS();
+
+        return implode(PHP_EOL, $html);
     }
 }

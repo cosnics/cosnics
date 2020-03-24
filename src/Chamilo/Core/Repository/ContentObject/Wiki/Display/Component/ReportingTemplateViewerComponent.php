@@ -10,6 +10,11 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class ReportingTemplateViewerComponent extends Manager implements DelegateComponent
 {
 
@@ -26,14 +31,17 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
                 $template = $this->get_parent()->get_wiki_statistics_reporting_template_name();
                 break;
             case self::ACTION_ACCESS_DETAILS :
-                $template = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate';
+                $template =
+                    'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate';
                 break;
         }
 
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Reporting\Viewer\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $component->set_template_by_name($template);
+
         return $component->run();
     }
 
@@ -47,8 +55,8 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
         {
             $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
-                $complex_wiki_page_id);
+                ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+            );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             $html = array();
@@ -56,11 +64,11 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
             $html[] = parent::render_header($complex_wiki_page);
 
             $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Statistics') . ' ' .
-                 $wiki_page->get_title() . '</div>';
+                $wiki_page->get_title() . '</div>';
             $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
-                'From',
-                null,
-                Utilities::COMMON_LIBRARIES) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
+                    'From', null, Utilities::COMMON_LIBRARIES
+                ) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
+
             return implode(PHP_EOL, $html);
         }
     }

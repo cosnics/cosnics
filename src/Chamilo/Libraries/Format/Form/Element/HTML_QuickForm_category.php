@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A pseudo-element used for adding raw HTML to form
  * Intended for use with the default renderer only, template-based

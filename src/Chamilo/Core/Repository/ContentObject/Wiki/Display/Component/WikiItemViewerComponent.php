@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -17,16 +16,11 @@ use MediawikiParser;
 use MediawikiParserContext;
 
 /**
- *
- * @package repository.lib.complex_display.wiki.component
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
+ * @author Stefan Billiet
+ * @author Nick De Feyter
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-/*
- * This viewer will show the selected wiki_page. You'll be redirected here from the wiki_viewer page by clicking on the
- * name of a wiki_page Author: Stefan Billiet Author: Nick De Feyter
- */
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
-
 class WikiItemViewerComponent extends Manager implements DelegateComponent
 {
 

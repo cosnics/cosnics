@@ -1,9 +1,8 @@
 <?php
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Utilities\Utilities;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_extended_checkbox.php';
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -23,11 +22,21 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
      * @param integer $value
      * @param string $return_value
      */
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
-        $return_value = null)
+    public function __construct(
+        $elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, $return_value = null
+    )
     {
         parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
         $this->_type = 'toggle';
+    }
+
+    /**
+     *
+     * @see HTML_QuickForm_extended_checkbox::getCheckboxClasses()
+     */
+    function getCheckboxClasses()
+    {
+        return 'checkbox no-awesome-style';
     }
 
     /**
@@ -40,17 +49,9 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 
         $html[] = parent::toHtml();
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'Toggle.js');
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'Toggle.js'
+        );
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @see HTML_QuickForm_extended_checkbox::getCheckboxClasses()
-     */
-    function getCheckboxClasses()
-    {
-        return 'checkbox no-awesome-style';
     }
 }

@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPage\WikiPageTa
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -17,14 +16,10 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  *
- * @package repository.lib.complex_display.wiki.component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-/*
- * This is the compenent that allows the user to view all pages of a wiki. If no homepage is set all available pages
- * will be shown, otherwise the homepage will be shown. Author: Stefan Billiet Author: Nick De Feyter
- */
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
 class WikiBrowserComponent extends Manager implements DelegateComponent, TableSupport
 {
 
@@ -47,6 +42,11 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         }
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail = $this->get_breadcrumbtrail();
+    }
+
     public function get_condition()
     {
         // search condition
@@ -55,9 +55,9 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         // append with extra conditions
         $owner_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_PARENT),
-            new StaticConditionVariable($this->owner));
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($this->owner)
+        );
         if ($condition)
         {
             $conditions = array();
@@ -80,23 +80,23 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         {
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
+
             return new OrCondition($conditions);
         }
-        return null;
-    }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail = $this->get_breadcrumbtrail();
+        return null;
     }
 
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
      */
+
     public function get_table_condition($table_class_name)
     {
         return $this->get_condition();

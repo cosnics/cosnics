@@ -10,7 +10,7 @@
         <service id="Chamilo\Core\Repository\Service\WorkspaceExtensionManager"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectService"/>
-        
+
         <service id="Chamilo\Core\Repository\Quota\Rights\Service\RightsService">
             <argument key="$rightsRepository"
                       type="service"
@@ -21,5 +21,6 @@
         <service id="Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository"/>
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository"/>
 
+        <service id="Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer"/>
     </services>
 </container>

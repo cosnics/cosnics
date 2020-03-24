@@ -11,32 +11,26 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
-/**
- *
- * @package repository.lib.complex_display.wiki.component
- */
-/*
- * This is the compenent that allows the user to create a wiki_page. Author: Stefan Billiet Author: Nick De Feyter
- */
-class WikiPageCreatorComponent extends Manager implements ViewerInterface,
-    DelegateComponent
+class WikiPageCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
 {
 
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_parameter(self::PARAM_ACTION, self::ACTION_CREATE_PAGE);
+
             return $component->run();
         }
         else
         {
             $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
-            if (! is_array($objects))
+            if (!is_array($objects))
             {
                 $objects = array($objects);
             }
@@ -49,18 +43,25 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface,
                 $complex_content_object_item->set_user_id($this->get_user_id());
                 $complex_content_object_item->set_display_order(
                     DataManager::select_next_display_order(
-                        $this->get_root_content_object()->get_id()));
+                        $this->get_root_content_object()->get_id()
+                    )
+                );
                 $complex_content_object_item->set_is_homepage(0);
                 $complex_content_object_item->create();
             }
 
             $this->redirect(
-                Translation::get('WikiItemCreated'),
-                '',
-                array(
+                Translation::get('WikiItemCreated'), '', array(
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
-                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id()));
+                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id()
+                )
+            );
         }
+    }
+
+    public function get_allowed_content_object_types()
+    {
+        return $this->get_root_content_object()->get_allowed_types();
     }
 
     public function render_header()
@@ -89,13 +90,8 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface,
 
         $html[] = '<div class="wiki-pane-content-title">' . Translation::get($title) . '</div>';
         $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get('In') . ' ' .
-             $this->get_root_content_object()->get_title() . '</div>';
+            $this->get_root_content_object()->get_title() . '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_allowed_content_object_types()
-    {
-        return $this->get_root_content_object()->get_allowed_types();
     }
 }

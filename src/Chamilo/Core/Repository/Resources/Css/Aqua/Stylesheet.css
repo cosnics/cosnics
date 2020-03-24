@@ -287,6 +287,10 @@ div.quota_statistics .data_table td.header {
     background: #e99;
 }
 
+.table-difference th.col-sm-1 {
+    text-align: center;
+}
+
 .comparer-header-table {
     margin-bottom: 20px;
 }

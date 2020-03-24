@@ -19,8 +19,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  *
- * @package repository.lib.complex_display.wiki.component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WikiHistoryComponent extends Manager implements TableSupport
 {
@@ -57,8 +58,9 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 {
                     $this->redirect(Translation::get('TooFewItems'), true);
                 }
-                $compareObjectIdentifier = $compareObjectIdentifiers[0];
-                $compareVersionIdentifier = $compareObjectIdentifiers[1];
+
+                $compareVersionIdentifier = $compareObjectIdentifiers[0];
+                $compareObjectIdentifier = $compareObjectIdentifiers[1];
 
                 $compareObject = DataManager::retrieve_by_id(
                     ContentObject::class_name(), $compareObjectIdentifier
@@ -67,10 +69,9 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 $html[] = '<h3 id="page-title">' . Translation::get('ComparerComponent') . ': ' .
                     $this->wiki_page->get_title() . '</h3>';
 
-                $difference = $compareObject->get_difference($compareVersionIdentifier);
-                $differenctRenderer = new ContentObjectDifferenceRenderer();
-
-                $html[] = $differenctRenderer->render($difference);
+                $html[] = $this->getContentObjectDifferenceRenderer()->render(
+                    $compareObject->get_difference($compareVersionIdentifier)
+                );
             }
             else
             {
@@ -109,6 +110,14 @@ class WikiHistoryComponent extends Manager implements TableSupport
         return DataManager::count_content_objects(
             ContentObject::class_name(), $condition
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer
+     */
+    protected function getContentObjectDifferenceRenderer()
+    {
+        return $this->getService(ContentObjectDifferenceRenderer::class);
     }
 
     public function get_content_object_deletion_url($content_object, $type = null)

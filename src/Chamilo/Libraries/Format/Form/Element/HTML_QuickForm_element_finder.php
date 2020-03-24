@@ -118,9 +118,9 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         );
         $this->_elements[] = new HTML_QuickForm_button(
             $this->getName() . '_deactivate', '', array(
-                'id'       => $deactivate_button_id,
+                'id' => $deactivate_button_id,
                 'disabled' => 'disabled',
-                'class'    => 'deactivate_elements'
+                'class' => 'deactivate_elements'
             )
         );
     }

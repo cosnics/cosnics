@@ -27,8 +27,6 @@ class Basic extends Pdf
 
     public function render()
     {
-        require_once Path::getInstance()->getPluginPath() . 'fpdf/mc_table.php';
-
         $this->pdf_mc_table = new PDF_MC_Table($this->get_template()->getStyle()->getPaperOrientation(), 'mm', 'A4');
 
         $this->pdf_mc_table->SetMargins(10, 5);

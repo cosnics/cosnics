@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -22,12 +21,11 @@ use Chamilo\Libraries\Translation\Translation;
 use MediawikiParser;
 use MediawikiParserContext;
 
-/*
- * This is the discuss page. Here a user can add feedback to a wiki_page. Author: Stefan Billiet Author: Nick De Feyter
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
-require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
-
 class WikiDiscussComponent extends Manager implements DelegateComponent, FeedbackSupport
 {
     const DESCRIPTION_MARKER = '<!-- /description -->';

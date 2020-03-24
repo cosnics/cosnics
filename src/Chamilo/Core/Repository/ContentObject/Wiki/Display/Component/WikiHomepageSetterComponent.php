@@ -8,12 +8,11 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  *
- * @package repository.lib.complex_display.wiki.component
- */
-/*
- * This is the component that allows the user to make a wiki_page the homepage. Author: Stefan Billiet Author: Nick De
- * Feyter
+ * @author Stefan Billiet
+ * @author Nick De Feyter
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WikiHomepageSetterComponent extends Manager
 {
@@ -21,26 +20,23 @@ class WikiHomepageSetterComponent extends Manager
     public function run()
     {
         $page = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(),
-            Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
-        /*
-         * If the wiki_page isn't empy the homepage will be set
-         */
-        if (! empty($page))
+            ComplexContentObjectItem::class_name(), Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+        );
+
+        if (!empty($page))
         {
             $page->set_is_homepage(true);
             $page->update();
             $this->redirect(
-                Translation::get('HomepageSelected'),
-                false,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => Request::get('pid')));
+                Translation::get('HomepageSelected'), false,
+                array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => Request::get('pid'))
+            );
         }
         else
         {
             $this->redirect(
-                Translation::get('HomepageNotSelected'),
-                true,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI));
+                Translation::get('HomepageNotSelected'), true, array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)
+            );
         }
     }
 }

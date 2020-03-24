@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_element_finder.php';
 
 /**
  * AJAX-based tree search and multiselect element.
@@ -20,8 +19,10 @@ class HTML_QuickForm_user_group_finder extends HTML_QuickForm_element_finder
      * @param string[] $default_values
      * @param string[] $options
      */
-    public function __construct($elementName = null, $elementLabel = null, $search_url = null,
-        $locale = array('Display' => 'Display'), $default_values = array(), $options = array())
+    public function __construct(
+        $elementName = null, $elementLabel = null, $search_url = null, $locale = array('Display' => 'Display'),
+        $default_values = array(), $options = array()
+    )
     {
         parent::__construct($elementName, $elementLabel, $search_url, $locale, $default_values, $options);
         $this->_type = 'user_group_finder';
@@ -45,7 +46,7 @@ class HTML_QuickForm_user_group_finder extends HTML_QuickForm_element_finder
         {
             $value = explode('_', $value['id']);
 
-            if (! isset($results[$value[0]]) || ! is_array($results[$value[0]]))
+            if (!isset($results[$value[0]]) || !is_array($results[$value[0]]))
             {
                 $results[$value[0]] = array();
             }

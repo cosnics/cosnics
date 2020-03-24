@@ -1,4 +1,5 @@
 <?php
+
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,9 +26,11 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
      * @param string[] $attributes
      * @param boolean $includeMinutesPicker
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $includeMinutesPicker = true)
+    public function __construct(
+        $elementName = null, $elementLabel = null, $attributes = null, $includeMinutesPicker = true
+    )
     {
-        if (! isset($attributes['form_name']))
+        if (!isset($attributes['form_name']))
         {
             return;
         }
@@ -57,7 +60,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
         }
 
         // If translation not available in PEAR::HTML_QuickForm_date, add the Chamilo-translation
-        if (! array_key_exists($editor_lang, $this->_locale))
+        if (!array_key_exists($editor_lang, $this->_locale))
         {
             $this->_locale[$editor_lang]['months_long'] = array(
                 Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
@@ -71,7 +74,8 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
                 Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
                 Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
                 Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+                Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES)
+            );
         }
 
         if ($this->includeMinutesPicker)
@@ -85,26 +89,6 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
 
         $this->_options['language'] = $editor_lang;
         $this->setValue(date('H'));
-    }
-
-    /**
-     *
-     * @see HTML_QuickForm_date::toHtml()
-     */
-    public function toHtml()
-    {
-        $js = $this->getElementJS();
-        return $js . parent::toHtml();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getElementJS()
-    {
-        return ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js');
     }
 
     /**
@@ -132,6 +116,29 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
         $datetime = $h;
 
         $result[$this->getName()] = $datetime;
+
         return $result;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getElementJS()
+    {
+        return ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
+        );
+    }
+
+    /**
+     *
+     * @see HTML_QuickForm_date::toHtml()
+     */
+    public function toHtml()
+    {
+        $js = $this->getElementJS();
+
+        return $js . parent::toHtml();
     }
 }

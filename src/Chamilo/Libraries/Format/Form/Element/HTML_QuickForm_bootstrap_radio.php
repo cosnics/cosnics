@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for <input /> form elements
  * HTML class for a radio type element
@@ -38,7 +39,7 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
      */
     function toHtml()
     {
-        if (! $this->isFrozen())
+        if (!$this->isFrozen())
         {
             $html = array();
 

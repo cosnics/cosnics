@@ -1,8 +1,7 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_stylebutton.php';
 
-use \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  *

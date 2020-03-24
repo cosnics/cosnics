@@ -326,17 +326,17 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
         $uploadUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT                          => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
             )
         );
 
         $dropZoneParameters = array(
-            'name'                        => 'attachments_importer',
-            'maxFilesize'                 => $calculator->getMaximumUploadSize(),
-            'uploadUrl'                   => $uploadUrl->getUrl(),
-            'successCallbackFunction'     => 'chamilo.core.repository.importImage.processUploadedFile',
-            'sendingCallbackFunction'     => 'chamilo.core.repository.importImage.prepareRequest',
+            'name' => 'attachments_importer',
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'successCallbackFunction' => 'chamilo.core.repository.importImage.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.importImage.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importImage.deleteUploadedFile'
         );
 
