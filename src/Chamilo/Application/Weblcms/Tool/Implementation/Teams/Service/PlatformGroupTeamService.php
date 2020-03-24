@@ -15,6 +15,7 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsExcep
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
+use Nette\Neon\Exception;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service
@@ -185,14 +186,18 @@ class PlatformGroupTeamService
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
-     *
+     * @param PlatformGroupTeam $platformGroupTeam
+     * @throws AzureUserNotExistsException
+     * @throws UnknownAzureUserIdException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Exception
      */
     public function addGroupUsersToPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
+        if(!$team)
+            throw new \Exception("Platform group Team not found in GRAPH API with id: " . $platformGroupTeam->getTeamId());
         $this->addGroupUsersToTeam($team, $groups->getArrayCopy());
     }
 
