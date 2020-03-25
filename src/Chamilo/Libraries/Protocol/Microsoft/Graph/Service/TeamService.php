@@ -103,7 +103,6 @@ class TeamService
      *
      * @return Team | null
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
-     * @throws TeamNotFoundException
      *
      */
     public function getTeam(string $groupId): ?Team

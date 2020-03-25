@@ -20,6 +20,7 @@ class TeamRepository
 
     /**
      * GroupRepository constructor.
+     *
      * @param GraphRepository $graphRepository
      */
     public function __construct(GraphRepository $graphRepository)
@@ -31,6 +32,7 @@ class TeamRepository
      * @param string $title
      * @param string $description
      * @param string $ownerAzureId
+     *
      * @return string
      * @throws GraphException
      * @throws \Exception
@@ -38,7 +40,7 @@ class TeamRepository
     public function createTeam(string $title, string $description, string $ownerAzureId)
     {
         $response = $this->graphRepository->executePostWithAccessTokenExpirationRetry(
-              '/teams/',
+            '/teams/',
             [
                 "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('educationClass')",
                 "displayName" => $title,
@@ -53,28 +55,34 @@ class TeamRepository
 
         //Content-Location: /teams/{teamId}/operation/{operationId}
         $locationHeader = $response->getHeaders()['Location'];
-        if(!$locationHeader)
+        if (!$locationHeader)
+        {
             throw new \Exception("No location header");
+        }
 
         $locationString = $locationHeader[0];
-        if(!$locationString)
+        if (!$locationString)
+        {
             throw new \Exception("Location header does not contain Team ID: " . $locationHeader);
+        }
 
         $matches = [];
         preg_match('/\/teams\(\'(.*?)\'\).*/', $locationString, $matches);
 
-        if(!$matches[1])
+        if (!$matches[1])
+        {
             throw new \Exception("Invalid Team Id");
+        }
 
         return $matches[1];
     }
 
-
     /**
-     * @deprecated
      * @param $groupId
+     *
      * @return \Microsoft\Graph\Model\Entity | Team
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @deprecated
      */
     public function addTeamToGroup(string $groupId): \Microsoft\Graph\Model\Entity
     {
@@ -98,17 +106,27 @@ class TeamRepository
      */
     public function getTeam(string $teamId): ?\Microsoft\Graph\Model\Entity
     {
-        try {
+        try
+        {
             return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
                 '/teams/' . $teamId,
                 Team::class
             );
-        } catch ( \GuzzleHttp\Exception\ClientException $exception){
-            if($exception->getCode() == 404 &&
-                $exception->getResponse()->getBody()->getContents() === 'No team found with Group Id ' . $teamId) {
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+
+            $bodyContents = json_decode($exception->getResponse()->getBody()->getContents());
+
+            if (
+                $exception->getCode() == 404 &&
+                $bodyContents['error']['message'] == 'No team found with Group Id ' . $teamId
+            )
+            {
                 return null;
             }
-            else {
+            else
+            {
                 throw new GraphException("Could not retrieve team with id" . $teamId, 0, $exception);
             }
         }
@@ -116,6 +134,7 @@ class TeamRepository
 
     /**
      * @param string $teamId
+     *
      * @return string
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
