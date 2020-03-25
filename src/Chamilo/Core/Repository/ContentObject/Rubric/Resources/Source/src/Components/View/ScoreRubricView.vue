@@ -36,13 +36,13 @@
 						<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
 					</div>
 				</div>
-				<div v-if="categoriesView1.length === 0" slot="footer" class="no-category"></div>
+				<div slot="footer" class="no-category"></div>
 			</draggable>
-			<div class="actions" v-if="!isAddingCategory" :class="{ hideInput: categoryDragging }">
+			<div class="actions" v-if="!isAddingCategory">
 				<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus-circle" aria-hidden="true"/>Categorie</button>
 				<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus-circle" aria-hidden="true"/>Criterium</button>
 			</div>
-			<div v-else class="category newcategory" :class="{ hideInput: categoryDragging }">
+			<div v-else class="category newcategory">
 				<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 						<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
 					</draggable>
 				</div>
-				<div v-if="categoriesView2.length === 0" slot="footer" class="no-category"></div>
+				<div slot="footer" class="no-category"></div>
 			</draggable>
 		</div>
 	</div>
@@ -410,9 +410,6 @@
 		margin-right: 5px;
 		transition: color 0.1s ease-in;
 	}
-	.hideInput {
-		opacity: 0;
-	}
 	button:hover {
 		background: hsla(200, 100%, 48%, 1);
 		color: #fff;
@@ -595,16 +592,14 @@
 	.cluster-content > div > div.no-category {
 		margin-right: 0;
 		height: 200px;
-		width: 0px;
 		flex: 0;
-		background: pink;
-		transition: width 150ms;
-	}
-	.container.dragging .cluster-content > div > div.no-category {
-		width: 200px;
+		background: transparent;
 	}
 	.cluster-content .actions {
-		margin-left: 0;
+		transform: translate(-260px, 0);
+	}
+	.container.dragging .cluster-content .actions {
+		pointer-events: none;
 	}
 	.category {
 		min-width: 240px;
@@ -646,7 +641,10 @@
 	.category.newcategory {
 		margin-left: 0;
 		border: none;
-		transition: opacity 100ms;
+		transform: translate(-240px, 0);
+	}
+	.container.dragging .category.newcategory {
+		pointer-events: none;
 	}
 	.category.newcategory > div:nth-child(1) {
 		background: transparent;
