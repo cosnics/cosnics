@@ -119,7 +119,7 @@ class TeamRepository
             $bodyContents = json_decode($exception->getResponse()->getBody()->getContents());
 
             if (
-                $exception->getCode() == 404 &&
+                $exception->getCode() == 404 && is_array($bodyContents) &&
                 $bodyContents['error']['message'] == 'No team found with Group Id ' . $teamId
             )
             {
