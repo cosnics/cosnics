@@ -150,7 +150,7 @@ class CourseGroupOffice365Connector
     public function updateCourseGroupTeamName(CourseGroup $courseGroup)
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        if(!$reference->hasTeam())
+        if(!$reference instanceof CourseGroupOffice365Reference || !$reference->hasTeam())
         {
             return;
         }
