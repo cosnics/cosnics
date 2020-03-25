@@ -1,13 +1,13 @@
 <template>
-    <div class="container criterium">
+    <div class="container criterium" v-if="criterium !== null">
         <div v-if="criterium">
-            <i class="fa fa fa-close" @click="closeCriterium"/>
+            <i class="fa fa fa-close" @click="$emit('close')"/>
             <h2>
                 <label for="title" style="display:table-cell; width:1px">Criterium: </label>
-                <input type="text" v-model="criterium.title" name="title" style="display: table-cell; width: 100%"/>
+                <input type="text" v-model="criterium.title" id="title" name="title" style="display: table-cell; width: 100%"/>
             </h2>
             <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} > {{ criterium.parent.title }}</div>
-            <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" v-model="criterium.weight"/> %</div>
+            <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight"/> %</div>
             <ul>
                 <li v-for="level in store.rubric.levels" :key="level.id">
                     <div class="level-title">{{ level.title }}</div>
@@ -26,7 +26,8 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Watch} from "vue-property-decorator";
+    import {Component, Vue, Prop, Watch} from "vue-property-decorator";
+    import Criterium from "../../Domain/Criterium";
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
@@ -38,10 +39,12 @@
         components: {  }
     })
     export default class ScoreRubricView extends Vue {
+        @Prop(Criterium)
+        criterium: Criterium|null = null;
 
-        get criterium() {
-            return this.store.selectedCriterium;
-        }
+        /*get criterium() {
+            return this.selectedCriterium;
+        }*/
         get store() {
             return this.$root.$data.store;
         }
@@ -52,9 +55,6 @@
             for (let elem of document.getElementsByClassName('ta-feedback')) {
                 updateHeight(elem as HTMLElement);
             }
-        }
-        closeCriterium() {
-            this.store.selectedCriterium = null;
         }
     }
 

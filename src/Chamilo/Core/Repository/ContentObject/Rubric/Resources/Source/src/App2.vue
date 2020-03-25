@@ -16,8 +16,8 @@
             </transition> -->
 
             <div v-if="!store.isLoading">
-                <score-rubric-view v-if="!viewFullRubric"/>
-                <criterium-details-view v-if="store.selectedCriterium !== null"></criterium-details-view>
+                <score-rubric-view :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
+                <criterium-details-view :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
             </div>
             <div v-else class="container">
                 <p>Loading Rubrics...</p>
@@ -32,6 +32,7 @@
     import ScoreRubricView from "./Components/View/ScoreRubricView.vue";
     import CriteriumDetailsView from "./Components/View/CriteriumDetailsView.vue";
     import ScoreRubricStore from "./ScoreRubricStore";
+    import Criterium from "./Domain/Criterium";
 
     @Component({
         components: {
@@ -39,14 +40,17 @@
         },
     })
     export default class App extends Vue {
-        viewFullRubric: boolean = false;
+        private selectedCriterium: Criterium|null = null;
 
         get store(): ScoreRubricStore {
             return this.$root.$data.store;
         }
 
-        async created() {
+        selectCriterium(criterium: Criterium|null) {
+            this.selectedCriterium = criterium;
+        }
 
+        async created() {
             await this.store.fetchData();
         }
     }
