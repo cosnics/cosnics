@@ -14,22 +14,12 @@ mark {
     background-color: yellow;
 }
 
-.fa {
-    width: 14px;
-    text-align: center;
-}
-
 .container-headerless {
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.glyphicon {
-    top: 2px;
-}
-
 blockquote {
-    font-size: inherit;
     opacity: 0.7;
 }
 
@@ -59,17 +49,6 @@ body.cke_editable {
 
 .btn-action-toolbar a, .btn-toolbar a:hover, .btn-group a:hover {
     font-weight: normal !important;
-}
-
-.btn-default span.glyphicon, .btn-default span.fa {
-    color: #406e8e;
-}
-
-.btn-primary span.glyphicon, .btn-primary span.fa, .btn-success span.glyphicon,
-.btn-success span.fa, .btn-info span.glyphicon, .btn-info span.fa,
-.btn-warning span.glyphicon, .btn-warning span.fa, .btn-danger span.glyphicon,
-.btn-danger span.fa {
-    color: white;
 }
 
 .dropdown-menu {
@@ -104,14 +83,6 @@ body.cke_editable {
 
 .btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical .btn {
     text-align: left;
-}
-
-/*********
- * PANEL *
- *********/
-.panel.panel-chamilo {
-    background-color: #f9f9f9;
-    box-shadow: none;
 }
 
 /*******************
@@ -361,13 +332,6 @@ button.btn {
     color: #333333;
 }
 
-/***************
- * BREADCRUMBS *
- ***************/
-ol.breadcrumb a {
-    font-weight: normal;
-}
-
 /***********************
  * DYNAMIC VISUAL TABS *
  ***********************/
@@ -537,7 +501,7 @@ ul.nav-wizard li {
     float: left;
     height: 46px;
     display: inline-block;
-    text-align: middle;
+    text-align: center;
     padding: 0 20px 0 30px;
     margin: 0;
     font-size: 14px;
@@ -670,14 +634,6 @@ ul.nav-wizard.publication-wizard {
     margin-right: 0px !important;
 }
 
-/*.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item .icon.glyphicon {*/
-/*    width: 1.25em;*/
-/*}*/
-
-.glyphicon-muted {
-    opacity: 0.5;
-}
-
 .text-muted-invisible {
     color: #777777 !important;
 }
@@ -698,9 +654,4 @@ ul.nav-wizard.publication-wizard {
 
 .img-responsive {
     display: inline-block;
-}
-
-div.panel del {
-    background-color: white !important;
-    text-decoration: line-through !important;
 }

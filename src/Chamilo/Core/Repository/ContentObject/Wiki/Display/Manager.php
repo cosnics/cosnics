@@ -421,7 +421,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $html[] = '</div>';
         }
 
-        $html[] = $this->getButtonToolBarRenderer()->render();
+        $html[] = $this->getButtonToolBarRenderer($complexWikiPage)->render();
 
         return implode(PHP_EOL, $html);
     }

@@ -121,26 +121,6 @@ td p {
     padding: 0px;
 }
 
-table.no_border {
-    width: 100%;
-}
-
-table.no_border td {
-    border: 0px solid #EEF5FA;
-    padding: 0px 5px 0px 5px;
-}
-
-div.thumbnail_actions {
-    padding: 12px 20px;
-}
-
-div.thumbnail_container {
-    background-color: white;
-    opacity: 0.2;
-    display: none;
-    padding: 6px 10px;
-}
-
 /**
  * SLIDESHOW TABLE
  */
@@ -173,10 +153,6 @@ div.thumbnail_container {
 
 .table-slideshow .control span.glyphicon {
     width: 20px;
-}
-
-.table-slideshow .thumbnail-container {
-
 }
 
 .table-slideshow .thumbnail-container .thumbnail {

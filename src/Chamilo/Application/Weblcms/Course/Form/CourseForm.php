@@ -98,7 +98,7 @@ class CourseForm extends CommonCourseForm
             Course::PROPERTY_COURSE_TYPE_ID, 
             Translation::get('CourseType'), 
             $course_type_options, 
-            array('class' => 'course_type_selector'));
+            array('class' => 'course_type_selector form-control'));
         
         $this->registerRule(
             'course_type', 

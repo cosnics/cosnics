@@ -1,5 +1,5 @@
 /* Bootstrap */
-@import url('Bootstrap/css/bootstrap.css');
+@import url('Bootstrap/css/bootstrap.min.css');
 @import url('BootstrapCheckbox/awesome-bootstrap-checkbox.css');
 
 /* Font Awesome */
@@ -17,7 +17,6 @@
 @import url('Tabs.css');
 @import url('Tree.css');
 @import url('Bootstrap.css');
-@import url('Fancytree.css');
 
 .fas-ci-0793ee69022bce29ee5c942d0f33bb10, .fas-ci-d639d7187c52c2eff70a540c6b291884 {
     font-family: 'Font Awesome 5 Free';
@@ -60,51 +59,4 @@
  */
 .fas-ci-7e230f4a916e07600b3e0825011c6032:before {
     content: "\f3ca";
-}
-
-figcaption {
-    padding-top: 8px !important;
-}
-
-.image-captioned {
-    padding: 0px 0px 10px !important;
-    text-align: center;
-    border: solid 1px #ccc;
-    border-radius: 0px;
-    background: rgba(0, 0, 0, 0.05);
-    display: inline-block;
-    color: #555555;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.align-left {
-    float: left;
-    margin-right: 1.5em;
-}
-
-.align-right {
-    float: right;
-    margin-left: 1.5em;
-}
-
-.align-center {
-    text-align: center;
-    margin: 0 auto;
-}
-
-.align-center div {
-    margin: 0 auto;
-}
-
-.align-center > figure {
-    display: inline-block;
-}
-
-.text-maintenance {
-    font-weight: bold;
-}
-
-span[lang] {
-    font-style: normal;
 }

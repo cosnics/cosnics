@@ -1,48 +1,43 @@
 .reporting-container {
-	width: 100%;
-	min-width: 1000px;
+    width: 100%;
+    min-width: 1000px;
+    float: left;
+    overflow: hidden;
 }
 
 .reporting-body {
-	width: 100%;
-	position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .reporting-body:after {
-	display: table;
-	clear: both;
-}
-
-.reporting-container {
-	width: 100%;
-	float: left;
-	overflow: hidden;
+    display: table;
+    clear: both;
 }
 
 .reporting-content {
-	padding: 0 0 0 182px;
+    padding: 0 0 0 182px;
 }
 
 .reporting-left {
-	float: left;
-	width: 140px;
-	margin-left: -100%;
-	position: relative;
-	background: #B5E3FF;
-	border: 1px solid #B5CAE7;
-	/* 	border-left: 0px solid white; */
-	padding: 10px;
-	background-color: #d4e0f1;
+    float: left;
+    width: 140px;
+    margin-left: -100%;
+    position: relative;
+    background: #B5E3FF;
+    border: 1px solid #B5CAE7;
+    padding: 10px;
+    background-color: #d4e0f1;
 }
 
 .reporting-left-title {
-	font-weight: bold;
-	margin-bottom: 10px;
-	border-bottom: 1px solid white;
-	color: #4171B5;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 1px solid white;
+    color: #4171B5;
 }
 
 .reporting-left-title .bevel {
-	padding-bottom: 10px;
-	border-bottom: 1px solid #B5CAE7;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #B5CAE7;
 }

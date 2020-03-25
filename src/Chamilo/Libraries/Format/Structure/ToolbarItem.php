@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  *
@@ -12,8 +14,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 class ToolbarItem
 {
     const DISPLAY_ICON = 1;
-    const DISPLAY_LABEL = 2;
+
     const DISPLAY_ICON_AND_LABEL = 3;
+
+    const DISPLAY_LABEL = 2;
 
     /**
      *
@@ -81,8 +85,10 @@ class ToolbarItem
      * @param string $confirmationMessage
      * @param string[] $extraAttributes
      */
-    public function __construct($label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null,
-        $confirmationMessage = null, $extraAttributes = null)
+    public function __construct(
+        $label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false,
+        $class = null, $target = null, $confirmationMessage = null, $extraAttributes = null
+    )
     {
         $this->label = $label;
         $this->display = $display;
@@ -108,193 +114,39 @@ class ToolbarItem
      *
      * @return string
      */
-    public function get_label()
-    {
-        return $this->label;
-    }
-
-    /**
-     *
-     * @param unknown $label
-     */
-    public function set_label($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_display()
-    {
-        return $this->display;
-    }
-
-    /**
-     *
-     * @param integer $display
-     */
-    public function set_display($display)
-    {
-        $this->display = $display;
-    }
-
-    /**
-     *
-     * @return string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function get_image()
-    {
-        return $this->image;
-    }
-
-    /**
-     *
-     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
-     */
-    public function set_image($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_href()
-    {
-        return $this->href;
-    }
-
-    /**
-     *
-     * @param string $href
-     */
-    public function set_href($href)
-    {
-        $this->href = $href;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_target()
-    {
-        return $this->target;
-    }
-
-    /**
-     *
-     * @param string $target
-     */
-    public function set_target($target)
-    {
-        $this->target = $target;
-    }
-
-    /**
-     *
-     * @return boolean|string
-     */
-    public function get_confirmation()
-    {
-        return $this->confirmation;
-    }
-
-    /**
-     *
-     * @param boolean|string $confirmation
-     */
-    public function set_confirmation($confirmation)
-    {
-        $this->confirmation = $confirmation;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    function get_confirm_message()
-    {
-        return $this->confirmationMessage;
-    }
-
-    /**
-     *
-     * @param string $message
-     */
-    function set_confirm_message($message)
-    {
-        $this->confirmationMessage = $message;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function needs_confirmation()
-    {
-        if ($this->get_confirmation() === false)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getExtraAttributes()
-    {
-        return $this->extraAttributes;
-    }
-
-    /**
-     *
-     * @param string[] $extraAttributes
-     */
-    public function setExtraAttributes($extraAttributes)
-    {
-        $this->extraAttributes = $extraAttributes;
-    }
-
-    /**
-     *
-     * @return string
-     * @deprecated Use render() now
-     */
-    public function as_html()
-    {
-        return $this->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function render()
     {
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
-        if (! $this->get_display())
+        $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
+
+        $elementClasses = !empty($this->class) ? explode(' ', $this->class) : array();
+        array_unshift($elementClasses, 'btn-link');
+
+        $button = new Button(
+            $label, $this->get_image(), $this->get_href(), $display, $this->get_confirmation(),
+            implode(' ', $elementClasses), $this->get_target()
+        );
+
+        $buttonRenderer = new ButtonRenderer($button);
+
+        return $buttonRenderer->render();
+
+        $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
+        if (!$this->get_display())
         {
             $this->display = self::DISPLAY_ICON;
         }
-        $display_label = ($this->display & self::DISPLAY_LABEL) == self::DISPLAY_LABEL && ! empty($label);
+
+        $displayLabel = ($this->display & self::DISPLAY_LABEL) == self::DISPLAY_LABEL && !empty($label);
 
         $button = '';
 
         if (($this->display & self::DISPLAY_ICON) == self::DISPLAY_ICON && isset($this->image))
         {
-            if (! $this->image instanceof InlineGlyph)
+            if (!$this->image instanceof InlineGlyph)
             {
                 $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' .
-                     htmlentities($label) . '"' . ($display_label ? ' class="labeled"' : '') . '/>';
+                    htmlentities($label) . '"' . ($displayLabel ? ' class="labeled"' : '') . '/>';
             }
             else
             {
@@ -304,14 +156,14 @@ class ToolbarItem
 
         if ($this->class)
         {
-            $class = ' class="' . $this->class . '"';
+            $class = ' class="btn btn-default ' . $this->class . '"';
         }
         else
         {
-            $class = '';
+            $class = ' class="btn btn-default"';
         }
 
-        if ($display_label)
+        if ($displayLabel)
         {
             if ($this->get_href())
             {
@@ -322,6 +174,10 @@ class ToolbarItem
                 $button .= '<span' . $class . '>' . $label . '</span>';
             }
         }
+
+        $elementName = $this->get_href() ? 'a' : 'div';
+
+        $elementAttributes = array();
 
         if ($this->get_href())
         {
@@ -348,14 +204,39 @@ class ToolbarItem
 
             $extraAttributesString = implode(' ', $extraAttributesString);
 
-            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' .
-                 htmlentities($label) . '"' .
-                 ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
-                 addslashes(htmlentities($this->get_confirmation())) . '\');"' : '') . ' ' . $extraAttributesString . '>' .
-                 $button . '</a>';
+            $html[] =
+                '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . htmlentities($label) .
+                '"' . ($this->needs_confirmation() ?
+                    ' onclick="return confirm(\'' . addslashes(htmlentities($this->get_confirmation())) . '\');"' :
+                    '') . ' ' . $extraAttributesString . '>';
         }
 
-        return $button;
+        if (($this->display & self::DISPLAY_ICON) == self::DISPLAY_ICON && isset($this->image))
+        {
+            if (!$this->image instanceof InlineGlyph)
+            {
+                $html[] = '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' .
+                    htmlentities($label) . '"' . ($displayLabel ? ' class="labeled"' : '') . '/>';
+            }
+            else
+            {
+                $html[] = $this->image->render();
+            }
+        }
+
+        $html[] = '</' . $elementName . '>';
+
+        return implode('', $html);
+    }
+
+    /**
+     *
+     * @return string
+     * @deprecated Use render() now
+     */
+    public function as_html()
+    {
+        return $this->render();
     }
 
     /**
@@ -365,5 +246,165 @@ class ToolbarItem
     public function getClasses()
     {
         return $this->class;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getExtraAttributes()
+    {
+        return $this->extraAttributes;
+    }
+
+    /**
+     *
+     * @param string[] $extraAttributes
+     */
+    public function setExtraAttributes($extraAttributes)
+    {
+        $this->extraAttributes = $extraAttributes;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    function get_confirm_message()
+    {
+        return $this->confirmationMessage;
+    }
+
+    /**
+     *
+     * @return boolean|string
+     */
+    public function get_confirmation()
+    {
+        return $this->confirmation;
+    }
+
+    /**
+     *
+     * @param boolean|string $confirmation
+     */
+    public function set_confirmation($confirmation)
+    {
+        $this->confirmation = $confirmation;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_display()
+    {
+        return $this->display;
+    }
+
+    /**
+     *
+     * @param integer $display
+     */
+    public function set_display($display)
+    {
+        $this->display = $display;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_href()
+    {
+        return $this->href;
+    }
+
+    /**
+     *
+     * @param string $href
+     */
+    public function set_href($href)
+    {
+        $this->href = $href;
+    }
+
+    /**
+     *
+     * @return string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    public function get_image()
+    {
+        return $this->image;
+    }
+
+    /**
+     *
+     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
+     */
+    public function set_image($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_label()
+    {
+        return $this->label;
+    }
+
+    /**
+     *
+     * @param unknown $label
+     */
+    public function set_label($label)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_target()
+    {
+        return $this->target;
+    }
+
+    /**
+     *
+     * @param string $target
+     */
+    public function set_target($target)
+    {
+        $this->target = $target;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function needs_confirmation()
+    {
+        if ($this->get_confirmation() === false)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     *
+     * @param string $message
+     */
+    function set_confirm_message($message)
+    {
+        $this->confirmationMessage = $message;
     }
 }

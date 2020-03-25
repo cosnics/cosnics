@@ -17,7 +17,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Ruby/ErrorPages.css">
+    <link rel="stylesheet" href="Chamilo/Libraries/Resources/Css/Ruby/ErrorPages.css">
 
 </head>
 <body>

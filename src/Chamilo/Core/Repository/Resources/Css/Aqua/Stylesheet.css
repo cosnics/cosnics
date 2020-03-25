@@ -1,5 +1,4 @@
 @import url(../../../Feedback/Resources/Css/Aqua/Stylesheet.css);
-
 @import url(../../../Publication/Resources/Css/Aqua/Stylesheet.css);
 
 .fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f,
@@ -151,36 +150,6 @@
     content: "\f167";
 }
 
-tr.recycled td {
-    color: #cccccc;
-}
-
-tr.recycled td a {
-    color: #cccccc;
-}
-
-tr.recycled td a:hover {
-    color: #ff7777;
-}
-
-div#advanced_filter_tabs div.admin_tab {
-    background-color: transparent;
-    padding: 10px !important;
-}
-
-div#advanced_filter_tabs .ui-tabs-selected {
-    background-color: white;
-    background-image: none;
-}
-
-div.quota_statistics .data_table td.header {
-    width: 20%;
-}
-
-#repository-tree-container {
-    margin-bottom: 15px;
-}
-
 #search-parameters .list-group-item {
     border-top: 0px solid white;
     padding: 5px 15px;
@@ -289,12 +258,4 @@ div.quota_statistics .data_table td.header {
 
 .table-difference th.col-sm-1 {
     text-align: center;
-}
-
-.comparer-header-table {
-    margin-bottom: 20px;
-}
-
-.comparer-header-title {
-    max-width: 50px;
 }

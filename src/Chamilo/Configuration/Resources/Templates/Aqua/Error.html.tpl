@@ -17,7 +17,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Aqua/ErrorPages.css">
+    <link rel="stylesheet" href="Chamilo/Libraries/Resources/Css/Aqua/ErrorPages.css">
 
 </head>
 <body>

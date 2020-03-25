@@ -147,6 +147,7 @@ class BuildUtilities
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Images' . DIRECTORY_SEPARATOR;
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
             Filesystem::remove($webResourceImagePath);
+            Filesystem::create_dir($webResourceImagePath);
             Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
             // Css
@@ -154,13 +155,15 @@ class BuildUtilities
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Css' . DIRECTORY_SEPARATOR;
             $webResourceStylePath = str_replace($basePath, $baseWebPath, $sourceResourceStylePath);
             Filesystem::remove($webResourceStylePath);
+            Filesystem::create_dir($webResourceStylePath);
             Filesystem::recurse_copy($sourceResourceStylePath, $webResourceStylePath, true);
 
             // Javascript
             $sourceResourceJavascriptPath =
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Javascript' . DIRECTORY_SEPARATOR;
             $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
-            Filesystem::remove($webResourceImagePath);
+            Filesystem::remove($webResourceJavascriptPath);
+            Filesystem::create_dir($webResourceJavascriptPath);
             Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
 
             $event->getIO()->write('Processed resources for: ' . $packageNamespace);

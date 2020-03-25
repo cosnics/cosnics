@@ -1,71 +1,8 @@
 .fas-ci-579b93a825f8a7194a5a0b0ec485f97c {
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
 
 .fas-ci-579b93a825f8a7194a5a0b0ec485f97c:before {
-	content: "\f466";
-}
-
-div.package_upgrade {
-	border: 1px solid #F0F0F0;
-	margin: 0 0 1em 0;
-	padding: 10px 10px 0px 68px;
-	background-position: 10px 10px;
-	background-repeat: no-repeat;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-bottomright: 10px;
-	border-radius-topleft: 10px;
-	border-radius-bottomright: 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-	overflow: auto;
-	clear: both;
-}
-
-div.package_upgrade div.title {
-	font-weight: bold;
-	border-bottom: 1px solid #CCCCCC;
-	width: 100%;
-	margin-bottom: 10px;
-}
-
-div.package_upgrade div.package {
-	border: 1px solid #F0F0F0;
-	padding: 10px;
-	background-position: 10px 10px;
-	background-repeat: no-repeat;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-bottomright: 10px;
-	border-radius-topleft: 10px;
-	border-radius-bottomright: 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-	overflow: auto;
-	margin-bottom: 10px;
-	height: 26px;
-}
-
-div.package_upgrade div.package div.title {
-	font-weight: bold;
-	width: 100%;
-	font-size: 18px;
-	border: 0px solid white;
-	color: #2b3f71;
-	margin: 0px;
-	padding: 0px;
-}
-
-.upgrade-step-collapsed {
-	clear: none !important;
-	float: left;
-	height: 48px;
-	width: 48px;
-	padding: 10px !important;
-	margin-right: 10px !important;
-	overflow: hidden !important;
-}
-
-.upgrade-step-collapsed div {
-	display: none;
+    content: "\f466";
 }

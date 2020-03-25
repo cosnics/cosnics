@@ -1,47 +1,45 @@
 .fas-ci-2d0c20be88180840f4e29fb03aae5484 {
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
 
 .fas-ci-2d0c20be88180840f4e29fb03aae5484:before {
-	content: "\f0ca";
+    content: "\f0ca";
 }
 
 
 .fas-ci-baea8c7ba7539d872c7b28a86f4518b1 {
-	font-family: 'Font Awesome 5 Free';
-	font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
 
 .fas-ci-baea8c7ba7539d872c7b28a86f4518b1:before {
-	content: "\f772";
+    content: "\f772";
 }
 
-.table.table-assessment-question-form>tbody>tr>td {
-	padding-bottom: 20px;
-	border: 0px solid white;
+.table.table-assessment-question-form > tbody > tr > td {
+    padding-bottom: 20px;
+    border: 0px solid white;
 }
 
 .form-assessment-extra-container {
-	margin-top: 10px;
-	display: none;
+    margin-top: 10px;
+    display: none;
 }
 
-.table.table-assessment-question-form>tbody>tr>td.table-cell-selection,
-	.table.table-assessment-question-form>tbody>tr>td.table-cell-action {
-	vertical-align: top;
+.table.table-assessment-question-form > tbody > tr > td.table-cell-selection,
+.table.table-assessment-question-form > tbody > tr > td.table-cell-action {
+    vertical-align: top;
 }
 
-.table.table-assessment-question-form>tbody>tr>td.table-cell-action {
-	font-size: 18px;
+.table.table-assessment-question-form > tbody > tr > td.table-cell-action {
+    font-size: 18px;
 }
 
-.table.table-assessment-question-form>tbody>tr>td.table-cell-action .option-action
-	{
-	cursor: pointer;
+.table.table-assessment-question-form > tbody > tr > td.table-cell-action .option-action {
+    cursor: pointer;
 }
 
-.table.table-assessment-question-form>tbody>tr>td.table-cell-action .option-action.text-muted
-	{
-	cursor: default;
+.table.table-assessment-question-form > tbody > tr > td.table-cell-action .option-action.text-muted {
+    cursor: default;
 }

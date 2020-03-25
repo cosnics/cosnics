@@ -12,27 +12,27 @@
 }
 
 .event-container-source-1, .event-container-source-19, .event-container-source-37, .event-container-source-55,
-    .event-container-source-73 {
+.event-container-source-73 {
     background-color: #b3b360;
 }
 
 .event-container-source-2, .event-container-source-20, .event-container-source-38, .event-container-source-56,
-    .event-container-source-74 {
+.event-container-source-74 {
     background-color: #60b360;
 }
 
 .event-container-source-3, .event-container-source-21, .event-container-source-39, .event-container-source-57,
-    .event-container-source-75 {
+.event-container-source-75 {
     background-color: #607cb3;
 }
 
 .event-container-source-4, .event-container-source-22, .event-container-source-40, .event-container-source-58,
-    .event-container-source-76 {
+.event-container-source-76 {
     background-color: #b360b3;
 }
 
 .event-container-source-5, .event-container-source-23, .event-container-source-41, .event-container-source-59,
-    .event-container-source-77 {
+.event-container-source-77 {
     background-color: #b39760;
 }
 
@@ -40,104 +40,104 @@
  * UPDATE REMAINING COLOURS
  */
 .event-container-source-6, .event-container-source-24, .event-container-source-42, .event-container-source-60,
-    .event-container-source-78 {
+.event-container-source-78 {
     background-color: #9ADE78;
 }
 
 .event-container-source-7, .event-container-source-25, .event-container-source-43, .event-container-source-61,
-    .event-container-source-79 {
+.event-container-source-79 {
     background-color: #DF7979;
 }
 
 .event-container-source-8, .event-container-source-26, .event-container-source-44, .event-container-source-62,
-    .event-container-source-80 {
+.event-container-source-80 {
     background-color: #78BCDE;
 }
 
 .event-container-source-9, .event-container-source-27, .event-container-source-45, .event-container-source-63,
-    .event-container-source-81 {
+.event-container-source-81 {
     background-color: #BC78DE;
 }
 
 .event-container-source-10, .event-container-source-28, .event-container-source-46, .event-container-source-64,
-    .event-container-source-82 {
+.event-container-source-82 {
     background-color: #BCDE78;
 }
 
 .event-container-source-11, .event-container-source-29, .event-container-source-47, .event-container-source-65,
-    .event-container-source-83 {
+.event-container-source-83 {
     background-color: #DE78BC;
 }
 
 .event-container-source-12, .event-container-source-30, .event-container-source-48, .event-container-source-66,
-    .event-container-source-84 {
+.event-container-source-84 {
     background-color: #78DE9A;
 }
 
 .event-container-source-13, .event-container-source-31, .event-container-source-49, .event-container-source-67,
-    .event-container-source-85 {
+.event-container-source-85 {
     background-color: #DE9A78;
 }
 
 .event-container-source-14, .event-container-source-32, .event-container-source-50, .event-container-source-68,
-    .event-container-source-86 {
+.event-container-source-86 {
     background-color: #78DEBC;
 }
 
 .event-container-source-15, .event-container-source-33, .event-container-source-51, .event-container-source-69,
-    .event-container-source-87 {
+.event-container-source-87 {
     background-color: #7878DE;
 }
 
 .event-container-source-16, .event-container-source-34, .event-container-source-52, .event-container-source-70,
-    .event-container-source-88 {
+.event-container-source-88 {
     background-color: #DE789A;
 }
 
 .event-container-source-17, .event-container-source-35, .event-container-source-53, .event-container-source-71,
-    .event-container-source-89 {
+.event-container-source-89 {
     background-color: #9A78DE;
 }
 
 .event-container-source-18, .event-container-source-36, .event-container-source-54, .event-container-source-72,
-    .event-container-source-90 {
+.event-container-source-90 {
     background-color: #78DEDE;
 }
 
 .event-container-source-19, .event-container-source-20, .event-container-source-21, .event-container-source-22,
-    .event-container-source-23, .event-container-source-24, .event-container-source-25, .event-container-source-26,
-    .event-container-source-27, .event-container-source-28, .event-container-source-29, .event-container-source-30,
-    .event-container-source-31, .event-container-source-32, .event-container-source-33, .event-container-source-34,
-    .event-container-source-35, .event-container-source-36 {
+.event-container-source-23, .event-container-source-24, .event-container-source-25, .event-container-source-26,
+.event-container-source-27, .event-container-source-28, .event-container-source-29, .event-container-source-30,
+.event-container-source-31, .event-container-source-32, .event-container-source-33, .event-container-source-34,
+.event-container-source-35, .event-container-source-36 {
     background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 1) 2px,
-        rgba(255, 255, 255, 1) 4px);
+    rgba(255, 255, 255, 1) 4px);
 }
 
 .event-container-source-37, .event-container-source-38, .event-container-source-39, .event-container-source-40,
-    .event-container-source-41, .event-container-source-42, .event-container-source-43, .event-container-source-44,
-    .event-container-source-45, .event-container-source-46, .event-container-source-47, .event-container-source-48,
-    .event-container-source-49, .event-container-source-50, .event-container-source-51, .event-container-source-52,
-    .event-container-source-53, .event-container-source-54 {
+.event-container-source-41, .event-container-source-42, .event-container-source-43, .event-container-source-44,
+.event-container-source-45, .event-container-source-46, .event-container-source-47, .event-container-source-48,
+.event-container-source-49, .event-container-source-50, .event-container-source-51, .event-container-source-52,
+.event-container-source-53, .event-container-source-54 {
     background-image: radial-gradient(white 15%, transparent 16%), radial-gradient(white 15%, transparent 16%);
     background-size: 14px 14px;
     background-position: 0 0, 7px 7px;
 }
 
 .event-container-source-55, .event-container-source-56, .event-container-source-57, .event-container-source-58,
-    .event-container-source-59, .event-container-source-60, .event-container-source-61, .event-container-source-62,
-    .event-container-source-63, .event-container-source-64, .event-container-source-65, .event-container-source-66,
-    .event-container-source-67, .event-container-source-68, .event-container-source-69, .event-container-source-70,
-    .event-container-source-71, .event-container-source-72 {
+.event-container-source-59, .event-container-source-60, .event-container-source-61, .event-container-source-62,
+.event-container-source-63, .event-container-source-64, .event-container-source-65, .event-container-source-66,
+.event-container-source-67, .event-container-source-68, .event-container-source-69, .event-container-source-70,
+.event-container-source-71, .event-container-source-72 {
     background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
-        linear-gradient(-45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+    linear-gradient(-45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
     background-size: 7px 7px;
 }
 
 .event-container-source-73, .event-container-source-74, .event-container-source-75, .event-container-source-76,
-    .event-container-source-77, .event-container-source-78, .event-container-source-79, .event-container-source-80,
-    .event-container-source-81, .event-container-source-82, .event-container-source-83, .event-container-source-84,
-    .event-container-source-85, .event-container-source-86, .event-container-source-87, .event-container-source-88,
-    .event-container-source-89, .event-container-source-90 {
+.event-container-source-77, .event-container-source-78, .event-container-source-79, .event-container-source-80,
+.event-container-source-81, .event-container-source-82, .event-container-source-83, .event-container-source-84,
+.event-container-source-85, .event-container-source-86, .event-container-source-87, .event-container-source-88,
+.event-container-source-89, .event-container-source-90 {
     background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, 1) 50%);
     background-size: 4px 4px;
 }
@@ -225,7 +225,7 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-week thead tr th.table-calendar-week-hours, .table-calendar-week tbody tr td.table-calendar-week-hours,
-    .table-calendar-day thead tr th.table-calendar-day-hours, .table-calendar-day tbody tr td.table-calendar-day-hours {
+.table-calendar-day thead tr th.table-calendar-day-hours, .table-calendar-day tbody tr td.table-calendar-day-hours {
     width: 5%;
 }
 
@@ -332,8 +332,7 @@ h4 .calendar-event-range {
     text-align: left;
 }
 
-.table-calendar .event-container-source, .table-calendar .event-container-source a, .table-calendar td.table-calendar-disabled .event-container-source a
-    {
+.table-calendar .event-container-source, .table-calendar .event-container-source a, .table-calendar td.table-calendar-disabled .event-container-source a {
     color: white;
     font-weight: normal;
     text-decoration: none;
@@ -348,13 +347,13 @@ h4 .calendar-event-range {
     padding: 0px 15px;
 }
 
-.table-calendar-list>.row {
+.table-calendar-list > .row {
     border-bottom: 1px dashed #dadada;
     margin-bottom: 0px;
     padding: 5px 0px;
 }
 
-.table-calendar-list>.row:last-child {
+.table-calendar-list > .row:last-child {
     border-bottom: 0px dashed #dadada;
 }
 
@@ -482,9 +481,11 @@ h4 .calendar-event-range {
     .month-calendar {
         overflow: auto;
     }
+
     .table-calendar-month {
         min-width: 900px;
     }
+
     .table-list-sidebar, .table-calendar-sidebar {
         padding-top: 5px;
     }

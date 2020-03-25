@@ -86,7 +86,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
                 $html[] = $version_browser->render();
                 $html[] = ResourceManager::getInstance()->get_resource_html(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js'
+                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
                 );
             }
 

@@ -19,6 +19,5 @@ class FormDynamicContentMenuItem extends DynamicContentMenuItem
     {
         $form->addElement('html', $this->render_content_header());
         call_user_func(array($form, $this->get_content_function()), $this);
-        $form->addElement('html', $this->render_content_footer());
     }
 }

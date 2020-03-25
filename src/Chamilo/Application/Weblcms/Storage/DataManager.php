@@ -241,6 +241,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $data_class_properties[] = new PropertyConditionVariable(
             ContentObject::class_name(),
+            ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID
+        );
+
+        $data_class_properties[] = new PropertyConditionVariable(
+            ContentObject::class_name(),
             ContentObject::PROPERTY_TITLE
         );
 

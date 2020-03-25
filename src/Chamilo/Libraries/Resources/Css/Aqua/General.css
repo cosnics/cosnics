@@ -35,16 +35,6 @@ footer.chamilo-footer {
  *  MAIN STYLES                                      *
  *****************************************************/
 
-/* Style for the failed login message */
-#login_fail {
-    margin: 0 6px 6px 6px;
-    padding: 4px;
-    border: 1px solid #f00;
-    background-color: #fff;
-    font-size: 12px;
-    color: #f00;
-}
-
 .notifications {
     position: fixed;
     right: 15px;
@@ -72,14 +62,6 @@ footer.chamilo-footer {
     text-align: center;
 }
 
-.warning-banner .actions {
-    float: right;
-}
-
-.warning-banner .action-bar {
-    float: left;
-}
-
 /*****************************************************
  *  GENERAL STYLES                                    *
  *****************************************************/
@@ -91,14 +73,6 @@ footer.chamilo-footer {
 .visible {
     color: #4171B5;
     font-weight: bold;
-}
-
-.does_not_exist a:link, does_not_exist a:visited {
-    color: #FF0000;
-}
-
-a.does_not_exist:link, a.does_not_exist:visited {
-    color: #FF0000;
 }
 
 .invisible a:link, .invisible a:visited {
@@ -116,18 +90,6 @@ a.invisible:link, a.invisible:visited {
     font-size: 0px;
 }
 
-.vertical_space {
-    margin: 5px 0;
-    padding: 10px 0;
-}
-
-/* p, blockquote, ol, ul { */
-/* 	font-size: 12px; */
-/* } */
-
-/*****************************************************
- *  SOME MORE GENERAL STYLES                         *
- *****************************************************/
 label.left {
     float: left;
     width: 15em;
@@ -222,22 +184,6 @@ div.content_object div#content_object_tags ul li.tag {
     margin-left: 5px;
 }
 
-/* User details display styles */
-div.user_details {
-    border: 1px solid #F0F0F0;
-    margin: 0 0 1em 0;
-    padding: 10px 10px 10px 44px;
-    background-position: 10px 10px;
-    background-repeat: no-repeat;
-}
-
-div.user_details div.title {
-    font-weight: bold;
-    border-bottom: 1px solid #CCCCCC;
-    width: 60%;
-    margin-bottom: 1em;
-}
-
 /* List of attachments */
 div.attachments {
     border: 1px solid #F6F6F6;
@@ -275,117 +221,9 @@ ul.attachments_list img {
     vertical-align: middle;
 }
 
-/* Comparing 2 versions styles */
-div.difference {
-    border: 1px solid #F0F0F0;
-    margin: 0 0 1em 0;
-    padding: 10px 10px 10px 44px;
-    background-position: 10px 10px;
-    background-repeat: no-repeat;
-}
-
-div.difference div.title {
-    font-weight: bold;
-    border-bottom: 1px solid #D0D0D0;
-    width: 60%;
-    margin-bottom: 1em;
-}
-
-div.difference div.titleleft {
-    float: left;
-    background-repeat: no-repeat;
-    font-weight: bold;
-    border-bottom: 1px solid #CCCCCC;
-    width: 47%;
-    margin-bottom: 1em;
-}
-
-div.difference div.titleright {
-    float: left;
-    background-repeat: no-repeat;
-    font-weight: bold;
-    border-bottom: 1px solid #CCCCCC;
-    width: 45%;
-    margin-bottom: 1em;
-}
-
-div.difference div.left {
-    float: left;
-    width: 45%;
-    padding: 6px 6px 6px 6px;
-}
-
-div.difference div.right {
-    float: left;
-    width: 45%;
-    padding: 6px 6px 6px 6px;
-}
-
-span.version_comment {
-    font-style: italic;
-}
-
-span.compare_delete, span.compare_delete a {
-    color: red;
-    text-decoration: line-through;
-}
-
-span.compare_add, span.compare_add a {
-    color: green;
-}
-
-span.compare_change, span.compare_change a {
-    color: blue;
-}
-
-span.compare_copy, span.compare_copy a {
-    color: black;
-}
-
 span.info_message {
     color: #808080;
     font-style: italic;
-}
-
-div.user_course_category {
-    background-color: #efefef;
-    border: 1px solid #666;
-    font-weight: bold;
-    color: #666;
-    margin: 5px;
-    padding: 5px;
-}
-
-div.user_course_category div.title {
-    float: left;
-    padding-top: 2px;
-    height: 17px;
-}
-
-div.user_course_category div.options {
-    float: right;
-    margin-left: 5px;
-}
-
-div.nocourses {
-    text-align: center;
-}
-
-div.user_course_element {
-    clear: both;
-    margin: 0px 0px 10px 0px;
-}
-
-div.user_course {
-    float: left;
-    margin: 0px 5px 0px 10px;
-    padding: 5px;
-}
-
-div.user_course_options {
-    float: right;
-    margin: 0px;
-    padding: 5px;
 }
 
 /*****************************************************
@@ -451,72 +289,13 @@ div.user_course_options {
 /*****************************************************
  *  ICON BASED TOOLBAR STYLES                        *
  *****************************************************/
-ul.toolbar, ul.toolbar_horizontal, ul.toolbar_vertical {
-    display: inline;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    color: #999; /* For disabled items */
-    white-space: nowrap;
-}
-
-ul.toolbar li, ul.toolbar_horizontal li {
-    display: inline;
-    float: left;
-    margin: 0px 2px 0px 2px;
-    padding: 0px 0px 2px 0px;
-    white-space: nowrap;
-}
-
-ul.toolbar_vertical li {
-    display: block;
-    margin: 2px 0px 2px 0px;
-    padding: 0;
-    white-space: nowrap;
-}
-
-ul.toolbar li img, ul.toolbar_horizontal li img, ul.toolbar_vertical li img {
-    margin: 0;
-    padding: 0;
-    vertical-align: middle;
-}
-
-ul.toolbar li img.labeled, ul.toolbar_horizontal li img.labeled, ul.toolbar_vertical li img.labeled {
-    margin-right: 0.5ex;
-}
-
-ul.toolbar li span, ul.toolbar_horizontal li span, ul.toolbar_vertical li span {
-    margin: 0;
-    padding: 0 1ex 0 0;
-}
-
-ul.toolbar li.last span, ul.toolbar_horizontal li.last span, ul.toolbar_vertical li.last span {
-    padding-right: 0;
-}
-
-ul.toolbar li span.legend, ul.toolbar_horizontal li span.legend, ul.toolbar_vertical li span.legend {
-    color: black;
+.btn-toolbar.btn-toolbar-cosnics .btn {
+    padding: 2px;
 }
 
 /**********************************
  * MODAL DIALOGS CSS
  **********************************/
-#modalOverlay {
-    background-color: black;
-    cursor: wait;
-}
-
-#modalContainer {
-    position: fixed;
-    width: 50%;
-    height: 50%;
-    padding: 10px;
-    background-color: #FFFFFF;
-    border: 1px solid black;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-}
-
 #help-modal-overlay {
     background-color: black;
     cursor: wait;
@@ -550,155 +329,6 @@ a.help-modal-close {
     -webkit-border-radius: 8px;
 }
 
-#repoViewerModalContainer {
-    position: fixed;
-    width: 1000px;
-    height: 550px;
-    background-color: #FFFFFF;
-    border: 2px solid #E5EDF9;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-}
-
-#overlay {
-    background-color: red;
-}
-
-/*********************************************
- * Reporting								 *
- *********************************************/
-.reporting_block {
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    border: 1px solid #ccc;
-    margin: 4px 4px 20px 4px;
-    padding: 4px;
-    overflow: auto;
-}
-
-.reporting_block div.toolbar {
-    display: inline;
-    clear: none;
-}
-
-.reporting_header {
-    margin: 0px;
-    padding: 5px;
-}
-
-.reporting_header_title {
-    float: left;
-    font-weight: bold;
-}
-
-.reporting_header_displaymode {
-    float: right;
-}
-
-.reporting_content {
-    margin: 0px;
-    padding: 5px;
-}
-
-.reporting_footer {
-    margin: 0px;
-    padding: 5px;
-}
-
-.reporting_footer_export {
-    float: right;
-}
-
-.reporting_template_container {
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    width: 100%;
-}
-
-.reporting_template_con_left {
-    float: left;
-}
-
-.reporting_template_con_right {
-    float: right;
-}
-
-div.reporting_template_menu {
-
-}
-
-div.reporting_template_menu #nav, #nav ul {
-    padding: 3px 0 0 0;
-    margin: 0;
-    list-style: none;
-}
-
-div.reporting_template_menu #nav li {
-    float: left;
-    width: 30em;
-}
-
-div.reporting_template_menu #nav ul {
-    position: absolute;
-    width: 30em;
-    left: -1000px;
-}
-
-div.reporting_template_menu #nav li:hover ul, #nav li.ie_does_hover ul {
-    left: auto;
-    background-position: 0 0;
-}
-
-div.reporting_template_menu #nav a {
-    display: block;
-    margin: 2px 5px 3px 5px;
-    text-decoration: none;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 1em;
-}
-
-div.reporting_template_menu ul a {
-    cursor: default;
-}
-
-div.reporting_template_menu ul ul a:link, ul ul a:visited {
-    font-weight: normal;
-    cursor: pointer;
-}
-
-div.reporting_template_menu ul ul a:hover, ul ul a:active {
-    font-weight: normal;
-    color: #FFF;
-    cursor: pointer;
-}
-
-div.reporting_template_menu ul li {
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    border: 1px solid #ccc;
-    background-color: #F6F6F6;
-    padding: 1px;
-    width: 30em;
-}
-
-div.reporting_template_menu ul ul li {
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    border: none;
-    background-color: #E5EDF9;
-    border-top: 1px solid #FFF;
-    border-left: 0;
-}
-
-div.reporting_center {
-    text-align: center;
-    margin: 0 auto;
-    width: 30em;
-}
-
-/************************************
- * ADDITIONAL ELEMENT FINDER STYLES *
- ************************************/
 .element_finder_loading {
     width: 100%;
     height: 64px;
@@ -709,44 +339,10 @@ div.reporting_center {
     text-align: center;
 }
 
-/************************
- * APPLICATION SELECTER *
- ************************/
-div.create_block {
-    background-repeat: no-repeat;
-    background-position: center 10px;
-    background-color: #F6F6F6;
-    float: left;
-    margin: 0px 10px 10px 0px;
-    padding: 68px 10px 10px 10px;
-    -moz-border-radius: 5px;
-    -webkit-border--radius: 5px;
-    overflow: hidden;
-    width: 120px;
-    text-align: center;
-    font-weight: bold;
-    color: #565656;
-    font-size: 11px;
-}
-
-.content_object_selection {
-    clear: both;
-    margin-top: 10px;
-}
-
 iframe.preview {
     border: 1px solid #cccccc;
     width: 100%;
     height: 300px;
-}
-
-a.cda_link {
-    display: inline !important;
-    padding: 0px !important;
-    margin: 0px !important;
-    height: 7px !important;
-    width: 7px !important;
-    background: none !important;
 }
 
 .hidden {
@@ -766,31 +362,11 @@ a.cda_link {
 }
 
 .ui-widget-content2 a {
-    color: #222222 /*{fcContent}*/;
+    color: #222222;
 }
 
 span.highlight {
     color: #B1071C;
-}
-
-/***************************************************
- *  QUICK LANGUAGE STYLES
- ***************************************************/
-#header_quick_language {
-    position: absolute;
-    right: 1em;
-    list-style: none;
-    font-weight: bold;
-    color: white;
-}
-
-#header_quick_language li {
-    display: inline;
-    margin-left: 0.3em;
-}
-
-#header_quick_language li a {
-    color: #8eadd8;
 }
 
 pre.inline {
@@ -831,4 +407,48 @@ code.inline {
 
 [v-cloak] {
     display: none
+}
+
+
+figcaption {
+    padding-top: 8px !important;
+}
+
+.image-captioned {
+    padding: 0px 0px 10px !important;
+    text-align: center;
+    border: solid 1px #ccc;
+    border-radius: 0px;
+    background: rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    color: #555555;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.align-left {
+    float: left;
+    margin-right: 1.5em;
+}
+
+.align-right {
+    float: right;
+    margin-left: 1.5em;
+}
+
+.align-center {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.align-center div {
+    margin: 0 auto;
+}
+
+.align-center > figure {
+    display: inline-block;
+}
+
+span[lang] {
+    font-style: normal;
 }

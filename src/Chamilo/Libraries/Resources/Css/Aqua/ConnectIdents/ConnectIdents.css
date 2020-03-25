@@ -240,3 +240,7 @@
     height: 40%;
     border-radius: 100%;
 }
+
+.fas-ci-half-transparent {
+    opacity: 0.5;
+}

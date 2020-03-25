@@ -17,7 +17,6 @@
 @import url('Tabs.css');
 @import url('Tree.css');
 @import url('Bootstrap.css');
-@import url('../Aqua/Fancytree.css');
 
 .fas-ci-0793ee69022bce29ee5c942d0f33bb10, .fas-ci-d639d7187c52c2eff70a540c6b291884 {
     font-family: 'Font Awesome 5 Free';
@@ -104,10 +103,6 @@ figcaption {
 div[data-oembed-url] {
     max-width: 100%;
     max-height: 100%;
-}
-
-.text-maintenance {
-    font-weight: bold;
 }
 
 span[lang] {

@@ -1,13 +1,11 @@
 @import url('Plugin/Dropzone/dropzone.min.css');
 @import url('Plugin/Jquery/jquery-ui.min.css');
-@import url('Plugin/TextareaResizer/Stylesheet.css');
-@import url('Plugin/Jplayer/Stylesheet.css');
+@import url('Plugin/Jplayer/Stylesheet.min.css');
 @import url('Bootstrap/css/bootstrap-toggle.min.css');
 @import url('Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
-@import url('Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
-@import url('Plugin/Highlight/github.css');
+@import url('Plugin/Highlight/github.min.css');
 @import url('../../Javascript/Plugin/Uploadify/uploadify.css');
-@import url('../../Javascript/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.css');
+@import url('../../Javascript/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css');
 
 .ui-widget-content {
     border: 0px;
@@ -34,6 +32,3 @@
     border: 1px solid #ebebeb;
 }
 
-.fa-half-transparent {
-    opacity: 0.5;
-}

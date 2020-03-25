@@ -18,15 +18,12 @@ class FormDynamicContentMenu extends DynamicContentMenu
     public function add_to_form($form)
     {
         $form->addElement('html', $this->render_header());
-        $form->addElement('html', $this->render_menu());
-        $form->addElement('html', $this->render_content_header());
 
         foreach ($this->get_menu_items() as $menu_item)
         {
             $menu_item->add_to_form($form);
         }
 
-        $form->addElement('html', $this->render_small_footer());
         $form->addElement('html', $this->render_footer());
     }
 }

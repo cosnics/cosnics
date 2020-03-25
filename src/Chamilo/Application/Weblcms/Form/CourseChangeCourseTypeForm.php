@@ -96,7 +96,7 @@ class CourseChangeCourseTypeForm extends FormValidator
                 Course::PROPERTY_ID,
                 Translation::get('CourseType'),
                 $course_types,
-                array('class' => 'course_type_selector'));
+                array('class' => 'course_type_selector form-control'));
             $this->addRule(
                 'CourseType',
                 Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),

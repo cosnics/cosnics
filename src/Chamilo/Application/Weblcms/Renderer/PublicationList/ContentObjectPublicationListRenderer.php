@@ -159,6 +159,7 @@ abstract class ContentObjectPublicationListRenderer
         $class = $publication[ContentObject::PROPERTY_TYPE];
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+        $content_object->set_template_registration_id($publication[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID]);
 
         return $content_object;
     }

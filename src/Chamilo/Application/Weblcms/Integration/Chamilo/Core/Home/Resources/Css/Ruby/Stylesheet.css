@@ -1,13 +1,9 @@
 @import url('../Aqua/Stylesheet.css');
 
 span.badge-date {
-	font-weight: normal;
-	opacity: 0.5;
-	background-color: #9e021b;
+    background-color: #9e021b;;
 }
 
-.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text
-	{
-	color: #9e021b;
-	font-size: 13px;
+.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text {
+    color: #9e021b;
 }
