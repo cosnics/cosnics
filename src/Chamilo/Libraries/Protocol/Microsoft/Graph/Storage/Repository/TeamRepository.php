@@ -116,10 +116,10 @@ class TeamRepository
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
 
-            $bodyContents = json_decode($exception->getResponse()->getBody()->getContents());
+            $bodyContents = json_decode($exception->getResponse()->getBody()->getContents(), true);
 
             if (
-                $exception->getCode() == 404 && is_array($bodyContents) &&
+                $exception->getCode() == 404 && is_array($bodyContents) && array_key_exists('error', $bodyContents) &&
                 $bodyContents['error']['message'] == 'No team found with Group Id ' . $teamId
             )
             {
