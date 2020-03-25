@@ -146,13 +146,19 @@ class CourseTeamService
     {
         $teachers = $this->courseService->getTeachersFromCourse($course);
 
-        $this->teamService->removeTeamOwnersNotInArray($this->getTeam($course), $teachers);
+        $team = $this->getTeam($course);
+        if(!$team)
+        {
+            return null;
+        }
+
+        $this->teamService->removeTeamOwnersNotInArray($team, $teachers);
 
         $students = $this->courseService->getStudentsFromCourse($course);
         $studentsAndTeachers = array_merge($teachers, $students);
 
         $this->teamService->removeTeamMembersNotInArray(
-            $this->getTeam($course), $studentsAndTeachers
+            $team, $studentsAndTeachers
 
         );
     }
