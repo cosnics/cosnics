@@ -90,7 +90,7 @@ class CourseGroupOffice365Connector
         {
             throw new \RuntimeException(
                 sprintf(
-                    'Could not create a new office365 group for the given course group %s' .
+                    'Could not create a new team for the given course group %s' .
                     'since there is a group already available'
                     , $courseGroup->getId()
                 )
@@ -104,6 +104,62 @@ class CourseGroupOffice365Connector
         $this->subscribeCourseGroupUsers($courseGroup, $teamId);
 
         return $teamId;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $owner
+     *
+     * @return string
+     *
+     * @throws AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function createStandardTeamFromCourseGroup(CourseGroup $courseGroup, User $owner)
+    {
+        if($this->courseGroupOffice365ReferenceService->courseGroupHasTeam($courseGroup))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not create a new team for the given course group %s' .
+                    'since there is a group already available'
+                    , $courseGroup->getId()
+                )
+            );
+        }
+
+        $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
+        $teamId = $this->teamService->createStandardTeam($courseGroupName, $courseGroupName, $owner);
+
+        $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $teamId, true);
+        $this->subscribeCourseGroupUsers($courseGroup, $teamId);
+
+        return $teamId;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     *
+     * todo: check if name in group differs from course group. If so the user changed it, and we don't need to sync...
+     *  to fix this you may want to alter the way the course groups are updated since this method already receives
+     *  the changed course group name so comparison is not possible
+     */
+    public function updateCourseGroupTeamName(CourseGroup $courseGroup)
+    {
+        $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
+        if(!$reference->hasTeam())
+        {
+            return;
+        }
+
+        $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
+
+        $this->groupService->updateGroupName(
+            $reference->getOffice365GroupId(), $courseGroupName
+        );
     }
 
     /**
