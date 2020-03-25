@@ -1,5 +1,23 @@
-@import url('../../Javascript/Plugin/Uploadify/uploadify.css');
-@import url('../../Javascript/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.css');
+/* Bootstrap */
+@import url('Bootstrap/css/bootstrap.css');
+@import url('BootstrapCheckbox/awesome-bootstrap-checkbox.css');
+
+/* Font Awesome */
+@import url('FontAwesome5/css/all.min.css');
+@import url('FontAwesome5/css/v4-shims.min.css');
+@import url('ConnectIdents/ConnectIdents.css');
+
+/* Plugin CSS */
+@import url('Plugin.css');
+
+/* Platform CSS */
+@import url('General.css');
+@import url('Form.css');
+@import url('Table.css');
+@import url('Tabs.css');
+@import url('Tree.css');
+@import url('Bootstrap.css');
+@import url('Fancytree.css');
 
 .fas-ci-0793ee69022bce29ee5c942d0f33bb10, .fas-ci-d639d7187c52c2eff70a540c6b291884 {
     font-family: 'Font Awesome 5 Free';
@@ -15,6 +33,21 @@
     content: "\f187";
 }
 
+/* Package Type: Chamilo */
+.fas-ci-c4f6f16617596c8cbb153739ac653c84:before {
+    content: "\f7a2";
+}
+
+/* Package Type: Chamilo\Application */
+.fas-ci-669b00ee75beb54b73358f5002b42069:before {
+    content: "\f3fa";
+}
+
+/* Package Type: Chamilo\Core */
+.fas-ci-04ab940c81f4ba505c29fcc625ea8b26:before {
+    content: "\f085";
+}
+
 /**
  * Package Type: Chamilo\Libraries\Protocol
  */
@@ -28,7 +61,6 @@
 .fas-ci-7e230f4a916e07600b3e0825011c6032:before {
     content: "\f3ca";
 }
-
 
 figcaption {
     padding-top: 8px !important;
@@ -67,31 +99,6 @@ figcaption {
 
 .align-center > figure {
     display: inline-block;
-}
-
-.embed-240p {
-    max-width: 426px;
-    margin: 0 auto;
-}
-
-.embed-360p {
-    max-width: 640px;
-    margin: 0 auto;
-}
-
-.embed-480p {
-    max-width: 854px;
-    margin: 0 auto;
-}
-
-.embed-720p {
-    max-width: 1280px;
-    margin: 0 auto;
-}
-
-.embed-1080p {
-    max-width: 1920px;
-    margin: 0 auto;
 }
 
 .text-maintenance {

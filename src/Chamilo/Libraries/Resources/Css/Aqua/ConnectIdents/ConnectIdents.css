@@ -1,0 +1,242 @@
+@font-face {
+    font-family: 'ConnectIdents';
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: url('ConnectIdents.ttf') format('truetype'),
+    url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot') format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
+}
+
+.fas-ci {
+    font-family: 'ConnectIdents';
+    font-weight: 400;
+}
+
+.fas-ci-announcement:before {
+    content: "\e700";
+}
+
+.fas-ci-blog:before {
+    content: "\e701";
+}
+
+.fas-ci-course-description:before {
+    content: "\e702";
+}
+
+.fas-ci-course-group:before {
+    content: "\e703";
+}
+
+.fas-ci-document:before {
+    content: "\e704";
+}
+
+.fas-ci-ephorus:before {
+    content: "\e705";
+}
+
+.fas-ci-forum:before {
+    content: "\e706";
+}
+
+.fas-ci-chat:before {
+    content: "\e707";
+}
+
+.fas-ci-user:before {
+    content: "\e708";
+}
+
+.fas-ci-calendar:before {
+    content: "\e709";
+}
+
+.fas-ci-link:before {
+    content: "\e70a";
+}
+
+.fas-ci-location:before {
+    content: "\e70b";
+}
+
+.fas-ci-note:before {
+    content: "\e70c";
+}
+
+.fas-ci-assessment:before {
+    content: "\e70d";
+}
+
+.fas-ci-assignment:before {
+    content: "\e70e";
+}
+
+.fas-ci-streaming-video:before {
+    content: "\e70f";
+}
+
+.fas-ci-wiki:before {
+    content: "\e710";
+}
+
+.fas-ci-glossary:before {
+    content: "\e711";
+}
+
+.fas-ci-peer-assessment:before {
+    content: "\e712";
+}
+
+.fas-ci-search:before {
+    content: "\e713";
+}
+
+.fas-ci-course-copier:before {
+    content: "\e714";
+}
+
+.fas-ci-course-truncater:before {
+    content: "\e715";
+}
+
+.fas-ci-course-deleter:before {
+    content: "\e716";
+}
+
+.fas-ci-course-settings:before {
+    content: "\e717";
+}
+
+.fas-ci-rights:before {
+    content: "\e718";
+}
+
+.fas-ci-reporting:before {
+    content: "\e719";
+}
+
+.fas-ci-course-sections:before {
+    content: "\e71a";
+}
+
+.fas-ci-learning-path:before {
+    content: "\e71b";
+}
+
+.fas-ci-weblcms:before {
+    content: "\e71c";
+}
+
+.fas-ci-portfolio:before {
+    content: "\e71d";
+}
+
+.fas-ci-home:before {
+    content: "\e71e";
+}
+
+.fas-ci-repository:before {
+    content: "\e71f";
+}
+
+.fas-ci-workspaces:before {
+    content: "\e720";
+}
+
+.fas-ci-admin:before {
+    content: "\e721";
+}
+
+.fas-ci-group:before {
+    content: "\e722";
+}
+
+.fas-ci-help:before {
+    content: "\e723";
+}
+
+.fas-ci-menu:before {
+    content: "\e724";
+}
+
+.fas-ci-lynx:before {
+    content: "\e725";
+}
+
+.fas-ci-metadata:before {
+    content: "\e726";
+}
+
+.fas-ci-cas-storage:before {
+    content: "\e727";
+}
+
+.fas-ci-cache:before {
+    content: "\e728";
+}
+
+.fas-ci-tracking:before {
+    content: "\e729";
+}
+
+.fas-ci-install:before {
+    content: "\e72a";
+}
+
+.fas-ci-disabled {
+    color: #777;
+}
+
+.fas-ci-disabled:before {
+    opacity: 0.3;
+}
+
+.fas-ci.fas-ci-new,
+.fa.fas-ci-new,
+.fas.fas-ci-new,
+.far.fas-ci-new,
+.fab.fas-ci-new,
+.fas-ci.fas-ci-completed,
+.fa.fas-ci-completed,
+.fas.fas-ci-completed,
+.far.fas-ci-completed,
+.fab.fas-ci-completed {
+    position: relative;
+}
+
+.fas-ci-new:before {
+    opacity: 0.5;
+}
+
+.fas-ci-new:after {
+    display: inline-block;
+    background-color: #f57900;
+    position: absolute;
+    content: "";
+    right: 0px;
+    bottom: 0px;
+    width: 40%;
+    height: 40%;
+    border-radius: 100%;
+}
+
+.fas-ci-va {
+    vertical-align: middle;
+}
+
+.fas-ci-completed:before {
+    opacity: 0.5;
+}
+
+.fas-ci-completed:after {
+    display: inline-block;
+    background-color: #00FF00;
+    position: absolute;
+    content: "";
+    right: 0px;
+    bottom: 0px;
+    width: 40%;
+    height: 40%;
+    border-radius: 100%;
+}

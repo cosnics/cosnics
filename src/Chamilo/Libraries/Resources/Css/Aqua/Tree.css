@@ -1,0 +1,98 @@
+/*****************************************************
+ *  TREEMENU STYLES                                  *
+ *****************************************************/
+ul.tree-menu, ul.tree-menu ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    clear: both;
+}
+
+ul.tree-menu ul {
+    background-repeat: repeat-y;
+    background-image: url(../../Images/Aqua/Treemenu/TreeBranch.png);
+    padding-left: 18px;
+    clear: both;
+}
+
+ul.tree-menu li {
+    margin: 0px;
+    padding: 0px;
+    clear: both;
+}
+
+ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
+ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand {
+    padding-left: 18px;
+    background-repeat: no-repeat;
+    clear: both;
+}
+
+ul.tree-menu li div {
+    background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li div.last {
+    background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
+}
+
+ul.tree-menu li div.collapse {
+    background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li div.lastCollapse {
+    background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
+}
+
+ul.tree-menu li div.expand {
+    background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li div.lastExpand {
+    background-image: url(../../Images/Aqua/Treemenu/TreeNodeEnd.png);
+}
+
+ul.tree-menu li div a {
+    clear: both;
+    display: block;
+    font-weight: bold;
+}
+
+ul.tree-menu li div a.selected {
+    background-color: #ddecf7;
+}
+
+ul.tree-menu li div a.selected:focus {
+    text-decoration: none;
+}
+
+ul.tree-menu li div a.lastSelected {
+    border: 1px dotted #d4d4d4;
+    margin-left: -1px;
+}
+
+ul.tree-menu li div a.disabled {
+    color: #9f9f9f;
+    cursor: default;
+}
+
+ul.tree-menu li div img {
+    height: 16px;
+    margin-left: 2px;
+    position: relative;
+    margin-top: -1px;
+    vertical-align: middle;
+}
+
+ul.tree-menu li.current > div a {
+    text-decoration: underline;
+}
+
+ul.tree-menu li div.collapse {
+    display: block;
+}
+
+ul.tree-menu li div a.no_link {
+    color: #797268;
+    cursor: default;
+}

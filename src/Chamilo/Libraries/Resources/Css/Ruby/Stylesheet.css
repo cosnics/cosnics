@@ -1,16 +1,77 @@
-@import url('../Aqua/Stylesheet.css');
-figure {
-    display: inline-block;
+/* Bootstrap */
+@import url('../Aqua/Bootstrap/css/bootstrap.css');
+@import url('../Aqua/BootstrapCheckbox/awesome-bootstrap-checkbox.css');
+
+/* Font Awesome */
+@import url('../Aqua/FontAwesome5/css/all.css');
+@import url('../Aqua/FontAwesome5/css/v4-shims.css');
+@import url('../Aqua/ConnectIdents/ConnectIdents.css');
+
+/* Plugin CSS */
+@import url('Plugin.css');
+
+/* Platform CSS */
+@import url('General.css');
+@import url('Form.css');
+@import url('Table.css');
+@import url('Tabs.css');
+@import url('Tree.css');
+@import url('Bootstrap.css');
+@import url('../Aqua/Fancytree.css');
+
+.fas-ci-0793ee69022bce29ee5c942d0f33bb10, .fas-ci-d639d7187c52c2eff70a540c6b291884 {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
 }
+
+.fas-ci-7e230f4a916e07600b3e0825011c6032 {
+    font-family: 'Font Awesome 5 Brands';
+
+}
+
+.fas-ci-0793ee69022bce29ee5c942d0f33bb10:before {
+    content: "\f187";
+}
+
+/* Package Type: Chamilo */
+.fas-ci-c4f6f16617596c8cbb153739ac653c84:before {
+    content: "\f7a2";
+}
+
+/* Package Type: Chamilo\Application */
+.fas-ci-669b00ee75beb54b73358f5002b42069:before {
+    content: "\f3fa";
+}
+
+/* Package Type: Chamilo\Core */
+.fas-ci-04ab940c81f4ba505c29fcc625ea8b26:before {
+    content: "\f085";
+}
+
+/**
+ * Package Type: Chamilo\Libraries\Protocol
+ */
+.fas-ci-d639d7187c52c2eff70a540c6b291884:before {
+    content: "\f6ff";
+}
+
+/**
+ * Package Type: Chamilo\Libraries\Protocol\Microsoft
+ */
+.fas-ci-7e230f4a916e07600b3e0825011c6032:before {
+    content: "\f3ca";
+}
+
 figcaption {
     padding-top: 8px !important;
 }
+
 .image-captioned {
     padding: 0px 0px 10px !important;
     text-align: center;
     border: solid 1px #ccc;
     border-radius: 0px;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
     display: inline-block;
     color: #555555;
     font-size: 12px;
@@ -45,37 +106,10 @@ div[data-oembed-url] {
     max-height: 100%;
 }
 
-.embed-240p
-{
-    max-width: 426px;
-    max-height: 240px;
-    margin:0 auto;
+.text-maintenance {
+    font-weight: bold;
 }
 
-.embed-360p
-{
-    max-width: 640px;
-    max-height: 360px;
-    margin:0 auto;
-}
-
-.embed-480p
-{
-    max-width: 854px;
-    max-height: 480px;
-    margin:0 auto;
-}
-
-.embed-720p
-{
-    max-width: 1280px;
-    max-height: 720px;
-    margin:0 auto;
-}
-
-.embed-1080p
-{
-    max-width: 1920px;
-    max-height: 1080px;
-    margin:0 auto;
+span[lang] {
+    font-style: normal;
 }

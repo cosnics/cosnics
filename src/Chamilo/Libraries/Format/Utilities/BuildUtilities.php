@@ -54,12 +54,6 @@ class BuildUtilities
                     continue;
                 }
 
-                //                if(!array_key_exists('cosnics', $completePackage->getExtra()))
-                //                {
-                //                    var_dump($packageComposerPath);
-                //                    continue;
-                //                }
-
                 // Process require
                 foreach ($completePackage->getRequires() as $requireName => $requirePackage)
                 {
@@ -78,7 +72,7 @@ class BuildUtilities
                     }
                 }
 
-                // Process PSR-4 autoload
+                // Process psr-4 autoload
                 $packageAutoloaders = $completePackage->getAutoload();
 
                 if (isset($packageAutoloaders['psr-4']))
@@ -92,6 +86,7 @@ class BuildUtilities
                     }
                 }
 
+                // Process classmap autoload
                 if (isset($packageAutoloaders['classmap']))
                 {
                     foreach ($packageAutoloaders['classmap'] as $autoloaderKey => $autoloaderValue)
@@ -102,6 +97,8 @@ class BuildUtilities
                         }
                     }
                 }
+
+                // Process exclude-from-classmap autoload
 
                 if (isset($packageAutoloaders['exclude-from-classmap']))
                 {
@@ -149,35 +146,24 @@ class BuildUtilities
             $sourceResourceImagePath =
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Images' . DIRECTORY_SEPARATOR;
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
+            Filesystem::remove($webResourceImagePath);
             Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
             // Css
-            $sourceResourceImagePath =
+            $sourceResourceStylePath =
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Css' . DIRECTORY_SEPARATOR;
-            $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
-            Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
+            $webResourceStylePath = str_replace($basePath, $baseWebPath, $sourceResourceStylePath);
+            Filesystem::remove($webResourceStylePath);
+            Filesystem::recurse_copy($sourceResourceStylePath, $webResourceStylePath, true);
 
             // Javascript
             $sourceResourceJavascriptPath =
                 Path::getInstance()->getResourcesPath($packageNamespace) . 'Javascript' . DIRECTORY_SEPARATOR;
             $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
+            Filesystem::remove($webResourceImagePath);
             Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
 
             $event->getIO()->write('Processed resources for: ' . $packageNamespace);
         }
-
-        // Copy the file extensions
-        $sourceResourceImagePath =
-            Path::getInstance()->getResourcesPath('Chamilo\Configuration') . 'File' . DIRECTORY_SEPARATOR;
-        $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
-        Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
-        $event->getIO()->write('Processed file extension resources');
-
-        // Copy the error pages
-        $sourceResourceImagePath =
-            Path::getInstance()->getResourcesPath('Chamilo\Configuration') . 'ErrorPages' . DIRECTORY_SEPARATOR;
-        $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
-        Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
-        $event->getIO()->write('Processed error pages');
     }
 }
