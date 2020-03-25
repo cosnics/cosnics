@@ -112,7 +112,7 @@ class TeamService
 
         if (!$team instanceof Team)
         {
-            throw new TeamNotFoundException($groupId);
+            return null;
         }
 
         return $team;
