@@ -4,7 +4,7 @@
 @import url('Bootstrap/css/bootstrap-toggle.min.css');
 @import url('Plugin/JqueryContextMenu/jquery.contextMenu.min.css');
 @import url('Plugin/Highlight/github.min.css');
-@import url('../../Javascript/Plugin/Uploadify/uploadify.css');
+@import url('../../Javascript/Plugin/Uploadify/uploadify.min.css');
 @import url('../../Javascript/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css');
 
 .ui-widget-content {
