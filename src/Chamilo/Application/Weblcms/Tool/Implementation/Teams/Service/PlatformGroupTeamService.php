@@ -16,7 +16,6 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
-use Nette\Neon\Exception;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service
@@ -89,12 +88,12 @@ class PlatformGroupTeamService
 
         $this->validateUserCount();
 
-        $team = $this->teamService->createTeamByName($owner, $teamName);
+        $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
 
         $platformGroupTeam = new PlatformGroupTeam();
         $platformGroupTeam->setCourseId($course->getId());
         $platformGroupTeam->setName($teamName);
-        $platformGroupTeam->setTeamId($team->getId());
+        $platformGroupTeam->setTeamId($teamId);
 
         if (!$this->platformGroupTeamRepository->createPlatformGroupTeam($platformGroupTeam))
         {
@@ -113,6 +112,7 @@ class PlatformGroupTeamService
      *
      * @throws TooManyUsersException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function updatePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam, string $teamName, $groupIds = [])
     {
@@ -212,6 +212,7 @@ class PlatformGroupTeamService
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws TeamNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function removeTeamUsersNotInGroups(Course $course, PlatformGroupTeam $platformGroupTeam)
     {
@@ -291,10 +292,12 @@ class PlatformGroupTeamService
      *
      * @return string
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws AzureUserNotExistsException
      * @throws NotAllowedException
      * @throws TeamNotFoundException
+     * @throws UnknownAzureUserIdException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function getVisitTeamUrl(User $user, PlatformGroupTeam $platformGroupTeam)
     {
@@ -346,7 +349,6 @@ class PlatformGroupTeamService
      * @param User $user
      *
      * @return array
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Exception
      */
     public function getPlatformGroupTeamsForCourse(Course $course, User $user)
@@ -441,7 +443,7 @@ class PlatformGroupTeamService
      */
     protected function getTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        return $this->teamService->getTeam($platformGroupTeam->getTeamId());
 
 //        if (is_null($team))
 //        {
@@ -450,7 +452,7 @@ class PlatformGroupTeamService
 //            return null;
 //        }
 
-        return $team;
+//        return $team;
     }
 
     /**
@@ -465,8 +467,11 @@ class PlatformGroupTeamService
     /**
      * @param \Microsoft\Graph\Model\Team $team
      * @param array $groups
+     *
      * @throws AzureUserNotExistsException
      * @throws UnknownAzureUserIdException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     protected function addGroupUsersToTeam(Team $team, array $groups = [])
     {

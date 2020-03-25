@@ -98,7 +98,7 @@ class CourseGroupOffice365Connector
         }
 
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
-        $teamId = $this->teamService->createTeam($courseGroupName, $courseGroupName, $owner);
+        $teamId = $this->teamService->createClassTeam($courseGroupName, $courseGroupName, $owner);
 
         $this->courseGroupOffice365ReferenceService->createReferenceForCourseGroup($courseGroup, $teamId, true);
         $this->subscribeCourseGroupUsers($courseGroup, $teamId);

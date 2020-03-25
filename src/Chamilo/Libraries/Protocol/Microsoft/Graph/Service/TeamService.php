@@ -59,13 +59,44 @@ class TeamService
      * @param User $owner
      *
      * @return string
-     * @throws \Exception
+     * @throws AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function createTeam(string $title, string $description, User $owner)
+    public function createClassTeam(string $title, string $description, User $owner)
+    {
+        return $this->teamRepository->createClassTeam($title, $description, $this->getTeamOwnerAzureUserId($owner));
+    }
+
+    /**
+     * @param string $title
+     * @param string $description
+     * @param User $owner
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws AzureUserNotExistsException
+     */
+    public function createStandardTeam(string $title, string $description, User $owner)
+    {
+        return $this->teamRepository->createStandardTeam($title, $description, $this->getTeamOwnerAzureUserId($owner));
+    }
+
+    /**
+     * @param User $owner
+     *
+     * @return string
+     * @throws AzureUserNotExistsException
+     */
+    protected function getTeamOwnerAzureUserId(User $owner)
     {
         $ownerAzureId = $this->userService->getAzureUserIdentifier($owner);
 
-        return $this->teamRepository->createTeam($title, $description, $ownerAzureId);
+        if (empty($ownerAzureId))
+        {
+            throw new AzureUserNotExistsException($owner);
+        }
+
+        return $ownerAzureId;
     }
 
     /**
@@ -77,7 +108,8 @@ class TeamService
      * @deprecated
      */
     public function addTeamToGroup(string $groupId, int $retryCounter = 0): Team
-    { //todo queue implementation
+    {
+        //todo queue implementation
         try
         {
             return $this->teamRepository->addTeamToGroup($groupId);
@@ -85,7 +117,8 @@ class TeamService
         catch (ClientException $exception)
         {
             if ($exception->getCode() == 404 && $retryCounter < 3)
-            {//group maybe not created due to replication delay
+            {
+                //group maybe not created due to replication delay
                 $retryCounter ++;
                 sleep(10);
 
@@ -127,7 +160,7 @@ class TeamService
     public function getTeamUrl(Group $group)
     {
         $team = $this->getTeam($group);
-        if(!$team instanceof Team)
+        if (!$team instanceof Team)
         {
             throw new TeamNotFoundException($group->getId());
         }
@@ -142,6 +175,7 @@ class TeamService
      * @return Team
      * @throws AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function createTeamByName(User $owner, string $teamName): Team
     {
@@ -153,6 +187,9 @@ class TeamService
     /**
      * @param Team $team
      * @param string $newName
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function updateTeamName(Team $team, string $newName)
     {
@@ -164,6 +201,7 @@ class TeamService
      * @param Team $team
      *
      * @return bool
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function isMember(User $user, Team $team): bool
     {
@@ -175,6 +213,7 @@ class TeamService
      * @param Team $team
      *
      * @return bool
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function isOwner(User $user, Team $team): bool
     {
@@ -187,6 +226,8 @@ class TeamService
      *
      * @throws AzureUserNotExistsException
      * @throws UnknownAzureUserIdException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function addMember(User $user, Team $team)
     {
@@ -196,6 +237,9 @@ class TeamService
     /**
      * @param Team $team
      * @param User[] $members
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function removeTeamMembersNotInArray(Team $team, array $members)
     {
@@ -205,6 +249,9 @@ class TeamService
     /**
      * @param Team $team
      * @param User[] $owners
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function removeTeamOwnersNotInArray(Team $team, array $owners)
     {
@@ -216,6 +263,8 @@ class TeamService
      * @param Team $team
      *
      * @throws AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function addOwner(User $user, Team $team)
     {

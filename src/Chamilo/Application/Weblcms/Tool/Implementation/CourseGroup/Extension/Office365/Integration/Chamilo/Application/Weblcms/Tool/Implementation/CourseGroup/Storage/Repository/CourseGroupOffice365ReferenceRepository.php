@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -80,15 +81,26 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     * @return AndCondition
      */
     protected function getConditionByCourseGroup(CourseGroup $courseGroup)
     {
-        return new EqualityCondition(
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseGroupOffice365Reference::class, CourseGroupOffice365Reference::PROPERTY_COURSE_GROUP_ID
             ),
             new StaticConditionVariable($courseGroup->getId())
         );
+
+//        $conditions[] = new EqualityCondition(
+//            new PropertyConditionVariable(
+//                CourseGroupOffice365Reference::class, CourseGroupOffice365Reference::PROPERTY_OFFICE365_HAS_TEAM
+//            ),
+//            new StaticConditionVariable(1)
+//        );
+
+        return new AndCondition($conditions);
     }
 }

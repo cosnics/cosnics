@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Architecture\Exceptions\ValueNotInArrayException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Microsoft\Graph\Http\GraphResponse;
 use Microsoft\Graph\Model\Team;
@@ -35,14 +36,50 @@ class TeamRepository
      *
      * @return string
      * @throws GraphException
+     */
+    public function createClassTeam(string $title, string $description, string $ownerAzureId)
+    {
+        return $this->createTeam($title, $description, $ownerAzureId, 'educationClass');
+    }
+
+    /**
+     * @param string $title
+     * @param string $description
+     * @param string $ownerAzureId
+     *
+     * @return string
+     * @throws GraphException
+     */
+    public function createStandardTeam(string $title, string $description, string $ownerAzureId)
+    {
+        return $this->createTeam($title, $description, $ownerAzureId, 'standard');
+    }
+
+    /**
+     * @param string $title
+     * @param string $description
+     * @param string $ownerAzureId
+     *
+     * @param string $template
+     *
+     * @return string
+     * @throws GraphException
      * @throws \Exception
      */
-    public function createTeam(string $title, string $description, string $ownerAzureId)
+    protected function createTeam(
+        string $title, string $description, string $ownerAzureId, string $template = 'standard'
+    )
     {
+        $allowedTemplates = ['standard', 'educationClass'];
+        if (!in_array($template, $allowedTemplates))
+        {
+            throw new ValueNotInArrayException('template', $template, $allowedTemplates);
+        }
+
         $response = $this->graphRepository->executePostWithAccessTokenExpirationRetry(
             '/teams/',
             [
-                "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('educationClass')",
+                "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('" . $template . "')",
                 "displayName" => $title,
                 "description" => $description,
                 "owners@odata.bind" => [
