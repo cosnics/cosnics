@@ -132,20 +132,4 @@ class TeamRepository
         }
     }
 
-    /**
-     * @param string $teamId
-     *
-     * @return string
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
-     */
-    public function getUrl(string $teamId): string
-    {
-        /**
-         * @var Team $team
-         */
-        $team = $this->getTeam($teamId);
-
-        return $team->getWebUrl();
-    }
-
 }

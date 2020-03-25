@@ -122,10 +122,17 @@ class TeamService
      *
      * @return string
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws TeamNotFoundException
      */
     public function getTeamUrl(Group $group)
     {
-        return $this->teamRepository->getUrl($group->getId());
+        $team = $this->getTeam($group);
+        if(!$team instanceof Team)
+        {
+            throw new TeamNotFoundException($group->getId());
+        }
+
+        return $team->getWebUrl();
     }
 
     /**
