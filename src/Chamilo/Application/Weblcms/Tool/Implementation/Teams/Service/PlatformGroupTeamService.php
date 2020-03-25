@@ -12,6 +12,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
@@ -196,8 +197,12 @@ class PlatformGroupTeamService
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
+
         if(!$team)
-            throw new \Exception("Platform group Team not found in GRAPH API with id: " . $platformGroupTeam->getTeamId());
+        {
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
+        }
+
         $this->addGroupUsersToTeam($team, $groups->getArrayCopy());
     }
 
@@ -206,11 +211,17 @@ class PlatformGroupTeamService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws TeamNotFoundException
      */
     public function removeTeamUsersNotInGroups(Course $course, PlatformGroupTeam $platformGroupTeam)
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
+
+        if(!$team)
+        {
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
+        }
 
         $userIds = [];
 
@@ -283,6 +294,7 @@ class PlatformGroupTeamService
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws NotAllowedException
+     * @throws TeamNotFoundException
      */
     public function getVisitTeamUrl(User $user, PlatformGroupTeam $platformGroupTeam)
     {
@@ -313,12 +325,7 @@ class PlatformGroupTeamService
 
         if (!$team instanceof Team)
         {
-            throw new \RuntimeException(
-                sprintf(
-                    'The given team with id %s could not be found and can therefor not be visited',
-                    $platformGroupTeam->getTeamId()
-                )
-            );
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
         }
 
         if($isTeacher)
