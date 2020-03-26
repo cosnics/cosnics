@@ -293,7 +293,7 @@ class ConfigurationForm extends FormValidator
                                     (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     $context),
-                                $options);
+                                $options, array('class' => 'form-control'));
                         }
                     }
                 }

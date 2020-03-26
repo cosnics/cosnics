@@ -55,13 +55,16 @@ class StylesheetCacheService extends AsseticCacheService
 
         $assets = array();
 
+        $stylesheetPath = $this->getThemeUtilities()->getStylesheetPath('Chamilo\Libraries', false, true);
+        $assets[] = new CssFileAsset($this->getPathBuilder(), $stylesheetPath);
+
         foreach ($packages as $category => $namespaces)
         {
             foreach ($namespaces as $namespace => $package)
             {
                 $stylesheetPath = $this->getThemeUtilities()->getStylesheetPath($namespace, false, true);
 
-                if (file_exists($stylesheetPath))
+                if (file_exists($stylesheetPath) && $namespace != 'Chamilo\Libraries')
                 {
                     $assets[] = new CssFileAsset($this->getPathBuilder(), $stylesheetPath);
                 }
