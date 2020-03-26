@@ -64,19 +64,6 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
     }
 
     /**
-     * Removes a reference by a given course group
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     *
-     * @return bool
-     */
-    public function removeReferenceForCourseGroup(CourseGroup $courseGroup)
-    {
-        $condition = $this->getConditionByCourseGroup($courseGroup);
-        return $this->dataClassRepository->deletes(CourseGroupOffice365Reference::class, $condition);
-    }
-
-    /**
      * Builds the condition for a reference by a given course group
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
@@ -94,12 +81,12 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
             new StaticConditionVariable($courseGroup->getId())
         );
 
-//        $conditions[] = new EqualityCondition(
-//            new PropertyConditionVariable(
-//                CourseGroupOffice365Reference::class, CourseGroupOffice365Reference::PROPERTY_OFFICE365_HAS_TEAM
-//            ),
-//            new StaticConditionVariable(1)
-//        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseGroupOffice365Reference::class, CourseGroupOffice365Reference::PROPERTY_LINKED
+            ),
+            new StaticConditionVariable(1)
+        );
 
         return new AndCondition($conditions);
     }

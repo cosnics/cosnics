@@ -55,21 +55,16 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
         $id = $courseGroup->getId() ? $courseGroup->getId() : 0;
         $useTeamElementName = self::PROPERTY_USE_TEAM . '[' . $id . ']';
 
-        $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        if ($office365Reference && $office365Reference->hasTeam())
+        $hasReference = $this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup);
+
+        if ($hasReference)
         {
             $courseGroupForm->addElement(
                 'checkbox', $useTeamElementName,
                 Translation::getInstance()->getTranslation('UseOffice365Team')
             );
 
-            if ($office365Reference)
-            {
-                if ($office365Reference->hasTeam())
-                {
-                    $defaults[$useTeamElementName] = true;
-                }
-            }
+            $defaults[$useTeamElementName] = true;
         }
         else
         {

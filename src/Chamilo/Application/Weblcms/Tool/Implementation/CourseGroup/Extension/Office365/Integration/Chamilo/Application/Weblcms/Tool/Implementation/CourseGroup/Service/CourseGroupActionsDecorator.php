@@ -65,7 +65,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
         ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup, User $user, $isCourseTeacher = false
     )
     {
-        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasTeam($courseGroup))
+        if (!$this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
         {
             return;
         }

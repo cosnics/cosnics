@@ -201,12 +201,19 @@ class GroupService
      *
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws AzureUserNotExistsException
      */
     public function removeMemberFromGroup($groupId, User $user)
     {
         if ($this->isMemberOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+
+            if (empty($azureUserIdentifier))
+            {
+                throw new AzureUserNotExistsException($user);
+            }
+
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
     }
