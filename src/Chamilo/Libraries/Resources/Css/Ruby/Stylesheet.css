@@ -1,110 +1,18 @@
-/* Bootstrap */
-@import url('../Aqua/Bootstrap/css/bootstrap.css');
-@import url('../Aqua/BootstrapCheckbox/awesome-bootstrap-checkbox.css');
+@import url("../Aqua/Stylesheet.min.css");
+@import url("ErrorPages.min.css");
 
-/* Font Awesome */
-@import url('../Aqua/FontAwesome5/css/all.css');
-@import url('../Aqua/FontAwesome5/css/v4-shims.css');
-@import url('../Aqua/ConnectIdents/ConnectIdents.css');
-
-/* Plugin CSS */
-@import url('Plugin.css');
-
-/* Platform CSS */
-@import url('General.css');
-@import url('Form.css');
-@import url('Table.css');
-@import url('Tabs.css');
-@import url('Tree.css');
-@import url('Bootstrap.css');
-
-.fas-ci-0793ee69022bce29ee5c942d0f33bb10, .fas-ci-d639d7187c52c2eff70a540c6b291884 {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
+.ui-widget-content a:not (.btn ), a {
+    color: #b1071c;
 }
 
-.fas-ci-7e230f4a916e07600b3e0825011c6032 {
-    font-family: 'Font Awesome 5 Brands';
-
+a {
+    color: #b1071c;
 }
 
-.fas-ci-0793ee69022bce29ee5c942d0f33bb10:before {
-    content: "\f187";
+ol.breadcrumb > li > a {
+    color: #808080;
 }
 
-/* Package Type: Chamilo */
-.fas-ci-c4f6f16617596c8cbb153739ac653c84:before {
-    content: "\f7a2";
-}
-
-/* Package Type: Chamilo\Application */
-.fas-ci-669b00ee75beb54b73358f5002b42069:before {
-    content: "\f3fa";
-}
-
-/* Package Type: Chamilo\Core */
-.fas-ci-04ab940c81f4ba505c29fcc625ea8b26:before {
-    content: "\f085";
-}
-
-/**
- * Package Type: Chamilo\Libraries\Protocol
- */
-.fas-ci-d639d7187c52c2eff70a540c6b291884:before {
-    content: "\f6ff";
-}
-
-/**
- * Package Type: Chamilo\Libraries\Protocol\Microsoft
- */
-.fas-ci-7e230f4a916e07600b3e0825011c6032:before {
-    content: "\f3ca";
-}
-
-figcaption {
-    padding-top: 8px !important;
-}
-
-.image-captioned {
-    padding: 0px 0px 10px !important;
-    text-align: center;
-    border: solid 1px #ccc;
-    border-radius: 0px;
-    background: rgba(0, 0, 0, 0.05);
-    display: inline-block;
-    color: #555555;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.align-left {
-    float: left;
-    margin-right: 1.5em;
-}
-
-.align-right {
-    float: right;
-    margin-left: 1.5em;
-}
-
-.align-center {
-    text-align: center;
-    margin: 0 auto;
-}
-
-.align-center div {
-    margin: 0 auto;
-}
-
-.align-center > figure {
-    display: inline-block;
-}
-
-div[data-oembed-url] {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-span[lang] {
-    font-style: normal;
+.table th a {
+    color: rgb(60, 60, 59);
 }

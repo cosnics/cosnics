@@ -1,5 +1,5 @@
 .fas-ci-950a386854466dd0d205a99737f163cd {
-    font-family: 'Font Awesome 5 Free';
+    font-family: "Font Awesome 5 Free";
     font-weight: 900;
 }
 
@@ -7,19 +7,25 @@
     content: "\f14e";
 }
 
-.navbar.navbar-chamilo {
+.navbar.navbar-inverse.navbar-chamilo {
     border-radius: 0px;
+    border-width: 0px;
     margin-bottom: 0px;
 }
 
-.navbar-chamilo .profile-picture {
+.navbar.navbar-inverse.navbar-chamilo .profile-picture {
     height: 49px;
 }
 
-.navbar-inverse.navbar-chamilo .navbar-brand > img {
+.navbar.navbar-inverse.navbar-chamilo .img-thumbnail {
+    background-color: #222222;
+    border-width: 2px;
+}
+
+.navbar.navbar-inverse.navbar-chamilo .navbar-brand > img {
     max-height: 65px;
 }
 
-.navbar-nav > li > a {
+.navbar.navbar-inverse.navbar-chamilo .navbar-nav > li > a {
     text-align: center;
 }

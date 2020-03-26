@@ -1,15 +1,7 @@
-@import url('../Aqua/Stylesheet.css');
+@import url('../Aqua/Stylesheet.min.css');
 
 span.fill_in_the_blanks_gap {
-	border: 1px solid #CECECE;
-	background-color: #F4F4F4;
-	padding: 2px 10px 2px 10px;
-	font-weight: bold;
-	font-size: 11px;
-	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
-		sans-serif;
-	letter-spacing: 2px;
-	text-transform: uppercase;
-	color: #9e021b;
-	font-size: 10px;
+    border: 1px solid #CECECE;
+    background-color: #F4F4F4;
+    color: #9e021b;
 }

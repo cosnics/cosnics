@@ -1,14 +1,6 @@
 /*****************************************************
  *  MAIN STYLES FILE                                 *
  *****************************************************/
-body {
-    /*font-family: arial, verdana, helvetica, sans-serif;*/
-    color: #3f4045;
-    margin: 0px;
-    padding: 0px;
-    background-color: white;
-}
-
 .container-breadcrumb {
     background-color: #f5f5f5;
     margin-bottom: 20px;
@@ -24,25 +16,24 @@ body {
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer.chamilo-footer {
+    border-top: 1px solid #dddddd;
+    font-size: 90%;
     margin-top: 20px;
     padding: 15px 0;
-    font-size: 90%;
     text-align: right;
-    border-top: 1px solid #dddddd;
 }
 
 /*****************************************************
  *  MAIN STYLES                                      *
  *****************************************************/
-
 .notifications {
+    left: 15px;
     position: fixed;
     right: 15px;
+    text-align: justify;
+    text-align: justify;
     top: 15px;
-    left: 15px;
-    text-align: justify;
     z-index: 9999999;
-    text-align: justify;
 }
 
 @media ( min-width: 768px) {
@@ -58,8 +49,8 @@ footer.chamilo-footer {
 .warning-banner {
     border-bottom: 1px solid #ffd89b;
     padding: 10px;
-    z-index: 9999;
     text-align: center;
+    z-index: 9999;
 }
 
 /*****************************************************
@@ -67,33 +58,33 @@ footer.chamilo-footer {
  *****************************************************/
 /* Invisibility style */
 .invisible {
-    color: #999;
+    color: #999999;
 }
 
 .visible {
-    color: #4171B5;
+    color: #4171b5;
     font-weight: bold;
 }
 
 .invisible a:link, .invisible a:visited {
-    color: #999;
+    color: #999999;
 }
 
 a.invisible:link, a.invisible:visited {
-    color: #999;
+    color: #999999;
 }
 
 .clear {
     clear: both;
-    line-height: 0px;
-    height: 0px;
     font-size: 0px;
+    height: 0px;
+    line-height: 0px;
 }
 
 label.left {
     float: left;
-    width: 15em;
     margin: 0 0 0.5em 0;
+    width: 15em;
 }
 
 /* Fix for alignment problem in IE-Win browsers  */
@@ -108,9 +99,9 @@ label.left {
 }
 
 span.subtitle {
+    color: #787878;
     font-size: 90%;
     font-weight: bold;
-    color: #787878;
 }
 
 /*****************************************************
@@ -119,41 +110,41 @@ span.subtitle {
 
 /* Learning object display styles */
 div.content_object {
-    border: 1px solid #F0F0F0;
-    margin: 0 0 1em 0;
-    padding: 10px 10px 10px 44px;
     background-position: 10px 10px;
     background-repeat: no-repeat;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-bottomright: 10px;
-    border-radius-topleft: 10px;
-    border-radius-bottomright: 10px;
-    -webkit-border-top-left-radius: 10px;
+    border: 1px solid #f0f0f0;
     -webkit-border-bottom-right-radius: 10px;
+    -moz-border-radius-bottomright: 10px;
+    border-radius-bottomright: 10px;
+    -moz-border-radius-topleft: 10px;
+    border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 10px;
+    margin: 0 0 1em 0;
     overflow: auto;
+    padding: 10px 10px 10px 44px;
 }
 
 div.content_object div.title {
+    border-bottom: 1px solid #cccccc;
     font-weight: bold;
-    border-bottom: 1px solid #CCCCCC;
-    width: 100%;
     margin-bottom: 1em;
+    width: 100%;
 }
 
 div.content_object div.description ul.attachments_list {
-    margin-top: 10px;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 div.content_object div.publication_info {
     font-style: italic;
-    text-align: right;
     margin: 1em 0;
+    text-align: right;
 }
 
 div.content_object span.publication_info {
-    font-weight: normal;
     font-style: italic;
+    font-weight: normal;
     text-align: right;
 }
 
@@ -162,39 +153,39 @@ div.content_object div.publication_actions {
 }
 
 div.content_object div#content_object_tags {
-    border-top: 1px solid #CCCCCC;
-    text-align: right;
+    border-top: 1px solid #cccccc;
     margin-top: 1em;
     padding-top: 7px;
+    text-align: right;
 }
 
 div.content_object div#content_object_tags ul {
     list-style: none;
-    padding: 0px;
     margin: 0px;
+    padding: 0px;
 }
 
 div.content_object div#content_object_tags ul li.tag {
-    float: right;
-    background-color: #D4E0F1;
-    padding: 2px 4px;
-    border: 1px solid #B5CAE7;
+    background-color: #d4e0f1;
+    border: 1px solid #b5cae7;
     border-radius: 3px;
-    color: #4171B5;
+    color: #4171b5;
+    float: right;
     margin-left: 5px;
+    padding: 2px 4px;
 }
 
 /* List of attachments */
 div.attachments {
-    border: 1px solid #F6F6F6;
+    border: 1px solid #f6f6f6;
     margin: 0 0 1em 0;
 }
 
 div.attachments_title {
+    border-bottom: 1px solid #d0d0d0;
     font-weight: bold;
-    border-bottom: 1px solid #D0D0D0;
-    width: 60%;
     margin-bottom: 1em;
+    width: 60%;
 }
 
 ul.attachments_list li.personal_message_attachment {
@@ -234,10 +225,10 @@ span.info_message {
 }
 
 .tabbed-pane-tabs {
+    height: 0; /* for IE */
     list-style: none;
     margin: 0;
     padding: 0 0 0 1em;
-    height: 0; /* for IE */
 }
 
 .tabbed-pane-tabs li {
@@ -248,25 +239,25 @@ span.info_message {
 }
 
 .tabbed-pane-tabs li a {
-    display: block;
-    margin: 0.25em 0 -1px 0;
-    padding: 0.25em 1em;
-    background: #E5EDF9;
-    color: #4171b5;
-    text-decoration: none;
+    background: #e5edf9;
     border: 1px solid #4271b5;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
+    color: #4171b5;
+    display: block;
+    margin: 0.25em 0 -1px 0;
+    padding: 0.25em 1em;
+    text-decoration: none;
 }
 
 .tabbed-pane-tabs li a:hover, .tabbed-pane-tabs li a.current {
     background: white;
-    margin-top: 0;
-    padding-bottom: 0.5em;
     border-bottom-color: white;
     color: #4171b5;
+    margin-top: 0;
+    padding-bottom: 0.5em;
 }
 
 .tabbed-pane-tabs li a:active, .tabbed-pane-tabs li a.current,
@@ -275,15 +266,15 @@ span.info_message {
 }
 
 .tabbed-pane-content {
-    clear: both;
     border: 1px solid #4271b5;
-    margin: 0;
-    padding: 1em;
-    min-height: 15em;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    -webkit-border-top-right-radius: 10px;
     -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-topright: 10px;
+    -webkit-border-top-right-radius: 10px;
+    clear: both;
+    margin: 0;
+    min-height: 15em;
+    padding: 1em;
 }
 
 /*****************************************************
@@ -302,47 +293,47 @@ span.info_message {
 }
 
 #help-modal-container {
-    position: fixed;
-    left: 100px;
-    right: 100px;
-    top: 100px;
-    bottom: 100px;
-    padding: 10px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border: 1px solid black;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    bottom: 100px;
+    left: 100px;
+    padding: 10px;
+    position: fixed;
+    right: 100px;
+    top: 100px;
 }
 
 a.help-modal-close {
     background-color: red;
-    width: 16px;
-    height: 16px;
-    display: inline;
-    z-index: 3200;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
-    border-radius: 8px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline;
+    height: 16px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 16px;
+    z-index: 3200;
 }
 
 .element_finder_loading {
-    width: 100%;
-    height: 64px;
     display: inline-block;
-    position: relative;
-    top: 50%;
+    height: 64px;
     margin-top: -32px;
+    position: relative;
     text-align: center;
+    top: 50%;
+    width: 100%;
 }
 
 iframe.preview {
     border: 1px solid #cccccc;
-    width: 100%;
     height: 300px;
+    width: 100%;
 }
 
 .hidden {
@@ -350,15 +341,15 @@ iframe.preview {
 }
 
 .ui-widget-content2 {
-    color: #222222;
-    border: 1px solid #F0F0F0;
-    margin-right: 5px;
-    padding: 5px;
-    overflow: hidden;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    -webkit-border-top-right-radius: 10px;
+    border: 1px solid #f0f0f0;
     -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-topright: 10px;
+    -webkit-border-top-right-radius: 10px;
+    color: #222222;
+    margin-right: 5px;
+    overflow: hidden;
+    padding: 5px;
 }
 
 .ui-widget-content2 a {
@@ -366,64 +357,63 @@ iframe.preview {
 }
 
 span.highlight {
-    color: #B1071C;
+    color: #b1071c;
 }
 
 pre.inline {
-    font-size: 90%;
-    line-height: 1.2em;
+    background: #f4f4f4;
+    border: solid 1px #e1e1e1;
+    clear: both;
+    color: #555555;
+    display: block;
     font-family: "Courier 10 Pitch", Courier, monospace;
+    font-size: 90%;
+    height: 1%;
+    line-height: 1.2em;
+    padding: 1em 1em;
     white-space: pre;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
-    height: 1%;
     width: auto;
-    display: block;
-    clear: both;
-    color: #555555;
-    padding: 1em 1em;
-    background: #f4f4f4;
-    border: solid 1px #e1e1e1
 }
 
 code.inline {
-    font-size: 90%;
-    line-height: 1.2em;
+    background: #f4f4f4;
+    color: #555555;
+    display: inline;
     font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono",
     monospace;
-    display: inline;
-    color: #555555;
+    font-size: 90%;
+    line-height: 1.2em;
     padding: 1em 1em;
-    background: #f4f4f4;
 }
 
 .panel.panel-not-authenticated {
-    margin-top: 20px;
-    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 20px;
+    max-width: 700px;
 }
 
 [v-cloak] {
     display: none
 }
 
-
 figcaption {
     padding-top: 8px !important;
 }
 
 .image-captioned {
-    padding: 0px 0px 10px !important;
-    text-align: center;
-    border: solid 1px #ccc;
-    border-radius: 0px;
     background: rgba(0, 0, 0, 0.05);
-    display: inline-block;
+    border: solid 1px #cccccc;
+    border-radius: 0px;
     color: #555555;
+    display: inline-block;
     font-size: 12px;
     font-weight: bold;
+    padding: 0px 0px 10px !important;
+    text-align: center;
 }
 
 .align-left {
@@ -437,8 +427,8 @@ figcaption {
 }
 
 .align-center {
-    text-align: center;
     margin: 0 auto;
+    text-align: center;
 }
 
 .align-center div {

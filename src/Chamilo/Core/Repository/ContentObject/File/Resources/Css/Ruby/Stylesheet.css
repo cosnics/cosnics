@@ -1,14 +1,1 @@
-@import url('../Aqua/Stylesheet.css');
-
-#file-upload {
-	margin-bottom: 0px;
-}
-
-#file-upload .panel-body {
-	text-align: center;
-}
-
-#file-upload span.glyphicon {
-	font-size: 48px;
-	color: #406e8e;
-}
+@import url('../Aqua/Stylesheet.min.css');

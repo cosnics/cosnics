@@ -1,8 +1,4 @@
-@import url('../Aqua/Stylesheet.css');
-
-.navbar-inverse.navbar-chamilo {
-    background-color: rgb(60, 60, 59);
-}
+@import url("../Aqua/Stylesheet.css");
 
 .navbar-inverse.navbar-chamilo .navbar-nav > .active > a,
 .navbar-inverse.navbar-chamilo .navbar-nav > .active > a:hover,
@@ -10,11 +6,10 @@
     background-color: black;
 }
 
-.navbar-inverse.navbar-chamilo .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+.navbar-inverse.navbar-chamilo,
+.navbar-inverse.navbar-chamilo .img-thumbnail,
+.navbar-inverse.navbar-chamilo .dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
     background-color: rgb(60, 60, 59);
-}
-
-.navbar-inverse.navbar-chamilo .img-thumbnail {
-    background-color: rgb(60, 60, 59);
-    border-width: 2px;
 }

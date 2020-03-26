@@ -1,0 +1,19 @@
+/* Bootstrap */
+@import url('Bootstrap/css/bootstrap.min.css');
+@import url('BootstrapCheckbox/awesome-bootstrap-checkbox.min.css');
+
+/* Font Awesome */
+@import url('FontAwesome5/css/all.min.css');
+@import url('FontAwesome5/css/v4-shims.min.css');
+@import url('ConnectIdents/ConnectIdents.min.css');
+
+/* Plugin CSS */
+@import url('Plugin.min.css');
+
+/* Platform CSS */
+@import url('General.min.css');
+@import url('Form.min.css');
+@import url('Table.min.css');
+@import url('Tabs.min.css');
+@import url('Tree.min.css');
+@import url('Bootstrap.min.css');
