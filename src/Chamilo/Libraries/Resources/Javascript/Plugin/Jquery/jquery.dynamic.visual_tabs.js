@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 (function($){
-	$.fn.extend({ 
+	$.fn.extend({
 		//plugin name - animatemenu
 		dynamic_tabs: function(options) {
 

@@ -53,52 +53,6 @@ class FeedbackForm extends FormValidator
 
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', Feedback::PROPERTY_COMMENT);
 
-//        $calculator = new Calculator(
-//            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-//                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-//                (int) $this->application->getUser()->getId()
-//            )
-//        );
-//
-//        $uploadUrl = new Redirect(
-//            array(
-//                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
-//                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-//            )
-//        );
-//
-//        $dropZoneParameters = array(
-//            'name' => self::PROPERTY_ATTACHMENTS_UPLOADER,
-//            'maxFilesize' => $calculator->getMaximumUploadSize(),
-//            'uploadUrl' => $uploadUrl->getUrl(),
-//            'successCallbackFunction' => 'chamilo.core.repository.feedback.importAttachment.processUploadedFile',
-//            'sendingCallbackFunction' => 'chamilo.core.repository.feedback.importAttachment.prepareRequest',
-//            'removedfileCallbackFunction' => 'chamilo.core.repository.feedback.importAttachment.deleteUploadedFile'
-//        );
-//
-//        $this->addFileDropzone(self::PROPERTY_ATTACHMENTS_UPLOADER, $dropZoneParameters, false);
-//
-//        $this->addElement(
-//            'html',
-//            ResourceManager::getInstance()->get_resource_html(
-//                Path::getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) .
-//                'Plugin/jquery.file.upload.import.js'
-//            )
-//        );
-//
-//        $this->addElement(
-//            'html',
-//            ResourceManager::getInstance()->get_resource_html(
-//                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'FeedbackAttachmentsUpload.js'
-//            )
-//        );
-//
-//        $this->addElement('hidden', self::PROPERTY_ATTACHMENTS);
-//
-//        $renderer->setElementTemplate(
-//            '<div class="form-group">{element}</div>', self::PROPERTY_ATTACHMENTS_UPLOADER . '_static_data'
-//        );
-
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',

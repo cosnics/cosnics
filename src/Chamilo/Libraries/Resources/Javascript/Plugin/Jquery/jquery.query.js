@@ -8,7 +8,7 @@
  * @version 2.1.7
  *
  **/
-new function(settings) { 
+new function(settings) {
   // Various Settings
   var $separator = settings.separator || '&';
   var $spaces = settings.spaces === false ? false : true;

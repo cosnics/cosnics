@@ -189,7 +189,7 @@ class Theme
      */
     public function getFavouriteIcon()
     {
-        return $this->getImagePath('Chamilo\Configuration', 'Favicon', 'ico');
+        return $this->getImagePath('Chamilo\Libraries', 'Favicon', 'ico');
     }
 
     /**
