@@ -84,7 +84,8 @@ class TeamRepository
                 "description" => $description,
                 "owners@odata.bind" => [
                     "https://graph.microsoft.com/beta/users('" . $ownerAzureId . "')"
-                ]
+                ],
+                "visibility" => "Private"
             ],
             null,
             GraphRepository::API_VERSION_BETA
