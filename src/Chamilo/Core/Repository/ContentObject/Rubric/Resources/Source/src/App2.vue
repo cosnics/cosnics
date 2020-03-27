@@ -1,7 +1,11 @@
 <template>
     <div id="app">
-        <div>
         <div v-if="showHeaderFooter" class="chamilo-header"><div class="start"></div><div class="middle"></div><div class="end"></div></div>
+        <ul class="menu">
+            <li><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
+            <li><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
+        </ul>
+        <div class="rubrics">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <!--            <transition name="fade">
@@ -17,8 +21,9 @@
             </transition> -->
 
             <div v-if="!store.isLoading">
-                <score-rubric-view :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
-                <criterium-details-view :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
+                <levels-view v-if="content === 'levels'"></levels-view>
+                <score-rubric-view v-if="content === 'rubric'" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
+                <criterium-details-view v-if="content === 'rubric'" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
             </div>
             <div v-else class="container">
                 <p>Loading Rubrics...</p>
@@ -35,15 +40,17 @@
     import CriteriumDetailsView from "./Components/View/CriteriumDetailsView.vue";
     import ScoreRubricStore from "./ScoreRubricStore";
     import Criterium from "./Domain/Criterium";
+    import LevelsView from "./Components/View/LevelsView.vue";
 
     @Component({
         components: {
-            ScoreRubricView, CriteriumDetailsView
+            ScoreRubricView, CriteriumDetailsView, LevelsView
         },
     })
     export default class App extends Vue {
         private selectedCriterium: Criterium|null = null;
         private showHeaderFooter: boolean = true;
+        private content: string = 'rubric';
 
         get store(): ScoreRubricStore {
             return this.$root.$data.store;
@@ -144,6 +151,26 @@
         background-repeat: no-repeat;
         height: 48px!important;
         width: 685px;
+    }
+    ul.menu {
+        list-style: none; display: flex;
+        border-bottom: 1px solid hsl(199, 39%, 73%);
+        border-top: 1px solid hsl(199, 39%, 73%);
+        padding: 8px; margin-bottom: 0;
+        background-color: hsla(165, 5%, 90%, 1);
+    }
+    ul.menu li {
+        margin-left: 8px; margin-right: 4px;
+        cursor: pointer;
+    }
+    ul.menu li:first-child {
+        margin-left: 20px;
+    }
+    ul.menu li a {
+        text-decoration: none;
+    }
+    .rubrics {
+        flex: 1;
     }
     /* Reset elements */
     .container {
