@@ -92,7 +92,11 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
             }
             else
             {
-                $this->courseGroupOffice365Connector->updateTeamFromCourseGroup($courseGroup);
+                try
+                {
+                    $this->courseGroupOffice365Connector->updateTeamFromCourseGroup($courseGroup);
+                }
+                catch(\Exception $ex) {}
             }
         }
         else

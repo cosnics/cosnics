@@ -149,7 +149,7 @@ class CourseGroupOffice365Connector
 
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
-            return null;
+            throw new \RuntimeException('No team found for course group ' . $courseGroup->getId());
         }
 
         $courseGroupName = $this->getOffice365GroupNameForCourseGroup($courseGroup);
