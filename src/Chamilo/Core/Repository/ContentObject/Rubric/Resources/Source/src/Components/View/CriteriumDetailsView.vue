@@ -68,14 +68,15 @@
         outline-width: thin;
     }
     .container.criterium {
+        position: relative;
         min-width: 28%;
-        height: 100vh;
+        /*height: 100vh;*/
         max-width: 28%;
         padding-bottom: 10px;
         /*background: whitesmoke;*/
         background: hsla(203, 13%, 88%, 1);
         border-left: 1px solid hsla(200, 50%, 50%, 0.4);
-        overflow-y: scroll;
+        overflow-y: auto;
         padding:20px;
         color: #333;
     }
@@ -181,8 +182,8 @@
     i.fa-close {
         display: block;
         position: absolute;
-        right: 24px;
-        top: 6px;
+        right: 10px;
+        top: 10px;
         color: #888;
         /*border: 1px solid transparent;*/
         padding: 4px;
