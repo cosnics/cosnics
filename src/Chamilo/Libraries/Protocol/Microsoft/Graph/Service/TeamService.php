@@ -159,7 +159,7 @@ class TeamService
      */
     public function getTeamUrl(Group $group)
     {
-        $team = $this->getTeam($group);
+        $team = $this->getTeam($group->getId());
         if (!$team instanceof Team)
         {
             throw new TeamNotFoundException($group->getId());
