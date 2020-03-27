@@ -17,7 +17,7 @@
                             </div>
                             <div class="default-choice">
                                 <label :for="`level_default_${levelIndex}`">Standaard</label>
-                                <input :id="`level_default_${levelIndex}`" tabindex="0" type="radio" class="with-font" :checked="level.isDefault" @click.stop="setDefault(level)" @keydown.space.prevent="setDefault(level)">
+                                <input :id="`level_default_${levelIndex}`" tabindex="0" type="radio" :checked="level.isDefault" @click.stop="setDefault(level)" @keydown.space.prevent="setDefault(level)">
                                 <label class="check" @click.stop="" :for="`level_default_${levelIndex}`"><i class="fa fa-fw fa-check"></i></label>
                             </div>
                             <div class="delete">
@@ -168,6 +168,18 @@
     }
     .actions button {
         display: block;
+        font-size: 20px;
+        outline-width: thin;
+        background: transparent;
+    }
+    .actions button:not(:disabled) i {
+        color: #999;
+    }
+    .actions button:disabled i {
+        color: #bbb;
+    }
+    .actions button:not(:disabled):hover i {
+        color: hsla(200, 100%, 48%, 1);
     }
     li {
         display: flex;
@@ -199,10 +211,11 @@
     /*li:not(.selected) .default-choice input:not(:checked) { opacity: 0; }
     li:not(.selected):hover .default-choice input:not(:checked) { opacity: 1; }*/
 
-    li .default-choice input:checked + label.check { color: #406e8d; font-size: 16px; }
+    li .default-choice input:checked + label.check { color: #406e8d;  }
     li:not(.selected) .default-choice input:not(:checked) + label.check { opacity: 0; color: #aaa; }
     li.selected .default-choice input:not(:checked) + label.check { color: #bbb; }
     li:not(.selected):hover .default-choice input:not(:checked) + label.check { opacity: 1; }
+    li:not(.selected) .default-choice input:focus + label.check { opacity: 1; }
     li:not(.selected) textarea { color: #999; margin-top: -6px; padding-left: 6px; margin-bottom: -10px;}
 
     .level input {
@@ -288,7 +301,7 @@
     li:not(.selected) .description.empty textarea {
         display: none;
     }
-    li input:hover, li input:focus, li textarea:hover, li textarea:focus, li.selected .default-choice input:focus + label i, li .delete .btn:focus {
+    li input:hover, li input:focus, li textarea:focus, li .default-choice input:focus + label i, li .delete .btn:focus {
         border: 1px solid #4f8be8;
     }
     .delete .btn {
@@ -301,6 +314,7 @@
     .delete .btn i {
         margin-left: 3px;
         padding: 0;
+        transition: color 120ms;
     }
     li.selected .delete .btn {
         color: #999;
