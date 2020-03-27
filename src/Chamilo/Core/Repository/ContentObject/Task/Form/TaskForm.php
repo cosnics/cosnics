@@ -50,12 +50,12 @@ class TaskForm extends ContentObjectForm
 
         $options_priority = Task::get_priority_options();
         $choices_priority = array();
-        $choices_priority[] = $this->createElement('select', Task::PROPERTY_PRIORITY, null, $options_priority);
+        $choices_priority[] = $this->createElement('select', Task::PROPERTY_PRIORITY, null, $options_priority, array('class' => 'form-control'));
         $this->addGroup($choices_priority, self::PARAM_PRIORITY, Translation::get('Priority'), '', false);
 
         $options_type = Task::get_types_options();
         $choices_type = array();
-        $choices_type[] = $this->createElement('select', Task::PROPERTY_CATEGORY, null, $options_type);
+        $choices_type[] = $this->createElement('select', Task::PROPERTY_CATEGORY, null, $options_type, array('class' => 'form-control'));
         $this->addGroup($choices_type, self::PARAM_TYPE, Translation::get('TaskType'), '', false);
 
         $start_date = array();
@@ -63,12 +63,12 @@ class TaskForm extends ContentObjectForm
             'text',
             Task::PROPERTY_START_DATE,
             null,
-            'id="start_date" style="width:120px;"');
+            'id="start_date" class="form-control"');
         $this->addGroup($start_date, Task::PROPERTY_START_DATE, Translation::get('StartDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', Task::PROPERTY_START_DATE);
 
         $due_date = array();
-        $due_date[] = $this->createElement('text', Task::PROPERTY_DUE_DATE, null, 'id="due_date" style="width:120px;"');
+        $due_date[] = $this->createElement('text', Task::PROPERTY_DUE_DATE, null, 'id="due_date" class="form-control"');
         $this->addGroup($due_date, Task::PROPERTY_DUE_DATE, Translation::get('EndDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', Task::PROPERTY_DUE_DATE);
 

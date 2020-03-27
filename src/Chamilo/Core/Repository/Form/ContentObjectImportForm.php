@@ -82,31 +82,34 @@ abstract class ContentObjectImportForm extends FormValidator
 
         $category_group = array();
 
+        if (!$this->implementsDropZoneSupport())
+        {
+            $category_group[] = $this->createElement('static', null, null, '<div class="row">');
+            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-5">');
+        }
+
         $category_group[] = $this->createElement(
             'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'), $this->get_categories(),
-            array('id' => 'parent_id')
+            array('class' => 'form-control', 'id' => 'parent_id')
         );
 
         if (!$this->implementsDropZoneSupport())
         {
+            $category_group[] = $this->createElement('static', null, null, '</div>');
+
             $category_group[] = $this->createElement(
-                'style_button', 'add_category', null, array('id' => 'add_category', 'style' => 'display:none'), null,
-                new FontAwesomeGlyph('plus', array(), null, 'fas')
+                'static', null, null, '<div class="col-md-12 col-lg-3 btn btn-link form-label control-label">' .
+                Translation::get('AddNewCategory') . '</div>'
             );
+
+            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-4">');
+            $category_group[] =
+                $this->createElement('text', self::NEW_CATEGORY, null, array('class' => 'form-control'));
+            $category_group[] = $this->createElement('static', null, null, '</div>');
+            $category_group[] = $this->createElement('static', null, null, '</div>');
         }
 
-        $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
-
-        if (!$this->implementsDropZoneSupport())
-        {
-            $group = array();
-            $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
-            $group[] = $this->createElement('static', null, null, Translation::get('AddNewCategory'));
-            $group[] = $this->createElement('text', self::NEW_CATEGORY);
-            $group[] = $this->createElement('static', null, null, '</div>');
-
-            $this->addGroup($group);
-        }
+        $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'), ' ', false);
     }
 
     /**

@@ -90,7 +90,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $viewButton = array();
             $viewButton[] = '<a class="btn btn-primary view" target="_blank" ' . $onclick . ' ">';
 
-            $glyph = new FontAwesomeGlyph('file', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('desktop', array(), null, 'fas');
 
             $viewButton[] = $glyph->render() . ' <span>';
 

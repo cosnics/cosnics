@@ -1,45 +1,43 @@
 dropzoneCallbacks.chamilo = {
-    core : {
-        repository : {
-            import : {
-                processUploadedFile : function(environment, file, serverResponse)
-                {
+    core: {
+        repository: {
+            import: {
+                processUploadedFile: function (environment, file, serverResponse) {
                     var viewButton = $(serverResponse.properties.viewButton);
                     var uploadedMessage = $(serverResponse.properties.uploadedMessage);
                     var contentObjectId = serverResponse.properties.contentObjectId;
                     var previewElement = $(file.previewElement);
 
                     previewElement.data('content-object-id', contentObjectId);
-                    var fileUploadButton = $('.file-upload-buttons', previewElement);
+                    var fileUploadButtonGroup = $('.file-upload-buttons', previewElement);
+                    var fileUploadButton = $('.file-upload-buttons-group', fileUploadButtonGroup);
                     fileUploadButton.prepend(viewButton);
 
                     uploadedMessage.insertBefore(fileUploadButton);
                 },
-                prepareRequest : function(environment, file, xhrObject, formData)
-                {
+                prepareRequest: function (environment, file, xhrObject, formData) {
                     var selectedCategory = $('#parent_id').val();
                     formData.append('parentId', selectedCategory);
 
                     var selectedWorkspace = $('#workspace_id').val();
                     formData.append('workspaceId', selectedWorkspace);
                 },
-                deleteUploadedFile : function(environment, file, serverResponse)
-                {
+                deleteUploadedFile: function (environment, file, serverResponse) {
                     var contentObjectId = $(file.previewElement).data('content-object-id');
 
                     var ajaxUri = getPath('WEB_PATH') + 'index.php';
                     var temporaryFileName = $(file.previewElement).data('temporary-file-name');
 
                     var parameters = {
-                        'application' : 'Chamilo\\Core\\Repository\\Ajax',
-                        'go' : 'DeleteFile',
-                        'content_object_id' : contentObjectId
+                        'application': 'Chamilo\\Core\\Repository\\Ajax',
+                        'go': 'DeleteFile',
+                        'content_object_id': contentObjectId
                     };
 
                     var response = $.ajax({
-                        type : "POST",
-                        url : ajaxUri,
-                        data : parameters
+                        type: "POST",
+                        url: ajaxUri,
+                        data: parameters
                     });
                 }
             },
@@ -99,7 +97,7 @@ dropzoneCallbacks.chamilo = {
                     var contentObjectId = $(file.previewElement).data('content-object-id');
 
                     var index = this.contentObjectIdentifiers.indexOf(contentObjectId);
-                    if(index > -1) {
+                    if (index > -1) {
                         this.contentObjectIdentifiers.splice(index, 1);
                         $('input[name="' + hiddenFieldId + '"]').val(JSON.stringify(this.contentObjectIdentifiers));
                     }
@@ -109,22 +107,18 @@ dropzoneCallbacks.chamilo = {
     }
 };
 
-(function($)
-{
-    function setDocumentTypeField()
-    {
+(function ($) {
+    function setDocumentTypeField() {
         var documentType = $('input[name="document_type"]:checked');
         var buttonContainer = $('#import_button').parent();
 
-        if (documentType.val() == 0)
-        {
+        if (documentType.val() == 0) {
             $('div#document_upload').show();
             $('div#document_link').hide();
             $('#import_button').hide();
             $('button:not(#import_button)', buttonContainer).show();
         }
-        else
-        {
+        else {
             $('div#document_upload').hide();
             $('div#document_link').show();
             $('#import_button').show();
@@ -132,8 +126,7 @@ dropzoneCallbacks.chamilo = {
         }
     }
 
-    $(document).ready(function()
-    {
+    $(document).ready(function () {
         $(document).on('change', 'input[name="document_type"]', setDocumentTypeField);
         setDocumentTypeField();
     });

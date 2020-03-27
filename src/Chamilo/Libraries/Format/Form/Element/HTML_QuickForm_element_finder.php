@@ -283,6 +283,10 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $html[] = '<div class="col-lg-6">';
 
         // Active
+        $html[] = '<div class="element_finder_buttons form-group visible-lg-block">';
+        $html[] = '<div class="form-control-static"></div>';
+        $html[] = '</div>';
+
         $html[] = '<div class="element_finder_active form-group">';
         $html[] = '<div id="elf_' . $this->getName() . '_active" class="active_elements form-control" style="height: ' .
             $this->getHeight() . 'px; overflow: auto;"></div>';
