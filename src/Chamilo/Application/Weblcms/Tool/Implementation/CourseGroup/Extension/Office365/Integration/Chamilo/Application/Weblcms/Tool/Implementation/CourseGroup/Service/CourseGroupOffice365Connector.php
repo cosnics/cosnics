@@ -167,8 +167,6 @@ class CourseGroupOffice365Connector
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeTeamFromCourseGroup(CourseGroup $courseGroup, User $user)
     {
@@ -179,27 +177,27 @@ class CourseGroupOffice365Connector
             return;
         }
 
-        try
-        {
-            $group = $this->groupService->getGroup($reference->getOffice365GroupId());
-            if ($group instanceof Group)
-            {
-                $this->groupService->removeAllMembersFromGroup($reference->getOffice365GroupId());
-
-                try
-                {
-                    $this->groupService->addOwnerToGroup($reference->getOffice365GroupId(), $user);
-                }
-                catch (AzureUserNotExistsException $ex)
-                {
-
-                }
-            }
-        }
-        catch (GroupNotExistsException $groupNotExistsException)
-        {
-
-        }
+//        try
+//        {
+//            $group = $this->groupService->getGroup($reference->getOffice365GroupId());
+//            if ($group instanceof Group)
+//            {
+//                $this->groupService->removeAllMembersFromGroup($reference->getOffice365GroupId());
+//
+//                try
+//                {
+//                    $this->groupService->addOwnerToGroup($reference->getOffice365GroupId(), $user);
+//                }
+//                catch (AzureUserNotExistsException $ex)
+//                {
+//
+//                }
+//            }
+//        }
+//        catch (GroupNotExistsException $groupNotExistsException)
+//        {
+//
+//        }
 
         $this->courseGroupOffice365ReferenceService->unlinkCourseGroupReference($reference);
     }
