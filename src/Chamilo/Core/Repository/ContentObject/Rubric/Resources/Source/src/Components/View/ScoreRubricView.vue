@@ -105,9 +105,7 @@
 		private isAddingCategory: boolean = false;
 		private isAddingCriterium: boolean = false;
 
-		@Prop(Criterium)
-		selectedCriterium: Criterium|null = null;
-
+		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 
 		dragMouseOver(event: any, elementId: string) {
 			if (!this.initiatedDrag) { return; }

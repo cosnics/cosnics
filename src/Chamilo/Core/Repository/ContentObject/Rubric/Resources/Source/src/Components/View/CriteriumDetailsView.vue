@@ -39,8 +39,7 @@
         components: {  }
     })
     export default class ScoreRubricView extends Vue {
-        @Prop(Criterium)
-        criterium: Criterium|null = null;
+        @Prop(Criterium) readonly criterium!: Criterium | null;
 
         /*get criterium() {
             return this.selectedCriterium;
