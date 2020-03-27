@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <div>
+        <div v-if="showHeaderFooter" class="chamilo-header"><div class="start"></div><div class="middle"></div><div class="end"></div></div>
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <!--            <transition name="fade">
@@ -24,6 +25,7 @@
                 <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
+        <div v-if="showHeaderFooter" class="chamilo-footer"><div class="start"></div><div class="end"></div></div>
     </div>
 </template>
 
@@ -41,6 +43,7 @@
     })
     export default class App extends Vue {
         private selectedCriterium: Criterium|null = null;
+        private showHeaderFooter: boolean = true;
 
         get store(): ScoreRubricStore {
             return this.$root.$data.store;
@@ -94,13 +97,54 @@
 
 </style>
 <style>
+    #app > div {
+        display: flex;
+        flex-direction: column;
+
+    }
     #app > div > div {
         display: flex;
-        height: 100vh;
+        /*height: 100vh;*/
+        /*flex: 1;*/
         overflow: hidden;
     }
 </style>
 <style scoped>
+    .chamilo-header {
+        height: 112px;
+        display: flex;
+        flex-direction: row!important;
+        overflow: hidden;
+    }
+    .chamilo-header .start {
+        background-image: url("/images/chamilo-start.png");
+        width: 227px;
+    }
+    .chamilo-header .middle {
+        background-image: url("/images/chamilo-middle.png");
+        flex: 1;
+    }
+    .chamilo-header .end {
+        background-image: url("/images/chamilo-end.png");
+        width: 713px;
+    }
+    .chamilo-footer {
+        height: 48px;
+        display: flex;
+        background: pink;
+        flex-direction: row!important;
+    }
+    .chamilo-footer .start {
+        background-image: url("/images/chamilo-footer-start.png");
+        height: 48px!important;
+        flex: 1;
+    }
+    .chamilo-footer .end {
+        background-image: url("/images/chamilo-footer-end.png");
+        background-repeat: no-repeat;
+        height: 48px!important;
+        width: 685px;
+    }
     /* Reset elements */
     .container {
         width: 100%;
