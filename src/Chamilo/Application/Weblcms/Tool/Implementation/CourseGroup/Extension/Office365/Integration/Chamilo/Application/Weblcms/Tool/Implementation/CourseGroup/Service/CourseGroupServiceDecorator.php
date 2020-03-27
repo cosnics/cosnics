@@ -77,7 +77,6 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      * @param array $formValues
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
@@ -111,8 +110,6 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function deleteGroup(CourseGroup $courseGroup, User $user)
     {
