@@ -16,7 +16,7 @@
                                   placeholder="Geef feedback"
                                   @input="updateHeight"></textarea>
                         <div v-if="store.rubric.useScores" class="level-score">
-                            <input type="number" v-model="store.rubric.getChoiceScore(criterium, level)" />
+                            <input type="number" disabled v-model="store.rubric.getChoiceScore(criterium, level)" />
                         </div>
                     </div>
                 </li>
@@ -131,7 +131,7 @@
         border: 1px solid transparent;
         border-radius: 3px;
     }
-    .level-score input[type="number"]:hover {
+    .level-score input[type="number"]:not(:disabled):hover {
         border: 1px solid #4f8be8;
     }
     .level-score input[type="number"]:focus {
