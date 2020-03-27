@@ -81,11 +81,11 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        $useTeamFormValue = boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][$courseGroup->getId()]);
+        $useTeamFormValue = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][$courseGroup->getId()];
 
         if($this->courseGroupOffice365Connector->courseGroupHasTeam($courseGroup))
         {
-            if(!$useTeamFormValue)
+            if(!boolval($useTeamFormValue))
             {
                 $this->courseGroupOffice365Connector->removeTeamFromCourseGroup($courseGroup, $user);
             }
