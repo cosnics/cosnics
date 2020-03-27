@@ -143,7 +143,7 @@ class CourseGroupOffice365Connector
      *  to fix this you may want to alter the way the course groups are updated since this method already receives
      *  the changed course group name so comparison is not possible
      */
-    public function updateTeamFromCourseGroup(CourseGroup $courseGroup)
+    public function updateTeamNameFromCourseGroup(CourseGroup $courseGroup)
     {
         $reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
