@@ -201,7 +201,8 @@ EOT;
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
-        $dropzoneHtml[] = '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
+        $dropzoneHtml[] =
+            '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
         $dropzoneHtml[] = '<div class="file-upload-buttons-group btn-group btn-group-vertical">';
         $dropzoneHtml[] = '<a data-dz-remove class="btn btn-danger delete">';
 
@@ -1321,13 +1322,17 @@ EOT;
             'HTML_QuickForm_styleresetbutton'
         );
 
-        // Checkbox and radio elements
+        // Replacing some default elements
         $this->registerElementType(
             'radio', $dir . 'Element/HTML_QuickForm_bootstrap_radio.php', 'HTML_QuickForm_bootstrap_radio'
         );
 
         $this->registerElementType(
             'checkbox', $dir . 'Element/HTML_QuickForm_extended_checkbox.php', 'HTML_QuickForm_extended_checkbox'
+        );
+
+        $this->registerElementType(
+            'file', $dir . 'Element/HTML_QuickForm_stylefile.php', 'HTML_QuickForm_stylefile'
         );
 
         $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');

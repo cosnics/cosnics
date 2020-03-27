@@ -482,22 +482,20 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($this->allows_category_selection())
         {
-            $category_group = array();
-
-            $category_group[] = $this->createElement('static', null, null, '<div class="row">');
-            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-5">');
-            $category_group[] = $this->createElement(
+            $this->addElement(
                 'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'),
                 $this->get_categories(), array('class' => 'form-control', 'id' => "parent_id")
             );
-            $category_group[] = $this->createElement('static', null, null, '</div>');
+
+            $category_group = array();
+
+            $category_group[] = $this->createElement('static', null, null, '<div class="input-group">');
 
             $category_group[] = $this->createElement(
-                'static', null, null, '<div class="col-md-12 col-lg-3 btn btn-link form-label control-label">' .
-                Translation::get('AddNewCategory') . '</div>'
+                'static', null, null,
+                '<span class="input-group-addon">' . Translation::get('AddNewCategory') . '</span>'
             );
 
-            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-4">');
             $category_group[] = $this->createElement(
                 'text', self::NEW_CATEGORY, null, array(
                     'class' => 'form-control',
@@ -506,9 +504,8 @@ abstract class ContentObjectForm extends FormValidator
                 )
             );
             $category_group[] = $this->createElement('static', null, null, '</div>');
-            $category_group[] = $this->createElement('static', null, null, '</div>');
 
-            $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'), ' ', false);
+            $this->addGroup($category_group, 'category_form_group', null, ' ', false);
         }
 
         $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));

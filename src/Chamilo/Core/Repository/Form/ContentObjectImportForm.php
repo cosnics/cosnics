@@ -80,36 +80,28 @@ abstract class ContentObjectImportForm extends FormValidator
     {
         $this->addElement('hidden', self::PROPERTY_TYPE);
 
-        $category_group = array();
-
-        if (!$this->implementsDropZoneSupport())
-        {
-            $category_group[] = $this->createElement('static', null, null, '<div class="row">');
-            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-5">');
-        }
-
-        $category_group[] = $this->createElement(
+        $this->addElement(
             'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'), $this->get_categories(),
             array('class' => 'form-control', 'id' => 'parent_id')
         );
 
         if (!$this->implementsDropZoneSupport())
         {
-            $category_group[] = $this->createElement('static', null, null, '</div>');
+            $category_group = array();
+
+            $category_group[] = $this->createElement('static', null, null, '<div class="input-group">');
 
             $category_group[] = $this->createElement(
-                'static', null, null, '<div class="col-md-12 col-lg-3 btn btn-link form-label control-label">' .
-                Translation::get('AddNewCategory') . '</div>'
+                'static', null, null,
+                '<span class="input-group-addon">' . Translation::get('AddNewCategory') . '</span>'
             );
 
-            $category_group[] = $this->createElement('static', null, null, '<div class="col-md-12 col-lg-4">');
             $category_group[] =
                 $this->createElement('text', self::NEW_CATEGORY, null, array('class' => 'form-control'));
             $category_group[] = $this->createElement('static', null, null, '</div>');
-            $category_group[] = $this->createElement('static', null, null, '</div>');
-        }
 
-        $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'), ' ', false);
+            $this->addGroup($category_group, 'category_form_group', null, ' ', false);
+        }
     }
 
     /**

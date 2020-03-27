@@ -144,20 +144,25 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
-        $dropzoneHtml[] = '<div class="file-upload-buttons">';
-        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
+
+        $dropzoneHtml[] = '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
+        $dropzoneHtml[] = '<div class="file-upload-buttons-group btn-group btn-group-vertical">';
+        $dropzoneHtml[] = '<a data-dz-remove class="btn btn-warning cancel">';
 
         $glyph = new FontAwesomeGlyph('ban', array(), null, 'fas');
         $dropzoneHtml[] = $glyph->render() . ' <span>' . $this->getTranslation('Cancel') . '</span>';
 
-        $dropzoneHtml[] = '</button>';
-        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
+        $dropzoneHtml[] = '</a>';
+        $dropzoneHtml[] = '<a data-dz-remove class="btn btn-danger delete">';
 
         $glyph = new FontAwesomeGlyph('trash-alt', array(), null, 'fas');
         $dropzoneHtml[] = $glyph->render() . ' <span>' . $this->getTranslation('Delete') . '</span>';
 
-        $dropzoneHtml[] = '</button>';
+        $dropzoneHtml[] = '</a>';
+
         $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';

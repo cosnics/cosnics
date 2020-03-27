@@ -681,3 +681,4 @@ ValidatorMaximumRangeMessage = "The given value of {value} is more than the maxi
 InvalidDisplayOrderExceptionMessage = "The requested display order value {DISPLAY_ORDER} is invalid for the {TYPE} object with ID {ID} and context {CONTEXT}, containing a total of {COUNT} items"
 AddToSelection = "Include"
 RemoveFromSelection = "Exclude"
+ChooseFileInputLabel= "Choose a file"
