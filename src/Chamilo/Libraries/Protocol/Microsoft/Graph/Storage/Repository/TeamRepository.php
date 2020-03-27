@@ -76,19 +76,22 @@ class TeamRepository
             throw new ValueNotInArrayException('template', $template, $allowedTemplates);
         }
 
+        $parameters =  [
+            "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('" . $template . "')",
+            "displayName" => $title,
+            "description" => $description,
+            "owners@odata.bind" => [
+                "https://graph.microsoft.com/beta/users('" . $ownerAzureId . "')"
+            ]
+        ];
+
+        if($template == 'standard')
+        {
+            $parameters['visibility'] = 'Private';
+        }
+
         $response = $this->graphRepository->executePostWithAccessTokenExpirationRetry(
-            '/teams/',
-            [
-                "template@odata.bind" => "https://graph.microsoft.com/beta/teamsTemplates('" . $template . "')",
-                "displayName" => $title,
-                "description" => $description,
-                "owners@odata.bind" => [
-                    "https://graph.microsoft.com/beta/users('" . $ownerAzureId . "')"
-                ],
-                "visibility" => "Private"
-            ],
-            null,
-            GraphRepository::API_VERSION_BETA
+            '/teams/', $parameters, null, GraphRepository::API_VERSION_BETA
         );
 
         //Content-Location: /teams/{teamId}/operation/{operationId}
