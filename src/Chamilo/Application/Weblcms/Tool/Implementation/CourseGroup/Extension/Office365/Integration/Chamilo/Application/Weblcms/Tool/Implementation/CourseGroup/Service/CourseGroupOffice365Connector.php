@@ -311,9 +311,7 @@ class CourseGroupOffice365Connector
 
         $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
-        $group = $this->groupService->getGroup($reference->getOffice365GroupId());
-
-        return $this->teamService->getTeamUrl($group);
+        return $this->teamService->getTeamUrl($reference->getOffice365GroupId());
     }
 
     /**

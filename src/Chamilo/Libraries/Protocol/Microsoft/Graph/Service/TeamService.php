@@ -151,18 +151,18 @@ class TeamService
     }
 
     /**
-     * @param Group $group
+     * @param string $groupId
      *
      * @return string
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws TeamNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getTeamUrl(Group $group)
+    public function getTeamUrl(string $groupId)
     {
-        $team = $this->getTeam($group->getId());
+        $team = $this->getTeam($groupId);
         if (!$team instanceof Team)
         {
-            throw new TeamNotFoundException($group->getId());
+            throw new TeamNotFoundException($groupId);
         }
 
         return $team->getWebUrl();
