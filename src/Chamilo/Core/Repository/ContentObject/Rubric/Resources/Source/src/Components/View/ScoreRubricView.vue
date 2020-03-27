@@ -389,7 +389,7 @@
 <style>
 	#app > div > div {
 		display: flex;
-		height: 100vh;
+		/*height: 100vh;*/
 	}
 	button {
 		border-radius: 3px;
@@ -663,14 +663,17 @@
 	}
 	.category > div:nth-child(2) > div {
 		background: white;
-		background: linear-gradient(to top, rgba(0, 0, 0, 0.06) 0px, rgba(0, 0, 0, 0) 20px);
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
 	}
 	.category > div:nth-child(2) > div:first-child {
 		border-top: 1px solid #ccc;
 	}
-	.category > div:nth-child(2) > div:last-child {
-		border-bottom: 1px solid #ccc;
+	.category > div:nth-child(2) > div {
+		border-bottom: 1px solid #ddd;
 	}
+	/*.category > div:nth-child(2) > div:last-child {
+		border-bottom: 1px solid #ccc;
+	}*/
 	.category h2 {
 		display: initial;
 		font-size: 13px;
