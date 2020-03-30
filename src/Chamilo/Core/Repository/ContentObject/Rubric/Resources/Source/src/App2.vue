@@ -1,25 +1,23 @@
 <template>
     <div id="app">
         <div v-if="showHeaderFooter" class="chamilo-header"><div class="start"></div><div class="middle"></div><div class="end"></div></div>
-        <ul class="menu">
-            <li><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
-            <li><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
-        </ul>
+        <div class="header">
+            <ul class="menu">
+                <li><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
+                <li><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
+            </ul>
+            <div class="save-state">
+                <div v-if="store.isSaving" class="saving">
+                    Processing {{store.queue.pending + store.queue.size}} saves...
+                </div>
+                <div v-else class="saved" role="alert">
+                    All changes saved
+                </div>
+            </div>
+        </div>
         <div class="rubrics">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--            <transition name="fade">
-                <div v-if="store.isSaving" class="float-left save-alert">
-                    <div class="alert alert-info"
-                         role="alert">
-                        Processing {{store.queue.pending + store.queue.size}} saves
-                    </div>
-                </div>
-                <div v-else class="alert alert-success save-alert" role="alert">
-                    All changes saved!
-                </div>
-            </transition> -->
-
             <div v-if="!store.isLoading">
                 <levels-view v-if="content === 'levels'"></levels-view>
                 <score-rubric-view v-if="content === 'rubric'" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
@@ -75,33 +73,6 @@
         color: #2c3e50;
         margin-top: 60px; */
     }
-
-    .save-alert {
-/*        width: 20%; */
-    }
-
-    .fade-enter-active, .fade-leave-active {
-/*        transition: opacity 1s; */
-    }
-
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-    {
-/*        opacity: 0; */
-    }
-
-    .rubric-container {
-/*        display: flex;
-        flex-direction: column; */
-    }
-
-    .w-100 {
-/*        width: 100%; */
-    }
-
-    .full-rubric-btn {
-/*        width: 200px; */
-    }
-
 </style>
 <style>
     #app {
@@ -163,12 +134,17 @@
         height: 48px!important;
         width: 685px;
     }
-    ul.menu {
-        list-style: none; display: flex;
+    .header {
+        display: flex;
+        background-color: hsla(165, 5%, 90%, 1);
         border-bottom: 1px solid hsl(199, 39%, 73%);
         border-top: 1px solid hsl(199, 39%, 73%);
+        align-items: center;
+        justify-content: space-between;
+    }
+    ul.menu {
+        list-style: none; display: flex;
         padding: 8px; margin-bottom: 0;
-        background-color: hsla(165, 5%, 90%, 1);
     }
     ul.menu li {
         margin-left: 8px; margin-right: 4px;
@@ -179,6 +155,14 @@
     }
     ul.menu li a {
         text-decoration: none;
+    }
+    .save-state {
+        margin-right: 20px;
+        color: #337ab7;
+        width: 144px;
+    }
+    .save-state .saved {
+        opacity: 0.6;
     }
     .rubrics {
         flex: 1;
