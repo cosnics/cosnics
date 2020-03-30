@@ -117,42 +117,40 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         {
             $previous_url = $this->getTreeNodeNavigationUrl($previous_node);
             $label = Translation::get('Previous');
-            $glyph = new FontAwesomeGlyph('arrow-left', array(), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('arrow-left', array('fa-3x'), $label, 'fas');
 
             $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url . '">' . $glyph->render() . '</a>';
         }
         else
         {
             $label = Translation::get('PreviousNa');
-            $glyph = new FontAwesomeGlyph('arrow-left', array('disabled'), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('arrow-left', array('disabled', 'fa-3x'), $label, 'fas');
 
             $html[] = $glyph->render();
         }
 
         $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
 
-        $classes = array('learning-path-action-menu-show');
+        $classes = array('learning-path-action-menu-show', 'fa-3x');
         if ($isMenuHidden != 'true')
         {
             $classes[] = 'hidden';
         }
-        $glyph = new FontAwesomeGlyph('list-alt', $classes, null, 'fas');
+        $glyph = new FontAwesomeGlyph('list-alt', $classes, Translation::get('ShowMenu'), 'fas');
         $html[] = $glyph->render();
 
-        $classes = array('learning-path-action-menu-hide');
+        $classes = array('learning-path-action-menu-hide', 'fa-3x');
         if ($isMenuHidden == 'true')
         {
             $classes[] = 'hidden';
         }
-        $glyph = new FontAwesomeGlyph('list-alt', $classes, null, 'fas');
+        $glyph = new FontAwesomeGlyph('list-alt', $classes, Translation::get('HideMenu'), 'fas');
         $html[] = $glyph->render();
 
-        $html[] = '&nbsp;';
-
-        $glyph = new FontAwesomeGlyph('expand', array('learning-path-action-fullscreen'), null, 'fas');
+        $glyph = new FontAwesomeGlyph(
+            'expand', array('learning-path-action-fullscreen', 'fa-3x'), Translation::get('DisplayFullScreen'), 'fas'
+        );
         $html[] = $glyph->render();
-
-        $html[] = '</span>';
 
         $next_node = $currentTreeNode->getNextNode();
 
@@ -160,17 +158,19 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         {
             $next_url = $this->getTreeNodeNavigationUrl($next_node);
             $label = Translation::get('Next');
-            $glyph = new FontAwesomeGlyph('arrow-right', array(), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('arrow-right', array('fa-3x'), $label, 'fas');
 
             $html[] = '<a id="learning-path-navigate-right" href="' . $next_url . '">' . $glyph->render() . '</a>';
         }
         else
         {
             $label = Translation::get('NextNa');
-            $glyph = new FontAwesomeGlyph('arrow-right', array('disabled'), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('arrow-right', array('disabled', 'fa-3x'), $label, 'fas');
 
             $html[] = $glyph->render();
         }
+
+        $html[] = '</span>';
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -185,8 +185,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         return $this->get_url(
             array(
-                self::PARAM_ACTION                                  => self::ACTION_BUILD_PREREQUISITES,
-                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID          => $complex_content_object_item_id,
+                self::PARAM_ACTION => self::ACTION_BUILD_PREREQUISITES,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item
             )
         );
@@ -313,37 +313,37 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         }
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl'      => $this->get_application()->get_url(
+            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(
                 array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)
             ),
-            'moveTreeNodeAjaxUrl'        => $this->get_application()->get_url(
+            'moveTreeNodeAjaxUrl' => $this->get_application()->get_url(
                 array(
-                    self::PARAM_ACTION                                                                     => self::ACTION_AJAX,
+                    self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_MOVE_LEARNING_PATH_TREE_NODE
                 )
             ),
-            'addTreeNodeAjaxUrl'         => $this->get_application()->get_url(
+            'addTreeNodeAjaxUrl' => $this->get_application()->get_url(
                 array(
-                    self::PARAM_ACTION                                                                     => self::ACTION_AJAX,
+                    self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_ADD_LEARNING_PATH_TREE_NODE
                 )
             ),
             'updateTreeNodeTitleAjaxUrl' => $this->get_application()->get_url(
                 array(
-                    self::PARAM_ACTION                                                                     => self::ACTION_AJAX,
+                    self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE
                 )
             ),
-            'deleteTreeNodeAjaxUrl'      => $this->get_application()->get_url(
+            'deleteTreeNodeAjaxUrl' => $this->get_application()->get_url(
                 array(
-                    self::PARAM_ACTION                                                                     => self::ACTION_AJAX,
+                    self::PARAM_ACTION => self::ACTION_AJAX,
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_DELETE_LEARNING_PATH_TREE_NODE
                 )
             ),
-            'canEditTree'                => $this->canEditCurrentTreeNode() ? 'true' : 'false',
-            'inReportingMode'            => $inReportingMode ? 'true' : 'false',
-            'treeData'                   => $this->getBootstrapTreeData(),
-            'translationsJSON'           => json_encode($translations)
+            'canEditTree' => $this->canEditCurrentTreeNode() ? 'true' : 'false',
+            'inReportingMode' => $inReportingMode ? 'true' : 'false',
+            'treeData' => $this->getBootstrapTreeData(),
+            'translationsJSON' => json_encode($translations)
         );
 
         foreach ($parameters as $parameter => $value)

@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -28,54 +27,6 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
-    /**
-     * Renders a cell for a given object
-     *
-     * @param $column \libraries\ObjectTableColumn
-     *
-     * @param $course_type CourseType
-     *
-     * @return String
-     */
-    public function render_cell($column, $course_type)
-    {
-        switch ($column->get_name())
-        {
-            // Exceptions that need post-processing go here ...
-            case CourseType::PROPERTY_TITLE :
-                $name = parent::render_cell($column, $course_type);
-                $name_short = $name;
-                if (strlen($name_short) > 53)
-                {
-                    $name_short = mb_substr($name_short, 0, 50) . '&hellip;';
-                }
-
-                return '<a href="' . $this->get_component()->get_view_course_type_url($course_type->get_id()) .
-                    '" title="' . htmlentities($name) . '">' . $name_short . '</a>';
-
-            case CourseType::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $course_type));
-                if (strlen($description) > 175)
-                {
-                    $description = mb_substr($description, 0, 170) . '&hellip;';
-                }
-
-                return $description;
-
-            case CourseType::PROPERTY_ACTIVE :
-                if ($course_type->is_active())
-                {
-                    Return Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES);
-                }
-                else
-                {
-                    Return Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES);
-                }
-        }
-
-        return parent::render_cell($column, $course_type);
-    }
 
     /**
      * Returns the actions toolbar
@@ -181,5 +132,63 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a cell for a given object
+     *
+     * @param $column \libraries\ObjectTableColumn
+     *
+     * @param $course_type CourseType
+     *
+     * @return String
+     */
+    public function render_cell($column, $course_type)
+    {
+        switch ($column->get_name())
+        {
+            // Exceptions that need post-processing go here ...
+            case CourseType::PROPERTY_TITLE :
+                $name = parent::render_cell($column, $course_type);
+                $name_short = $name;
+                if (strlen($name_short) > 53)
+                {
+                    $name_short = mb_substr($name_short, 0, 50) . '&hellip;';
+                }
+
+                return '<a href="' . $this->get_component()->get_view_course_type_url($course_type->get_id()) .
+                    '" title="' . htmlentities($name) . '">' . $name_short . '</a>';
+
+            case CourseType::PROPERTY_DESCRIPTION :
+                $description = strip_tags(parent::render_cell($column, $course_type));
+                if (strlen($description) > 175)
+                {
+                    $description = mb_substr($description, 0, 170) . '&hellip;';
+                }
+
+                return $description;
+
+            case CourseType::PROPERTY_ACTIVE :
+
+                if ($course_type->is_active())
+                {
+                    $glyph = new FontAwesomeGlyph(
+                        'circle', array('text-success'),
+                        Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES), 'fas'
+                    );
+                }
+                else
+
+                {
+                    $glyph = new FontAwesomeGlyph(
+                        'circle', array('text-danger'),
+                        Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES), 'fas'
+                    );
+                }
+
+                return $glyph->render();
+        }
+
+        return parent::render_cell($column, $course_type);
     }
 }

@@ -13,3 +13,7 @@
 .dropdown-menu > .active > a:focus {
     background-color: rgb(60, 60, 59);
 }
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #9d9d9d;
+}

@@ -7,31 +7,29 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumn
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
- * This class describes the column model for the course type table
- * 
- * @package \application\weblcms\course_type
+ * @package Chamilo\Application\Weblcms\CourseType\Table\CourseType
+ *
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CourseTypeTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 3;
 
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * Initializes the columns for the table
-     */
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_TITLE, false)
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_DESCRIPTION, false));
+            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_DESCRIPTION, false)
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_ACTIVE, false));
+            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_ACTIVE, false)
+        );
+        $this->add_column(
+            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_DISPLAY_ORDER, false)
+        );
     }
 }

@@ -1,5 +1,5 @@
 .fas-ci-13a3f8cf7e05505e8c2f6d295d5b7cf6 {
-    font-family: 'Font Awesome 5 Free';
+    font-family: "Font Awesome 5 Free";
     font-weight: 900;
 }
 
@@ -9,18 +9,20 @@
 
 .learning-path-display-full-screen {
     background-color: white;
-    margin: 0px;
     border: 0px solid white;
-    width: 0px;
-    height: 0px;
     display: none;
+    height: 0px;
+    margin: 0px;
+    width: 0px;
 }
 
 .learning-path-content, .learning-path-tree-menu-container {
     padding-bottom: 90px;
 }
 
-.learning-path-tree-menu-container h3 {
+.learning-path-tree-menu-container h3,
+.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden,
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen {
     display: none;
 }
 
@@ -35,26 +37,22 @@
     }
 
     .learning-path-display .learning-path-tree-menu-container {
-        position: relative;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        width: 100%;
-        padding-top: 15px;
-        z-index: 9999;
         background-color: white;
-        padding-top: 15px;
+        bottom: 0px;
         display: none;
+        left: 0px;
+        padding-top: 15px;
+        padding-top: 15px;
+        position: relative;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        z-index: 9999;
     }
 }
 
 .learning-path-display .learning-path-content.learning-path-content-full-screen {
     width: 100%;
-}
-
-.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden {
-    display: none;
 }
 
 .learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-visible {
@@ -66,36 +64,27 @@
 }
 
 .learning-path-display .navbar-learning-path {
-    padding: 0px;
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    width: 100%;
-    text-align: center;
-    z-index: 10000;
     background-color: white;
     border-top: 1px solid #dddddd;
+    bottom: 0px;
+    left: 0px;
+    padding: 0px;
+    position: fixed;
+    right: 0px;
+    text-align: center;
+    width: 100%;
+    z-index: 10000;
 }
 
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions {
     padding: 15px;
-    height: 65px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions a {
-    height: 32px;
-    margin: 0 10px;
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .inline-glyph {
+    margin: 0 5px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon {
-    font-size: 32px;
-    line-height: 32px;
-    height: 32px;
-    overflow: hidden;
-}
-
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled {
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .inline-glyph.disabled {
     opacity: 0.25;
 }
 
@@ -110,13 +99,9 @@
 }
 
 .learning-path-display .navbar-learning-path .navbar-learning-path-progress .progress {
-    margin-bottom: 0px;
     border-radius: 0px;
     height: 10px;
-}
-
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen {
-    display: none;
+    margin-bottom: 0px;
 }
 
 /* Repo Drag Panel CSS */
@@ -134,32 +119,32 @@
 }
 
 #repo-drag-panel #drag-button {
-    position: fixed;
-    top: 118px;
-    right: 0;
-    border-radius: 20px 0 0 20px;
-    z-index: 100000;
-    padding: 7px 10px 7px 13px;
     background-color: #577ab7;
+    border-radius: 20px 0 0 20px;
     color: #f7f7f7;
+    padding: 7px 10px 7px 13px;
+    position: fixed;
+    right: 0;
+    top: 118px;
+    z-index: 100000;
 }
 
 #repo-drag-panel .cd-panel-container {
     /*...*/
-    position: fixed;
-    width: 245px;
-    top: 118px;
-    right: 0;
-    z-index: 100000;
+    background: #eeeeee;
     border: 1px solid lightgray;
-    padding: 10px;
-    background: #eee;
     border-radius: 10px 00px 0px 10px;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    top: 118px;
+    width: 245px;
+    z-index: 100000;
 }
 
 #repo-drag-panel .type-img {
-    vertical-align: middle;
     margin-right: 10px;
+    vertical-align: middle;
 }
 
 #repo-drag-panel .content-object {
@@ -172,12 +157,12 @@
 }
 
 #repo-drag-panel .content-object-list li:nth-child(2n) {
-    background: #F3F3F3;
+    background: #f3f3f3;
 }
 
 #repo-drag-panel .content-object-list li:hover {
-    background: #FFFDE3;
-    border-left: 5px solid #DCDAC1;
+    background: #fffde3;
+    border-left: 5px solid #dcdac1;
     margin-left: -5px;
 }
 
@@ -188,8 +173,8 @@
 /** Learning Path HTML Tree CSS */
 
 .learning-path-html-tree .ws-wrap {
-    white-space: normal;
     height: auto;
+    white-space: normal;
     width: 83%;
 }
 
@@ -224,8 +209,8 @@
 }
 
 .context-menu-icon--fa {
-    width: inherit;
     text-align: inherit;
+    width: inherit;
 }
 
 .learning-path-html-tree .btn-drag {
@@ -233,34 +218,34 @@
 }
 
 .learning-path-html-tree .alert-drag {
-    padding: 1px 1px 4px 5px;
     margin-bottom: 0px;
     margin-top: 5px;
+    padding: 1px 1px 4px 5px;
 }
 
 .learning-path-html-tree .tree-disabled {
     background: #e9e9e9;
-    top: 0;
-    right: 0;
     bottom: 0;
     left: 0;
     opacity: 0.5;
+    right: 0;
+    top: 0;
 }
 
 .learning-path-html-tree .tree-loading {
     float: left;
     height: 100%;
-    z-index: 20;
+    left: 45%;
     position: absolute;
     top: 30%;
-    left: 45%;
+    z-index: 20;
 }
 
 .learning-path-html-tree .tree-additional-icon {
-    width: 16px;
-    height: 16px;
     display: inline-block;
+    height: 16px;
     margin-left: 2px;
+    width: 16px;
 }
 
 .context-menu-list {
@@ -304,8 +289,8 @@
 }
 
 .learning-path-section-copier .content-object-selector-title-container {
-    display: flex;
     align-items: center;
+    display: flex;
 }
 
 .learning-path-section-copier .content-object-selector-title-container .content-object-selector-icon {
