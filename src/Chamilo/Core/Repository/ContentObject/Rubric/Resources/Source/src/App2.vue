@@ -111,6 +111,21 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
+    #app ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    #app ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 2px grey;
+        background-color: hsla(200, 50%, 40%, .05);
+        border-radius: 10px;
+    }
+    #app ::-webkit-scrollbar-thumb {
+        background-color: hsla(200, 50%, 40%, .15);
+        border-radius: 10px;
+    }
+    #app ::-webkit-scrollbar-thumb:hover {
+        background-color: hsla(220, 70%, 40%, .20);
     }
 </style>
 <style scoped>
