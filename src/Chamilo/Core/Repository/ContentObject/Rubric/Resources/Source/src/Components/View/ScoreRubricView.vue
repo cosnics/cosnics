@@ -257,7 +257,7 @@
 		}
 
 		addNewCriterium(name: string) {
-			this.selectedCategoryNewCriterium!.addCriterium(this.newCriterium!);
+			this.selectedCategoryNewCriterium!.addChild(this.newCriterium!, this.selectedCategoryNewCriterium!.criteria.length);
 			this.newCriterium = null;
 			this.selectedCategoryNewCriterium = null;
 			this.isAddingCriterium = false;
