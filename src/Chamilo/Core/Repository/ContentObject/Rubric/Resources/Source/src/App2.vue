@@ -104,16 +104,11 @@
 
 </style>
 <style>
-    #app > div {
+    #app {
         display: flex;
+        min-height: 100vh;
         flex-direction: column;
-
     }
-    #app > div > div {
-        display: flex;
-        /*height: 100vh;*/
-        /*flex: 1;*/
-        overflow: hidden;
     }
 </style>
 <style scoped>
@@ -138,7 +133,6 @@
     .chamilo-footer {
         height: 48px;
         display: flex;
-        background: pink;
         flex-direction: row!important;
     }
     .chamilo-footer .start {
@@ -171,10 +165,15 @@
     }
     .rubrics {
         flex: 1;
+        display: flex;
+    }
+    .rubrics > div {
+        width: 100%;
     }
     /* Reset elements */
     .container {
         width: 100%;
+        flex: 1;
         padding-top: 20px;
         background-color: hsla(165, 5%, 90%, 1);
         display: flex;
