@@ -108,6 +108,8 @@
         display: flex;
         min-height: 100vh;
         flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
     }
 </style>
