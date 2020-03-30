@@ -28,6 +28,53 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
 
     /**
      *
+     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::render()
+     */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = $this->renderHeader();
+        $html[] = $this->content;
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function body_footer()
+    {
+        return '</div>';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function body_header()
+    {
+        return '<div class="dynamic_visual_tab">';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::footer()
+     */
+    public function footer()
+    {
+        $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
      * @return string
      */
     public function get_content()
@@ -70,31 +117,11 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::footer()
+     * @return string
      */
-    public function footer()
+    public function renderFooter()
     {
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::render()
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = $this->renderHeader();
-        $html[] = $this->content;
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
+        return $this->footer();
     }
 
     /**
@@ -103,51 +130,6 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
      */
     public function renderHeader()
     {
-        $html = array();
-        $html[] = $this->header();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderFooter()
-    {
-        $html = array();
-
-        $html[] = $this->footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function body_header()
-    {
-        $html = array();
-
-        $html[] = '<div class="admin_tab ui-tabs-panel ui-widget-content ui-corner-bottom dynamic_visual_tab">';
-        $html[] = '<a class="prev"></a>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function body_footer()
-    {
-        $html = array();
-
-        $html[] = '<a class="next"></a>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->header();
     }
 }

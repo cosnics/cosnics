@@ -31,15 +31,7 @@ body.cke_editable {
 }
 
 .alert .btn-action-toolbar {
-    margin-bottom: 0px;
-}
-
-.btn-action-toolbar a, .btn-toolbar a:hover, .btn-group a:hover {
-    font-weight: normal !important;
-}
-
-.dropdown-menu {
-    z-index: 10000;
+    margin-bottom: 0;
 }
 
 .dropdown-menu > li > a > img + span, .dropdown-menu > li > a > span.inline-glyph + span,
@@ -48,12 +40,12 @@ body.cke_editable {
 }
 
 .btn-action-toolbar.btn-action-toolbar-vertical {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical {
     margin-bottom: 15px;
-    margin-left: 0px;
+    margin-left: 0;
     width: 100%;
 }
 
@@ -101,16 +93,16 @@ body.cke_editable {
     color: #23527c;
     font-size: 16px;
     font-weight: bold;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn {
-    padding: 0px 3px;
+    padding: 0 3px;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn span.caret {
@@ -173,7 +165,7 @@ body.cke_editable {
     .panel.panel-publication .panel-publication-footer .panel-publication-footer-visibility,
     .panel.panel-publication .panel-publication-footer .panel-publication-footer-date,
     .panel.panel-publication .panel-publication-header .panel-publication-header-title {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 
     .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar {
@@ -189,11 +181,10 @@ body.cke_editable {
     .panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox {
         background-color: transparent;
         left: 4px;
-        margin: 0px;
-        padding: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
         position: absolute;
-        top: 0px;
+        top: 0;
     }
 
     .panel.panel-publication .panel-publication-header .panel-publication-header-title h3 {
@@ -234,7 +225,7 @@ body.cke_editable {
 }
 
 .panel.panel-slideshow .panel-slideshow-actions .btn-toolbar.btn-action-toolbar {
-    margin: 0px;
+    margin: 0;
 }
 
 /****************************
@@ -248,8 +239,8 @@ body h3#page-title {
  * TABLE *
  *********/
 .table-navigation-pagination ul.pagination {
-    margin-bottom: 0px;
-    margin-top: 0px;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .table, .table-navigation-actions .btn-action-toolbar {
@@ -257,145 +248,18 @@ body h3#page-title {
 }
 
 .table .checkbox {
-    margin: 0px;
+    margin: 0;
 }
 
 .table-navigation-search .table-order-property {
     margin-right: 5px;
 }
 
-/********
- * FORM *
- ********/
-input.form-control[type="text"], input.form-control[type="password"] {
-    border: 1px solid #cccccc;
-    padding: 6px 12px;
-}
-
-form .radio input[type="radio"], form .radio input[type="checkbox"] {
-    margin-top: 0;
-}
-
-form .radio, form .checkbox {
-    margin-bottom: 5px;
-    margin-top: 0;
-}
-
-.radio + .radio, .checkbox + .checkbox {
-    margin-top: 0;
-}
-
-form .form-row {
-    margin: 0 0 5px;
-}
-
-form.table_form .form-row {
-    margin-bottom: 0;
-}
-
-form.table_form .form-row .btn-action-toolbar {
-    margin-bottom: 5px;
-}
-
-button.btn {
-    text-shadow: none;
-}
-
-.ui-widget-content a:not (.btn ), a {
-    color: #406e8e;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-#advanced_filter_form .input-date {
-    width: 90px;
-}
-
-.ui-widget-content .btn-group a {
-    color: #333333;
-}
-
-/***********************
- * DYNAMIC VISUAL TABS *
- ***********************/
-.nav.nav-tabs.dynamic-visual-tabs, .nav.nav-tabs.tool-list-tabs {
-    border-left: 1px solid #dddddd;
-    border-right: 1px solid #dddddd;
-    border-top: 1px solid #dddddd;
-}
-
-.nav.nav-tabs.dynamic-visual-tabs li, .nav.nav-tabs.tool-list-tabs li {
-    margin-bottom: -2px;
-    margin-top: -1px;
-}
-
-.nav.nav-tabs.dynamic-visual-tabs li a, .nav.nav-tabs.tool-list-tabs li a {
-    font-size: 13px;
-    padding: 12px 15px;
-}
-
-.nav.nav-tabs.dynamic-visual-tabs li.active a, .nav.nav-tabs.tool-list-tabs li.active a {
-    border-radius: 0;
-}
-
-.nav.nav-tabs.dynamic-visual-tabs li.active:first-child a, .nav.nav-tabs.tool-list-tabs li.active:first-child a {
-    border-left: none;
-}
-
-.nav.nav-tabs.dynamic-visual-tabs, .nav.nav-tabs.tool-list-tabs,
-.dynamic-visual-tab-content .list-group-header {
-    background-color: #f5f5f5;
-    color: #555555;
-}
-
-.dynamic-visual-tab-content {
-    margin-bottom: 15px;
-}
-
-.dynamic-visual-tab-content .list-group-item:first-child {
-    border-radius: 0;
-    padding-top: 12px;
-}
-
-.dynamic-visual-tab-content .list-group-item {
-    border-top: 0;
-}
-
-.dynamic-visual-tab-content .list-group-item.list-group-header {
-    border-bottom: 2px solid #dddddd;
-    border-top: 1px solid #dddddd;
-}
-
-.dynamic-visual-tab-content .list-group-item.list-group-header:first-child {
-    border-top: none;
-}
-
-.dynamic-visual-tab-content h4 .glyphicon {
-    font-size: 14px;
-}
-
-.dynamic-visual-tab-content .list-group-item-text {
-    color: #666666;
-}
-
-.dynamic-visual-tab-content .list-group-header .list-group-item-heading {
-    margin-bottom: 0;
-}
-
-.dynamic-visual-tab-content .tab-content-header {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #dddddd;
-    border-top: 1px solid #dddddd;
-    color: #555555;
-    margin: 15px -15px;
-    padding: 3px 10px;
-}
-
 /***************
  * FILE UPLOAD *
  ***************/
 .file-upload {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .file-upload .panel-body {
@@ -440,11 +304,11 @@ button.btn {
 }
 
 .file-upload-buttons.btn-toolbar.btn-action-toolbar.btn-action-toolbar-vertical {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .file-upload-buttons.btn-toolbar.btn-action-toolbar.btn-action-toolbar-vertical .file-upload-buttons-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 /*****************************************************
@@ -467,9 +331,9 @@ ul.nav-wizard:before {
     content: " ";
     display: block;
     height: 47px;
-    left: 0px;
+    left: 0;
     position: absolute;
-    right: 0px;
+    right: 0;
     top: 46px;
     z-index: 11;
 }
@@ -480,9 +344,9 @@ ul.nav-wizard:after {
     content: " ";
     display: block;
     height: 47px;
-    left: 0px;
+    left: 0;
     position: absolute;
-    right: 0px;
+    right: 0;
     top: 138px;
     z-index: 11;
 }
@@ -556,8 +420,7 @@ ul.nav-wizard .active ~ li:after {
     border-left: 16px solid #ededed;
 }
 
-ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active
-~ li a:visited, ul.nav-wizard .active ~ li a:focus {
+ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active ~ li a:visited, ul.nav-wizard .active ~ li a:focus {
     background: #ededed;
     color: #999999;
 }
@@ -571,8 +434,10 @@ ul.nav-wizard.nav-wizard-backnav li:hover:after {
     border-left: 16px solid #f6fbfd;
 }
 
-ul.nav-wizard.nav-wizard-backnav li:hover a, ul.nav-wizard.nav-wizard-backnav li:hover a:active,
-ul.nav-wizard.nav-wizard-backnav li:hover a:visited, ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
+ul.nav-wizard.nav-wizard-backnav li:hover a,
+ul.nav-wizard.nav-wizard-backnav li:hover a:active,
+ul.nav-wizard.nav-wizard-backnav li:hover a:visited,
+ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
     background: #f6fbfd;
     color: #468847;
 }
@@ -586,8 +451,9 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
     border-left: 16px solid #ededed;
 }
 
-ul.nav-wizard.nav-wizard-backnav .active ~ li a, ul.nav-wizard.nav-wizard-backnav .active
-~ li a:active, ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:active,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
 ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
     background: #ededed;
     color: #999999;
@@ -610,7 +476,7 @@ ul.nav-wizard.publication-wizard {
 
 .treeview .list-group .list-group-item .indent {
     display: inline-block !important;
-    margin-left: 0px !important;
+    margin-left: 0 !important;
     margin-right: 5px !important;
     width: 1.25em !important;
 }
@@ -621,7 +487,7 @@ ul.nav-wizard.publication-wizard {
 }
 
 .treeview span.icon.treeview-empty-icon {
-    margin-right: 0px !important;
+    margin-right: 0 !important;
     width: 0 !important;
 }
 

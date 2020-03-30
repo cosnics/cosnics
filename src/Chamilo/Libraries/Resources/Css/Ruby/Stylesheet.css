@@ -1,10 +1,6 @@
 @import url("../Aqua/Stylesheet.min.css");
 @import url("ErrorPages.min.css");
 
-.ui-widget-content a:not (.btn ), a {
-    color: #b1071c;
-}
-
 a {
     color: #b1071c;
 }

@@ -11,9 +11,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 abstract class DynamicTab
 {
     const DISPLAY_ICON = 1;
-
     const DISPLAY_ICON_AND_TITLE = 3;
-
     const DISPLAY_TITLE = 2;
 
     /**
@@ -178,7 +176,8 @@ abstract class DynamicTab
     public function header()
     {
         $html = array();
-        $html[] = '<li><a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '">';
+        $html[] = '<li>';
+        $html[] = '<a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '">';
         $html[] = '<span class="category">';
 
         if ($this->get_image() && $this->isIconVisible())
@@ -200,7 +199,8 @@ abstract class DynamicTab
         }
 
         $html[] = '</span>';
-        $html[] = '</a></li>';
+        $html[] = '</a>';
+        $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
     }

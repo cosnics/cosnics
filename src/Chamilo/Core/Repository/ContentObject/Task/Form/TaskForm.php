@@ -18,31 +18,29 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 class TaskForm extends ContentObjectForm
 {
-    const PARAM_RANGE = 'range';
-    const PARAM_FREQUENCY_RANGE = 'frequency_range';
     const PARAM_DAILY = 'daily';
-    const PARAM_WEEKLY = 'weekly';
-    const PARAM_MONTHLY = 'monthly';
-    const PARAM_YEARLY = 'yearly';
-    const PARAM_OPTION = 'option';
-    const PARAM_RANK = 'rank';
+
     const PARAM_DAY = 'day';
+
+    const PARAM_FREQUENCY_RANGE = 'frequency_range';
+
+    const PARAM_MONTHLY = 'monthly';
+
+    const PARAM_OPTION = 'option';
+
     const PARAM_PRIORITY = 'priority';
+
+    const PARAM_RANGE = 'range';
+
+    const PARAM_RANK = 'rank';
+
     const PARAM_TYPE = 'type';
 
-    // Inherited
-    protected function build_creation_form()
-    {
-        parent::build_creation_form();
-        $this->add_calendar_form();
-    }
+    const PARAM_WEEKLY = 'weekly';
+
+    const PARAM_YEARLY = 'yearly';
 
     // Inherited
-    protected function build_editing_form()
-    {
-        parent::build_editing_form();
-        $this->add_calendar_form();
-    }
 
     public function add_calendar_form()
     {
@@ -50,36 +48,26 @@ class TaskForm extends ContentObjectForm
 
         $options_priority = Task::get_priority_options();
         $choices_priority = array();
-        $choices_priority[] = $this->createElement('select', Task::PROPERTY_PRIORITY, null, $options_priority, array('class' => 'form-control'));
+        $choices_priority[] = $this->createElement(
+            'select', Task::PROPERTY_PRIORITY, null, $options_priority, array('class' => 'form-control')
+        );
         $this->addGroup($choices_priority, self::PARAM_PRIORITY, Translation::get('Priority'), '', false);
 
         $options_type = Task::get_types_options();
         $choices_type = array();
-        $choices_type[] = $this->createElement('select', Task::PROPERTY_CATEGORY, null, $options_type, array('class' => 'form-control'));
+        $choices_type[] = $this->createElement(
+            'select', Task::PROPERTY_CATEGORY, null, $options_type, array('class' => 'form-control')
+        );
         $this->addGroup($choices_type, self::PARAM_TYPE, Translation::get('TaskType'), '', false);
 
-        $start_date = array();
-        $start_date[] = $this->createElement(
-            'text',
-            Task::PROPERTY_START_DATE,
-            null,
-            'id="start_date" class="form-control"');
-        $this->addGroup($start_date, Task::PROPERTY_START_DATE, Translation::get('StartDate'), '', false);
-        $this->get_renderer()->setGroupElementTemplate('{element}', Task::PROPERTY_START_DATE);
-
-        $due_date = array();
-        $due_date[] = $this->createElement('text', Task::PROPERTY_DUE_DATE, null, 'id="due_date" class="form-control"');
-        $this->addGroup($due_date, Task::PROPERTY_DUE_DATE, Translation::get('EndDate'), '', false);
-        $this->get_renderer()->setGroupElementTemplate('{element}', Task::PROPERTY_DUE_DATE);
+        $this->add_datepicker(Task::PROPERTY_START_DATE, Translation::get('StartDate'), true);
+        $this->add_datepicker(Task::PROPERTY_DUE_DATE, Translation::get('EndDate'), true);
 
         // frequency
         // no repeat
         $this->addElement(
-            'radio',
-            Task::PROPERTY_FREQUENCY,
-            Translation::get('Frequency'),
-            Translation::get('NoRepeat'),
-            0);
+            'radio', Task::PROPERTY_FREQUENCY, Translation::get('Frequency'), Translation::get('NoRepeat'), 0
+        );
 
         // daily
         $this->addElement('radio', Task::PROPERTY_FREQUENCY, '', Translation::get('Daily'), 1);
@@ -88,10 +76,8 @@ class TaskForm extends ContentObjectForm
         $daily_elements[] = $this->createElement('static', '', null, Translation::get('Every'));
 
         $daily_elements[] = $this->createElement(
-            'text',
-            Task::PROPERTY_FREQUENCY_INTERVAL,
-            '',
-            array('style' => 'width:50px', 'maxlength' => 2));
+            'text', Task::PROPERTY_FREQUENCY_INTERVAL, '', array('style' => 'width:50px', 'maxlength' => 2)
+        );
         $daily_elements[] = $this->createElement('static', '', null, Translation::get('Days'));
         $this->addGroup($daily_elements, self::PARAM_DAILY);
 
@@ -104,19 +90,15 @@ class TaskForm extends ContentObjectForm
         $weekly_elements = array();
         $weekly_elements[] = $this->createElement('static', '', null, Translation::get('Every'));
         $weekly_elements[] = $this->createElement(
-            'text',
-            Task::PROPERTY_FREQUENCY_INTERVAL,
-            '',
-            array('style' => 'width:50px', 'maxlength' => 2));
+            'text', Task::PROPERTY_FREQUENCY_INTERVAL, '', array('style' => 'width:50px', 'maxlength' => 2)
+        );
         $weekly_elements[] = $this->createElement('static', '', null, Translation::get('Weeks'));
         $this->addGroup($weekly_elements, self::PARAM_WEEKLY);
 
         $this->addElement(
-            'select',
-            self::PARAM_WEEKLY . '[' . Task::PROPERTY_BYDAY . ']',
-            '',
-            Task::get_byday_options(),
-            'multiple="true"');
+            'select', self::PARAM_WEEKLY . '[' . Task::PROPERTY_BYDAY . ']', '', Task::get_byday_options(),
+            'multiple="true"'
+        );
         $this->addElement('html', '</div>');
 
         //
@@ -131,41 +113,31 @@ class TaskForm extends ContentObjectForm
         $monthly_elements = array();
         $monthly_elements[] = $this->createElement('static', '', null, Translation::get('Every'));
         $monthly_elements[] = $this->createElement(
-            'text',
-            Task::PROPERTY_FREQUENCY_INTERVAL,
-            '',
-            array('style' => 'width:50px', 'maxlength' => 2));
+            'text', Task::PROPERTY_FREQUENCY_INTERVAL, '', array('style' => 'width:50px', 'maxlength' => 2)
+        );
         $monthly_elements[] = $this->createElement('static', '', null, Translation::get('Months'));
         $this->addGroup($monthly_elements, self::PARAM_MONTHLY);
 
         $monthly_byday_elements = array();
         $monthly_byday_elements[] = $this->createElement(
-            'radio',
-            self::PARAM_MONTHLY . '[' . self::PARAM_OPTION . ']',
-            '',
-            '',
-            0);
+            'radio', self::PARAM_MONTHLY . '[' . self::PARAM_OPTION . ']', '', '', 0
+        );
         $monthly_byday_elements[] = $this->createElement(
-            'select',
-            self::PARAM_MONTHLY . '[' . Task::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']',
-            '',
-            Task::get_rank_options());
+            'select', self::PARAM_MONTHLY . '[' . Task::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
+            Task::get_rank_options()
+        );
         $monthly_byday_elements[] = $this->createElement(
-            'select',
-            self::PARAM_MONTHLY . '[' . Task::PROPERTY_BYDAY . '][' . self::PARAM_DAY . ']',
-            '',
-            Task::get_byday_options());
+            'select', self::PARAM_MONTHLY . '[' . Task::PROPERTY_BYDAY . '][' . self::PARAM_DAY . ']', '',
+            Task::get_byday_options()
+        );
         $this->addGroup($monthly_byday_elements);
 
         $monthly_bymonthday_elements = array();
         $monthly_bymonthday_elements[] = $this->createElement('radio', self::PARAM_OPTION, '', '', 1);
         $monthly_bymonthday_elements[] = $this->createElement('static', '', null, Translation::get('RecurOnDays'));
         $monthly_bymonthday_elements[] = $this->createElement(
-            'select',
-            Task::PROPERTY_BYMONTHDAY,
-            '',
-            Task::get_bymonthday_options(),
-            'multiple="true"');
+            'select', Task::PROPERTY_BYMONTHDAY, '', Task::get_bymonthday_options(), 'multiple="true"'
+        );
 
         $this->addGroup($monthly_bymonthday_elements, self::PARAM_MONTHLY);
         $this->addElement('html', '</div>');
@@ -177,10 +149,8 @@ class TaskForm extends ContentObjectForm
         $yearly_elements = array();
         $yearly_elements[] = $this->createElement('static', '', null, Translation::get('Every'));
         $yearly_elements[] = $this->createElement(
-            'text',
-            Task::PROPERTY_FREQUENCY_INTERVAL,
-            '',
-            array('style' => 'width:50px', 'maxlength' => 2));
+            'text', Task::PROPERTY_FREQUENCY_INTERVAL, '', array('style' => 'width:50px', 'maxlength' => 2)
+        );
         $yearly_elements[] = $this->createElement('static', '', null, Translation::get('Years'));
         $this->addGroup($yearly_elements, self::PARAM_YEARLY);
 
@@ -188,39 +158,29 @@ class TaskForm extends ContentObjectForm
         $yearly_bymonthday_elements[] = $this->createElement('radio', self::PARAM_OPTION, '', '', 0);
         $yearly_bymonthday_elements[] = $this->createElement('static', '', null, Translation::get('Every'));
         $yearly_bymonthday_elements[] = $this->createElement(
-            'select',
-            Task::PROPERTY_BYMONTHDAY,
-            '',
-            Task::get_bymonthday_options(),
-            'multiple="true"');
+            'select', Task::PROPERTY_BYMONTHDAY, '', Task::get_bymonthday_options(), 'multiple="true"'
+        );
         $this->addGroup($yearly_bymonthday_elements, self::PARAM_YEARLY);
 
         $yearly_byday_elements = array();
         $yearly_byday_elements[] = $this->createElement(
-            'radio',
-            self::PARAM_YEARLY . '[' . self::PARAM_OPTION . ']',
-            '',
-            '',
-            1);
+            'radio', self::PARAM_YEARLY . '[' . self::PARAM_OPTION . ']', '', '', 1
+        );
         $yearly_byday_elements[] = $this->createElement(
-            'select',
-            self::PARAM_YEARLY . '[' . Task::PROPERTY_BYDAY . ']' . '[' . self::PARAM_RANK . ']',
-            '',
-            Task::get_rank_options());
+            'select', self::PARAM_YEARLY . '[' . Task::PROPERTY_BYDAY . ']' . '[' . self::PARAM_RANK . ']', '',
+            Task::get_rank_options()
+        );
         $yearly_byday_elements[] = $this->createElement(
-            'select',
-            self::PARAM_YEARLY . '[' . Task::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']',
-            '',
-            Task::get_byday_options());
+            'select', self::PARAM_YEARLY . '[' . Task::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']', '',
+            Task::get_byday_options()
+        );
         $this->addGroup($yearly_byday_elements);
 
         $yearly_month = array();
         $yearly_month[] = $this->createElement('static', '', null, Translation::get('Of'));
         $yearly_month[] = $this->createElement(
-            'select',
-            self::PARAM_YEARLY . '[' . Task::PROPERTY_BYMONTH . ']',
-            '',
-            Task::get_bymonth_options());
+            'select', self::PARAM_YEARLY . '[' . Task::PROPERTY_BYMONTH . ']', '', Task::get_bymonth_options()
+        );
         $this->addGroup($yearly_month);
         $this->addElement('html', '</div>');
 
@@ -231,224 +191,42 @@ class TaskForm extends ContentObjectForm
         $interval_elements = array();
         $interval_elements[] = $this->createElement('radio', self::PARAM_RANGE, '', Translation::get('Create'), 2);
         $interval_elements[] = $this->createElement(
-            'text',
-            Task::PROPERTY_FREQUENCY_COUNT,
-            '',
-            array('style' => 'width:50px', 'maxlength' => 2));
+            'text', Task::PROPERTY_FREQUENCY_COUNT, '', array('style' => 'width:50px', 'maxlength' => 2)
+        );
         $interval_elements[] = $this->createElement('static', null, null, Translation::get('Appointments'));
         $this->addGroup($interval_elements, '', '', null, false);
 
         $until_elements = array();
         $until_elements[] = $this->createElement('radio', self::PARAM_RANGE, '', Translation::get('Until'), 3);
         $until_elements[] = $this->createElement(
-            'datepicker',
-            Task::PROPERTY_UNTIL,
-            '',
-            array('form_name' => $this->getAttribute('name'), 'class' => Task::PROPERTY_UNTIL),
-            true);
+            'datepicker', Task::PROPERTY_UNTIL, '',
+            array('form_name' => $this->getAttribute('name'), 'class' => Task::PROPERTY_UNTIL), true
+        );
         $this->addGroup($until_elements, '', '', null, false);
         $this->addElement('html', '</div>');
         $this->addElement('category');
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Task', true) . 'Dates.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Task', true) . 'Dates.min.js'
+        )
+        );
     }
 
     // Inherited
-    public function setDefaults($defaults = array())
+
+    protected function build_creation_form()
     {
-        $task = $this->get_content_object();
+        parent::build_creation_form();
+        $this->add_calendar_form();
+    }
 
-        if (isset($task) && $this->form_type == self::TYPE_EDIT)
-        {
-            $defaults[Task::PROPERTY_CATEGORY] = $task->get_category();
-            $defaults[Task::PROPERTY_PRIORITY] = $task->get_priority();
-
-            $defaults[Task::PROPERTY_START_DATE] = DatetimeUtilities::format_locale_date(
-                '%d-%m-%Y  %H:%M',
-                $task->get_start_date());
-            $defaults[Task::PROPERTY_DUE_DATE] = DatetimeUtilities::format_locale_date(
-                '%d-%m-%Y  %H:%M',
-                $task->get_due_date());
-            $defaults[Task::PROPERTY_FREQUENCY] = $task->get_frequency();
-
-            $repeats = $task->has_frequency();
-            if ($repeats)
-            {
-                switch ($task->get_frequency())
-                {
-                    case 1 :
-                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = $task->get_frequency_interval();
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        break;
-                    case 2 :
-                        if ($task->get_byday() == 'MO,TU,WE,TH,FR' && $task->get_frequency_interval() == 1)
-                        {
-                            $defaults[Task::PROPERTY_FREQUENCY] = 3;
-                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-                        }
-                        elseif ($task->get_frequency_interval() == 2 && $task->get_byday() == '')
-                        {
-                            $defaults[Task::PROPERTY_FREQUENCY] = 4;
-                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-                        }
-                        else
-                        {
-                            $bydays = Task::get_byday_parts($task->get_byday());
-                            foreach ($bydays as $byday)
-                            {
-                                $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY][] = Task::get_day_format($byday[1]);
-                            }
-                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = $task->get_frequency_interval();
-                        }
-                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        break;
-
-                    case 5 :
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = $task->get_frequency_interval();
-                        if ($task->get_bymonthday())
-                        {
-                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 1;
-                            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = $task->get_bymonthday();
-                        }
-                        else
-                        {
-                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-                            $bydays = Task::get_byday_parts($task->get_byday());
-                            foreach ($bydays as $byday)
-                            {
-                                $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_DAY] = Task::get_day_format(
-                                    $byday[1]);
-                                $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = $byday[0];
-                            }
-                        }
-                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        break;
-                    case 6 :
-                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = $task->get_frequency_interval();
-                        if ($task->get_bymonthday())
-                        {
-                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-                            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = $task->get_bymonthday();
-                            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTH] = $task->get_bymonth();
-                        }
-                        else
-                        {
-                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 1;
-                            $bydays = Task::get_byday_parts($task->get_byday());
-                            foreach ($bydays as $byday)
-                            {
-                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_DAY] = Task::get_day_format(
-                                    $byday[1]);
-                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = $byday[0];
-                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTH] = $task->get_bymonth();
-                            }
-                        }
-                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-                        break;
-                }
-
-                if ($task->get_until() == 0)
-                {
-                    if ($task->get_frequency_count() > 0)
-                    {
-                        $defaults[Task::PROPERTY_FREQUENCY_COUNT] = $task->get_frequency_count();
-                        $defaults[self::PARAM_RANGE] = 2;
-                    }
-                    else
-                    {
-                        $defaults[self::PARAM_RANGE] = 1;
-                        $defaults[Task::PROPERTY_UNTIL] = 0;
-                        $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
-                    }
-                }
-                else
-                {
-                    $defaults[self::PARAM_RANGE] = 3;
-                    $defaults[Task::PROPERTY_UNTIL] = $task->get_until();
-                    $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
-                }
-            }
-        }
-        else
-        {
-            $defaults[Task::PROPERTY_FREQUENCY] = 0;
-            // $defaults[Task :: PROPERTY_START_DATE] = time();
-            // $defaults[Task :: PROPERTY_DUE_DATE] = strtotime('+1 Hour', time());
-
-            $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-
-            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
-
-            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-
-            $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
-            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
-
-            $defaults[self::PARAM_RANGE] = 1;
-            $defaults[Task::PROPERTY_UNTIL] = null;
-            $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
-        }
-
-        parent::setDefaults($defaults);
+    protected function build_editing_form()
+    {
+        parent::build_editing_form();
+        $this->add_calendar_form();
     }
 
     // Inherited
-    public function create_content_object()
-    {
-        $object = new Task();
-        $object = $this->configure_content_object($object);
-
-        $this->set_content_object($object);
-        return parent::create_content_object();
-    }
-
-    // Inherited
-    public function update_content_object()
-    {
-        $object = $this->get_content_object();
-        $object = $this->configure_content_object($object);
-
-        return parent::update_content_object();
-    }
 
     public function configure_content_object($object)
     {
@@ -457,8 +235,8 @@ class TaskForm extends ContentObjectForm
         $object->set_category($values[Task::PROPERTY_CATEGORY]);
         $object->set_priority($values[Task::PROPERTY_PRIORITY]);
 
-        $object->set_start_date(strtotime($values[Task::PROPERTY_START_DATE]));
-        $object->set_due_date(strtotime($values[Task::PROPERTY_DUE_DATE]));
+        $object->set_start_date(DatetimeUtilities::time_from_datepicker($values[Task::PROPERTY_START_DATE]));
+        $object->set_due_date(DatetimeUtilities::time_from_datepicker($values[Task::PROPERTY_DUE_DATE]));
         $frequency = $values[Task::PROPERTY_FREQUENCY];
 
         $object->set_frequency($values[Task::PROPERTY_FREQUENCY]);
@@ -512,7 +290,9 @@ class TaskForm extends ContentObjectForm
                     $object->set_byday(
                         Task::get_byday_ical_format(
                             $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_RANK],
-                            $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_DAY]));
+                            $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_DAY]
+                        )
+                    );
 
                     $object->set_bymonthday(null);
                 }
@@ -537,7 +317,9 @@ class TaskForm extends ContentObjectForm
                     $object->set_byday(
                         Task::get_byday_ical_format(
                             $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_RANK],
-                            $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_DAY]));
+                            $values[$frequency_type][Task::PROPERTY_BYDAY][self::PARAM_DAY]
+                        )
+                    );
                     $object->set_bymonth($values[$frequency_type][Task::PROPERTY_BYMONTH]);
                     $object->set_bymonthday(null);
                 }
@@ -566,5 +348,207 @@ class TaskForm extends ContentObjectForm
         }
 
         return $object;
+    }
+
+    // Inherited
+
+    public function create_content_object()
+    {
+        $object = new Task();
+        $object = $this->configure_content_object($object);
+
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
+    }
+
+    // Inherited
+
+    public function setDefaults($defaults = array())
+    {
+        $task = $this->get_content_object();
+
+        if (isset($task) && $this->form_type == self::TYPE_EDIT)
+        {
+            $defaults[Task::PROPERTY_CATEGORY] = $task->get_category();
+            $defaults[Task::PROPERTY_PRIORITY] = $task->get_priority();
+
+            $defaults[Task::PROPERTY_START_DATE] = $task->get_start_date();
+            $defaults[Task::PROPERTY_DUE_DATE] = $task->get_due_date();
+            $defaults[Task::PROPERTY_FREQUENCY] = $task->get_frequency();
+
+            $repeats = $task->has_frequency();
+            if ($repeats)
+            {
+                switch ($task->get_frequency())
+                {
+                    case 1 :
+                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] =
+                            $task->get_frequency_interval();
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        break;
+                    case 2 :
+                        if ($task->get_byday() == 'MO,TU,WE,TH,FR' && $task->get_frequency_interval() == 1)
+                        {
+                            $defaults[Task::PROPERTY_FREQUENCY] = 3;
+                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+                        }
+                        elseif ($task->get_frequency_interval() == 2 && $task->get_byday() == '')
+                        {
+                            $defaults[Task::PROPERTY_FREQUENCY] = 4;
+                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+                        }
+                        else
+                        {
+                            $bydays = Task::get_byday_parts($task->get_byday());
+                            foreach ($bydays as $byday)
+                            {
+                                $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY][] = Task::get_day_format($byday[1]);
+                            }
+                            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] =
+                                $task->get_frequency_interval();
+                        }
+                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        break;
+
+                    case 5 :
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] =
+                            $task->get_frequency_interval();
+                        if ($task->get_bymonthday())
+                        {
+                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 1;
+                            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = $task->get_bymonthday();
+                        }
+                        else
+                        {
+                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                            $bydays = Task::get_byday_parts($task->get_byday());
+                            foreach ($bydays as $byday)
+                            {
+                                $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_DAY] =
+                                    Task::get_day_format(
+                                        $byday[1]
+                                    );
+                                $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = $byday[0];
+                            }
+                        }
+                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        break;
+                    case 6 :
+                        $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] =
+                            $task->get_frequency_interval();
+                        if ($task->get_bymonthday())
+                        {
+                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = $task->get_bymonthday();
+                            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTH] = $task->get_bymonth();
+                        }
+                        else
+                        {
+                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 1;
+                            $bydays = Task::get_byday_parts($task->get_byday());
+                            foreach ($bydays as $byday)
+                            {
+                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_DAY] =
+                                    Task::get_day_format(
+                                        $byday[1]
+                                    );
+                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = $byday[0];
+                                $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTH] = $task->get_bymonth();
+                            }
+                        }
+                        $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+                        $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+                        break;
+                }
+
+                if ($task->get_until() == 0)
+                {
+                    if ($task->get_frequency_count() > 0)
+                    {
+                        $defaults[Task::PROPERTY_FREQUENCY_COUNT] = $task->get_frequency_count();
+                        $defaults[self::PARAM_RANGE] = 2;
+                    }
+                    else
+                    {
+                        $defaults[self::PARAM_RANGE] = 1;
+                        $defaults[Task::PROPERTY_UNTIL] = 0;
+                        $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
+                    }
+                }
+                else
+                {
+                    $defaults[self::PARAM_RANGE] = 3;
+                    $defaults[Task::PROPERTY_UNTIL] = $task->get_until();
+                    $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
+                }
+            }
+        }
+        else
+        {
+            $defaults[Task::PROPERTY_FREQUENCY] = 0;
+
+            $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+
+            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_WEEKLY][Task::PROPERTY_BYDAY] = array(1);
+
+            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+            $defaults[self::PARAM_MONTHLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+
+            $defaults[self::PARAM_YEARLY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+            $defaults[self::PARAM_YEARLY][Task::PROPERTY_BYMONTHDAY] = array(1);
+
+            $defaults[self::PARAM_RANGE] = 1;
+            $defaults[Task::PROPERTY_UNTIL] = null;
+            $defaults[Task::PROPERTY_FREQUENCY_COUNT] = 10;
+
+            $defaults[Task::PROPERTY_START_DATE] = time();
+            $defaults[Task::PROPERTY_DUE_DATE] = time() + 3600;
+        }
+
+        parent::setDefaults($defaults);
+    }
+
+    public function update_content_object()
+    {
+        $object = $this->get_content_object();
+        $object = $this->configure_content_object($object);
+
+        return parent::update_content_object();
     }
 }

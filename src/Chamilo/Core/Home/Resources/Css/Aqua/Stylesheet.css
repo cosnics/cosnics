@@ -98,7 +98,7 @@
     border-radius: 3px;
 }
 
-.ui-state-highlight, .portal-block-sortable-helper,
+.portal-block-sortable-helper,
 .portal-tab-sortable-helper {
     border: 1px dashed #c0c0c0 !important;
     background-color: #F2F2F2 !important;

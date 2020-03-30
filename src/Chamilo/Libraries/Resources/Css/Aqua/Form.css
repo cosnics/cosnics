@@ -1,3 +1,44 @@
+/********
+ * FORM *
+ ********/
+input.form-control[type="text"], input.form-control[type="password"] {
+    border: 1px solid #cccccc;
+    padding: 6px 12px;
+}
+
+form .radio input[type="radio"], form .radio input[type="checkbox"] {
+    margin-top: 0;
+}
+
+form .radio, form .checkbox {
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.radio + .radio, .checkbox + .checkbox {
+    margin-top: 0;
+}
+
+form .form-row {
+    margin: 0 0 5px;
+}
+
+form.table_form .form-row {
+    margin-bottom: 0;
+}
+
+form.table_form .form-row .btn-action-toolbar {
+    margin-bottom: 5px;
+}
+
+button.btn {
+    text-shadow: none;
+}
+
+#advanced_filter_form .input-date {
+    width: 90px;
+}
+
 div.column {
     float: left;
     margin-right: 10px;
@@ -5,8 +46,8 @@ div.column {
 
 .form-category {
     border-bottom: 1px solid #dddddd;
-    padding-bottom: 5px;
     margin-bottom: 15px;
+    padding-bottom: 5px;
 }
 
 .form-category:not (:first-of-type ) {
@@ -21,17 +62,17 @@ form div.form-row {
 }
 
 form div.form-row div.form_header {
-    white-space: nowrap;
+    background-color: #e5edf9;
+    border: 1px solid #4271b5;
     padding: 2px;
-    background-color: #E5EDF9;
-    border: 1px solid #4271B5;
+    white-space: nowrap;
 }
 
 form div.form-row div.form-label {
-    text-align: right;
-    overflow: hidden;
-    font-weight: bold;
     color: #565656;
+    font-weight: bold;
+    overflow: hidden;
+    text-align: right;
 }
 
 form div.form-row div.formw {
@@ -46,19 +87,19 @@ form div.form-row div.formw select, form div.formw textarea {
 
 form div.formw input[type=text]:hover, form div.form-row div.formw input[type=text]:focus,
 form div.form-row div.formw input[type=password]:hover, form div.form-row div.formw input[type=password]:focus,
-form div.form-row div.formw select:hover, form div.form-row div.formw select:focus
+form div.form-row div.formw select:hover, form div.form-row div.formw select:focus,
 form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus {
     background-color: #f7fbfd;
-    border-color: #4171B5;
+    border-color: #4171b5;
 }
 
 form div.formw input[type=text].input_conflict, form div.form-row div.formw input[type=password].input_conflict,
-form div.form-row div.formw select.input_conflict
+form div.form-row div.formw select.input_conflict,
 form div.formw input[type=text].input_conflict:hover, form div.form-row div.formw input[type=password].input_conflict:hover,
 form div.form-row div.formw select.input_conflict:hover, form div.formw input[type=text].input_conflict:focus,
 form div.form-row div.formw input[type=password].input_conflict:focus,
 form div.form-row div.formw select.input_conflict:focus {
-    background-color: #FFD1D1 !important;
+    background-color: #ffd1d1 !important;
     border: 1px solid #ff9b9d !important;
     color: #b40404 !important;
 }
@@ -69,34 +110,34 @@ form div.form-row div.formw input[type=password].input_valid:hover,
 form div.form-row div.formw select.input_valid:hover, form div.formw input[type=text].input_valid:focus,
 form div.form-row div.formw input[type=password].input_valid:focus,
 form div.form-row div.formw select.input_valid:focus {
-    border: 1px solid #339900 !important;
     background-color: #ddffaa !important;
+    border: 1px solid #339900 !important;
     color: #006600 !important;
 }
 
 form div.formw input[type=text].input_warning, form div.form-row div.formw input[type=password].input_warning,
-form div.form-row div.formw select.input_warning
+form div.form-row div.formw select.input_warning,
 form div.formw input[type=text].input_warning:hover, form div.form-row div.formw input[type=password].input_warning:hover,
 form div.form-row div.formw select.input_warning:hover, form div.formw input[type=text].input_warning:focus,
 form div.form-row div.formw input[type=password].input_warning:focus,
 form div.form-row div.formw select.input_warning:focus {
-    border: 1px solid #ffd89b !important;
     background-color: #fff8aa !important;
+    border: 1px solid #ffd89b !important;
     color: #996900 !important;
 }
 
 form div.dynamic_search_action {
-    padding: 15px 0px;
+    padding: 15px 0;
 }
 
 form div.dynamic_search_action input[type=text], form div.dynamic_search_action div.form-row div.formw input[type=password],
 form div.dynamic_search_action div.form-row div.formw select {
     background-color: #f5f5f5;
     border: 1px solid #dedede;
+    margin-right: 10px;
     padding: 6px;
     position: relative;
     top: 2px;
-    margin-right: 10px;
 }
 
 form div.form-row div.formwa, form div.form-row div.formwa_no_margin,
@@ -108,14 +149,14 @@ form div.form-row div.forme, form div.form-row div.forme_no_margin {
 form div.form-row div.forme h2, form div.form-row div.forme_no_margin h2,
 form div.form-row div.formwa h2, form div.form-row div.formwa_no_margin h2,
 form div.form-row div.formc h2, form div.form-row div.formc_no_margin h2 {
-    padding: 0px 0px 5px 0px;
-    margin: 0px;
     font-weight: bold;
+    margin: 0;
+    padding: 0 0 5px 0;
 }
 
 form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
 form div.form-row div.formc_no_margin {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 @media ( max-width: 768px) {
@@ -130,7 +171,7 @@ form div.form-row div.feedback {
 }
 
 form span.form_required {
-    color: #f00;
+    color: #ff0000;
 }
 
 form span.form_required > img {
@@ -138,7 +179,7 @@ form span.form_required > img {
 }
 
 form span.form_error {
-    color: #f00;
+    color: #ff0000;
     font-size: x-small;
     margin: 2px;
 }
@@ -150,14 +191,14 @@ form select, textarea {
 }
 
 form input[type=text], form input[type=password] {
-    margin: 0px;
+    border: 1px solid #4171b5;
+    margin: 0;
     padding: 2px 4px 2px 4px;
-    border: 1px solid #4171B5;
 }
 
 form input[type=color], form input.colour-selection {
+    padding: 0;
     width: 30px;
-    padding: 0px;
 }
 
 /* Normal submit button */
@@ -193,45 +234,40 @@ form .input_numeric {
 
 a.button {
     background-color: #f5f5f5;
-    background-repeat: no-repeat;
     background-position: 10px center;
+    background-repeat: no-repeat;
     border: 1px solid #dedede;
-    border-top: 1px solid #eeeeee;
     border-left: 1px solid #eeeeee;
-    outline-style: none;
-    line-height: 100%;
-    text-decoration: none;
-    font-weight: bold;
+    border-top: 1px solid #eeeeee;
     color: #565656;
     cursor: pointer;
-    width: auto;
-    overflow: visible;
-    padding: 7px 10px 7px 36px;
-    vertical-align: middle;
-}
-
-a.button {
-    padding-top: 8px;
-    padding-bottom: 8px;
     display: inline-block;
+    font-weight: bold;
+    line-height: 100%;
+    outline-style: none;
+    overflow: visible;
+    padding: 8px 10px 8px 36px;
+    text-decoration: none;
+    vertical-align: middle;
+    width: auto;
 }
 
 a.last_button {
-    margin: 0px;
+    margin: 0;
 }
 
 a.mini_button, a.mini_button:hover, a.mini_button:active {
-    background-position: center center;
-    padding: 0px;
-    margin: -3px 0px 0px -3px;
-    line-height: 16px;
-    height: 22px;
-    vertical-align: middle;
-    font-size: 0px;
-    width: 22px;
-    overflow: hidden;
     background-color: transparent !important;
-    border: 0px solid white !important;
+    background-position: center center;
+    border: 0 solid white !important;
+    font-size: 0;
+    height: 22px;
+    line-height: 16px;
+    margin: -3px 0 0 -3px;
+    overflow: hidden;
+    padding: 0;
+    vertical-align: middle;
+    width: 22px;
 }
 
 a.mini_button {
@@ -245,33 +281,29 @@ div.simple_search form {
 }
 
 div.configuration_form {
+    border: 1px solid #ebebeb;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
     clear: both;
     margin: 20px 2px 2px 2px;
     padding: 10px;
-    border: 1px solid #ebebeb;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    border-radius-topright: 10px;
-    border-radius-bottomleft: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -webkit-border-bottom-left-radius: 10px;
 }
 
 div.form_splitter {
-    clear: both;
-    margin: 20px -10px 0px -10px;
-    padding: 6px 10px;
     border-top: 1px solid #ebebeb;
-    height: 0px;
+    clear: both;
+    height: 0;
+    margin: 20px -10px 0 -10px;
+    padding: 6px 10px;
 }
 
 div.configuration_form span.category, div.form_splitter span.category {
+    background-color: #ffffff;
+    color: #4271b5;
+    font-weight: bold;
+    padding: 0 5px 0 5px;
     position: relative;
     top: -20px;
-    background-color: #FFFFFF;
-    font-weight: bold;
-    color: #4271B5;
-    padding: 0px 5px 0px 5px;
 }
 
 div.form_splitter span.category {
@@ -291,7 +323,7 @@ div.form_splitter span.category {
 .active_elements:hover, .active_elements:focus, .inactive_elements:hover,
 .inactive_elements:focus {
     background-color: #f7fbfd;
-    border: 1px solid #4171B5;
+    border: 1px solid #4171b5;
 }
 
 div.element_finder_buttons {
@@ -304,22 +336,22 @@ div.element_finder_buttons {
 }
 
 div.element_finder div.inactive_elements div.previous_elements, div.element_finder div.inactive_elements div.next_elements {
-    padding: 4px;
     cursor: pointer;
-    margin-right: -12px;
     margin-left: -12px;
+    margin-right: -12px;
+    padding: 4px;
     text-align: center;
 }
 
 div.element_finder div.inactive_elements div.previous_elements {
-    margin-top: -6px;
     margin-bottom: 6px;
+    margin-top: -6px;
 
 }
 
 div.element_finder div.inactive_elements div.next_elements {
-    margin-top: 6px;
     margin-bottom: -6px;
+    margin-top: 6px;
 }
 
 /**********************
@@ -334,8 +366,8 @@ div.filter_form {
 div.filter_form div.form-row {
     clear: none;
     float: left;
-    padding: 0px;
     margin-left: 10px;
+    padding: 0;
 }
 
 div.filter_form div.form-row div.formw {
@@ -352,109 +384,61 @@ div.filter_form div.form-row div.formw button {
  **********************/
 div.advanced_filter_form {
     clear: both;
-    padding-top: 4px;
     font-size: 11px !important;
+    padding-top: 4px;
 }
 
 div.advanced_filter_form div.configuration_form {
+    border: 0 solid #000000 !important;
     clear: both;
-    margin: 0px -10px 10px -10px;
-    padding: 0px 10px 0px 10px;
-    border: 0px solid #000000 !important;
+    margin: 0 -10px 10px -10px;
+    padding: 0 10px 0 10px;
 }
 
 div.advanced_filter_form div.configuration_form span.category {
-    clear: both;
-    position: relative;
-    top: 0px !important;
-    font-weight: bold;
-    padding: 0px 10px 0px 10px;
-    margin-bottom: 5px;
-    margin-left: -10px;
-    margin-right: -10px;
-    margin-top: 0px;
-    display: block;
     border-bottom: 1px solid #999999;
+    clear: both;
+    display: block;
+    font-weight: bold;
+    margin: 0 -10px 5px;
+    padding: 0 10px 0 10px;
+    position: relative;
+    top: 0 !important;
 }
 
 div.advanced_filter_form a.calendar_button:hover, div.advanced_filter_form a.calendar_button {
-    margin: 0;
     background-position: center center;
-    width: 16px;
     height: 16px;
+    margin: 0;
     padding: 2px;
     position: relative;
     top: -2px;
+    width: 16px;
 }
 
 div.advanced_filter_form div.form-row {
     clear: both;
-    padding: 0px;
+    padding: 0;
     width: 100%;
 }
 
 div.advanced_filter_form div.form-row input, div.advanced_filter_form div.form-row select {
     background-color: #f5f5f5;
     border: 1px solid #dedede;
-    height: 16px;
     font-size: 11px !important;
+    height: 16px;
 }
 
 div.advanced_filter_form div.form-row select {
+    height: 22px;
     margin: 0;
     padding: 2px 2px;
-    height: 22px;
 }
 
 div.advanced_filter_form div.form-row input.full, div.advanced_filter_form div.form-row select.full {
-    width: 100%;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     height: 20px;
-}
-
-/**********************
- * JUMP FORM STYLES *
- **********************/
-#personal_calendar_jump_form select {
     width: 100%;
-}
-
-div.jump_form {
-    clear: both;
-    padding: 0px;
-    margin: 0px;
-}
-
-div.jump_form div.form-row {
-    clear: both;
-    padding: 0px;
-}
-
-div.jump_form div.form-row div.formw {
-    float: none;
-    width: 100%;
-}
-
-input.link_alike {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #4171b5;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
-}
-
-input.link_alike:hover {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #FF0000;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
 }
 
 form br {
@@ -464,66 +448,19 @@ form br {
 /**************************
  * ACTION BAR SEARCH FORM *
  **************************/
-div.search_form {
-    background-color: white;
-    border: 1px solid grey;
-    height: 18px;
-    overflow: hidden;
-}
-
-div.search_form input.search_query {
-    border: 0px solid white;
-    background-image: none;
-    padding: 0px 2px 0px 2px;
-    height: 18px;
-}
-
-div.search_form button.search, div.search_form button.clear {
-    background-color: white;
-    border: 0px solid white;
-    width: 18px;
-    height: 18px;
-    /*	background-image: none;*/
-    background-position: center center;
-    padding: 0px;
-    margin: 0px;
-    vertical-align: top;
-    text-align: center;
-}
-
-div.search_form button.search img, div.search_form button.clear img {
-    padding: 0px;
-    margin: 1px 2px 0px 2px;
-}
-
 fieldset {
+    border: 1px solid #ebebeb;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
     clear: both;
     margin: 5px;
     padding: 5px;
-    border: 1px solid #ebebeb;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    border-radius-topright: 10px;
-    border-radius-bottomleft: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -webkit-border-bottom-left-radius: 10px;
 }
 
 fieldset legend {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
+    color: #4271b5;
     font-weight: bold;
-    color: #4271B5;
-    padding: 0px 5px 0px 5px;
     margin-right: 10px;
-}
-
-div.ui-datepicker {
-    background-color: #F7FBFD !important;
-    border: 1px solid #d7e6ed !important;
-    padding: 10px;
-    margin: 2px;
-}
-
-div.ui-datepicker div.ui-datepicker-header {
-    background-color: #264269 !important;
+    padding: 0 5px 0 5px;
 }

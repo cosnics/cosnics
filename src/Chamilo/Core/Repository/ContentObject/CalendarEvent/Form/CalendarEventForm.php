@@ -45,24 +45,13 @@ class CalendarEventForm extends ContentObjectForm
     {
         $this->addElement('category', Translation::get('Properties'));
 
-        $start_date = array();
-        $start_date[] = $this->createElement(
-            'text', CalendarEvent::PROPERTY_START_DATE, null, 'id="start_date" class="form-control"'
-        );
-        $this->addGroup($start_date, CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), '', false);
-        $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent::PROPERTY_START_DATE);
+        $this->add_datepicker(CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), true);
+        $this->add_datepicker(CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), true);
 
         $this->addRule(
             CalendarEvent::PROPERTY_START_DATE,
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
-
-        $end_date = array();
-        $end_date[] = $this->createElement(
-            'text', CalendarEvent::PROPERTY_END_DATE, null, 'id="end_date" class="form-control"'
-        );
-        $this->addGroup($end_date, CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), '', false);
-        $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent::PROPERTY_END_DATE);
 
         $this->addRule(
             CalendarEvent::PROPERTY_END_DATE,
@@ -266,7 +255,7 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
-            'Dates.js'
+            'Dates.min.js'
         )
         );
     }
@@ -290,8 +279,8 @@ class CalendarEventForm extends ContentObjectForm
         $values = $this->exportValues();
 
         $object->set_location($values[CalendarEvent::PROPERTY_LOCATION]);
-        $object->set_start_date(strtotime($values[CalendarEvent::PROPERTY_START_DATE]));
-        $object->set_end_date(strtotime($values[CalendarEvent::PROPERTY_END_DATE]));
+        $object->set_start_date(DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_START_DATE]));
+        $object->set_end_date(DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_END_DATE]));
         $frequency = $values[CalendarEvent::PROPERTY_FREQUENCY];
 
         $object->set_frequency($values[CalendarEvent::PROPERTY_FREQUENCY]);
@@ -430,12 +419,8 @@ class CalendarEventForm extends ContentObjectForm
         if (isset($calendar_event) && $this->form_type == self::TYPE_EDIT)
         {
             $defaults[CalendarEvent::PROPERTY_LOCATION] = $calendar_event->get_location();
-            $defaults[CalendarEvent::PROPERTY_START_DATE] = DatetimeUtilities::format_locale_date(
-                '%d-%m-%Y  %H:%M', $calendar_event->get_start_date()
-            );
-            $defaults[CalendarEvent::PROPERTY_END_DATE] = DatetimeUtilities::format_locale_date(
-                '%d-%m-%Y  %H:%M', $calendar_event->get_end_date()
-            );
+            $defaults[CalendarEvent::PROPERTY_START_DATE] = $calendar_event->get_start_date();
+            $defaults[CalendarEvent::PROPERTY_END_DATE] = $calendar_event->get_end_date();
             $defaults[CalendarEvent::PROPERTY_FREQUENCY] = $calendar_event->get_frequency();
 
             $repeats = $calendar_event->has_frequency();
@@ -588,8 +573,6 @@ class CalendarEventForm extends ContentObjectForm
         else
         {
             $defaults[CalendarEvent::PROPERTY_FREQUENCY] = 0;
-            // $defaults[CalendarEvent :: PROPERTY_START_DATE] = time();
-            // $defaults[CalendarEvent :: PROPERTY_END_DATE] = strtotime('+1 Hour', time());
 
             $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
 
@@ -610,13 +593,8 @@ class CalendarEventForm extends ContentObjectForm
             $defaults[CalendarEvent::PROPERTY_UNTIL] = null;
             $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = 10;
 
-            // Remove start and end date from the defaults because it blocks the selection of the start date
-            $defaults[CalendarEvent :: PROPERTY_START_DATE] = DatetimeUtilities:: format_locale_date(
-                '%d-%m-%Y %H:%M', time()
-            );
-            $defaults[CalendarEvent :: PROPERTY_END_DATE] = DatetimeUtilities:: format_locale_date(
-                '%d-%m-%Y %H:%M', time() + 3600
-            );
+            $defaults[CalendarEvent :: PROPERTY_START_DATE] = time();
+            $defaults[CalendarEvent :: PROPERTY_END_DATE] = time() + 3600;
         }
 
         parent::setDefaults($defaults);

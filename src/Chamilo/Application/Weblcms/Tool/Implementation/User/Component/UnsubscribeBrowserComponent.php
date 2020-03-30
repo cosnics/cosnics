@@ -276,50 +276,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_platformgroup_tabs()
     {
-        $html = $this->get_platformgroup_tabs_header();
-        $html .= $this->get_platformgroup_tabs_content();
-        $html .= $this->get_platformgroup_tabs_footer();
-
-        return $html;
-    }
-
-    /**
-     * Creates the content of the selected tab.
-     *
-     * @return String HTML of the content
-     */
-    private function get_platformgroup_tabs_content()
-    {
-        switch ($this->current_tab)
-        {
-            case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
-                return $this->get_platformgroups_subgroups_tab();
-            case self::TAB_PLATFORM_GROUPS_USERS :
-                return $this->get_platformgroups_users_tab();
-        }
-    }
-
-    /**
-     * Creates the footer for the tabs.
-     *
-     * @return String HTML of the footer
-     */
-    private function get_platformgroup_tabs_footer()
-    {
-        $html = array();
-        $html[] = $this->tabs->body_footer();
-        $html[] = $this->tabs->footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Creates the header for the tabs.
-     *
-     * @return String HTML of the header
-     */
-    private function get_platformgroup_tabs_header()
-    {
         $html = array();
 
         $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_platformgroups_browser');
@@ -369,7 +325,38 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         // render
         $html[] = $tabs->header();
-        $html[] = DynamicVisualTabsRenderer::body_header();
+        $html[] = $this->get_platformgroup_tabs_content();
+        $html[] = $tabs->footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Creates the content of the selected tab.
+     *
+     * @return String HTML of the content
+     */
+    private function get_platformgroup_tabs_content()
+    {
+        switch ($this->current_tab)
+        {
+            case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
+                return $this->get_platformgroups_subgroups_tab();
+            case self::TAB_PLATFORM_GROUPS_USERS :
+                return $this->get_platformgroups_users_tab();
+        }
+    }
+
+    /**
+     * Creates the footer for the tabs.
+     *
+     * @return String HTML of the footer
+     */
+    private function get_platformgroup_tabs_footer()
+    {
+        $html = array();
+        $html[] = $this->tabs->body_footer();
+        $html[] = $this->tabs->footer();
 
         return implode(PHP_EOL, $html);
     }
@@ -399,11 +386,13 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $html = array();
         if ($menu_tree)
         {
-            $html[] = '<div style="float: left; width: 18%; overflow: auto; height: 500px;">';
+            $html[] = '<div class="row">';
+            $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
             $html[] = $menu_tree->render_as_tree();
             $html[] = '</div>';
-            $html[] = '<div style="float: right; width: 80%;">';
+            $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
             $html[] = $this->get_platformgroup_tabs();
+            $html[] = '</div>';
             $html[] = '</div>';
         }
         else
@@ -501,7 +490,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             case self::TAB_USERS :
                 return $this->get_direct_users_tab();
             case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
-                return $this->get_platformgroups_tab();
             case self::TAB_PLATFORM_GROUPS_USERS :
                 return $this->get_platformgroups_tab();
         }

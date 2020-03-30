@@ -16,11 +16,6 @@ use Chamilo\Libraries\Translation\Translation;
 class Display extends QuestionDisplay
 {
 
-    public function needsDescriptionBorder()
-{
-    return true;
-}
-
     public function add_footer()
     {
         $formvalidator = $this->get_formvalidator();
@@ -69,14 +64,14 @@ class Display extends QuestionDisplay
         $element_template = implode(PHP_EOL, $element_template);
 
         $formvalidator->addElement(
-            'select', $question_name, Translation::get('Rating') . ': ', $scores, 'class="rating_slider"'
+            'select', $question_name, Translation::get('Rating') . ': ', $scores, 'class="rating-slider"'
         );
         $renderer->setElementTemplate($element_template, $question_name);
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', true
-            ) . 'AssessmentRatingQuestion.js'
+            ) . 'AssessmentRatingQuestion.min.js'
         )
         );
 
@@ -85,5 +80,10 @@ class Display extends QuestionDisplay
             Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
         )
         );
+    }
+
+    public function needsDescriptionBorder()
+    {
+        return true;
     }
 }

@@ -1,41 +1,39 @@
-(function($)
-{
-    function setValue(e, ui)
-    {
-        var currentValue = ui.value;
-        var sliderId = $(this).attr('id');
-        var selectName = sliderId.replace('slider_', '');
-        
-        $("select[name=" + selectName + "]").val(currentValue);
-        $("#slider_caption_" + selectName).html(currentValue);
-    }
-    
-    function addSlider()
-    {
-        var id = $(this).attr("name");
-        var minValue = parseInt($('option:first', this).val());
-        var maxValue = parseInt($('option:last', this).val());
-        var slider = $('<div class="slider" id="slider_' + id + '"></div>');
-        var caption = $('<div class="caption" id="slider_caption_' + id + '"></div>');
-        
-        $(this).after(caption).after(slider);
-        $(this).toggle();
-        
-        $(slider).slider({
-            animate : true,
-            min : minValue,
-            max : maxValue,
-            stop : setValue,
-            slide : setValue,
-            value : $(this).val()
+(function ($) {
+    function addSlider() {
+        var selectElement = $(this);
+        var id = selectElement.attr("name");
+        var minValue = parseInt($('option:first', selectElement).val());
+        var maxValue = parseInt($('option:last', selectElement).val());
+        var sliderName = 'slider_' + id;
+
+        var slider = $(
+            '<div id="' + sliderName + '"><div class="ui-slider-handle" id="slider_caption_' + id + '" /></div>');
+        selectElement.after(slider);
+        selectElement.toggle();
+
+        var sliderSelector = $('#' + sliderName);
+        var handle = $('.ui-slider-handle', slider);
+
+        sliderSelector.slider({
+            orientation: 'horizontal',
+            min: minValue,
+            max: maxValue,
+            change: function () {
+                var value = sliderSelector.slider('value');
+                selectElement.val(value);
+                handle.text(value);
+            },
+            create: function () {
+                handle.text($(this).slider("value"));
+            },
+            slide: function (event, ui) {
+                handle.text(ui.value);
+            }
         });
-        
-        $("#slider_caption_" + id).html($(this).val());
     }
-    
-    $(document).ready(function()
-    {
-        $("select.rating_slider").each(addSlider);
+
+    $(document).ready(function () {
+        $(".rating-slider").each(addSlider);
     });
-    
+
 })(jQuery);

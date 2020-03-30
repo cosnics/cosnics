@@ -59,7 +59,6 @@ CKEDITOR.editorConfig = function(config)
 
     config.contentsCss = [
         web_path + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/contents.css?t=' + CKEDITOR.timestamp,
-        web_path + 'index.php?application=Chamilo\\Libraries\\Ajax&go=CkeditorCss&theme=' + getTheme() + '&t=' + CKEDITOR.timestamp,
         web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme() + '&t=' + CKEDITOR.timestamp
     ];
 

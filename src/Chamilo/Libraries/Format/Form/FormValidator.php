@@ -900,48 +900,6 @@ EOT;
     }
 
     /**
-     * Adds tabs to a form
-     *
-     * @param \Chamilo\Libraries\Format\Tabs\DynamicFormTab $tabs
-     * @param integer $selected_tab The tab that is selected
-     */
-    public function add_tabs($tabs, $selected_tab)
-    {
-        $this->addElement('html', '<div id="form_tabs">');
-        $this->addElement('html', '<ul>');
-
-        foreach ($tabs as $index => $tab)
-        {
-            $this->addElement('html', '<li><a href="#form_tabs-' . $index . '">');
-            $this->addElement('html', '<span class="category">');
-            $this->addElement('html', '<span class="title">' . Translation::get($tab->get_title()) . '</span>');
-            $this->addElement('html', '</span>');
-            $this->addElement('html', '</a></li>');
-        }
-
-        $this->addElement('html', '</ul>');
-
-        foreach ($tabs as $index => $tab)
-        {
-            $this->addElement('html', '<div class="form_tab" id="form_tabs-' . $index . '">');
-            call_user_func(array($this, $tab->get_method()));
-            $this->addElement('html', '<div class="clear"></div>');
-            $this->addElement('html', '</div>');
-        }
-
-        $this->addElement('html', '</div>');
-        $this->addElement('html', '<script type="text/javascript">');
-        $this->addElement('html', '  var tabnumber = ' . $selected_tab . ';');
-        $this->addElement('html', '</script>');
-
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTabs.js'
-        )
-        );
-    }
-
-    /**
      * Add a textfield to the form.
      * A trim-filter is attached to the field.
      *
@@ -951,6 +909,7 @@ EOT;
      * @param string[] $attributes Optional list of attributes for the form-element
      *
      * @return \HTML_QuickForm_input The element.
+     * @throws \Exception
      */
     public function add_textfield($name, $label, $required = true, $attributes = array())
     {
