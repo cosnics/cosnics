@@ -574,7 +574,6 @@
 	.cluster-content.no-drop {
 		opacity: 0.3;
 	}
-
 	.cluster-content > div {
 		margin-left: 21px;
 		white-space: nowrap;

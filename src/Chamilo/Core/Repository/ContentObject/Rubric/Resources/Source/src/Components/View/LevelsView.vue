@@ -1,5 +1,5 @@
 <template>
-    <div class="levels-container" @click="selectLevel(null)">
+    <div class="levels-container" @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div class="levels">
             <div>
                 <h1>Niveaus</h1>
@@ -21,7 +21,7 @@
                                 <label class="check" @click.stop="" :for="`level_default_${levelIndex}`"><i class="fa fa-fw fa-check"></i></label>
                             </div>
                             <div class="delete">
-                                <button class="btn" @click.prevent="removeLevel(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
+                                <button class="btn" @click.prevent="showRemoveLevelDialog(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
                                     <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -49,6 +49,15 @@
                         class="fa fa-arrow-down" aria-hidden="true"></i></button>
             </div>
         </div>
+        <div class="modal-bg" v-if="removingLevel !== null">
+            <div class="modal-level" >
+                <div class="title">Niveau '{{ removingLevel.title }}' verwijderen?</div>
+                <div>
+                    <button ref="btn-remove-level" class="btn" @click.prevent="removeLevel(removingLevel)">OK</button>
+                    <button class="btn" @click.prevent="hideRemoveLevelDialog">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -64,6 +73,7 @@
     })
     export default class LevelsView extends Vue {
         private selectedLevel: Level|null = null;
+        private removingLevel: Level|null = null;
 
         selectLevel(level: Level|null) {
             this.selectedLevel = level;
@@ -88,10 +98,21 @@
             }, 50);
         }
 
-        removeLevel(level: Level) {
-            if (confirm("Niveau verwijderen?") === false) {
-                return;
+        showRemoveLevelDialog(level: Level|null) {
+            this.removingLevel = level;
+            if (level) {
+                this.$nextTick(() => {
+                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
+                });
             }
+        }
+
+        hideRemoveLevelDialog() {
+            this.showRemoveLevelDialog(null);
+        }
+
+        removeLevel(level: Level) {
+            this.removingLevel = null;
             this.rubric.removeLevel(level);
             window.setTimeout(() => {
                 this.selectLevel(null);
@@ -298,6 +319,9 @@
     .default-choice input {
         margin-top: 8px;
     }
+    .default-choice * {
+        cursor: pointer;
+    }
     li:not(.selected) .description.empty textarea {
         display: none;
     }
@@ -334,5 +358,29 @@
     }
     li:not(.selected):not(:first-child) .delete .btn {
         margin-top: 4px;
+    }
+    .modal-bg {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.31);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    .modal-level {
+        background: hsl(165, 5%, 90%);
+        width: 360px;
+        height: 150px;
+        margin: 120px auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        box-shadow: 0px 6px 12px #666;
+    }
+    .modal-level div {
+        margin-bottom: 20px;
     }
 </style>
