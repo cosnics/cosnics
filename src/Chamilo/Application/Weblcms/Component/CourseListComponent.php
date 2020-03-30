@@ -136,7 +136,7 @@ class CourseListComponent extends Manager implements DelegateComponent
         $manageDropDownButton->addSubButton(
             new SubButton(
                 Translation::get('CourseCategoryManagement'),
-                new FontAwesomeGlyph('arrows'),
+                new FontAwesomeGlyph('arrows-alt'),
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER)),
                 Button::DISPLAY_LABEL));
 
@@ -162,7 +162,7 @@ class CourseListComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton(
             new Button(
                 Translation::get('Reporting'),
-                new FontAwesomeGlyph('bar-chart'),
+                new FontAwesomeGlyph('chart-bar'),
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_REPORTING))));
 
         return $buttonGroup;
@@ -276,7 +276,7 @@ class CourseListComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton(
             new Button(
                 Translation::get('SortMyCourses'),
-                new FontAwesomeGlyph('refresh'),
+                new FontAwesomeGlyph('sync'),
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_MANAGER_SORT))));
 
         $showSubscribeButtonOnCourseHome = Configuration::getInstance()->get_setting(

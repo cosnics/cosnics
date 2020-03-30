@@ -63,7 +63,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Refresh', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('refresh'),
+                new FontAwesomeGlyph('sync'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_REQUIREMENTS,

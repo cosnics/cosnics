@@ -119,7 +119,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_EDIT,
@@ -152,7 +152,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             }
             else
             {
-                $glyph = new FontAwesomeGlyph('clock-o');
+                $glyph = new FontAwesomeGlyph('clock');
             }
 
             $toolbar->add_item(

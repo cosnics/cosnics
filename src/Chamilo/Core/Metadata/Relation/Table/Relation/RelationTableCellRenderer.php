@@ -35,7 +35,7 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_UPDATE,

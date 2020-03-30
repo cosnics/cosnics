@@ -120,7 +120,7 @@ class PackageRemover extends Action
             'Removal', array('PACKAGE' => Translation::get('TypeName', null, $this->get_package()->get_context())),
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('trash', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('trash-alt', array('fa-lg'), null, 'fas');
 
         if (!$remover->run())
         {

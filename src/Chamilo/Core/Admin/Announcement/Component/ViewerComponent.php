@@ -75,7 +75,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_EDIT,
@@ -107,7 +107,7 @@ class ViewerComponent extends Manager implements NoContextComponent
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('clock-o');
+                    $glyph = new FontAwesomeGlyph('clock');
                 }
 
                 $commonActions->addButton(

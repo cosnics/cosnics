@@ -32,7 +32,7 @@ class BrowserComponent extends Manager
         {
             $tool_actions[] = new Button(
                 Translation::get('ScoresOverview'),
-                new FontAwesomeGlyph('bar-chart'),
+                new FontAwesomeGlyph('chart-bar'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING,
@@ -109,7 +109,7 @@ class BrowserComponent extends Manager
         if($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $html[] = '<div class="alert alert-info" style="display: flex">';
-            $html[]= '<div class="fa fa-info" style="font-size: 20px;"></div>';
+            $html[]= '<div class="fas fa-info" style="font-size: 20px;"></div>';
             $html[]= '<div style="margin-left: 10px;">';
             $html[] = $this->getTranslator()->trans('AssignmentChangesWarning', [], Manager::context());
             $html[] = '</div>';

@@ -291,9 +291,9 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 }
 
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                     '" class="option-action option-feedback fas fa-comment text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
+                     '" class="option-action option-remove fas fa-trash-alt ' . $removeClass . '"></span>';
 
                 $this->addElement('html', implode('<br />' . PHP_EOL, $actionButtons));
 

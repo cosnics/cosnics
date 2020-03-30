@@ -101,9 +101,9 @@ $(function()
         fieldScore += '</div>';
         
         fieldActions = '<span data-option-id="' + numberOfOptions
-                + '" class="option-action option-feedback fa fa-comment text-primary"></span>&nbsp;&nbsp;';
+                + '" class="option-action option-feedback fas fa-comment text-primary"></span>&nbsp;&nbsp;';
         fieldActions += '<span data-option-id="' + numberOfOptions
-                + '" class="option-action option-remove fa fa-trash text-danger"></span>';
+                + '" class="option-action option-remove fas fa-trash-alt text-danger"></span>';
         
         tableRow = '<tr data-option-id="' + numberOfOptions + '">';
         tableRow += '<td class="table-cell-selection cell-stat-x3">' + fieldSelection + '</td>';

@@ -353,7 +353,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
                     )
                 );
@@ -435,12 +435,12 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $html[] = '<div class="forum-post-panel">';
         $html[] = '<small>';
 
-        $html[] = $this->renderPostDate('clock-o', 'text-muted', $forumTopicPost->get_creation_date());
+        $html[] = $this->renderPostDate('clock', 'text-muted', $forumTopicPost->get_creation_date());
 
         if ($forumTopicPost->get_modification_date() != $forumTopicPost->get_creation_date())
         {
             $html[] = '&nbsp;';
-            $html[] = $this->renderPostDate('pencil', 'text-danger', $forumTopicPost->get_modification_date());
+            $html[] = $this->renderPostDate('pencil-alt', 'text-danger', $forumTopicPost->get_modification_date());
         }
 
         $html[] = '</small>';

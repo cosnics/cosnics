@@ -86,7 +86,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Reporting'), new FontAwesomeGlyph('pie-chart'), $reportingUrl,
+                Translation::get('Reporting'), new FontAwesomeGlyph('chart-pie'), $reportingUrl,
                 ToolbarItem::DISPLAY_ICON
             )
         );

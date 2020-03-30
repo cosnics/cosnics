@@ -45,7 +45,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $questions = $this->get_questions();
 
         $count = 0;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         // while ($question = $questions->next_result())
         foreach ($questions as $question)

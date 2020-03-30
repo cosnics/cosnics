@@ -31,8 +31,9 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('DownloadFile', array('LABEL' => $label)), new FontAwesomeGlyph('arrow-circle-o-down'),
-                $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, false, $classes, '_blank'
+                Translation::get('DownloadFile', array('LABEL' => $label)),
+                new FontAwesomeGlyph('arrow-alt-circle-down'), $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL,
+                false, $classes, '_blank'
             )
         );
 
@@ -119,8 +120,8 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
-                    "icon"    => $object->getGlyph(Theme::ICON_BIG)->render(),
-                    "title"        => $object->get_title(),
+                    "icon" => $object->getGlyph(Theme::ICON_BIG)->render(),
+                    "title" => $object->get_title(),
                     "download_url" => $this->getDownloadUrl()
                 ]
             );

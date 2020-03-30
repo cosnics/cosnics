@@ -99,7 +99,7 @@ class Login extends BlockRenderer
 
         $buttons = array();
         $buttons[] = $form->createElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('log-in')
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('sign-in-alt')
         );
 
         if (Configuration::getInstance()->get_setting(

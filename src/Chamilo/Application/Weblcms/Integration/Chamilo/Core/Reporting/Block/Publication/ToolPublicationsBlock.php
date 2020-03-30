@@ -71,7 +71,7 @@ class ToolPublicationsBlock extends ToolBlock
             ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
         );
 
-        $glyph = new FontAwesomeGlyph('pie-chart', array(), Translation::get('Details'));
+        $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('Details'));
 
         $index = 1;
         while ($content_object_publication = $content_object_publications->next_result())

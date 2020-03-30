@@ -64,7 +64,7 @@
                             {% else %}
                             <td>{{ 'LocalHitNotFoundOnServer'|trans({}, appContext) }}</td>
                             {% endif %}
-                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.RESULT_OBJECT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.RESULT_OBJECT.getId() }}"><span class="fas fa-bars"></span></a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -87,7 +87,7 @@
                         <tr>
                             <td>{{ ephorusReport.colorPercentage(RESULT.get_percentage()) }}</td>
                             <td>{{ RESULT.get_original_guid() }}</a></td>
-                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fas fa-bars"></span></a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -110,7 +110,7 @@
                         <tr>
                             <td>{{ ephorusReport.colorPercentage(RESULT.get_percentage()) }}</td>
                             <td><a href="{{ RESULT.get_url() }}">{{ RESULT.get_url() }}</a></td>
-                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fa fa-bars"></span></a></td>
+                            <td class="text-center"><a class="btn btn-default" href="#result{{ RESULT.getId() }}"><span class="fas fa-bars"></span></a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -132,7 +132,7 @@
                             {{ 'LocalReport'|trans({'{LOCAL_GUID}': RESULT.RESULT_OBJECT.get_original_guid(), '{SOURCE}': RESULT.RESULT_OBJECT.get_student_name()}, appContext) }}
                         {% endif %}
                     </h3>
-                    <span class="pull-right"><a class="btn btn-xs btn-default" href="#results"><span class="fa fa-chevron-up"></span></a></span>
+                    <span class="pull-right"><a class="btn btn-xs btn-default" href="#results"><span class="fas fa-chevron-up"></span></a></span>
                     <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">

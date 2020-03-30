@@ -74,7 +74,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON
             )
@@ -82,7 +82,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('files-o'),
+                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('copy'),
                 $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON, true
             )

@@ -204,7 +204,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $splitDropdownButton->addSubButton(
             new SubButton(
                 Translation::get('AvailabilityComponent'),
-                new FontAwesomeGlyph('check-circle-o'),
+                new FontAwesomeGlyph('check-circle'),
                 $availabilityUrl->getUrl()));
 
         $buttonGroup->addButton($splitDropdownButton);

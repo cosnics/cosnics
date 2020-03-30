@@ -95,7 +95,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canEditContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_repository_browser()->get_content_object_editing_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );
@@ -104,7 +104,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canCopyContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Duplicate'), new FontAwesomeGlyph('files-o'),
+                Translation::get('Duplicate'), new FontAwesomeGlyph('copy'),
                 $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
                 ToolbarItem::DISPLAY_ICON
             );
@@ -115,7 +115,7 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
             {
                 $actions[] = new ToolbarItem(
-                    Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('trash'), $url,
+                    Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('trash-alt'), $url,
                     ToolbarItem::DISPLAY_ICON, true
                 );
             }
@@ -123,7 +123,7 @@ abstract class ContentObjectRenderer implements TableSupport
             {
                 $actions[] = new ToolbarItem(
                     Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('trash', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('trash-alt', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 );
             }
         }
@@ -184,7 +184,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canUseContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('share-square-o'),
+                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('share-square'),
                 $this->get_repository_browser()->get_publish_content_object_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );

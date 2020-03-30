@@ -57,7 +57,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $component->get_complex_content_object_item_update_url($glossary_item), ToolbarItem::DISPLAY_ICON
                 )
             );

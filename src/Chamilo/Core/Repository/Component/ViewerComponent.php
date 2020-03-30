@@ -304,7 +304,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Remove', array(), Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('trash'), $recycle_url, Button::DISPLAY_ICON_AND_LABEL
+                            new FontAwesomeGlyph('trash-alt'), $recycle_url, Button::DISPLAY_ICON_AND_LABEL
                         )
                     );
                 }
@@ -365,7 +365,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('Edit', array(), Utilities::COMMON_LIBRARIES),
-                                new FontAwesomeGlyph('pencil'), $edit_url, Button::DISPLAY_ICON_AND_LABEL
+                                new FontAwesomeGlyph('pencil-alt'), $edit_url, Button::DISPLAY_ICON_AND_LABEL
                             )
                         );
                     }
@@ -435,7 +435,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $baseActions->addButton(
                     new Button(
                         $translator->trans('Duplicate', array(), Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('files-o'), $this->get_copy_content_object_url($contentObject->getId())
+                        new FontAwesomeGlyph('copy'), $this->get_copy_content_object_url($contentObject->getId())
                     )
                 );
             }
@@ -446,7 +446,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $publishActions->addButton(
                     new Button(
                         $translator->trans('Publish', array(), Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('share-square-o'), $this->get_publish_content_object_url($contentObject)
+                        new FontAwesomeGlyph('share-square'), $this->get_publish_content_object_url($contentObject)
                     )
                 );
             }

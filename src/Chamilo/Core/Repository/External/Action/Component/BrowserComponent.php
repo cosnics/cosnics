@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $glyph = new FontAwesomeGlyph('table');
                         break;
                     case ContentObjectRenderer::TYPE_GALLERY:
-                        $glyph = new FontAwesomeGlyph('picture-o');
+                        $glyph = new FontAwesomeGlyph('image');
                         break;
                     case ContentObjectRenderer::TYPE_SLIDESHOW:
                         $glyph = new FontAwesomeGlyph('play-circle');

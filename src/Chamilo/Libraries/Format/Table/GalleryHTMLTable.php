@@ -59,22 +59,95 @@ class GalleryHTMLTable extends HtmlTable
      * @param string $allowPageSelection
      * @param string $allowPageNavigation
      */
-    public function __construct($tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
+    public function __construct(
+        $tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
         $sourcePropertiesFunction = null, $defaultOrderColumn = 1, $defaultNumberOfItemsPerPage = 20,
-        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageSelection = true, $allowPageNavigation = true)
+        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageSelection = true,
+        $allowPageNavigation = true
+    )
     {
         parent::__construct(
-            $tableName,
-            $sourceCountFunction,
-            $sourceDataFunction,
-            $defaultOrderColumn,
-            $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection,
-            $allowPageSelection,
-            $allowPageNavigation);
+            $tableName, $sourceCountFunction, $sourceDataFunction, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
+            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
+        );
 
         $this->allowOrderDirection = $allowOrderDirection;
         $this->sourcePropertiesFunction = $sourcePropertiesFunction;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::filterData()
+     */
+    public function filterData($row)
+    {
+        foreach ($row as $index => $value)
+        {
+            if (strlen($value[0]) == 0)
+            {
+                $row[$index] = '';
+            }
+            else
+            {
+                $row[$index] = $value[1];
+                $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
+                    $this->getTableFormActions()->has_form_actions();
+
+                if ($hasActions)
+                {
+                    $row[$index] = str_replace(
+                        '__CHECKBOX_PLACEHOLDER__', $this->getCheckboxHtml($value[0]), $row[$index]
+                    );
+                }
+            }
+        }
+
+        return $row;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getActionsButtonToolbar()
+     */
+    public function getActionsButtonToolbar()
+    {
+        $buttonToolBar = parent::getActionsButtonToolbar();
+
+        $buttonToolBar->prependItem(
+            new Button(
+                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('check-square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                'btn-sm select-all'
+            )
+        );
+
+        $buttonToolBar->prependItem(
+            new Button(
+                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
+                new FontAwesomeGlyph('square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                'btn-sm select-none'
+            )
+        );
+
+        return $buttonToolBar;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
+     */
+    public function getColumnCount()
+    {
+        return self::DEFAULT_COLUMN_COUNT;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getFormClasses()
+     */
+    public function getFormClasses()
+    {
+        return 'form-gallery-table';
     }
 
     /**
@@ -83,7 +156,7 @@ class GalleryHTMLTable extends HtmlTable
      */
     public function getSourceProperties()
     {
-        if (! is_null($this->getSourcePropertiesFunction()))
+        if (!is_null($this->getSourcePropertiesFunction()))
         {
             if (is_null($this->sourceProperties))
             {
@@ -107,6 +180,17 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableActionsJavascript()
+     */
+    public function getTableActionsJavascript()
+    {
+        return ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'GalleryTable.js'
+        );
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
      */
     public function getTableClasses()
@@ -116,34 +200,70 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableContainerClasses()
      */
-    public function getColumnCount()
+    public function getTableContainerClasses()
     {
-        return self::DEFAULT_COLUMN_COUNT;
+        return 'table-gallery-container';
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getFormClasses()
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processContentAttributes()
      */
-    public function getFormClasses()
+    public function processContentAttributes()
     {
-        return 'form-gallery-table';
+        $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
+        $this->setAllAttributes(array('class' => 'col-xs-6 col-lg-3'));
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::renderTableFilters()
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processRowAttributes()
      */
-    public function renderTableFilters()
+    public function processRowAttributes($rowIdentifier, $currentRow)
     {
-        $html = array();
+    }
 
-        $html[] = parent::renderTableFilters();
-        $html[] = $this->renderPropertySorting();
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     */
+    public function renderPropertyDirectionSubButtons()
+    {
+        $propertyModel = $this->getSourceProperties();
+        $currentOrderDirections = $this->getOrderDirection();
+        $currentFirstOrderDirection = $currentOrderDirections[0];
+        $subButtons = array();
 
-        return implode(PHP_EOL, $html);
+        if ($this->allowOrderDirection && $propertyModel instanceof GalleryTablePropertyModel &&
+            count($propertyModel->get_properties()) > 0)
+        {
+            $queryParameters = array();
+            $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
+            $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = $this->getOrderColumn();
+            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
+
+            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = array(SORT_ASC);
+            $propertyUrl = new Redirect($queryParameters);
+            $isSelected = $currentFirstOrderDirection == SORT_ASC;
+
+            $subButtons[] = new SubButton(
+                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null,
+                $isSelected
+            );
+
+            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = SORT_DESC;
+            $propertyUrl = new Redirect($queryParameters);
+            $isSelected = $currentFirstOrderDirection == SORT_DESC;
+
+            $subButtons[] = new SubButton(
+                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null,
+                $isSelected
+            );
+        }
+
+        return $subButtons;
     }
 
     /**
@@ -168,7 +288,7 @@ class GalleryHTMLTable extends HtmlTable
             $currentFirstOrderDirection = $currentOrderDirections[0];
 
             $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-                 $this->getTableFormActions()->has_form_actions();
+                $this->getTableFormActions()->has_form_actions();
 
             $propertyIndex = $currentFirstOrderColumn - ($hasFormActions ? 1 : 0);
 
@@ -180,7 +300,8 @@ class GalleryHTMLTable extends HtmlTable
             $dropDownButton->setDropdownClasses('dropdown-menu-right');
 
             $orderPropertyName = Translation::get(
-                (string) StringUtilities::getInstance()->createString($orderProperty->get_name())->upperCamelize());
+                (string) StringUtilities::getInstance()->createString($orderProperty->get_name())->upperCamelize()
+            );
 
             if ($this->allowOrderDirection)
             {
@@ -193,12 +314,15 @@ class GalleryHTMLTable extends HtmlTable
                 $dropDownButton->setLabel(
                     Translation::get(
                         'GalleryTableOrderPropertyWithDirection',
-                        array('PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection)));
+                        array('PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection)
+                    )
+                );
             }
             else
             {
                 $dropDownButton->setLabel(
-                    Translation::get('GalleryTableOrderProperty', array('PROPERTY' => $orderPropertyName)));
+                    Translation::get('GalleryTableOrderProperty', array('PROPERTY' => $orderPropertyName))
+                );
             }
 
             $buttonToolBar->addItem($dropDownButton);
@@ -221,7 +345,7 @@ class GalleryHTMLTable extends HtmlTable
     {
         $propertyModel = $this->getSourceProperties();
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-             $this->getTableFormActions()->has_form_actions();
+            $this->getTableFormActions()->has_form_actions();
         $currentOrderColumns = $this->getOrderColumn();
         $currentFirstOrderColumn = $currentOrderColumns[0];
         $subButtons = array();
@@ -243,16 +367,13 @@ class GalleryHTMLTable extends HtmlTable
                 $propertyUrl = new Redirect($queryParameters);
 
                 $label = Translation::get(
-                    (string) StringUtilities::getInstance()->createString($property->get_name())->upperCamelize());
+                    (string) StringUtilities::getInstance()->createString($property->get_name())->upperCamelize()
+                );
                 $isSelected = $currentFirstOrderColumn == $propertyIndex;
 
                 $subButtons[] = new SubButton(
-                    $label,
-                    null,
-                    $propertyUrl->getUrl(),
-                    SubButton::DISPLAY_LABEL,
-                    false,
-                    array(), null, $isSelected);
+                    $label, null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null, $isSelected
+                );
             }
         }
 
@@ -261,145 +382,15 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::renderTableFilters()
      */
-    public function renderPropertyDirectionSubButtons()
+    public function renderTableFilters()
     {
-        $propertyModel = $this->getSourceProperties();
-        $currentOrderDirections = $this->getOrderDirection();
-        $currentFirstOrderDirection = $currentOrderDirections[0];
-        $subButtons = array();
+        $html = array();
 
-        if ($this->allowOrderDirection && $propertyModel instanceof GalleryTablePropertyModel &&
-             count($propertyModel->get_properties()) > 0)
-        {
-            $queryParameters = array();
-            $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = $this->getOrderColumn();
-            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
+        $html[] = parent::renderTableFilters();
+        $html[] = $this->renderPropertySorting();
 
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = array(SORT_ASC);
-            $propertyUrl = new Redirect($queryParameters);
-            $isSelected = $currentFirstOrderDirection == SORT_ASC;
-
-            $subButtons[] = new SubButton(
-                Translation::get('ASC'),
-                null,
-                $propertyUrl->getUrl(),
-                SubButton::DISPLAY_LABEL,
-                false,
-                array(), null, $isSelected);
-
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = SORT_DESC;
-            $propertyUrl = new Redirect($queryParameters);
-            $isSelected = $currentFirstOrderDirection == SORT_DESC;
-
-            $subButtons[] = new SubButton(
-                Translation::get('DESC'),
-                null,
-                $propertyUrl->getUrl(),
-                SubButton::DISPLAY_LABEL,
-                false,
-                array(), null, $isSelected);
-        }
-
-        return $subButtons;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getActionsButtonToolbar()
-     */
-    public function getActionsButtonToolbar()
-    {
-        $buttonToolBar = parent::getActionsButtonToolbar();
-
-        $buttonToolBar->prependItem(
-            new Button(
-                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('check-square-o'),
-                '#',
-                Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-sm select-all'));
-
-        $buttonToolBar->prependItem(
-            new Button(
-                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('square-o'),
-                '#',
-                Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-sm select-none'));
-
-        return $buttonToolBar;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableActionsJavascript()
-     */
-    public function getTableActionsJavascript()
-    {
-        return ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'GalleryTable.js');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableContainerClasses()
-     */
-    public function getTableContainerClasses()
-    {
-        return 'table-gallery-container';
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processRowAttributes()
-     */
-    public function processRowAttributes($rowIdentifier, $currentRow)
-    {
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processContentAttributes()
-     */
-    public function processContentAttributes()
-    {
-        $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
-        $this->setAllAttributes(array('class' => 'col-xs-6 col-lg-3'));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::filterData()
-     */
-    public function filterData($row)
-    {
-        foreach ($row as $index => $value)
-        {
-            if (strlen($value[0]) == 0)
-            {
-                $row[$index] = '';
-            }
-            else
-            {
-                $row[$index] = $value[1];
-                $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
-                     $this->getTableFormActions()->has_form_actions();
-
-                if ($hasActions)
-                {
-                    $row[$index] = str_replace(
-                        '__CHECKBOX_PLACEHOLDER__',
-                        $this->getCheckboxHtml($value[0]),
-                        $row[$index]);
-                }
-            }
-        }
-
-        return $row;
+        return implode(PHP_EOL, $html);
     }
 }

@@ -99,7 +99,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit'), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit'), new FontAwesomeGlyph('pencil-alt'),
                     $component->get_complex_content_object_item_update_url($complex_content_object_item),
                     ToolbarItem::DISPLAY_ICON
                 )

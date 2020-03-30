@@ -20,7 +20,7 @@ class BrowserComponent extends Manager
 
             $tool_actions[] = new Button(
                 Translation::get('Reporting'),
-                new FontAwesomeGlyph('bar-chart'),
+                new FontAwesomeGlyph('chart-bar'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'reporting',

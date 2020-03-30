@@ -58,7 +58,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->getTranslation('Edit', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pencil'),
+                    new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->getUpdateOpenCourseUrl($course[Course::PROPERTY_ID]),
                     ToolbarItem::DISPLAY_ICON
                 )

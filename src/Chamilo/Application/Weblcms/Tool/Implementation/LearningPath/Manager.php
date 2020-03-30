@@ -78,7 +78,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'), $this->get_url(
+                        Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'), $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -106,7 +106,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('StatisticsNA'), new FontAwesomeGlyph('bar-chart', array('text-muted')), null,
+                        Translation::get('StatisticsNA'), new FontAwesomeGlyph('chart-bar', array('text-muted')), null,
                         ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -132,7 +132,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $dropdownButton->prependSubButton(
                     new SubButton(
-                        Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'), $this->get_url(
+                        Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'), $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],

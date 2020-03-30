@@ -57,7 +57,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation:: get('SubscribeUsersFromGroup'), new FontAwesomeGlyph('files-o'),
+                        Translation:: get('SubscribeUsersFromGroup'), new FontAwesomeGlyph('copy'),
                         $this->get_component()->get_url($parameters), ToolbarItem::DISPLAY_ICON
                     )
                 );

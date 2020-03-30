@@ -65,7 +65,7 @@ class SidebarHomeRenderer extends HomeRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->getHomeTool()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_UPDATE_CONTENT_OBJECT,

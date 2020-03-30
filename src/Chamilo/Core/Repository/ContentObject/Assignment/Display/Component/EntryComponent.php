@@ -225,7 +225,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                                             Translation::get(
                                                 'CorrectCurrentEntry'
                                             ),
-                                            new FontAwesomeGlyph('pencil-square-o'),
+                                            new FontAwesomeGlyph('edit'),
                                             $this->get_url(
                                                 [
                                                     self::PARAM_ACTION => self::ACTION_ENTRY_CODE_PAGE_CORRECTOR,

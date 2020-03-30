@@ -69,7 +69,7 @@ class AttemptBrowserComponent extends Manager
         // TODO date locale doesn't work
         $html = array();
 
-        $glyph = new FontAwesomeGlyph('clock-o');
+        $glyph = new FontAwesomeGlyph('clock');
         $level = 0;
 
         // loop through all the attempts and render them
@@ -104,7 +104,7 @@ class AttemptBrowserComponent extends Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit'), new FontAwesomeGlyph('pencil'), $this->get_url(
+                Translation::get('Edit'), new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                 array(self::PARAM_ACTION => self::ACTION_EDIT_ATTEMPT, self::PARAM_ATTEMPT => $attempt->get_id())
             ), ToolbarItem::DISPLAY_ICON
             )

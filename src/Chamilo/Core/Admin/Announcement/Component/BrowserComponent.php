@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('share-square-o'),
+                        new FontAwesomeGlyph('share-square'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )

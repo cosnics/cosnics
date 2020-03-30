@@ -23,7 +23,7 @@ class ActionTest extends ChamiloTestCase
     protected function setUp()
     {
         $this->action = new Action(
-            'delete', 'Remove', 'https://cosnics.github.io/', 'fa fa-remove', 'Are you sure you want to remove this?'
+            'delete', 'Remove', 'https://cosnics.github.io/', 'fas fa-times', 'Are you sure you want to remove this?'
         );
     }
 
@@ -70,7 +70,7 @@ class ActionTest extends ChamiloTestCase
 
     public function testGetImage()
     {
-        $this->assertEquals('fa fa-remove', $this->action->getImage());
+        $this->assertEquals('fas fa-times', $this->action->getImage());
     }
 
     public function testSetImage()
@@ -107,7 +107,7 @@ class ActionTest extends ChamiloTestCase
             'name' => 'delete',
             'title' => 'Remove',
             'url' => 'https://cosnics.github.io/',
-            'image' => 'fa fa-remove',
+            'image' => 'fas fa-times',
             'confirm' => true,
             'confirmation_message' => 'Are you sure you want to remove this?'
         ];

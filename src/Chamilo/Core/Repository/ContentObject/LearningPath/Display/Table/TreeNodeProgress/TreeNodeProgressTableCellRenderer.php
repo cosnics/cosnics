@@ -99,7 +99,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Reporting'), new FontAwesomeGlyph('bar-chart'), $this->getReportingUrl($record),
+                Translation::get('Reporting'), new FontAwesomeGlyph('chart-bar'), $this->getReportingUrl($record),
                 ToolbarItem::DISPLAY_ICON
             )
         );

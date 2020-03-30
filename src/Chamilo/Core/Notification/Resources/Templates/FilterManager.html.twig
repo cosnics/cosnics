@@ -23,7 +23,7 @@
             <input @click.stop type="checkbox" :value="data.item.id" v-model="data.item.selected" @change="selectSingleItem(data.item)">
         </template>
     </b-table>
-    <button type="button" class="btn btn-default"><span class="fa fa-trash"></span> {{ 'RemoveSelectedFilters'|trans({}, appContext) }}</button>
+    <button type="button" class="btn btn-default"><span class="fas fa-trash-alt"></span> {{ 'RemoveSelectedFilters'|trans({}, appContext) }}</button>
 </div>
 
 <style>

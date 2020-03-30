@@ -443,7 +443,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
     // $toolbar->prependItem(
     // new Button(
     // $translator->getTranslation('ReturnToUserList'),
-    // new FontAwesomeGlyph('bar-chart'),
+    // new FontAwesomeGlyph('chart-bar'),
     // $this->get_url(
     // array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
     // array(self::PARAM_REPORTING_USER_ID)

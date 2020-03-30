@@ -114,7 +114,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
         $count = 0;
 
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =

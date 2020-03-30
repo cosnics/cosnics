@@ -167,13 +167,13 @@ $(function()
         fieldScore += '</div>';
         
         fieldActions = '<span title="' + feedbackLabel + '" data-option-id="' + numberOfOptions
-                + '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                + '" class="option-action option-feedback fas fa-comment text-primary"></span>';
         fieldActions += '<br>';
         fieldActions += '<span title="' + scoreLabel + '" data-option-id="' + numberOfOptions
-                + '" class="option-action option-score fa fa-percent text-primary"></span>';
+                + '" class="option-action option-score fas fa-percent text-primary"></span>';
         fieldActions += '<br>';
         fieldActions += '<span title="' + deleteLabel + '" data-option-id="' + numberOfOptions
-                + '" class="option-action option-remove fa fa-trash text-danger"></span>';
+                + '" class="option-action option-remove fas fa-trash-alt text-danger"></span>';
         
         tableRow = '<tr data-option-id="' + numberOfOptions + '">';
         tableRow += '<td class="table-cell-selection cell-stat-x2">' + fieldSelection + '</td>';

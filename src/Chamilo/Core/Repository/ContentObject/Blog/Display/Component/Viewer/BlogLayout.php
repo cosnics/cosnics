@@ -154,7 +154,7 @@ abstract class BlogLayout
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_parent()->get_complex_content_object_item_update_url($complexBlogItem),
                     ToolbarItem::DISPLAY_ICON, false, 'btn-link'
                 )

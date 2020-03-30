@@ -228,7 +228,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                $translator->trans('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
@@ -261,7 +261,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('Truncate'), new FontAwesomeGlyph('trash'),
+                    $translator->trans('Truncate'), new FontAwesomeGlyph('trash-alt'),
                     $this->get_group_emptying_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -270,7 +270,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash', array('text-muted')), null,
+                    $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash-alt', array('text-muted')), null,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

@@ -264,7 +264,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('Remove', array(), Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('trash', array(), null, 'fas'), $this->get_url(
+                        new FontAwesomeGlyph('trash-alt', array(), null, 'fas'), $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_REMOVE,
                             Manager::PARAM_CONTEXT => $registration->get_context()

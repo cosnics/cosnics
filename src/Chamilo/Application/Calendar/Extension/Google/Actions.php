@@ -35,14 +35,14 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
     public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
-            Translation::get('TypeName', null, __NAMESPACE__),
-            new FontAwesomeGlyph('google'));
+            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', array(), null, 'fab')
+        );
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager::context();
         $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
 
-        if (! $accessToken)
+        if (!$accessToken)
         {
             $parameters = array();
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
@@ -52,7 +52,8 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
             $link = $redirect->getUrl();
 
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogin'), new FontAwesomeGlyph('sign-in'), $link));
+                new SubButton(Translation::get('GoogleCalendarLogin'), new FontAwesomeGlyph('sign-in-alt'), $link)
+            );
         }
         else
         {
@@ -64,7 +65,8 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
             $link = $redirect->getUrl();
 
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogout'), new FontAwesomeGlyph('sign-out'), $link));
+                new SubButton(Translation::get('GoogleCalendarLogout'), new FontAwesomeGlyph('sign-out-alt'), $link)
+            );
         }
 
         return array($dropdownButton);

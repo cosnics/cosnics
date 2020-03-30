@@ -167,7 +167,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     $toolActions->addButton(
                         new Button(
                             Translation::get('PeerAssessmentComplexDisplayStatusViewerComponent'),
-                            new FontAwesomeGlyph('pie-chart'),
+                            new FontAwesomeGlyph('chart-pie'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_STATUS))
                         )
                     );
@@ -186,7 +186,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolActions->addButton(
                     new Button(
                         Translation::get('PeerAssessmentComplexDisplayResultsViewerComponent'),
-                        new FontAwesomeGlyph('line-chart'),
+                        new FontAwesomeGlyph('chart-line'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_RESULTS))
                     )
                 );

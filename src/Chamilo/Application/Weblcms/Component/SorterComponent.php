@@ -483,7 +483,7 @@ class SorterComponent extends Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_course_user_category_edit_url($course_type_user_category), ToolbarItem::DISPLAY_ICON
             )
         );

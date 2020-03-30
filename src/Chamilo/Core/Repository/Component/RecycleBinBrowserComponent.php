@@ -113,7 +113,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('EmptyRecycleBin'), new FontAwesomeGlyph('trash'),
+                    Translation::get('EmptyRecycleBin'), new FontAwesomeGlyph('trash-alt'),
                     $this->get_url(array(self::PARAM_EMPTY_RECYCLE_BIN => 1)), ToolbarItem::DISPLAY_ICON_AND_LABEL,
                     Translation::get('ConfirmEmptyRecycleBin')
                 )

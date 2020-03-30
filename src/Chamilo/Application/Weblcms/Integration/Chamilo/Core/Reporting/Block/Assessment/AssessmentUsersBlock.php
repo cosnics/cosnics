@@ -37,7 +37,7 @@ class AssessmentUsersBlock extends AssessmentBlock
         $course_id = $this->getCourseId();
 
         $count = 1;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
             $pub_id, $course_id

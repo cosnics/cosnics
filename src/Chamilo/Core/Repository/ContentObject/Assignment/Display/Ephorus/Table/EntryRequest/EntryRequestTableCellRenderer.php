@@ -113,7 +113,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('ViewResult', null, self::EPHORUS_TRANSLATION_CONTEXT),
-                    new FontAwesomeGlyph('pie-chart'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('chart-pie'), $this->get_component()->get_url(
                     array(
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::ACTION_VIEW_RESULT,
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager::PARAM_ENTRY_ID => $object->getId(

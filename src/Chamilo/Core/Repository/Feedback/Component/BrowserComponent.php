@@ -305,7 +305,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             )
         );
 
-        $bootstrapGlyph = new FontAwesomeGlyph('pencil');
+        $bootstrapGlyph = new FontAwesomeGlyph('pencil-alt');
         $title = Translation::get('Edit', null, Utilities::COMMON_LIBRARIES);
         $update_link =
             '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() .

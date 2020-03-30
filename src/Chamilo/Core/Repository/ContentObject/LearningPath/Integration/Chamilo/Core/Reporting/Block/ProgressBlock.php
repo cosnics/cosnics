@@ -101,7 +101,7 @@ class ProgressBlock extends ReportingBlock
                     )
                 );
 
-                $glyph = new FontAwesomeGlyph('bar-chart', array(), Translation::get('Details'));
+                $glyph = new FontAwesomeGlyph('chart-bar', array(), Translation::get('Details'));
                 $actions[] = '<a href="' . $reporting_url . '">' . $glyph->render() . '</a>';
 
                 if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())

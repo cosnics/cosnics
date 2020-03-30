@@ -74,7 +74,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $edit_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $edit_url, ToolbarItem::DISPLAY_ICON
                 )
             );

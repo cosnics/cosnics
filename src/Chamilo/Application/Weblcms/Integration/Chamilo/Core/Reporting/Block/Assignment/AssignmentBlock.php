@@ -41,7 +41,7 @@ class AssignmentBlock extends AssignmentReportingManager
         $course_id = $this->getCourseId();
 
         $count = 1;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $publicationsById = [];
 

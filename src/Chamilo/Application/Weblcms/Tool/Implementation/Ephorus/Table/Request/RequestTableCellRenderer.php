@@ -34,7 +34,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ViewResult'), new FontAwesomeGlyph('pie-chart'), $this->get_component()->get_url(
+                Translation::get('ViewResult'), new FontAwesomeGlyph('chart-pie'), $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_VIEW_RESULT,
                     Manager::PARAM_REQUEST_IDS => $object->get_id()

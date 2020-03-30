@@ -140,7 +140,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewResults'), new FontAwesomeGlyph('line-chart'),
+                    Translation::get('ViewResults'), new FontAwesomeGlyph('chart-line'),
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_ATTEMPT_RESULT_VIEWER,
@@ -155,7 +155,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewResultsNA'), new FontAwesomeGlyph('line-chart', array('text-muted')), null,
+                    Translation::get('ViewResultsNA'), new FontAwesomeGlyph('chart-line', array('text-muted')), null,
                     ToolbarItem::DISPLAY_ICON
                 )
             );

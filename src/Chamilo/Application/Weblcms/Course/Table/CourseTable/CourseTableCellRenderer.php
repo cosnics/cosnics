@@ -94,7 +94,7 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('pencil'),
+                new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_update_course_url($course[Course::PROPERTY_ID]),
                 ToolbarItem::DISPLAY_ICON));
 

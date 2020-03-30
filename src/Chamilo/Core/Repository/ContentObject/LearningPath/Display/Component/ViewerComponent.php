@@ -48,7 +48,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $translator->getTranslation('ActivityComponent', null, Manager::context()),
             new FontAwesomeGlyph('mouse-pointer'), $this->get_url(
             array(
-                self::PARAM_ACTION   => self::ACTION_ACTIVITY,
+                self::PARAM_ACTION => self::ACTION_ACTIVITY,
                 self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
             )
         )
@@ -86,7 +86,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $translator->getTranslation($translationVariable, null, Manager::context()),
                 new FontAwesomeGlyph($icon), $this->get_url(
                 array(
-                    self::PARAM_ACTION   => self::ACTION_TOGGLE_BLOCKED_STATUS,
+                    self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
                     self::PARAM_CHILD_ID => $treeNode->getId()
                 )
             ), Button::DISPLAY_ICON_AND_LABEL
@@ -108,7 +108,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $translator->getTranslation($translationVariable, null, Manager::context()),
                 new FontAwesomeGlyph($icon), $this->get_url(
                 array(
-                    self::PARAM_ACTION   => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
+                    self::PARAM_ACTION => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
                     self::PARAM_CHILD_ID => $treeNode->getId()
                 )
             ), Button::DISPLAY_ICON_AND_LABEL
@@ -188,7 +188,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                     $translator->getTranslation('DeleterComponent', null, Manager::context()),
                     new FontAwesomeGlyph('times'), $this->get_url(
                     array(
-                        self::PARAM_ACTION   => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
+                        self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                         self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                     )
                 ), SubButton::DISPLAY_ICON_AND_LABEL, true
@@ -219,7 +219,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                         $translator->getTranslation('ManagerComponent', null, Manager::context()),
                         new FontAwesomeGlyph('bars'), $this->get_url(
                         array(
-                            self::PARAM_ACTION   => self::ACTION_MANAGE,
+                            self::PARAM_ACTION => self::ACTION_MANAGE,
                             self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                         )
                     )
@@ -240,10 +240,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
         if ($this->canEditCurrentTreeNode())
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
-            $editImage = new FontAwesomeGlyph('pencil');
+            $editImage = new FontAwesomeGlyph('pencil-alt');
             $editURL = $this->get_url(
                 array(
-                    self::PARAM_ACTION   => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                     self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
             );
@@ -318,12 +318,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $url = $this->get_url(
             array(
-                self::PARAM_ACTION   => self::ACTION_REPORTING,
+                self::PARAM_ACTION => self::ACTION_REPORTING,
                 self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
             )
         );
 
-        $icon = new FontAwesomeGlyph('pie-chart');
+        $icon = new FontAwesomeGlyph('chart-pie');
 
         if (!$this->canEditCurrentTreeNode())
         {
@@ -332,10 +332,10 @@ class ViewerComponent extends BaseHtmlTreeComponent
         else
         {
             $splitDropDownButton = new SplitDropdownButton(
-                $translator->getTranslation('Reporting', null, Manager::context()), new FontAwesomeGlyph('bar-chart'),
+                $translator->getTranslation('Reporting', null, Manager::context()), new FontAwesomeGlyph('chart-bar'),
                 $this->get_url(
                     array(
-                        self::PARAM_ACTION   => self::ACTION_VIEW_USER_PROGRESS,
+                        self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
                         self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                     )
                 )
@@ -361,7 +361,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $translator->getTranslation('ShowStudentView', null, Manager::context()), new FontAwesomeGlyph('user'),
             $this->get_url(
                 array(
-                    self::PARAM_ACTION   => self::ACTION_SHOW_STUDENT_VIEW,
+                    self::PARAM_ACTION => self::ACTION_SHOW_STUDENT_VIEW,
                     self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
             )
@@ -511,8 +511,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $form = new DirectMoverForm(
             $this->get_url(
                 array(
-                    self::PARAM_ACTION            => self::ACTION_MOVE_DIRECTLY,
-                    self::PARAM_CHILD_ID          => $this->getCurrentTreeNodeDataId(),
+                    self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId(),
                     self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ), $this->getTree(), $this->getCurrentTreeNode(), $this->getAutomaticNumberingService()

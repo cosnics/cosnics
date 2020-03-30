@@ -35,7 +35,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
         );
 
         $userId = $this->get_user_id();;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $courseId = $this->get_parent()->get_parent()->get_parent()->get_parameter(
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE

@@ -349,11 +349,11 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
                 }
 
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                     '" class="option-action option-feedback fas fa-comment text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-score fa fa-percent text-primary"></span>';
+                     '" class="option-action option-score fas fa-percent text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
+                     '" class="option-action option-remove fas fa-trash-alt ' . $removeClass . '"></span>';
 
                 $this->addElement('html', implode('&nbsp;&nbsp;', $actionButtons));
 

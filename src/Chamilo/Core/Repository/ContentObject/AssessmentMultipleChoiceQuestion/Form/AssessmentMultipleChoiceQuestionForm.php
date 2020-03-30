@@ -325,12 +325,12 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 $translator = Translation::getInstance();
 
                 $actionButtons[] = '<span title="' . $translator->getTranslation('Feedback') . '" data-option-id="' .
-                     $option_number . '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                     $option_number . '" class="option-action option-feedback fas fa-comment text-primary"></span>';
                 $actionButtons[] = '<span title="' . $translator->getTranslation('Score') . '" data-option-id="' .
-                     $option_number . '" class="option-action option-score fa fa-percent text-primary"></span>';
+                     $option_number . '" class="option-action option-score fas fa-percent text-primary"></span>';
                 $actionButtons[] = '<span title="' .
                      $translator->getTranslation('Delete', null, Utilities::COMMON_LIBRARIES) . '" data-option-id="' .
-                     $option_number . '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
+                     $option_number . '" class="option-action option-remove fas fa-trash-alt ' . $removeClass . '"></span>';
 
                 $this->addElement('html', implode('<br />' . PHP_EOL, $actionButtons));
 

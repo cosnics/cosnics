@@ -28,7 +28,7 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
         if (!isset($glyph))
         {
-            $glyph = new FontAwesomeGlyph('trash');
+            $glyph = new FontAwesomeGlyph('trash-alt');
         }
 
         HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);

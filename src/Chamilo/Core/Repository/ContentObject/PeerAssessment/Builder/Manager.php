@@ -179,7 +179,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                     $toolActions->addButton(
                         new Button(
                             Translation::get('PeerAssessmentBuilderAttemptBrowserComponent'),
-                            new FontAwesomeGlyph('clock-o'),
+                            new FontAwesomeGlyph('clock'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS))
                         )
                     );

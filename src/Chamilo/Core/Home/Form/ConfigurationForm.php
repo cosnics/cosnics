@@ -88,7 +88,7 @@ abstract class ConfigurationForm extends FormValidator
         );
         $buttons[] = $this->createElement(
             'style_submit_button', 'cancel', Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES),
-            array('class' => 'btn-danger'), null, new FontAwesomeGlyph('remove')
+            array('class' => 'btn-danger'), null, new FontAwesomeGlyph('times')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

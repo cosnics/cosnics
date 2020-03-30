@@ -121,7 +121,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'name' => 'progress',
             'title' => 'MyProgress',
             'url' => 'http://bin/phpunit?parameter1=value1&learning_path_action=Reporting&child_id=2',
-            'image' => 'fa-pie-chart',
+            'image' => 'fa-chart-pie',
             'confirm' => false,
             'confirmation_message' => NULL,
         );
@@ -179,7 +179,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
 
     public function testNodeSpecificActions()
     {
-        $specificAction = new Action('test', 'Test Action', 'index.php?go=test', 'fa fa-user', 'Are you sure?');
+        $specificAction = new Action('test', 'Test Action', 'index.php?go=test', 'fas fa-user', 'Are you sure?');
 
         $this->contentObjectTypeNodeActionGeneratorMock->expects($this->once())
             ->method('generateNodeActions')
@@ -192,7 +192,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'name' => 'test',
             'title' => 'Test Action',
             'url' => 'index.php?go=test',
-            'image' => 'fa fa-user',
+            'image' => 'fas fa-user',
             'confirm' => true,
             'confirmation_message' => 'Are you sure?',
         );
@@ -230,7 +230,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
             'name' => 'reporting',
             'title' => 'Reporting',
             'url' => 'http://bin/phpunit?parameter1=value1&learning_path_action=UserProgress&child_id=2',
-            'image' => 'fa-bar-chart',
+            'image' => 'fa-chart-bar',
             'confirm' => false,
             'confirmation_message' => NULL,
         );

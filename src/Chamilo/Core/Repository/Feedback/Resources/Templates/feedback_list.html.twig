@@ -30,13 +30,13 @@
                 <div class="text-right" style="min-width: 40px;">
                     {% if feedbackItem.updateAllowed %}
                         <a title="{{ 'Edit'|trans([], commonContext) }}" href="{{ feedbackItem.updateUrl }}">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                         </a>
                     {% endif %}
                     {% if feedbackItem.deleteAllowed %}
                         <a title="{{ 'Delete'|trans([], commonContext) }}" href="{{ feedbackItem.deleteUrl }}"
                            onclick="return confirm('{{ 'Confirm'|trans([], commonContext) }}');">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fas fa-times" aria-hidden="true"></i>
                         </a>
                     {% endif %}
                     {% endif %}

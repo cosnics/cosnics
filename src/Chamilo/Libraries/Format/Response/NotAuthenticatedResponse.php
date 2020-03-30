@@ -101,7 +101,7 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement('html', '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('log-in')
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement('html', '</div>');
 

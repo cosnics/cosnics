@@ -31,6 +31,7 @@ class NodeActionGenerator
     {
         $actions = array();
         $actions[] = $this->getForumSubscribeAction($learningPathTreeNode);
+
         return $actions;
     }
 
@@ -49,15 +50,15 @@ class NodeActionGenerator
             $contentObject->getId(), Session::get_user_id()
         );
 
-        if (! $subscribed)
+        if (!$subscribed)
         {
-            $icon = 'fa-envelope';
+            $icon = 'fas fa-envelope';
             $titleVariable = 'Subscribe';
             $action = Manager::ACTION_SUBSCRIBE;
         }
         else
         {
-            $icon = 'fa-envelope-o';
+            $icon = 'far fa-envelope';
             $titleVariable = 'UnSubscribe';
             $action = Manager::ACTION_UNSUBSCRIBE;
         }
@@ -65,13 +66,11 @@ class NodeActionGenerator
         $title = $this->translator->getTranslation($titleVariable, null, Manager::context());
         $url = $this->getUrlForNode(
             array(
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
-                    $learningPathTreeNode->getContentObject()->getId(),
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $learningPathTreeNode->getContentObject(
+                )->getId(),
                 Manager::PARAM_ACTION => $action
-            ),
-            $learningPathTreeNode->getId()
+            ), $learningPathTreeNode->getId()
         );
 
         return new Action('forumSubscribe', $title, $url, $icon);

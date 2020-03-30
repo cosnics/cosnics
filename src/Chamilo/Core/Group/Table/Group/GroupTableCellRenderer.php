@@ -58,7 +58,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -81,7 +81,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Truncate'), new FontAwesomeGlyph('trash'),
+                    Translation::get('Truncate'), new FontAwesomeGlyph('trash-alt'),
                     $this->get_component()->get_group_emptying_url($group), ToolbarItem::DISPLAY_ICON, true
                 )
             );
@@ -91,7 +91,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('TruncateNA'), new FontAwesomeGlyph('trash', array('text-muted')), null,
+                    Translation::get('TruncateNA'), new FontAwesomeGlyph('trash-alt', array('text-muted')), null,
                     ToolbarItem::DISPLAY_ICON
                 )
             );

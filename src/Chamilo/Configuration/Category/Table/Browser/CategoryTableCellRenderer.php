@@ -105,7 +105,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_update_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -115,7 +115,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('EditNA', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pencil', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('pencil-alt', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }

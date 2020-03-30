@@ -293,7 +293,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square-o'), $this->get_url(
+                    new FontAwesomeGlyph('share-square'), $this->get_url(
                     array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
                 ), ToolbarItem::DISPLAY_ICON
                 )

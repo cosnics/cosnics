@@ -60,7 +60,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_user_editing_url($user), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -76,7 +76,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolBarItem(
-                    Translation::get('Report'), new FontAwesomeGlyph('pie-chart'), $this->get_component()->get_url(
+                    Translation::get('Report'), new FontAwesomeGlyph('chart-pie'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
                         \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::PARAM_ACTION => \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::ACTION_VIEW,

@@ -248,7 +248,7 @@ abstract class ViewRenderer extends Renderer
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
 
-        $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar'));
+        $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'));
         $button->setDropdownClasses('dropdown-menu-right');
 
         foreach ($rendererTypes as $rendererType)

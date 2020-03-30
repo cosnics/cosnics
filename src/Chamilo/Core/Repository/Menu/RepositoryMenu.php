@@ -46,24 +46,6 @@ class RepositoryMenu
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Manager
-     */
-    public function getRepositoryManager()
-    {
-        return $this->repositoryManager;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Manager $repositoryManager
-     */
-    public function setRepositoryManager(Manager $repositoryManager)
-    {
-        $this->repositoryManager = $repositoryManager;
-    }
-
-    /**
-     *
      * @return string
      */
     public function render()
@@ -74,8 +56,7 @@ class RepositoryMenu
 
         $rightsService = RightsService::getInstance();
         $canAddContentObjects = $rightsService->canAddContentObjects(
-            $repositoryManager->get_user(),
-            $repositoryManager->getWorkspace()
+            $repositoryManager->get_user(), $repositoryManager->getWorkspace()
         );
 
         if ($canAddContentObjects)
@@ -84,17 +65,12 @@ class RepositoryMenu
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('plus'),
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
                     $repositoryManager->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_CREATE_CONTENT_OBJECTS
-                        ),
-                        array(Manager::PARAM_IMPORT_TYPE)
-                    ),
-                    Button::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'btn-primary'
+                        ), array(Manager::PARAM_IMPORT_TYPE)
+                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
                 )
             );
 
@@ -108,8 +84,7 @@ class RepositoryMenu
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('AddExisting'),
-                        new FontAwesomeGlyph('hdd-o'),
+                        Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', array(), null, 'far'),
                         $repositoryManager->get_url(
                             array(
 
@@ -118,10 +93,8 @@ class RepositoryMenu
                                 FilterData::FILTER_CATEGORY => FilterData::getInstance(
                                     $repositoryManager->getWorkspace()
                                 )->get_category()
-                            ),
-                            array(Manager::PARAM_IMPORT_TYPE)
-                        ),
-                        Button::DISPLAY_ICON_AND_LABEL
+                            ), array(Manager::PARAM_IMPORT_TYPE)
+                        ), Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -135,14 +108,11 @@ class RepositoryMenu
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('MyPublications'),
-                    new FontAwesomeGlyph('list'),
-                    $repositoryManager->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
-                        ),
-                        array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE)
-                    )
+                    Translation::get('MyPublications'), new FontAwesomeGlyph('list'), $repositoryManager->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
+                    ), array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE)
+                )
                 )
             );
         }
@@ -151,37 +121,30 @@ class RepositoryMenu
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Quota'),
-                    new FontAwesomeGlyph('bar-chart'),
-                    $repositoryManager->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
-                            Manager::PARAM_CATEGORY_ID => null,
-                            \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
-                            DynamicTabsRenderer::PARAM_SELECTED_TAB => null
-                        ),
-                        array(Manager::PARAM_IMPORT_TYPE)
-                    )
+                    Translation::get('Quota'), new FontAwesomeGlyph('chart-bar'), $repositoryManager->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
+                        Manager::PARAM_CATEGORY_ID => null,
+                        \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => null
+                    ), array(Manager::PARAM_IMPORT_TYPE)
+                )
                 )
             );
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('ViewDoubles'),
-                    new FontAwesomeGlyph('files-o'),
-                    $repositoryManager->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
-                        ),
-                        array(Manager::PARAM_IMPORT_TYPE)
-                    )
+                    Translation::get('ViewDoubles'), new FontAwesomeGlyph('copy'), $repositoryManager->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
+                    ), array(Manager::PARAM_IMPORT_TYPE)
+                )
                 )
             );
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('RecycleBin'),
-                    new FontAwesomeGlyph('trash'),
+                    Translation::get('RecycleBin'), new FontAwesomeGlyph('trash-alt'),
                     $repositoryManager->get_recycle_bin_url()
                 )
             );
@@ -222,5 +185,23 @@ class RepositoryMenu
         }
 
         return $types;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Manager
+     */
+    public function getRepositoryManager()
+    {
+        return $this->repositoryManager;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Manager $repositoryManager
+     */
+    public function setRepositoryManager(Manager $repositoryManager)
+    {
+        $this->repositoryManager = $repositoryManager;
     }
 }

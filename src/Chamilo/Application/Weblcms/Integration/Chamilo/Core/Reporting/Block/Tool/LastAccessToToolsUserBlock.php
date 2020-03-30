@@ -21,7 +21,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $reporting_data->add_row(Translation::get('ViewPublications'));
 
-        $glyph = new FontAwesomeGlyph('pie-chart', array(), Translation::get('ViewPublications'));
+        $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('ViewPublications'));
 
         $tool_names = $reporting_data->get_categories();
         foreach ($tool_names as $tool_name)

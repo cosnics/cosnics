@@ -213,7 +213,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getItemEditingUrl($item), ToolbarItem::DISPLAY_ICON
             )
         );

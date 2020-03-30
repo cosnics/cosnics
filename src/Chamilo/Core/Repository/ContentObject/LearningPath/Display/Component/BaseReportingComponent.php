@@ -92,7 +92,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
         $html[] = '</div>';
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $returnToUserListUrl . '" class="btn btn-default">';
-        $html[] = '<span class="inline-glyph fa fa-bar-chart"></span>';
+        $html[] = '<span class="inline-glyph fas fa-chart-bar"></span>';
         $html[] = $returnToUserListTranslation;
         $html[] = '</a>';
         $html[] = '</div>';

@@ -163,7 +163,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $glyph = 'table';
                         break;
                     case ContentObjectRenderer::TYPE_GALLERY:
-                        $glyph = 'picture-o';
+                        $glyph = 'image';
                         break;
                     case ContentObjectRenderer::TYPE_SLIDESHOW:
                         $glyph = 'play-circle';

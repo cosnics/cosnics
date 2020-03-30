@@ -71,7 +71,7 @@ class ViewerComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square-o'),
+                    new FontAwesomeGlyph('share-square'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_COURSE_SECTION)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

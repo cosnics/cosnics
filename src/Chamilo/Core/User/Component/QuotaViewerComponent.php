@@ -89,7 +89,7 @@ class QuotaViewerComponent extends Manager
 
         $commonActions->addButton(
             new Button(
-                Translation::get('EditUser'), new FontAwesomeGlyph('pencil'), $this->get_url(
+                Translation::get('EditUser'), new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                 array(
                     Application::PARAM_ACTION => self::ACTION_UPDATE_USER,
                     self::PARAM_USER_USER_ID => $this->selected_user->get_id()

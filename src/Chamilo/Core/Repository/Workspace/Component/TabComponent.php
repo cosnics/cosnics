@@ -86,7 +86,7 @@ abstract class TabComponent extends Manager
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
                     self::ACTION_UPDATE, Translation::get(self::ACTION_UPDATE . 'Component'),
-                    new FontAwesomeGlyph('pencil', array('fa-lg'), null, 'fas'),
+                    new FontAwesomeGlyph('pencil-alt', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE)),
                     $this->get_action() == self::ACTION_UPDATE, false, DynamicVisualTab::POSITION_RIGHT,
                     DynamicVisualTab::DISPLAY_BOTH

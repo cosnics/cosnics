@@ -719,7 +719,7 @@ abstract class Manager extends Application
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT,
@@ -824,7 +824,7 @@ abstract class Manager extends Application
             );
 
             return new Button(
-                Translation::get('AccessDetails'), new FontAwesomeGlyph('pie-chart'), $url
+                Translation::get('AccessDetails'), new FontAwesomeGlyph('chart-pie'), $url
             );
         }
         else

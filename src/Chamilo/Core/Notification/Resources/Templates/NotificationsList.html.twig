@@ -135,7 +135,7 @@
         <a class="notification-description" :href="getNotificationUrl(notification)" target="_blank">
             <div v-html="notification.message"></div>
             <div class="notification-timestamp"><span
-                        class="fa fa-clock-o"></span> {{ '{{ notification.time }}' }}</div>
+                        class="fas fa-clock"></span> {{ '{{ notification.time }}' }}</div>
         </a>
         <div class="notification-actions" v-if="showFilters">
             <div>

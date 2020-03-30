@@ -251,7 +251,7 @@ class UserDetailComponent extends Manager
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_user_editing_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

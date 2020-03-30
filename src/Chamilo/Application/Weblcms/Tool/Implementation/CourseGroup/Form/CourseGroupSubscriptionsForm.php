@@ -121,7 +121,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $this->addElement('static', null, null, $legend->as_html());
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Subscribe'), null, null, new FontAwesomeGlyph('log-in')
+            'style_submit_button', 'submit', Translation::get('Subscribe'), null, null, new FontAwesomeGlyph('sign-in-alt')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)

@@ -718,7 +718,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeSticky'),
-                                    new FontAwesomeGlyph('star-o'),
+                                    new FontAwesomeGlyph('star', array(), null, 'far'),
                                     $this->get_url($parameters),
                                     Button::DISPLAY_ICON,
                                     false,
@@ -728,7 +728,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeImportant'),
-                                    new FontAwesomeGlyph('circle-o'),
+                                    new FontAwesomeGlyph('circle', array(), null, 'far'),
                                     $this->get_url($parameters),
                                     Button::DISPLAY_ICON,
                                     false,
@@ -789,7 +789,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe', null, ForumTopic::package()),
-                        new FontAwesomeGlyph('envelope-o'),
+                        new FontAwesomeGlyph('envelope', array(), null, 'far'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         true,
@@ -882,7 +882,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('pencil'),
+                        new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         false,
@@ -959,7 +959,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe'),
-                        new FontAwesomeGlyph('envelope-o'),
+                        new FontAwesomeGlyph('envelope', array(), null, 'far'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         true,

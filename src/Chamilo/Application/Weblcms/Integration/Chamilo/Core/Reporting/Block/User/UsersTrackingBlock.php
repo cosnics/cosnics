@@ -29,7 +29,7 @@ class UsersTrackingBlock extends CourseBlock
         );
 
         $course_id = $this->getCourseId();
-        $glyph = new FontAwesomeGlyph('pie-chart', array(), Translation::get('Details'));
+        $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('Details'));
 
         $count = 1;
         $users_resultset = CourseDataManager::retrieve_all_course_users($course_id);

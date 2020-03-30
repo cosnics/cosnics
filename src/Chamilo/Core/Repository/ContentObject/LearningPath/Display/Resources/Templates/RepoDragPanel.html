@@ -1,7 +1,7 @@
 <div id="repo-drag-panel">
     <div ng-cloak ng-controller="dragPanelCtrl">
         <button id="drag-button" class="btn btn-default" ng-click="panelIsVisible=true" ng-hide="panelIsVisible">
-            <i class="fa fa-folder-open fa-spin" aria-hidden="true"></i>
+            <i class="fas fa-folder-open fa-spin" aria-hidden="true"></i>
             Repository
         </button>
         <div class="cd-panel from-right repo-drag-panel-content" ng-show="panelIsVisible">
@@ -9,7 +9,7 @@
                 <div class="cd-panel-content">
                     <div>
                         <a href="#0" class="btn btn-default btn-sm btn-close" ng-click="panelIsVisible=false">
-                            <i class="fa fa-times fa-1x" aria-hidden="true"></i>
+                            <i class="fas fa-times fa-1x" aria-hidden="true"></i>
                         </a>
                     </div>
                     <h4>Versleep om toe te voegen</h4>
@@ -21,7 +21,7 @@
                                 ng-options="category.name for category in categories">
                         </select>
                         <span class="input-group-btn">
-                     <button class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh"
+                     <button class="btn btn-default" ng-click="refresh()"><i class="fas fa-sync"
                                                                              aria-hidden="true"></i></button>
                 </span>
                     </div>
@@ -44,7 +44,7 @@
                         <input type="text" class="form-control" ng-model="searchQuery"
                                ng-model-options="{ debounce: 300 }" placeholder="Zoek in repository"/>
                         <span class="input-group-btn">
-                     <button class="btn btn-default" ng-click="searchQuery=''"><i class="fa fa-remove"
+                     <button class="btn btn-default" ng-click="searchQuery=''"><i class="fas fa-times"
                                                                                   aria-hidden="true"></i></button>
                 </span>
                     </div>

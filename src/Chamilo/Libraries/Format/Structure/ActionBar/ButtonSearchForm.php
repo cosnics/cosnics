@@ -100,7 +100,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         if ($this->getQuery())
         {
-            $this->addElement('style_button', 'clear', null, null, 'clear', new FontAwesomeGlyph('remove'));
+            $this->addElement('style_button', 'clear', null, null, 'clear', new FontAwesomeGlyph('times'));
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 

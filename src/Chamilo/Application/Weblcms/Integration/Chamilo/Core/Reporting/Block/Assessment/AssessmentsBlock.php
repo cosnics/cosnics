@@ -43,7 +43,7 @@ class AssessmentsBlock extends AssessmentBlock
         $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true);
 
         $count = 1;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $conditions = array();
         $conditions[] = new EqualityCondition(

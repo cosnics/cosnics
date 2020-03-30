@@ -167,7 +167,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Report'), new FontAwesomeGlyph('pie-chart'), $reporting_url,
+                    Translation::get('Report'), new FontAwesomeGlyph('chart-pie'), $reporting_url,
                     ToolbarItem::DISPLAY_ICON
                 )
             );

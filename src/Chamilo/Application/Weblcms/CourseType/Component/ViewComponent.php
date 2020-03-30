@@ -75,7 +75,7 @@ class ViewComponent extends Manager
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_update_course_type_url($course_type->get_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

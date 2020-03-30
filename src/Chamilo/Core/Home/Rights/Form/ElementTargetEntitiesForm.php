@@ -60,7 +60,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
             Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES), 
             array('class' => 'btn-danger'), 
             null,
-            new FontAwesomeGlyph('remove'));
+            new FontAwesomeGlyph('times'));
         
         $buttonGroup->setElements($buttons);
     }

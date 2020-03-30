@@ -120,7 +120,7 @@ class GroupBrowserComponent extends Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_EDIT_GROUP, self::PARAM_GROUP => $group->get_id())
                 ), ToolbarItem::DISPLAY_ICON

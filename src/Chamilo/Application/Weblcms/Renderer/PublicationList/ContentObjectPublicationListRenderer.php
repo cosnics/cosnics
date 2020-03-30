@@ -258,7 +258,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pencil'), $this->get_url(
+                    new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -401,7 +401,7 @@ abstract class ContentObjectPublicationListRenderer
                 $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
             {
                 $variable = 'PeriodForever';
-                $glyph = new FontAwesomeGlyph('clock-o');
+                $glyph = new FontAwesomeGlyph('clock');
             }
             else
             {
@@ -418,7 +418,7 @@ abstract class ContentObjectPublicationListRenderer
                 else
                 {
                     $variable = 'PeriodCurrent';
-                    $glyph = new FontAwesomeGlyph('clock-o');
+                    $glyph = new FontAwesomeGlyph('clock');
                 }
             }
 
@@ -980,7 +980,7 @@ abstract class ContentObjectPublicationListRenderer
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('clock-o');
+            $glyph = new FontAwesomeGlyph('clock');
             $visibility_url = 'javascript:void(0)';
         }
         $visibility_link = '<a href="' . $visibility_url . '">' . $glyph->render() . '</a>';

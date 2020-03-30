@@ -65,7 +65,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $update_url, ToolbarItem::DISPLAY_ICON
             )
         );

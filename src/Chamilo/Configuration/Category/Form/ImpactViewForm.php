@@ -26,7 +26,7 @@ class ImpactViewForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'delete', Translation::get('Delete'), array('class' => 'btn-danger'), null,
-            new FontAwesomeGlyph('remove')
+            new FontAwesomeGlyph('times')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

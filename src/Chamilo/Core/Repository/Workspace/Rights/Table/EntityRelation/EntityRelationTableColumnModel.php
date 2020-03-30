@@ -34,7 +34,7 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
                 $glyphName = 'pencil-alt';
                 break;
             case RightsService::RIGHT_DELETE:
-                $glyphName = 'trash';
+                $glyphName = 'trash-alt';
                 break;
             case RightsService::RIGHT_USE:
                 $glyphName = 'share-square';

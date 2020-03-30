@@ -131,7 +131,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         {
             $actions[] = new ToolbarItem(
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('pencil'),
+                new FontAwesomeGlyph('pencil-alt'),
                 $this->getPublicationEditingUrl($event->getId()),
                 ToolbarItem::DISPLAY_ICON);
 

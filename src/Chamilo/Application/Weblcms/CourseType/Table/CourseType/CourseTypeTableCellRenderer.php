@@ -60,7 +60,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_update_course_type_url($course_type->get_id()), ToolbarItem::DISPLAY_ICON
             )
         );

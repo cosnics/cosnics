@@ -179,7 +179,7 @@
                                                     </div>
                                                 </div>
                                                 <a href="#" data-dz-remove class="btn btn-default btn-xs"><span
-                                                            class="fa fa-remove"></span></a>
+                                                            class="fas fa-times"></span></a>
                                             </div>
                                         </div>
 
@@ -191,7 +191,7 @@
 
                             <!--div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> Verbeterde versies
+                                    <h3 class="panel-title"><i class="fas fa-upload" aria-hidden="true"></i> Verbeterde versies
                                     </h3>
                                 </div>
                                 <div class="panel-body"!-->
@@ -217,7 +217,7 @@
                                                 <td align="center"><a href="#"
                                                                       onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
                                                                       class="btn btn-default btn-xs"><span
-                                                                class="fa fa-remove"></span></a></td>
+                                                                class="fas fa-times"></span></a></td>
                                                 {% endif %}
                                             </tr>
                                         {% endfor %}
@@ -289,7 +289,7 @@
                                         removeAssignmentEntryAttachment(attachmentId);
                                     });
 
-                                var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
+                                var deleteIcon = $('<span></span>').attr('class', 'fas fa-times');
 
                                 deleteButton.append(deleteIcon);
                                 var deleteElement = $('<td></td>').append(deleteButton).attr('align', 'center');

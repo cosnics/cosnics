@@ -151,7 +151,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             'UpdaterComponent';
 
                         $editTitle = Translation::get($variable);
-                        $editImage = new FontAwesomeGlyph('pencil');
+                        $editImage = new FontAwesomeGlyph('pencil-alt');
                     }
 
                     $editButton = new SplitDropdownButton(
@@ -305,7 +305,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             'UpdaterComponent';
 
                         $editTitle = Translation::get($variable);
-                        $editImage = new FontAwesomeGlyph('pencil');
+                        $editImage = new FontAwesomeGlyph('pencil-alt');
                     }
 
                     $contentItems->addButton(

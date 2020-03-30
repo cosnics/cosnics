@@ -54,7 +54,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $conditions = array();
         $conditions[] = new EqualityCondition(

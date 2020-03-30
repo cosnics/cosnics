@@ -80,7 +80,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewAssessmentResult'), new FontAwesomeGlyph('pie-chart'),
+                    Translation::get('ViewAssessmentResult'), new FontAwesomeGlyph('chart-pie'),
                     $assessmentResultViewerUrl, ToolbarItem::DISPLAY_ICON
                 )
             );

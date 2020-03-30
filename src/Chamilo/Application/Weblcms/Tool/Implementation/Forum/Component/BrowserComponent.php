@@ -555,7 +555,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe', null, Forum::package()),
-                        new FontAwesomeGlyph('envelope-o'),
+                        new FontAwesomeGlyph('envelope', array(), null, 'far'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         true,
@@ -568,7 +568,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolBar->addItem(
                 new Button(
                     Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pencil'),
+                    new FontAwesomeGlyph('pencil-alt'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],

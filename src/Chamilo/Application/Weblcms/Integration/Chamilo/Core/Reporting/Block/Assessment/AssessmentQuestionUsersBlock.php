@@ -49,7 +49,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         }
         
         $count = 0;
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         while ($user = $users_resultset->next_result())
         {

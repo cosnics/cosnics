@@ -44,7 +44,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
 
-        $glyph = new FontAwesomeGlyph('pie-chart');
+        $glyph = new FontAwesomeGlyph('chart-pie');
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_COURSE_ID),

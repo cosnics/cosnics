@@ -218,7 +218,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             );
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Statistics'), new FontAwesomeGlyph('bar-chart'),
+                    Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

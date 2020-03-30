@@ -292,7 +292,7 @@ abstract class TabComponent extends Manager
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
-                    new FontAwesomeGlyph('pencil'),
+                    new FontAwesomeGlyph('pencil-alt'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
                     get_class($this) == EditorComponent::class_name()
                 )

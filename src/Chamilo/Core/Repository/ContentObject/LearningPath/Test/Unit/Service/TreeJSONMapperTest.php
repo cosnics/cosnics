@@ -136,7 +136,7 @@ class TreeJSONMapperTest extends ChamiloTestCase
         $this->automaticNumberingServiceMock->expects($this->exactly(7))->method('getAutomaticNumberingForTreeNode')->will(
             $this->returnValue(5));
 
-        $actions = [new Action('remove', 'Remove', 'fa fa-remove', 'https://remove-url', 'Are you sure?')];
+        $actions = [new Action('remove', 'Remove', 'fas fa-times', 'https://remove-url', 'Are you sure?')];
 
         $this->nodeActionGeneratorMock->expects($this->exactly(7))->method('generateNodeActions')->will(
             $this->returnValue($actions));
@@ -245,7 +245,7 @@ class TreeJSONMapperTest extends ChamiloTestCase
         $action = [
             'name' => 'remove',
             'title' => 'Remove',
-            'url' => 'fa fa-remove',
+            'url' => 'fas fa-times',
             'image' => 'https://remove-url',
             'confirm' => true,
             'confirmation_message' => 'Are you sure?'];

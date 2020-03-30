@@ -135,7 +135,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('Reporting'), new FontAwesomeGlyph('pie-chart'), $this->get_url(
+                Translation::get('Reporting'), new FontAwesomeGlyph('chart-pie'), $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,

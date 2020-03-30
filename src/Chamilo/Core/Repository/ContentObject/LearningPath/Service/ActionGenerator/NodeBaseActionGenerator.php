@@ -351,7 +351,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS), $treeNode->getId()
         );
 
-        return new Action('reporting', $title, $url, 'fas fa-bar-chart fa-fw');
+        return new Action('reporting', $title, $url, 'fas fa-chart-bar fa-fw');
     }
 
     /**

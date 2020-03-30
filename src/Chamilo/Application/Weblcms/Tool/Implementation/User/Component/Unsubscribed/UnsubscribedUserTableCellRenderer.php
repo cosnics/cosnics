@@ -109,7 +109,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('UserRequestPending'), new FontAwesomeGlyph('clock-o'), null,
+                        Translation::get('UserRequestPending'), new FontAwesomeGlyph('clock'), null,
                         ToolbarItem::DISPLAY_ICON
                     )
                 );

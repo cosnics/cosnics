@@ -185,7 +185,7 @@ class HotspotQuestionForm extends ContentObjectForm
                 $hotspot_actions[] = $this->createElement(
                     'style_button', 'edit[' . $option_number . ']', null,
                     array('class' => 'edit_option', 'id' => 'edit_' . $option_number), null,
-                    new FontAwesomeGlyph('pencil', array(), null, 'fas')
+                    new FontAwesomeGlyph('pencil-alt', array(), null, 'fas')
                 );
 
                 $hotspot_actions[] = $this->createElement(

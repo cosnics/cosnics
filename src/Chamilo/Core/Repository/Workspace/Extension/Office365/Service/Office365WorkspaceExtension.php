@@ -82,7 +82,7 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
         {
             $workspaceExtensionActions->addButton(
                 new Button(
-                    $this->translator->trans('SyncOffice365Group', [], Manager::context()), new FontAwesomeGlyph('refresh'),
+                    $this->translator->trans('SyncOffice365Group', [], Manager::context()), new FontAwesomeGlyph('sync'),
                     $workspaceComponent->get_url(
                         [
                             Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,

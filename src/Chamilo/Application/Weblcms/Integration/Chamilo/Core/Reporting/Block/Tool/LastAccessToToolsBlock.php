@@ -59,7 +59,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                 $toolbar = new Toolbar();
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('ViewPublications'), new FontAwesomeGlyph('pie-chart'), $url,
+                        Translation::get('ViewPublications'), new FontAwesomeGlyph('chart-pie'), $url,
                         ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -75,7 +75,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewScores'), new FontAwesomeGlyph('line-chart'), $url_detail,
+                                Translation::get('ViewScores'), new FontAwesomeGlyph('chart-line'), $url_detail,
                                 ToolbarItem::DISPLAY_ICON
                             )
                         );
@@ -90,7 +90,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewScores'), new FontAwesomeGlyph('line-chart'), $url_detail,
+                                Translation::get('ViewScores'), new FontAwesomeGlyph('chart-line'), $url_detail,
                                 ToolbarItem::DISPLAY_ICON
                             )
                         );
@@ -105,7 +105,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('ViewProgressUsers'), new FontAwesomeGlyph('line-chart'), $url_detail,
+                                Translation::get('ViewProgressUsers'), new FontAwesomeGlyph('chart-line'), $url_detail,
                                 ToolbarItem::DISPLAY_ICON
                             )
                         );

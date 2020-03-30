@@ -265,7 +265,7 @@ abstract class Manager extends Application implements NoContextComponent
         if ($object->is_editable())
         {
             $toolbar_items[self::ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_EDIT_EXTERNAL_REPOSITORY,
@@ -294,7 +294,7 @@ abstract class Manager extends Application implements NoContextComponent
             {
                 $toolbar_items[] = new ToolbarItem(
                     Translation::get('Select', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square-o'), $this->get_url(
+                    new FontAwesomeGlyph('share-square'), $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
                         self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
@@ -602,10 +602,10 @@ abstract class Manager extends Application implements NoContextComponent
                     $glyph = new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas');
                     break;
                 case 'Login':
-                    $glyph = new FontAwesomeGlyph('sign-in', array('fa-lg'), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('sign-in-alt', array('fa-lg'), null, 'fas');
                     break;
                 case 'Logout':
-                    $glyph = new FontAwesomeGlyph('sign-out', array('fa-lg'), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('sign-out-alt', array('fa-lg'), null, 'fas');
                     break;
                 default:
                     $glyph = new FontAwesomeGlyph('file', array('fa-lg'), null, 'fas');

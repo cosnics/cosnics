@@ -351,7 +351,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                         $buttons[] = $this->createElement(
                             'style_submit_button', self::PROPERTY_PUBLISH_AND_BUILD,
                             Translation::get('PublishAndBuild', null, Utilities::COMMON_LIBRARIES), null, null,
-                            new FontAwesomeGlyph('pencil')
+                            new FontAwesomeGlyph('pencil-alt')
                         );
                     }
 
