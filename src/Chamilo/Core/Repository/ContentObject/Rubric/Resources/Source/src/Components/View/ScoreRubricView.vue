@@ -13,7 +13,7 @@
 				<div v-if="clusterDialogShown">
 					<name-input class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
 				</div>
-				<button v-else @click="showClusterDialog"><i class="fa fa-plus-circle" aria-hidden="true"/>Nieuw</button>
+				<button v-else @click="showClusterDialog"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
 			</div>
 		</nav>
 		<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
@@ -30,7 +30,7 @@
 						<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
 					</draggable>
 					<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: criteriumDragging}">
-						<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus-circle" aria-hidden="true"/>Voeg een criterium toe</button>
+						<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
 					</div>
 					<div v-else>
 						<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
@@ -39,8 +39,8 @@
 				<div slot="footer" class="no-category"></div>
 			</draggable>
 			<div class="actions" v-if="!isAddingCategory">
-				<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus-circle" aria-hidden="true"/>Categorie</button>
-				<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus-circle" aria-hidden="true"/>Criterium</button>
+				<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus" aria-hidden="true"/>Categorie</button>
+				<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium</button>
 			</div>
 			<div v-else class="category newcategory">
 				<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
@@ -455,7 +455,7 @@
 
 	/* Navigation: Clusters */
 	nav.clusters {
-		--background: hsla(200, 10%, 80%, 1);
+		--background: hsla(200, 10%, 80%, 0.5);
 		width: 100%;
 		height: 36px;
 		display: flex;
@@ -499,7 +499,7 @@
 		--background: hsla(190, 20%, 75%, 1);
 		color: #222;
 	}
-	li.selected:after {
+	/*li.selected:after {
 		content: '';
 		display: block;
 		margin: 0 auto;
@@ -509,7 +509,7 @@
 		border-width: 11px 13px 0;
 		border-color: var(--background) transparent;
 		border-style: solid solid none;
-	}
+	}*/
 	li.selected div {
 		box-shadow: 0px 2px 4px #999;
 	}
@@ -694,8 +694,8 @@
 	}
 	.category > div:nth-child(2) > div.selected {
 	/*	background: hsla(190, 40%, 45%, 1); */
-		background: hsla(220, 30%, 35%, 0.5);
-		color: white;
+		background: hsla(220, 30%, 35%, 0.25);
+		/*color: white;*/
 	}
 	.category > div:nth-child(1) a {
 		display: inline-block;
