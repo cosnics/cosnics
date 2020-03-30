@@ -301,8 +301,8 @@
     li:not(.selected) .description.empty textarea {
         display: none;
     }
-    li input:hover, li input:focus, li textarea:focus, li .default-choice input:focus + label i, li .delete .btn:focus {
-        border: 1px solid #4f8be8;
+    li input:hover, li .default-choice input:focus + label i, li .delete .btn:focus {
+        border: 1px solid hsla(200, 50%, 50%, 0.5);
     }
     .delete .btn {
         width: 26px;

@@ -105,9 +105,6 @@
         border: 1px solid transparent;
         border-radius: 3px;
     }
-    h2 input:hover {
-        border: 1px solid #4f8be8;
-    }
     h2 input:focus {
         background: white;
     }
@@ -124,14 +121,10 @@
         width: 55px;
         text-align: right;
         padding-right: 16px;
-        /*background: #eee;*/
         background: hsla(200, 5%, 90%, 1);
         /*border: 1px solid hsla(190, 50%, 50%, 0.2);*/
         border: 1px solid transparent;
         border-radius: 3px;
-    }
-    .level-score input[type="number"]:not(:disabled):hover {
-        border: 1px solid #4f8be8;
     }
     .level-score input[type="number"]:focus {
         background: white;
@@ -175,9 +168,6 @@
     .ta-feedback:focus {
         background: white;
     }
-    .ta-feedback:hover {
-        border: 1px solid #4f8be8;
-    }
     i.fa-close {
         display: block;
         position: absolute;
@@ -194,6 +184,9 @@
         /*border: 1px solid #ccc;*/
         border-radius: 3px;
         color: white;
+    }
+    h2 input:hover, .level-score input[type="number"]:not(:disabled):hover, .criterium-weight:hover input, .ta-feedback:hover {
+        border: 1px solid hsla(200, 50%, 50%, 0.5);
     }
 
 </style>
