@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
@@ -31,14 +30,13 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $blog = $this->get_root_content_object();
-        $trail = BreadcrumbTrail::getInstance();
         $blog_layout = BlogLayout::factory($this, $blog);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $blog_layout->as_html();
+        $html[] = $blog_layout->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

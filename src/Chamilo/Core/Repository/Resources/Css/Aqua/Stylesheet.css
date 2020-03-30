@@ -1,25 +1,6 @@
 @import url(../../../Feedback/Resources/Css/Aqua/Stylesheet.min.css);
 @import url(../../../Publication/Resources/Css/Aqua/Stylesheet.min.css);
 
-.fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f,
-.fas-ci-16e12166426537ee0ba35c2d107830c1,
-.fas-ci-f137619b1cf9c5596143dca2ea3a74b9,
-.fas-ci-4d4cf8cea026eac57bfdf14e0e8fcb0c,
-.fas-ci-ff8dd06af20c5a5fe0bef2f6c5121066,
-.fas-ci-c2b6b1afedf80daeae5f1764f69dbaae,
-.fas-ci-f070e5a65cc0463e94f042dcaa37d76f,
-.fas-ci-086f7e8bdc5ee9c0a5b1cb5b53dded87,
-.fas-ci-d8e575873ba86569ce6dfd4f23324fc3,
-.fas-ci-60edd92a853974f2bba84e50c2aba9d8,
-.fas-ci-e181bea9b3835867726b5d1379fc8a78,
-.fas-ci-56ef83b6283d63193e3191f8210e5984,
-.fas-ci-6f37206c2cc79e7af7ccdcbb3d818ba8,
-.fas-ci-0900638a6ab01cb7cabe743e699c7c94,
-.fas-ci-bc19824b7d7f02add6fc90d8194cfd07, .fas-ci-9ecfbe79198945c477313dd776ef0ce2 {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
 .fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f:before {
     content: "\f0a0";
 }

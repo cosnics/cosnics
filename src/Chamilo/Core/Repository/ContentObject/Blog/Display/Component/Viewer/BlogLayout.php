@@ -6,8 +6,11 @@ use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlog
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -23,28 +26,25 @@ use Exception;
  * local settings
  *
  * @author Sven Vanpoucke
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class BlogLayout
 {
     use DependencyInjectionContainerTrait;
 
     /**
-     * The parent on which this blog layout is rendering
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $parent;
 
     /**
-     * The blog which needs to be rendered
-     *
-     * @var Blog
+     * @var \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog
      */
     private $blog;
 
     /**
-     * Constructor
-     *
-     * @param $parent
-     * @param $blog Blog
+     * @param \Chamilo\Libraries\Architecture\Application\Application $parent
+     * @param \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog $blog
      */
     public function __construct($parent, Blog $blog)
     {
@@ -54,33 +54,28 @@ abstract class BlogLayout
         $this->initializeContainer();
     }
 
-    public function as_html()
+    /**
+     * @return string
+     */
+    public function render()
     {
         $html = array();
 
-        $complex_blog_items = $this->retrieve_complex_blog_items();
-        while ($complex_blog_item = $complex_blog_items->next_result())
+        $complexBlogItems = $this->retrieve_complex_blog_items();
+        while ($complexBlogItem = $complexBlogItems->next_result())
         {
-            $html[] = $this->display_blog_item($complex_blog_item);
+            $html[] = $this->renderBlogItem($complexBlogItem);
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    // Getters and setters
-
     /**
-     * Displays a given blog item
-     *
-     * @param $complex_blog_item ComplexBlogItem
-     */
-    abstract public function display_blog_item(ComplexBlogItem $complex_blog_item);
-
-    /**
-     * Factory
-     *
      * @param $parent
-     * @param $blog Blog
+     * @param \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog $blog
+     *
+     * @return mixed
+     * @throws \Exception
      */
     public function factory($parent, Blog $blog)
     {
@@ -95,63 +90,96 @@ abstract class BlogLayout
         return new $class($parent, $blog);
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog
+     */
     public function get_blog()
     {
         return $this->blog;
     }
 
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog $blog
+     */
     public function set_blog(Blog $blog)
     {
         $this->blog = $blog;
     }
 
     /**
-     * Returns the actions for the blog item
-     *
-     * @param $complex_blog_item ComplexBlogItem
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    public function get_blog_item_actions($complex_blog_item)
-    {
-        $toolbar = new Toolbar();
-        if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
-                    $this->get_parent()->get_complex_content_object_item_update_url($complex_blog_item),
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($this->get_parent()->get_parent()->is_allowed_to_delete_child())
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->get_parent()->get_complex_content_object_item_delete_url($complex_blog_item),
-                    ToolbarItem::DISPLAY_ICON, true
-                )
-            );
-        }
-
-        return $toolbar->as_html();
-    }
-
     public function get_parent()
     {
         return $this->parent;
     }
 
-    // Helper methods
-
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $parent
+     */
     public function set_parent($parent)
     {
         $this->parent = $parent;
     }
 
     /**
-     * Retrieves the children of the current blog by date
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return boolean
+     */
+    public function hasBlogItemActions(ComplexBlogItem $complexBlogItem)
+    {
+        return $this->get_parent()->get_parent()->is_allowed_to_edit_content_object() ||
+            $this->get_parent()->get_parent()->is_allowed_to_delete_child();
+    }
+
+    /**
+     * @param $complexBlogItem ComplexBlogItem
+     */
+    abstract public function renderBlogItem(ComplexBlogItem $complexBlogItem);
+
+    /**
+     * Returns the actions for the blog item
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderBlogItemActions(ComplexBlogItem $complexBlogItem)
+    {
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
+        {
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil'),
+                    $this->get_parent()->get_complex_content_object_item_update_url($complexBlogItem),
+                    ToolbarItem::DISPLAY_ICON, false, 'btn-link'
+                )
+            );
+        }
+
+        if ($this->get_parent()->get_parent()->is_allowed_to_delete_child())
+        {
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $this->get_parent()->get_complex_content_object_item_delete_url($complexBlogItem),
+                    ToolbarItem::DISPLAY_ICON, true, 'btn-link'
+                )
+            );
+        }
+
+        $buttonToolBar->addButtonGroup($buttonGroup);
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolbarRenderer->render();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function retrieve_complex_blog_items()
     {

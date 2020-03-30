@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
 
-use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
+use Chamilo\Core\Repository\ContentObject\Blog\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -17,55 +18,32 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class PersonalBlogLayout extends BlogLayout
 {
-
-    public function display_blog_item(ComplexBlogItem $complex_blog_item)
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function determinePanelClasses(ComplexBlogItem $complexBlogItem)
     {
-        $blog_item = $complex_blog_item->get_ref_object();
-        $owner = DataManager::retrieve_by_id(
-            User::class_name(), (int) $blog_item->get_owner_id()
-        );
+        $classes = array();
 
-        if ($owner instanceof User)
-        {
-            $name = $owner->get_fullname();
-        }
-        else
-        {
-            $name = Translation::get('AuthorUnknown');
-        }
+        $classes[] = 'panel';
+        $classes[] = 'panel-default';
+        $classes[] = 'panel-publication';
 
-        $html = array();
+        return implode(' ', $classes);
+    }
 
-        $html[] = '<div class="blog_item">';
-        $html[] = '<div class="information_box">';
+    /**
+     * @param integer $date
+     *
+     * @return string
+     */
+    public function formatDate($date)
+    {
+        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
 
-        if ($owner instanceof User)
-        {
-            $html[] = '<img class="img-thumbnail" src="' .
-                $this->getUserPictureProvider()->getUserPictureAsBase64String($owner, $owner) . '" /><br /><br />';
-        }
-
-        $html[] = $name . '<br />';
-        $html[] = DatetimeUtilities::format_locale_date(null, $complex_blog_item->get_add_date());
-        $html[] = '</div>';
-        $html[] = '<div class="message_box">';
-        $html[] = '<div class="title">' . $blog_item->get_title() . '</div>';
-        $html[] = '<div class="description">';
-
-        $renderer = new ContentObjectResourceRenderer($blog_item, $blog_item->get_description());
-        $html[] = $renderer->run();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp</div>';
-        $html[] = $this->get_attached_content_objects_as_html($complex_blog_item);
-        $html[] = '<div class="actions_box">';
-        $html[] = '<div class="actions">' . $this->get_blog_item_actions($complex_blog_item) . '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp</div>';
-        $html[] = '</div><br />';
-
-        return implode(PHP_EOL, $html);
+        return DatetimeUtilities::format_locale_date($date_format, $date);
     }
 
     /**
@@ -77,55 +55,166 @@ class PersonalBlogLayout extends BlogLayout
     }
 
     /**
-     * Gets the layout of the attachments list
-     *
-     * @param BlogItem $blog_item
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
      *
      * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function get_attached_content_objects_as_html($complex_blog_item)
+    public function get_content_object_display_attachment_url($attachment)
     {
-        $blog_item = $complex_blog_item->get_ref_object();
-        $attachments = $blog_item->get_attachments();
+        return $this->get_parent()->get_url(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
+                Manager::PARAM_ATTACHMENT_ID => $attachment->getId(),
+                Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->getRequest()->query->get(
+                    Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
+                )
+            )
+        );
+    }
 
-        if (count($attachments))
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderBlogItem(ComplexBlogItem $complexBlogItem)
+    {
+        $html = array();
+
+        $html[] = '<div class="' . $this->determinePanelClasses($complexBlogItem) . '">';
+        $html[] = '<div class="panel-body">';
+
+        $html[] = $this->renderBlogItemHeader($complexBlogItem);
+        $html[] = $this->renderBlogItemBody($complexBlogItem);
+        $html[] = $this->renderBlogItemFooter($complexBlogItem);
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderBlogItemAuthorName(ComplexBlogItem $complexBlogItem)
+    {
+        $blogItem = $complexBlogItem->get_ref_object();
+        $author = DataManager::retrieve_by_id(
+            User::class_name(), (int) $blogItem->get_owner_id()
+        );
+
+        if ($author instanceof User)
         {
-            $html[] = '<div class="attachments">';
-
-            $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
-
-            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' . htmlentities(
-                    Translation::get('Attachements', null, Utilities::COMMON_LIBRARIES)
-                ) . '</div>';
-            Utilities::order_content_objects_by_title($attachments);
-            $html[] = '<ul class="attachments_list">';
-
-            /**
-             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
-             * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $attachment
-             */
-            foreach ($attachments as $attachment)
-            {
-                $url = $this->get_parent()->get_content_object_display_attachment_url(
-                    $attachment, $complex_blog_item->get_id()
-                );
-
-                $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-
-                $glyph = $attachment->getGlyph(Theme::ICON_MINI);
-
-                $html[] =
-                    '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
-                    '</a></li>';
-            }
-
-            $html[] = '</ul>';
-            $html[] = '</div>';
-
-            return implode(PHP_EOL, $html);
+            return $author->get_fullname();
         }
+        else
+        {
+            return Translation::get('AuthorUnknown');
+        }
+    }
 
-        return '';
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderBlogItemBody(ComplexBlogItem $complexBlogItem)
+    {
+        $blogItem = $complexBlogItem->get_ref_object();
+
+        $html = array();
+
+        $html[] = '<div class="row panel-publication-body">';
+        $html[] = '<div class="col-xs-12">';
+
+        $this->get_parent()->getRequest()->query->set(
+            Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, $complexBlogItem->getId()
+        );
+
+        $renditionImplementation = ContentObjectRenditionImplementation::factory(
+            $blogItem, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
+        );
+
+        $html[] = $renditionImplementation->render();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderBlogItemFooter(ComplexBlogItem $complexBlogItem)
+    {
+        $html = array();
+
+        $html[] = '<div class="row panel-publication-footer">';
+
+        $html[] = '<div class="col-xs-12 panel-publication-footer-date">';
+        $html[] = $this->renderVisiblePublicationDate($complexBlogItem);
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderBlogItemHeader(ComplexBlogItem $complexBlogItem)
+    {
+        $blogItem = $complexBlogItem->get_ref_object();
+
+        $html = array();
+
+        $html[] = '<div class="row panel-publication-header">';
+
+        $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
+
+        $author = DataManager::retrieve_by_id(User::class_name(), (int) $blogItem->get_owner_id());
+        $userPictureProvider = $this->getUserPictureProvider();
+
+        $html[] =
+            '<img class="img-rounded pull-left" src="' . $userPictureProvider->getUserPictureAsBase64String($author, $author) .
+            '" >';
+
+        $html[] = '<h3>' . $blogItem->get_title() . '</h3>';
+        $html[] = '<small>' . $this->renderBlogItemAuthorName($complexBlogItem) . '</small>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-sm-2 panel-publication-header-actions">';
+        $html[] = $this->renderBlogItemActions($complexBlogItem);
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
+     *
+     * @return string
+     */
+    public function renderVisiblePublicationDate(ComplexBlogItem $complexBlogItem)
+    {
+        $blogItem = $complexBlogItem->get_ref_object();
+
+        $contentObjectModified = $blogItem->get_modification_date() > $blogItem->get_creation_date();
+
+        $html = array();
+
+        $glyphClasses = $contentObjectModified ? array('text-danger') : array();
+        $glyph = new FontAwesomeGlyph('clock', $glyphClasses, null, 'far');
+
+        $html[] = $glyph->render();
+        $html[] = $this->formatDate($blogItem->get_modification_date());
+
+        return implode(PHP_EOL, $html);
     }
 }

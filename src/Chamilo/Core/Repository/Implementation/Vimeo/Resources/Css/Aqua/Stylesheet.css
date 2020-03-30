@@ -8,11 +8,6 @@
 }
 
 /* Content Type: Chamilo\Core\Repository\Implementation\Vimeo\Type\Video */
-.fas-ci-310987b5a9d9eead30aa7b598def9971 {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
 .fas-ci-310987b5a9d9eead30aa7b598def9971:before {
     content: "\f03d";
 }

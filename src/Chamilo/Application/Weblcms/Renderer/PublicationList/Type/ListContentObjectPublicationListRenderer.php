@@ -1025,8 +1025,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function render_publication($publication, $first = false, $last = false, $position = 0)
     {
-        $lastVisitDate = $this->get_tool_browser()->get_last_visit_date();
-
         $html = array();
 
         $html[] = '<div class="' . $this->determinePanelClasses() . '">';

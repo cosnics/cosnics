@@ -1,11 +1,6 @@
 /*****************************************************
  *  WEBLCMS STYLES                                   *
  *****************************************************/
-.fas-ci-9008bad3af70e139b9fa6cc53cea5d85, .fas-ci-13cdb0b7c0706b4cf8b08a2498de114d {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
 .fas-ci-9008bad3af70e139b9fa6cc53cea5d85:before {
     content: "\f51b";
 }

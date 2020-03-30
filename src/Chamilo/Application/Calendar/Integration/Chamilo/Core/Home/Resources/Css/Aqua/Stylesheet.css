@@ -1,13 +1,4 @@
 /*
- * Home Block Type: Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type
- */
-.fas-ci-0b036c53b549a315b4c9386e9d03c870,
-.fas-ci-04d68b75e305b08f57be1d5ccde24344 {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
-/*
  * Home Block Type: Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type\Day
  */
 .fas-ci-0b036c53b549a315b4c9386e9d03c870:before {

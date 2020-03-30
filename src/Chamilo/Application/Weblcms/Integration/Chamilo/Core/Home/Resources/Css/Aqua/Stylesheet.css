@@ -1,20 +1,4 @@
 /*
- * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
- */
-.fas-ci-e2608fb8e2c424fb76b776bd914fd29b,
-.fas-ci-ebaa95102c37c2d52fe90d5b1571dea5,
-.fas-ci-5b09c72129c016f18fb82ebe9a04ea02,
-.fas-ci-65fef410e12f2a200c044ffc85393740,
-.fas-ci-b0da474f22e413845287c7dbfdb77add,
-.fas-ci-6fc14ea42cdb3e51fd379d8b42b0a418,
-.fas-ci-ef27e2983874eca39f57e78ff07af742,
-.fas-ci-6321595e59e7069750790ccc882cb33f,
-.fas-ci-c895a8aabf14be379bf43f4b2cefeb0a {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
-/*
  * Home Block Type: Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentNotifications
  */
 .fas-ci-e2608fb8e2c424fb76b776bd914fd29b:before {

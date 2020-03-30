@@ -1,15 +1,18 @@
 @font-face {
-    font-family: 'ConnectIdents';
+    font-family: "ConnectIdents";
     font-style: normal;
     font-weight: 400;
     font-display: auto;
-    src: url('ConnectIdents.ttf') format('truetype'),
-    url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot') format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
+    src: url("ConnectIdents.ttf") format("truetype"),
+    url("ConnectIdents.woff") format("woff"), url("ConnectIdents.eot") format("eot"), url("ConnectIdents.svg?#ConnectIdents") format("svg");
 }
 
 .fas-ci {
-    font-family: 'ConnectIdents';
-    font-weight: 400;
+    /*For now all glyps are from Font Awesome so make this the default to save out on lots of unnecessary css*/
+    /*font-family: 'ConnectIdents';*/
+    /*font-weight: 400;*/
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
 }
 
 .fas-ci-announcement:before {
@@ -185,7 +188,7 @@
 }
 
 .fas-ci-disabled {
-    color: #777;
+    color: #777777;
 }
 
 .fas-ci-disabled:before {
@@ -210,15 +213,15 @@
 }
 
 .fas-ci-new:after {
-    display: inline-block;
     background-color: #f57900;
-    position: absolute;
-    content: "";
-    right: 0px;
-    bottom: 0px;
-    width: 40%;
-    height: 40%;
     border-radius: 100%;
+    bottom: 0px;
+    content: "";
+    display: inline-block;
+    height: 40%;
+    position: absolute;
+    right: 0px;
+    width: 40%;
 }
 
 .fas-ci-va {
@@ -230,15 +233,15 @@
 }
 
 .fas-ci-completed:after {
-    display: inline-block;
-    background-color: #00FF00;
-    position: absolute;
-    content: "";
-    right: 0px;
-    bottom: 0px;
-    width: 40%;
-    height: 40%;
+    background-color: #00ff00;
     border-radius: 100%;
+    bottom: 0px;
+    content: "";
+    display: inline-block;
+    height: 40%;
+    position: absolute;
+    right: 0px;
+    width: 40%;
 }
 
 .fas-ci-half-transparent {

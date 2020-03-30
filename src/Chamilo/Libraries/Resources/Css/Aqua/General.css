@@ -105,10 +105,8 @@ span.subtitle {
 }
 
 /*****************************************************
- *  REPOSITORY / LEARNING OBJECT STYLES              *
+ *  REPOSITORY / CONTENT OBJECT STYLES              *
  *****************************************************/
-
-/* Learning object display styles */
 div.content_object {
     background-position: 10px 10px;
     background-repeat: no-repeat;
@@ -177,7 +175,6 @@ div.content_object div#content_object_tags ul li.tag {
 
 /* List of attachments */
 div.attachments {
-    border: 1px solid #f6f6f6;
     margin: 0 0 1em 0;
 }
 
