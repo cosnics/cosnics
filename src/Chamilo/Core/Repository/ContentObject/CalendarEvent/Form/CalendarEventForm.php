@@ -62,7 +62,7 @@ class CalendarEventForm extends ContentObjectForm
 
         // Frequency
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="col-lg-12">';
         $html[] = '<select name="frequency" class="form-control">';
         $html[] = '<option>Geen</option>';
         $html[] = '<option>Elke weekdag</option>';
@@ -77,7 +77,7 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Daily</h4></div></div>';
 
         $html[] = '<div class="form-group row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="col-sm-12">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
         $html[] = '<input name="daily[frequency_interval]" type="text" class="form-control">';
@@ -89,18 +89,16 @@ class CalendarEventForm extends ContentObjectForm
         // Weekly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Weekly</h4></div></div>';
 
-        $html[] = '<div class="form-group row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="row">';
+        $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
         $html[] = '<input name="weekly[frequency_interval]" type="text" class="form-control">';
         $html[] = '<div class="input-group-addon">weken</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = '</div>';
 
-        $html[] = '<div class="form-group  row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="form-group col-md-12 col-lg-8">';
         $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<span class="input-group-addon">Op</span>';
         $html[] = '<a class="btn btn-default">Ma</a>';
@@ -117,30 +115,253 @@ class CalendarEventForm extends ContentObjectForm
         // Monthly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Monthly</h4></div></div>';
 
-        $html[] = '<div class="form-group row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
         $html[] = '<input name="monthly[frequency_interval]" type="text" class="form-control">';
         $html[] = '<div class="input-group-addon">maand</div>';
         $html[] = '</div>';
         $html[] = '</div>';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-8">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
+        $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-4">';
+        $html[] = '<select name="frequency" class="form-control">';
+        $html[] = '<option>elke</option>';
+        $html[] = '<option>de 1e</option>';
+        $html[] = '<option>de 2e</option>';
+        $html[] = '<option>de 3e</option>';
+        $html[] = '<option>de 4e</option>';
+        $html[] = '<option>de 5e</option>';
+        $html[] = '</select>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-8">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default">Ma</a>';
+        $html[] = '<a class="btn btn-default">Di</a>';
+        $html[] = '<a class="btn btn-default">Wo</a>';
+        $html[] = '<a class="btn btn-default">Do</a>';
+        $html[] = '<a class="btn btn-default btn-primary">Vr</a>';
+        $html[] = '<a class="btn btn-default">Za</a>';
+        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default btn-primary">1</a>';
+        $html[] = '<a class="btn btn-default">2</a>';
+        $html[] = '<a class="btn btn-default">3</a>';
+        $html[] = '<a class="btn btn-default">4</a>';
+        $html[] = '<a class="btn btn-default">5</a>';
+        $html[] = '<a class="btn btn-default">6</a>';
+        $html[] = '<a class="btn btn-default">7</a>';
+        $html[] = '<a class="btn btn-default">8</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">9</a>';
+        $html[] = '<a class="btn btn-default btn-primary">10</a>';
+        $html[] = '<a class="btn btn-default">11</a>';
+        $html[] = '<a class="btn btn-default">12</a>';
+        $html[] = '<a class="btn btn-default">13</a>';
+        $html[] = '<a class="btn btn-default">14</a>';
+        $html[] = '<a class="btn btn-default">15</a>';
+        $html[] = '<a class="btn btn-default">16</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">17</a>';
+        $html[] = '<a class="btn btn-default">18</a>';
+        $html[] = '<a class="btn btn-default">19</a>';
+        $html[] = '<a class="btn btn-default btn-primary">20</a>';
+        $html[] = '<a class="btn btn-default">21</a>';
+        $html[] = '<a class="btn btn-default">22</a>';
+        $html[] = '<a class="btn btn-default btn-primary">23</a>';
+        $html[] = '<a class="btn btn-default">24</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">25</a>';
+        $html[] = '<a class="btn btn-default">26</a>';
+        $html[] = '<a class="btn btn-default">27</a>';
+        $html[] = '<a class="btn btn-default">28</a>';
+        $html[] = '<a class="btn btn-default">29</a>';
+        $html[] = '<a class="btn btn-default btn-primary">30</a>';
+        $html[] = '<a class="btn btn-default">31</a>';
+        $html[] = '<a class="btn btn-default">Last</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = '</div>';
 
         // Yearly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Yearly</h4></div></div>';
 
-        $html[] = '<div class="form-group row">';
-        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
         $html[] = '<input name="yearly[frequency_interval]" type="text" class="form-control">';
         $html[] = '<div class="input-group-addon">jaar</div>';
         $html[] = '</div>';
         $html[] = '</div>';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-8">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
+        $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
+        $html[] = '</div>';
         $html[] = '</div>';
 
-        $this->addElement('static', null, Translation::get('Frequency'), implode(PHP_EOL, $html));
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-4">';
+        $html[] = '<select name="frequency" class="form-control">';
+        $html[] = '<option>elke</option>';
+        $html[] = '<option>de 1e</option>';
+        $html[] = '<option>de 2e</option>';
+        $html[] = '<option>de 3e</option>';
+        $html[] = '<option>de 4e</option>';
+        $html[] = '<option>de 5e</option>';
+        $html[] = '</select>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-8">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default">Ma</a>';
+        $html[] = '<a class="btn btn-default">Di</a>';
+        $html[] = '<a class="btn btn-default">Wo</a>';
+        $html[] = '<a class="btn btn-default">Do</a>';
+        $html[] = '<a class="btn btn-default btn-primary">Vr</a>';
+        $html[] = '<a class="btn btn-default">Za</a>';
+        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default btn-primary">1</a>';
+        $html[] = '<a class="btn btn-default">2</a>';
+        $html[] = '<a class="btn btn-default">3</a>';
+        $html[] = '<a class="btn btn-default">4</a>';
+        $html[] = '<a class="btn btn-default">5</a>';
+        $html[] = '<a class="btn btn-default">6</a>';
+        $html[] = '<a class="btn btn-default">7</a>';
+        $html[] = '<a class="btn btn-default">8</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">9</a>';
+        $html[] = '<a class="btn btn-default btn-primary">10</a>';
+        $html[] = '<a class="btn btn-default">11</a>';
+        $html[] = '<a class="btn btn-default">12</a>';
+        $html[] = '<a class="btn btn-default">13</a>';
+        $html[] = '<a class="btn btn-default">14</a>';
+        $html[] = '<a class="btn btn-default">15</a>';
+        $html[] = '<a class="btn btn-default">16</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">17</a>';
+        $html[] = '<a class="btn btn-default">18</a>';
+        $html[] = '<a class="btn btn-default">19</a>';
+        $html[] = '<a class="btn btn-default btn-primary">20</a>';
+        $html[] = '<a class="btn btn-default">21</a>';
+        $html[] = '<a class="btn btn-default">22</a>';
+        $html[] = '<a class="btn btn-default btn-primary">23</a>';
+        $html[] = '<a class="btn btn-default">24</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+
+        $html[] = '<a class="btn btn-default">25</a>';
+        $html[] = '<a class="btn btn-default">26</a>';
+        $html[] = '<a class="btn btn-default">27</a>';
+        $html[] = '<a class="btn btn-default">28</a>';
+        $html[] = '<a class="btn btn-default">29</a>';
+        $html[] = '<a class="btn btn-default btn-primary">30</a>';
+        $html[] = '<a class="btn btn-default">31</a>';
+        $html[] = '<a class="btn btn-default" disabled="disabled"></a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">van de maand</div>';
+        $html[] = '<select name="frequency" class="form-control">';
+        $html[] = '<option>Januari</option>';
+        $html[] = '<option>Februari</option>';
+        $html[] = '<option>Maart</option>';
+        $html[] = '<option>April</option>';
+        $html[] = '<option>Mei</option>';
+        $html[] = '<option>Juni</option>';
+        $html[] = '<option>Juli</option>';
+        $html[] = '<option>Augustus</option>';
+        $html[] = '<option>September</option>';
+        $html[] = '<option>Oktober</option>';
+        $html[] = '<option>November</option>';
+        $html[] = '<option>December</option>';
+        $html[] = '</select>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        //Until
+        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Until</h4></div></div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default">Geen einddatum</a>';
+        $html[] = '<a class="btn btn-default">Beperkt aantal</a>';
+        $html[] = '<a class="btn btn-default btn-primary">Tot</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">Maak</div>';
+        $html[] = '<input name="yearly[frequency_interval]" type="text" class="form-control">';
+        $html[] = '<div class="input-group-addon">afspraken</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+//        $this->addElement('static', null, Translation::get('Frequency'), implode(PHP_EOL, $html));
 
         // frequency
         // no repeat

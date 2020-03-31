@@ -106,7 +106,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $js_form_name = $attributes['form_name'];
         $glyph = new FontAwesomeGlyph('calendar-alt');
 
-        $popupLink = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
+        $popupLink = '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
             $glyph->render() . '</a>';
         $specialCharacters = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
         $hourMinuteDivider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
@@ -119,11 +119,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
         if ($includeTimePicker)
         {
-            return 'dFY ' . $popupLink . '   H ' . $hourMinuteDivider . ' i';
+            return 'd F Y   ' . $popupLink . '   H ' . $hourMinuteDivider . ' i';
         }
         else
         {
-            return 'dFY ' . $popupLink;
+            return 'd F Y   ' . $popupLink;
         }
     }
 
