@@ -38,10 +38,12 @@
                             <div class="level">
                                 <label :for="`level_title_${levelIndex}`">Niveau</label>
                                 <input :id="`level_title_${levelIndex}`" tabindex="0" type="text" autocomplete="off" v-model="level.title" placeholder="Vul hier een niveau in" @focus="selectLevel(level)">
+                                <div class="overlay"></div>
                             </div>
                             <div class="weight">
                                 <label :for="`level_score_${levelIndex}`">Punten</label>
                                 <input :id="`level_score_${levelIndex}`" tabindex="0" type="number" name="Weight" maxlength="3" v-model="level.score" @focus="selectLevel(level)">
+                                <div class="overlay"></div>
                             </div>
                             <div class="default-choice">
                                 <label :for="`level_default_${levelIndex}`">Standaard</label>
@@ -51,6 +53,11 @@
                             <div class="delete">
                                 <button class="btn" @click.prevent="showRemoveLevelDialog(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
                                     <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="edit">
+                                <button class="btn" @click.prevent="editLevel(level)">
+                                    <i class="fa fa-fw fa-edit"></i>
                                 </button>
                             </div>
                         </div>
@@ -102,6 +109,7 @@
     export default class LevelsView extends Vue {
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
+        private editMode: boolean = false;
 
         selectLevel(level: Level|null) {
             this.selectedLevel = level;
@@ -114,6 +122,11 @@
 
         get rubric() {
             return this.store.rubric;
+        }
+
+        editLevel(level: Level) {
+            this.selectLevel(level);
+            this.editMode = true;
         }
 
         addLevel() {
@@ -140,6 +153,7 @@
         }
 
         removeLevel(level: Level) {
+            this.editMode = false;
             this.removingLevel = null;
             this.rubric.removeLevel(level);
             window.setTimeout(() => {
@@ -212,7 +226,6 @@
     }
     .actions {
         margin-left: 10px;
-        margin-top: 46px;
         align-self: center;
     }
     .actions button {
@@ -268,11 +281,9 @@
     li:not(.selected) textarea { color: #999; margin-top: -6px; padding-left: 6px; margin-bottom: -10px;}
 
     .level input {
-        /*min-width: 300px;*/
         width: 100%;
         height: 40px;
         padding: 4px ;
-        /*font-weight: bold;*/
     }
 
     label {
@@ -287,16 +298,9 @@
         resize: none;
         padding: 4px;
     }
-
     li label {
         transition: all 150ms;
     }
-    /*li:nth-child(odd) {
-        background-color: #dfdfdf;
-    }
-    li:nth-child(even) {
-        background-color: #e5e5e5;
-    }*/
     li:not(:first-child):not(.selected) label:not(.check), li:not(.selected) .description label {
         opacity: 0;
         margin: 0;
@@ -359,7 +363,6 @@
     .delete .btn {
         width: 26px;
         height: 26px;
-        /*text-align: center;*/
         padding: 0;
         color: transparent;
     }
@@ -410,5 +413,136 @@
     }
     .modal-level div {
         margin-bottom: 20px;
+    }
+    .overlay {
+        width: 0; height: 0;
+    }
+    .edit {
+        display: none;
+    }
+    .edit button {
+        background: transparent;
+    }
+    .edit button i {
+        color: #999;
+    }
+    .editMode {
+        margin-top: 18px;
+        margin-left: 24px;
+        margin-right: 24px;
+        width: 100%;
+    }
+    .editMode > div, .editMode > form > div {
+        margin-bottom: 14px;
+    }
+    .editMode input, .editMode textarea {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    .editMode input:focus {
+        background: white;
+    }
+    .editMode input[type="text"] { width: 100%; }
+    .editMode .weight, .editMode .default-choice {
+        margin-left: 4px;
+        align-items: start;
+    }
+    .editMode .weight input {
+        text-align: left;
+        padding-left: 4px;
+    }
+    .editMode .default-choice input + label {
+        border: 1px solid transparent;
+    }
+    .editMode .default-choice input + label.check i { margin-right: 6px; }
+    .editMode .default-choice input:checked + label.check { color: #406e8d; }
+    .editMode .default-choice input:not(:checked) + label.check { color: #aaa; }
+    .editMode input:hover, .editMode .default-choice input:focus + label {
+        border: 1px solid hsla(200, 50%, 50%, 0.5);
+    }
+    .editMode textarea {
+        resize: vertical;
+    }
+    .editMode .back {
+        cursor: pointer;
+    }
+    .editMode .delete {
+        display: block;
+    }
+    .editMode .delete button {
+        margin: 10px 0;
+        width: unset;
+        color: #999;
+    }
+    .editMode .delete button:hover {
+        background: transparent;
+        color: #337ab7
+    }
+    .editMode .delete button i {
+        margin-right: 2px;
+    }
+    @media only screen and (max-width: 900px) {
+        .levels ul {
+            pointer-events: none;
+        }
+        .level input {
+            text-overflow: ellipsis;
+        }
+        .delete {
+            display: none;
+        }
+        li:not(.selected) .default-choice input:not(:checked) + label.check { opacity: 1; color: #c9c9c9; }
+        li.selected .description { display: none; }
+        li.selected input[type="text"], li.selected input[type="number"] { background: transparent; }
+        li:not(:first-child).selected label:not(.check) {
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            height: 0;
+        }
+        .levels { flex: 1 }
+        .actions {
+            margin-right: 10px;
+        }
+        .details > div {
+            position: relative;
+        }
+        .default-choice, .edit {
+            pointer-events: visible;
+        }
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            pointer-events: visible;
+        }
+        .edit {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        li:first-child .edit button {
+            margin-top: 26px;
+        }
+        .edit button {
+            margin-top: 2px;
+        }
+    }
+
+    @media only screen and (max-width: 700px) {
+        .levels {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .details {
+            width: 90vw;
+        }
+        .levels li {
+            width: 100%;
+        }
+        .actions button {
+            display: inline-block;
+        }
     }
 </style>
