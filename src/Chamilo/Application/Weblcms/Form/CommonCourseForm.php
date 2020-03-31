@@ -225,8 +225,6 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             }
         }
 
-        $this->addElement('category');
-
         $this->setDefaults($defaults);
     }
 
@@ -446,8 +444,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $tool_title = Translation::get('TypeName', null, $tool_namespace);
 
             $glyph = new NamespaceIdentGlyph(
-                $tool_namespace, true, false, false, IdentGlyph::SIZE_MINI,
-                array(), $tool_title
+                $tool_namespace, true, false, false, IdentGlyph::SIZE_MINI, array(), $tool_title
             );
 
             $table_body = array();

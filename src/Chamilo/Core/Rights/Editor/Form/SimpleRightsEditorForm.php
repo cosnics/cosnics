@@ -23,17 +23,27 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class SimpleRightsEditorForm extends FormValidator
 {
-    const PROPERTY_INHERIT = 'inherit';
-    const PROPERTY_RIGHT_OPTION = 'right_option';
-    const PROPERTY_SUBMIT = 'submit';
-    const PROPERTY_RESET = 'reset';
-    const PROPERTY_BUTTONS = 'buttons';
-    const PROPERTY_TARGETS = 'targets';
-    const INHERIT_TRUE = 0;
     const INHERIT_FALSE = 1;
+
+    const INHERIT_TRUE = 0;
+
+    const PROPERTY_BUTTONS = 'buttons';
+
+    const PROPERTY_INHERIT = 'inherit';
+
+    const PROPERTY_RESET = 'reset';
+
+    const PROPERTY_RIGHT_OPTION = 'right_option';
+
+    const PROPERTY_SUBMIT = 'submit';
+
+    const PROPERTY_TARGETS = 'targets';
+
     const RIGHT_OPTION_ALL = 0;
-    const RIGHT_OTPION_ME = 1;
+
     const RIGHT_OPTION_SELECT = 2;
+
+    const RIGHT_OTPION_ME = 1;
 
     /**
      * The context for the rights form
@@ -95,6 +105,31 @@ class SimpleRightsEditorForm extends FormValidator
     }
 
     /**
+     * Builds the form footer
+     */
+    private function build_form_footer()
+    {
+        $buttons = array();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
+            null, null, new FontAwesomeGlyph('arrow-right')
+        );
+
+        $buttons[] = $this->createElement(
+            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
+
+        $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
+
+        $this->addElement(
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'RightsForm.js'
+        )
+        );
+    }
+
+    /**
      * Builds the inheritance form (wheter to inherit the rights from parent location or not)
      */
     private function build_inheritance_form()
@@ -131,8 +166,6 @@ class SimpleRightsEditorForm extends FormValidator
         );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
-
-        $this->addElement('category');
     }
 
     /**
@@ -177,113 +210,6 @@ class SimpleRightsEditorForm extends FormValidator
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS . '_' . $right_id, null, $types);
 
         $this->addElement('html', '</div></div>');
-
-        $this->addElement('category');
-    }
-
-    /**
-     * Builds the form footer
-     */
-    private function build_form_footer()
-    {
-        $buttons = array();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
-            null, null, new FontAwesomeGlyph('arrow-right')
-        );
-
-        $buttons[] = $this->createElement(
-            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-
-        $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
-
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'RightsForm.js'
-        )
-        );
-    }
-
-    /**
-     * Sets the default values for this form
-     *
-     * @param array $defaults
-     */
-    public function setDefaults($defaults = array())
-    {
-        $locations = $this->locations;
-
-        if (count($locations) > 0)
-        {
-            $first_location = $locations[0];
-
-            if ($first_location->inherits())
-            {
-                $defaults[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
-                foreach ($this->available_rights as $right_id)
-                {
-                    $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ALL;
-                }
-            }
-            else
-            {
-                $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
-            }
-
-            $selected_entities = DataManager::retrieve_rights_location_rights_for_location(
-                $this->context, $first_location->get_id(), $this->available_rights
-            );
-
-            $selected_entities_per_right = array();
-            while ($selected_entity = $selected_entities->next_result())
-            {
-                $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;
-            }
-
-            foreach ($this->available_rights as $right_id)
-            {
-                if (count($selected_entities_per_right[$right_id]) >= 1)
-                {
-                    $selected_entity = $selected_entities_per_right[$right_id][0];
-                    if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
-                    {
-                        $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ALL;
-                        continue;
-                    }
-                }
-
-                if (count($selected_entities_per_right[$right_id]) == 1)
-                {
-                    $selected_entity = $selected_entities_per_right[$right_id][0];
-
-                    if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == Session::get_user_id())
-                    {
-                        $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OTPION_ME;
-                        continue;
-                    }
-                }
-
-                $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_SELECT;
-
-                $default_elements = new AdvancedElementFinderElements();
-
-                foreach ($selected_entities_per_right[$right_id] as $selected_entity)
-                {
-                    $entity = $this->entities[$selected_entity->get_entity_type()];
-                    $default_elements->add_element(
-                        $entity->get_element_finder_element($selected_entity->get_entity_id())
-                    );
-                }
-
-                $element = $this->getElement(self::PROPERTY_TARGETS . '_' . $right_id);
-                $element->setDefaultValues($default_elements);
-            }
-        }
-
-        parent::setDefaults($defaults);
     }
 
     /**
@@ -370,5 +296,85 @@ class SimpleRightsEditorForm extends FormValidator
         }
 
         return $succes;
+    }
+
+    /**
+     * Sets the default values for this form
+     *
+     * @param array $defaults
+     */
+    public function setDefaults($defaults = array())
+    {
+        $locations = $this->locations;
+
+        if (count($locations) > 0)
+        {
+            $first_location = $locations[0];
+
+            if ($first_location->inherits())
+            {
+                $defaults[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
+                foreach ($this->available_rights as $right_id)
+                {
+                    $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ALL;
+                }
+            }
+            else
+            {
+                $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
+            }
+
+            $selected_entities = DataManager::retrieve_rights_location_rights_for_location(
+                $this->context, $first_location->get_id(), $this->available_rights
+            );
+
+            $selected_entities_per_right = array();
+            while ($selected_entity = $selected_entities->next_result())
+            {
+                $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;
+            }
+
+            foreach ($this->available_rights as $right_id)
+            {
+                if (count($selected_entities_per_right[$right_id]) >= 1)
+                {
+                    $selected_entity = $selected_entities_per_right[$right_id][0];
+                    if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
+                    {
+                        $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ALL;
+                        continue;
+                    }
+                }
+
+                if (count($selected_entities_per_right[$right_id]) == 1)
+                {
+                    $selected_entity = $selected_entities_per_right[$right_id][0];
+
+                    if ($selected_entity->get_entity_type() == 1 &&
+                        $selected_entity->get_entity_id() == Session::get_user_id())
+                    {
+                        $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OTPION_ME;
+                        continue;
+                    }
+                }
+
+                $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_SELECT;
+
+                $default_elements = new AdvancedElementFinderElements();
+
+                foreach ($selected_entities_per_right[$right_id] as $selected_entity)
+                {
+                    $entity = $this->entities[$selected_entity->get_entity_type()];
+                    $default_elements->add_element(
+                        $entity->get_element_finder_element($selected_entity->get_entity_id())
+                    );
+                }
+
+                $element = $this->getElement(self::PROPERTY_TARGETS . '_' . $right_id);
+                $element->setDefaultValues($default_elements);
+            }
+        }
+
+        parent::setDefaults($defaults);
     }
 }

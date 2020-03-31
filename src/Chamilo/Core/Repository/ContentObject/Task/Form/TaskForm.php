@@ -204,7 +204,6 @@ class TaskForm extends ContentObjectForm
         );
         $this->addGroup($until_elements, '', '', null, false);
         $this->addElement('html', '</div>');
-        $this->addElement('category');
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Task', true) . 'Dates.min.js'

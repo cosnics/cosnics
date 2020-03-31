@@ -13,24 +13,6 @@ use Chamilo\Libraries\Translation\Translation;
 class WikiForm extends ContentObjectForm
 {
 
-    public function create_content_object()
-    {
-        $object = new Wiki();
-        $object->set_locked($this->exportValue(Wiki::PROPERTY_LOCKED));
-        $object->set_links($this->exportValue(Wiki::PROPERTY_LINKS));
-        $this->set_content_object($object);
-        return parent::create_content_object();
-    }
-
-    public function update_content_object()
-    {
-        $object = $this->get_content_object();
-        $object->set_locked($this->exportValue(Wiki::PROPERTY_LOCKED));
-        $object->set_links($this->exportValue(Wiki::PROPERTY_LINKS));
-        $this->set_content_object($object);
-        return parent::update_content_object();
-    }
-
     public function build_creation_form()
     {
         parent::build_creation_form();
@@ -39,7 +21,6 @@ class WikiForm extends ContentObjectForm
         $this->add_html_editor('links', Translation::get('WikiToolBoxLinks'), false);
         // $this->addElement('textarea', 'links', Translation :: get('WikiToolBoxLinks'),
         // array('rows' => 5, 'cols' => 100));
-        $this->addElement('category');
     }
 
     public function build_editing_form()
@@ -50,7 +31,16 @@ class WikiForm extends ContentObjectForm
         $this->add_html_editor('links', Translation::get('WikiToolBoxLinks'), false);
         // $this->addElement('textarea', 'links', Translation :: get('WikiToolBoxLinks'),
         // array('rows' => 5, 'cols' => 100));
-        $this->addElement('category');
+    }
+
+    public function create_content_object()
+    {
+        $object = new Wiki();
+        $object->set_locked($this->exportValue(Wiki::PROPERTY_LOCKED));
+        $object->set_links($this->exportValue(Wiki::PROPERTY_LINKS));
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
     }
 
     public function setDefaults($defaults = array())
@@ -67,5 +57,15 @@ class WikiForm extends ContentObjectForm
         }
 
         parent::setDefaults($defaults);
+    }
+
+    public function update_content_object()
+    {
+        $object = $this->get_content_object();
+        $object->set_locked($this->exportValue(Wiki::PROPERTY_LOCKED));
+        $object->set_links($this->exportValue(Wiki::PROPERTY_LINKS));
+        $this->set_content_object($object);
+
+        return parent::update_content_object();
     }
 }

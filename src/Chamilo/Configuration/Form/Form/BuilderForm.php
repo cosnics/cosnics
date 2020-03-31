@@ -59,8 +59,6 @@ class BuilderForm extends FormValidator
             'checkbox', Element::PROPERTY_REQUIRED, Translation::get('Required', null, Utilities::COMMON_LIBRARIES)
         );
 
-        $this->addElement('category');
-
         if ($this->element->get_type() >= Element::TYPE_RADIO_BUTTONS)
         {
             $this->build_options();
@@ -164,8 +162,6 @@ class BuilderForm extends FormValidator
         $this->addElement(
             'style_button', 'add[]', null, array(), null, new FontAwesomeGlyph('plus', array(), null, 'fas')
         );
-
-        $this->addElement('category');
     }
 
     public function create_dynamic_form_element()

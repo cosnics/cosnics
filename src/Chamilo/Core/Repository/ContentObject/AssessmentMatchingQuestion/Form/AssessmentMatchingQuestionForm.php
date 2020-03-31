@@ -170,8 +170,6 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
         );
-
-        $this->addElement('category');
     }
 
     /**
@@ -306,8 +304,6 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
         );
-
-        $this->addElement('category');
     }
 
     protected function build_creation_form()
@@ -349,7 +345,6 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addElement(
             'select', AssessmentMatchingQuestion::PROPERTY_DISPLAY, Translation::get('Display'), $select_options
         );
-        $this->addElement('category');
 
         $this->update_number_of_options_and_matches();
         $this->add_options();

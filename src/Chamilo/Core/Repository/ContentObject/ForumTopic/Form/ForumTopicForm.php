@@ -14,34 +14,6 @@ class ForumTopicForm extends ContentObjectForm
 {
 
     /**
-     * Creates a new ForumTopic.
-     *
-     * @return ForumTopic
-     */
-    public function create_content_object()
-    {
-        $object = new ForumTopic();
-        $object->set_locked(false);
-        $this->set_content_object($object);
-
-        return parent::create_content_object();
-    }
-
-    /**
-     * Updates a ForumTopic.
-     *
-     * @return ForumTopic
-     * @throws \Exception
-     */
-    public function update_content_object()
-    {
-        $object = $this->get_content_object();
-        $object->set_locked($this->exportValue(ForumTopic::PROPERTY_LOCKED));
-
-        return parent::update_content_object();
-    }
-
-    /**
      * Build the creation form to create a ForumTopic.
      *
      * @param array $htmleditor_options
@@ -65,10 +37,22 @@ class ForumTopicForm extends ContentObjectForm
         parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         $this->addElement(
-            'checkbox',
-            'locked',
-            Translation::get('Locked', null, 'Chamilo\Core\Repository\ContentObject\Forum'));
-        $this->addElement('category');
+            'checkbox', 'locked', Translation::get('Locked', null, 'Chamilo\Core\Repository\ContentObject\Forum')
+        );
+    }
+
+    /**
+     * Creates a new ForumTopic.
+     *
+     * @return ForumTopic
+     */
+    public function create_content_object()
+    {
+        $object = new ForumTopic();
+        $object->set_locked(false);
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
     }
 
     public function setDefaults($defaults = array())
@@ -79,5 +63,19 @@ class ForumTopicForm extends ContentObjectForm
             $defaults[ForumTopic::PROPERTY_LOCKED] = $object->get_locked();
         }
         parent::setDefaults($defaults);
+    }
+
+    /**
+     * Updates a ForumTopic.
+     *
+     * @return ForumTopic
+     * @throws \Exception
+     */
+    public function update_content_object()
+    {
+        $object = $this->get_content_object();
+        $object->set_locked($this->exportValue(ForumTopic::PROPERTY_LOCKED));
+
+        return parent::update_content_object();
     }
 }

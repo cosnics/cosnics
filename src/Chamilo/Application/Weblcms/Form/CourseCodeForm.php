@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Form;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,6 +34,21 @@ class CourseCodeForm extends FormValidator
         $this->add_progress_bar(2);
     }
 
+    public function build_code_form()
+    {
+        $this->addElement('category', Translation::get('CourseCodeProperties'));
+
+        $course_name = $this->course->get_name();
+        $this->addElement('static', 'course', Translation::get('Course'), $course_name);
+
+        $user_name = $this->user->get_fullname();
+        $this->addElement(
+            'static', 'user', Translation::get('User', null, Manager::context()), $user_name
+        );
+
+        $this->add_textfield(self::TEMP_CODE, Translation::get('Code'));
+    }
+
     public function build_creating_form()
     {
         $this->build_code_form();
@@ -46,23 +62,6 @@ class CourseCodeForm extends FormValidator
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    public function build_code_form()
-    {
-        $this->addElement('category', Translation::get('CourseCodeProperties'));
-
-        $course_name = $this->course->get_name();
-        $this->addElement('static', 'course', Translation::get('Course'), $course_name);
-
-        $user_name = $this->user->get_fullname();
-        $this->addElement(
-            'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
-        );
-
-        $this->add_textfield(self::TEMP_CODE, Translation::get('Code'));
-
-        $this->addElement('category');
     }
 
     public function check_code()

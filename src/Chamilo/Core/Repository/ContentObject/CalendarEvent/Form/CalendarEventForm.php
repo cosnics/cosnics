@@ -58,6 +58,90 @@ class CalendarEventForm extends ContentObjectForm
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
 
+        $html = array();
+
+        // Frequency
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<select name="frequency" class="form-control">';
+        $html[] = '<option>Geen</option>';
+        $html[] = '<option>Elke weekdag</option>';
+        $html[] = '<option>Tweewekelijks</option>';
+        $html[] = '<option>Dagelijks</option>';
+        $html[] = '<option>Wekelijks</option>';
+        $html[] = '<option>Maandelijks</option>';
+        $html[] = '</select>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        // Daily
+        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Daily</h4></div></div>';
+
+        $html[] = '<div class="form-group row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">Elke</div>';
+        $html[] = '<input name="daily[frequency_interval]" type="text" class="form-control">';
+        $html[] = '<div class="input-group-addon">dagen</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        // Weekly
+        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Weekly</h4></div></div>';
+
+        $html[] = '<div class="form-group row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">Elke</div>';
+        $html[] = '<input name="weekly[frequency_interval]" type="text" class="form-control">';
+        $html[] = '<div class="input-group-addon">weken</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="form-group  row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<span class="input-group-addon">Op</span>';
+        $html[] = '<a class="btn btn-default">Ma</a>';
+        $html[] = '<a class="btn btn-default btn-primary">Di</a>';
+        $html[] = '<a class="btn btn-default">Wo</a>';
+        $html[] = '<a class="btn btn-default">Do</a>';
+        $html[] = '<a class="btn btn-default">Vr</a>';
+        $html[] = '<a class="btn btn-default">Za</a>';
+        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        // Monthly
+        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Monthly</h4></div></div>';
+
+        $html[] = '<div class="form-group row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">Elke</div>';
+        $html[] = '<input name="monthly[frequency_interval]" type="text" class="form-control">';
+        $html[] = '<div class="input-group-addon">maand</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        // Yearly
+        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Yearly</h4></div></div>';
+
+        $html[] = '<div class="form-group row">';
+        $html[] = '<div class="col-md-12 col-lg-6">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">Elke</div>';
+        $html[] = '<input name="yearly[frequency_interval]" type="text" class="form-control">';
+        $html[] = '<div class="input-group-addon">jaar</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $this->addElement('static', null, Translation::get('Frequency'), implode(PHP_EOL, $html));
+
         // frequency
         // no repeat
         $this->addElement(
@@ -246,12 +330,11 @@ class CalendarEventForm extends ContentObjectForm
             'datepicker', CalendarEvent::PROPERTY_UNTIL, '',
             array('form_name' => $this->getAttribute('name'), 'class' => CalendarEvent::PROPERTY_UNTIL), true
         );
-        $this->addGroup($until_elements, '', '', null, false);
+        $this->addGroup($until_elements, 'until_elements', '', null, false);
         $this->addElement('html', '</div>');
 
         $this->add_textfield(CalendarEvent::PROPERTY_LOCATION, Translation::get('Location'), false);
 
-        $this->addElement('category');
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .

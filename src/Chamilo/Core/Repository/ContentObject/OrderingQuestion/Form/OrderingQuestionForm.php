@@ -22,8 +22,7 @@ class OrderingQuestionForm extends ContentObjectForm
     {
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')),
-                'buildHintForm'
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
             )
         );
     }
@@ -219,7 +218,6 @@ class OrderingQuestionForm extends ContentObjectForm
         )
         );
         $this->add_options();
-        $this->addElement('category');
     }
 
     protected function build_editing_form()
@@ -233,7 +231,6 @@ class OrderingQuestionForm extends ContentObjectForm
         )
         );
         $this->add_options();
-        $this->addElement('category');
     }
 
     public function create_content_object()

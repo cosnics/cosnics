@@ -93,7 +93,6 @@ class InvitationRegistrationForm extends FormValidator
             'required'
         );
 
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('BasicProfile'));
 
@@ -116,7 +115,6 @@ class InvitationRegistrationForm extends FormValidator
         // $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
-        $this->addElement('category');
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
         {
@@ -130,7 +128,6 @@ class InvitationRegistrationForm extends FormValidator
                 'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                 'required'
             );
-            $this->addElement('category');
         }
 
         $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('CreateAccount'));

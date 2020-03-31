@@ -1,13 +1,8 @@
 <?php
 
 /**
- * A pseudo-element used for adding raw HTML to form
- * Intended for use with the default renderer only, template-based
- * ones may (and probably will) completely ignore this
  *
- * @package Chamilo\Libraries\Format\Form\Element
- * @author Alexey Borzov <borz_off@cs.msu.su>
- * @access public
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HTML_QuickForm_category extends HTML_QuickForm_html
 {
@@ -19,14 +14,12 @@ class HTML_QuickForm_category extends HTML_QuickForm_html
      */
     public function __construct($title = null, $extra_classes = null)
     {
-        $html = array();
+        $html = '';
 
         if ($title != null)
         {
-            $html[] = '<h4 class="form-category">' . $title . '</h4>';
+            $html = '<h4 class="form-category">' . $title . '</h4>';
         }
-
-        $html = implode(PHP_EOL, $html);
 
         parent::__construct($html);
     }

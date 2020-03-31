@@ -144,8 +144,6 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
         );
-
-        $this->addElement('category');
     }
 
     /**
@@ -293,8 +291,6 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
         );
-
-        $this->addElement('category');
     }
 
     protected function build_creation_form()

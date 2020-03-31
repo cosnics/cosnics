@@ -40,7 +40,6 @@ class PhysicalLocationForm extends ContentObjectForm
             Translation::get('Location'),
             true,
             array('size' => '100'));
-        $this->addElement('category');
     }
 
     protected function build_editing_form()
@@ -52,7 +51,6 @@ class PhysicalLocationForm extends ContentObjectForm
             Translation::get('Location'),
             true,
             array('size' => '100'));
-        $this->addElement('category');
     }
 
     public function setDefaults($defaults = array ())

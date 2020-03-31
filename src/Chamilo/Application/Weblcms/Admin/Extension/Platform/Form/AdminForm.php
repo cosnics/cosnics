@@ -49,7 +49,6 @@ class AdminForm extends FormValidator
 
         $this->addElement('advanced_element_finder', self::PROPERTY_ENTITIES, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_ENTITIES);
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('Targets'));
 
@@ -62,7 +61,6 @@ class AdminForm extends FormValidator
 
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_TARGETS);
-        $this->addElement('category');
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES), null, null,

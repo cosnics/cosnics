@@ -168,8 +168,6 @@ class PublicationTargetForm extends FormValidator
             $table_data, $header, array(), 1, count($table_data), SORT_ASC, 'selected-content-objects'
         );
         $this->addElement('html', $table->render());
-
-        $this->addElement('category');
     }
 
     public function buildForm()

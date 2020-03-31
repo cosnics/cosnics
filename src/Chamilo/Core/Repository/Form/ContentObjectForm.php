@@ -266,7 +266,6 @@ abstract class ContentObjectForm extends FormValidator
                 {
                     $this->addElement($element);
                 }
-                $this->addElement('category');
             }
         }
     }
@@ -335,8 +334,6 @@ abstract class ContentObjectForm extends FormValidator
             $elem = $this->addElement(
                 'element_finder', 'attachments', Translation::get('SelectAttachment'), $url, $locale, $attachments
             );
-
-            $this->addElement('category');
 
             if ($id = $object->get_id())
             {
@@ -523,11 +520,6 @@ abstract class ContentObjectForm extends FormValidator
         }
 
         $this->build_basic_form($htmleditor_options);
-
-        if (!$in_tab)
-        {
-            $this->addElement('category');
-        }
     }
 
     protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
@@ -580,11 +572,6 @@ abstract class ContentObjectForm extends FormValidator
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'
         )
         );
-
-        if (!$in_tab)
-        {
-            $this->addElement('category');
-        }
     }
 
     public function build_general_form()
@@ -963,8 +950,7 @@ EOT;
         $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($type);
         $name = Translation::get('TypeName', array(), $namespace);
 
-        return $content_object->getGlyph(IdentGlyph::SIZE_MINI)->render() .
-            ' <b>' . $name . '</b>';
+        return $content_object->getGlyph(IdentGlyph::SIZE_MINI)->render() . ' <b>' . $name . '</b>';
     }
 
     public function get_form_type()

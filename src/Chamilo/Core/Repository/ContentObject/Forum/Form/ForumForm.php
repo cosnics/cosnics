@@ -34,7 +34,6 @@ class ForumForm extends ContentObjectForm
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
         $this->addElement('checkbox', 'locked', Translation::get('ForumLocked'));
-        $this->addElement('category');
     }
 
     public function setDefaults($defaults = array())

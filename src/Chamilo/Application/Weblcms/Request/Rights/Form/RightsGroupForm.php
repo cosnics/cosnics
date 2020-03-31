@@ -9,12 +9,12 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class RightsGroupForm extends FormValidator
@@ -50,14 +50,12 @@ class RightsGroupForm extends FormValidator
         $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
         $this->addElement('advanced_element_finder', self::PROPERTY_ACCESS, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_ACCESS);
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('RightsGroupTargets'));
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_TARGETS);
-        $this->addElement('category');
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES), null, null,

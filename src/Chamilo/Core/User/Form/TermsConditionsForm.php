@@ -9,8 +9,9 @@ use function Strftime;
 
 class TermsConditionsForm extends FormValidator
 {
-    const TYPE_VIEW = 'view';
     const TYPE_EDIT = 'edit';
+
+    const TYPE_VIEW = 'view';
 
     private $parent;
 
@@ -36,6 +37,42 @@ class TermsConditionsForm extends FormValidator
         $this->setDefaults();
     }
 
+    public function add_accepted_date()
+    {
+        // show date when user has accepted tems & conditions
+        if ($this->user->get_terms_date() != null && $this->user->get_terms_date() > 0)
+        {
+            $date_format = '%e-%m-%Y %H:%M';
+            $date = Strftime($date_format, $this->user->get_terms_date());
+            $this->addElement('html', Translation::get('TermsConditionsAcceptedDate') . $date);
+        }
+    }
+
+    public function add_last_modified_date()
+    {
+        // show date last updated
+        $date_format = '%e-%m-%Y %H:%M';
+        $date = Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified());
+        $this->addElement('html', Translation::get('TermsConditionsDate') . $date);
+    }
+
+    public function build_edit_form()
+    {
+        $this->add_last_modified_date();
+
+        $this->addElement('category', Translation::get('TermsConditions'));
+        $this->addElement(
+            'textarea', 'conditions', null, array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;')
+        );
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('TermsConditionsEdit'), null, null,
+            new FontAwesomeGlyph('user')
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
     /**
      * Creates a creation form
      */
@@ -50,7 +87,6 @@ class TermsConditionsForm extends FormValidator
             'textarea', 'conditions', null,
             array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;')
         );
-        $this->addElement('category');
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('TermsConditionsAccept'), null, null,
@@ -60,41 +96,11 @@ class TermsConditionsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function add_last_modified_date()
+    public function edit_terms_conditions()
     {
-        // show date last updated
-        $date_format = '%e-%m-%Y %H:%M';
-        $date = Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified());
-        $this->addElement('html', Translation::get('TermsConditionsDate') . $date);
-    }
-
-    public function add_accepted_date()
-    {
-        // show date when user has accepted tems & conditions
-        if ($this->user->get_terms_date() != null && $this->user->get_terms_date() > 0)
-        {
-            $date_format = '%e-%m-%Y %H:%M';
-            $date = Strftime($date_format, $this->user->get_terms_date());
-            $this->addElement('html', Translation::get('TermsConditionsAcceptedDate') . $date);
-        }
-    }
-
-    public function build_edit_form()
-    {
-        $this->add_last_modified_date();
-
-        $this->addElement('category', Translation::get('TermsConditions'));
-        $this->addElement(
-            'textarea', 'conditions', null, array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;')
-        );
-        $this->addElement('category');
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('TermsConditionsEdit'), null, null,
-            new FontAwesomeGlyph('user')
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        $values = $this->exportValues();
+        $text = $values['conditions'];
+        Manager::set_terms_and_conditions($text);
     }
 
     /**
@@ -105,13 +111,6 @@ class TermsConditionsForm extends FormValidator
         $this->user->set_term_date(time());
 
         return $this->user->update();
-    }
-
-    public function edit_terms_conditions()
-    {
-        $values = $this->exportValues();
-        $text = $values['conditions'];
-        Manager::set_terms_and_conditions($text);
     }
 
     /**

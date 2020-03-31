@@ -102,8 +102,6 @@ class AssignmentForm extends ContentObjectForm
             $types
         );
 
-        $this->addElement('category');
-
         parent::add_attachments_form();
 
         // Automatic feedback
@@ -169,8 +167,6 @@ class AssignmentForm extends ContentObjectForm
             'radio', Assignment::PROPERTY_VISIBILTY_FEEDBACK, null, Translation::get('AfterSubmission'), 1
         );
         $this->addGroup($choices, null, Translation::get('VisibiltyFeedback'), '', false);
-
-        $this->addElement('category');
     }
 
     public function create_content_object()
@@ -276,8 +272,7 @@ class AssignmentForm extends ContentObjectForm
                 $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
 
                 $glyph = new NamespaceIdentGlyph(
-                    $basePackage, true, false, false, IdentGlyph::SIZE_MINI,
-                    array('fa-fw')
+                    $basePackage, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
                 );
 
                 $defaultElements->add_element(

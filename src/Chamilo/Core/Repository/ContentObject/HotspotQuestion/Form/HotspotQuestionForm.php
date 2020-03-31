@@ -27,7 +27,16 @@ class HotspotQuestionForm extends ContentObjectForm
 {
 
     private $colours = array(
-        '#ff0000', '#f2ef00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#0080ff', '#ff0080', '#00ff80', '#ff8000',
+        '#ff0000',
+        '#f2ef00',
+        '#00ff00',
+        '#00ffff',
+        '#0000ff',
+        '#ff00ff',
+        '#0080ff',
+        '#ff0080',
+        '#00ff80',
+        '#ff8000',
         '#8000ff'
     );
 
@@ -75,7 +84,6 @@ class HotspotQuestionForm extends ContentObjectForm
         // get('SelectAnotherImage')) . '</button>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
-        $this->addElement('category');
     }
 
     /**
@@ -294,7 +302,6 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement('html', '<div id="hotspot_options" style="display: none;">');
         $this->addElement('category', Translation::get('Hotspots'));
         $this->add_options();
-        $this->addElement('category');
         $this->addElement('html', '</div>');
 
         $this->addElement('html', '<div id="hotspot_select">');
@@ -330,7 +337,6 @@ class HotspotQuestionForm extends ContentObjectForm
             'image_selecter', 'image', Translation::get('SelectImage'), $redirect->getUrl(), $locale, array(),
             $image_selecter_options
         );
-        $this->addElement('category');
         $this->addElement('html', '</div>');
 
         $this->set_session_answers();
@@ -385,7 +391,6 @@ class HotspotQuestionForm extends ContentObjectForm
             $image_selecter_options
         );
 
-        $this->addElement('category');
         $this->set_session_answers();
     }
 

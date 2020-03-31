@@ -25,11 +25,9 @@ define('TEACHER_HTML_FULLPAGE', 5);
 class FormValidator extends HTML_QuickForm
 {
     const FORM_METHOD_GET = 'get';
-
     const FORM_METHOD_POST = 'post';
 
     const PARAM_RESET = 'reset';
-
     const PARAM_SUBMIT = 'submit';
 
     /**
@@ -417,6 +415,7 @@ EOT;
             $includeTimePicker
         );
         $this->addRule($name, Translation::get('InvalidDate'), 'date');
+        $this->get_renderer()->setElementTemplate($this->getDatePickerElementTemplate(), $name);
 
         return $element;
     }
@@ -931,25 +930,6 @@ EOT;
     }
 
     /**
-     * Add a timepicker element to the form
-     *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param boolean $includeMinutesPicker
-     *
-     * @return \HTML_QuickForm_timepicker The element.
-     */
-    public function add_timepicker($name, $label, $includeMinutesPicker = true)
-    {
-        $element = $this->addElement(
-            'timepicker', $name, $label, array('form_name' => $this->getAttribute('name'), 'class' => $name),
-            $includeMinutesPicker
-        );
-
-        return $element;
-    }
-
-    /**
      * Add a timewindow element to the form.
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
@@ -1095,6 +1075,13 @@ EOT;
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
     }
 
+    public function getDatePickerElementTemplate()
+    {
+        $template = $this->getElementTemplate();
+
+        return str_replace('<div class="element">', '<div class="element form-inline">', $template);
+    }
+
     /**
      *
      * @param string $extraClasses
@@ -1103,22 +1090,63 @@ EOT;
      */
     public function getElementTemplate($extraClasses = null)
     {
-        $element_template = array();
+        $html = array();
         $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
 
-        $element_template[] = '<div class="form-row row ' . $extraClasses . '">';
-        $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
-        $element_template[] = '{label}<!-- BEGIN required --><span class="form_required">&nbsp;' . $glyph->render() .
+        $html[] = '<div class="form-row row ' . $extraClasses . '">';
+        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
+        $html[] = '{label}<!-- BEGIN required --><span class="form_required">&nbsp;' . $glyph->render() .
             '</span> <!-- END required -->';
-        $element_template[] = '</div>';
-        $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $element_template[] =
+        $html[] = '</div>';
+        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+        $html[] =
             '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
-        $element_template[] = '<div class="form_feedback"></div></div>';
-        $element_template[] = '<div class="clear">&nbsp;</div>';
-        $element_template[] = '</div>';
+        $html[] = '<div class="form_feedback"></div></div>';
+        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '</div>';
 
-        return implode(PHP_EOL, $element_template);
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormTemplate()
+    {
+        $html = array();
+
+        $html[] = '<form {attributes}>';
+        $html[] = '{content}';
+        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '</form>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getHeaderTemplate()
+    {
+        $html = array();
+
+        $html[] = '<div class="form-row">';
+        $html[] = '<div class="form_header">{header}</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function getRequiredNoteTemplate()
+    {
+        $html = array();
+
+        $html[] = '<div class="form-row row">';
+        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>';
+        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -1244,14 +1272,8 @@ EOT;
         $this->registerElementType(
             'datepicker', $dir . 'Element/HTML_QuickForm_datepicker.php', 'HTML_QuickForm_datepicker'
         );
-        $this->registerElementType(
-            'timepicker', $dir . 'Element/HTML_QuickForm_timepicker.php', 'HTML_QuickForm_timepicker'
-        );
 
         // Element finder elements
-        $this->registerElementType(
-            'upload_or_create', $dir . 'Element/HTML_QuickForm_upload_or_create.php', 'HTML_QuickForm_upload_or_create'
-        );
         $this->registerElementType(
             'element_finder', $dir . 'Element/HTML_QuickForm_element_finder.php', 'HTML_QuickForm_element_finder'
         );
@@ -1338,41 +1360,19 @@ EOT;
 
     public function setDefaultTemplates()
     {
-        $this->renderer = $this->defaultRenderer();
-
-        $form_template = <<<EOT
-<form {attributes}>
-{content}
-	<div class="clear">
-		&nbsp;
-	</div>
-</form>
-EOT;
-        $this->renderer->setFormTemplate($form_template);
-
-        $this->renderer->setElementTemplate($this->getElementTemplate());
-
-        $header_template = array();
-        $header_template[] = '<div class="form-row">';
-        $header_template[] = '<div class="form_header">{header}</div>';
-        $header_template[] = '</div>';
-        $header_template = implode(PHP_EOL, $header_template);
-
-        $this->renderer->setHeaderTemplate($header_template);
-
         $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
 
         HTML_QuickForm::setRequiredNote(
             '<span class="form_required">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>'
         );
-        $required_note_template = <<<EOT
-	<div class="form-row row">
-		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>
-		<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>
-	</div>
-EOT;
-        $this->renderer->setRequiredNoteTemplate($required_note_template);
+
+        $this->renderer = $this->defaultRenderer();
+
+        $this->renderer->setFormTemplate($this->getFormTemplate());
+        $this->renderer->setElementTemplate($this->getElementTemplate());
+        $this->renderer->setHeaderTemplate($this->getHeaderTemplate());
+        $this->renderer->setRequiredNoteTemplate($this->getRequiredNoteTemplate());
     }
 
     /**

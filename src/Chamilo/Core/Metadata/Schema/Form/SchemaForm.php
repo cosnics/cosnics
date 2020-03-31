@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Form for the schema
- * 
+ *
  * @package Chamilo\Core\Metadata\Schema\Form
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -33,18 +33,18 @@ class SchemaForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param string $form_url
      * @param \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema $schema
      */
     public function __construct(Schema $schema, EntityTranslationFormService $entityTranslationFormService, $formUrl)
     {
         parent::__construct('schema', 'post', $formUrl);
-        
+
         $this->schema = $schema;
         $this->entityTranslationFormService = $entityTranslationFormService;
         $this->entityTranslationFormService->setFormValidator($this);
-        
+
         $this->buildForm();
         $this->setFormDefaults();
     }
@@ -56,47 +56,44 @@ class SchemaForm extends FormValidator
     {
         $this->addElement('category', Translation::get('General'));
         $this->addElement('text', Schema::PROPERTY_NAMESPACE, Translation::get('Namespace'), array("size" => "50"));
-        
+
         $this->addRule(
-            Schema::PROPERTY_NAMESPACE, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-            'required');
-        
+            Schema::PROPERTY_NAMESPACE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
+
         $this->addElement('text', Schema::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
-        
+
         $this->addRule(
-            Schema::PROPERTY_NAME, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-            'required');
-        
+            Schema::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
+
         $this->addElement('text', Schema::PROPERTY_URL, Translation::get('Url'), array("size" => "50"));
-        
+
         $this->addRule(
-            Schema::PROPERTY_URL, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-            'required');
-        
-        $this->addElement('category');
-        
+            Schema::PROPERTY_URL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
+
         $this->entityTranslationFormService->addFieldsToForm();
         $this->addSaveResetButtons();
     }
 
     /**
      * Sets the default values
-     * 
+     *
      * @param \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema $schema
      */
     protected function setFormDefaults()
     {
         $defaults = array();
-        
+
         $defaults[Schema::PROPERTY_NAMESPACE] = $this->schema->get_namespace();
         $defaults[Schema::PROPERTY_NAME] = $this->schema->get_name();
         $defaults[Schema::PROPERTY_URL] = $this->schema->get_url();
-        
+
         $this->setDefaults($defaults);
-        
+
         $this->entityTranslationFormService->setFormDefaults();
     }
 }

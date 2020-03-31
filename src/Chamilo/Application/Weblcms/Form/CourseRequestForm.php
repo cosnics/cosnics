@@ -5,15 +5,17 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -23,10 +25,13 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CourseRequestForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_VIEW = 3;
     const CHOOSE_DATE = 'choose date';
+
+    const TYPE_CREATE = 1;
+
+    const TYPE_EDIT = 2;
+
+    const TYPE_VIEW = 3;
 
     private $form_type;
 
@@ -90,11 +95,6 @@ class CourseRequestForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function build_viewing_form()
-    {
-        $this->build_request_form();
-    }
-
     public function build_request_form()
     {
         $this->addElement('html', '<div class="clear">&nbsp;</div><br/>');
@@ -113,8 +113,8 @@ class CourseRequestForm extends FormValidator
                 );
 
                 $parameters = new DataClassRetrievesParameters(null, null, null, $order);
-                $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), $parameters
+                $users_result = DataManager::retrieves(
+                    User::class_name(), $parameters
                 );
                 $users = array();
                 while ($user = $users_result->next_result())
@@ -124,16 +124,16 @@ class CourseRequestForm extends FormValidator
                 }
                 $this->addElement(
                     'select', CommonRequest::PROPERTY_USER_ID,
-                    Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $users
+                    Translation::get('User', null, Manager::context()), $users
                 );
             }
             else
             {
-                $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $this->request_user_id
+                $user_name = DataManager::retrieve_by_id(
+                    User::class_name(), (int) $this->request_user_id
                 )->get_fullname();
                 $this->addElement(
-                    'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
+                    'static', 'user', Translation::get('User', null, Manager::context()), $user_name
                 );
             }
 
@@ -154,11 +154,11 @@ class CourseRequestForm extends FormValidator
                 'category', Translation::get(ClassnameUtilities::getInstance()->getClassnameFromObject($this->request))
             );
 
-            $name_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), (int) $this->request->get_user_id()
+            $name_user = DataManager::retrieve_by_id(
+                User::class_name(), (int) $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
-                'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $name_user
+                'static', 'request', Translation::get('User', null, Manager::context()), $name_user
             );
 
             $request_name =
@@ -200,7 +200,11 @@ class CourseRequestForm extends FormValidator
                     break;
             }
         }
-        $this->addElement('category');
+    }
+
+    public function build_viewing_form()
+    {
+        $this->build_request_form();
     }
 
     public function create_request()
@@ -235,6 +239,11 @@ class CourseRequestForm extends FormValidator
         return true;
     }
 
+    public function get_form_type()
+    {
+        return $this->form_type;
+    }
+
     public function setDefaults($defaults = array())
     {
         $request = $this->request;
@@ -247,10 +256,5 @@ class CourseRequestForm extends FormValidator
         $defaults[CommonRequest::PROPERTY_DECISION_DATE] = $request->get_decision_date();
 
         parent::setDefaults($defaults);
-    }
-
-    public function get_form_type()
-    {
-        return $this->form_type;
     }
 }

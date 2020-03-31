@@ -2,6 +2,7 @@
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -17,13 +18,18 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      *
      * @var boolean
      */
-    private $include_time_picker;
+    private $includeTimePicker;
 
     /**
-     * Constructor
+     * HTML_QuickForm_datepicker constructor.
+     *
+     * @param string $elementName
+     * @param string $elementLabel
+     * @param string $attributes
+     * @param boolean $includeTimePicker
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $attributes = null, $include_time_picker = true
+        $elementName = null, $elementLabel = null, $attributes = null, $includeTimePicker = true
     )
     {
         if (!isset($attributes['form_name']))
@@ -31,67 +37,21 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             return;
         }
 
-        $js_form_name = $attributes['form_name'];
+        $attributes['class'] = 'form-control';
+
         // unset($attributes['form_name']);
         HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
+
         $this->_persistantFreeze = true;
         $this->_appendName = true;
         $this->_type = 'datepicker';
+        $this->includeTimePicker = $includeTimePicker;
 
-        $glyph = new FontAwesomeGlyph('calendar-alt');
-
-        $popup_link = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
-            $glyph->render() . '</a>';
-        $special_chars = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
-        $hour_minute_devider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
-
-        foreach ($special_chars as $index => $char)
-        {
-            $popup_link = str_replace($char, "\\" . $char, $popup_link);
-            $hour_minute_devider = str_replace($char, "\\" . $char, $hour_minute_devider);
-        }
-
-        $editor_lang = Translation::getInstance()->getLanguageIsocode();
-
-        if (empty($editor_lang))
-        {
-            // if there was no valid iso-code, use the english one
-            $editor_lang = 'en';
-        }
-
-        // If translation not available in PEAR::HTML_QuickForm_date, add the Chamilo-translation
-        if (!array_key_exists($editor_lang, $this->_locale))
-        {
-            $this->_locale[$editor_lang]['months_long'] = array(
-                Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("FebruaryLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("MarchLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("AprilLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("MayLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("JuneLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("JulyLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("AugustLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-                Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES)
-            );
-        }
-
-        $this->include_time_picker = $include_time_picker;
-
-        if ($include_time_picker)
-        {
-            $this->_options['format'] = 'dFY ' . $popup_link . '   H ' . $hour_minute_devider . ' i';
-        }
-        else
-        {
-            $this->_options['format'] = 'dFY ' . $popup_link;
-        }
-
+        $this->_options['format'] = $this->getDateFormat($elementName, $attributes, $includeTimePicker);
         $this->_options['minYear'] = date('Y') - 5;
         $this->_options['maxYear'] = date('Y') + 10;
-        $this->_options['language'] = $editor_lang;
+        $this->_options['language'] = Translation::getInstance()->getLanguageIsocode();
+
         $this->setValue(date('Y-m-d H:i:s'));
     }
 
@@ -113,7 +73,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $h = $h < 10 ? '0' . $h : $h;
         $i = $i < 10 ? '0' . $i : $i;
 
-        if ($this->include_time_picker)
+        if ($this->includeTimePicker)
         {
             $datetime = $y . '-' . $m . '-' . $d . ' ' . $h . ':' . $i . ':00';
         }
@@ -135,23 +95,56 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     }
 
     /**
+     * @param string $elementName
+     * @param string[] $attributes
+     * @param boolean $includeTimePicker
+     *
+     * @return string
+     */
+    public function getDateFormat($elementName, $attributes, $includeTimePicker)
+    {
+        $js_form_name = $attributes['form_name'];
+        $glyph = new FontAwesomeGlyph('calendar-alt');
+
+        $popupLink = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
+            $glyph->render() . '</a>';
+        $specialCharacters = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
+        $hourMinuteDivider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
+
+        foreach ($specialCharacters as $index => $char)
+        {
+            $popupLink = str_replace($char, "\\" . $char, $popupLink);
+            $hourMinuteDivider = str_replace($char, "\\" . $char, $hourMinuteDivider);
+        }
+
+        if ($includeTimePicker)
+        {
+            return 'dFY ' . $popupLink . '   H ' . $hourMinuteDivider . ' i';
+        }
+        else
+        {
+            return 'dFY ' . $popupLink;
+        }
+    }
+
+    /**
      *
      * @return string
      */
     public function getElementJS()
     {
-        $js = PHP_EOL;
-        $js .= '<script src="';
-        $js .= Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js';
-        $js .= '" type="text/javascript"></script>';
-        $js .= PHP_EOL;
-        $js .= '<script type="text/javascript">';
-        $js .= 'var path = \'' . Path::getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . '\';' .
-            PHP_EOL;
-        $js .= 'var max_year="' . (date('Y') + 10) . '";';
-        $js .= '</script>';
+        $pathBuilder = Path::getInstance();
 
-        return $js;
+        $html = array();
+
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
+            $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
+        );
+        $html[] = '<script type="text/javascript">';
+        $html[] = 'var max_year="' . (date('Y') + 10) . '";';
+        $html[] = '</script>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -216,8 +209,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function toHtml()
     {
-        $js = $this->getElementJS();
+        $html = array();
 
-        return $js . parent::toHtml();
+        $html[] = $this->getElementJS();
+        $html[] = parent::toHtml();
+
+        return implode(PHP_EOL, $html);
     }
 }

@@ -199,8 +199,6 @@ class AccountForm extends FormValidator
             $this->addRule(User::PROPERTY_USERNAME, Translation::get('UsernameWrong'), 'username');
         }
 
-        $this->addElement('category');
-
         // Password
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_password')) == 1 &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
@@ -251,14 +249,12 @@ class AccountForm extends FormValidator
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Password.js'
             )
             );
-            $this->addElement('category');
         }
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'show_personal_token')))
         {
             $this->addElement('category', Translation::get('Other'));
             $this->addElement('static', User::PROPERTY_SECURITY_TOKEN, Translation::get('SecurityToken'));
-            $this->addElement('category');
         }
     }
 

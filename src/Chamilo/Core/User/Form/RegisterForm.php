@@ -102,7 +102,6 @@ class RegisterForm extends FormValidator
         $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, null);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
-        $this->addElement('category');
         $this->addElement('category', Translation::get('Additional'));
 
         // Official Code
@@ -150,7 +149,6 @@ class RegisterForm extends FormValidator
         // Submit button
         // $this->addElement('submit', 'user_settings', 'OK');
 
-        $this->addElement('category');
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
         {
@@ -164,7 +162,6 @@ class RegisterForm extends FormValidator
                 'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                 'required'
             );
-            $this->addElement('category');
         }
 
         $buttons[] = $this->createElement(

@@ -93,8 +93,6 @@ class ItemForm extends FormValidator
             ['class' => 'form-control']
         );
 
-        $this->addElement('category');
-
         $this->buildFormTitles();
     }
 
@@ -122,8 +120,6 @@ class ItemForm extends FormValidator
                 );
             }
         }
-
-        $this->addElement('category');
     }
 
     /**

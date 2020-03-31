@@ -27,18 +27,19 @@ class RelationForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param string $form_url
      * @param Relation $relation
      */
-    public function __construct(Relation $relation, EntityTranslationFormService $entityTranslationFormServic, $form_url)
+    public function __construct(Relation $relation, EntityTranslationFormService $entityTranslationFormServic, $form_url
+    )
     {
         parent::__construct('relation', 'post', $form_url);
-        
+
         $this->relation = $relation;
         $this->entityTranslationFormService = $entityTranslationFormServic;
         $this->entityTranslationFormService->setFormValidator($this);
-        
+
         $this->buildForm();
         $this->setFormDefaults();
     }
@@ -49,31 +50,28 @@ class RelationForm extends FormValidator
     protected function buildForm()
     {
         $this->addElement('category', Translation::get('General'));
-        
+
         $this->addElement(
-            'text', 
-            Relation::PROPERTY_NAME, 
-            Translation::get('Name', null, Utilities::COMMON_LIBRARIES));
+            'text', Relation::PROPERTY_NAME, Translation::get('Name', null, Utilities::COMMON_LIBRARIES)
+        );
         $this->addRule(
-            Relation::PROPERTY_NAME, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-            'required');
-        
-        $this->addElement('category');
-        
+            Relation::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'required'
+        );
+
         $this->entityTranslationFormService->addFieldsToForm();
         $this->addSaveResetButtons();
     }
 
     /**
      * Sets the default values
-     * 
+     *
      * @param Element $element
      */
     protected function setFormDefaults()
     {
         $this->setDefaults(array(Relation::PROPERTY_NAME => $this->relation->get_name()));
-        
+
         $this->entityTranslationFormService->setFormDefaults();
     }
 }

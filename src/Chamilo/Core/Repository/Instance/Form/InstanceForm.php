@@ -274,11 +274,6 @@ class InstanceForm extends FormValidator
                     }
                 }
             }
-
-            if ($has_settings && $categories > 1)
-            {
-                $this->addElement('category');
-            }
         }
     }
 

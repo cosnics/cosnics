@@ -33,7 +33,6 @@ class LinkItemForm extends ItemForm
             LinkItem::PROPERTY_TARGET,
             $this->getTranslator()->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
         );
-        $this->addElement('category');
     }
 
     /**

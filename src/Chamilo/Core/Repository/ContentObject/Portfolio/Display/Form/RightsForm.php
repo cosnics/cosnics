@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Form;
 
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -10,7 +11,6 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 
 /**
  * Form to configure the portfolio (sub)item rights
@@ -20,14 +20,22 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
  */
 class RightsForm extends FormValidator
 {
-    const PROPERTY_INHERIT = 'inherit';
-    const PROPERTY_RIGHT_OPTION = 'right_option';
-    const PROPERTY_SUBMIT = 'submit';
-    const PROPERTY_RESET = 'reset';
-    const PROPERTY_BUTTONS = 'buttons';
-    const PROPERTY_TARGETS = 'targets';
-    const INHERIT_TRUE = 0;
     const INHERIT_FALSE = 1;
+
+    const INHERIT_TRUE = 0;
+
+    const PROPERTY_BUTTONS = 'buttons';
+
+    const PROPERTY_INHERIT = 'inherit';
+
+    const PROPERTY_RESET = 'reset';
+
+    const PROPERTY_RIGHT_OPTION = 'right_option';
+
+    const PROPERTY_SUBMIT = 'submit';
+
+    const PROPERTY_TARGETS = 'targets';
+
     const RIGHT_OPTION_ALL = 0;
     const RIGHT_OPTION_ME = 1;
     const RIGHT_OPTION_SELECT = 2;
@@ -104,26 +112,29 @@ class RightsForm extends FormValidator
     }
 
     /**
-     * Build the locations form
+     * Builds the form footer
      */
-    private function build_locations_form()
+    private function build_form_footer()
     {
-        if (count($this->locations) > 1)
-        {
-            $html = array();
-            $html[] = '<ul>';
+        $buttons = array();
 
-            foreach ($this->locations as $location)
-            {
-                $html[] = '<li>' . $location->get_node()->get_content_object()->get_title();
-            }
+        $buttons[] = $this->createElement(
+            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
+            null, null, new FontAwesomeGlyph('arrow-right')
+        );
 
-            $html[] = '</ul>';
+        $buttons[] = $this->createElement(
+            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
-            $this->addElement('category', Translation::get('SelectedPortfolioItems'));
-            $this->addElement('html', implode(PHP_EOL, $html));
-            $this->addElement('category');
-        }
+        $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
+
+        $this->addElement(
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display', true) .
+            'RightsForm.js'
+        )
+        );
     }
 
     /**
@@ -167,8 +178,28 @@ class RightsForm extends FormValidator
         );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
+    }
 
-        $this->addElement('category');
+    /**
+     * Build the locations form
+     */
+    private function build_locations_form()
+    {
+        if (count($this->locations) > 1)
+        {
+            $html = array();
+            $html[] = '<ul>';
+
+            foreach ($this->locations as $location)
+            {
+                $html[] = '<li>' . $location->get_node()->get_content_object()->get_title();
+            }
+
+            $html[] = '</ul>';
+
+            $this->addElement('category', Translation::get('SelectedPortfolioItems'));
+            $this->addElement('html', implode(PHP_EOL, $html));
+        }
     }
 
     /**
@@ -213,34 +244,6 @@ class RightsForm extends FormValidator
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS . '_' . $right_id, null, $types);
 
         $this->addElement('html', '</div></div>');
-
-        $this->addElement('category');
-    }
-
-    /**
-     * Builds the form footer
-     */
-    private function build_form_footer()
-    {
-        $buttons = array();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
-            null, null, new FontAwesomeGlyph('arrow-right')
-        );
-
-        $buttons[] = $this->createElement(
-            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-
-        $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
-
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display', true) .
-            'RightsForm.js'
-        )
-        );
     }
 
     /**

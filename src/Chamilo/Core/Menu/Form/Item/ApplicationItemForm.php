@@ -45,8 +45,6 @@ class ApplicationItemForm extends ItemForm
             ApplicationItem::PROPERTY_EXTRA_PARAMETERS, $translator->trans('ExtraParameters', [], 'Chamilo\Core\Menu'),
             false
         );
-
-        $this->addElement('category');
     }
 
     /**

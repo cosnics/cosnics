@@ -86,7 +86,6 @@ class SettingsForm extends FormValidator
         $this->addElement(
             'select', 'platform_language', Translation::get("MainLang"), $this->getApplication()->getLanguages()
         );
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('Administrator'));
         $this->addElement('text', 'admin_email', Translation::get("AdminEmail"), array('size' => '40'));
@@ -111,7 +110,6 @@ class SettingsForm extends FormValidator
         $this->addRule(
             'admin_password', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('Platform'));
         $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
@@ -126,7 +124,6 @@ class SettingsForm extends FormValidator
         $this->addRule(
             'organization_url', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('Security'));
 
@@ -143,7 +140,6 @@ class SettingsForm extends FormValidator
         $this->addElement(
             'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::get_available_types()
         );
-        $this->addElement('category');
 
         $this->addElement('category', Translation::get('Storage'));
         $this->addElement('text', 'archive_path', Translation::get("ArchivePath"), array('size' => '40'));
@@ -155,7 +151,6 @@ class SettingsForm extends FormValidator
         $this->addElement('text', 'scorm_path', Translation::get("ScormPath"), array('size' => '40'));
         $this->addElement('text', 'temp_path', Translation::get("TempPath"), array('size' => '40'));
         $this->addElement('text', 'userpictures_path', Translation::get("UserPicturesPath"), array('size' => '40'));
-        $this->addElement('category');
     }
 
     protected function addPackageSelectionToggle()

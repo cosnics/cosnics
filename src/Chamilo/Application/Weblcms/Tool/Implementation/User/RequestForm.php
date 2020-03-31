@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -9,19 +10,22 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class RequestForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_VIEW = 3;
     const CHOOSE_DATE = 'choose date';
+
+    const TYPE_CREATE = 1;
+
+    const TYPE_EDIT = 2;
+
+    const TYPE_VIEW = 3;
 
     private $form_type;
 
@@ -74,17 +78,6 @@ class RequestForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function build_viewing_form()
-    {
-        $this->build_request_form();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Print'), null, null, new FontAwesomeGlyph('arrow-right')
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
     public function build_request_form()
     {
         $this->addElement('html', '<div class="clear">&nbsp;</div><br/>');
@@ -103,7 +96,7 @@ class RequestForm extends FormValidator
                 );
 
                 $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                    User::class_name(),
                     new DataClassRetrievesParameters(null, null, null, $order)
                 );
 
@@ -121,7 +114,7 @@ class RequestForm extends FormValidator
             else
             {
                 $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), $this->user_id
+                    User::class_name(), $this->user_id
                 )->get_fullname();
                 $this->addElement(
                     'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
@@ -146,13 +139,13 @@ class RequestForm extends FormValidator
             );
 
             $name_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), $this->request->get_user_id()
+                User::class_name(), $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
                 'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $name_user
             );
 
-            $request_name = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
+            $request_name = DataManager::retrieve_by_id(
                 Course::class_name(), $this->request->get_course_id()
             )->get_name();
 
@@ -192,7 +185,17 @@ class RequestForm extends FormValidator
                     break;
             }
         }
-        $this->addElement('category');
+    }
+
+    public function build_viewing_form()
+    {
+        $this->build_request_form();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Print'), null, null, new FontAwesomeGlyph('arrow-right')
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function create_request()
@@ -226,6 +229,11 @@ class RequestForm extends FormValidator
         return true;
     }
 
+    public function get_form_type()
+    {
+        return $this->form_type;
+    }
+
     public function setDefaults($defaults = array())
     {
         $request = $this->request;
@@ -238,10 +246,5 @@ class RequestForm extends FormValidator
         $defaults[CommonRequest::PROPERTY_DECISION_DATE] = $request->get_decision_date();
 
         parent::setDefaults($defaults);
-    }
-
-    public function get_form_type()
-    {
-        return $this->form_type;
     }
 }

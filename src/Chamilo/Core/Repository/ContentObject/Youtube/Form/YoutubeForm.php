@@ -28,8 +28,6 @@ class YoutubeForm extends ContentObjectForm
 
         $this->addElement('hidden', SynchronizationData::PROPERTY_EXTERNAL_ID);
         $this->addElement('hidden', SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID);
-
-        $this->addElement('category');
     }
 
     protected function build_editing_form()
@@ -52,9 +50,10 @@ class YoutubeForm extends ContentObjectForm
             $external_respository_sync->set_external_id($external_repository_id);
 
             $external_repository_object_id = (string) $this->exportValue(
-                SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID);
+                SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID
+            );
 
-            if (! $external_repository_object_id)
+            if (!$external_repository_object_id)
             {
                 return false;
             }

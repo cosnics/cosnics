@@ -163,8 +163,6 @@ class RightsForm extends FormValidator
         );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
-
-        $this->addElement('category');
     }
 
     /**
@@ -213,8 +211,6 @@ class RightsForm extends FormValidator
         );
 
         $this->addElement('html', '</div></div>');
-
-        $this->addElement('category');
     }
 
     /**
@@ -283,39 +279,6 @@ class RightsForm extends FormValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param boolean $rightsLocationInherits
-     * @param integer[][][] $targetEntities
-     *
-     * @throws \Exception
-     */
-    public function setRightsDefaults(User $user, bool $rightsLocationInherits, array $targetEntities)
-    {
-        $defaults = array();
-
-        if ($rightsLocationInherits)
-        {
-            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
-
-            foreach ($this->getAvailableRights() as $rightIdentifier)
-            {
-                $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_ALL;
-            }
-        }
-        else
-        {
-            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
-        }
-
-        parent::setDefaults($defaults);
-
-        foreach ($this->getAvailableRights() as $rightIdentifier)
-        {
-            $this->setRightDefaults($user, $rightIdentifier, $targetEntities[$rightIdentifier]);
-        }
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $rightIdentifier
      * @param integer[][] $targetEntities
      *
@@ -365,5 +328,38 @@ class RightsForm extends FormValidator
         }
 
         parent::setDefaults($defaults);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $rightsLocationInherits
+     * @param integer[][][] $targetEntities
+     *
+     * @throws \Exception
+     */
+    public function setRightsDefaults(User $user, bool $rightsLocationInherits, array $targetEntities)
+    {
+        $defaults = array();
+
+        if ($rightsLocationInherits)
+        {
+            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_TRUE;
+
+            foreach ($this->getAvailableRights() as $rightIdentifier)
+            {
+                $defaults[self::PROPERTY_RIGHT_OPTION][$rightIdentifier] = self::RIGHT_OPTION_ALL;
+            }
+        }
+        else
+        {
+            $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
+        }
+
+        parent::setDefaults($defaults);
+
+        foreach ($this->getAvailableRights() as $rightIdentifier)
+        {
+            $this->setRightDefaults($user, $rightIdentifier, $targetEntities[$rightIdentifier]);
+        }
     }
 }

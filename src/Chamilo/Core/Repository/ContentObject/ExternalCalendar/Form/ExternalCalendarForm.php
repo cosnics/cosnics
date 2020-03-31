@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Form;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -34,66 +36,71 @@ class ExternalCalendarForm extends ContentObjectForm
     {
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
-            'radio',
-            ExternalCalendar::PROPERTY_PATH_TYPE,
-            '',
-            Translation::get('PathTypeRemote'),
-            ExternalCalendar::PATH_TYPE_REMOTE);
+            'radio', ExternalCalendar::PROPERTY_PATH_TYPE, '', Translation::get('PathTypeRemote'),
+            ExternalCalendar::PATH_TYPE_REMOTE
+        );
 
         $path_type_remote_id = ExternalCalendar::PROPERTY_PATH_TYPE . '_' . ExternalCalendar::PATH_TYPE_REMOTE;
 
         $this->addElement(
-            'html',
-            '<div style="padding-left:28px;" id="' . $path_type_remote_id . '" class="' .
-                 ExternalCalendar::PROPERTY_PATH_TYPE . '">');
+            'html', '<div style="padding-left:28px;" id="' . $path_type_remote_id . '" class="' .
+            ExternalCalendar::PROPERTY_PATH_TYPE . '">'
+        );
 
         $this->add_textfield(
-            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_REMOTE . ']',
-            null,
-            false,
-            array('size' => '100'));
+            ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_REMOTE . ']', null, false,
+            array('size' => '100')
+        );
 
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'radio',
-            ExternalCalendar::PROPERTY_PATH_TYPE,
-            '',
-            Translation::get('PathTypeLocal'),
-            ExternalCalendar::PATH_TYPE_LOCAL);
+            'radio', ExternalCalendar::PROPERTY_PATH_TYPE, '', Translation::get('PathTypeLocal'),
+            ExternalCalendar::PATH_TYPE_LOCAL
+        );
 
         $path_type_local_id = ExternalCalendar::PROPERTY_PATH_TYPE . '_' . ExternalCalendar::PATH_TYPE_LOCAL;
 
         $this->addElement(
-            'html',
-            '<div style="padding-left:28px;" id="' . $path_type_local_id . '" class="' .
-                 ExternalCalendar::PROPERTY_PATH_TYPE . '">');
+            'html', '<div style="padding-left:28px;" id="' . $path_type_local_id . '" class="' .
+            ExternalCalendar::PROPERTY_PATH_TYPE . '">'
+        );
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                (int) $this->get_owner_id()));
+            DataManager::retrieve_by_id(
+                User::class_name(), (int) $this->get_owner_id()
+            )
+        );
 
         $calculator->addUploadWarningToForm($this);
 
         $this->addElement('file', ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']');
         $this->addRule(
             ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']',
-            Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES),
-            'disk_quota');
+            Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota'
+        );
 
         // $this->addFormRule(array($this, 'check_document_form'));
 
         $this->addElement('html', '</div>');
-        $this->addElement('category');
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\ExternalCalendar', true) .
-                     'ExternalCalendar.js'));
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\ExternalCalendar', true) .
+            'ExternalCalendar.js'
+        )
+        );
     }
 
-    public function setDefaults($defaults = array ())
+    public function create_content_object()
+    {
+        $object = new ExternalCalendar();
+        $this->set_content_object_properties($object);
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
+    }
+
+    public function setDefaults($defaults = array())
     {
         $content_object = $this->get_content_object();
 
@@ -109,7 +116,8 @@ class ExternalCalendarForm extends ContentObjectForm
 
                 if (StringUtilities::getInstance()->hasValue($content_object->get_path()))
                 {
-                    $defaults[ExternalCalendar::PROPERTY_PATH][ExternalCalendar::PATH_TYPE_REMOTE] = $content_object->get_path();
+                    $defaults[ExternalCalendar::PROPERTY_PATH][ExternalCalendar::PATH_TYPE_REMOTE] =
+                        $content_object->get_path();
                 }
                 else
                 {
@@ -124,21 +132,6 @@ class ExternalCalendarForm extends ContentObjectForm
         }
 
         parent::setDefaults($defaults);
-    }
-
-    public function create_content_object()
-    {
-        $object = new ExternalCalendar();
-        $this->set_content_object_properties($object);
-        $this->set_content_object($object);
-        return parent::create_content_object();
-    }
-
-    public function update_content_object()
-    {
-        $object = $this->get_content_object();
-        $this->set_content_object_properties($object);
-        return parent::update_content_object();
     }
 
     public function set_content_object_properties($object)
@@ -168,7 +161,7 @@ class ExternalCalendarForm extends ContentObjectForm
                 $object->set_temporary_file_path($file['tmp_name'][ExternalCalendar::PATH_TYPE_LOCAL]);
             }
 
-            if ((isset($values['version']) && $values['version'] == 0) || ! isset($values['version']))
+            if ((isset($values['version']) && $values['version'] == 0) || !isset($values['version']))
             {
                 $object->set_save_as_new_version(false);
             }
@@ -177,5 +170,13 @@ class ExternalCalendarForm extends ContentObjectForm
                 $object->set_save_as_new_version(true);
             }
         }
+    }
+
+    public function update_content_object()
+    {
+        $object = $this->get_content_object();
+        $this->set_content_object_properties($object);
+
+        return parent::update_content_object();
     }
 }

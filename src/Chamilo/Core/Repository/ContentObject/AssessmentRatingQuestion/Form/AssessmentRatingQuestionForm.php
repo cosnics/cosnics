@@ -122,7 +122,6 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 			/* ]]> */
 				</script>\n"
         );
-        $this->addElement('category');
 
         $this->addRule(
             AssessmentRatingQuestion::PROPERTY_LOW,

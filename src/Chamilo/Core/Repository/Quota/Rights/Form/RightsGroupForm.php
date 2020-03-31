@@ -30,7 +30,6 @@ class RightsGroupForm extends RightsForm
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGET_GROUPS, null, $types);
 
         $this->addElement('html', '</div></div>');
-        $this->addElement('category');
 
         parent::buildFormFooter();
     }

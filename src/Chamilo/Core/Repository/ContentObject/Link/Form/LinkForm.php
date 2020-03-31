@@ -18,7 +18,6 @@ class LinkForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Link::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
         $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
-        $this->addElement('category');
 
         $this->addFormRule(array($this, 'check_https_compliance'));
     }
@@ -29,9 +28,55 @@ class LinkForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Link::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
         $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
-        $this->addElement('category');
 
         $this->addFormRule(array($this, 'check_https_compliance'));
+    }
+
+    /**
+     * Checks if the link is compliant with HTTPS and can be shown in iframe
+     *
+     * @param $fields
+     *
+     * @return bool
+     */
+    protected function check_https_compliance($fields)
+    {
+        $errors = array();
+
+        if (!isset($_SERVER['HTTPS']))
+        {
+            return true;
+        }
+
+        $link = $fields[Link::PROPERTY_URL];
+        $show_in_iframe = $fields[LINK::PROPERTY_SHOW_IN_IFRAME];
+
+        if (strpos(strtolower($link), 'https') !== 0 && $show_in_iframe)
+        {
+            $errors['show_in_iframe'] = Translation::get('IFrameNotAllowed');
+        }
+
+        if (count($errors) == 0)
+        {
+            return true;
+        }
+
+        return $errors;
+    }
+
+    public function create_content_object()
+    {
+        $object = new Link();
+
+        // TODO: Cleaner and more generalized solution to check URL validity
+        $url = $this->exportValue(Link::PROPERTY_URL);
+        $url = str_replace('http://http://', 'http://', $url);
+
+        $object->set_url($url);
+        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
     }
 
     public function setDefaults($defaults = array())
@@ -51,21 +96,6 @@ class LinkForm extends ContentObjectForm
         parent::setDefaults($defaults);
     }
 
-    public function create_content_object()
-    {
-        $object = new Link();
-
-        // TODO: Cleaner and more generalized solution to check URL validity
-        $url = $this->exportValue(Link::PROPERTY_URL);
-        $url = str_replace('http://http://', 'http://', $url);
-
-        $object->set_url($url);
-        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
-        $this->set_content_object($object);
-
-        return parent::create_content_object();
-    }
-
     public function update_content_object()
     {
         $object = $this->get_content_object();
@@ -78,36 +108,5 @@ class LinkForm extends ContentObjectForm
         $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
 
         return parent::update_content_object();
-    }
-
-    /**
-     * Checks if the link is compliant with HTTPS and can be shown in iframe
-     *
-     * @param $fields
-     * @return bool
-     */
-    protected function check_https_compliance($fields)
-    {
-        $errors = array();
-
-        if (! isset($_SERVER['HTTPS']))
-        {
-            return true;
-        }
-
-        $link = $fields[Link::PROPERTY_URL];
-        $show_in_iframe = $fields[LINK::PROPERTY_SHOW_IN_IFRAME];
-
-        if (strpos(strtolower($link), 'https') !== 0 && $show_in_iframe)
-        {
-            $errors['show_in_iframe'] = Translation::get('IFrameNotAllowed');
-        }
-
-        if (count($errors) == 0)
-        {
-            return true;
-        }
-
-        return $errors;
     }
 }

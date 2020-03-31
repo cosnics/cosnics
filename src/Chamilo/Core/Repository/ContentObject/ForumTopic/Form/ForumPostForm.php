@@ -2,7 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Form;
 
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -25,8 +28,10 @@ class ForumPostForm extends FormValidator
      * **************************************************************************************************************
      */
     const TYPE_CREATE = 1;
-    const TYPE_QUOTE = 2;
+
     const TYPE_EDIT = 3;
+
+    const TYPE_QUOTE = 2;
 
     /**
      * Determine which kind of form it is.
@@ -67,61 +72,6 @@ class ForumPostForm extends FormValidator
      */
 
     /**
-     * Constructs a basic form.
-     */
-    public function build_basic_form()
-    {
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
-
-        // title field
-        $this->add_textfield(ForumPost::PROPERTY_TITLE, Translation::get('Title'), false, array("size" => "50"));
-
-        // content HTML editor
-        $this->add_html_editor(ForumPost::PROPERTY_CONTENT, Translation::get('Content'), true);
-        $this->addElement('category');
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Defaults *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Sets default values.
-     *
-     * @param $defaults array Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = array())
-    {
-        $forump = $this->forumpost;
-        if ($this->form_type == self::TYPE_EDIT)
-        {
-            $defaults[ForumPost::PROPERTY_TITLE] = $forump->get_title();
-            $defaults[ForumPost::PROPERTY_CONTENT] = $forump->get_content();
-        }
-
-        if ($this->form_type == self::TYPE_QUOTE)
-        {
-            $defaults[ForumPost::PROPERTY_CONTENT] = $forump->get_content();
-        }
-
-        if ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_QUOTE)
-        {
-            if (substr($forump->get_title(), 0, 3) == 'RE:')
-            {
-                $defaults[ForumPost::PROPERTY_TITLE] = $forump->get_title();
-            }
-            else
-            {
-                $defaults[ForumPost::PROPERTY_TITLE] = 'RE: ' . $forump->get_title();
-            }
-        }
-
-        parent::setDefaults($defaults);
-    }
-
-    /**
      * Adds a footer to the form, this function generates the attachment part.
      */
     protected function add_footer()
@@ -138,8 +88,8 @@ class ForumPostForm extends FormValidator
         }
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), Session::get_user_id()
+            DataManager::retrieve_by_id(
+                User::class_name(), Session::get_user_id()
             )
         );
 
@@ -151,7 +101,8 @@ class ForumPostForm extends FormValidator
         );
 
         $dropZoneParameters = array(
-            'name' => 'attachments_importer', 'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'name' => 'attachments_importer',
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
             'uploadUrl' => $uploadUrl->getUrl(),
             'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
@@ -175,7 +126,7 @@ class ForumPostForm extends FormValidator
 
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) .
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) .
             'Plugin/jquery.file.upload.import.js'
         )
         );
@@ -183,7 +134,6 @@ class ForumPostForm extends FormValidator
         $elem = $this->addElement(
             'element_finder', 'attachments', Translation::get('SelectAttachment'), $url, $locale, $attachments
         );
-        $this->addElement('category');
 
         if (count($this->additional_elements) > 0)
         {
@@ -202,7 +152,6 @@ class ForumPostForm extends FormValidator
                 {
                     $this->addElement($element);
                 }
-                $this->addElement('category');
             }
         }
 
@@ -243,5 +192,59 @@ class ForumPostForm extends FormValidator
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
         )
         );
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Defaults *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Constructs a basic form.
+     */
+    public function build_basic_form()
+    {
+        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+
+        // title field
+        $this->add_textfield(ForumPost::PROPERTY_TITLE, Translation::get('Title'), false, array("size" => "50"));
+
+        // content HTML editor
+        $this->add_html_editor(ForumPost::PROPERTY_CONTENT, Translation::get('Content'), true);
+    }
+
+    /**
+     * Sets default values.
+     *
+     * @param $defaults array Default values for this form's parameters.
+     */
+    public function setDefaults($defaults = array())
+    {
+        $forump = $this->forumpost;
+        if ($this->form_type == self::TYPE_EDIT)
+        {
+            $defaults[ForumPost::PROPERTY_TITLE] = $forump->get_title();
+            $defaults[ForumPost::PROPERTY_CONTENT] = $forump->get_content();
+        }
+
+        if ($this->form_type == self::TYPE_QUOTE)
+        {
+            $defaults[ForumPost::PROPERTY_CONTENT] = $forump->get_content();
+        }
+
+        if ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_QUOTE)
+        {
+            if (substr($forump->get_title(), 0, 3) == 'RE:')
+            {
+                $defaults[ForumPost::PROPERTY_TITLE] = $forump->get_title();
+            }
+            else
+            {
+                $defaults[ForumPost::PROPERTY_TITLE] = 'RE: ' . $forump->get_title();
+            }
+        }
+
+        parent::setDefaults($defaults);
     }
 }
