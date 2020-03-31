@@ -1,6 +1,34 @@
 <template>
-    <div class="levels-container" @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
-        <div class="levels">
+    <div class="levels-container" @click="editMode ? null : selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
+        <div v-if="editMode" class="editMode">
+            <form>
+                <div class="level">
+                    <label for="level_title">Niveau</label>
+                    <input id="level_title" tabindex="0" type="text" autocomplete="off" v-model="selectedLevel.title" placeholder="Vul hier een niveau in">
+                </div>
+                <div class="description">
+                    <label for="level_description">Beschrijving</label>
+                    <textarea id="level_description" tabindex="0" v-model="selectedLevel.description" placeholder="Vul hier een beschrijving in"></textarea>
+                </div>
+                <div class="weight">
+                    <label for="level_score">Punten</label>
+                    <input id="level_score" tabindex="0" type="number" name="Weight" maxlength="3" v-model="selectedLevel.score">
+                </div>
+                <div class="default-choice">
+                    <input id="level_default" tabindex="0" type="radio" :checked="selectedLevel.isDefault" @click.stop="setDefault(selectedLevel)" @keydown.space.prevent="setDefault(selectedLevel)">
+                    <label class="check" @click.stop="" for="level_default"><i class="fa fa-fw fa-check"></i>Standaard keuze</label>
+                </div>
+            </form>
+            <div class="delete">
+                <button class="btn" @click.prevent="showRemoveLevelDialog(selectedLevel)"><!--    v-b-popover.hover.top="'Verwijder'">-->
+                    <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>Verwijder niveau
+                </button>
+            </div>
+            <div class="back">
+                <a @click.stop="editMode=false">Terug naar overzicht niveaus.</a>
+            </div>
+        </div>
+        <div v-else class="levels">
             <div>
                 <h1>Niveaus</h1>
                 <form>
