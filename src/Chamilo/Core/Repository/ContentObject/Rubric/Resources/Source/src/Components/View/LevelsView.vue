@@ -33,7 +33,7 @@
                 <h1>Niveaus</h1>
                 <form>
                 <ul>
-                    <li v-for="(level, levelIndex) in rubric.levels" @click.stop="selectLevel(level)" :class="{ selected: selectedLevel === level }" >
+                    <li v-for="(level, levelIndex) in rubric.levels" :key="`level_${levelIndex}`" @click.stop="selectLevel(level)" :class="{ selected: isSelected(level) }" >
                         <div class="details">
                             <div class="level">
                                 <label :for="`level_title_${levelIndex}`">Niveau</label>
@@ -51,7 +51,7 @@
                                 <label class="check" @click.stop="" :for="`level_default_${levelIndex}`"><i class="fa fa-fw fa-check"></i></label>
                             </div>
                             <div class="delete">
-                                <button class="btn" @click.prevent="showRemoveLevelDialog(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
+                                <button class="btn" @click.prevent.stop="showRemoveLevelDialog(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
                                     <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -69,11 +69,11 @@
                 </ul>
                 </form>
                 <button class="btn btn-sm"
-                        @click="addLevel"><i
+                        @click.stop="addLevel"><i
                         class="fa fa-plus" aria-hidden="true"></i> Voeg niveau toe
                 </button>
             </div>
-            <div v-if="rubric.levels.length > 1" class="actions" @click.stop="">
+            <div v-if="rubric.levels.length > 1 && selectedLevel !== null" class="actions" @click.stop="">
                 <button class="btn btn-secondary"
                         @click.stop="rubric.moveLevelUp(selectedLevel)"
                         :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) <= 0"><i
@@ -84,12 +84,12 @@
                         class="fa fa-arrow-down" aria-hidden="true"></i></button>
             </div>
         </div>
-        <div class="modal-bg" v-if="removingLevel !== null">
-            <div class="modal-level" >
+        <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
+            <div class="modal-level" @click.stop="">
                 <div class="title">Niveau '{{ removingLevel.title }}' verwijderen?</div>
                 <div>
-                    <button ref="btn-remove-level" class="btn" @click.prevent="removeLevel(removingLevel)">OK</button>
-                    <button class="btn" @click.prevent="hideRemoveLevelDialog">Cancel</button>
+                    <button ref="btn-remove-level" class="btn" @click.stop="removeLevel(removingLevel)">OK</button>
+                    <button class="btn" @click.stop="hideRemoveLevelDialog">Cancel</button>
                 </div>
             </div>
         </div>
@@ -110,6 +110,10 @@
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
         private editMode: boolean = false;
+
+        isSelected(level: Level) : boolean {
+            return this.selectedLevel === level;
+        }
 
         selectLevel(level: Level|null) {
             this.selectedLevel = level;
@@ -132,20 +136,11 @@
         addLevel() {
             const level = this.getDefaultLevel();
             this.rubric.addLevel(level);
-            window.setTimeout(() => {
-                this.selectLevel(level);
-                const elems = document.querySelectorAll('.level input');
-                (elems[elems.length - 1] as HTMLElement).focus();
-            }, 50);
+            this.selectLevel(level);
         }
 
         showRemoveLevelDialog(level: Level|null) {
             this.removingLevel = level;
-            if (level) {
-                this.$nextTick(() => {
-                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
-                });
-            }
         }
 
         hideRemoveLevelDialog() {
@@ -156,10 +151,7 @@
             this.editMode = false;
             this.removingLevel = null;
             this.rubric.removeLevel(level);
-            window.setTimeout(() => {
-                this.selectLevel(null);
-                (document.activeElement as HTMLElement).blur();
-            }, 50);
+            this.selectLevel(null);
         }
 
         setDefault(defaultLevel: Level) {
@@ -170,6 +162,27 @@
 
         getDefaultLevel() {
             return new Level('');
+        }
+
+        @Watch('rubric.levels.length')
+        onLevelsChanged(newLength: Number, oldLength: Number) {
+            window.setTimeout(() => {
+                if (newLength > oldLength) {
+                    const elems = document.querySelectorAll('.level input');
+                    (elems[elems.length - 1] as HTMLElement).focus();
+                } else if (newLength < oldLength) {
+                    (document.activeElement as HTMLElement).blur();
+                }
+            }, 50);
+        }
+
+        @Watch('removingLevel')
+        onRemovingLevelChanged(level: Level|null) {
+            if (level) {
+                this.$nextTick(() => {
+                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
+                });
+            }
         }
     }
 </script>
@@ -357,6 +370,9 @@
     li:not(.selected) .description.empty textarea {
         display: none;
     }
+    button.btn {
+        outline-width: thin;
+    }
     li input:hover, li .default-choice input:focus + label i, li .delete .btn:focus {
         border: 1px solid hsla(200, 50%, 50%, 0.5);
     }
@@ -400,7 +416,7 @@
     }
     .modal-level {
         background: hsl(165, 5%, 90%);
-        width: 360px;
+        width: 420px;
         height: 150px;
         margin: 120px auto;
         padding: 20px;
@@ -411,8 +427,12 @@
         border-radius: 4px;
         box-shadow: 0px 6px 12px #666;
     }
-    .modal-level div {
-        margin-bottom: 20px;
+    .modal-level .title {
+        padding-bottom: 16px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid hsl(200, 30%, 80%);
+        width: 100%;
+        text-align: center;
     }
     .overlay {
         width: 0; height: 0;
