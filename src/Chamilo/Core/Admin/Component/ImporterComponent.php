@@ -9,10 +9,10 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicActionsTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -119,7 +119,8 @@ class ImporterComponent extends Manager
                 $index = 0;
 
                 $glyph = new NamespaceIdentGlyph(
-                    $package, true, false, false, Theme::ICON_SMALL, array()
+                    $package, true, false, false, IdentGlyph::SIZE_SMALL,
+                    array()
                 );
 
                 $index ++;

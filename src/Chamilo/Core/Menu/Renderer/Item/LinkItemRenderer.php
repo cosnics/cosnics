@@ -8,7 +8,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -29,16 +29,16 @@ class LinkItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        Theme $themeUtilities, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
+        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
 
         $this->classnameUtilities = $classnameUtilities;
     }

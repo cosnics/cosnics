@@ -28,6 +28,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -252,7 +253,8 @@ class Manager implements PublicationInterface
         return [
             $container->get(
                 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService'
-            ), $container->get(
+            ),
+            $container->get(
                 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService'
             ),
         ];
@@ -504,7 +506,8 @@ class Manager implements PublicationInterface
 
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(), Translation::getInstance(), new CourseRepository(),
-                new PublicationRepository(), new ContentObjectRepository(), $container->get(UserService::class)
+                new PublicationRepository(), new ContentObjectRepository(), $container->get(UserService::class),
+                $container->get(ThemePathBuilder::class)
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);

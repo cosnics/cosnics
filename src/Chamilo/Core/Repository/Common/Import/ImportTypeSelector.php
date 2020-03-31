@@ -8,8 +8,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -96,7 +96,8 @@ class ImportTypeSelector
                         $importTypes[$objectImportType] = array(
                             'label' => Translation::get(
                                 'ImportType' . $importTypeName, null, Manager::context()
-                            ), 'namespace' => 'Chamilo\Core\Repository\Import\\' . $importTypeName
+                            ),
+                            'namespace' => 'Chamilo\Core\Repository\Import\\' . $importTypeName
                         );
                     }
                 }
@@ -167,8 +168,9 @@ class ImportTypeSelector
 
         foreach ($this->getImportTypes() as $type => $properties)
         {
-            $glyph =
-                new NamespaceIdentGlyph($properties['namespace'], true, false, false, Theme::ICON_MINI, array('fa-fw'));
+            $glyph = new NamespaceIdentGlyph(
+                $properties['namespace'], true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
+            );
 
             $subButtons[] = new SubButton($properties['label'], $glyph, $this->getLink($type));
         }
@@ -190,8 +192,9 @@ class ImportTypeSelector
         {
             $html[] = '<a class="btn btn-default" href="' . $this->getLink($type) . '">';
 
-            $glyph =
-                new NamespaceIdentGlyph($properties['namespace'], true, false, false, Theme::ICON_BIG, array('fa-fw'));
+            $glyph = new NamespaceIdentGlyph(
+                $properties['namespace'], true, false, false, IdentGlyph::SIZE_BIG, array('fa-fw')
+            );
 
             $html[] = $glyph->render();
             $html[] = $properties['label'];

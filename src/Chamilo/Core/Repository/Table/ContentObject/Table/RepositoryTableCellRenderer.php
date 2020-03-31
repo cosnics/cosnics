@@ -6,10 +6,10 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -31,7 +31,9 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
         switch ($column->get_name())
         {
             case RepositoryTableColumnModel::PROPERTY_TYPE :
-                $image = $content_object->get_icon_image(Theme::ICON_MINI, true, array('fa-fw'));
+                $image = $content_object->get_icon_image(
+                    IdentGlyph::SIZE_MINI, true, array('fa-fw')
+                );
 
                 return '<a href="' . Utilities::htmlentities(
                         $this->get_component()->get_type_filter_url($content_object->get_template_registration_id())

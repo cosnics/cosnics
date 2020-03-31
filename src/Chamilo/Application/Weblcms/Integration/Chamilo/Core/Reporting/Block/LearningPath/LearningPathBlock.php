@@ -5,17 +5,19 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\L
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -32,7 +34,8 @@ class LearningPathBlock extends CourseBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation::get('Title'), Translation::get('LearningPathDetails')
+                Translation::get('Title'),
+                Translation::get('LearningPathDetails')
             )
         );
 
@@ -72,8 +75,8 @@ class LearningPathBlock extends CourseBlock
                 \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 
             $detailParams = $params;
-            $detailParams[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS;
+            $detailParams[Manager::PARAM_ACTION] =
+                Manager::ACTION_VIEW_USER_PROGRESS;
 
             $link =
                 '<a href="' . $this->get_parent()->get_url($detailParams) . '" target="_blank"">' . $glyph->render() .
@@ -82,7 +85,7 @@ class LearningPathBlock extends CourseBlock
             $redirect = new Redirect($params);
             $url_title = $redirect->getUrl();
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $pub[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
@@ -100,13 +103,13 @@ class LearningPathBlock extends CourseBlock
         return $reporting_data;
     }
 
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

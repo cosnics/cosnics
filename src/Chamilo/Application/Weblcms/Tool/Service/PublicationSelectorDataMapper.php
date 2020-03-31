@@ -5,8 +5,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -51,7 +51,7 @@ class PublicationSelectorDataMapper
                 $properties[ContentObjectPublicationCategory::PROPERTY_TOOL];
 
             $glyph = new NamespaceIdentGlyph(
-                $glyphNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                $glyphNamespace, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
             );
 
             $properties[self::PROPERTY_TOOL_CLASS] = $glyph->getClassNamesString();
@@ -108,12 +108,12 @@ class PublicationSelectorDataMapper
                 $publication[ContentObjectPublicationCategory::PROPERTY_TOOL];
 
             $toolGlyph = new NamespaceIdentGlyph(
-                $publication[ContentObject::PROPERTY_TYPE]::package(), true, false, false, Theme::ICON_MINI,
+                $publication[ContentObject::PROPERTY_TYPE]::package(), true, false, false, IdentGlyph::SIZE_MINI,
                 array('fa-fw')
             );
 
             $contentObjectGlyph = new NamespaceIdentGlyph(
-                $toolGlyphNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                $toolGlyphNamespace, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
             );
 
             $publicationProperties[self::PROPERTY_TOOL_CLASS] = $toolGlyph->getClassNamesString();

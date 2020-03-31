@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -20,34 +19,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ElementTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    /**
-     * Renders a single cell
-     *
-     * @param TableColumn $column
-     * @param Element $result
-     *
-     * @return string
-     */
-    public function render_cell($column, $result)
-    {
-        switch ($column->get_name())
-        {
-            case Element::PROPERTY_TYPE :
-                return $result->get_type_name($result->get_type());
-            case Element::PROPERTY_REQUIRED :
-                if ($result->get_required())
-                {
-                    return Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES);
-                }
-                else
-                {
-                    return Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES);
-                }
-        }
-
-        return parent::render_cell($column, $result);
-    }
 
     /**
      * Returns the actions toolbar
@@ -78,5 +49,33 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         );
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a single cell
+     *
+     * @param TableColumn $column
+     * @param Element $result
+     *
+     * @return string
+     */
+    public function render_cell($column, $result)
+    {
+        switch ($column->get_name())
+        {
+            case Element::PROPERTY_TYPE :
+                return $result->get_type_name($result->get_type());
+            case Element::PROPERTY_REQUIRED :
+                if ($result->get_required())
+                {
+                    return Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES);
+                }
+                else
+                {
+                    return Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES);
+                }
+        }
+
+        return parent::render_cell($column, $result);
     }
 }

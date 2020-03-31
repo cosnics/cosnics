@@ -2,13 +2,14 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentEntitiesTemplate;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentEntitiesTemplate;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -51,10 +52,10 @@ class AssignmentBlock extends AssignmentReportingManager
             $publicationsById[$publication[DataClass::PROPERTY_ID]] = $publication;
         }
 
-        $publicationsStatistics = $this->getAssignmentService()
-            ->findEntryStatisticsByContentObjectPublicationIdentifiers(
-                array_keys($publicationsById)
-            );
+        $publicationsStatistics =
+            $this->getAssignmentService()->findEntryStatisticsByContentObjectPublicationIdentifiers(
+                    array_keys($publicationsById)
+                );
 
         foreach ($publicationsStatistics as $publicationStatistics)
         {
@@ -69,8 +70,7 @@ class AssignmentBlock extends AssignmentReportingManager
             {
                 $last_submission = DatetimeUtilities::format_locale_date(
                     Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                    Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
-                    $last_submission
+                    Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $last_submission
                 );
             }
 
@@ -80,9 +80,8 @@ class AssignmentBlock extends AssignmentReportingManager
             }
 
             $params = $this->get_parent()->get_parameters();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-                AssignmentEntitiesTemplate::class_name();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
+            $params[Manager::PARAM_TEMPLATE_ID] = AssignmentEntitiesTemplate::class_name();
+            $params[Manager::PARAM_PUBLICATION] = $publicationId;
 
             $link = $this->createLink($this->get_parent()->get_url($params), $glyph->render());
 
@@ -90,8 +89,7 @@ class AssignmentBlock extends AssignmentReportingManager
 
             $reporting_data->add_category($count);
             $reporting_data->add_data_category_row(
-                $count,
-                Translation::get('Title'),
+                $count, Translation::get('Title'),
                 $this->createLink($url, $publication[ContentObject::PROPERTY_TITLE], '_blank')
             );
 
@@ -111,13 +109,13 @@ class AssignmentBlock extends AssignmentReportingManager
         return $reporting_data;
     }
 
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

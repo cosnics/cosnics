@@ -8,6 +8,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -17,19 +19,18 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
  * @package repository.lib.complex_builder.assessment.component
  */
-class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, TableSupport
+class AssessmentMergerComponent extends Manager implements ViewerInterface, TableSupport
 {
 
     /**
@@ -67,7 +68,7 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
         }
         else
         {
-            $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $selected_assessment = DataManager::retrieve_by_id(
                 Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
             );
             $display = ContentObjectRenditionImplementation::launch(
@@ -98,37 +99,6 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
         }
     }
 
-    public function get_condition($selected_assessment)
-    {
-        $sub_condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($selected_assessment->get_id())
-        );
-        $condition = new SubselectCondition(
-
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
-            ), ComplexContentObjectItem::get_table_name(), $sub_condition, ContentObject::get_table_name()
-        );
-
-        return $condition;
-    }
-
-    public function get_question_selector_url($question_id, $assessment_id)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_SELECT_QUESTIONS, self::PARAM_QUESTION_ID => $question_id,
-                self::PARAM_ASSESSMENT_ID => $assessment_id,
-                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
-                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
-                )
-            )
-        );
-    }
-
     public function getButtonToolbarRenderer($selected_assessment)
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -154,9 +124,41 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
         return array(Assessment::class_name());
     }
 
+    public function get_condition($selected_assessment)
+    {
+        $sub_condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($selected_assessment->get_id())
+        );
+        $condition = new SubselectCondition(
+
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+            ), ComplexContentObjectItem::get_table_name(), $sub_condition, ContentObject::get_table_name()
+        );
+
+        return $condition;
+    }
+
+    public function get_question_selector_url($question_id, $assessment_id)
+    {
+        return $this->get_url(
+            array(
+                self::PARAM_ACTION => self::ACTION_SELECT_QUESTIONS,
+                self::PARAM_QUESTION_ID => $question_id,
+                self::PARAM_ASSESSMENT_ID => $assessment_id,
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
+                )
+            )
+        );
+    }
+
     public function get_table_condition($table_class_name)
     {
-        $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $selected_assessment = DataManager::retrieve_by_id(
             Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
         );
 

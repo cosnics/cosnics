@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -276,7 +276,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
-    public function getGlyph($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array())
     {
         $glyph = FileType::getGlyphForExtension($this->get_extension(), $size);
 

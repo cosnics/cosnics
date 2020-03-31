@@ -15,12 +15,11 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -37,73 +36,6 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
-    /**
-     * Renders a cell for a given object
-     *
-     * @param $column \libraries\ObjectTableColumn
-     *
-     * @param mixed $assessment_attempt
-     *
-     * @return String
-     */
-    public function render_cell($column, $assessment_attempt)
-    {
-        if ($column instanceof DataClassPropertyTableColumn)
-        {
-            switch ($column->get_class_name())
-            {
-                case AssessmentAttempt::class_name() :
-                {
-                    switch ($column->get_name())
-                    {
-                        case AssessmentAttempt::PROPERTY_START_TIME :
-                            return DatetimeUtilities::format_locale_date(
-                                null, $assessment_attempt[AssessmentAttempt::PROPERTY_START_TIME]
-                            );
-                        case AssessmentAttempt::PROPERTY_END_TIME :
-                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME])
-                            {
-                                return DatetimeUtilities::format_locale_date(
-                                    null, $assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME]
-                                );
-                            }
-
-                            return null;
-                        case AssessmentAttempt::PROPERTY_TOTAL_TIME :
-                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
-                                AssessmentAttempt::STATUS_COMPLETED)
-                            {
-                                return DatetimeUtilities::convert_seconds_to_hours(
-                                    $assessment_attempt[AssessmentAttempt::PROPERTY_TOTAL_TIME]
-                                );
-                            }
-
-                            return null;
-                        case AssessmentAttempt::PROPERTY_TOTAL_SCORE :
-                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
-                                AssessmentAttempt::STATUS_COMPLETED)
-                            {
-                                $total = $assessment_attempt[AssessmentAttempt::PROPERTY_TOTAL_SCORE];
-
-                                return $total . '%';
-                            }
-
-                            return null;
-                        case AssessmentAttempt::PROPERTY_STATUS :
-                            return $assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
-                            AssessmentAttempt::STATUS_COMPLETED ? Translation::get(
-                                'Completed', null, 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking'
-                            ) : Translation::get(
-                                'NotCompleted', null, 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking'
-                            );
-                    }
-                }
-            }
-        }
-
-        return parent::render_cell($column, $assessment_attempt);
-    }
 
     /**
      * Returns the actions toolbar
@@ -176,5 +108,72 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
         }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a cell for a given object
+     *
+     * @param $column \libraries\ObjectTableColumn
+     *
+     * @param mixed $assessment_attempt
+     *
+     * @return String
+     */
+    public function render_cell($column, $assessment_attempt)
+    {
+        if ($column instanceof DataClassPropertyTableColumn)
+        {
+            switch ($column->get_class_name())
+            {
+                case AssessmentAttempt::class_name() :
+                {
+                    switch ($column->get_name())
+                    {
+                        case AssessmentAttempt::PROPERTY_START_TIME :
+                            return DatetimeUtilities::format_locale_date(
+                                null, $assessment_attempt[AssessmentAttempt::PROPERTY_START_TIME]
+                            );
+                        case AssessmentAttempt::PROPERTY_END_TIME :
+                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME])
+                            {
+                                return DatetimeUtilities::format_locale_date(
+                                    null, $assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME]
+                                );
+                            }
+
+                            return null;
+                        case AssessmentAttempt::PROPERTY_TOTAL_TIME :
+                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
+                                AssessmentAttempt::STATUS_COMPLETED)
+                            {
+                                return DatetimeUtilities::convert_seconds_to_hours(
+                                    $assessment_attempt[AssessmentAttempt::PROPERTY_TOTAL_TIME]
+                                );
+                            }
+
+                            return null;
+                        case AssessmentAttempt::PROPERTY_TOTAL_SCORE :
+                            if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
+                                AssessmentAttempt::STATUS_COMPLETED)
+                            {
+                                $total = $assessment_attempt[AssessmentAttempt::PROPERTY_TOTAL_SCORE];
+
+                                return $total . '%';
+                            }
+
+                            return null;
+                        case AssessmentAttempt::PROPERTY_STATUS :
+                            return $assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
+                            AssessmentAttempt::STATUS_COMPLETED ? Translation::get(
+                                'Completed', null, 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking'
+                            ) : Translation::get(
+                                'NotCompleted', null, 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking'
+                            );
+                    }
+                }
+            }
+        }
+
+        return parent::render_cell($column, $assessment_attempt);
     }
 }

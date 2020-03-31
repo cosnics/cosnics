@@ -7,8 +7,8 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Lynx\Action;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 set_time_limit(0);
@@ -139,7 +139,9 @@ class PackageInstaller extends Action
             'Installation', array('PACKAGE' => Translation::get('TypeName', null, $context)),
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new NamespaceIdentGlyph($context, true, false, false, Theme::ICON_BIG);
+        $image = new NamespaceIdentGlyph(
+            $context, true, false, false, IdentGlyph::SIZE_BIG
+        );
 
         $installer = Installer::factory($context, array());
 

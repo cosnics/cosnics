@@ -2,14 +2,16 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentStudentEntriesTemplate;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentStudentEntriesTemplate;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -29,22 +31,26 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation::get('Title'), Translation::get('NumberOfSubmissions'), Translation::get('LastSubmission'),
-                Translation::get('NumberOfFeedbacks'), Translation::get('LastScore'), Translation::get('Submissions')
+                Translation::get('Title'),
+                Translation::get('NumberOfSubmissions'),
+                Translation::get('LastSubmission'),
+                Translation::get('NumberOfFeedbacks'),
+                Translation::get('LastScore'),
+                Translation::get('Submissions')
             )
         );
 
-        $userId = $this->get_user_id();;
+        $userId = $this->get_user_id();
         $glyph = new FontAwesomeGlyph('chart-pie');
 
         $courseId = $this->get_parent()->get_parent()->get_parent()->get_parameter(
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
+            Manager::PARAM_COURSE
         );
 
         $publications = $this->retrieveAssignmentPublicationsForCourse($courseId, Entry::ENTITY_TYPE_USER);
 
         $params_detail = $this->get_parent()->get_parameters();
-        $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
+        $params_detail[Manager::PARAM_TEMPLATE_ID] =
             AssignmentStudentEntriesTemplate::class_name();
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $userId;
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
@@ -58,7 +64,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
             $publicationObject = new ContentObjectPublication();
             $publicationObject->setId($publicationId);
 
-            if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user($userId, $publicationId))
+            if (!DataManager::is_publication_target_user($userId, $publicationId))
             {
                 continue;
             }
@@ -77,7 +83,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
                 $entryStatistics[AssignmentRepository::LAST_ENTRY_SUBMITTED_DATE]
             );
 
-            $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
+            $params_detail[Manager::PARAM_PUBLICATION] =
                 $publication[ContentObjectPublication::PROPERTY_ID];
             $link = $this->createLink($this->get_parent()->get_url($params_detail), $glyph->render());
 
@@ -112,13 +118,13 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
         return $reporting_data;
     }
 
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

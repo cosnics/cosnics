@@ -7,9 +7,8 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -19,30 +18,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    /**
-     * Renders a single cell
-     *
-     * @param TableColumn $column
-     * @param mixed $result
-     *
-     * @return string
-     */
-    public function render_cell($column, $result)
-    {
-        $helper_class = $this->get_table()->get_helper_class_name();
-
-        $rendered = $helper_class::render_table_cell($this, $column, $result);
-
-        if ($rendered)
-        {
-            return $rendered;
-        }
-        else
-        {
-            return parent::render_cell($column, $result);
-        }
-    }
 
     /**
      * Returns the actions toolbar
@@ -69,5 +44,29 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         );
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a single cell
+     *
+     * @param TableColumn $column
+     * @param mixed $result
+     *
+     * @return string
+     */
+    public function render_cell($column, $result)
+    {
+        $helper_class = $this->get_table()->get_helper_class_name();
+
+        $rendered = $helper_class::render_table_cell($this, $column, $result);
+
+        if ($rendered)
+        {
+            return $rendered;
+        }
+        else
+        {
+            return parent::render_cell($column, $result);
+        }
     }
 }

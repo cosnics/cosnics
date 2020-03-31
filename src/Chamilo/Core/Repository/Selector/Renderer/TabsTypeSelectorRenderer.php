@@ -10,11 +10,11 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -98,7 +98,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
         {
             $glyph = new NamespaceIdentGlyph(
                 'Chamilo\Core\Repository\ContentObject\Category\\' . $category->get_type(), true, false, false,
-                Theme::ICON_SMALL, array('fa-fw')
+                IdentGlyph::SIZE_SMALL, array('fa-fw')
             );
 
             $tabs->add_tab(

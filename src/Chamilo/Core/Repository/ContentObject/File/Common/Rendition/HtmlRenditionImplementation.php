@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -94,7 +94,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         $button = new Button(
         //Translation::get('DownloadFile', array('LABEL' => 'qsdf')),
-            Translation::get($file->get_filename(), array('LABEL' => 'qsdf')), $file->getGlyph(Theme::ICON_MEDIUM),
+            Translation::get($file->get_filename(), array('LABEL' => 'qsdf')), $file->getGlyph(IdentGlyph::SIZE_MEDIUM),
             $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, false, '', '_blank'
         );
 
@@ -120,7 +120,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
-                    "icon" => $object->getGlyph(Theme::ICON_BIG)->render(),
+                    "icon" => $object->getGlyph(IdentGlyph::SIZE_BIG)->render(),
                     "title" => $object->get_title(),
                     "download_url" => $this->getDownloadUrl()
                 ]

@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -20,32 +19,6 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
 {
 
     private $glossary_item;
-
-    public function render_cell($column, $glossary_item)
-    {
-        $component = $this->get_component()->get_component();
-
-        if (!$this->glossary_item || $this->glossary_item->get_id() != $glossary_item->get_ref())
-        {
-            $this->glossary_item = DataManager::retrieve_by_id(
-                GlossaryItem::class_name(), $glossary_item->get_ref()
-            );
-        }
-
-        switch ($column->get_name())
-        {
-            case ContentObject::PROPERTY_TITLE :
-                return $this->glossary_item->get_title();
-            case ContentObject::PROPERTY_DESCRIPTION :
-
-                return ContentObjectRenditionImplementation::launch(
-                    $this->glossary_item, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION,
-                    $this->get_component()
-                );
-        }
-
-        return parent::render_cell($column, $glossary_item);
-    }
 
     public function get_actions($glossary_item)
     {
@@ -75,5 +48,31 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         }
 
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $glossary_item)
+    {
+        $component = $this->get_component()->get_component();
+
+        if (!$this->glossary_item || $this->glossary_item->get_id() != $glossary_item->get_ref())
+        {
+            $this->glossary_item = DataManager::retrieve_by_id(
+                GlossaryItem::class_name(), $glossary_item->get_ref()
+            );
+        }
+
+        switch ($column->get_name())
+        {
+            case ContentObject::PROPERTY_TITLE :
+                return $this->glossary_item->get_title();
+            case ContentObject::PROPERTY_DESCRIPTION :
+
+                return ContentObjectRenditionImplementation::launch(
+                    $this->glossary_item, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION,
+                    $this->get_component()
+                );
+        }
+
+        return parent::render_cell($column, $glossary_item);
     }
 }

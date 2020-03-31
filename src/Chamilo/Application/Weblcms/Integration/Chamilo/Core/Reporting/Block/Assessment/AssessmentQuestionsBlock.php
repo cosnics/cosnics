@@ -4,16 +4,18 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssessmentQuestionUsersTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -64,7 +66,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
                     AssessmentQuestionUsersTemplate::class_name();
-                $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION] =
+                $params[Manager::PARAM_QUESTION] =
                     $question->get_id();
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
                 $reporting_data->add_data_category_row($count, Translation::get('QuestionDetails'), $link);
@@ -74,30 +76,6 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $reporting_data->hide_categories();
 
         return $reporting_data;
-    }
-
-    public function retrieve_data()
-    {
-        return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
-    }
-
-    /**
-     * Returns the question reporting headers
-     *
-     * @return string[]
-     */
-    protected function get_question_reporting_info_headers()
-    {
-        return array(
-            Translation::get('NumberOfAttempts'), Translation::get('AverageScore'),
-            Translation::get('MinScoreAchieved'), Translation::get('MaxScoreAchieved'),
-            Translation::get('DifficultyIndex')
-        );
     }
 
     /**
@@ -179,6 +157,22 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         return $reporting_info;
     }
 
+    /**
+     * Returns the question reporting headers
+     *
+     * @return string[]
+     */
+    protected function get_question_reporting_info_headers()
+    {
+        return array(
+            Translation::get('NumberOfAttempts'),
+            Translation::get('AverageScore'),
+            Translation::get('MinScoreAchieved'),
+            Translation::get('MaxScoreAchieved'),
+            Translation::get('DifficultyIndex')
+        );
+    }
+
     private function get_questions()
     {
         $pid = $this->getPublicationId();
@@ -193,7 +187,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
 
-        $questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $questions = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters($condition)
         );
 
@@ -204,5 +198,15 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         }
 
         return $questions_arr;
+    }
+
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

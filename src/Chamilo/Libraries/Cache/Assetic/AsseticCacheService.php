@@ -8,6 +8,7 @@ use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
+use Exception;
 
 /**
  *
@@ -54,21 +55,88 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\File\PathBuilder
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheClearerInterface::clear()
      */
-    public function getPathBuilder()
+    public function clear()
     {
-        return $this->pathBuilder;
+        return Filesystem::remove($this->getCachePath());
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface::clearAndWarmUp()
      */
-    public function setPathBuilder(PathBuilder $pathBuilder)
+    public function clearAndWarmUp()
     {
-        $this->pathBuilder = $pathBuilder;
+        if (!$this->clear())
+        {
+            return false;
+        }
+
+        return $this->warmUp();
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function get()
+    {
+        return $this->getAssetCache()->dump();
+    }
+
+    /**
+     *
+     * @return \Assetic\Asset\AssetCache
+     */
+    protected function getAssetCache()
+    {
+        if (!isset($this->assetCache))
+        {
+            $this->assetCache = new AssetCache($this->getAssetCollection(), $this->getFilesystemCache());
+        }
+
+        return $this->assetCache;
+    }
+
+    /**
+     *
+     * @return \Assetic\Asset\AssetCollection
+     */
+    protected function getAssetCollection()
+    {
+        if (!isset($this->assetCollection))
+        {
+            $this->assetCollection =
+                new AssetCollection($this->getAssets(), $this->getAssetFilters(), null, $this->getAssetVariables());
+        }
+
+        return $this->assetCollection;
+    }
+
+    /**
+     *
+     * @return \Assetic\Filter\FilterInterface[]
+     */
+    abstract protected function getAssetFilters();
+
+    /**
+     *
+     * @return string[]
+     */
+    abstract protected function getAssetVariables();
+
+    /**
+     *
+     * @return \Assetic\Asset\FileAsset[]
+     */
+    abstract protected function getAssets();
+
+    /**
+     *
+     * @return string
+     */
+    abstract protected function getCachePath();
 
     /**
      *
@@ -90,17 +158,11 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      *
-     * @return string
-     */
-    abstract protected function getCachePath();
-
-    /**
-     *
      * @return \Assetic\Cache\FilesystemCache
      */
     public function getFilesystemCache()
     {
-        if (! isset($this->filesystemCache))
+        if (!isset($this->filesystemCache))
         {
             $this->filesystemCache = new FilesystemCache($this->getCachePath());
         }
@@ -118,43 +180,36 @@ abstract class AsseticCacheService implements CacheResetterInterface
     }
 
     /**
+     * Returns the last modification time of the resource
      *
-     * @return \Assetic\Asset\FileAsset[]
+     * @return integer
      */
-    abstract protected function getAssets();
-
-    /**
-     *
-     * @return \Assetic\Filter\FilterInterface[]
-     */
-    abstract protected function getAssetFilters();
-
-    /**
-     *
-     * @return \Assetic\Asset\AssetCollection
-     */
-    protected function getAssetCollection()
+    public function getLastModificationTime()
     {
-        if (! isset($this->assetCollection))
+        if (!file_exists($this->getCachePath()))
         {
-            $this->assetCollection = new AssetCollection($this->getAssets(), $this->getAssetFilters());
+            return 0;
         }
 
-        return $this->assetCollection;
+        return filemtime($this->getCachePath());
     }
 
     /**
      *
-     * @return \Assetic\Asset\AssetCache
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    protected function getAssetCache()
+    public function getPathBuilder()
     {
-        if (! isset($this->assetCache))
-        {
-            $this->assetCache = new AssetCache($this->getAssetCollection(), $this->getFilesystemCache());
-        }
+        return $this->pathBuilder;
+    }
 
-        return $this->assetCache;
+    /**
+     *
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     */
+    public function setPathBuilder(PathBuilder $pathBuilder)
+    {
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -166,58 +221,12 @@ abstract class AsseticCacheService implements CacheResetterInterface
         try
         {
             $this->getAssetCache()->dump();
+
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return false;
         }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheClearerInterface::clear()
-     */
-    public function clear()
-    {
-        return Filesystem::remove($this->getCachePath());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface::clearAndWarmUp()
-     */
-    public function clearAndWarmUp()
-    {
-        if (! $this->clear())
-        {
-            return false;
-        }
-
-        return $this->warmUp();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get()
-    {
-        return $this->getAssetCache()->dump();
-    }
-
-    /**
-     * Returns the last modification time of the resource
-     *
-     * @return integer
-     */
-    public function getLastModificationTime()
-    {
-        if (! file_exists($this->getCachePath()))
-        {
-            return 0;
-        }
-
-        return filemtime($this->getCachePath());
     }
 }

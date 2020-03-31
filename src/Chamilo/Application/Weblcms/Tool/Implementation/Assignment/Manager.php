@@ -19,10 +19,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -83,7 +83,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         {
             $glyph = new NamespaceIdentGlyph(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), false, false, false,
-                Theme::ICON_MINI
+                IdentGlyph::SIZE_MINI
             );
 
             $buttonGroup->prependButton(
@@ -150,7 +150,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         {
             $glyph = new NamespaceIdentGlyph(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), false, false, false,
-                Theme::ICON_MINI
+                IdentGlyph::SIZE_MINI
             );
 
             $toolbar->insert_item(

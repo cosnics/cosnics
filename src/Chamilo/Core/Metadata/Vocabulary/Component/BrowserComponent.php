@@ -16,12 +16,11 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -66,34 +65,6 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function getContent()
-    {
-        $table = new VocabularyTable($this);
-        $userId = $this->getSelectedUserId();
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        if ($userId != 0)
-        {
-            $user = DataManager::retrieve_by_id(User::class_name(), $userId);
-            $breadcrumbTitle = $user->get_fullname();
-        }
-        else
-        {
-            $breadcrumbTitle = Translation::get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
-        }
-
-        BreadcrumbTrail::getInstance()->add(
-            new Breadcrumb($this->get_url(array(Manager::PARAM_USER_ID => $userId)), $breadcrumbTitle)
-        );
-
-        $html = array();
-
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table->as_html();
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
      * Builds the action bar
      *
@@ -125,6 +96,34 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    public function getContent()
+    {
+        $table = new VocabularyTable($this);
+        $userId = $this->getSelectedUserId();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
+        if ($userId != 0)
+        {
+            $user = DataManager::retrieve_by_id(User::class_name(), $userId);
+            $breadcrumbTitle = $user->get_fullname();
+        }
+        else
+        {
+            $breadcrumbTitle = Translation::get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
+        }
+
+        BreadcrumbTrail::getInstance()->add(
+            new Breadcrumb($this->get_url(array(Manager::PARAM_USER_ID => $userId)), $breadcrumbTitle)
+        );
+
+        $html = array();
+
+        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $table->as_html();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

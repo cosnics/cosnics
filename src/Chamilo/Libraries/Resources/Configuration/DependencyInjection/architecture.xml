@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -30,7 +30,8 @@
                      method="createExceptionLogger"/>
         </service>
 
-        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface" alias="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger" />
+        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface"
+                 alias="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger"/>
 
         <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory">
             <argument type="service"
@@ -39,6 +40,9 @@
 
         <service id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator"/>
         <service id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
+
+        <service id="Chamilo\Libraries\Architecture\Resource\JavascriptGenerator"/>
+        <service id="Chamilo\Libraries\Architecture\Resource\StylesheetGenerator"/>
 
     </services>
 </container>

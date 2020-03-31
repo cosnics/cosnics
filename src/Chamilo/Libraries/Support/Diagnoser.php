@@ -5,10 +5,9 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Connection;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -442,9 +441,12 @@ class Diagnoser
 
         // Extensions
         $extensions = array(
-            'gd' => 'http://www.php.net/gd', 'mysqli' => 'http://www.php.net/mysqli',
-            'pcre' => 'http://www.php.net/pcre', 'session' => 'http://www.php.net/session',
-            'standard' => 'http://www.php.net/spl', 'zlib' => 'http://www.php.net/zlib',
+            'gd' => 'http://www.php.net/gd',
+            'mysqli' => 'http://www.php.net/mysqli',
+            'pcre' => 'http://www.php.net/pcre',
+            'session' => 'http://www.php.net/session',
+            'standard' => 'http://www.php.net/spl',
+            'zlib' => 'http://www.php.net/zlib',
             'xsl' => 'http://be2.php.net/xsl'
         );
 

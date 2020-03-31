@@ -2,9 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -27,6 +26,86 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+
+    /**
+     * Formats a date.
+     *
+     * @param int $date the date to be formatted.
+     *
+     * @return string
+     */
+    protected function formatDate($date)
+    {
+        $formatted_date = DatetimeUtilities::format_locale_date(
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
+        );
+
+        if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+        {
+            return '<span style="color:red">' . $formatted_date . '</span>';
+        }
+
+        return $formatted_date;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
+     */
+    public function get_actions($entry)
+    {
+        $toolbar = new Toolbar();
+
+        $isCurrentEntry = $this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID];
+        $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
+        $assignment = $this->get_table()->get_component()->get_root_content_object();
+
+        if (!$isCurrentEntry && ($isUser || $assignment->get_visibility_submissions() == 1 ||
+                $this->get_table()->getAssignmentDataProvider()->canEditAssignment()))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('ViewEntry'), new FontAwesomeGlyph('folder'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+                        Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID],
+                        Manager::PARAM_ENTITY_ID => $this->get_component()->getEntityIdentifier(),
+                        Manager::PARAM_ENTITY_TYPE => $this->get_component()->getEntityType()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        $usesFileStorage = is_subclass_of(
+            $entry[ContentObject::PROPERTY_TYPE], '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport'
+        );
+
+        if ($usesFileStorage)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Download'), new FontAwesomeGlyph('download'), $this->get_component()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
+                        Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('DownloadNotPossible'), new FontAwesomeGlyph('download', array('text-muted')),
+                    null, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        return $toolbar->as_html();
+    }
 
     public function render_cell($column, $entry)
     {
@@ -78,7 +157,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                 break;
             case Score::PROPERTY_SCORE:
                 $score = $entry[Score::PROPERTY_SCORE];
-                if(is_null($score))
+                if (is_null($score))
                 {
                     return null;
                 }
@@ -97,96 +176,5 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
     public function render_id_cell($row)
     {
         return $row[Entry::PROPERTY_ID];
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
-     */
-    public function get_actions($entry)
-    {
-        $toolbar = new Toolbar();
-
-        $isCurrentEntry = $this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID];
-        $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
-        $assignment = $this->get_table()->get_component()->get_root_content_object();
-
-        if (!$isCurrentEntry && ($isUser || $assignment->get_visibility_submissions() == 1 ||
-            $this->get_table()->getAssignmentDataProvider()->canEditAssignment()))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('ViewEntry'),
-                    new FontAwesomeGlyph('folder'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID],
-                            Manager::PARAM_ENTITY_ID => $this->get_component()->getEntityIdentifier(),
-                            Manager::PARAM_ENTITY_TYPE => $this->get_component()->getEntityType()
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        $usesFileStorage = is_subclass_of(
-            $entry[ContentObject::PROPERTY_TYPE],
-            '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport'
-        );
-
-        if ($usesFileStorage)
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Download'),
-                    new FontAwesomeGlyph('download'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD,
-                            Manager::PARAM_ENTRY_ID => $entry[Entry::PROPERTY_ID]
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-        else
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('DownloadNotPossible'),
-                    new FontAwesomeGlyph('download', array('text-muted')),
-                    null,
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-
-        return $toolbar->as_html();
-    }
-
-    /**
-     * Formats a date.
-     *
-     * @param int $date the date to be formatted.
-     *
-     * @return string
-     */
-    protected function formatDate($date)
-    {
-        $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
-            $date
-        );
-
-        if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
-        {
-            return '<span style="color:red">' . $formatted_date . '</span>';
-        }
-
-        return $formatted_date;
     }
 }

@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\Instance\Table\Instance;
 use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -65,7 +65,8 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE, Manager::PARAM_INSTANCE_ID => $result->get_id()
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
+                        Manager::PARAM_INSTANCE_ID => $result->get_id()
                     )
                 ), ToolbarItem::DISPLAY_ICON
             )
@@ -76,7 +77,8 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_url(
                     array(
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, Manager::PARAM_INSTANCE_ID => $result->get_id()
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                        Manager::PARAM_INSTANCE_ID => $result->get_id()
                     )
                 ), ToolbarItem::DISPLAY_ICON, true
             )
@@ -87,7 +89,8 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 Translation::get('ManageRights', null, \Chamilo\Core\Rights\Manager::context()),
                 new FontAwesomeGlyph('lock'), $this->get_component()->get_url(
                 array(
-                    Manager::PARAM_ACTION => Manager::ACTION_RIGHTS, Manager::PARAM_INSTANCE_ID => $result->get_id()
+                    Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
+                    Manager::PARAM_INSTANCE_ID => $result->get_id()
                 )
             ), ToolbarItem::DISPLAY_ICON
             )
@@ -112,7 +115,8 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $name = htmlentities(Translation::get('ImplementationName', null, $result->get_implementation()));
 
                 $glyph = new NamespaceIdentGlyph(
-                    $result->get_implementation(), true, false, false, Theme::ICON_SMALL, array(), $name
+                    $result->get_implementation(), true, false, false,
+                    IdentGlyph::SIZE_SMALL, array(), $name
                 );
 
                 return $glyph->render();

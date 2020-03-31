@@ -11,7 +11,6 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 class UsersTrackingBlock extends CourseBlock
@@ -22,9 +21,14 @@ class UsersTrackingBlock extends CourseBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation::get('Name'), Translation::get('UserName'), Translation::get('TimeOnCourse'),
-                Translation::get('FirstAccess'), Translation::get('LastAccess'), Translation::get('TotalVisits'),
-                Translation::get('TotalPublications'), Translation::get('UserDetail')
+                Translation::get('Name'),
+                Translation::get('UserName'),
+                Translation::get('TimeOnCourse'),
+                Translation::get('FirstAccess'),
+                Translation::get('LastAccess'),
+                Translation::get('TotalVisits'),
+                Translation::get('TotalPublications'),
+                Translation::get('UserDetail')
             )
         );
 

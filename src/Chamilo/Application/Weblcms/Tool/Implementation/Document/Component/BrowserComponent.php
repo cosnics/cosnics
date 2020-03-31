@@ -13,34 +13,38 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager
 {
-    const PARAM_FILTER = 'filter';
-    const FILTER_TODAY = 'Today';
-    const FILTER_THIS_WEEK = 'Week';
-    const FILTER_THIS_MONTH = 'Month';
     const ACTION_DOWNLOAD_SELECTED_PUBLICATIONS = 'download_selected_publications';
 
-    public function get_tool_actions()
+    const FILTER_THIS_MONTH = 'Month';
+
+    const FILTER_THIS_WEEK = 'Week';
+
+    const FILTER_TODAY = 'Today';
+
+    const PARAM_FILTER = 'filter';
+
+    /**
+     *
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $toolActions = array();
+    }
 
-        $toolActions[] = new Button(
-            Translation::get('Download'), new FontAwesomeGlyph('download'),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_ZIP_AND_DOWNLOAD)), Button::DISPLAY_ICON_AND_LABEL
-        );
-
-        return $toolActions;
+    protected function getFilter()
+    {
+        return $this->getRequest()->query->get(self::PARAM_FILTER);
     }
 
     public function getFilterActions()
@@ -88,9 +92,34 @@ class BrowserComponent extends Manager
         return $showActions;
     }
 
-    protected function getFilter()
+    public function get_additional_form_actions()
     {
-        return $this->getRequest()->query->get(self::PARAM_FILTER);
+        return array(
+            new TableFormAction(
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SELECTED_PUBLICATIONS
+                    )
+                ), Translation::get('DownloadSelected'), false
+            )
+        );
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
+    }
+
+    public function get_tool_actions()
+    {
+        $toolActions = array();
+
+        $toolActions[] = new Button(
+            Translation::get('Download'), new FontAwesomeGlyph('download'),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_ZIP_AND_DOWNLOAD)), Button::DISPLAY_ICON_AND_LABEL
+        );
+
+        return $toolActions;
     }
 
     public function get_tool_conditions()
@@ -158,31 +187,5 @@ class BrowserComponent extends Manager
         }
 
         return $conditions;
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
-    }
-
-    public function get_additional_form_actions()
-    {
-        return array(
-            new TableFormAction(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SELECTED_PUBLICATIONS
-                    )
-                ), Translation::get('DownloadSelected'), false
-            )
-        );
-    }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
     }
 }

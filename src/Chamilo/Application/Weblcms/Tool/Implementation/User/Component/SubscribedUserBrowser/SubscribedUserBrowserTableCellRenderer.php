@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -99,8 +98,8 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
-                                'minus-square', array('text-muted')
-                            ), null, ToolbarItem::DISPLAY_ICON
+                            'minus-square', array('text-muted')
+                        ), null, ToolbarItem::DISPLAY_ICON
                         )
                     );
                 }
@@ -116,7 +115,9 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeStudent'), new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeStudent'),
+                                new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                                ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -127,7 +128,8 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'), $status_change_url, ToolbarItem::DISPLAY_ICON
+                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                                $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
                         break;
@@ -138,8 +140,8 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('UnsubscribeNotAvailable'), new FontAwesomeGlyph(
-                            'minus-square', array('text-muted')
-                        ), null, ToolbarItem::DISPLAY_ICON
+                        'minus-square', array('text-muted')
+                    ), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }

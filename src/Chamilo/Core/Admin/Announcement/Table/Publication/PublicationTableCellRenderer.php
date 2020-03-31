@@ -11,11 +11,11 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -61,22 +61,6 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
     }
 
     /**
-     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
-     */
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
      * @return \Chamilo\Core\Group\Service\GroupService
      */
     public function getGroupService(): GroupService
@@ -90,6 +74,22 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
     public function setGroupService(GroupService $groupService): void
     {
         $this->groupService = $groupService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -181,7 +181,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             case PublicationTableColumnModel::COLUMN_STATUS :
                 return $content_object->get_icon_image(
-                    Theme::ICON_MINI, !(boolean) $publication[Publication::PROPERTY_HIDDEN]
+                    IdentGlyph::SIZE_MINI,
+                    !(boolean) $publication[Publication::PROPERTY_HIDDEN]
                 );
                 break;
             case ContentObject::PROPERTY_TITLE :

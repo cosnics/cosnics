@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -86,6 +85,37 @@ class InstanceForm extends FormValidator
         }
 
         $tabs_generator->render();
+    }
+
+    public function build_creation_form()
+    {
+        $this->build_basic_form();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    public function build_editing_form()
+    {
+        $this->build_basic_form();
+
+        $this->addElement('hidden', Instance::PROPERTY_ID);
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_general_form()
@@ -252,85 +282,6 @@ class InstanceForm extends FormValidator
         }
     }
 
-    public function build_editing_form()
-    {
-        $this->build_basic_form();
-
-        $this->addElement('hidden', Instance::PROPERTY_ID);
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    public function build_creation_form()
-    {
-        $this->build_basic_form();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    public function update_external_instance()
-    {
-        $external_instance = $this->external_instance;
-        $values = $this->exportValues();
-
-        $external_instance->set_title($values[Instance::PROPERTY_TITLE]);
-        $external_instance->set_implementation($values[Instance::PROPERTY_IMPLEMENTATION]);
-        $external_instance->set_creation_date(time());
-        $external_instance->set_modification_date(time());
-
-        if (isset($values[Instance::PROPERTY_ENABLED]))
-        {
-            $external_instance->set_enabled(true);
-        }
-        else
-        {
-            $external_instance->set_enabled(false);
-        }
-
-        if (!$external_instance->update())
-        {
-            return false;
-        }
-        else
-        {
-            $settings = $values['settings'];
-            $failures = 0;
-
-            foreach ($settings as $name => $value)
-            {
-                $setting = DataManager::retrieve_setting_from_variable_name($name, $external_instance->get_id());
-                $setting->set_value($value);
-
-                if (!$setting->update())
-                {
-                    $failures ++;
-                }
-            }
-
-            if ($failures > 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function create_external_instance()
     {
         $values = $this->exportValues();
@@ -386,45 +337,11 @@ class InstanceForm extends FormValidator
         return true;
     }
 
-    /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
-     * object type's additional properties.
-     *
-     * @param array $defaults Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = array())
+    private function is_valid_validation_method($validation_method)
     {
-        $external_instance = $this->external_instance;
+        $available_validation_methods = array('regex', 'email', 'lettersonly', 'alphanumeric', 'numeric', 'required');
 
-        if ($external_instance instanceof Instance)
-        {
-            $defaults[Instance::PROPERTY_ID] = $external_instance->get_id();
-            $defaults[Instance::PROPERTY_TITLE] = $external_instance->get_title();
-            $defaults[Instance::PROPERTY_IMPLEMENTATION] = $external_instance->get_implementation();
-            $defaults[Instance::PROPERTY_ENABLED] = $external_instance->get_enabled();
-            $defaults[Instance::PROPERTY_TYPE] = $external_instance->get_type();
-
-            $configuration = $this->configuration;
-
-            foreach ($configuration['settings'] as $category_name => $settings)
-            {
-                foreach ($settings as $name => $setting)
-                {
-                    $setting = DataManager::retrieve_setting_from_variable_name($name, $external_instance->get_id());
-                    if ($setting instanceof Setting)
-                    {
-                        $defaults[self::SETTINGS_PREFIX][$name] = $setting->get_value();
-                    }
-                }
-            }
-        }
-        else
-        {
-            $defaults[Instance::PROPERTY_TYPE] = PersonalInstance::class_name();
-        }
-
-        parent::setDefaults($defaults);
+        return in_array($validation_method, $available_validation_methods);
     }
 
     public function parse_settings()
@@ -530,10 +447,92 @@ class InstanceForm extends FormValidator
         return $result;
     }
 
-    private function is_valid_validation_method($validation_method)
+    /**
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
+     * object type's additional properties.
+     *
+     * @param array $defaults Default values for this form's parameters.
+     */
+    public function setDefaults($defaults = array())
     {
-        $available_validation_methods = array('regex', 'email', 'lettersonly', 'alphanumeric', 'numeric', 'required');
+        $external_instance = $this->external_instance;
 
-        return in_array($validation_method, $available_validation_methods);
+        if ($external_instance instanceof Instance)
+        {
+            $defaults[Instance::PROPERTY_ID] = $external_instance->get_id();
+            $defaults[Instance::PROPERTY_TITLE] = $external_instance->get_title();
+            $defaults[Instance::PROPERTY_IMPLEMENTATION] = $external_instance->get_implementation();
+            $defaults[Instance::PROPERTY_ENABLED] = $external_instance->get_enabled();
+            $defaults[Instance::PROPERTY_TYPE] = $external_instance->get_type();
+
+            $configuration = $this->configuration;
+
+            foreach ($configuration['settings'] as $category_name => $settings)
+            {
+                foreach ($settings as $name => $setting)
+                {
+                    $setting = DataManager::retrieve_setting_from_variable_name($name, $external_instance->get_id());
+                    if ($setting instanceof Setting)
+                    {
+                        $defaults[self::SETTINGS_PREFIX][$name] = $setting->get_value();
+                    }
+                }
+            }
+        }
+        else
+        {
+            $defaults[Instance::PROPERTY_TYPE] = PersonalInstance::class_name();
+        }
+
+        parent::setDefaults($defaults);
+    }
+
+    public function update_external_instance()
+    {
+        $external_instance = $this->external_instance;
+        $values = $this->exportValues();
+
+        $external_instance->set_title($values[Instance::PROPERTY_TITLE]);
+        $external_instance->set_implementation($values[Instance::PROPERTY_IMPLEMENTATION]);
+        $external_instance->set_creation_date(time());
+        $external_instance->set_modification_date(time());
+
+        if (isset($values[Instance::PROPERTY_ENABLED]))
+        {
+            $external_instance->set_enabled(true);
+        }
+        else
+        {
+            $external_instance->set_enabled(false);
+        }
+
+        if (!$external_instance->update())
+        {
+            return false;
+        }
+        else
+        {
+            $settings = $values['settings'];
+            $failures = 0;
+
+            foreach ($settings as $name => $value)
+            {
+                $setting = DataManager::retrieve_setting_from_variable_name($name, $external_instance->get_id());
+                $setting->set_value($value);
+
+                if (!$setting->update())
+                {
+                    $failures ++;
+                }
+            }
+
+            if ($failures > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

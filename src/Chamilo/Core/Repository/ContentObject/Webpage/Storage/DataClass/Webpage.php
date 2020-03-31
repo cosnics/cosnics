@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -257,7 +256,10 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_FILENAME, self::PROPERTY_FILESIZE, self::PROPERTY_PATH, self::PROPERTY_HASH,
+            self::PROPERTY_FILENAME,
+            self::PROPERTY_FILESIZE,
+            self::PROPERTY_PATH,
+            self::PROPERTY_HASH,
             self::PROPERTY_STORAGE_PATH
         );
     }

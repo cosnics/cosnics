@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -139,7 +139,7 @@ class ForumPostRendition
                 $url = $this->getApplication()->get_url($params);
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
 
-                $glyph = $attachment->getGlyph(Theme::ICON_MINI);
+                $glyph = $attachment->getGlyph(IdentGlyph::SIZE_MINI);
 
                 $html[] =
                     '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .

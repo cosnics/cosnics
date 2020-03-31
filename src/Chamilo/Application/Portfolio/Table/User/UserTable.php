@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -54,9 +54,9 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
      * Constructor
@@ -67,75 +67,23 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
      * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
      * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     *
      * @throws \Exception
      */
-    public function __construct($component, UserService $userService, RightsService $rightsService,
-        PublicationService $publicationService, FavouriteService $favouriteService, Translator $translator,
-        Theme $themeUtilities)
+    public function __construct(
+        $component, UserService $userService, RightsService $rightsService, PublicationService $publicationService,
+        FavouriteService $favouriteService, Translator $translator, ThemePathBuilder $themePathBuilder
+    )
     {
         $this->userService = $userService;
         $this->rightsService = $rightsService;
         $this->publicationService = $publicationService;
         $this->favouriteService = $favouriteService;
         $this->translator = $translator;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
 
         parent::__construct($component);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Service\UserService
-     */
-    public function getUserService()
-    {
-        return $this->userService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Portfolio\Service\RightsService
-     */
-    public function getRightsService()
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService)
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Portfolio\Service\PublicationService
-     */
-    public function getPublicationService()
-    {
-        return $this->publicationService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService)
-    {
-        $this->publicationService = $publicationService;
     }
 
     /**
@@ -158,6 +106,60 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
+     * @return \Chamilo\Application\Portfolio\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Portfolio\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService)
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public function getThemePathBuilder()
+    {
+        return $this->themePathBuilder;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
+    {
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    /**
+     *
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator()
@@ -176,20 +178,52 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Core\User\Service\UserService
      */
-    public function getThemeUtilities()
+    public function getUserService()
     {
-        return $this->themeUtilities;
+        return $this->userService;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
-    public function setThemeUtilities(Theme $themeUtilities)
+    public function setUserService(UserService $userService)
     {
-        $this->themeUtilities = $themeUtilities;
+        $this->userService = $userService;
+    }
+
+    /**
+     * Gets the table's cell renderer or builds one if it is not set
+     *
+     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
+     */
+    public function get_cell_renderer()
+    {
+        if (!isset($this->cellRenderer))
+        {
+            $this->cellRenderer = new UserTableCellRenderer(
+                $this, $this->getRightsService(), $this->getFavouriteService(), $this->getTranslator(),
+                $this->getPublicationService(), $this->getThemePathBuilder()
+            );
+        }
+
+        return $this->cellRenderer;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Table::get_data_provider()
+     */
+    public function get_data_provider()
+    {
+        if (!isset($this->dataProvider))
+        {
+            $this->dataProvider = new UserTableDataProvider($this, $this->getUserService());
+        }
+
+        return $this->dataProvider;
     }
 
     /**
@@ -206,45 +240,12 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
                 $this->get_component()->get_url(
                     array(
                         \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
-                        Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
-                $this->getTranslator()->trans('CreateFavourites', [], Manager::context()),
-                false));
+                        Manager::PARAM_ACTION => Manager::ACTION_CREATE
+                    )
+                ), $this->getTranslator()->trans('CreateFavourites', [], Manager::context()), false
+            )
+        );
 
         return $actions;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Table::get_data_provider()
-     */
-    public function get_data_provider()
-    {
-        if (! isset($this->dataProvider))
-        {
-            $this->dataProvider = new UserTableDataProvider($this, $this->getUserService());
-        }
-
-        return $this->dataProvider;
-    }
-
-    /**
-     * Gets the table's cell renderer or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
-     */
-    public function get_cell_renderer()
-    {
-        if (! isset($this->cell_renderer))
-        {
-            $this->cell_renderer = new UserTableCellRenderer(
-                $this,
-                $this->getRightsService(),
-                $this->getFavouriteService(),
-                $this->getTranslator(),
-                $this->getPublicationService(),
-                $this->getThemeUtilities());
-        }
-
-        return $this->cell_renderer;
     }
 }

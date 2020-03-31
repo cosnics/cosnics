@@ -19,7 +19,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0"
+        "php": ">=7.2.0",
+        "ext-exif": "*"
     },
     "extra": {
         "cosnics": {

@@ -8,9 +8,9 @@ use Chamilo\Core\Install\StepResult;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -97,7 +97,10 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
 
-        $glyph = new NamespaceIdentGlyph($result->get_context(), true, false, false, Theme::ICON_SMALL, array('fa-fw'));
+        $glyph = new NamespaceIdentGlyph(
+            $result->get_context(), true, false, false,
+            IdentGlyph::SIZE_SMALL, array('fa-fw')
+        );
 
         return $this->renderResult(
             $title, $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()), $glyph

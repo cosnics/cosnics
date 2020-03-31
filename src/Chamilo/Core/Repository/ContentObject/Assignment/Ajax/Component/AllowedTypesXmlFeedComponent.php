@@ -7,8 +7,8 @@ use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -41,7 +41,8 @@ class AllowedTypesXmlFeedComponent extends Manager
 
             $glyphNamespace = $this->getClassnameUtilities()->getNamespaceParent($allowedType['type']);
             $glyph = new NamespaceIdentGlyph(
-                $glyphNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                $glyphNamespace, true, false, false, IdentGlyph::SIZE_MINI,
+                array('fa-fw')
             );
 
             $elements->add_element(

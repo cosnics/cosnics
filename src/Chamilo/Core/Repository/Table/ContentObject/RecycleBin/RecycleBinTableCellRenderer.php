@@ -6,11 +6,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -96,7 +96,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                 return $this->parent_title_cache[$pid];
 
             case RecycleBinTableColumnModel::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(

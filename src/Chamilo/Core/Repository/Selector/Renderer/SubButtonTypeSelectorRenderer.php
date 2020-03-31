@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 
 /**
  *
@@ -53,7 +53,8 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         {
             // If multiple categories add category header?
             $subButtons[] = new SubButton(
-                $option->get_label(), $option->get_image_path(Theme::ICON_MINI),
+                $option->get_label(),
+                $option->get_image_path(IdentGlyph::SIZE_MINI),
                 $this->getContentObjectTypeUrl($option->get_template_registration_id())
             );
         }

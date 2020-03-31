@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Utilities;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -253,7 +253,9 @@ class Utilities
         $date = date('r', $object->get_modification_date());
         $return = array();
         $return['id'] = 'lo_' . $object->get_id();
-        $return['classes'] = $object->getGlyph(Theme::ICON_MINI, true, array('fa-fw'))->getClassNamesString();
+        $return['classes'] =
+            $object->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))
+                ->getClassNamesString();
         $return['title'] = $object->get_title();
         $return['description'] = Translation::get(
                 'TypeName', array(), ClassnameUtilities::getInstance()->getNamespaceFromClassname($type)

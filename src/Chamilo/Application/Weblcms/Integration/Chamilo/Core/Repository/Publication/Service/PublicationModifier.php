@@ -22,6 +22,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -53,16 +54,26 @@ class PublicationModifier implements PublicationModifierInterface
     private $courseService;
 
     /**
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    private $themePathBuilder;
+
+    /**
      *
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function __construct(Translator $translator, UserService $userService, CourseService $courseService)
+    public function __construct(
+        Translator $translator, UserService $userService, CourseService $courseService,
+        ThemePathBuilder $themePathBuilder
+    )
     {
         $this->translator = $translator;
         $this->userService = $userService;
         $this->courseService = $courseService;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
@@ -110,6 +121,22 @@ class PublicationModifier implements PublicationModifierInterface
     public function setCourseService(CourseService $courseService): void
     {
         $this->courseService = $courseService;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public function getThemePathBuilder(): ThemePathBuilder
+    {
+        return $this->themePathBuilder;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
+    {
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
@@ -185,7 +212,8 @@ class PublicationModifier implements PublicationModifierInterface
         {
             $failureMessage = $this->getTranslator()->trans(
                 'PublicationFailure', [
-                '%CONTENT_OBJECT%' => $contentObject->get_title(), '%COURSE%' => $course->get_title(),
+                '%CONTENT_OBJECT%' => $contentObject->get_title(),
+                '%COURSE%' => $course->get_title(),
                 '%TOOL%' => $toolName
             ], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository'
             );
@@ -205,7 +233,8 @@ class PublicationModifier implements PublicationModifierInterface
             {
                 $failureMessage = $this->getTranslator()->trans(
                     'PublicationFailure', [
-                    '%CONTENT_OBJECT%' => $contentObject->get_title(), '%COURSE%' => $course->get_title(),
+                    '%CONTENT_OBJECT%' => $contentObject->get_title(),
+                    '%COURSE%' => $course->get_title(),
                     '%TOOL%' => $toolName
                 ], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository'
                 );
@@ -223,7 +252,8 @@ class PublicationModifier implements PublicationModifierInterface
 
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(), Translation::getInstance(), new CourseRepository(),
-                new PublicationRepository(), new ContentObjectRepository(), $this->getUserService()
+                new PublicationRepository(), new ContentObjectRepository(), $this->getUserService(),
+                $this->getThemePathBuilder()
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);
@@ -231,8 +261,10 @@ class PublicationModifier implements PublicationModifierInterface
 
         $successMessage = $this->getTranslator()->trans(
             'PublicationSuccess', [
-            '%CONTENT_OBJECT%' => $contentObject->get_title(), '%COURSE%' => $course->get_title(),
-            '%COURSE_CODE%' => $course->get_visual_code(), '%TOOL%' => $toolName
+            '%CONTENT_OBJECT%' => $contentObject->get_title(),
+            '%COURSE%' => $course->get_title(),
+            '%COURSE_CODE%' => $course->get_visual_code(),
+            '%TOOL%' => $toolName
         ], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository'
         );
 

@@ -13,8 +13,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -396,7 +396,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $html = array();
 
-        $wikiGlyph = $this->get_root_content_object()->getGlyph(Theme::ICON_BIG, true, array('fa-6x'));
+        $wikiGlyph = $this->get_root_content_object()->getGlyph(
+            IdentGlyph::SIZE_BIG, true, array('fa-6x')
+        );
 
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-body text-center">';

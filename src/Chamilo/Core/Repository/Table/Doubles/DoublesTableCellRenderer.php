@@ -5,11 +5,11 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -71,7 +71,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                     '" title="' . $title . '">' . $title_short . '</a>';
             case DoublesTableColumnModel::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(

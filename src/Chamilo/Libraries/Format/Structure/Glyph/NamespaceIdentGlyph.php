@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\Glyph;
 
-use Chamilo\Libraries\Format\Theme;
-
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\Glyph
@@ -23,8 +21,9 @@ class NamespaceIdentGlyph extends IdentGlyph
      * @param string $style
      */
     public function __construct(
-        $namespace, $isAligned = false, $isNew = false, $isDisabled = false, $size = Theme::ICON_SMALL,
-        $extraClasses = array(), $title = null, $style = 'fas-ci'
+        $namespace, $isAligned = false, $isNew = false, $isDisabled = false,
+        $size = IdentGlyph::SIZE_SMALL, $extraClasses = array(),
+        $title = null, $style = 'fas-ci'
     )
     {
         parent::__construct(md5($namespace), $isAligned, $isNew, $isDisabled, $size, $extraClasses, $title, $style);

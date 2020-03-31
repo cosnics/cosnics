@@ -15,9 +15,9 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -150,7 +150,10 @@ class PublicationTargetForm extends FormValidator
 
         foreach ($this->content_objects as $content_object)
         {
-            $table_data[] = array($content_object->get_icon_image(Theme::ICON_MINI), $content_object->get_title());
+            $table_data[] = array(
+                $content_object->get_icon_image(IdentGlyph::SIZE_MINI),
+                $content_object->get_title()
+            );
         }
 
         $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));

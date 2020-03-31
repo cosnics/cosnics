@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -139,7 +139,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             while ($contentObject = $contentObjects->next_result())
             {
                 $namespace = ContentObject::get_content_object_type_namespace($contentObject->get_type());
-                $glyph = $contentObject->getGlyph(Theme::ICON_MINI);
+                $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
                 if (RightsService::getInstance()->canUseContentObject($this->getUser(), $contentObject))
                 {

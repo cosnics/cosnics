@@ -10,8 +10,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\Translation\Translator;
 
@@ -44,6 +42,22 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         parent::__construct($table);
 
         $this->translator = $translator;
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
         $this->rightsService = $rightsService;
     }
 
@@ -107,21 +121,5 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         }
 
         return parent::render_cell($column, $record);
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
-     */
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
     }
 }

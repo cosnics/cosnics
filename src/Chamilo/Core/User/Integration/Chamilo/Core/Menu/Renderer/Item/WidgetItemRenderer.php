@@ -11,7 +11,7 @@ use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -37,18 +37,18 @@ class WidgetItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        Theme $themeUtilities, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
+        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
         UserPictureProviderInterface $userPictureProvider
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->userPictureProvider = $userPictureProvider;
@@ -64,7 +64,6 @@ class WidgetItemRenderer extends ItemRenderer
     public function render(Item $item, User $user)
     {
         $translator = $this->getTranslator();
-        $themeUtilities = $this->getThemeUtilities();
 
         if (!$this->isItemVisibleForUser($user))
         {

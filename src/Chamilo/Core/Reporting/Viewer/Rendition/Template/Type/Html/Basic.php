@@ -14,10 +14,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -226,7 +226,7 @@ class Basic extends Html
                     $glyph = new NamespaceIdentGlyph(
                         $this->getBlockNamespace($block) . '\Block\\' .
                         ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
-                        Theme::ICON_SMALL, array()
+                        IdentGlyph::SIZE_SMALL, array()
                     );
 
                     $tabs->add_tab(

@@ -21,15 +21,14 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -42,9 +41,11 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class AdminRequestBrowserComponent extends Manager implements TableSupport
 {
-    const PENDING_REQUEST_VIEW = 'pending_request_view';
     const ALLOWED_REQUEST_VIEW = 'allowed_request_view';
+
     const DENIED_REQUEST_VIEW = 'denied_request_view';
+
+    const PENDING_REQUEST_VIEW = 'pending_request_view';
 
     /**
      *
@@ -86,25 +87,39 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function get_request_html()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $html = array();
-        $menu = new RequestsTreeRenderer($this);
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
-        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">' .
-            $menu->render_as_tree() . '</div>';
-        $html[] = '<div style="float: right; width: 80%;">';
-        if ($this->request_view && $this->request_type)
+        if ($this->get_user()->is_platform_admin())
         {
-            $html[] = $this->get_table_html();
-        }
-        $html[] = '</div>';
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
+            $redirect = new Redirect(
+                array(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                )
+            );
 
-        return implode(PHP_EOL, $html);
+            $breadcrumbtrail->add(
+                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+            );
+
+            $redirect = new Redirect(
+                array(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
+                    DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
+                        self::package()
+                    )
+                )
+            );
+
+            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
+        }
+
+        if ($this->category)
+        {
+            $category = DataManager::retrieve_by_id(CourseCategory::class_name(), $this->category);
+            $breadcrumbtrail->add(new Breadcrumb($this->get_url(), $category->get_name()));
+        }
     }
 
     public function getButtonToolbarRenderer()
@@ -126,21 +141,6 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    public function get_table_html()
-    {
-        $parameters = array();
-        $parameters[self::PARAM_CONTEXT] = self::context();
-        $parameters[self::PARAM_ACTION] = self::ACTION_ADMIN_REQUEST_BROWSER;
-        $parameters[self::PARAM_REQUEST_TYPE] = $this->request_type;
-
-        $table = new AdminRequestTable($this);
-
-        $html = array();
-        $html[] = $table->as_html();
-
-        return implode(PHP_EOL, $html);
     }
 
     public function get_condition()
@@ -207,6 +207,27 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         return $condition;
     }
 
+    public function get_request_html()
+    {
+        $html = array();
+        $menu = new RequestsTreeRenderer($this);
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
+        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">' .
+            $menu->render_as_tree() . '</div>';
+        $html[] = '<div style="float: right; width: 80%;">';
+        if ($this->request_view && $this->request_type)
+        {
+            $html[] = $this->get_table_html();
+        }
+        $html[] = '</div>';
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     public function get_request_type()
     {
         return $this->request_type;
@@ -217,43 +238,23 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         return $this->request_view;
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        if ($this->get_user()->is_platform_admin())
-        {
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-                )
-            );
-
-            $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
-            );
-
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
-                    DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package()
-                    )
-                )
-            );
-
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
-        }
-
-        if ($this->category)
-        {
-            $category = DataManager::retrieve_by_id(CourseCategory::class_name(), $this->category);
-            $breadcrumbtrail->add(new Breadcrumb($this->get_url(), $category->get_name()));
-        }
-    }
-
     public function get_table_condition($table_class_name)
     {
         return $this->get_condition();
+    }
+
+    public function get_table_html()
+    {
+        $parameters = array();
+        $parameters[self::PARAM_CONTEXT] = self::context();
+        $parameters[self::PARAM_ACTION] = self::ACTION_ADMIN_REQUEST_BROWSER;
+        $parameters[self::PARAM_REQUEST_TYPE] = $this->request_type;
+
+        $table = new AdminRequestTable($this);
+
+        $html = array();
+        $html[] = $table->as_html();
+
+        return implode(PHP_EOL, $html);
     }
 }

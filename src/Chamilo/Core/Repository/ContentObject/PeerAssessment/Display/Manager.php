@@ -8,9 +8,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -418,7 +418,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         if (is_null($image))
         {
             $image = new NamespaceIdentGlyph(
-                'Chamilo\Core\Repository\ContentObject\PeerAssessment', true, false, false, Theme::ICON_SMALL, array()
+                'Chamilo\Core\Repository\ContentObject\PeerAssessment', true, false, false,
+                IdentGlyph::SIZE_SMALL, array()
             );
         }
 

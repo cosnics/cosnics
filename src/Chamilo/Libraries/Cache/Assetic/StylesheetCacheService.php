@@ -5,7 +5,7 @@ use Assetic\Filter\CssImportFilter;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 
 /**
@@ -18,27 +18,26 @@ class StylesheetCacheService extends AsseticCacheService
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
      *
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
     public function __construct(
-        PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities
+        PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder
     )
     {
         parent::__construct($pathBuilder, $configurablePathBuilder);
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssetFilters()
+     * @return \Assetic\Filter\FilterInterface[]
      */
     protected function getAssetFilters()
     {
@@ -46,8 +45,15 @@ class StylesheetCacheService extends AsseticCacheService
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssets()
+     * @return string[]
+     */
+    protected function getAssetVariables()
+    {
+        return array($this->getThemePathBuilder()->getTheme());
+    }
+
+    /**
+     * @return \Assetic\Asset\FileAsset[]
      */
     protected function getAssets()
     {
@@ -55,14 +61,14 @@ class StylesheetCacheService extends AsseticCacheService
 
         $assets = array();
 
-        $stylesheetPath = $this->getThemeUtilities()->getStylesheetPath('Chamilo\Libraries', false, true);
+        $stylesheetPath = $this->getThemePathBuilder()->getStylesheetPath('Chamilo\Libraries', false, true);
         $assets[] = new CssFileAsset($this->getPathBuilder(), $stylesheetPath);
 
         foreach ($packages as $category => $namespaces)
         {
             foreach ($namespaces as $namespace => $package)
             {
-                $stylesheetPath = $this->getThemeUtilities()->getStylesheetPath($namespace, false, true);
+                $stylesheetPath = $this->getThemePathBuilder()->getStylesheetPath($namespace, false, true);
 
                 if (file_exists($stylesheetPath) && $namespace != 'Chamilo\Libraries')
                 {
@@ -75,8 +81,7 @@ class StylesheetCacheService extends AsseticCacheService
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getCachePath()
+     * @return string
      */
     protected function getCachePath()
     {
@@ -85,19 +90,19 @@ class StylesheetCacheService extends AsseticCacheService
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemeUtilities()
+    public function getThemePathBuilder()
     {
-        return $this->themeUtilities;
+        return $this->themePathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function setThemeUtilities(Theme $themeUtilities)
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
     {
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 }

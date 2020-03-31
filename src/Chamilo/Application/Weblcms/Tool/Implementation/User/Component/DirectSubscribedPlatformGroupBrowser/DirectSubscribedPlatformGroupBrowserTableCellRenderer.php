@@ -6,12 +6,12 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -30,39 +30,6 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
-    /**
-     * Renders a single cell
-     *
-     * @param RecordTableColumn $column
-     * @param string[] $group_with_subscription_status
-     *
-     * @return String
-     */
-    public function render_cell($column, $group_with_subscription_status)
-    {
-        switch ($column->get_name())
-        {
-            // Exceptions that need post-processing go here ...
-            case Group::PROPERTY_DESCRIPTION :
-                return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
-                    $group_with_subscription_status[\Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID]
-                )->get_fully_qualified_name();
-            case CourseEntityRelation::PROPERTY_STATUS :
-                switch ($group_with_subscription_status[CourseEntityRelation::PROPERTY_STATUS])
-                {
-                    case CourseEntityRelation::STATUS_TEACHER :
-                        return Translation::get('CourseAdmin');
-                    case CourseEntityRelation::STATUS_STUDENT :
-                        return Translation::get('Student');
-                    default :
-                        return Translation::get('Unknown');
-                }
-        }
-
-        return parent::render_cell($column, $group_with_subscription_status);
-    }
 
     /**
      * Gets the action links to display
@@ -113,8 +80,8 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('MakeStudent'),
-                            new FontAwesomeGlyph('user-graduate', array(), null, 'fas'),
-                            $status_change_url, ToolbarItem::DISPLAY_ICON
+                            new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                            ToolbarItem::DISPLAY_ICON
                         )
                     );
 
@@ -126,8 +93,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MakeTeacher'),
-                            new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                            Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
                             $status_change_url, ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -137,5 +103,38 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
         }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Renders a single cell
+     *
+     * @param RecordTableColumn $column
+     * @param string[] $group_with_subscription_status
+     *
+     * @return String
+     */
+    public function render_cell($column, $group_with_subscription_status)
+    {
+        switch ($column->get_name())
+        {
+            // Exceptions that need post-processing go here ...
+            case Group::PROPERTY_DESCRIPTION :
+                return DataManager::retrieve_by_id(
+                    Group::class_name(),
+                    $group_with_subscription_status[Group::PROPERTY_ID]
+                )->get_fully_qualified_name();
+            case CourseEntityRelation::PROPERTY_STATUS :
+                switch ($group_with_subscription_status[CourseEntityRelation::PROPERTY_STATUS])
+                {
+                    case CourseEntityRelation::STATUS_TEACHER :
+                        return Translation::get('CourseAdmin');
+                    case CourseEntityRelation::STATUS_STUDENT :
+                        return Translation::get('Student');
+                    default :
+                        return Translation::get('Unknown');
+                }
+        }
+
+        return parent::render_cell($column, $group_with_subscription_status);
     }
 }

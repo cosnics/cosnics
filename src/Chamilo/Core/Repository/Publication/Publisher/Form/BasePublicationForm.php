@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -44,7 +44,7 @@ abstract class BasePublicationForm extends FormValidator
             $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname(
                 ContentObject::get_content_object_type_namespace($contentObject->get_type())
             );
-            $glyph = $contentObject->getGlyph(Theme::ICON_MINI);
+            $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
             if (RightsService::getInstance()->canUseContentObject($user, $contentObject))
             {

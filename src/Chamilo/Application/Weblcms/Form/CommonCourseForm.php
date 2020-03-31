@@ -23,10 +23,10 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenu;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenuItem;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -446,7 +446,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $tool_title = Translation::get('TypeName', null, $tool_namespace);
 
             $glyph = new NamespaceIdentGlyph(
-                $tool_namespace, true, false, false, Theme::ICON_MINI, array(), $tool_title
+                $tool_namespace, true, false, false, IdentGlyph::SIZE_MINI,
+                array(), $tool_title
             );
 
             $table_body = array();

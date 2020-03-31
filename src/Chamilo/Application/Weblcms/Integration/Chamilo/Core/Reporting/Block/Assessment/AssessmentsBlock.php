@@ -3,19 +3,20 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssessmentAttemptsTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -58,15 +59,15 @@ class AssessmentsBlock extends AssessmentBlock
         );
         $condition = new AndCondition($conditions);
 
-        $pub_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $pub_resultset = WeblcmsDataManager::retrieves(
             ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
         );
 
         while ($pub = $pub_resultset->next_result())
         {
             $params = $this->get_parent()->get_parameters();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $pub->get_id();
+            $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+            $params[Manager::PARAM_PUBLICATION] = $pub->get_id();
             $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
 
             $reporting_data->add_category($count);
@@ -88,20 +89,6 @@ class AssessmentsBlock extends AssessmentBlock
         $reporting_data->hide_categories();
 
         return $reporting_data;
-    }
-
-    /**
-     * Returns the headers for the assessment reporting info
-     *
-     * @return array
-     */
-    protected function get_assessment_reporting_info_headers()
-    {
-        return array(
-            Translation::get('ResponseUsers'), Translation::get('NumberOfAttempts'), Translation::get('FirstAttempt'),
-            Translation::get('LastAttempt'), Translation::get('AverageScore'), Translation::get('MinScoreAchieved'),
-            Translation::get('MaxScoreAchieved')
-        );
     }
 
     /**
@@ -193,13 +180,31 @@ class AssessmentsBlock extends AssessmentBlock
         return $reporting_info;
     }
 
-    public function retrieve_data()
+    /**
+     * Returns the headers for the assessment reporting info
+     *
+     * @return array
+     */
+    protected function get_assessment_reporting_info_headers()
     {
-        return $this->count_data();
+        return array(
+            Translation::get('ResponseUsers'),
+            Translation::get('NumberOfAttempts'),
+            Translation::get('FirstAttempt'),
+            Translation::get('LastAttempt'),
+            Translation::get('AverageScore'),
+            Translation::get('MinScoreAchieved'),
+            Translation::get('MaxScoreAchieved')
+        );
     }
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

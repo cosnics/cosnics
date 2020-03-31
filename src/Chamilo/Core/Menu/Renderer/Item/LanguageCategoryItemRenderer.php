@@ -13,7 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -38,18 +38,18 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        Theme $themeUtilities, ChamiloRequest $request, LanguageConsulter $languageConsulter,
+        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, LanguageConsulter $languageConsulter,
         ItemRendererFactory $itemRendererFactory
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themeUtilities, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
 
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
@@ -82,7 +82,8 @@ class LanguageCategoryItemRenderer extends ItemRenderer
                 $redirect = new Redirect(
                     array(
                         Application::PARAM_CONTEXT => Manager::context(),
-                        Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG, Manager::PARAM_CHOICE => $isocode,
+                        Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
+                        Manager::PARAM_CHOICE => $isocode,
                         Manager::PARAM_REFER => $this->getRequest()->getUri()
                     )
                 );

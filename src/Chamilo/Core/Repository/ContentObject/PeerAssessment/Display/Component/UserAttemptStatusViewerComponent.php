@@ -13,10 +13,9 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Translation\Translation;
 
 class UserAttemptStatusViewerComponent extends Manager implements TableSupport
 {
@@ -158,7 +157,8 @@ class UserAttemptStatusViewerComponent extends Manager implements TableSupport
             {
                 $url = $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_TAKE_PEER_ASSESSMENT, self::PARAM_ATTEMPT => $a->get_id()
+                        self::PARAM_ACTION => self::ACTION_TAKE_PEER_ASSESSMENT,
+                        self::PARAM_ATTEMPT => $a->get_id()
                     )
                 );
             }

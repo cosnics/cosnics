@@ -9,8 +9,8 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -82,7 +82,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $packageId = $homeIntegration[Registration::PROPERTY_CONTEXT];
 
                 $packageGlyph = new NamespaceIdentGlyph(
-                    $parentNamespace, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                    $parentNamespace, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
                 );
 
                 $blocks[$packageId]['name'] = Translation::get('TypeName', null, $parentNamespace);
@@ -92,7 +92,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $blockName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($blockType);
 
                     $blockGlyph = new NamespaceIdentGlyph(
-                        $blockType, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                        $blockType, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
                     );
 
                     $blocks[$packageId]['components'][] = array(

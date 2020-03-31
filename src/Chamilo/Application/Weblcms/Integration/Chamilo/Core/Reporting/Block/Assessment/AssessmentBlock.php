@@ -11,9 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -132,8 +131,10 @@ abstract class AssessmentBlock extends ToolBlock
     protected function get_assessment_information_headers()
     {
         return array(
-            Translation::get('AssessmentTitle'), Translation::get('AssessmentDescription'),
-            Translation::get('Published'), Translation::get('LastModified')
+            Translation::get('AssessmentTitle'),
+            Translation::get('AssessmentDescription'),
+            Translation::get('Published'),
+            Translation::get('LastModified')
         );
     }
 
@@ -171,7 +172,7 @@ abstract class AssessmentBlock extends ToolBlock
         $redirect = new Redirect($params);
         $link = $redirect->getUrl();
 
-        return '<a href="#" onclick="javascript:openPopup(\'' . $link . '\')">' . $glyph->render() . '</a>';
+        return ' . $link . '\')">' . $glyph->render() . '</a>';
     }
 
     /**
@@ -324,7 +325,9 @@ abstract class AssessmentBlock extends ToolBlock
     protected function get_question_information_headers()
     {
         return array(
-            Translation::get('QuestionTitle'), Translation::get('QuestionDescription'), Translation::get('QuestionType')
+            Translation::get('QuestionTitle'),
+            Translation::get('QuestionDescription'),
+            Translation::get('QuestionType')
         );
     }
 

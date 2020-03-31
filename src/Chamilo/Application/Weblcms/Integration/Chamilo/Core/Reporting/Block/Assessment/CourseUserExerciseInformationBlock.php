@@ -4,21 +4,23 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssessmentAttemptsUserTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -37,8 +39,12 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation::get('Title'), Translation::get('NumberOfAttempts'), Translation::get('LastAttempt'),
-                Translation::get('TotalTime'), Translation::get('AverageScore'), Translation::get('Attempts')
+                Translation::get('Title'),
+                Translation::get('NumberOfAttempts'),
+                Translation::get('LastAttempt'),
+                Translation::get('TotalTime'),
+                Translation::get('AverageScore'),
+                Translation::get('Attempts')
             )
         );
         $course_id = $this->getCourseId();
@@ -80,17 +86,17 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         }
 
         $params = array();
-        $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = Assessment::get_type_name();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
+        $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
+        $params[Application::PARAM_CONTEXT] = Manager::context();
+        $params[Manager::PARAM_COURSE] = $course_id;
+        $params[Manager::PARAM_TOOL] = Assessment::get_type_name();
+        $params[Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
 
         $filterParams = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
 
         $params_detail = $this->get_parent()->get_parameters();
-        $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
+        $params_detail[Manager::PARAM_TEMPLATE_ID] =
             AssessmentAttemptsUserTemplate::class_name();
 
         $conditions = array();
@@ -135,17 +141,17 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                     Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $value['last']
                 );
-                $params_detail[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
+                $params_detail[Manager::PARAM_PUBLICATION] =
                     $publication[ContentObjectPublication::PROPERTY_ID];
                 $link = '<a href="' . $this->get_parent()->get_url($params_detail, $filterParams) . '">' .
                     $glyph->render() . '</a>';
                 $count = $value['count'];
             }
 
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] =
+            $params[Manager::PARAM_PUBLICATION] =
                 $publication[ContentObjectPublication::PROPERTY_ID];
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
@@ -167,13 +173,13 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         return $reporting_data;
     }
 
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

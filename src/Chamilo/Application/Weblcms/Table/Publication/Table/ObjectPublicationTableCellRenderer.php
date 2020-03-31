@@ -15,9 +15,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -98,7 +98,9 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                     }
                 }
 
-                $glyph = $content_object->getGlyph(Theme::ICON_MINI, $isAvailable, $extraClasses);
+                $glyph = $content_object->getGlyph(
+                    IdentGlyph::SIZE_MINI, $isAvailable, $extraClasses
+                );
                 $glyph->setTitle($glyph->getTitle() . $titleExtra);
 
                 return $glyph->render();
@@ -109,7 +111,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                     $details_url = $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT
                         )
                     );
 
@@ -119,7 +121,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                 $details_url = $this->get_component()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
                     )
                 );
 

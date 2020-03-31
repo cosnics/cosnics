@@ -17,12 +17,12 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -293,13 +293,13 @@ abstract class Manager extends Application implements NoContextComponent
             if (!$this->is_stand_alone())
             {
                 $toolbar_items[] = new ToolbarItem(
-                    Translation::get('Select', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square'), $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
-                        self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                    Translation::get('Select', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('share-square'),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
+                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id()
+                        )
+                    ), ToolbarItem::DISPLAY_ICON
                 );
             }
             else
@@ -335,7 +335,8 @@ abstract class Manager extends Application implements NoContextComponent
                             if ($object->is_editable())
                             {
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, Theme::ICON_MINI, array()
+                                    $object::context(), true, false, false,
+                                    IdentGlyph::SIZE_MINI, array()
                                 );
 
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
@@ -365,7 +366,8 @@ abstract class Manager extends Application implements NoContextComponent
                             {
 
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, Theme::ICON_MINI, array()
+                                    $object::context(), true, false, false,
+                                    IdentGlyph::SIZE_MINI, array()
                                 );
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(

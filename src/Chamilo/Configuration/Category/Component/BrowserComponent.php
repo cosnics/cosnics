@@ -12,15 +12,14 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -66,29 +65,48 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function get_user_html()
+    public function getButtonToolbarRenderer()
     {
-        $parameters = array_merge(
-            $this->get_parameters(), array(
-                self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                self::PARAM_CATEGORY_ID => $this->get_category_id()
-            )
-        );
-        $table = new CategoryTable($this);
-        $html = array();
-
-        if ($this->get_subcategories_allowed())
+        if (!isset($this->buttonToolbarRenderer))
         {
-            $html[] = '<div style="float: right; width: 80%;">';
-            $html[] = $table->as_html();
-            $html[] = '</div>';
-        }
-        else
-        {
-            $html[] = $table->as_html();
+            $buttonToolbar = new ButtonToolBar(
+                $this->get_url(array(self::PARAM_CATEGORY_ID => $this->get_category_id()))
+            );
+            $commonActions = new ButtonGroup();
+
+            if ($this->get_parent()->allowed_to_add_category($this->get_category_id()))
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        $this->get_create_category_url($this->get_category_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
+
+            $buttonToolbar->addButtonGroup($commonActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
-        return implode(PHP_EOL, $html);
+        return $this->buttonToolbarRenderer;
+    }
+
+    public function get_category()
+    {
+        return $this->get_category_id();
+    }
+
+    public function get_category_id()
+    {
+        $category_id = (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
+        if (is_array($category_id) && !empty($category_id))
+        {
+            $category_id = $category_id[0];
+            $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
+        }
+
+        return $category_id;
     }
 
     public function get_condition()
@@ -121,55 +139,37 @@ class BrowserComponent extends Manager implements TableSupport
         return $condition;
     }
 
-    public function get_category()
+    public function get_table_condition($table_class_name)
     {
-        return $this->get_category_id();
-    }
-
-    public function get_category_id()
-    {
-        $category_id = (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
-        if (is_array($category_id) && !empty($category_id))
-        {
-            $category_id = $category_id[0];
-            $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
-        }
-
-        return $category_id;
-    }
-
-    public function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(self::PARAM_CATEGORY_ID => $this->get_category_id()))
-            );
-            $commonActions = new ButtonGroup();
-
-            if ($this->get_parent()->allowed_to_add_category($this->get_category_id()))
-            {
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_create_category_url($this->get_category_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-
-            $buttonToolbar->addButtonGroup($commonActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
+        return $this->get_condition();
     }
 
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
      */
-    public function get_table_condition($table_class_name)
+
+    public function get_user_html()
     {
-        return $this->get_condition();
+        $parameters = array_merge(
+            $this->get_parameters(), array(
+                self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
+                self::PARAM_CATEGORY_ID => $this->get_category_id()
+            )
+        );
+        $table = new CategoryTable($this);
+        $html = array();
+
+        if ($this->get_subcategories_allowed())
+        {
+            $html[] = '<div style="float: right; width: 80%;">';
+            $html[] = $table->as_html();
+            $html[] = '</div>';
+        }
+        else
+        {
+            $html[] = $table->as_html();
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

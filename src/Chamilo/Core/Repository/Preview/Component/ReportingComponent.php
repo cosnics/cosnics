@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Preview\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -56,12 +55,11 @@ class ReportingComponent extends Manager implements PreviewSupport
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($available_action)->upperCamelize() .
                             'Component', null, $preview_context
-                        ), null,
-                        $this->get_url(
-                            array(
-                                \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager::PARAM_ACTION => $available_action
-                            )
+                        ), null, $this->get_url(
+                        array(
+                            \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager::PARAM_ACTION => $available_action
                         )
+                    )
                     )
                 );
             }

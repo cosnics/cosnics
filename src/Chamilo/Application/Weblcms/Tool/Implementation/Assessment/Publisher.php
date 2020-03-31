@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -149,7 +149,7 @@ class Publisher
             while ($content_object = $content_objects->next_result())
             {
                 $namespace = ContentObject::get_content_object_type_namespace($content_object->get_type());
-                $glyph = $content_object->getGlyph(Theme::ICON_MINI);
+                $glyph = $content_object->getGlyph(IdentGlyph::SIZE_MINI);
 
                 if (RightsService::getInstance()->canUseContentObject($this->parent->get_user(), $content_object))
                 {

@@ -7,8 +7,8 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
@@ -60,7 +60,8 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item">';
 
         $glyph = new NamespaceIdentGlyph(
-            'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false, Theme::ICON_MINI, array()
+            'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false,
+            IdentGlyph::SIZE_MINI, array()
         );
 
         $html[] = $glyph->render() . ' ' . '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';

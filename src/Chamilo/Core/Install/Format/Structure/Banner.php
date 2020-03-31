@@ -3,9 +3,10 @@ namespace Chamilo\Core\Install\Format\Structure;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -37,15 +38,55 @@ class Banner
     private $containerMode;
 
     /**
+     * Banner constructor.
      *
-     * @param Application $application
-     * @param integer $viewMode
+     * @param \Chamilo\Libraries\Architecture\Application\Application|null $application
+     * @param int $viewMode
+     * @param string $containerMode
      */
-    public function __construct(Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(
+        Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid'
+    )
     {
         $this->application = $application;
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
+    }
+
+    /**
+     * Creates the HTML output for the banner.
+     */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = '<a name="top"></a>';
+        $html[] = '<nav class="navbar navbar-chamilo navbar-default navbar-no-items">';
+        $html[] = '<div class="' . $this->getContainerMode() . '">';
+        $html[] = '<div class="navbar-header">';
+
+        $html[] =
+            '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
+        $html[] = '<span class="sr-only">Toggle navigation</span>';
+        $html[] = '<span class="icon-bar"></span>';
+        $html[] = '<span class="icon-bar"></span>';
+        $html[] = '<span class="icon-bar"></span>';
+        $html[] = '</button>';
+
+        $brandSource = $this->getThemePathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+
+        $html[] = '<a class="navbar-brand" href="' . $pathBuilder->getBasePath(true) . '">' . '<img alt="' .
+            Translation::get('ChamiloInstallationTitle') . '" src="' . $brandSource . '"></a>';
+
+        $html[] = '</div>';
+        $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
+        $html[] = '<ul class="nav navbar-nav navbar-right">';
+
+        $html[] = '</ul>';
+        $html[] = '</nav>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -68,24 +109,6 @@ class Banner
 
     /**
      *
-     * @return integer
-     */
-    public function getViewMode()
-    {
-        return $this->viewMode;
-    }
-
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
-    {
-        $this->viewMode = $viewMode;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getContainerMode()
@@ -103,37 +126,28 @@ class Banner
     }
 
     /**
-     * Creates the HTML output for the banner.
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function render()
+    public function getThemePathBuilder()
     {
-        $html = array();
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+    }
 
-        $html[] = '<a name="top"></a>';
-        $html[] = '<nav class="navbar navbar-chamilo navbar-default navbar-no-items">';
-        $html[] = '<div class="' . $this->getContainerMode() . '">';
-        $html[] = '<div class="navbar-header">';
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
 
-        $html[] = '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
-        $html[] = '<span class="sr-only">Toggle navigation</span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '</button>';
-
-        $brandSource = Theme::getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
-
-        $html[] = '<a class="navbar-brand" href="' . $pathBuilder->getBasePath(true) . '">' . '<img alt="' .
-             Translation::get('ChamiloInstallationTitle') . '" src="' . $brandSource . '"></a>';
-
-        $html[] = '</div>';
-        $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
-        $html[] = '<ul class="nav navbar-nav navbar-right">';
-
-        $html[] = '</ul>';
-        $html[] = '</nav>';
-
-        return implode(PHP_EOL, $html);
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
     }
 }

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -21,30 +20,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     // Inherited
-    public function render_cell($column, $user)
-    {
-        // Add special features here
-        switch ($column->get_name())
-        {
-            // Exceptions that need post-processing go here ...
-            case User::PROPERTY_STATUS :
-                if ($user->get_status() == '1')
-                {
-                    return Translation::get('CourseAdmin');
-                }
-                else
-                {
-                    return Translation::get('Student');
-                }
-            case User::PROPERTY_PLATFORMADMIN :
-                return Utilities::display_true_false_icon($user->get_platformadmin());
-            case User::PROPERTY_ACTIVE :
-                return Utilities::display_true_false_icon($user->get_active());
-        }
-
-        return parent::render_cell($column, $user);
-    }
-
     /**
      * Gets the action links to display
      *
@@ -158,5 +133,29 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         }
 
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $user)
+    {
+        // Add special features here
+        switch ($column->get_name())
+        {
+            // Exceptions that need post-processing go here ...
+            case User::PROPERTY_STATUS :
+                if ($user->get_status() == '1')
+                {
+                    return Translation::get('CourseAdmin');
+                }
+                else
+                {
+                    return Translation::get('Student');
+                }
+            case User::PROPERTY_PLATFORMADMIN :
+                return Utilities::display_true_false_icon($user->get_platformadmin());
+            case User::PROPERTY_ACTIVE :
+                return Utilities::display_true_false_icon($user->get_active());
+        }
+
+        return parent::render_cell($column, $user);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -26,55 +25,72 @@ use Chamilo\Libraries\Utilities\Utilities;
 abstract class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $entity)
+    protected function canViewEntity($entity)
     {
-        if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
-        {
-            return $this->get_actions($entity);
-        }
+        /** @var Assignment $assignment */
+        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
 
-        switch ($column->get_name())
-        {
-            case EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE :
-                if (is_null($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]))
-                {
-                    return '-';
-                }
-
-                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]);
-                break;
-            case EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE :
-                if (is_null($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]))
-                {
-                    return '-';
-                }
-
-                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]);
-                break;
-            case EntityTableColumnModel::PROPERTY_FEEDBACK_COUNT :
-                return $this->getAssignmentDataProvider()->countFeedbackByEntityTypeAndEntityId(
-                    $this->getAssignmentDataProvider()->getCurrentEntityType(), $entity[Entry::PROPERTY_ENTITY_ID]
-                );
-            case EntityTableColumnModel::PROPERTY_LAST_SCORE:
-                $lastScore = $this->getAssignmentDataProvider()->getLastScoreForEntityTypeAndId(
-                    $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
-                );
-
-                if (is_null($lastScore))
-                {
-                    return null;
-                }
-
-                return '<div class="text-right">' . $lastScore . '%</div>';
-                break;
-        }
-
-        return parent::render_cell($column, $entity);
+        return $this->getRightsService()->canUserViewEntity(
+                $this->get_component()->getUser(), $this->get_component()->getAssignment(),
+                $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
+            ) && $hasEntries;
     }
 
-    public function render_id_cell($row)
+    /**
+     * Formats a date.
+     *
+     * @param int $date the date to be formatted.
+     *
+     * @return string
+     */
+    protected function formatDate($date)
     {
-        return $row[Entry::PROPERTY_ENTITY_ID];
+        $formatted_date = DatetimeUtilities::format_locale_date(
+            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
+        );
+
+        if ($this->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+        {
+            return '<span style="color:red">' . $formatted_date . '</span>';
+        }
+
+        return $formatted_date;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     */
+    protected function getAssignmentDataProvider()
+    {
+        return $this->getTable()->getAssignmentDataProvider();
+    }
+
+    protected function getEntityUrl($entity)
+    {
+        return $this->get_component()->get_url(
+            array(
+                Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+                Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+            )
+        );
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getTable()->get_component()->getRightsService();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Table |
+     *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
+     */
+    protected function getTable()
+    {
+        return $this->get_table();
     }
 
     /**
@@ -144,73 +160,56 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         return $toolbar->as_html();
     }
 
-    /**
-     * Formats a date.
-     *
-     * @param int $date the date to be formatted.
-     *
-     * @return string
-     */
-    protected function formatDate($date)
-    {
-        $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
-        );
+    abstract protected function isEntity($entityId, $userId);
 
-        if ($this->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+    public function render_cell($column, $entity)
+    {
+        if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
         {
-            return '<span style="color:red">' . $formatted_date . '</span>';
+            return $this->get_actions($entity);
         }
 
-        return $formatted_date;
+        switch ($column->get_name())
+        {
+            case EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE :
+                if (is_null($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]))
+                {
+                    return '-';
+                }
+
+                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]);
+                break;
+            case EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE :
+                if (is_null($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]))
+                {
+                    return '-';
+                }
+
+                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]);
+                break;
+            case EntityTableColumnModel::PROPERTY_FEEDBACK_COUNT :
+                return $this->getAssignmentDataProvider()->countFeedbackByEntityTypeAndEntityId(
+                    $this->getAssignmentDataProvider()->getCurrentEntityType(), $entity[Entry::PROPERTY_ENTITY_ID]
+                );
+            case EntityTableColumnModel::PROPERTY_LAST_SCORE:
+                $lastScore = $this->getAssignmentDataProvider()->getLastScoreForEntityTypeAndId(
+                    $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
+                );
+
+                if (is_null($lastScore))
+                {
+                    return null;
+                }
+
+                return '<div class="text-right">' . $lastScore . '%</div>';
+                break;
+        }
+
+        return parent::render_cell($column, $entity);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
-     */
-    protected function getAssignmentDataProvider()
+    public function render_id_cell($row)
     {
-        return $this->getTable()->getAssignmentDataProvider();
+        return $row[Entry::PROPERTY_ENTITY_ID];
     }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
-     */
-    protected function getRightsService()
-    {
-        return $this->getTable()->get_component()->getRightsService();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Table\Table |
-     *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
-     */
-    protected function getTable()
-    {
-        return $this->get_table();
-    }
-
-    protected function canViewEntity($entity)
-    {
-        /** @var Assignment $assignment */
-        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
-
-        return $this->getRightsService()->canUserViewEntity(
-                $this->get_component()->getUser(), $this->get_component()->getAssignment(),
-                $entity[Entry::PROPERTY_ENTITY_TYPE], $entity[Entry::PROPERTY_ENTITY_ID]
-            ) && $hasEntries;
-    }
-
-    protected function getEntityUrl($entity)
-    {
-        return $this->get_component()->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-                Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
-                Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
-            )
-        );
-    }
-
-    abstract protected function isEntity($entityId, $userId);
 }

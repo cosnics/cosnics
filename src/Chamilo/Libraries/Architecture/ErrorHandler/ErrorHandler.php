@@ -3,8 +3,9 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
@@ -31,25 +32,48 @@ class ErrorHandler
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    protected $themeUtilities;
+    protected $themePathBuilder;
 
     /**
-     * ErrorHandlerManager constructor.
+     * ErrorHandler constructor.
      *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Chamilo\Libraries\Platform\Translation $translator
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Translation\Translation $translator
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
     public function __construct(
-        ExceptionLoggerInterface $exceptionLogger, Translation $translator,
-        Theme $themeUtilities
+        ExceptionLoggerInterface $exceptionLogger, Translation $translator, ThemePathBuilder $themePathBuilder
     )
     {
         $this->exceptionLogger = $exceptionLogger;
         $this->translator = $translator;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    /**
+     * Displays a general error page
+     */
+    protected function displayGeneralErrorPage()
+    {
+        $path = $this->getThemePathBuilder()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
+
+        $template = file_get_contents($path);
+
+        $variables = array(
+            'error_code' => 500,
+            'error_title' => $this->getTranslation('FatalErrorTitle'),
+            'error_content' => $this->getTranslation('FatalErrorContent'),
+            'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
+        );
+
+        foreach ($variables as $variable => $value)
+        {
+            $template = str_replace('{ ' . $variable . ' }', $value, $template);
+        }
+
+        echo $template;
     }
 
     /**
@@ -72,6 +96,38 @@ class ErrorHandler
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public function getThemePathBuilder()
+    {
+        return $this->themePathBuilder;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
+    {
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    /**
+     * Helper function for translations
+     *
+     * @param string $variable
+     * @param string[] $parameters
+     * @param string $context
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Configuration')
+    {
+        return $this->getTranslator()->getTranslation($variable, $parameters, $context);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Platform\Translation
      */
     public function getTranslator()
@@ -86,46 +142,6 @@ class ErrorHandler
     public function setTranslator(Translation $translator)
     {
         $this->translator = $translator;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities()
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities)
-    {
-        $this->themeUtilities = $themeUtilities;
-    }
-
-    /**
-     * General shutdown handler for fatal errors in PHP
-     */
-    public function handleShutdown()
-    {
-        $error = error_get_last();
-
-        $allowedErrors = [E_ERROR, E_COMPILE_ERROR];
-
-        if (!is_null($error) && in_array($error['type'], $allowedErrors))
-        {
-            $this->getExceptionLogger()->logException(
-                new \Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
-                ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
-                $error['file'],
-                $error['line']
-            );
-
-            $this->displayGeneralErrorPage();
-        }
     }
 
     /**
@@ -154,7 +170,7 @@ class ErrorHandler
 
         $exceptionLevel = $exceptionTypes[$errorNumber];
 
-        $this->getExceptionLogger()->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
+        $this->getExceptionLogger()->logException(new Exception($errorString), $exceptionLevel, $file, $line);
 
         return true;
     }
@@ -171,6 +187,26 @@ class ErrorHandler
     }
 
     /**
+     * General shutdown handler for fatal errors in PHP
+     */
+    public function handleShutdown()
+    {
+        $error = error_get_last();
+
+        $allowedErrors = [E_ERROR, E_COMPILE_ERROR];
+
+        if (!is_null($error) && in_array($error['type'], $allowedErrors))
+        {
+            $this->getExceptionLogger()->logException(
+                new Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
+                ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR, $error['file'], $error['line']
+            );
+
+            $this->displayGeneralErrorPage();
+        }
+    }
+
+    /**
      * Registers the error handler, the exception handler and the shutdown function
      */
     public function registerErrorHandlers()
@@ -179,43 +215,5 @@ class ErrorHandler
         set_error_handler(array($this, 'handleError'));
 
         register_shutdown_function(array($this, 'handleShutdown'));
-    }
-
-    /**
-     * Displays a general error page
-     */
-    protected function displayGeneralErrorPage()
-    {
-        $path = $this->getThemeUtilities()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
-
-        $template = file_get_contents($path);
-
-        $variables = array(
-            'error_code' => 500,
-            'error_title' => $this->getTranslation('FatalErrorTitle'),
-            'error_content' => $this->getTranslation('FatalErrorContent'),
-            'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
-        );
-
-        foreach ($variables as $variable => $value)
-        {
-            $template = str_replace('{ ' . $variable . ' }', $value, $template);
-        }
-
-        echo $template;
-    }
-
-    /**
-     * Helper function for translations
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Configuration')
-    {
-        return $this->getTranslator()->getTranslation($variable, $parameters, $context);
     }
 }

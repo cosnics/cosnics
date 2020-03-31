@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -26,18 +26,18 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     private $configurablePathBuilder;
 
     /**
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
@@ -152,21 +152,21 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemeUtilities(): Theme
+    public function getThemePathBuilder(): ThemePathBuilder
     {
-        return $this->themeUtilities;
+        return $this->themePathBuilder;
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      *
      * @return UserPictureProvider
      */
-    public function setThemeUtilities(Theme $themeUtilities): UserPictureProvider
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): UserPictureProvider
     {
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
 
         return $this;
     }
@@ -184,7 +184,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      */
     private function getUnknownUserPicturePath()
     {
-        return $this->getThemeUtilities()->getImagePath(
+        return $this->getThemePathBuilder()->getImagePath(
             'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
         );
     }

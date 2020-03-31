@@ -12,8 +12,7 @@ class JavascriptCacheService extends AsseticCacheService
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssetFilters()
+     * @return \Assetic\Filter\FilterInterface[]
      */
     protected function getAssetFilters()
     {
@@ -21,8 +20,15 @@ class JavascriptCacheService extends AsseticCacheService
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getAssets()
+     * @return string[]
+     */
+    protected function getAssetVariables()
+    {
+        return array();
+    }
+
+    /**
+     * @return \Assetic\Asset\FileAsset[]
      */
     protected function getAssets()
     {
@@ -62,8 +68,7 @@ class JavascriptCacheService extends AsseticCacheService
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Assetic\AsseticCacheService::getCachePath()
+     * @return string
      */
     protected function getCachePath()
     {

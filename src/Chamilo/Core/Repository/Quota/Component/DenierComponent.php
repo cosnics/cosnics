@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -125,8 +124,7 @@ class DenierComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('UpgradeQuota'),
-                        new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
+                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -145,8 +143,7 @@ class DenierComponent extends Manager
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('BackToOverview'),
-                    new FontAwesomeGlyph('folder', array(), null, 'fas'),
+                    Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', array(), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
                 )
             );

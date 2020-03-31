@@ -40,9 +40,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -963,7 +963,8 @@ EOT;
         $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($type);
         $name = Translation::get('TypeName', array(), $namespace);
 
-        return $content_object->getGlyph(Theme::ICON_MINI)->render() . ' <b>' . $name . '</b>';
+        return $content_object->getGlyph(IdentGlyph::SIZE_MINI)->render() .
+            ' <b>' . $name . '</b>';
     }
 
     public function get_form_type()

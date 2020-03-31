@@ -14,9 +14,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -89,7 +89,7 @@ class ViewerComponent extends Manager implements TableSupport
                             new Button(
                                 Translation::get('EphorusComponent'), new NamespaceIdentGlyph(
                                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', true, false, false,
-                                Theme::ICON_MINI, array()
+                                IdentGlyph::SIZE_MINI, array()
                             ), $this->get_url([self::PARAM_ACTION => self::ACTION_EPHORUS])
                             )
                         )
@@ -146,19 +146,27 @@ class ViewerComponent extends Manager implements TableSupport
         $viewNotificationUrl = $redirect->getUrl();
 
         return [
-            'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
+            'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
-            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(), 'ENTITY_NAME' => $entityName,
-            'ENTITY_COUNT' => $entityCount, 'ENTRY_COUNT' => $entryCount, 'FEEDBACK_COUNT' => $feedbackCount,
-            'LATE_ENTRY_COUNT' => $lateEntryCount, 'START_TIME' => $startTime, 'END_TIME' => $endTime,
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'ENTITY_NAME' => $entityName,
+            'ENTITY_COUNT' => $entityCount,
+            'ENTRY_COUNT' => $entryCount,
+            'FEEDBACK_COUNT' => $feedbackCount,
+            'LATE_ENTRY_COUNT' => $lateEntryCount,
+            'START_TIME' => $startTime,
+            'END_TIME' => $endTime,
             'ALLOW_LATE_SUBMISSIONS' => $assignment->get_allow_late_submissions(),
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
             'ENTITY_TABLE' => $this->renderEntityTable(),
             'CAN_EDIT_ASSIGNMENT' => $this->getDataProvider()->canEditAssignment(),
             'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Admin', 'administrator_email']
-            ), 'NOTIFICATIONS_URL' => $notificationsUrl, 'NOTIFICATIONS_COUNT' => $notificationsCount,
+            ),
+            'NOTIFICATIONS_URL' => $notificationsUrl,
+            'NOTIFICATIONS_COUNT' => $notificationsCount,
             'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
             'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Admin', 'administrator_email']

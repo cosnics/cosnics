@@ -8,11 +8,10 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -27,35 +26,6 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
 {
 
     // Inherited
-    public function render_cell($column, $category)
-    {
-        $category_class_name = get_class($category);
-        $class_name = $category_class_name::class_name();
-
-        switch ($column->get_name())
-        {
-            case CategoryTableColumnModel::CATEGORY :
-                $glyph = new FontAwesomeGlyph('folder');
-
-                return $glyph->render();
-            case PlatformCategory::PROPERTY_NAME :
-                $url = $this->get_component()->get_browse_categories_url($category->get_id());
-
-                return '<a href="' . $url . '" alt="' . $category->get_name() . '">' . $category->get_name() . '</a>';
-            case CategoryTableColumnModel::SUBCATEGORIES :
-                $count = $this->get_component()->get_parent()->count_categories(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
-                        new StaticConditionVariable($category->get_id())
-                    )
-                );
-
-                return $count;
-        }
-
-        return parent::render_cell($column, $category);
-    }
-
     public function get_actions($category)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
@@ -216,5 +186,34 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         }
 
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $category)
+    {
+        $category_class_name = get_class($category);
+        $class_name = $category_class_name::class_name();
+
+        switch ($column->get_name())
+        {
+            case CategoryTableColumnModel::CATEGORY :
+                $glyph = new FontAwesomeGlyph('folder');
+
+                return $glyph->render();
+            case PlatformCategory::PROPERTY_NAME :
+                $url = $this->get_component()->get_browse_categories_url($category->get_id());
+
+                return '<a href="' . $url . '" alt="' . $category->get_name() . '">' . $category->get_name() . '</a>';
+            case CategoryTableColumnModel::SUBCATEGORIES :
+                $count = $this->get_component()->get_parent()->count_categories(
+                    new EqualityCondition(
+                        new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
+                        new StaticConditionVariable($category->get_id())
+                    )
+                );
+
+                return $count;
+        }
+
+        return parent::render_cell($column, $category);
     }
 }

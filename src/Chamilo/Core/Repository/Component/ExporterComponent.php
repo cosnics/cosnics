@@ -15,9 +15,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -201,8 +201,8 @@ class ExporterComponent extends Manager
             $table_row = array();
 
             $glyph = new NamespaceIdentGlyph(
-                $type_namespace, true, false, false, Theme::ICON_MINI, array('fa-fw'),
-                Translation::get('TypeName', null, $type_namespace)
+                $type_namespace, true, false, false, IdentGlyph::SIZE_MINI,
+                array('fa-fw'), Translation::get('TypeName', null, $type_namespace)
             );
 
             $table_row[] = $glyph->render();

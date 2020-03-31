@@ -29,7 +29,7 @@ class ConfigurationConsulter extends DataConsulter
     /**
      *
      * @param string[] $keys
-     * @return string
+     * @return string|string[]
      */
     public function getSetting($keys)
     {

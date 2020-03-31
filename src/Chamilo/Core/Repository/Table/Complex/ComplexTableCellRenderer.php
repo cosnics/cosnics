@@ -7,11 +7,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -162,7 +162,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             case ContentObject::PROPERTY_TYPE :
             case ComplexTableColumnModel::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
 
             case ContentObject::PROPERTY_TITLE :
                 $title = htmlspecialchars($content_object->get_title());

@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -14,12 +14,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
+    public function get_actions($content_object)
+    {
+        return $this->get_component()->get_default_browser_actions($content_object)->as_html();
+    }
+
     public function render_cell($column, $content_object)
     {
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
             case ContentObject::PROPERTY_TITLE :
                 return StringUtilities::getInstance()->truncate($content_object->get_title(), 50);
             case ContentObject::PROPERTY_DESCRIPTION :
@@ -27,12 +32,7 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
             case ContentObject::PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities::format_locale_date(null, $content_object->get_modification_date());
         }
-        
-        return parent::render_cell($column, $content_object);
-    }
 
-    public function get_actions($content_object)
-    {
-        return $this->get_component()->get_default_browser_actions($content_object)->as_html();
+        return parent::render_cell($column, $content_object);
     }
 }

@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -66,32 +65,11 @@ class BrowserComponent extends Manager implements TableSupport
      */
 
     /**
-     * Returns the condition for the object table
      *
-     * @param $object_table_class_name string
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @param BreadcrumbTrail $breadcrumbtrail
      */
-    public function get_table_condition($object_table_class_name)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $search_conditions = $this->buttonToolbarRenderer->getConditions(
-            array(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
-            )
-        );
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id())
-        );
-
-        if ($search_conditions != null)
-        {
-            $condition = new AndCondition(array($condition, $search_conditions));
-        }
-
-        return $condition;
     }
 
     /**
@@ -151,10 +129,31 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
+     * Returns the condition for the object table
      *
-     * @param BreadcrumbTrail $breadcrumbtrail
+     * @param $object_table_class_name string
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function get_table_condition($object_table_class_name)
     {
+        $search_conditions = $this->buttonToolbarRenderer->getConditions(
+            array(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_course_id())
+        );
+
+        if ($search_conditions != null)
+        {
+            $condition = new AndCondition(array($condition, $search_conditions));
+        }
+
+        return $condition;
     }
 }

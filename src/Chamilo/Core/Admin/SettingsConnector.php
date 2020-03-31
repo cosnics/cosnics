@@ -3,7 +3,8 @@ namespace Chamilo\Core\Admin;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -21,6 +22,14 @@ class SettingsConnector
         $mailerFactory = new MailerFactory(Configuration::getInstance());
 
         return $mailerFactory->getAvailableMailers();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public static function getThemePathBuilder()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
     }
 
     public static function get_active_applications()
@@ -50,11 +59,12 @@ class SettingsConnector
         return Configuration::getInstance()->getLanguages();
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_themes()
     {
-        $options = Theme::getInstance()->getAvailableThemes();
-
-        return $options;
+        return self::getThemePathBuilder()->getAvailableThemes();
     }
 
     public static function get_working_hours()

@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Selector\Option;
 use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -41,7 +41,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         $this->template_registration_id = $template_registration_id;
     }
 
-    public function get_image_path($imageSize = Theme::ICON_BIG)
+    public function get_image_path($imageSize = IdentGlyph::SIZE_BIG)
     {
         $templateRegistration = $this->get_template_registration();
 

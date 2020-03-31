@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataC
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 class SystemAnnouncement extends ContentObject implements Versionable
@@ -55,7 +55,7 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
-    public static function icon_name($icon, $size = Theme :: ICON_SMALL)
+    public static function icon_name($icon, $size = IdentGlyph::SIZE_SMALL)
     {
         // if icon is empty: return size as icon apht, to prevent trailing underscore
         if ($icon == "")

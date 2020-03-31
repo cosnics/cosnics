@@ -4,13 +4,13 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\T
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\ToolPublicationsDetailTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 {
@@ -36,7 +36,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL] =
                     $tool_name;
                 $link_pub = '<a href="' . $this->get_parent()->get_url(
-                        $params, array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID)
+                        $params, array(Manager::PARAM_BLOCK_ID)
                     ) . '">' . $glyph->render() . '</a>';
 
                 $reporting_data->add_data_category_row($tool_name, Translation::get('ViewPublications'), $link_pub);
@@ -44,18 +44,6 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
         }
 
         return $reporting_data;
-    }
-
-    /**
-     * Returns the summary data for this course
-     *
-     * @return RecordResultSet
-     */
-    public function retrieve_course_summary_data()
-    {
-        return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data(
-            $this->getCourseId(), $this->get_user_id()
-        );
     }
 
     /**
@@ -78,5 +66,17 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
         );
 
         return new AndCondition($conditions);
+    }
+
+    /**
+     * Returns the summary data for this course
+     *
+     * @return RecordResultSet
+     */
+    public function retrieve_course_summary_data()
+    {
+        return WeblcmsTrackingDataManager::retrieve_tools_access_summary_data(
+            $this->getCourseId(), $this->get_user_id()
+        );
     }
 }

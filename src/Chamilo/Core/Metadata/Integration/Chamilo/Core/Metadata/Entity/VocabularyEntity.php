@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Integration\Chamilo\Core\Metadata\Entity;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -29,7 +29,7 @@ class VocabularyEntity extends DataClassEntity
      *
      * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getIcon()
      */
-    public function getIcon($size = Theme::ICON_MINI)
+    public function getIcon($size = IdentGlyph::SIZE_MINI)
     {
         $glyph = new NamespaceIdentGlyph(
             $this->getType(), true, false, false, $size, array()

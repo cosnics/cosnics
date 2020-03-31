@@ -167,7 +167,7 @@ class FavouriteService
      * @param User $sourceUser
      * @param User $possibleFavouriteUser
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite
      */
     public function findUserFavouriteBySourceAndFavouriteUser($sourceUser, $possibleFavouriteUser)
     {

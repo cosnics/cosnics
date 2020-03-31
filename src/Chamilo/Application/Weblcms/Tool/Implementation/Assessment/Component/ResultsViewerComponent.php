@@ -17,10 +17,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -83,7 +83,10 @@ class ResultsViewerComponent extends Manager implements TableSupport
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
 
-        $glyph = new NamespaceIdentGlyph('Chamilo\Core\Repository\ContentObject\Assessment', false, false, false, Theme::ICON_MINI);
+        $glyph = new NamespaceIdentGlyph(
+            'Chamilo\Core\Repository\ContentObject\Assessment', false, false, false,
+            IdentGlyph::SIZE_MINI
+        );
 
         $html[] = $glyph->render() . ' ' . $assessment->get_title();
         $html[] = '</h3>';

@@ -5,11 +5,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -87,7 +87,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $content_object->get_owner_fullname();
             case ContentObject::PROPERTY_TYPE :
             case VersionTableColumnModel::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
             case ContentObject::PROPERTY_DESCRIPTION :
                 return Utilities::htmlentities(
                     StringUtilities::getInstance()->truncate($content_object->get_description(), 50)

@@ -7,7 +7,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service
@@ -32,9 +33,9 @@ class ReportExporter
     protected $configurablePathBuilder;
 
     /**
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    protected $themeUtilities;
+    protected $themePathBuilder;
 
     /**
      * @var \Twig\Environment
@@ -47,18 +48,18 @@ class ReportExporter
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer $reportRenderer
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
         ReportRenderer $reportRenderer, ContentObjectRepository $contentObjectRepository,
-        ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities, \Twig\Environment $twigRenderer
+        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder, Environment $twigRenderer
     )
     {
         $this->reportRenderer = $reportRenderer;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
         $this->twigRenderer = $twigRenderer;
     }
 
@@ -75,10 +76,11 @@ class ReportExporter
 
         $parameters = [
             'CSS' => file_get_contents(
-                $this->themeUtilities->getCssPath(
+                $this->themePathBuilder->getCssPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service', false
                 ) . 'Report.css'
-            ), 'REPORT' => $this->reportRenderer->renderRequestReport($request)
+            ),
+            'REPORT' => $this->reportRenderer->renderRequestReport($request)
         ];
 
         $exportHTML = $this->twigRenderer->render(

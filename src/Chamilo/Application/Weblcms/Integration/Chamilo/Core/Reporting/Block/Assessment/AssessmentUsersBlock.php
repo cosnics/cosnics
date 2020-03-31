@@ -4,15 +4,17 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssessmentAttemptsUserTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Manager;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -25,6 +27,64 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class AssessmentUsersBlock extends AssessmentBlock
 {
+
+    /**
+     * Calculates the user attempt summary data
+     *
+     * @return mixed[]
+     */
+    protected function calculate_user_attempt_summary_data()
+    {
+        $assessment_attempts = $this->retrieve_assessment_attempts();
+
+        $user_attempts = array();
+
+        while ($assessment_attempt = $assessment_attempts->next_result())
+        {
+            $user_attempts[$assessment_attempt->get_user_id()]['count'] ++;
+            $user_attempts[$assessment_attempt->get_user_id()]['time'] += $assessment_attempt->get_total_time();
+
+            if ($assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED)
+            {
+                $user_attempts[$assessment_attempt->get_user_id()]['status'] = $assessment_attempt->get_status();
+
+                $user_attempts[$assessment_attempt->get_user_id(
+                )]['total_score'] += $assessment_attempt->get_total_score();
+
+                $user_attempts[$assessment_attempt->get_user_id()]['score_count'] ++;
+
+                if (is_null($user_attempts[$assessment_attempt->get_user_id()]['min_score']) ||
+                    $user_attempts[$assessment_attempt->get_user_id()]['min_score'] >
+                    $assessment_attempt->get_total_score())
+                {
+                    $user_attempts[$assessment_attempt->get_user_id()]['min_score'] =
+                        $assessment_attempt->get_total_score();
+                }
+
+                if (is_null($user_attempts[$assessment_attempt->get_user_id()]['max_score']) ||
+                    $user_attempts[$assessment_attempt->get_user_id()]['max_score'] <
+                    $assessment_attempt->get_total_score())
+                {
+                    $user_attempts[$assessment_attempt->get_user_id()]['max_score'] =
+                        $assessment_attempt->get_total_score();
+                }
+            }
+
+            if ($user_attempts[$assessment_attempt->get_user_id()]['first'] == null ||
+                $user_attempts[$assessment_attempt->get_user_id()]['first'] > $assessment_attempt->get_start_time())
+            {
+                $user_attempts[$assessment_attempt->get_user_id()]['first'] = $assessment_attempt->get_start_time();
+            }
+
+            if ($user_attempts[$assessment_attempt->get_user_id()]['last'] == null ||
+                $assessment_attempt->get_start_time() > $user_attempts[$assessment_attempt->get_user_id()]['last'])
+            {
+                $user_attempts[$assessment_attempt->get_user_id()]['last'] = $assessment_attempt->get_start_time();
+            }
+        }
+
+        return $user_attempts;
+    }
 
     public function count_data()
     {
@@ -39,7 +99,7 @@ class AssessmentUsersBlock extends AssessmentBlock
         $count = 1;
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
+        $users_resultset = DataManager::retrieve_publication_target_users(
             $pub_id, $course_id
         );
         $user_attempts = $this->calculate_user_attempt_summary_data();
@@ -57,7 +117,7 @@ class AssessmentUsersBlock extends AssessmentBlock
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
                     AssessmentAttemptsUserTemplate::class_name();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user->get_id();
-                $filter = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+                $filter = array(Manager::PARAM_BLOCK_ID);
 
                 $link = '<a href="' . $this->get_parent()->get_url($params, $filter) . '">' . $glyph->render() . '</a>';
 
@@ -72,27 +132,16 @@ class AssessmentUsersBlock extends AssessmentBlock
         return $reporting_data;
     }
 
-    public function retrieve_data()
-    {
-        return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
-    }
-
     /**
-     * Returns the headers for the user reporting information
+     * Returns the condition for the assessment attempts
      *
-     * @return string[]
+     * @return Condition
      */
-    protected function get_user_reporting_info_headers()
+    protected function get_assessment_attempts_condition()
     {
-        return array(
-            Translation::get('Name'), Translation::get('OfficialCode'), Translation::get('TotalTime'),
-            Translation::get('NumberOfAttempts'), Translation::get('FirstAttempt'), Translation::get('LastAttempt'),
-            Translation::get('AverageScore'), Translation::get('MinScoreAchieved'), Translation::get('MaxScoreAchieved')
+        return new EqualityCondition(
+            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new StaticConditionVariable($this->getPublicationId())
         );
     }
 
@@ -154,61 +203,28 @@ class AssessmentUsersBlock extends AssessmentBlock
     }
 
     /**
-     * Calculates the user attempt summary data
+     * Returns the headers for the user reporting information
      *
-     * @return mixed[]
+     * @return string[]
      */
-    protected function calculate_user_attempt_summary_data()
+    protected function get_user_reporting_info_headers()
     {
-        $assessment_attempts = $this->retrieve_assessment_attempts();
+        return array(
+            Translation::get('Name'),
+            Translation::get('OfficialCode'),
+            Translation::get('TotalTime'),
+            Translation::get('NumberOfAttempts'),
+            Translation::get('FirstAttempt'),
+            Translation::get('LastAttempt'),
+            Translation::get('AverageScore'),
+            Translation::get('MinScoreAchieved'),
+            Translation::get('MaxScoreAchieved')
+        );
+    }
 
-        $user_attempts = array();
-
-        while ($assessment_attempt = $assessment_attempts->next_result())
-        {
-            $user_attempts[$assessment_attempt->get_user_id()]['count'] ++;
-            $user_attempts[$assessment_attempt->get_user_id()]['time'] += $assessment_attempt->get_total_time();
-
-            if ($assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED)
-            {
-                $user_attempts[$assessment_attempt->get_user_id()]['status'] = $assessment_attempt->get_status();
-
-                $user_attempts[$assessment_attempt->get_user_id(
-                )]['total_score'] += $assessment_attempt->get_total_score();
-
-                $user_attempts[$assessment_attempt->get_user_id()]['score_count'] ++;
-
-                if (is_null($user_attempts[$assessment_attempt->get_user_id()]['min_score']) ||
-                    $user_attempts[$assessment_attempt->get_user_id()]['min_score'] >
-                    $assessment_attempt->get_total_score())
-                {
-                    $user_attempts[$assessment_attempt->get_user_id()]['min_score'] =
-                        $assessment_attempt->get_total_score();
-                }
-
-                if (is_null($user_attempts[$assessment_attempt->get_user_id()]['max_score']) ||
-                    $user_attempts[$assessment_attempt->get_user_id()]['max_score'] <
-                    $assessment_attempt->get_total_score())
-                {
-                    $user_attempts[$assessment_attempt->get_user_id()]['max_score'] =
-                        $assessment_attempt->get_total_score();
-                }
-            }
-
-            if ($user_attempts[$assessment_attempt->get_user_id()]['first'] == null ||
-                $user_attempts[$assessment_attempt->get_user_id()]['first'] > $assessment_attempt->get_start_time())
-            {
-                $user_attempts[$assessment_attempt->get_user_id()]['first'] = $assessment_attempt->get_start_time();
-            }
-
-            if ($user_attempts[$assessment_attempt->get_user_id()]['last'] == null ||
-                $assessment_attempt->get_start_time() > $user_attempts[$assessment_attempt->get_user_id()]['last'])
-            {
-                $user_attempts[$assessment_attempt->get_user_id()]['last'] = $assessment_attempt->get_start_time();
-            }
-        }
-
-        return $user_attempts;
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
     }
 
     /**
@@ -224,16 +240,8 @@ class AssessmentUsersBlock extends AssessmentBlock
         );
     }
 
-    /**
-     * Returns the condition for the assessment attempts
-     *
-     * @return Condition
-     */
-    protected function get_assessment_attempts_condition()
+    public function retrieve_data()
     {
-        return new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($this->getPublicationId())
-        );
+        return $this->count_data();
     }
 }

@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\User\Factory;
 
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -38,9 +38,9 @@ class UserFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
      *
@@ -59,20 +59,56 @@ class UserFactory
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Translation\Translation $translationUtilities
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
      */
     public function __construct(
         SessionUtilities $sessionUtilities, UserService $userService, ConfigurationConsulter $configurationConsulter,
-        Theme $themeUtilities, Translation $translationUtilities, LocalSetting $localSettingUtilities
+        ThemePathBuilder $themePathBuilder, Translation $translationUtilities, LocalSetting $localSettingUtilities
     )
     {
         $this->sessionUtilities = $sessionUtilities;
         $this->userService = $userService;
         $this->configurationConsulter = $configurationConsulter;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
         $this->translationUtilities = $translationUtilities;
+        $this->localSettingUtilities = $localSettingUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    public function getConfigurationConsulter()
+    {
+        return $this->configurationConsulter;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Configuration\LocalSetting
+     */
+    public function getLocalSettingUtilities()
+    {
+        return $this->localSettingUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
+     */
+    public function setLocalSettingUtilities(LocalSetting $localSettingUtilities)
+    {
         $this->localSettingUtilities = $localSettingUtilities;
     }
 
@@ -96,56 +132,20 @@ class UserFactory
 
     /**
      *
-     * @return \Chamilo\Core\User\Service\UserService
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getUserService()
+    public function getThemePathBuilder()
     {
-        return $this->userService;
+        return $this->themePathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function setUserService(UserService $userService)
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
     {
-        $this->userService = $userService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    public function getConfigurationConsulter()
-    {
-        return $this->configurationConsulter;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Theme
-     */
-    public function getThemeUtilities()
-    {
-        return $this->themeUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     */
-    public function setThemeUtilities(Theme $themeUtilities)
-    {
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
@@ -164,24 +164,6 @@ class UserFactory
     public function setTranslationUtilities(Translation $translationUtilities)
     {
         $this->translationUtilities = $translationUtilities;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\Configuration\LocalSetting
-     */
-    public function getLocalSettingUtilities()
-    {
-        return $this->localSettingUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
-     */
-    public function setLocalSettingUtilities(LocalSetting $localSettingUtilities)
-    {
-        $this->localSettingUtilities = $localSettingUtilities;
     }
 
     /**
@@ -205,7 +187,7 @@ class UserFactory
 
             if ($themeSelectionAllowed)
             {
-                $this->getThemeUtilities()->setTheme($this->getLocalSettingUtilities()->get('theme'));
+                $this->getThemePathBuilder()->setTheme($this->getLocalSettingUtilities()->get('theme'));
             }
 
             $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
@@ -221,6 +203,24 @@ class UserFactory
         }
 
         return $user;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService()
+    {
+        return $this->userService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 }
 

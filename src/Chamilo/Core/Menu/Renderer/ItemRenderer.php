@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -32,9 +32,9 @@ abstract class ItemRenderer
     private $itemCacheService;
 
     /**
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
      * @var \Chamilo\Libraries\Platform\ChamiloRequest
@@ -45,18 +45,18 @@ abstract class ItemRenderer
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        Theme $themeUtilities, ChamiloRequest $request
+        ThemePathBuilder $themePathBuilder, ChamiloRequest $request
     )
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->translator = $translator;
         $this->itemCacheService = $itemCacheService;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
         $this->request = $request;
     }
 
@@ -133,19 +133,19 @@ abstract class ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemeUtilities(): Theme
+    public function getThemePathBuilder(): ThemePathBuilder
     {
-        return $this->themeUtilities;
+        return $this->themePathBuilder;
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function setThemeUtilities(Theme $themeUtilities): void
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
     {
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**

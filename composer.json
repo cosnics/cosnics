@@ -39,7 +39,8 @@
         "symfony/validator": "^4.4",
         "symfony/yaml": "^4.4",
         "twig/twig": "2.*",
-        "kriswallsmith/assetic": "^1.4"
+        "kriswallsmith/assetic": "^1.4",
+        "ext-dom": "*"
     },
     "require-dev": {
         "behat/behat": "*",
@@ -63,7 +64,8 @@
             "Chamilo\\": "src/Chamilo/"
         },
         "classmap": [
-            "src/Chamilo/Libraries/Format/Form/Element/", "src/Chamilo/Configuration/Plugin"
+            "src/Chamilo/Libraries/Format/Form/Element/",
+            "src/Chamilo/Configuration/Plugin"
         ],
         "exclude-from-classmap": [
             "src/Chamilo/Libraries/Format/Form/Element/AdvancedElementFinder"

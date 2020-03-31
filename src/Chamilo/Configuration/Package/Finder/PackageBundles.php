@@ -5,8 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -179,7 +179,10 @@ class PackageBundles extends BasicBundles
             $packageImageNamespace = $packageNamespace;
         }
 
-        $glyph = new NamespaceIdentGlyph($packageImageNamespace, false, false, false, Theme::ICON_MINI, array('fa-fw'));
+        $glyph = new NamespaceIdentGlyph(
+            $packageImageNamespace, false, false, false,
+            IdentGlyph::SIZE_MINI, array('fa-fw')
+        );
 
         $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $glyph);
     }

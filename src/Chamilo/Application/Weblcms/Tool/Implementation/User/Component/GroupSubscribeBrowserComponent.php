@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedG
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -15,9 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -28,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -107,21 +107,187 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    protected function renderInformationMessage()
+    /**
+     * Builds and returns the toolbar renderer
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getButtonToolbarRenderer()
     {
-        $html = array();
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
 
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-12">';
+            $commonActions->addButton(
+                new Button(
+                    Translation::get('ViewSubscribedUsers'), new FontAwesomeGlyph('folder'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
-        $html[] = '<div class="alert alert-info">';
-        $html[] = $this->getTranslation('SubscribeGroupsInformationMessage');
-        $html[] = '</div>';
+            $buttonToolbar->addButtonGroup($commonActions);
 
-        $html[] = '</div>';
-        $html[] = '</div>';
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
 
-        return implode(PHP_EOL, $html);
+        return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * Retrieves the currently selected group
+     *
+     * @return Group
+     */
+    protected function getCurrentGroup()
+    {
+        $groupId = $this->getGroupId();
+        if (!$groupId)
+        {
+            return null;
+        }
+
+        return DataManager::retrieve_by_id(Group::class_name(), $groupId);
+    }
+
+    /**
+     * Builds the group button toolbar for the management of a single group
+     *
+     * @param Group $group
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getGroupButtonToolbarRenderer(Group $group)
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        $courseManagementRights = CourseManagementRights::getInstance();
+
+        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
+            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $group->getId(), $this->get_course_id()
+        );
+
+        if (!in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
+        {
+            $buttonToolbar->addItem(
+                new Button(
+                    $this->getTranslation('SubscribeGroup'), '', $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
+                        self::PARAM_OBJECTS => $group->getId()
+                    )
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
+                )
+            );
+        }
+
+        return new ButtonToolBarRenderer($buttonToolbar);
+    }
+
+    /**
+     * Returns the id of the currently selected group, or the root group
+     *
+     * @return int
+     */
+    protected function getGroupId()
+    {
+        if (!$this->groupId)
+        {
+            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+
+            if (!$this->groupId)
+            {
+                $this->groupId = $this->getRootGroup()->get_id();
+            }
+        }
+
+        return $this->groupId;
+    }
+
+    /**
+     * Retrieves the root group
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getRootGroup()
+    {
+        if (!$this->rootGroup)
+        {
+            $group = DataManager::retrieve(
+                Group::class_name(), new DataClassRetrieveParameters(
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable(0)
+                    )
+                )
+            );
+            $this->rootGroup = $group;
+        }
+
+        return $this->rootGroup;
+    }
+
+    /**
+     * Helper function to get translations in the current context
+     *
+     * @param $variable
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array())
+    {
+        return $this->translator->getTranslation($variable, $parameters, Manager::context());
+    }
+
+    /**
+     * Returns additional parameters that need to be registered
+     *
+     * @return array
+     */
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+    }
+
+    /**
+     * Returns the condition for the table
+     *
+     * @param string $table_class_name
+     *
+     * @return Condition
+     */
+    public function get_table_condition($table_class_name)
+    {
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($this->getGroupId())
+        );
+
+        // filter already subscribed groups
+        if ($this->subscribedGroups)
+        {
+            $conditions[] = new NotCondition(
+                new InCondition(
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $this->subscribedGroups
+                )
+            );
+        }
+
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        if (isset($query) && $query != '')
+        {
+            $conditions2[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), '*' . $query . '*'
+            );
+            $conditions2[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
+            );
+            $conditions[] = new OrCondition($conditions2);
+        }
+
+        return new AndCondition($conditions);
     }
 
     /**
@@ -178,16 +344,20 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Helper function to get translations in the current context
-     *
-     * @param $variable
-     * @param array $parameters
+     * Renders the group menu
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function renderGroupMenu()
     {
-        return $this->translator->getTranslation($variable, $parameters, Manager::context());
+        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
+
+        $html = array();
+        $html[] = '<div class="col-sm-2">';
+        $html[] = $tree->render_as_tree();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -210,189 +380,20 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders the group menu
-     *
-     * @return string
-     */
-    protected function renderGroupMenu()
+    protected function renderInformationMessage()
     {
-        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
-
         $html = array();
-        $html[] = '<div class="col-sm-2">';
-        $html[] = $tree->render_as_tree();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-12">';
+
+        $html[] = '<div class="alert alert-info">';
+        $html[] = $this->getTranslation('SubscribeGroupsInformationMessage');
+        $html[] = '</div>';
+
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Builds and returns the toolbar renderer
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar($this->get_url());
-            $commonActions = new ButtonGroup();
-
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('ViewSubscribedUsers'), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            $buttonToolbar->addButtonGroup($commonActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
-    }
-
-    /**
-     * Builds the group button toolbar for the management of a single group
-     *
-     * @param Group $group
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getGroupButtonToolbarRenderer(Group $group)
-    {
-        $buttonToolbar = new ButtonToolBar();
-
-        $courseManagementRights = CourseManagementRights::getInstance();
-
-        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
-            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $group->getId(), $this->get_course_id()
-        );
-
-        if (!in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
-        {
-            $buttonToolbar->addItem(
-                new Button(
-                    $this->getTranslation('SubscribeGroup'), '', $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS, self::PARAM_OBJECTS => $group->getId()
-                    )
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
-                )
-            );
-        }
-
-        return new ButtonToolBarRenderer($buttonToolbar);
-    }
-
-    /**
-     * Retrieves the currently selected group
-     *
-     * @return Group
-     */
-    protected function getCurrentGroup()
-    {
-        $groupId = $this->getGroupId();
-        if (!$groupId)
-        {
-            return null;
-        }
-
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
-    }
-
-    /**
-     * Returns the id of the currently selected group, or the root group
-     *
-     * @return int
-     */
-    protected function getGroupId()
-    {
-        if (!$this->groupId)
-        {
-            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-
-            if (!$this->groupId)
-            {
-                $this->groupId = $this->getRootGroup()->get_id();
-            }
-        }
-
-        return $this->groupId;
-    }
-
-    /**
-     * Retrieves the root group
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function getRootGroup()
-    {
-        if (!$this->rootGroup)
-        {
-            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-                Group::class_name(), new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable(0)
-                    )
-                )
-            );
-            $this->rootGroup = $group;
-        }
-
-        return $this->rootGroup;
-    }
-
-    /**
-     * Returns the condition for the table
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
-    {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->getGroupId())
-        );
-
-        // filter already subscribed groups
-        if ($this->subscribedGroups)
-        {
-            $conditions[] = new NotCondition(
-                new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $this->subscribedGroups
-                )
-            );
-        }
-
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        if (isset($query) && $query != '')
-        {
-            $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), '*' . $query . '*'
-            );
-            $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
-            );
-            $conditions[] = new OrCondition($conditions2);
-        }
-
-        return new AndCondition($conditions);
-    }
-
-    /**
-     * Returns additional parameters that need to be registered
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
     }
 }

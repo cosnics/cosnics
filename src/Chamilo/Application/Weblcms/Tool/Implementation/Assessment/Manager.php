@@ -15,14 +15,13 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -35,31 +34,56 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_VIEW_RESULTS = 'ResultsViewer';
     const ACTION_ATTEMPT_RESULT_VIEWER = 'AttemptResultViewer';
-    const ACTION_SAVE_DOCUMENTS = 'DocumentSaver';
-    const ACTION_RAW_EXPORT_RESULTS = 'RawExportResults';
+
     const ACTION_DELETE_RESULTS = 'ResultsDeleter';
+
+    const ACTION_RAW_EXPORT_RESULTS = 'RawExportResults';
+
+    const ACTION_SAVE_DOCUMENTS = 'DocumentSaver';
+
     const ACTION_TAKE_ASSESSMENT = 'ComplexDisplay';
-    const PARAM_USER_ASSESSMENT = 'uaid';
-    const PARAM_QUESTION_ATTEMPT = 'qaid';
-    const PARAM_ASSESSMENT = 'aid';
+
+    const ACTION_VIEW_RESULTS = 'ResultsViewer';
+
     const PARAM_ANONYMOUS = 'anonymous';
+
+    const PARAM_ASSESSMENT = 'aid';
+
     const PARAM_INVITATION_ID = 'invitation_id';
+
     const PARAM_PUBLICATION_ACTION = 'publication_action';
 
-    public static function get_allowed_types()
-    {
-        return array(Assessment::class_name(), Hotpotatoes::class_name());
-    }
+    const PARAM_QUESTION_ATTEMPT = 'qaid';
 
-    public function get_available_browser_types()
-    {
-        $browser_types = array();
-        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
-        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
+    const PARAM_USER_ASSESSMENT = 'uaid';
 
-        return $browser_types;
+    private static $checked_publications = array();
+
+    public function addContentObjectPublicationButtons(
+        $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
+    )
+    {
+        $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
+
+        $buttonGroup->prependButton(
+            new Button(
+                Translation::get('Take'), new FontAwesomeGlyph('play'), $this->get_complex_display_url($publication_id),
+                Button::DISPLAY_ICON, false, 'btn-link'
+            )
+        );
+
+        $dropdownButton->prependSubButton(
+            new SubButton(
+                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', array(), 'fas'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                        self::PARAM_ASSESSMENT => $publication_id
+                    )
+                ), SubButton::DISPLAY_LABEL
+            )
+        );
     }
 
     public function add_content_object_publication_actions($toolbar, $publication)
@@ -96,33 +120,19 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         );
     }
 
-    public function addContentObjectPublicationButtons(
-        $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
-    )
+    public static function get_allowed_types()
     {
-        $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
-
-        $buttonGroup->prependButton(
-            new Button(
-                Translation::get('Take'), new FontAwesomeGlyph('play'), $this->get_complex_display_url($publication_id),
-                Button::DISPLAY_ICON, false, 'btn-link'
-            )
-        );
-
-        $dropdownButton->prependSubButton(
-            new SubButton(
-                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', array(), 'fas'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
-                        self::PARAM_ASSESSMENT => $publication_id
-                    )
-                ), SubButton::DISPLAY_LABEL
-            )
-        );
+        return array(Assessment::class_name(), Hotpotatoes::class_name());
     }
 
-    private static $checked_publications = array();
+    public function get_available_browser_types()
+    {
+        $browser_types = array();
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
+        $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
+
+        return $browser_types;
+    }
 
     public function is_content_object_attempt_possible($publication)
     {
@@ -130,26 +140,26 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         {
             $assessment = $publication->get_content_object();
             $track =
-                new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt(
+                new AssessmentAttempt(
                 );
             $condition_t = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(
+                    AssessmentAttempt::class_name(
                     ),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID
+                    AssessmentAttempt::PROPERTY_ASSESSMENT_ID
                 ), new StaticConditionVariable($publication->get_id())
             );
             $condition_u = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(
+                    AssessmentAttempt::class_name(
                     ),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_USER_ID
+                    AssessmentAttempt::PROPERTY_USER_ID
                 ), new StaticConditionVariable($this->get_user_id())
             );
             $condition = new AndCondition(array($condition_t, $condition_u));
 
             $trackers = DataManager::retrieves(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(
+                AssessmentAttempt::class_name(
                 ), new DataClassRetrievesParameters($condition)
             )->as_array();
 

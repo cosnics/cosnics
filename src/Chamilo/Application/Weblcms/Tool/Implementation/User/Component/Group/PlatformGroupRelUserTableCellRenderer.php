@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -24,20 +23,6 @@ use Chamilo\Libraries\Translation\Translation;
 class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
     implements TableCellRendererActionsColumnSupport
 {
-
-    public function render_cell($column, $groupreluser)
-    {
-        switch ($column->get_name())
-        {
-            case GroupRelUser::PROPERTY_USER_ID :
-                $user_id = parent::render_cell($column, $groupreluser);
-                $user = DataManager::retrieve_by_id(User::class_name(), $user_id);
-
-                return $user->get_fullname();
-        }
-
-        return parent::render_cell($column, $groupreluser);
-    }
 
     public function get_actions($groupreluser)
     {
@@ -85,5 +70,19 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
 
         // return
         return $toolbar->as_html();
+    }
+
+    public function render_cell($column, $groupreluser)
+    {
+        switch ($column->get_name())
+        {
+            case GroupRelUser::PROPERTY_USER_ID :
+                $user_id = parent::render_cell($column, $groupreluser);
+                $user = DataManager::retrieve_by_id(User::class_name(), $user_id);
+
+                return $user->get_fullname();
+        }
+
+        return parent::render_cell($column, $groupreluser);
     }
 }

@@ -7,8 +7,8 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -81,7 +81,8 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                         }
 
                         $glyph = new NamespaceIdentGlyph(
-                            $attachment->context(), true, false, false, Theme::ICON_MINI, array('fa-fw')
+                            $attachment->context(), true, false, false,
+                            IdentGlyph::SIZE_MINI, array('fa-fw')
                         );
 
                         $render[] = $glyph->render();

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
@@ -12,8 +14,8 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_implemented_driver()
+     * @return string
+     * @throws \Exception
      */
     public function getImplementedDriver()
     {
@@ -28,6 +30,8 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
             case self::DRIVER_SQLITE :
                 return 'Doctrine\DBAL\Driver\PDOSqlite\Driver';
                 break;
+            // Deprecated option for backwards compatibility with older configuration files
+            case 'mysqli' :
             case self::DRIVER_MYSQL :
                 return 'Doctrine\DBAL\Driver\PDOMySql\Driver';
                 break;
@@ -41,19 +45,13 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
             case self::DRIVER_IBM :
                 return 'Doctrine\DBAL\Driver\PDOIbm\Driver';
                 break;
+
             case self::DRIVER_OCI :
-                throw new \Exception(
-                    'The requested driver (' . $this->get_driver() .
-                         ') is not available in Doctrine. Please provide a driver for Doctrine or choose another implementation');
-                break;
-            // Deprecated option for backwards compatibility with older configuration files
-            case 'mysqli' :
-                return 'Doctrine\DBAL\Driver\PDOMySql\Driver';
-                break;
             default :
-                throw new \Exception(
+                throw new Exception(
                     'The requested driver (' . $this->get_driver() .
-                         ') is not available in Doctrine. Please provide a driver for Doctrine or choose another implementation');
+                    ') is not available in Doctrine. Please provide a driver for Doctrine or choose another implementation'
+                );
                 break;
         }
     }

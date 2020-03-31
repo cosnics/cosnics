@@ -9,10 +9,11 @@ use Chamilo\Core\Repository\Workspace\Table\Share\ShareTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -120,9 +121,9 @@ class ShareComponent extends Manager implements TableSupport
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            $contentObject->get_title(),
-                            $contentObject->getGlyph(Theme::ICON_MINI, true, array('fa-fw')), $viewUrl->getUrl(),
-                            ToolbarItem::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+                            $contentObject->get_title(), $contentObject->getGlyph(
+                            IdentGlyph::SIZE_MINI, true, array('fa-fw')
+                        ), $viewUrl->getUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
                         )
                     );
                 }

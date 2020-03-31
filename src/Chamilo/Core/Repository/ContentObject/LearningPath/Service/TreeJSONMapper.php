@@ -10,8 +10,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -123,7 +123,8 @@ class TreeJSONMapper
         }
 
         $glyph = new NamespaceIdentGlyph(
-            $node->getContentObject()->package(), true, false, false, Theme::ICON_MINI, $extraClasses
+            $node->getContentObject()->package(), true, false, false,
+            IdentGlyph::SIZE_MINI, $extraClasses
         );
 
         return $glyph->getClassNamesString();

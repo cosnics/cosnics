@@ -24,8 +24,8 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -793,7 +793,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function getGlyph($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array())
     {
         $templateRegistration = $this->get_template_registration();
 
@@ -1205,7 +1205,9 @@ class ContentObject extends CompositeDataClass
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function get_icon_image($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    public function get_icon_image(
+        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array()
+    )
     {
         return $this->getGlyph($size, $isAvailable, $extraClasses)->render();
     }
@@ -1547,7 +1549,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
      */
     public static function glyph(
-        $glyphNamespace, $size = Theme::ICON_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
     )
     {
         return new NamespaceIdentGlyph($glyphNamespace, true, false, !$isAvailable, $size, $extraClasses, $title);
@@ -1641,7 +1643,7 @@ class ContentObject extends CompositeDataClass
      * @return string
      */
     public static function icon_image(
-        $glyphNamespace, $size = Theme::ICON_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
     )
     {
         return self::glyph($glyphNamespace, $size, $isAvailable, $title, $extraClasses)->render();

@@ -5,18 +5,20 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -93,7 +95,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             );
 
             /** @var LearningPath $learning_path */
-            $learning_path = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $learning_path = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
@@ -106,9 +108,9 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication::PROPERTY_ID];
 
             $params_detail = $params;
-            $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
-            $params_detail[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
+            $params_detail[Manager::PARAM_ACTION] =
+                Manager::ACTION_REPORTING;
+            $params_detail[Manager::PARAM_REPORTING_USER_ID] =
                 $this->get_user_id();
 
             $link =
@@ -138,16 +140,6 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         return $reporting_data;
     }
 
-    public function retrieve_data()
-    {
-        return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
-    }
-
     /**
      * Creates the TrackingService for a given Publication and Course
      *
@@ -165,11 +157,13 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
     /**
      *
-     * @return TrackingServiceBuilder | object
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    protected function getTrackingServiceBuilder()
+    protected function getDataClassRepository()
     {
-        return new TrackingServiceBuilder($this->getDataClassRepository());
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
     }
 
     /**
@@ -186,12 +180,20 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return TrackingServiceBuilder | object
      */
-    protected function getDataClassRepository()
+    protected function getTrackingServiceBuilder()
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return new TrackingServiceBuilder($this->getDataClassRepository());
+    }
 
-        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

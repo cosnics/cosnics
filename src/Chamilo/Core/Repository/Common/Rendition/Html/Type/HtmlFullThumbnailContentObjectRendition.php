@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 
 class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition
 {
@@ -21,14 +21,12 @@ class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition
         $object = $this->get_content_object();
 
         $fullViewHtml = ContentObjectRenditionImplementation::factory(
-            $object,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_INLINE,
-            $this->get_context())->render($parameters);
+            $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_INLINE, $this->get_context()
+        )->render($parameters);
 
         return $this->getTwig()->render(
             'Chamilo\Core\Repository:full_thumbnail.html.twig', [
-                "icon" => $object->getGlyph(Theme::ICON_BIG)->render(),
+                "icon" => $object->getGlyph(IdentGlyph::SIZE_BIG)->render(),
                 "title" => $object->get_title(),
                 "full_view" => $fullViewHtml,
                 "id" => $object->getId()

@@ -3,7 +3,8 @@ namespace Chamilo\Core\Admin\Language;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,6 +16,14 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class SettingsConnector
 {
+
+    /**
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public static function getThemePathBuilder()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+    }
 
     public static function get_active_applications()
     {
@@ -45,9 +54,7 @@ class SettingsConnector
 
     public static function get_themes()
     {
-        $options = Theme::getInstance()->getAvailableThemes();
-
-        return $options;
+        return self::getThemePathBuilder()->getAvailableThemes();
     }
 
     public static function get_working_hours()

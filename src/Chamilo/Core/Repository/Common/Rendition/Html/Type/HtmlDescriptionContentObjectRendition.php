@@ -3,10 +3,8 @@ namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -63,7 +61,9 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
 
                     $glyph = $attachment->getGlyph();
 
-                    $html[] = '<li><a href="#" onClick="' . $url . '">'. $glyph->render() .' ' . $attachment->get_title() . '</a></li>';
+                    $html[] =
+                        '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
+                        '</a></li>';
                 }
                 $html[] = '</ul>';
                 $html[] = '</div>';

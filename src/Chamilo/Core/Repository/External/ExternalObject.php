@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -173,7 +173,10 @@ abstract class ExternalObject
      *
      * @return string
      */
-    public function get_icon_image($size = Theme::ICON_SMALL, $isAvailable = true, $extraClasses = array())
+    public function get_icon_image(
+        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true,
+        $extraClasses = array()
+    )
     {
 
         $glyphTitle = Translation::get(

@@ -20,8 +20,8 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -126,17 +126,17 @@ class AssignmentForm extends ContentObjectForm
 
         $uploadUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT                          => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
             )
         );
 
         $dropZoneParameters = array(
-            'name'                        => 'select_attachment_importer',
-            'maxFilesize'                 => $calculator->getMaximumUploadSize(),
-            'uploadUrl'                   => $uploadUrl->getUrl(),
-            'successCallbackFunction'     => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
-            'sendingCallbackFunction'     => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
+            'name' => 'select_attachment_importer',
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'successCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.deleteUploadedFile'
         );
 
@@ -276,7 +276,8 @@ class AssignmentForm extends ContentObjectForm
                 $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
 
                 $glyph = new NamespaceIdentGlyph(
-                    $basePackage, true, false, false, Theme::ICON_MINI, array('fa-fw')
+                    $basePackage, true, false, false, IdentGlyph::SIZE_MINI,
+                    array('fa-fw')
                 );
 
                 $defaultElements->add_element(

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -82,26 +83,26 @@ class Footer extends BaseFooter
 
         if ($showAdministratorData == '1')
         {
-            if (! empty($administratorEmail) && ! empty($administratorWebsite))
+            if (!empty($administratorEmail) && !empty($administratorWebsite))
             {
                 $email = $stringUtilities->encryptMailLink($administratorEmail, $administratorName);
                 $links[] = Translation::get(
-                    'ManagerContactWebsite',
-                    array('EMAIL' => $email, 'WEBSITE' => $administratorWebsite));
+                    'ManagerContactWebsite', array('EMAIL' => $email, 'WEBSITE' => $administratorWebsite)
+                );
             }
             else
             {
-                if (! empty($administratorEmail))
+                if (!empty($administratorEmail))
                 {
                     $links[] = Translation::get('Manager') . ': ' . $stringUtilities->encryptMailLink(
-                        $administratorEmail,
-                        $administratorName);
+                            $administratorEmail, $administratorName
+                        );
                 }
 
-                if (! empty($administratorWebsite))
+                if (!empty($administratorWebsite))
                 {
                     $links[] = Translation::get('Support') . ': <a href="' . $administratorWebsite . '">' .
-                         $administratorName . '</a>';
+                        $administratorName . '</a>';
                 }
             }
         }
@@ -109,7 +110,7 @@ class Footer extends BaseFooter
         if ($showVersionData == '1')
         {
             $links[] = htmlspecialchars(Translation::get('Version')) . ' ' .
-                 Configuration::get('Chamilo\Core\Admin', 'version');
+                Configuration::get('Chamilo\Core\Admin', 'version');
         }
 
         if (key_exists('_uid', $_SESSION))
@@ -117,19 +118,21 @@ class Footer extends BaseFooter
             $user = new User();
             $user->setId(Session::get_user_id());
             $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
-                $user,
-                'Chamilo\Core\Admin',
-                'ViewWhoisOnline');
+                $user, 'Chamilo\Core\Admin', 'ViewWhoisOnline'
+            );
 
             if ($whoisOnlineAuthorized)
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                        Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE));
+                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_ACTION => Manager::ACTION_WHOIS_ONLINE
+                    )
+                );
 
-                $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation::get('WhoisOnline') .
-                     '?</a>';
+                $links[] =
+                    '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation::get('WhoisOnline') .
+                    '?</a>';
             }
         }
 

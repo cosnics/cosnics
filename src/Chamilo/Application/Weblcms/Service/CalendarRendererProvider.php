@@ -4,17 +4,17 @@ namespace Chamilo\Application\Weblcms\Service;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
-    implements \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
+    implements ActionSupport
 {
 
     /**
@@ -46,58 +46,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         $this->renderer = $renderer;
 
         parent::__construct($dataUser, $viewingUser, $displayParameters);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
-     */
-    public function getRenderer()
-    {
-        return $this->renderer;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
-     */
-    public function setRenderer(BrowserComponent $renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
-     */
-    public function getEventActions($event)
-    {
-        $actions = array();
-
-        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
-        {
-            $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getRenderer()->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId()
-                    )
-                ), ToolbarItem::DISPLAY_ICON
-            );
-
-            $actions[] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
-                $this->getRenderer()->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $event->getId()
-                    )
-                ), ToolbarItem::DISPLAY_ICON, true
-            );
-        }
-
-        return $actions;
     }
 
     /**
@@ -143,6 +91,58 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
+     * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
+     */
+    public function getEventActions($event)
+    {
+        $actions = array();
+
+        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
+        {
+            $actions[] = new ToolbarItem(
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $this->getRenderer()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE_PUBLICATION,
+                        Manager::PARAM_PUBLICATION_ID => $event->getId()
+                    )
+                ), ToolbarItem::DISPLAY_ICON
+            );
+
+            $actions[] = new ToolbarItem(
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $this->getRenderer()->get_url(
+                    array(
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                        Manager::PARAM_PUBLICATION_ID => $event->getId()
+                    )
+                ), ToolbarItem::DISPLAY_ICON, true
+            );
+        }
+
+        return $actions;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
+     */
+    public function getRenderer()
+    {
+        return $this->renderer;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
+     */
+    public function setRenderer(BrowserComponent $renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
@@ -156,17 +156,17 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @return boolean
      */
-    public function supportsVisibility()
+    public function supportsActions()
     {
-        return $this instanceof VisibilitySupport;
+        return $this instanceof ActionSupport;
     }
 
     /**
      *
      * @return boolean
      */
-    public function supportsActions()
+    public function supportsVisibility()
     {
-        return $this instanceof ActionSupport;
+        return $this instanceof VisibilitySupport;
     }
 }

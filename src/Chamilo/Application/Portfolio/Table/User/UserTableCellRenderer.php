@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -49,18 +49,23 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Theme
+     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    private $themeUtilities;
+    private $themePathBuilder;
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Table\Table $table
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
+     * @param \Symfony\Component\Translation\Translator $translator
+     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     *
+     * @throws \Exception
      */
     public function __construct(
         $table, RightsService $rightsService, FavouriteService $favouriteService, Translator $translator,
-        PublicationService $publicationService, Theme $themeUtilities
+        PublicationService $publicationService, ThemePathBuilder $themePathBuilder
     )
     {
         parent::__construct($table);
@@ -69,7 +74,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         $this->favouriteService = $favouriteService;
         $this->translator = $translator;
         $this->publicationService = $publicationService;
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**
@@ -149,20 +154,20 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemeUtilities()
+    public function getThemePathBuilder()
     {
-        return $this->themeUtilities;
+        return $this->themePathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
-    public function setThemeUtilities(Theme $themeUtilities)
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
     {
-        $this->themeUtilities = $themeUtilities;
+        $this->themePathBuilder = $themePathBuilder;
     }
 
     /**

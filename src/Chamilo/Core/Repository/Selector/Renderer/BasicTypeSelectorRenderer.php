@@ -10,8 +10,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -255,7 +255,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
         $html[] = '<li class="list-group-item">';
 
-        $imagePath = $option->get_image_path(Theme::ICON_MEDIUM);
+        $imagePath = $option->get_image_path(IdentGlyph::SIZE_MEDIUM);
 
         if ($imagePath instanceof InlineGlyph)
         {

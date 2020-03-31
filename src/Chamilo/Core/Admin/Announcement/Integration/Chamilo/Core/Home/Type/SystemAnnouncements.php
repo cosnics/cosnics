@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
@@ -39,7 +39,8 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
             );
 
             $icon = $content_object->get_icon_image(
-                Theme::ICON_MINI, !(boolean) $publication[Publication::PROPERTY_HIDDEN]
+                IdentGlyph::SIZE_MINI,
+                !(boolean) $publication[Publication::PROPERTY_HIDDEN]
             );
 
             $href = htmlspecialchars($this->getPublicationLink($publication));

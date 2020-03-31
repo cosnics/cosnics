@@ -9,11 +9,11 @@ use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicAction;
 use Chamilo\Libraries\Format\Tabs\DynamicActionsTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -98,7 +98,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
                     $this->getTranslator()->trans('TypeName', array(), $package->get_context()),
-                    new NamespaceIdentGlyph($package->get_context(), true, false, false, Theme::ICON_SMALL)
+                    new NamespaceIdentGlyph(
+                        $package->get_context(), true, false, false,
+                        IdentGlyph::SIZE_SMALL
+                    )
                 );
 
                 if ($links->get_search())

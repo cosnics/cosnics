@@ -24,17 +24,18 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements TableSupport
 {
-    const SHARED_BROWSER = 'shared';
-    const SHARED_BROWSER_ALLOWED = 'allow_shared_browser';
     const PROPERTY_CATEGORY = 'category';
+
+    const SHARED_BROWSER = 'shared';
+
+    const SHARED_BROWSER_ALLOWED = 'allow_shared_browser';
 
     /**
      *
@@ -60,14 +61,6 @@ class BrowserComponent extends Manager implements TableSupport
      */
     protected $filterData;
 
-    public function get_additional_parameters()
-    {
-        return array(self::PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
-    }
-
-    /*
-     * Inherited
-     */
     public function run()
     {
         $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
@@ -117,89 +110,13 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Registers the query as parameter to be used in other links
+    /*
+     * Inherited
      */
-    protected function registerQuery()
+
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $query = $this->get_query();
-        $this->set_parameter(self::PARAM_QUERY, $query);
-    }
-
-    /**
-     * Setup the selected parameters in the repository filter data
-     */
-    protected function setupFilterData()
-    {
-        $filterData = new FilterData($this->getWorkspace());
-        $filterData->set_filter_property(FilterData::FILTER_TEXT, $this->get_query());
-
-        $typeSelectorFactory = new TypeSelectorFactory($this->get_types(), $this->getUser()->getId());
-        $type_selector = $typeSelectorFactory->getTypeSelector();
-
-        $all_types = $type_selector->get_unique_content_object_template_ids();
-
-        $type_selection = TypeSelector::get_selection();
-
-        if ($type_selection)
-        {
-            $types = array($type_selection);
-            $types = array_intersect($types, $all_types);
-        }
-        else
-        {
-            $types = $all_types;
-        }
-
-        if (count($types) == 1)
-        {
-            $types = $types[0];
-        }
-
-        $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
-        $filterData->setExcludedContentObjectIds($this->get_excluded_objects());
-
-        $this->filterData = $filterData;
-    }
-
-    /**
-     * Returns the previously setup filterdata
-     *
-     * @return FilterData
-     */
-    public function getFilterData()
-    {
-        return $this->filterData;
-    }
-
-    /**
-     * Returns the selected category id
-     *
-     * @return int
-     */
-    protected function getCategoryId()
-    {
-        $categoryId = $this->filterData->get_category();
-
-        return $categoryId ? $categoryId : 0;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable
-     */
-    protected function get_object_table()
-    {
-        return new ContentObjectTable($this);
-    }
-
-    /**
-     *
-     * @return string NULL
-     */
-    protected function get_query()
-    {
-        return $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
+        $breadcrumbtrail->add_help('repo_viewer_browser');
     }
 
     /**
@@ -227,7 +144,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 while ($workspace = $workspaces->next_result())
                 {
-                    $isActive = ($workspace->getId() == $this->getWorkspace()->getId()) ? true:false;
+                    $isActive = ($workspace->getId() == $this->getWorkspace()->getId()) ? true : false;
 
                     $button->addSubButton(
                         new SubButton(
@@ -248,118 +165,25 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
+     * Returns the selected category id
      *
-     * @param boolean $allow_shared
-     *
-     * @return \core\repository\RepositoryCategoryMenu
+     * @return int
      */
-    public function get_menu($allow_shared = true)
+    protected function getCategoryId()
     {
-        $url =
-            $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self::PROPERTY_CATEGORY . '=%s';
+        $categoryId = $this->filterData->get_category();
 
-        $extra = array();
-
-        $menu = new RepositoryCategoryMenu(
-            $this, $this->get_user_id(), $this->getWorkspace(), $this->getCategoryId(), $url, $extra, $this->get_types()
-        );
-
-        return $menu;
+        return $categoryId ? $categoryId : 0;
     }
 
     /**
+     * Returns the previously setup filterdata
      *
-     * @param int $category_id
-     *
-     * @return string
+     * @return FilterData
      */
-    public function get_category_url($category_id)
+    public function getFilterData()
     {
-        return $this->get_url(array(self::PROPERTY_CATEGORY => $category_id), array(self::PARAM_QUERY));
-    }
-
-    /**
-     *
-     * @param \core\repository\ContentObject $content_object
-     *
-     * @return \libraries\format\Toolbar
-     */
-    public function get_default_browser_actions($content_object)
-    {
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
-        if (RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square'), $this->get_url(
-                    array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
-                ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if (RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Preview'), new FontAwesomeGlyph('desktop'), $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), array(
-                            self::PARAM_TAB => self::TAB_VIEWER, self::PARAM_ACTION => self::ACTION_VIEWER,
-                            self::PARAM_VIEW_ID => $content_object->get_id()
-                        )
-                    ), false
-                ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if (RightsService::getInstance()->canEditContentObject($this->get_user(), $content_object) &&
-            RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('EditAndPublish'), new FontAwesomeGlyph('edit'), $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), array(
-                            self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR,
-                            self::PARAM_EDIT_ID => $content_object->get_id()
-                        )
-                    ), false
-                ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($content_object instanceof ComplexContentObjectSupport &&
-            RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
-        {
-
-            $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
-            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
-                    $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
-                )
-            );
-        }
-
-        return $toolbar;
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repo_viewer_browser');
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-    public function get_table_condition($table_class_name)
-    {
+        return $this->filterData;
     }
 
     /**
@@ -416,6 +240,142 @@ class BrowserComponent extends Manager implements TableSupport
         return $workspaces;
     }
 
+    public function get_additional_parameters()
+    {
+        return array(self::PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
+    }
+
+    /**
+     *
+     * @param int $category_id
+     *
+     * @return string
+     */
+    public function get_category_url($category_id)
+    {
+        return $this->get_url(array(self::PROPERTY_CATEGORY => $category_id), array(self::PARAM_QUERY));
+    }
+
+    /**
+     *
+     * @param \core\repository\ContentObject $content_object
+     *
+     * @return \libraries\format\Toolbar
+     */
+    public function get_default_browser_actions($content_object)
+    {
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        if (RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('share-square'), $this->get_url(
+                    array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if (RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Preview'), new FontAwesomeGlyph('desktop'), $this->get_url(
+                    array_merge(
+                        $this->get_parameters(), array(
+                            self::PARAM_TAB => self::TAB_VIEWER,
+                            self::PARAM_ACTION => self::ACTION_VIEWER,
+                            self::PARAM_VIEW_ID => $content_object->get_id()
+                        )
+                    ), false
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if (RightsService::getInstance()->canEditContentObject($this->get_user(), $content_object) &&
+            RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('EditAndPublish'), new FontAwesomeGlyph('edit'), $this->get_url(
+                    array_merge(
+                        $this->get_parameters(), array(
+                            self::PARAM_TAB => self::TAB_CREATOR,
+                            self::PARAM_ACTION => self::ACTION_CREATOR,
+                            self::PARAM_EDIT_ID => $content_object->get_id()
+                        )
+                    ), false
+                ), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if ($content_object instanceof ComplexContentObjectSupport &&
+            RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
+        {
+
+            $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
+            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                    $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
+                )
+            );
+        }
+
+        return $toolbar;
+    }
+
+    /**
+     *
+     * @param boolean $allow_shared
+     *
+     * @return \core\repository\RepositoryCategoryMenu
+     */
+    public function get_menu($allow_shared = true)
+    {
+        $url =
+            $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self::PROPERTY_CATEGORY . '=%s';
+
+        $extra = array();
+
+        $menu = new RepositoryCategoryMenu(
+            $this, $this->get_user_id(), $this->getWorkspace(), $this->getCategoryId(), $url, $extra, $this->get_types()
+        );
+
+        return $menu;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable
+     */
+    protected function get_object_table()
+    {
+        return new ContentObjectTable($this);
+    }
+
+    /**
+     *
+     * @return string NULL
+     */
+    protected function get_query()
+    {
+        return $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
+    }
+
+    /*
+     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
+     */
+
+    public function get_table_condition($table_class_name)
+    {
+    }
+
     /**
      *
      * @return bool
@@ -423,5 +383,50 @@ class BrowserComponent extends Manager implements TableSupport
     protected function isInWorkspaces()
     {
         return $this->getRequest()->query->get(self::PARAM_IN_WORKSPACES);
+    }
+
+    /**
+     * Registers the query as parameter to be used in other links
+     */
+    protected function registerQuery()
+    {
+        $query = $this->get_query();
+        $this->set_parameter(self::PARAM_QUERY, $query);
+    }
+
+    /**
+     * Setup the selected parameters in the repository filter data
+     */
+    protected function setupFilterData()
+    {
+        $filterData = new FilterData($this->getWorkspace());
+        $filterData->set_filter_property(FilterData::FILTER_TEXT, $this->get_query());
+
+        $typeSelectorFactory = new TypeSelectorFactory($this->get_types(), $this->getUser()->getId());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
+
+        $all_types = $type_selector->get_unique_content_object_template_ids();
+
+        $type_selection = TypeSelector::get_selection();
+
+        if ($type_selection)
+        {
+            $types = array($type_selection);
+            $types = array_intersect($types, $all_types);
+        }
+        else
+        {
+            $types = $all_types;
+        }
+
+        if (count($types) == 1)
+        {
+            $types = $types[0];
+        }
+
+        $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
+        $filterData->setExcludedContentObjectIds($this->get_excluded_objects());
+
+        $this->filterData = $filterData;
     }
 }

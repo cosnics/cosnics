@@ -4,15 +4,17 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\Ajax\Component\JavascriptComponent;
+use Chamilo\Libraries\Ajax\Component\StylesheetComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
 use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -76,7 +78,7 @@ class BaseHeader implements HeaderInterface
      * @param string $textDirection
      */
     public function __construct(
-        $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
+        $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
         $textDirection = 'ltr'
     )
     {
@@ -158,33 +160,29 @@ class BaseHeader implements HeaderInterface
             $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
         );
 
-        $theme = Theme::getInstance()->getTheme();
-
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'resource';
-        $parameters[ResourceUtilities::PARAM_THEME] = $theme;
-
         $this->addHtmlHeader('<meta charset="utf-8">');
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
         $stylesheetCacheService = new StylesheetCacheService(
-            $pathBuilder, $configurablePathBuilder, Theme::getInstance()
+            $pathBuilder, $configurablePathBuilder, $this->getThemePathBuilder()
         );
 
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
 
-        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
-        $parameters['modified'] = $cssModified;
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'Stylesheet';
+        $parameters[StylesheetComponent::PARAM_THEME] = $this->getThemePathBuilder()->getTheme();
+        $parameters[StylesheetComponent::PARAM_MODIFIED] = $cssModified;
 
         $this->addCssFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addLink($pathBuilder->getBasePath(true), 'top');
         $this->addLink(
-            Theme::getInstance()->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon'
+            $this->getThemePathBuilder()->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon'
         );
 
         $this->addExceptionLogger($fileConfigurationConsulter);
@@ -198,8 +196,10 @@ class BaseHeader implements HeaderInterface
         $javascriptModified = $javascriptCacheService->getLastModificationTime();
         $javascriptModified = $javascriptModified ? $javascriptModified : time();
 
-        $parameters[ResourceUtilities::PARAM_TYPE] = 'javascript';
-        $parameters['modified'] = $javascriptModified;
+        $parameters = array();
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'Javascript';
+        $parameters[JavascriptComponent::PARAM_MODIFIED] = $cssModified;
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addJavascriptCDNFiles();
@@ -355,6 +355,14 @@ class BaseHeader implements HeaderInterface
     public function setTextDirection($textDirection)
     {
         $this->textDirection = $textDirection;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     */
+    public function getThemePathBuilder()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
     }
 
     /**

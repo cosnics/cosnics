@@ -6,14 +6,14 @@ use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
-
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
@@ -22,9 +22,9 @@ use Doctrine\ORM\EntityManager;
 use JMS\Serializer\Serializer;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 /**
  *
@@ -183,15 +183,6 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
-     */
-    public function getResourceManager()
-    {
-        return $this->getService(ResourceManager::class);
-    }
-
-    /**
-     *
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
     public function getRegistrationConsulter()
@@ -207,6 +198,15 @@ trait DependencyInjectionContainerTrait
     public function getRequest()
     {
         return $this->getService(ChamiloRequest::class);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
+     */
+    public function getResourceManager()
+    {
+        return $this->getService(ResourceManager::class);
     }
 
     /**
@@ -251,11 +251,11 @@ trait DependencyInjectionContainerTrait
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Theme
+     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemeUtilities()
+    public function getThemePathBuilder()
     {
-        return $this->getService(Theme::class);
+        return $this->getService(ThemePathBuilder::class);
     }
 
     /**
@@ -275,7 +275,7 @@ trait DependencyInjectionContainerTrait
      */
     public function getTwig()
     {
-        return $this->getService(\Twig\Environment::class);
+        return $this->getService(Environment::class);
     }
 
     /**

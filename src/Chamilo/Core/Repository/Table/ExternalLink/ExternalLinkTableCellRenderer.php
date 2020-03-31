@@ -6,12 +6,12 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -71,7 +71,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         {
             case Instance::PROPERTY_IMPLEMENTATION :
                 $glyph = new NamespaceIdentGlyph(
-                    $external_instance->get_implementation(), true, false, false, Theme::ICON_MINI, array(),
+                    $external_instance->get_implementation(), true, false, false, IdentGlyph::SIZE_MINI, array(),
                     Translation::get('TypeName', null, $external_instance->get_implementation())
                 );
 

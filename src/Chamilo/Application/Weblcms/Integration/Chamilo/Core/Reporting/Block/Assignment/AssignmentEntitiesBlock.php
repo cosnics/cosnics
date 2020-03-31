@@ -2,14 +2,15 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\EntityAssignmentEntriesTemplate;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\EntityAssignmentEntriesTemplate;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -21,6 +22,16 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class AssignmentEntitiesBlock extends AssignmentReportingManager
 {
+
+    const STATISTICS_AVERAGE_SCORE = 2;
+
+    const STATISTICS_FIRST_SUBMISSION = 0;
+
+    const STATISTICS_LAST_SUBMISSION = 1;
+
+    const STATISTICS_NUMBER_OF_FEEDBACKS = 4;
+
+    const STATISTICS_NUMBER_OF_SUBMISSIONS = 3;
 
     private static $COLUMN_ACTIONS;
 
@@ -35,12 +46,6 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
     private static $COLUMN_NUMBER_OF_FEEDBACKS;
 
     private static $COLUMN_NUMBER_OF_SUBMISSIONS;
-
-    const STATISTICS_FIRST_SUBMISSION = 0;
-    const STATISTICS_LAST_SUBMISSION = 1;
-    const STATISTICS_AVERAGE_SCORE = 2;
-    const STATISTICS_NUMBER_OF_SUBMISSIONS = 3;
-    const STATISTICS_NUMBER_OF_FEEDBACKS = 4;
 
     protected $submissions;
 
@@ -69,17 +74,6 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         parent::__construct($parent);
     }
 
-    public function get_title()
-    {
-        $contentObjectPublication = $this->getContentObjectPublication();
-        $assignmentPublication =
-            $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
-        $entityType = ($assignmentPublication instanceof Publication) ? $assignmentPublication->getEntityType() :
-            Entry::ENTITY_TYPE_USER;
-
-        return $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
-    }
-
     /**
      * @return \Chamilo\Core\Reporting\ReportingData
      */
@@ -94,8 +88,12 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
         $this->reportingData->set_rows(
             array(
-                self::$COLUMN_NAME, self::$COLUMN_FIRST_SUBMISSION, self::$COLUMN_LAST_SUBMISSION,
-                self::$COLUMN_NUMBER_OF_SUBMISSIONS, self::$COLUMN_NUMBER_OF_FEEDBACKS, self::$COLUMN_LAST_SCORE,
+                self::$COLUMN_NAME,
+                self::$COLUMN_FIRST_SUBMISSION,
+                self::$COLUMN_LAST_SUBMISSION,
+                self::$COLUMN_NUMBER_OF_SUBMISSIONS,
+                self::$COLUMN_NUMBER_OF_FEEDBACKS,
+                self::$COLUMN_LAST_SCORE,
                 self::$COLUMN_ACTIONS
             )
         );
@@ -119,7 +117,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
             EntityAssignmentEntriesTemplate::class_name();
-        $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
+        $detailParams[Manager::PARAM_ENTITY_TYPE] =
             $entityType;
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublicationId();
 
@@ -163,7 +161,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
             )
             );
 
-            $detailParams[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] =
+            $detailParams[Manager::PARAM_ENTITY_ID] =
                 $entityId;
 
             $link = $this->createLink($this->get_parent()->get_url($detailParams), $glyph->render());
@@ -177,13 +175,24 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
         return $this->reportingData;
     }
 
-    public function retrieve_data()
+    public function get_title()
     {
-        return $this->count_data();
+        $contentObjectPublication = $this->getContentObjectPublication();
+        $assignmentPublication =
+            $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+        $entityType = ($assignmentPublication instanceof Publication) ? $assignmentPublication->getEntityType() :
+            Entry::ENTITY_TYPE_USER;
+
+        return $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
     }
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

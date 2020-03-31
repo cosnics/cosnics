@@ -23,7 +23,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -52,7 +51,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkLoggedInAs();
 
         $header = Page::getInstance()->getHeader();
-        $header->addCssFile(Theme::getInstance()->getCssPath(self::package(), true) . 'Print.css', 'print');
+        $header->addCssFile($this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print');
 
         $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
         $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
@@ -77,7 +76,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
 
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
-            if (! $user instanceof User || ! $user->is_platform_admin())
+            if (!$user instanceof User || !$user->is_platform_admin())
             {
                 throw new NotAllowedException();
             }
@@ -86,81 +85,22 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     protected function getCalendarDataProvider()
     {
-        if (! isset($this->calendarDataProvider))
+        if (!isset($this->calendarDataProvider))
         {
             $displayParameters = array(
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime());
+                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()
+            );
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
-                $this->get_user(),
-                $this->get_user(),
-                $displayParameters,
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                new CalendarRendererProviderRepository(), $this->get_user(), $this->get_user(), $displayParameters,
+                \Chamilo\Application\Calendar\Ajax\Manager::context()
+            );
         }
 
         return $this->calendarDataProvider;
-    }
-
-    protected function renderNormalCalendar()
-    {
-        $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
-
-        $rendererFactory = new ViewRendererFactory(
-            $this->getCurrentRendererType(),
-            $dataProvider,
-            $calendarLegend,
-            $this->getCurrentRendererTime(),
-            $this->getViewActions());
-        $renderer = $rendererFactory->getRenderer();
-
-        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
-             $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
-        {
-            $renderer->setStartHour(
-                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
-            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
-            $renderer->setHideOtherHours(
-                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar'));
-        }
-
-        return $renderer->render();
-    }
-
-    protected function getViewActions()
-    {
-        $actions = array();
-
-        $extensionRegistrations = Configuration::registrations_by_type(
-            \Chamilo\Application\Calendar\Manager::package() . '\Extension');
-
-        $primaryExtensionActions = array();
-        $additionalExtensionActions = array();
-
-        foreach ($extensionRegistrations as $extensionRegistration)
-        {
-            if ($extensionRegistration[Registration::PROPERTY_STATUS] == 1)
-            {
-                $actionRendererClass = $extensionRegistration[Registration::PROPERTY_CONTEXT] . '\Actions';
-                $actionRenderer = new $actionRendererClass();
-
-                $primaryExtensionActions = array_merge($primaryExtensionActions, $actionRenderer->getPrimary($this));
-                $additionalExtensionActions = array_merge(
-                    $additionalExtensionActions,
-                    $actionRenderer->getAdditional($this));
-            }
-        }
-
-        $actions = array_merge($actions, $primaryExtensionActions);
-        $actions = array_merge($actions, $additionalExtensionActions);
-
-        $actions[] = $this->getGeneralActions();
-
-        return $actions;
     }
 
     protected function getGeneralActions()
@@ -172,40 +112,47 @@ class BrowserComponent extends Manager implements DelegateComponent
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_PRINT,
                 ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()));
+                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()
+            )
+        );
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get(self::ACTION_PRINT . 'Component'),
-                new FontAwesomeGlyph('print'),
-                $printUrl->getUrl()));
+                Translation::get(self::ACTION_PRINT . 'Component'), new FontAwesomeGlyph('print'), $printUrl->getUrl()
+            )
+        );
 
         $iCalUrl = new Redirect(
-            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_ICAL));
+            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_ICAL)
+        );
 
         $buttonGroup->addButton(
-            new Button(Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'), $iCalUrl->getUrl()));
+            new Button(Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'), $iCalUrl->getUrl())
+        );
 
         $settingsUrl = new Redirect(
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
-                UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'));
+                UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'
+            )
+        );
 
         $splitDropdownButton = new SplitDropdownButton(
-            Translation::get('ConfigComponent'),
-            new FontAwesomeGlyph('cog'),
-            $settingsUrl->getUrl());
+            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl->getUrl()
+        );
         $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $availabilityUrl = new Redirect(
-            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY));
+            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY)
+        );
 
         $splitDropdownButton->addSubButton(
             new SubButton(
-                Translation::get('AvailabilityComponent'),
-                new FontAwesomeGlyph('check-circle'),
-                $availabilityUrl->getUrl()));
+                Translation::get('AvailabilityComponent'), new FontAwesomeGlyph('check-circle'),
+                $availabilityUrl->getUrl()
+            )
+        );
 
         $buttonGroup->addButton($splitDropdownButton);
 
@@ -225,5 +172,64 @@ class BrowserComponent extends Manager implements DelegateComponent
             default :
                 return MiniMonthCalendar::PERIOD_DAY;
         }
+    }
+
+    protected function getViewActions()
+    {
+        $actions = array();
+
+        $extensionRegistrations = Configuration::registrations_by_type(
+            Manager::package() . '\Extension'
+        );
+
+        $primaryExtensionActions = array();
+        $additionalExtensionActions = array();
+
+        foreach ($extensionRegistrations as $extensionRegistration)
+        {
+            if ($extensionRegistration[Registration::PROPERTY_STATUS] == 1)
+            {
+                $actionRendererClass = $extensionRegistration[Registration::PROPERTY_CONTEXT] . '\Actions';
+                $actionRenderer = new $actionRendererClass();
+
+                $primaryExtensionActions = array_merge($primaryExtensionActions, $actionRenderer->getPrimary($this));
+                $additionalExtensionActions = array_merge(
+                    $additionalExtensionActions, $actionRenderer->getAdditional($this)
+                );
+            }
+        }
+
+        $actions = array_merge($actions, $primaryExtensionActions);
+        $actions = array_merge($actions, $additionalExtensionActions);
+
+        $actions[] = $this->getGeneralActions();
+
+        return $actions;
+    }
+
+    protected function renderNormalCalendar()
+    {
+        $dataProvider = $this->getCalendarDataProvider();
+        $calendarLegend = new Legend($dataProvider);
+
+        $rendererFactory = new ViewRendererFactory(
+            $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),
+            $this->getViewActions()
+        );
+        $renderer = $rendererFactory->getRenderer();
+
+        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
+            $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
+        {
+            $renderer->setStartHour(
+                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar')
+            );
+            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
+            $renderer->setHideOtherHours(
+                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar')
+            );
+        }
+
+        return $renderer->render();
     }
 }

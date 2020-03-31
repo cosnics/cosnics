@@ -15,9 +15,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use const Chamilo\Libraries\Format\Theme\;
 
 /**
  *
@@ -264,7 +265,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 {
                     $html[] = '<a href="' . $parent->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => $lcms_action,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $lcms_action,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(
                                 )
                             )
@@ -278,7 +279,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
                     $html[] = '<a href="' . $parent->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_DELETE_LINKS,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_DELETE_LINKS,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(
                                 )
                             )
@@ -301,10 +302,10 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                         '\Manager';
                     $url = $parent->get_url(
                         array(
-                            'tool_action'                                                   => null,
-                            Manager::PARAM_COMPONENT_ACTION                                 => null,
-                            Manager::PARAM_TOOL                                             => $publication->get_tool(),
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION         => $class::ACTION_VIEW,
+                            'tool_action' => null,
+                            Manager::PARAM_COMPONENT_ACTION => null,
+                            Manager::PARAM_TOOL => $publication->get_tool(),
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $class::ACTION_VIEW,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
                         ), array(), true
                     );
@@ -316,7 +317,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 );
 
                 $identGlyph = new NamespaceIdentGlyph(
-                    $toolNamespace, true, false, $isDisabled, Theme::ICON_MEDIUM, array('fa-fw')
+                    $toolNamespace, true, false, $isDisabled, IdentGlyph::SIZE_MEDIUM, array('fa-fw')
                 );
 
                 $html[] = $identGlyph->render();
@@ -412,7 +413,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '<a href="' . $parent->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_ACTION => $lcms_action,
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_TOOL   => $tool->get_name(
+                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::PARAM_TOOL => $tool->get_name(
                             )
                         )
                     ) . '">' . $glyph->render() . '</a>';
@@ -423,8 +424,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '<span style="width: 27px; display: inline-block;" class="no-visibility-icon"></span>';
             }
 
-            $identGlyph =
-                new NamespaceIdentGlyph($tool_namespace, true, $isNew, $isDisabled, Theme::ICON_MEDIUM, array('fa-fw'));
+            $identGlyph = new NamespaceIdentGlyph(
+                $tool_namespace, true, $isNew, $isDisabled, IdentGlyph::SIZE_MEDIUM, array('fa-fw')
+            );
             $html[] = $identGlyph->render();
 
             $html[] = '&nbsp;';

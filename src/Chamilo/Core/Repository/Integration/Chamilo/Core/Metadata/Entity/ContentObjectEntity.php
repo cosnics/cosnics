@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -37,12 +37,13 @@ class ContentObjectEntity extends DataClassEntity
     }
 
     /**F
+     *
      * @param integer $size
      *
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function getIcon($size = Theme::ICON_MINI)
+    public function getIcon($size = IdentGlyph::SIZE_MINI)
     {
         $dataClass = $this->getDataClass();
         $dataClassName = $this->getDataClassName();

@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerF
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -34,9 +34,12 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
         $toolbar = new Toolbar();
 
         $types = array(
-            Configuration::ANSWER_FEEDBACK_TYPE_NONE, Configuration::ANSWER_FEEDBACK_TYPE_GIVEN,
-            Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
-            Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, Configuration::ANSWER_FEEDBACK_TYPE_WRONG,
+            Configuration::ANSWER_FEEDBACK_TYPE_NONE,
+            Configuration::ANSWER_FEEDBACK_TYPE_GIVEN,
+            Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT,
+            Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
+            Configuration::ANSWER_FEEDBACK_TYPE_CORRECT,
+            Configuration::ANSWER_FEEDBACK_TYPE_WRONG,
             Configuration::ANSWER_FEEDBACK_TYPE_ALL
         );
 
@@ -87,7 +90,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
         switch ($column->get_name())
         {
             case AnswerFeedbackTypeTableColumnModel::PROPERTY_TYPE :
-                return $content_object->get_icon_image(Theme::ICON_MINI);
+                return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
             case ContentObject::PROPERTY_TITLE :
                 $title = parent::render_cell($column, $content_object);
 
