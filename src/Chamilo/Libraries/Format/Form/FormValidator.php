@@ -289,6 +289,40 @@ EOT;
     }
 
     /**
+     * @param string[] $attributes
+     *
+     * @return string[]
+     */
+    protected function addFormControlToElementAttributes($attributes)
+    {
+        if (is_array($attributes))
+        {
+            if (!array_key_exists('class', $attributes))
+            {
+                $attributes['class'] = 'form-control';
+            }
+            else
+            {
+                $classAttributes = $attributes['class'];
+
+                if (!is_array($classAttributes))
+                {
+                    $classAttributes = explode(' ', $classAttributes);
+                }
+
+                if (!in_array('form-control', $classAttributes))
+                {
+                    array_unshift($classAttributes, 'form-control');
+                }
+
+                $attributes['class'] = implode(' ', $classAttributes);
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      *
      * @param string $name
      * @param string $label
@@ -887,6 +921,8 @@ EOT;
      */
     public function add_select($name, $label, $values, $required = true, $attributes = array())
     {
+        $attributes = $this->addFormControlToElementAttributes($attributes);
+
         $element = $this->addElement('select', $name, $label, $values, $attributes);
         if ($required)
         {
@@ -912,10 +948,7 @@ EOT;
      */
     public function add_textfield($name, $label, $required = true, $attributes = array())
     {
-        if (!array_key_exists('class', $attributes))
-        {
-            $attributes['class'] = 'form-control';
-        }
+        $attributes = $this->addFormControlToElementAttributes($attributes);
 
         $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
