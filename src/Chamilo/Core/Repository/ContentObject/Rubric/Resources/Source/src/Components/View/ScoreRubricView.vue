@@ -1,12 +1,10 @@
 <template>
 	<div class="container" :class="mainClass">
-		<nav class="clusters" @mouseover="dragMouseOver($event,'view1_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view1_clusters' }">
-			<draggable id="view1_clusters" tag="ul"	group="clusters" class="clusters_draggable"	ghost-class="ghost"	:list="clusters" :class="{ clusterDragging }" :forceFallback="true"	:animation="250"
+		<div class="clusters-view" @mouseover="dragMouseOver($event,'view1_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view1_clusters' }">
+			<draggable id="view1_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
 					:move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
-				<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster)}" @click="selectCluster(cluster)">
-					<div>
-						<i v-if="cluster.title !== ''" class="fa fa-map-o" aria-hidden="true"/><i v-else class="fa fa-institution empty" aria-hidden="true"/>{{cluster.title}}
-					</div>
+				<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view1')}" @click="selectCluster(cluster, 'view1')">
+					<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
 				</li>
 			</draggable>
 			<div class="actions">
@@ -15,7 +13,7 @@
 				</div>
 				<button v-else @click="showClusterDialog"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
 			</div>
-		</nav>
+		</div>
 		<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
 			<draggable id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
 					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view1')">
@@ -46,12 +44,14 @@
 				<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
 			</div>
 		</div>
-		<nav class="clusters" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
-			<draggable id="view2_clusters" tag="ul"	group="clusters" class="clusters_draggable"	ghost-class="ghost"	:list="clusters" :class="{ clusterDragging }" :forceFallback="true"	:animation="250"
+		<div class="clusters-view" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
+			<draggable id="view2_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
 					:move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
-				<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected2nd(cluster)}" @click="selectCluster2nd(cluster)"><div><i v-if="cluster.title !== ''" class="fa fa-map-o" aria-hidden="true"/><i v-else class="fa fa-institution empty" aria-hidden="true"/>{{cluster.title}}</div></li>
+				<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view2')}" @click="selectCluster(cluster, 'view2')">
+					<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
+				</li>
 			</draggable>
-		</nav>
+		</div>
 		<div class="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view2_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view2_categories' }">
 			<draggable id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
 					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view2')">
@@ -222,7 +222,6 @@
 				category.moveChild(criterium, event.moved.newIndex, event.moved.oldIndex);
 				this.store.moveChild(criterium, category, event.moved.newIndex);
 			}
-
 		}
 
 		get console() {
@@ -270,7 +269,6 @@
 			this.isAddingCriterium = false;
 		}
 
-
 		addNewCluster() {
 			const cluster = this.newCluster;
 			this.newCluster = null;
@@ -293,12 +291,12 @@
 			return this.isAddingCriterium && this.selectedCategoryNewCriterium === category;
 		}
 
-		selectCluster(cluster: Cluster|null) {
-			this.selectedClusterView1 = cluster;
-		}
-
-		selectCluster2nd(cluster: Cluster|null) {
-			this.selectedClusterView2 = cluster;
+		selectCluster(cluster: Cluster|null, view: string = 'view1') {
+			if (view === 'view1') {
+				this.selectedClusterView1 = cluster;
+			} else if (view === 'view2') {
+				this.selectedClusterView2 = cluster;
+			}
 		}
 
 		selectCriterium(criterium: Criterium|null) {
@@ -321,17 +319,18 @@
 			this.selectedCategoryColorPicker = this.selectedCategoryColorPicker !== category ? category : null;
 		}
 
-		isColorPickerOpened(category: Category) {
+		isColorPickerOpened(category: Category) : boolean {
 			if (this.selectedCategoryColorPicker === null) { return false; }
 			return category === this.selectedCategoryColorPicker;
 		}
 
-		isSelected(cluster: Cluster) {
-			return cluster === this.selectedClusterView1;
-		}
-
-		isSelected2nd(cluster: Cluster) {
-			return cluster === this.selectedClusterView2;
+		isSelected(cluster: Cluster, view: string = 'view1') : boolean {
+			if (view === 'view1') {
+				return cluster === this.selectedClusterView1;
+			} else if (view === 'view2') {
+				return cluster === this.selectedClusterView2;
+			}
+			return false;
 		}
 
 		get clusters() {
@@ -370,7 +369,6 @@
 
 		@Watch('isAddingCategory')
 		onCategoryAddingChanged() {
-			console.log('isAddingCategory', this.isAddingCategory);
 //			if (!this.store.isAddingCategory) {
 				this.$nextTick(()=> {
 					const clusterContent = this.$refs['cluster-content'] as HTMLElement;
@@ -385,10 +383,6 @@
 </script>
 
 <style>
-	#app > div > div {
-		display: flex;
-		/*height: 100vh;*/
-	}
 	button {
 		border-radius: 3px;
 		transition: background-color 0.2s ease-in, color 0.1s ease-in;
@@ -453,53 +447,55 @@
 		cursor: not-allowed;
 	}
 
-	/* Navigation: Clusters */
-	nav.clusters {
+	/* Clusters */
+	.clusters-view {
 		--background: hsla(200, 10%, 80%, 0.5);
 		width: 100%;
-		height: 36px;
 		display: flex;
 		transition: opacity 100ms;
 	}
-	nav.clusters.no-drop {
+	.clusters-view.no-drop {
 		opacity: 0.3;
 	}
-	ul {
-		margin-left: 21px;
-		list-style-type: none;
+	.clusters {
+		margin-left: 1.5em;
+		font-size: 1.4rem;
+		list-style: none;
 		display: flex;
 	}
-	li {
+	.clusters li {
 		display: block;
-		margin: 0 10px 0 0;
+		margin-right: 0.7em;
 		padding: 0;
 		color: #444;
 	}
-	li.selected {
+	.clusters li.selected {
 		--background: hsla(190, 40%, 45%, 1);
+		/*--background: hsla(207, 38%, 45%, 1);*/
 		color: white;
 	}
-	li div {
-		margin: 0;
-		padding: 8px 12px;
-		min-width: 70px;
-		height: 36px;
+	.clusters .title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.8em;
+		line-height: 1.3em;
+		height: 100%;
 		background: var(--background);
 		border-radius: 3px;
-		text-align:center;
+		text-align: center;
 	}
-	li > div i {
-		margin-right: 8px;
-		font-size: 13px;
+	.clusters i {
+		font-size: 1.3rem;
 	}
-	li > div i.empty {
-		margin-right: 0;
+	.clusters span:not(:empty) {
+		margin-left: 0.6em;
 	}
-	ul:not(.clusterDragging) li:not(.selected):hover {
+	.clusters:not(.cluster-dragging) li:not(.selected):hover {
 		--background: hsla(190, 20%, 75%, 1);
 		color: #222;
 	}
-	/*li.selected:after {
+	/*.clusters li.selected:after {
 		content: '';
 		display: block;
 		margin: 0 auto;
@@ -510,25 +506,25 @@
 		border-color: var(--background) transparent;
 		border-style: solid solid none;
 	}*/
-	li.selected div {
+	.clusters li.selected .title {
 		box-shadow: 0px 2px 4px #999;
 	}
-	li, li div {
+	.clusters li, .clusters .title {
 		-moz-user-select: -moz-none;
 		-khtml-user-select: none;
 		-webkit-user-select: none;
 		-o-user-select: none;
 		user-select: none;
 	}
-	li div {
+	.clusters div {
 		pointer-events: none;
 	}
-	li.ghost {
+	.clusters li.ghost {
 		background: rgba(255, 255, 255, 0.45);
 		border: 1px dotted rgba(28,110,164,0.65);
 		border-radius: 4px;
 	}
-	li.ghost:after, li.ghost > * {
+	.clusters li.ghost:after, .clusters li.ghost > * {
 		visibility: hidden;
 	}
 
@@ -714,11 +710,6 @@
 	.category.ghost > * {
 		visibility: hidden;
 	}
-	.icon-btn {
-		font-family: '-webkit-pictograph';
-		/*font-style: normal;*/
-		font-size: 3em;
-		speak: none;
 	}
 
 	.action .add:after { content: "+"; }

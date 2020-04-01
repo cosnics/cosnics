@@ -66,18 +66,12 @@
 
 <style>
     #app {
-/*        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px; */
-    }
-</style>
-<style>
-    #app {
-        display: flex;
+        /* color: #2c3e50; */
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 1.3rem;
+        line-height: 2.3rem;
         min-height: 100vh;
+        display: flex;
         flex-direction: column;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -169,6 +163,7 @@
         display: flex;
     }
     .rubrics > div {
+        display: flex;
         width: 100%;
     }
     /* Reset elements */
