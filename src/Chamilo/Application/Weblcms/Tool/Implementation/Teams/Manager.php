@@ -24,6 +24,7 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     const ACTION_CREATE_PLATFORM_GROUP_TEAM = 'CreatePlatformGroupTeam';
     const ACTION_EDIT_PLATFORM_GROUP_TEAM = 'EditPlatformGroupTeam';
+    const ACTION_DELETE_PLATFORM_GROUP_TEAM = 'DeletePlatformGroupTeam';
     const ACTION_REMOVE_TEAM_USERS_NOT_IN_GROUPS = 'RemoveTeamUsersNotInGroups';
     const ACTION_SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS = 'SubscribePlatformGroupTeamUsers';
     const ACTION_VISIT_PLATFORM_GROUP_TEAM = 'VisitPlatformGroupTeam';

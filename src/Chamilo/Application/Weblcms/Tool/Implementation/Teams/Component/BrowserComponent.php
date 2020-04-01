@@ -65,6 +65,10 @@ class BrowserComponent extends Manager
                     self::ACTION_EDIT_PLATFORM_GROUP_TEAM,
                     [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']
                 ),
+                'DELETE_PLATFORM_GROUP_TEAM_URL' => $this->getUrlWithAction(
+                    self::ACTION_DELETE_PLATFORM_GROUP_TEAM,
+                    [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']
+                ),
                 'REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL' => $this->getUrlWithAction(
                     self::ACTION_REMOVE_TEAM_USERS_NOT_IN_GROUPS,
                     [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']

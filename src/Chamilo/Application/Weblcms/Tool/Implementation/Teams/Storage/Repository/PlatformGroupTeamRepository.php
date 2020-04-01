@@ -105,37 +105,6 @@ class PlatformGroupTeamRepository
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findPlatformGroupTeamRelationForTeamAndGroup(PlatformGroupTeam $platformGroupTeam, Group $group)
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
-            ),
-            new StaticConditionVariable($platformGroupTeam->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                PlatformGroupTeamRelation::class, PlatformGroupTeamRelation::PROPERTY_PLATFORM_GROUP_TEAM_ID
-            ),
-            new StaticConditionVariable($group->getId())
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->dataClassRepository->retrieve(
-            PlatformGroupTeamRelation::class, new DataClassRetrieveParameters($condition)
-        );
-    }
-
-    /**
      * @param int $platformGroupId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass|PlatformGroupTeam
@@ -153,10 +122,19 @@ class PlatformGroupTeamRepository
      */
     public function findPlatformGroupTeamsWithPlatformGroupsForCourse(Course $course)
     {
-        $condition = new EqualityCondition(
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(PlatformGroupTeam::class, PlatformGroupTeam::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course->getId())
         );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PlatformGroupTeam::class, PlatformGroupTeam::PROPERTY_ACTIVE),
+            new StaticConditionVariable(1)
+        );
+
+        $condition = new AndCondition($conditions);
 
         $joins = new Joins();
 

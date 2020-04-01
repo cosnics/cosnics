@@ -94,6 +94,7 @@ class PlatformGroupTeamService
         $platformGroupTeam->setCourseId($course->getId());
         $platformGroupTeam->setName($teamName);
         $platformGroupTeam->setTeamId($teamId);
+        $platformGroupTeam->setActive(true);
 
         if (!$this->platformGroupTeamRepository->createPlatformGroupTeam($platformGroupTeam))
         {
@@ -404,8 +405,6 @@ class PlatformGroupTeamService
     }
 
     /**
-     * Helper method for the record iterator above. Cleans up deleted teams and updates team names when changed
-     *
      * @param int $platformGroupId
      *
      * @return string
@@ -444,24 +443,6 @@ class PlatformGroupTeamService
     protected function getTeam(PlatformGroupTeam $platformGroupTeam)
     {
         return $this->teamService->getTeam($platformGroupTeam->getTeamId());
-
-//        if (is_null($team))
-//        {
-////            $this->deletePlatformGroupTeam($platformGroupTeam);
-//
-//            return null;
-//        }
-
-//        return $team;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
-     */
-    protected function deleteRemovedTeam(PlatformGroupTeam $platformGroupTeam)
-    {
-        $this->platformGroupTeamRepository->deleteRelationsForPlatformGroupTeam($platformGroupTeam);
-        $this->platformGroupTeamRepository->deletePlatformGroupTeam($platformGroupTeam);
     }
 
     /**
@@ -504,7 +485,18 @@ class PlatformGroupTeamService
         }
     }
 
-    protected function deletePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     */
+    public function deletePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
+        $platformGroupTeam->setActive(false);
+
+        if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
+        {
+            throw new \RuntimeException(
+                sprintf('The platform group team (%s) could not be deactivated', $platformGroupTeam->getId())
+            );
+        }
     }
 }
