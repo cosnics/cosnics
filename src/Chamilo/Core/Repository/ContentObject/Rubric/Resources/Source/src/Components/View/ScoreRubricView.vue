@@ -1,81 +1,87 @@
 <template>
 	<div class="container" :class="mainClass">
-		<div class="clusters-view" @mouseover="dragMouseOver($event,'view1_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view1_clusters' }">
-			<draggable id="view1_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
-					:move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
-				<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view1')}" @click="selectCluster(cluster, 'view1')">
-					<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
-				</li>
-			</draggable>
-			<div class="actions">
-				<div v-if="clusterDialogShown">
-					<name-input class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
-				</div>
-				<button v-else @click="showClusterDialog"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
-			</div>
-		</div>
-		<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
-			<draggable id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
-					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view1')">
-				<div v-for="category in categoriesView1" @mouseover="criteriumDragging && dragMouseOver($event, `view1_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view1_${category.id}`" :key="`view1_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view1_${category.id}`, 'null-category': category.title === '' }">
-					<div v-if="category.title !== ''" class="handle handle-area-category">
-						<a :style="{'background-color': category.color}" tabindex="0" @click="() => openColorPickerForCategory(category)" @keyup.enter.space="() => openColorPickerForCategory(category)"></a>
-						<h2 class="handle-area-category">{{ category.title }}</h2>
-						<swatches v-if="isColorPickerOpened(category)" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
-					</div>
-					<div v-else class="handle handle-area-category">
-						<h2 class="handle-area-category">Criteria</h2>
-					</div>
-					<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
-							:move="onMoveCriterium"	@start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
-						<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+		<div>
+			<div>
+				<div class="clusters-view" @mouseover="dragMouseOver($event,'view1_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view1_clusters' }">
+					<draggable id="view1_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
+							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
+						<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view1')}" @click="selectCluster(cluster, 'view1')">
+							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
+						</li>
 					</draggable>
-					<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: criteriumDragging}">
-						<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
-					</div>
-					<div v-else>
-						<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+					<div class="actions">
+						<div v-if="clusterDialogShown">
+							<name-input class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
+						</div>
+						<button v-else @click="showClusterDialog"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
 					</div>
 				</div>
-				<div slot="footer" class="no-category"></div>
-			</draggable>
-			<div class="actions" v-if="!isAddingCategory && !isAddingCriteriumWithoutCategory">
-				<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus" aria-hidden="true"/>Categorie</button>
-				<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium</button>
-			</div>
-			<div v-else-if="isAddingCategory" class="category newcategory">
-				<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
-			</div>
-			<div v-else-if="isAddingCriteriumWithoutCategory" class="category newcategory">
-				<name-input class="category-new item-new" @ok="addNewCriterium(true)" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
-			</div>
-		</div>
-		<div class="clusters-view" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
-			<draggable id="view2_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
-					:move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
-				<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view2')}" @click="selectCluster(cluster, 'view2')">
-					<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
-				</li>
-			</draggable>
-		</div>
-		<div class="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view2_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view2_categories' }">
-			<draggable id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
-					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view2')">
-				<div v-for="category in categoriesView2" class="category" @mouseover="criteriumDragging && dragMouseOver($event, `view2_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view2_${category.id}`" :key="`view2_${category.id}`" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view2_${category.id}`, 'null-category': category.title === '' }">
-					<div v-if="category.title !== ''" class="handle handle-area-category">
-						<a :style="{'background-color': category.color}" tabindex="0"></a>
-						<h2 class="handle-area-category">{{ category.title }}</h2>
+				<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
+					<draggable id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
+							   @start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view1')">
+						<div v-for="category in categoriesView1" @mouseover="criteriumDragging && dragMouseOver($event, `view1_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view1_${category.id}`" :key="`view1_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view1_${category.id}`, 'null-category': category.title === '' }">
+							<div v-if="category.title !== ''" class="handle handle-area-category">
+								<a :style="{'background-color': category.color}" tabindex="0" @click="() => openColorPickerForCategory(category)" @keyup.enter.space="() => openColorPickerForCategory(category)"></a>
+								<h2 class="handle-area-category">{{ category.title }}</h2>
+								<swatches v-if="isColorPickerOpened(category)" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+							</div>
+							<div v-else class="handle handle-area-category">
+								<h2 class="handle-area-category">Criteria</h2>
+							</div>
+							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
+									   :move="onMoveCriterium"	@start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
+								<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+							</draggable>
+							<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: criteriumDragging}">
+								<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
+							</div>
+							<div v-else>
+								<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+							</div>
+						</div>
+						<div slot="footer" class="no-category"></div>
+					</draggable>
+					<div class="actions" v-if="!isAddingCategory && !isAddingCriteriumWithoutCategory">
+						<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus" aria-hidden="true"/>Categorie</button>
+						<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium</button>
 					</div>
-					<div v-else class="handle handle-area-category">
-						<h2 class="handle-area-category">Criteria</h2>
+					<div v-else-if="isAddingCategory" class="category newcategory">
+						<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
 					</div>
-					<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
-							:move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
-						<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+					<div v-else-if="isAddingCriteriumWithoutCategory" class="category newcategory">
+						<name-input class="category-new item-new" @ok="addNewCriterium(true)" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+					</div>
+				</div>
+			</div>
+			<div v-if="split">
+				<div class="clusters-view" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
+					<draggable id="view2_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
+							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
+						<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view2')}" @click="selectCluster(cluster, 'view2')">
+							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
+						</li>
 					</draggable>
 				</div>
-				<div slot="footer" class="no-category"></div>
-			</draggable>
+				<div class="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view2_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view2_categories' }">
+					<draggable id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
+							   @start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view2')">
+						<div v-for="category in categoriesView2" class="category" @mouseover="criteriumDragging && dragMouseOver($event, `view2_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view2_${category.id}`" :key="`view2_${category.id}`" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view2_${category.id}`, 'null-category': category.title === '' }">
+							<div v-if="category.title !== ''" class="handle handle-area-category">
+								<a :style="{'background-color': category.color}" tabindex="0"></a>
+								<h2 class="handle-area-category">{{ category.title }}</h2>
+							</div>
+							<div v-else class="handle handle-area-category">
+								<h2 class="handle-area-category">Criteria</h2>
+							</div>
+							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
+									   :move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
+								<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+							</draggable>
+						</div>
+						<div slot="footer" class="no-category"></div>
+					</draggable>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -116,6 +122,7 @@
 		private isAddingCriteriumWithoutCategory: boolean = false;
 
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
+		@Prop(Boolean) readonly split!: boolean;
 
 		dragMouseOver(event: any, elementId: string) {
 			if (!this.initiatedDrag) { return; }
@@ -450,12 +457,11 @@
 		padding: 4px 8px 4px 6px;
 	}
 	.container {
+		position: relative;
 		width: 100%;
-		padding-top: 20px;
 		background-color: hsla(165, 5%, 90%, 1);
 		display: flex;
 		flex-direction: column;
-		overflow-x: auto;
 	}
 	.container.dragging, .container.dragging * {
 		cursor: move;
@@ -464,11 +470,30 @@
 	.container.dragging.not-allowed, .container.dragging.not-allowed * {
 		cursor: not-allowed;
 	}
+	.container > div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+	}
+	.container > div > div {
+		height: 50%;
+		overflow-x: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.container > div > div:nth-child(2) {
+		border-top: 1px solid hsl(200, 25%, 80%);
+	}
 
 	/* Clusters */
 	.clusters-view {
 		--background: hsla(200, 10%, 80%, 0.5);
 		width: 100%;
+		padding: 14px 0;
+		margin-bottom: 8px;
 		display: flex;
 		transition: opacity 100ms;
 	}
@@ -483,6 +508,7 @@
 	}
 	.clusters li {
 		display: block;
+		border: 1px solid transparent;
 		margin-right: 0.7em;
 		padding: 0;
 		color: #444;
@@ -576,11 +602,10 @@
 	/* Cluster content: categories and criteria */
 	.cluster-content {
 		flex: 1;
-		padding-top: 40px;
 		width: 100%;
+		padding-bottom: 40px;
 		user-select: none;
-		overflow-x: auto;
-		overflow-y: hidden;
+		overflow: auto;
 		overflow-wrap: break-word;
 		display: flex;
 		transition: opacity 100ms;
@@ -596,7 +621,6 @@
 		align-items: flex-start;
 	}
 	.cluster-content > div > div {
-		margin-right: 16px;
 		width: 240px;
 	}
 
@@ -614,6 +638,8 @@
 	}
 	.category {
 		min-width: 240px;
+		margin-right: 16px;
+		margin-bottom: 40px;
 		white-space: normal;
 		border: 1px solid #dedede;
 		border-radius: 4px;

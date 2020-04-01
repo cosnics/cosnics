@@ -6,6 +6,9 @@
                 <li><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
                 <li><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
             </ul>
+            <ul class="tools">
+                <li :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>
+            </ul>
             <div class="save-state">
                 <div v-if="store.isSaving" class="saving">
                     Processing {{store.queue.pending + store.queue.size}} saves...
@@ -20,7 +23,7 @@
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="!store.isLoading">
                 <levels-view v-if="content === 'levels'"></levels-view>
-                <score-rubric-view v-if="content === 'rubric'" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
+                <score-rubric-view v-if="content === 'rubric'" :split="showSplitView" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
                 <criterium-details-view v-if="content === 'rubric'" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
             </div>
             <div v-else class="container">
@@ -48,6 +51,7 @@
     export default class App extends Vue {
         private selectedCriterium: Criterium|null = null;
         private showHeaderFooter: boolean = true;
+        private showSplitView: boolean = false;
         private content: string = 'rubric';
 
         get store(): ScoreRubricStore {
@@ -136,19 +140,28 @@
         align-items: center;
         justify-content: space-between;
     }
-    ul.menu {
+    .header ul {
         list-style: none; display: flex;
         padding: 8px; margin-bottom: 0;
     }
-    ul.menu li {
+    .header li {
         margin-left: 8px; margin-right: 4px;
         cursor: pointer;
+    }
+    .header li a {
+        text-decoration: none;
     }
     ul.menu li:first-child {
         margin-left: 20px;
     }
-    ul.menu li a {
-        text-decoration: none;
+    ul.tools li:not(.checked) a {
+        color: #999;
+    }
+    ul.tools li.checked a {
+        color: #224e8b;
+    }
+    ul.tools i {
+        margin-right: 4px;
     }
     .save-state {
         margin-right: 20px;
@@ -170,8 +183,9 @@
     .container {
         width: 100%;
         flex: 1;
-        padding-top: 20px;
         background-color: hsla(165, 5%, 90%, 1);
+        padding: 0;
+        /*background-color: hsla(227, 25%, 92%, 1);*/
         display: flex;
         flex-direction: column;
         margin: 0 auto;
