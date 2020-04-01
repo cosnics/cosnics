@@ -6,7 +6,7 @@
 			<i v-else class="fa fa-times-circle muted" />
 		</span>
         <div>
-            <button @click="addNew">Voeg Toe</button>
+            <button @click="addNew" :disabled="!hasInput">Voeg Toe</button>
             <button @click="cancelNew">Annuleer</button>
         </div>
     </div>
@@ -32,6 +32,7 @@
         hasInput: boolean = false;
 
         addNew() {
+            if (!this.hasInput) { return; }
             this.$emit('ok');
         }
 
@@ -104,5 +105,8 @@
     }
     button:hover:nth-child(2) {
         border-color: transparent;
+    }
+    button[disabled] {
+        background: #ccc!important;
     }
 </style>

@@ -17,11 +17,14 @@
 		<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
 			<draggable id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
 					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view1')">
-				<div v-for="category in categoriesView1" @mouseover="criteriumDragging && dragMouseOver($event, `view1_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view1_${category.id}`" :key="`view1_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view1_${category.id}` }">
-					<div class="handle handle-area-category">
+				<div v-for="category in categoriesView1" @mouseover="criteriumDragging && dragMouseOver($event, `view1_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view1_${category.id}`" :key="`view1_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view1_${category.id}`, 'null-category': category.title === '' }">
+					<div v-if="category.title !== ''" class="handle handle-area-category">
 						<a :style="{'background-color': category.color}" tabindex="0" @click="() => openColorPickerForCategory(category)" @keyup.enter.space="() => openColorPickerForCategory(category)"></a>
 						<h2 class="handle-area-category">{{ category.title }}</h2>
 						<swatches v-if="isColorPickerOpened(category)" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+					</div>
+					<div v-else class="handle handle-area-category">
+						<h2 class="handle-area-category">Criteria</h2>
 					</div>
 					<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
 							:move="onMoveCriterium"	@start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
@@ -36,12 +39,15 @@
 				</div>
 				<div slot="footer" class="no-category"></div>
 			</draggable>
-			<div class="actions" v-if="!isAddingCategory">
+			<div class="actions" v-if="!isAddingCategory && !isAddingCriteriumWithoutCategory">
 				<button class="btn-category-add" @click="addCategory"><i class="fa fa-plus" aria-hidden="true"/>Categorie</button>
 				<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium</button>
 			</div>
-			<div v-else class="category newcategory">
+			<div v-else-if="isAddingCategory" class="category newcategory">
 				<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
+			</div>
+			<div v-else-if="isAddingCriteriumWithoutCategory" class="category newcategory">
+				<name-input class="category-new item-new" @ok="addNewCriterium(true)" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
 			</div>
 		</div>
 		<div class="clusters-view" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
@@ -55,10 +61,13 @@
 		<div class="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view2_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view2_categories' }">
 			<draggable id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
 					@start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view2')">
-				<div v-for="category in categoriesView2" class="category" @mouseover="criteriumDragging && dragMouseOver($event, `view2_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view2_${category.id}`" :key="`view2_${category.id}`" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view2_${category.id}` }">
-					<div class="handle handle-area-category">
+				<div v-for="category in categoriesView2" class="category" @mouseover="criteriumDragging && dragMouseOver($event, `view2_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view2_${category.id}`" :key="`view2_${category.id}`" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view2_${category.id}`, 'null-category': category.title === '' }">
+					<div v-if="category.title !== ''" class="handle handle-area-category">
 						<a :style="{'background-color': category.color}" tabindex="0"></a>
 						<h2 class="handle-area-category">{{ category.title }}</h2>
+					</div>
+					<div v-else class="handle handle-area-category">
+						<h2 class="handle-area-category">Criteria</h2>
 					</div>
 					<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
 							:move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
@@ -104,6 +113,7 @@
 		private clusterDialogShown: boolean = false;
 		private isAddingCategory: boolean = false;
 		private isAddingCriterium: boolean = false;
+		private isAddingCriteriumWithoutCategory: boolean = false;
 
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 
@@ -230,6 +240,7 @@
 
 		addCategory() {
 			this.newCategory = new Category();
+			this.newCategory.color = 'transparent';
 			this.isAddingCategory = true;
 		}
 
@@ -245,27 +256,34 @@
 		}
 
 		addCriterium() {
-			this.isAddingCriterium = true;
+			this.selectedCategoryNewCriterium = new Category();
+			this.selectedCategoryNewCriterium.color = '';
+			this.newCriterium = new Criterium();
+			this.isAddingCriteriumWithoutCategory = true;
 		}
 
 		addCriteriumForCategory(category: Category) {
-			const criterium = new Criterium();
 			this.selectedCategoryNewCriterium = category;
-			this.newCriterium = criterium;
+			this.newCriterium = new Criterium();
 			this.isAddingCriterium = true;
 		}
 
-		addNewCriterium(name: string) {
+		addNewCriterium(addCategory : boolean = false) {
 			this.selectedCategoryNewCriterium!.addChild(this.newCriterium!, this.selectedCategoryNewCriterium!.criteria.length);
 			this.newCriterium = null;
+			if (addCategory) {
+				this.selectedClusterView1!.addChild(this.selectedCategoryNewCriterium!, this.selectedClusterView1!.categories.length);
+			}
 			this.selectedCategoryNewCriterium = null;
 			this.isAddingCriterium = false;
+			this.isAddingCriteriumWithoutCategory = false;
 			this.isAddingCategory = false;
 		}
 
 		cancelNewCriterium() {
 			this.newCriterium = null;
 			this.selectedCategoryNewCriterium = null;
+			this.isAddingCriteriumWithoutCategory = false;
 			this.isAddingCriterium = false;
 		}
 
@@ -627,7 +645,7 @@
 	}
 	.category > div:nth-child(1) {
 		background: #dfdfdf;
-		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0) 10px, rgba(0,0,0,0) 19px,  rgba(0,0,0,0.08) 36px);
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0) 10px, rgba(0,0,0,0) 19px, rgba(0,0,0,0.08) 36px);
 		font-weight: bold;
 		border-radius: 4px 4px 0 0;
 	}
@@ -710,6 +728,15 @@
 	.category.ghost > * {
 		visibility: hidden;
 	}
+	.category.null-category > div:nth-child(1) {
+	}
+	.category.null-category > div:nth-child(1) h2 {
+		color: hsla(204, 38%, 36%, 1);
+		font-size: 1.35rem;
+		font-style: oblique;
+	}
+	.category.null-category > div:nth-child(2) > div:first-child {
+		border-top: 1px solid #d6d6d6;
 	}
 
 	.action .add:after { content: "+"; }
