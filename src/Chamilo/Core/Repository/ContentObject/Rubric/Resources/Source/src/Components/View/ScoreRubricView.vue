@@ -7,6 +7,7 @@
 							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
 						<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view1')}" @click="selectCluster(cluster, 'view1')">
 							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
+							<div class="item-actions" @click.stop="showClusterActions"><i class="fa fa-ellipsis-h"/></div>
 						</li>
 					</draggable>
 					<div class="actions">
@@ -24,13 +25,18 @@
 								<a :style="{'background-color': category.color}" tabindex="0" @click="() => openColorPickerForCategory(category)" @keyup.enter.space="() => openColorPickerForCategory(category)"></a>
 								<h2 class="handle-area-category">{{ category.title }}</h2>
 								<swatches v-if="isColorPickerOpened(category)" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+								<div class="item-actions" @click.stop="showCategoryActions"><i class="fa fa-ellipsis-h"/></div>
 							</div>
 							<div v-else class="handle handle-area-category">
 								<h2 class="handle-area-category">Criteria</h2>
+								<div class="item-actions" @click.stop="showCriteriumListActions"><i class="fa fa-ellipsis-h"/></div>
 							</div>
 							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
 									   :move="onMoveCriterium"	@start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
-								<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+								<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">
+									{{ criterium.title }}
+									<div class="item-actions" @click.stop="showCriteriumActions"><i class="fa fa-ellipsis-h"/></div>
+								</div>
 							</draggable>
 							<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: criteriumDragging}">
 								<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
@@ -63,6 +69,7 @@
 							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
 						<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view2')}" @click="selectCluster(cluster, 'view2')">
 							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
+							<div class="item-actions" @click.stop="showClusterActions"><i class="fa fa-ellipsis-h"/></div>
 						</li>
 					</draggable>
 				</div>
@@ -73,13 +80,18 @@
 							<div v-if="category.title !== ''" class="handle handle-area-category">
 								<a :style="{'background-color': category.color}" tabindex="0"></a>
 								<h2 class="handle-area-category">{{ category.title }}</h2>
+								<div class="item-actions" @click.stop="showCategoryActions"><i class="fa fa-ellipsis-h"/></div>
 							</div>
 							<div v-else class="handle handle-area-category">
 								<h2 class="handle-area-category">Criteria</h2>
+								<div class="item-actions" @click.stop="showCriteriumListActions"><i class="fa fa-ellipsis-h"/></div>
 							</div>
 							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
 									   :move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
-								<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
+								<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">
+									{{ criterium.title }}
+									<div class="item-actions" @click.stop="showCriteriumActions"><i class="fa fa-ellipsis-h"/></div>
+								</div>
 							</draggable>
 						</div>
 						<div class="category null-category cluster" v-if="criteriumDragging">
@@ -408,6 +420,22 @@
 			};
 		}
 
+		showClusterActions() {
+			console.log('cluster actions');
+		}
+
+		showCategoryActions() {
+			console.log('category actions');
+		}
+
+		showCriteriumListActions() {
+			console.log('criterium list actions');
+		}
+
+		showCriteriumActions() {
+			console.log('criterium actions');
+		}
+
 		@Watch('store.rubric')
 		onRubricChanged(){
 			console.log("change");
@@ -533,6 +561,7 @@
 		margin-right: 0.7em;
 		padding: 0;
 		color: #444;
+		position: relative;
 	}
 	.clusters li.selected {
 		--background: hsla(190, 40%, 45%, 1);
@@ -544,6 +573,7 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.8em;
+		padding-right: 2.1em;
 		line-height: 1.3em;
 		height: 100%;
 		background: var(--background);
@@ -556,7 +586,7 @@
 	.clusters span:not(:empty) {
 		margin-left: 0.6em;
 	}
-	.clusters:not(.cluster-dragging) li:not(.selected):hover {
+	.container:not(.dragging) .clusters li:not(.selected):hover {
 		--background: hsla(190, 20%, 75%, 1);
 		color: #222;
 	}
@@ -582,7 +612,7 @@
 		user-select: none;
 	}
 	.clusters div {
-		pointer-events: none;
+		/*pointer-events: none;*/
 	}
 	.clusters li.ghost {
 		background: rgba(255, 255, 255, 0.45);
@@ -772,6 +802,9 @@
 		border-radius: 4px;
 		height: 72px;
 	}
+	.handle-area-category {
+		position: relative;
+	}
 	.category.ghost > * {
 		visibility: hidden;
 	}
@@ -874,6 +907,51 @@
 		background: rgba(255, 255, 255, 0.45)!important;
 		border: 1px dotted rgba(28,110,164,0.65);
 		color: transparent;
+	}
+	.criterium {
+		position: relative;
+	}
+	.item-actions {
+		position: absolute;
+		top: 10px;
+		right: 4px;
+		width: 20px;
+		height: 20px;
+		opacity: 0;
+		display: block;
+		background: transparent;
+		text-align: center;
+		border: 1px solid transparent;
+		border-radius: 3px;
+		color: #777;
+		transition: all 200ms;
+		cursor: pointer;
+	}
+	.item-actions, .item-actions i, .clusters li .item-actions i {
+		font-size: 11px;
+	}
+	.container:not(.dragging) .criterium:hover .item-actions, .container:not(.dragging) .handle-area-category:hover .item-actions, .container:not(.dragging) .clusters li:hover .item-actions {
+		opacity: 1;
+	}
+	.clusters li:hover .item-actions {
+		color: #666;
+	}
+	.clusters li.selected:hover .item-actions {
+		color: white;
+	}
+	.item-actions:hover {
+		background: #bbb;
+		color: white;
+	}
+	.clusters li .item-actions:hover {
+		background: hsla(190, 20%, 60%, 1);
+		color: white;
+	}
+	.clusters li.selected .item-actions:hover {
+		background: hsla(190, 40%, 40%, 1);
+	}
+	.criterium.selected .item-actions:hover {
+		background: #a3a3a3;
 	}
 	@keyframes fade-in {
 		from { opacity: 0 }
