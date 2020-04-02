@@ -39,6 +39,10 @@
 								<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
 							</div>
 						</div>
+						<div class="category null-category cluster" v-if="criteriumDragging">
+							<div><h2 class="handle-area-category">Nieuwe lijst met criteria...</h2></div>
+							<draggable tag="div" ghost-class="ghost" swapTreshold="0.75" :list="[]" group="criteria" @end="endDrag" @change="onChangeCriteriumInCluster($event, selectedClusterView1)"></draggable>
+						</div>
 						<div slot="footer" class="no-category"></div>
 					</draggable>
 					<div class="actions" v-if="!isAddingCategory && !isAddingCriteriumWithoutCategory">
@@ -77,6 +81,10 @@
 									   :move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
 								<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">{{ criterium.title }}</div>
 							</draggable>
+						</div>
+						<div class="category null-category cluster" v-if="criteriumDragging">
+							<div><h2 class="handle-area-category">Nieuwe lijst met criteria...</h2></div>
+							<draggable tag="div" ghost-class="ghost" swapTreshold="0.75" :list="[]" group="criteria" @end="endDrag" @change="onChangeCriteriumInCluster($event, selectedClusterView2)"></draggable>
 						</div>
 						<div slot="footer" class="no-category"></div>
 					</draggable>
@@ -238,6 +246,19 @@
 				const category = criterium.parent as Category;
 				category.moveChild(criterium, event.moved.newIndex, event.moved.oldIndex);
 				this.store.moveChild(criterium, category, event.moved.newIndex);
+			}
+		}
+
+		onChangeCriteriumInCluster(event: any, cluster: Cluster) {
+			if (event.added && event.added.element) {
+				const criterium: Criterium = event.added.element;
+				const oldCategory = criterium.parent as Category;
+				oldCategory.removeChild(criterium);
+				const category = new Category();
+				category.color = '';
+				cluster.addChild(category, cluster.categories.length);
+				category.addChild(criterium, event.added.newIndex);
+				this.store.moveChild(criterium, category, event.added.newIndex);
 			}
 		}
 
@@ -756,10 +777,16 @@
 	}
 	.category.null-category > div:nth-child(1) {
 	}
+	.category.null-category.cluster > div:nth-child(1) {
+		background: transparent;
+	}
 	.category.null-category > div:nth-child(1) h2 {
 		color: hsla(204, 38%, 36%, 1);
 		font-size: 1.35rem;
 		font-style: oblique;
+	}
+	.category.null-category.cluster > div:nth-child(1) h2 {
+		color: #999;
 	}
 	.category.null-category > div:nth-child(2) > div:first-child {
 		border-top: 1px solid #d6d6d6;
