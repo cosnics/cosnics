@@ -60,10 +60,13 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
+        // Container START
         $html[] = '<div class="form-row row">';
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">Herhaling</div >';
         $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
         $html[] = '<div class="element">';
+
+        $html[] = '<div class="frequency">';
 
         // Frequency
         $html[] = '<div class="row">';
@@ -78,11 +81,14 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '</div>';
         $html[] = '</div>';
 
+        // Frequency Options START
+        $html[] = '<div class="frequency-options">';
+
         // Daily
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Daily</h4></div></div>';
 
-        $html[] = '<div class="form-group row">';
-        $html[] = '<div class="col-sm-12">';
+        $html[] = '<div class="row frequency-daily">';
+        $html[] = '<div class="form-group col-sm-12">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
 
@@ -101,7 +107,7 @@ class CalendarEventForm extends ContentObjectForm
         // Weekly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Weekly</h4></div></div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-weekly">';
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
@@ -127,7 +133,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-weekly-byday">';
         $html[] = '<span class="input-group-addon">Op</span>';
         $html[] = '<a class="btn btn-default">Ma</a>';
         $html[] = '<a class="btn btn-default btn-primary">Di</a>';
@@ -143,7 +149,7 @@ class CalendarEventForm extends ContentObjectForm
         // Monthly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Monthly</h4></div></div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-monthly">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
@@ -171,7 +177,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-monthly-option">';
         $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
         $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
         $html[] = '</div>';
@@ -179,17 +185,19 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-monthly-byday">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
-        $html[] = '<select name="frequency" class="form-control">';
-        $html[] = '<option>elke</option>';
-        $html[] = '<option>de 1e</option>';
-        $html[] = '<option>de 2e</option>';
-        $html[] = '<option>de 3e</option>';
-        $html[] = '<option>de 4e</option>';
-        $html[] = '<option>de 5e</option>';
-        $html[] = '</select>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->add_select(
+            self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
+            CalendarEvent::get_rank_options(), false
+        );
+
+        $html = array();
+
         $html[] = '</div>';
 
         $html[] = '<div class="form-group col-md-12 col-lg-8">';
@@ -203,7 +211,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-monthly-byday-day">';
         $html[] = '<a class="btn btn-default">Ma</a>';
         $html[] = '<a class="btn btn-default">Di</a>';
         $html[] = '<a class="btn btn-default">Wo</a>';
@@ -216,7 +224,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-monthly-bymonthday">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-12">';
 
@@ -279,7 +287,7 @@ class CalendarEventForm extends ContentObjectForm
         // Yearly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Yearly</h4></div></div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-yearly">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
@@ -307,7 +315,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-yearly-option">';
         $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
         $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
         $html[] = '</div>';
@@ -315,7 +323,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-yearly-byday">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
 
@@ -335,13 +343,13 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
-            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'true', 'style' => 'display: none;')
+            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']', null,
+            CalendarEvent::get_byday_options(), false, array('style' => 'display: none;')
         );
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-yearly-byday-day">';
         $html[] = '<a class="btn btn-default">Ma</a>';
         $html[] = '<a class="btn btn-default">Di</a>';
         $html[] = '<a class="btn btn-default">Wo</a>';
@@ -354,15 +362,15 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-yearly-bymonthday">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-12">';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']', null,
-            CalendarEvent::get_byday_options(), false, array('style' => 'display: none;')
+            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
+            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'true', 'style' => 'display: none;')
         );
 
         $html = array();
@@ -422,15 +430,14 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTH . ']', null, CalendarEvent::get_bymonth_options()
-        );
-
         $html = array();
 
         $html[] = '</div>';
         $html[] = '</div>';
 
+        $html[] = '</div>';
+
+        // Frequency Options END
         $html[] = '</div>';
 
         //Until
@@ -450,7 +457,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html = array();
 
-        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-range">';
         $html[] = '<a class="btn btn-default">Geen einddatum</a>';
         $html[] = '<a class="btn btn-default">Beperkt aantal</a>';
         $html[] = '<a class="btn btn-default btn-primary">Tot</a>';
@@ -459,7 +466,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-range-count">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-12">';
         $html[] = '<div class="input-group">';
@@ -477,7 +484,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row frequency-range-until">';
 
         $html[] = '<div class="form-inline form-group col-md-12 col-lg-12">';
 
@@ -496,10 +503,21 @@ class CalendarEventForm extends ContentObjectForm
 
         // Container END
         $html[] = '</div>';
+
+        $html[] = '</div>';
         $html[] = '<div class="form_feedback"></div>';
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
+
+        $html[] = '<script type="text/javascript">';
+        $html[] = '(function ($) {';
+        $html[] = '    $(document).ready(function () {';
+        $html[] = '        $(".frequency").calendarFrequency({name: "test"});';
+        $html[] = '    })';
+        $html[] = '})(jQuery);';
+
+        $html[] = '</script>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
@@ -508,7 +526,7 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
-            'Dates.min.js'
+            'jquery.calendarFrequency.js'
         )
         );
 
