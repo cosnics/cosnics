@@ -93,7 +93,6 @@ class WidgetItemRenderer extends ItemRenderer
             $html[] = '<div>' . $title . '</div>';
         }
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         $html[] = '<ul class="dropdown-menu">';
@@ -139,6 +138,8 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<div>' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
+
+        $html[] = '</ul>';
 
         $html[] = '</li>';
 

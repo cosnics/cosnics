@@ -300,7 +300,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.elementfinder.js'
         );
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
 
         $exclude_ids = array();
         if (count($this->exclude))

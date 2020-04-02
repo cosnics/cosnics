@@ -31,7 +31,6 @@ class CourseCodeForm extends FormValidator
         $this->build_creating_form();
 
         $this->setDefaults();
-        $this->add_progress_bar(2);
     }
 
     public function build_code_form()

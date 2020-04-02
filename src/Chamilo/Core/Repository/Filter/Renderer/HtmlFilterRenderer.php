@@ -72,10 +72,10 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
 
-        $html[] = '<div class="pull-right search-parameter" id="' . $this->get_parameter_name(self::CLEAR_ALL) . '">';
+        $html[] = '<span class="pull-right search-parameter" id="' . $this->get_parameter_name(self::CLEAR_ALL) . '">';
         $glyph = new FontAwesomeGlyph('times', array('text-muted', 'fas-ci-va'));
         $html[] = $glyph->render();
-        $html[] = '</div>';
+        $html[] = '</span>';
 
         $html[] = Translation::get('SearchParameters');
         $html[] = '</h3>';

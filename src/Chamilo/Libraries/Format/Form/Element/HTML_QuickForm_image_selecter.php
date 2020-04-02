@@ -196,7 +196,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'
         );
 
-        $dropzoneHtml[] = '<script type="text/javascript">';
+        $dropzoneHtml[] = '<script>';
         $dropzoneHtml[] = '$(document).ready(function() {';
         $dropzoneHtml[] =
             '$("#' . $elementName . '-upload-container").fileUpload({' . implode(', ', $dropzoneOptionsString) . '});';
@@ -442,7 +442,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js'
         );
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
 
         $exclude_ids = array();
         if (count($this->exclude))

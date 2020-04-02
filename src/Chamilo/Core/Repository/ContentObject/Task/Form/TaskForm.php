@@ -199,8 +199,8 @@ class TaskForm extends ContentObjectForm
         $until_elements = array();
         $until_elements[] = $this->createElement('radio', self::PARAM_RANGE, '', Translation::get('Until'), 3);
         $until_elements[] = $this->createElement(
-            'datepicker', Task::PROPERTY_UNTIL, '',
-            array('form_name' => $this->getAttribute('name'), 'class' => Task::PROPERTY_UNTIL), true
+            'datepicker', $this->getAttribute('name'),Task::PROPERTY_UNTIL, '',
+            array('class' => Task::PROPERTY_UNTIL), true
         );
         $this->addGroup($until_elements, '', '', null, false);
         $this->addElement('html', '</div>');

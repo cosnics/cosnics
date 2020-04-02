@@ -128,7 +128,7 @@ class FileForm extends ContentObjectForm
 
         $javascriptHtml = array();
 
-        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', false)';
         $javascriptHtml[] = '});';

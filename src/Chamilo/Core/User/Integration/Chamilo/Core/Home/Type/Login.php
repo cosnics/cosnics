@@ -88,7 +88,7 @@ class Login extends BlockRenderer
         $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
         $form->setRequiredNote(null);
         $html =
-            '<script type="text/javascript">$(document).ready(function(){document.formLogin.login.focus();});</script>';
+            '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
         $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');

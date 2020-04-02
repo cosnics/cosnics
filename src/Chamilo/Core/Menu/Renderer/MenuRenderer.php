@@ -272,6 +272,8 @@ class MenuRenderer
         $html = array();
 
         $html[] = '</ul>';
+        $html[] = '</div>';
+        $html[] = '</div>';
         $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);

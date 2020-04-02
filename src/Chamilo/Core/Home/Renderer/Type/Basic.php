@@ -75,13 +75,13 @@ class Basic extends Renderer
 
         if ($isEditable)
         {
-            $html[] = '<script type="text/javascript" src="' .
+            $html[] = '<script src="' .
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
 
         if ($this->isGeneralMode())
         {
-            $html[] = '<script type="text/javascript" src="' .
+            $html[] = '<script src="' .
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' .
                 '"></script>';
         }
@@ -102,7 +102,7 @@ class Basic extends Renderer
         $html[] = $this->renderContent();
 
         $html[] =
-            '<script type="text/javascript" src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
+            '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
             'HomeView.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
@@ -245,7 +245,7 @@ class Basic extends Renderer
 
         $html[] = $angularConnectorService->loadAngularModules();
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '(function(){';
         $html[] = '    var homeApp = angular.module(\'homeApp\', [' . $moduleString . ']);';
         $html[] = '    homeApp.filter(\'arrayToString\', function() { return function(x) { return x; }; });';

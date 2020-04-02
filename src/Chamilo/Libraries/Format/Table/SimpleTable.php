@@ -224,7 +224,7 @@ class SimpleTable extends HTML_Table
                  $this->tablename . '">';
             $html[] = parent::toHTML();
 
-            $html[] = '<script type="text/javascript">';
+            $html[] = '<script>';
             $html[] = '  function select(bool)';
             $html[] = '  {';
             $html[] = '    var d = document["' . $this->tablename . '"];

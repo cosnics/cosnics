@@ -91,7 +91,7 @@ abstract class Embedder
         $namespace = $this->get_application()->get_application()->package() .
             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax';
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '    var trackerId = "' . $activeAttemptId . '";';
         $html[] = '    var trackerContext = ' . json_encode($namespace) . ';';
         $html[] = '</script>';

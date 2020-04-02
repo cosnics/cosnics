@@ -45,7 +45,7 @@ class RepositoryViewerComponent extends Manager
             $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
             $object = DataManager::retrieve_by_id(File::class_name(), $object_id);
 
-            $html[] = '<script type="text/javascript">';
+            $html[] = '<script>';
             $html[] = 'window.opener.$("input[name=' . $element_name . '_title]").val("' . addslashes(
                 $object->get_title()) . '");';
             $html[] = 'window.opener.$("input[name=' . $element_name . ']").val("' . addslashes($object->get_id()) .

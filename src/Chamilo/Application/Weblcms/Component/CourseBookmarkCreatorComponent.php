@@ -96,7 +96,7 @@ class CourseBookmarkCreatorComponent extends Manager
             if ($success)
             {
                 $html[] = Translation::get('CreatingBookmarkSuccess');
-                $html[] = '<script type="text/javascript">window.close()</script>';
+                $html[] = '<script>window.close()</script>';
             }
             else
             {

@@ -147,7 +147,7 @@ abstract class Manager extends Application
 
                 if ($available_instances == 1 && $auto_open)
                 {
-                    $html[] = '<script type="text/javascript">';
+                    $html[] = '<script>';
                     $html[] = '$(document).ready(function ()';
                     $html[] = '{';
                     // htmlspecialchars converts & to &amp; -> need oher solution

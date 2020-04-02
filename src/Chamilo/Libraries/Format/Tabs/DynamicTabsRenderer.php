@@ -82,7 +82,7 @@ class DynamicTabsRenderer
         $html = array();
 
         $html[] = '</div>';
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
 
         $html[] = '$(\'#' . $this->name . 'Tabs a\').click(function (e) {
   e.preventDefault()

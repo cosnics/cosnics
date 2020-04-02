@@ -21,18 +21,24 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     private $includeTimePicker;
 
     /**
+     * @var string
+     */
+    private $formName;
+
+    /**
      * HTML_QuickForm_datepicker constructor.
      *
+     * @param string $formName
      * @param string $elementName
      * @param string $elementLabel
      * @param string $attributes
      * @param boolean $includeTimePicker
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $attributes = null, $includeTimePicker = true
+        $formName = null, $elementName = null, $elementLabel = null, $attributes = null, $includeTimePicker = true
     )
     {
-        if (!isset($attributes['form_name']))
+        if (!isset($formName))
         {
             return;
         }
@@ -46,6 +52,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->_appendName = true;
         $this->_type = 'datepicker';
         $this->includeTimePicker = $includeTimePicker;
+        $this->formName = $formName;
 
         $this->_options['format'] = $this->getDateFormat($elementName, $attributes, $includeTimePicker);
         $this->_options['minYear'] = date('Y') - 5;
@@ -103,11 +110,12 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function getDateFormat($elementName, $attributes, $includeTimePicker)
     {
-        $js_form_name = $attributes['form_name'];
+        $js_form_name = $this->formName;
         $glyph = new FontAwesomeGlyph('calendar-alt');
 
-        $popupLink = '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')">' .
-            $glyph->render() . '</a>';
+        $popupLink =
+            '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName .
+            '\')">' . $glyph->render() . '</a>';
         $specialCharacters = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
         $hourMinuteDivider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
 
@@ -140,7 +148,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
         );
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = 'var max_year="' . (date('Y') + 10) . '";';
         $html[] = '</script>';
 

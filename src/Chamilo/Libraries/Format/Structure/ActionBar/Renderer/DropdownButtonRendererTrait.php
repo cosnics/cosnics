@@ -99,6 +99,6 @@ trait DropdownButtonRendererTrait
      */
     public function renderDropdownAttributes()
     {
-        return 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"';
+        return 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"';
     }
 }

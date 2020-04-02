@@ -10,37 +10,25 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
+ * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Form
  *
- * @package repository.lib.content_object.calendar_event
- * @author Hans De Bisschop
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
- */
-
-/**
- * This class represents a form to create or update calendar events
  */
 class CalendarEventForm extends ContentObjectForm
 {
     const PARAM_DAILY = 'daily';
-
     const PARAM_DAY = 'day';
-
-    const PARAM_FREQUENCY_RANGE = 'frequency_range';
-
     const PARAM_MONTHLY = 'monthly';
-
     const PARAM_OPTION = 'option';
-
     const PARAM_RANGE = 'range';
-
     const PARAM_RANK = 'rank';
-
     const PARAM_WEEKLY = 'weekly';
-
     const PARAM_YEARLY = 'yearly';
 
-    // Inherited
-
+    /**
+     * @throws \Exception
+     */
     public function add_calendar_form()
     {
         $this->addElement('category', Translation::get('Properties'));
@@ -430,6 +418,10 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
+        $this->add_select(
+            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTH . ']', '', CalendarEvent::get_bymonth_options()
+        );
+
         $html = array();
 
         $html[] = '</div>';
@@ -491,8 +483,8 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->addElement(
-            'datepicker', CalendarEvent::PROPERTY_UNTIL, '',
-            array('form_name' => $this->getAttribute('name'), 'class' => CalendarEvent::PROPERTY_UNTIL), true
+            'datepicker', $this->getAttribute('name'), CalendarEvent::PROPERTY_UNTIL, '',
+            array('class' => CalendarEvent::PROPERTY_UNTIL), true
         );
 
         $html = array();
@@ -510,7 +502,7 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '(function ($) {';
         $html[] = '    $(document).ready(function () {';
         $html[] = '        $(".frequency").calendarFrequency({name: "test"});';
@@ -547,6 +539,11 @@ class CalendarEventForm extends ContentObjectForm
         $this->add_calendar_form();
     }
 
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent $object
+     *
+     * @return mixed
+     */
     public function configure_calendar_event($object)
     {
         $values = $this->exportValues();

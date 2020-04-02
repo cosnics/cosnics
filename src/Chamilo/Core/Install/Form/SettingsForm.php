@@ -191,7 +191,7 @@ class SettingsForm extends FormValidator
 
         $html = array();
 
-        $html[] = '<script type="text/javascript" src="' .
+        $html[] = '<script src="' .
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
         $html[] = '</div>';
 

@@ -131,7 +131,7 @@ class FormValidatorHtmlEditor
     {
         $javascript = array();
 
-        $javascript[] = '<script type="text/javascript">';
+        $javascript[] = '<script>';
         $javascript[] =
             'window.CKEDITOR_BASEPATH = "' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
             '" + "HtmlEditor/Ckeditor/"';
@@ -218,7 +218,7 @@ class FormValidatorHtmlEditor
         $scripts[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js'
         );
-        $scripts[] = '<script type="text/javascript">';
+        $scripts[] = '<script>';
         $scripts[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
         $scripts[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\';';
         $scripts[] = '</script>';
@@ -240,7 +240,7 @@ class FormValidatorHtmlEditor
     {
         $javascript = array();
 
-        $javascript[] = '<script type="text/javascript">';
+        $javascript[] = '<script>';
         $javascript[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\'';
         $javascript[] = '$(function ()';
         $javascript[] = '{';

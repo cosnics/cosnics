@@ -75,7 +75,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     {
         $html = [];
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
 
         $html[] = 'Raven.config(\'' . $this->sentryConnectionString . '\',{';
         $html[] = '}).install();';

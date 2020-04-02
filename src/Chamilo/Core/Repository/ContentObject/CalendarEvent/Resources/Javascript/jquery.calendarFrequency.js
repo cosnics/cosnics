@@ -11,8 +11,7 @@
                  * Initializes the advanced element finder
                  */
                 function init() {
-                    $('.frequency-options').hide();
-                    alert('test');
+                    // $('.frequency-options').hide();
 
 
                     // // Initalise global variables

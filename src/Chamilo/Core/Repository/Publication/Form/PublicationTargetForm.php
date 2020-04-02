@@ -201,7 +201,7 @@ class PublicationTargetForm extends FormValidator
         );
 
         $this->addElement(
-            'html', '<script type="text/javascript" src="' .
+            'html', '<script src="' .
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
             '"></script>'
         );

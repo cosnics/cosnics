@@ -61,7 +61,7 @@ class Processor extends HtmlEditorProcessor
         }
 
         $html = array();
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = 'window.opener.CKEDITOR.tools.callFunction(' . $this->get_parameter('CKEditorFuncNum') . ', "' .
             $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' .
             ', "' . $type . '"' . ');';

@@ -118,7 +118,7 @@ class SplitPanelRenderer
         // TODO: replace this with a decent include once the chamilo included jquery ui has been updated to the right
         // version
         $html[] = '<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>';
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '$(document).ready(function () {
             var npanels = ' . sizeof($this->panels) . ';
             var i;

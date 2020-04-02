@@ -168,7 +168,6 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($this->form_type != self::TYPE_COMPARE)
         {
-            $this->add_progress_bar(2);
             $this->add_footer();
         }
         $this->setDefaults();

@@ -84,7 +84,7 @@ class TagsFormBuilder
         
         $html = array();
         
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '$(\'#tagsinput\').tagsinput({';
         $html[] = 'typeahead: {';
         $html[] = 'name: \'tags\',';

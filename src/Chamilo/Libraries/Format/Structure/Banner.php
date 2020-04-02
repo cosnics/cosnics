@@ -159,8 +159,6 @@ class Banner
                 '</a></div>';
         }
 
-        $html[] = '<a name="top"></a>';
-
         $html[] = $this->getMenuRenderer()->render($this->getContainerMode(), $user);
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)

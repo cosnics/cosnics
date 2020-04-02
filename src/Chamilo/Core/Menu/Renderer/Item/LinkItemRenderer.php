@@ -77,7 +77,6 @@ class LinkItemRenderer extends ItemRenderer
             $html[] = '<div>' . $title . '</div>';
         }
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
         $html[] = '</li>';
 

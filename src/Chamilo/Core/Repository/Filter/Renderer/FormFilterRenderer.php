@@ -75,45 +75,6 @@ class FormFilterRenderer extends FilterRenderer
         $this->renderer = clone $this->form_validator->defaultRenderer();
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function get_user_id()
-    {
-        return $this->user_id;
-    }
-
-    /**
-     *
-     * @param int $user_id
-     */
-    public function set_user_id($user_id)
-    {
-        $this->user_id = $user_id;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_content_object_types()
-    {
-        return $this->content_object_types;
-    }
-
-    /**
-     *
-     * @param string[] $content_object_types
-     */
-    public function set_content_object_types($content_object_types)
-    {
-        $this->content_object_types = $content_object_types;
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\FilterRenderer::render()
-     */
     public function render()
     {
         $this->build();
@@ -125,22 +86,17 @@ class FormFilterRenderer extends FilterRenderer
         return $this->renderer->toHtml();
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    public function get_form_validitor()
+    function add_footer()
     {
-        return $this->form_validator;
-    }
-
-    /**
-     *
-     * @return HTML_QuickForm_Renderer_Default
-     */
-    public function get_renderer()
-    {
-        return $this->renderer;
+        $this->form_validator->addElement(
+            'html', ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Search.js'
+        )
+        );
+        $this->form_validator->addElement(
+            'style_button', 'submit', Translation::get('Search', array(), Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph('search')
+        );
     }
 
     public function build()
@@ -198,7 +154,7 @@ class FormFilterRenderer extends FilterRenderer
 
         $this->renderer->setGroupElementTemplate(
             '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>',
+        <span class="input-group-addon input-group-filter-date input-sm">{label}</span>{element}</div>',
             FilterData::FILTER_CREATION_DATE
         );
 
@@ -226,7 +182,7 @@ class FormFilterRenderer extends FilterRenderer
 
         $this->renderer->setGroupElementTemplate(
             '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>',
+        <span class="input-group-addon input-group-filter-date input-sm">{label}</span>{element}</div>',
             FilterData::FILTER_MODIFICATION_DATE
         );
 
@@ -257,18 +213,27 @@ class FormFilterRenderer extends FilterRenderer
         }
     }
 
-    function add_footer()
+    /**
+     *
+     * @param \core\repository\filter\FilterData $filter_data
+     * @param int $user_id
+     * @param string[] $content_object_types
+     * @param string $url ;
+     *
+     * @return \core\repository\filter\renderer\FormFilterRenderer
+     */
+    public static function factory(
+        FilterData $filter_data, WorkspaceInterface $workspace, $user_id, $content_object_types, $url
+    )
     {
-        $this->form_validator->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Search.js'
-        )
-        );
-        $this->form_validator->addElement(
-            'style_button', 'submit', Translation::get('Search', array(), Utilities::COMMON_LIBRARIES), null, null,
-            new FontAwesomeGlyph('search')
-        );
+        $class_name = $filter_data->get_context() . '\Filter\Renderer\FormFilterRenderer';
+
+        return new $class_name($filter_data, $workspace, $user_id, $content_object_types, $url);
     }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\FilterRenderer::render()
+     */
 
     /**
      *
@@ -281,6 +246,60 @@ class FormFilterRenderer extends FilterRenderer
         $menu->render($renderer, 'sitemap');
 
         return array(- 1 => '-- ' . Translation::get('SelectACategory') . ' --') + $renderer->toArray();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_content_object_types()
+    {
+        return $this->content_object_types;
+    }
+
+    /**
+     *
+     * @param string[] $content_object_types
+     */
+    public function set_content_object_types($content_object_types)
+    {
+        $this->content_object_types = $content_object_types;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Form\FormValidator
+     */
+    public function get_form_validitor()
+    {
+        return $this->form_validator;
+    }
+
+    /**
+     *
+     * @return HTML_QuickForm_Renderer_Default
+     */
+    public function get_renderer()
+    {
+        return $this->renderer;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_user_id()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     *
+     * @param int $user_id
+     */
+    public function set_user_id($user_id)
+    {
+        $this->user_id = $user_id;
     }
 
     /**
@@ -332,23 +351,5 @@ class FormFilterRenderer extends FilterRenderer
             $modification_date[FilterData::FILTER_TO_DATE];
 
         $this->form_validator->setDefaults($defaults);
-    }
-
-    /**
-     *
-     * @param \core\repository\filter\FilterData $filter_data
-     * @param int $user_id
-     * @param string[] $content_object_types
-     * @param string $url ;
-     *
-     * @return \core\repository\filter\renderer\FormFilterRenderer
-     */
-    public static function factory(
-        FilterData $filter_data, WorkspaceInterface $workspace, $user_id, $content_object_types, $url
-    )
-    {
-        $class_name = $filter_data->get_context() . '\Filter\Renderer\FormFilterRenderer';
-
-        return new $class_name($filter_data, $workspace, $user_id, $content_object_types, $url);
     }
 }

@@ -60,30 +60,19 @@ class Banner
     {
         $html = array();
 
-        $html[] = '<a name="top"></a>';
-        $html[] = '<nav class="navbar navbar-chamilo navbar-default navbar-no-items">';
+        $html[] = '<nav class="navbar navbar-chamilo navbar-inverse">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
-
-        $html[] =
-            '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
-        $html[] = '<span class="sr-only">Toggle navigation</span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '<span class="icon-bar"></span>';
-        $html[] = '</button>';
 
         $brandSource = $this->getThemePathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
         $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
 
-        $html[] = '<a class="navbar-brand" href="' . $pathBuilder->getBasePath(true) . '">' . '<img alt="' .
-            Translation::get('ChamiloInstallationTitle') . '" src="' . $brandSource . '"></a>';
+        $html[] = '<a class="navbar-brand" href="' . $pathBuilder->getBasePath(true) . '">';
+        $html[] = '<img alt="' . Translation::get('ChamiloInstallationTitle') . '" src="' . $brandSource . '">';
+        $html[] = '</a>';
 
         $html[] = '</div>';
-        $html[] = '<div class="collapse navbar-collapse" id="menu-navbar-collapse">';
-        $html[] = '<ul class="nav navbar-nav navbar-right">';
-
-        $html[] = '</ul>';
+        $html[] = '</div>';
         $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);

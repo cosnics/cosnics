@@ -137,7 +137,7 @@ class BaseHeader implements HeaderInterface
     /**
      * Adds a css file
      */
-    public function addCssFile($file, $media = 'screen,projection')
+    public function addCssFile($file, $media = 'screen')
     {
         $header = '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $file . '" />';
         $this->addHtmlHeader($header);
@@ -160,7 +160,6 @@ class BaseHeader implements HeaderInterface
             $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
         );
 
-        $this->addHtmlHeader('<meta charset="utf-8">');
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
@@ -188,7 +187,7 @@ class BaseHeader implements HeaderInterface
         $this->addExceptionLogger($fileConfigurationConsulter);
 
         $this->addHtmlHeader(
-            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
+            '<script>var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
         );
 
         $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
@@ -241,7 +240,7 @@ class BaseHeader implements HeaderInterface
      */
     public function addJavascriptFile($file)
     {
-        $header[] = '<script type="text/javascript" src="' . $file . '"></script>';
+        $header[] = '<script src="' . $file . '"></script>';
         $this->addHtmlHeader(implode(' ', $header));
     }
 

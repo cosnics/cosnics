@@ -103,7 +103,6 @@ class CategoryItemRenderer extends ItemRenderer
             $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
         }
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         if ($this->getItemCacheService()->doesItemHaveChildren($item))

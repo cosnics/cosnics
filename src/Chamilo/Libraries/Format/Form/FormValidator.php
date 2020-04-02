@@ -50,12 +50,6 @@ class FormValidator extends HTML_QuickForm
     private $html_editors;
 
     /**
-     *
-     * @var boolean
-     */
-    private $with_progress_bar;
-
-    /**
      * Constructor
      *
      * @param string $formName Name of the form
@@ -109,7 +103,7 @@ class FormValidator extends HTML_QuickForm
             }
         }
 
-        $return_value = '';
+        $html = array();
 
         if ($this->no_errors)
         {
@@ -129,18 +123,13 @@ EOT;
         }
         elseif ($error)
         {
-            $return_value .= Display::error_message(Translation::get('FormHasErrorsPleaseComplete'), true);
+
+            $html[] = Display::error_message(Translation::get('FormHasErrorsPleaseComplete'), true);
         }
 
-        $return_value .= parent::toHtml();
-        // Add the div which will hold the progress bar
+        $html[] = parent::toHtml();
 
-        if ($this->with_progress_bar)
-        {
-            $return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px;"></div>';
-        }
-
-        return $return_value;
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -276,7 +265,7 @@ EOT;
 
         $javascriptHtml = array();
 
-        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] =
             '$("#' . $elementName . '-upload-container").fileUpload({' . implode(', ', $dropzoneOptionsString) . '});';
@@ -445,8 +434,7 @@ EOT;
     public function add_datepicker($name, $label, $includeTimePicker = true)
     {
         $element = $this->addElement(
-            'datepicker', $name, $label, array('form_name' => $this->getAttribute('name'), 'class' => $name),
-            $includeTimePicker
+            'datepicker', $this->getAttribute('name'), $name, $label, array('class' => $name), $includeTimePicker
         );
         $this->addRule($name, Translation::get('InvalidDate'), 'date');
         $this->get_renderer()->setElementTemplate($this->getDatePickerElementTemplate(), $name);
@@ -487,7 +475,7 @@ EOT;
         $html = array();
         if ($type == 'script_block')
         {
-            $html[] = '<script type="text/javascript">';
+            $html[] = '<script>';
             $html[] = 'function showElement(item)';
             $html[] = '{';
             $html[] = '	if (document.getElementById(item).style.display == \'block\')';
@@ -504,7 +492,7 @@ EOT;
         }
         elseif ($type == 'script_radio')
         {
-            $html[] = '<script type="text/javascript">';
+            $html[] = '<script>';
             $html[] = 'function showRadio(type, item)';
             $html[] = '{';
             $html[] = '	if (type == \'A\')';
@@ -594,7 +582,7 @@ EOT;
         );
         $this->addGroup($choices, null, Translation::get($elementLabel), '<br />', false);
         $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="forever_timewindow">');
-        $this->addElement('datepicker', $elementName, '', array('form_name' => $this->getAttribute('name')), false);
+        $this->addElement('datepicker', $this->getAttribute('name'), $elementName, '', array(), false);
         $this->addElement('html', '</div>');
         $this->addElement(
             'html', "<script type=\"text/javascript\">
@@ -726,32 +714,6 @@ EOT;
         }
 
         return $element;
-    }
-
-    /**
-     * Adds a progress bar to the form.
-     * Once the user submits the form, a progress bar (animated gif) is displayed. The
-     * progress bar will disappear once the page has been reloaded.
-     *
-     * @param integer $delay
-     */
-    public function add_progress_bar($delay = 2)
-    {
-        $this->with_progress_bar = true;
-        $glyph = new FontAwesomeGlyph('fa-spinner', array('fa-spin'), null, 'fas');
-
-        $this->updateAttributes(
-            "onsubmit=\"javascript: myUpload.start('dynamic_div','" . $glyph->render() . "','" .
-            Translation::get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\""
-        );
-        $this->addElement(
-            'html', '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'Upload.js" type="text/javascript"></script>'
-        );
-        $this->addElement(
-            'html',
-            '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ')</script>'
-        );
     }
 
     /**
@@ -1099,7 +1061,7 @@ EOT;
     {
         $javascriptHtml = array();
 
-        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', true)';
         $javascriptHtml[] = '});';

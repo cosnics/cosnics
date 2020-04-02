@@ -608,7 +608,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $html[] = $content;
         $html[] = '</div>';
 
-        $html[] = '<script type="text/javascript" src="' .
+        $html[] = '<script src="' .
             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseHome.js' .
             '"></script>';
 

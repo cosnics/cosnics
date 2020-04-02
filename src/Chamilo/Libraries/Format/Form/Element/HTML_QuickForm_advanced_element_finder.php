@@ -315,7 +315,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
             'Plugin/Jquery/jquery.advelementfinder.js'
         );
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
 
         if ($this->default_values)
         {

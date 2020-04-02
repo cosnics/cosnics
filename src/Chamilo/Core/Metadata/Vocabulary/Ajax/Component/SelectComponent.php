@@ -106,7 +106,7 @@ class SelectComponent extends Manager implements TableSupport
             $plugin_path = Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
                  'Plugin/Bootstrap/Tagsinput/';
             
-            $html[] = '<script type="text/javascript">';
+            $html[] = '<script>';
             $html[] = 'var selectedVocabularyItems = ' . json_encode($vocabularyItemValues) . ';';
             $html[] = 'var elementIdentifier = ' . json_encode(
                 $this->getRequest()->query->get(

@@ -121,7 +121,7 @@ class Utilities
     {
         $html = array();
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] .= 'function showElement(item)';
         $html[] .= '{';
         $html[] .= '	if (document.getElementById(item).style.display == \'block\')';

@@ -82,7 +82,7 @@ class CalendarPopupComponent extends \Chamilo\Libraries\Ajax\Manager implements 
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js');
 
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = '/* <![CDATA[ */';
         $html[] = 'var month_names = new Array(';
 
@@ -104,7 +104,7 @@ class CalendarPopupComponent extends \Chamilo\Libraries\Ajax\Manager implements 
 
         $html[] = '<div id="calendar_data"></div>';
         $html[] = '<div id="clock_data"></div>';
-        $html[] = '<script type="text/javascript">';
+        $html[] = '<script>';
         $html[] = 'initCalendar(' . $start_of_week_identifier . ');';
         $html[] = '</script>';
         $html[] = $this->render_footer();

@@ -47,7 +47,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             'px;background-image: url(' . Manager::get_document_downloader_url(
                 $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
-        $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
+        $html[] = '<script src="' . htmlspecialchars(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                 'Plugin/jquery.draw.js'
             ) . '"></script>';

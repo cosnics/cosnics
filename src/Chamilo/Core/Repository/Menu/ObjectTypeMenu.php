@@ -135,7 +135,7 @@ class ObjectTypeMenu extends HtmlMenu
             $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item['title'] = $category->get_name();
             $menu_item['url'] = $this->get_category_url($category->get_type());
-            $menu_item[OptionsMenuRenderer::KEY_ID] = $category;
+            $menu_item[OptionsMenuRenderer::KEY_ID] = $category->get_type();
 
             $sub_menu_items = array();
 

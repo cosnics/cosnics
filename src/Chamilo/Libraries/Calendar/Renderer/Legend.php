@@ -228,7 +228,7 @@ class Legend
 
             if ($this->getDataProvider()->supportsVisibility())
             {
-                $result[] = '<script type="text/javascript">';
+                $result[] = '<script>';
                 $result[] = 'var calendarVisibilityContext = ' .
                      json_encode($this->getDataProvider()->getVisibilityContext()) . ';';
                 $result[] = '</script>';
