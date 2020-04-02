@@ -174,10 +174,10 @@ EOT;
         $dropzoneHtml[] = $glyph->render();
 
         $dropzoneHtml[] = '</div>';
-        $dropzoneHtml[] = '<img data-dz-thumbnail />';
+        $dropzoneHtml[] = '<img data-dz-thumbnail alt="Dropzone Thumbnail" />';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="caption">';
-        $dropzoneHtml[] = '<h3 data-dz-name></h3>';
+        $dropzoneHtml[] = '<h3 data-dz-name>Dropzone Name</h3>';
         $dropzoneHtml[] = '<strong class="error text-danger" data-dz-errormessage></strong>';
         $dropzoneHtml[] = '<p class="size" data-dz-size></p>';
         $dropzoneHtml[] = '<div>';

@@ -116,7 +116,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->add_select(
             self::PARAM_WEEKLY . '[' . CalendarEvent::PROPERTY_BYDAY . ']', null, CalendarEvent::get_byday_options(),
-            false, array('multiple' => 'true', 'style' => 'display: none;')
+            false, array('multiple' => 'multiple', 'style' => 'display: none;')
         );
 
         $html = array();
@@ -220,7 +220,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->add_select(
             self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
-            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'true', 'style' => 'display: none;')
+            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'multiple', 'style' => 'display: none;')
         );
 
         $html = array();
@@ -235,8 +235,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">7</a>';
         $html[] = '<a class="btn btn-default">8</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">9</a>';
         $html[] = '<a class="btn btn-default btn-primary">10</a>';
         $html[] = '<a class="btn btn-default">11</a>';
@@ -246,8 +246,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">15</a>';
         $html[] = '<a class="btn btn-default">16</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">17</a>';
         $html[] = '<a class="btn btn-default">18</a>';
         $html[] = '<a class="btn btn-default">19</a>';
@@ -257,8 +257,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default btn-primary">23</a>';
         $html[] = '<a class="btn btn-default">24</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">25</a>';
         $html[] = '<a class="btn btn-default">26</a>';
         $html[] = '<a class="btn btn-default">27</a>';
@@ -268,6 +268,7 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">31</a>';
         $html[] = '<a class="btn btn-default">Last</a>';
         $html[] = '</div>';
+
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -358,7 +359,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->add_select(
             self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
-            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'true', 'style' => 'display: none;')
+            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'multiple', 'style' => 'display: none;')
         );
 
         $html = array();
@@ -373,8 +374,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">7</a>';
         $html[] = '<a class="btn btn-default">8</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">9</a>';
         $html[] = '<a class="btn btn-default btn-primary">10</a>';
         $html[] = '<a class="btn btn-default">11</a>';
@@ -384,8 +385,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">15</a>';
         $html[] = '<a class="btn btn-default">16</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">17</a>';
         $html[] = '<a class="btn btn-default">18</a>';
         $html[] = '<a class="btn btn-default">19</a>';
@@ -395,8 +396,8 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default btn-primary">23</a>';
         $html[] = '<a class="btn btn-default">24</a>';
         $html[] = '</div>';
-        $html[] = '<div class="btn-group btn-group-justified">';
 
+        $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">25</a>';
         $html[] = '<a class="btn btn-default">26</a>';
         $html[] = '<a class="btn btn-default">27</a>';
@@ -404,8 +405,9 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">29</a>';
         $html[] = '<a class="btn btn-default btn-primary">30</a>';
         $html[] = '<a class="btn btn-default">31</a>';
-        $html[] = '<a class="btn btn-default" disabled="disabled"></a>';
+        $html[] = '<a class="btn btn-default"></a>';
         $html[] = '</div>';
+
         $html[] = '</div>';
 
         $html[] = '</div>';
