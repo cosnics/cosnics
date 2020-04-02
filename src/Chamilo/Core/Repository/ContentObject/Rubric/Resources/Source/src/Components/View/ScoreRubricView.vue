@@ -416,7 +416,8 @@
 		get mainClass() {
 			return {
 				'dragging': this.initiatedDrag !== '',
-				'not-allowed': this.bannedForDrop !== '' && this.overElementId === this.bannedForDrop
+				'not-allowed': this.bannedForDrop !== '' && this.overElementId === this.bannedForDrop,
+				'split-view': this.split
 			};
 		}
 
@@ -528,10 +529,13 @@
 		overflow: hidden;
 	}
 	.container > div > div {
-		height: 50%;
+		height: 100%;
 		overflow-x: hidden;
 		display: flex;
 		flex-direction: column;
+	}
+	.container.split-view > div > div {
+		height: 50%;
 	}
 	.container > div > div:nth-child(2) {
 		border-top: 1px solid hsl(200, 25%, 80%);
