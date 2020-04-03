@@ -192,7 +192,7 @@ export default class Rubric extends TreeNode {
 
     public getChoiceScore(criterium: Criterium, level: Level){
         let choice = this.getChoice(criterium, level);
-        if(choice.hasFixedScore)
+        if (choice.hasFixedScore)
             return choice.fixedScore;
 
         return Math.round(criterium.weight * level.score) / 100;

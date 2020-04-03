@@ -16,7 +16,9 @@
                                   placeholder="Geef feedback"
                                   @input="updateHeight"></textarea>
                         <div v-if="store.rubric.useScores" class="level-score">
-                            <input type="number" disabled v-model="store.rubric.getChoiceScore(criterium, level)" />
+                            <div v-if="hasFixedScore(criterium, level)" class="remove-fixed" @click="removeFixedScore(criterium, level) "><i class="fa fa-minus-circle" /></div>
+                            <input class="fixed-score" type="number" v-if="hasFixedScore(criterium, level)" v-model="store.rubric.getChoice(criterium, level).fixedScore"/>
+                            <input type="number" v-else v-model="store.rubric.getChoiceScore(criterium, level)" @input="changeChoiceScore($event, criterium, level)"/>
                         </div>
                     </div>
                 </li>
@@ -28,6 +30,8 @@
 <script lang="ts">
     import {Component, Vue, Prop, Watch} from "vue-property-decorator";
     import Criterium from "../../Domain/Criterium";
+    import Level from "../../Domain/Level";
+    import Choice from "../../Domain/Choice";
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
@@ -53,6 +57,27 @@
         updated() {
             for (let elem of document.getElementsByClassName('ta-feedback')) {
                 updateHeight(elem as HTMLElement);
+            }
+        }
+
+        hasFixedScore(criterium: Criterium, level: Level) : boolean {
+            return this.store.rubric.getChoice(criterium, level).hasFixedScore;
+        }
+
+        removeFixedScore(criterium: Criterium, level: Level) {
+            const choice = this.store.rubric.getChoice(criterium, level);
+            choice.hasFixedScore = false;
+            choice.fixedScore = Choice.FIXED_SCORE;
+            this.$forceUpdate();
+        }
+
+        changeChoiceScore(event: any, criterium: Criterium, level: Level) {
+            const value = parseFloat(event.target.value);
+            if (!isNaN(value)) {
+                const choice = this.store.rubric.getChoice(criterium, level);
+                choice.hasFixedScore = true;
+                choice.fixedScore = value;
+                this.$forceUpdate();
             }
         }
     }
@@ -116,6 +141,7 @@
     .level-title { font-weight: bold; }
     .level-input { display: flex; flex-direction: row;}
     .level-score { width: 50px; margin-left: 8px;}
+    .level-score { position: relative; }
     .level-score input[type="number"] {
         font-size: 18px;
         width: 55px;
@@ -189,6 +215,30 @@
         border: 1px solid hsla(200, 50%, 50%, 0.5);
     }
 
+    .level-score input.fixed-score, .level-score input.fixed-score:focus {
+        background: hsl(100, 55%, 75%);
+    }
+    .remove-fixed {
+        position: absolute;
+        left: -18px;
+        width: 18px;
+        height: 25px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: transparent;
+    }
+    .remove-fixed i {
+        color: transparent;
+        transition: color 200ms;
+    }
+    li:hover .remove-fixed i {
+        color: #999;
+    }
+    li:hover .remove-fixed:hover i {
+        color: #d9534f;
+    }
     .description {
         color: #999;
         cursor: pointer;

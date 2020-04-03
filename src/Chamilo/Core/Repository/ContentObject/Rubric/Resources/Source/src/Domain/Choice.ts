@@ -12,6 +12,7 @@ export default class Choice {
     public feedback: string;
     public hasFixedScore: boolean = false;
     public fixedScore: number = 10;
+    public static readonly FIXED_SCORE = 10;
 
     constructor(selected: boolean = false, feedback: string = '') {
         this.selected = selected;
