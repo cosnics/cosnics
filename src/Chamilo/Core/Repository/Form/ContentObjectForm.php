@@ -319,7 +319,7 @@ abstract class ContentObjectForm extends FormValidator
             $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
 
             $this->addElement(
-                'category', '<a href="#">' . Translation::get('Attachments') . '</a>'
+                'category', Translation::get('Attachments')
             );
 
             $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);

@@ -69,13 +69,10 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '</div>';
         $html[] = '</div>';
 
-        // Frequency Options START
-        $html[] = '<div class="frequency-options">';
-
         // Daily
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Daily</h4></div></div>';
 
-        $html[] = '<div class="row frequency-daily">';
+        $html[] = '<div class="row frequency-option frequency-daily">';
         $html[] = '<div class="form-group col-sm-12">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
@@ -95,7 +92,7 @@ class CalendarEventForm extends ContentObjectForm
         // Weekly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Weekly</h4></div></div>';
 
-        $html[] = '<div class="row frequency-weekly">';
+        $html[] = '<div class="row frequency-option frequency-weekly">';
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
@@ -123,13 +120,13 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '<div class="btn-group btn-group-justified frequency-weekly-byday">';
         $html[] = '<span class="input-group-addon">Op</span>';
-        $html[] = '<a class="btn btn-default">Ma</a>';
-        $html[] = '<a class="btn btn-default btn-primary">Di</a>';
-        $html[] = '<a class="btn btn-default">Wo</a>';
-        $html[] = '<a class="btn btn-default">Do</a>';
-        $html[] = '<a class="btn btn-default">Vr</a>';
-        $html[] = '<a class="btn btn-default">Za</a>';
-        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
+        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
+        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
+        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
+        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
+        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
+        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -137,7 +134,8 @@ class CalendarEventForm extends ContentObjectForm
         // Monthly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Monthly</h4></div></div>';
 
-        $html[] = '<div class="row frequency-monthly">';
+        $html[] = '<div class="frequency-option frequency-monthly">';
+        $html[] = '<div class="row">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
@@ -166,8 +164,10 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-monthly-option">';
-        $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
-        $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
+        $html[] =
+            '<a class="btn btn-default" data-option="frequency-monthly-byday" data-value="1">op deze weekdagen</a>';
+        $html[] =
+            '<a class="btn btn-default" data-option="frequency-monthly-bymonthday" data-value="2">op deze dagen</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -200,13 +200,13 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-monthly-byday-day">';
-        $html[] = '<a class="btn btn-default">Ma</a>';
-        $html[] = '<a class="btn btn-default">Di</a>';
-        $html[] = '<a class="btn btn-default">Wo</a>';
-        $html[] = '<a class="btn btn-default">Do</a>';
-        $html[] = '<a class="btn btn-default btn-primary">Vr</a>';
-        $html[] = '<a class="btn btn-default">Za</a>';
-        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
+        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
+        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
+        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
+        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
+        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
+        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -226,7 +226,7 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default btn-primary">1</a>';
+        $html[] = '<a class="btn btn-default">1</a>';
         $html[] = '<a class="btn btn-default">2</a>';
         $html[] = '<a class="btn btn-default">3</a>';
         $html[] = '<a class="btn btn-default">4</a>';
@@ -238,7 +238,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">9</a>';
-        $html[] = '<a class="btn btn-default btn-primary">10</a>';
+        $html[] = '<a class="btn btn-default">10</a>';
         $html[] = '<a class="btn btn-default">11</a>';
         $html[] = '<a class="btn btn-default">12</a>';
         $html[] = '<a class="btn btn-default">13</a>';
@@ -251,10 +251,10 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">17</a>';
         $html[] = '<a class="btn btn-default">18</a>';
         $html[] = '<a class="btn btn-default">19</a>';
-        $html[] = '<a class="btn btn-default btn-primary">20</a>';
+        $html[] = '<a class="btn btn-default">20</a>';
         $html[] = '<a class="btn btn-default">21</a>';
         $html[] = '<a class="btn btn-default">22</a>';
-        $html[] = '<a class="btn btn-default btn-primary">23</a>';
+        $html[] = '<a class="btn btn-default">23</a>';
         $html[] = '<a class="btn btn-default">24</a>';
         $html[] = '</div>';
 
@@ -264,9 +264,11 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">27</a>';
         $html[] = '<a class="btn btn-default">28</a>';
         $html[] = '<a class="btn btn-default">29</a>';
-        $html[] = '<a class="btn btn-default btn-primary">30</a>';
+        $html[] = '<a class="btn btn-default">30</a>';
         $html[] = '<a class="btn btn-default">31</a>';
         $html[] = '<a class="btn btn-default">Last</a>';
+        $html[] = '</div>';
+
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -276,7 +278,9 @@ class CalendarEventForm extends ContentObjectForm
         // Yearly
         $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Yearly</h4></div></div>';
 
-        $html[] = '<div class="row frequency-yearly">';
+        $html[] = '<div class="frequency-option frequency-yearly">';
+
+        $html[] = '<div class="row">';
 
         $html[] = '<div class="form-group col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
@@ -305,8 +309,10 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-yearly-option">';
-        $html[] = '<a class="btn btn-default">op deze weekdagen</a>';
-        $html[] = '<a class="btn btn-default btn-primary">op deze dagen</a>';
+        $html[] =
+            '<a class="btn btn-default" data-option="frequency-yearly-byday" data-value="1">op deze weekdagen</a>';
+        $html[] =
+            '<a class="btn btn-default" data-option="frequency-yearly-bymonthday" data-value="2">op deze dagen</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -339,14 +345,15 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-yearly-byday-day">';
-        $html[] = '<a class="btn btn-default">Ma</a>';
-        $html[] = '<a class="btn btn-default">Di</a>';
-        $html[] = '<a class="btn btn-default">Wo</a>';
-        $html[] = '<a class="btn btn-default">Do</a>';
-        $html[] = '<a class="btn btn-default btn-primary">Vr</a>';
-        $html[] = '<a class="btn btn-default">Za</a>';
-        $html[] = '<a class="btn btn-default">Zo</a>';
+        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
+        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
+        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
+        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
+        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
+        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
+        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
         $html[] = '</div>';
+
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -365,7 +372,7 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default btn-primary">1</a>';
+        $html[] = '<a class="btn btn-default">1</a>';
         $html[] = '<a class="btn btn-default">2</a>';
         $html[] = '<a class="btn btn-default">3</a>';
         $html[] = '<a class="btn btn-default">4</a>';
@@ -377,7 +384,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default">9</a>';
-        $html[] = '<a class="btn btn-default btn-primary">10</a>';
+        $html[] = '<a class="btn btn-default">10</a>';
         $html[] = '<a class="btn btn-default">11</a>';
         $html[] = '<a class="btn btn-default">12</a>';
         $html[] = '<a class="btn btn-default">13</a>';
@@ -390,10 +397,10 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">17</a>';
         $html[] = '<a class="btn btn-default">18</a>';
         $html[] = '<a class="btn btn-default">19</a>';
-        $html[] = '<a class="btn btn-default btn-primary">20</a>';
+        $html[] = '<a class="btn btn-default">20</a>';
         $html[] = '<a class="btn btn-default">21</a>';
         $html[] = '<a class="btn btn-default">22</a>';
-        $html[] = '<a class="btn btn-default btn-primary">23</a>';
+        $html[] = '<a class="btn btn-default">23</a>';
         $html[] = '<a class="btn btn-default">24</a>';
         $html[] = '</div>';
 
@@ -403,7 +410,7 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default">27</a>';
         $html[] = '<a class="btn btn-default">28</a>';
         $html[] = '<a class="btn btn-default">29</a>';
-        $html[] = '<a class="btn btn-default btn-primary">30</a>';
+        $html[] = '<a class="btn btn-default">30</a>';
         $html[] = '<a class="btn btn-default">31</a>';
         $html[] = '<a class="btn btn-default"></a>';
         $html[] = '</div>';
@@ -431,7 +438,6 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
-        // Frequency Options END
         $html[] = '</div>';
 
         //Until
@@ -452,9 +458,9 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-range">';
-        $html[] = '<a class="btn btn-default">Geen einddatum</a>';
-        $html[] = '<a class="btn btn-default">Beperkt aantal</a>';
-        $html[] = '<a class="btn btn-default btn-primary">Tot</a>';
+        $html[] = '<a class="btn btn-default" data-range="frequency-range-none">Geen einddatum</a>';
+        $html[] = '<a class="btn btn-default" data-range="frequency-range-count">Beperkt aantal</a>';
+        $html[] = '<a class="btn btn-default" data-range="frequency-range-until">Tot</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 

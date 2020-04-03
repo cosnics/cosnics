@@ -118,9 +118,16 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_LOCATION, self::PROPERTY_START_DATE, self::PROPERTY_END_DATE, self::PROPERTY_UNTIL,
-            self::PROPERTY_FREQUENCY, self::PROPERTY_FREQUENCY_COUNT, self::PROPERTY_FREQUENCY_INTERVAL,
-            self::PROPERTY_BYDAY, self::PROPERTY_BYMONTH, self::PROPERTY_BYMONTHDAY
+            self::PROPERTY_LOCATION,
+            self::PROPERTY_START_DATE,
+            self::PROPERTY_END_DATE,
+            self::PROPERTY_UNTIL,
+            self::PROPERTY_FREQUENCY,
+            self::PROPERTY_FREQUENCY_COUNT,
+            self::PROPERTY_FREQUENCY_INTERVAL,
+            self::PROPERTY_BYDAY,
+            self::PROPERTY_BYMONTH,
+            self::PROPERTY_BYMONTHDAY
         );
     }
 
@@ -213,9 +220,37 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public static function get_bymonthday_options()
     {
         return array(
-            1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 11 => 11, 12 => 12,
-            13 => 13, 14 => 14, 15 => 15, 16 => 16, 17 => 17, 18 => 18, 19 => 19, 20 => 20, 21 => 21, 22 => 22,
-            23 => 23, 24 => 24, 25 => 25, 26 => 26, 27 => 27, 28 => 28, 29 => 29, 30 => 30, 31 => 31
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+            5 => 5,
+            6 => 6,
+            7 => 7,
+            8 => 8,
+            9 => 9,
+            10 => 10,
+            11 => 11,
+            12 => 12,
+            13 => 13,
+            14 => 14,
+            15 => 15,
+            16 => 16,
+            17 => 17,
+            18 => 18,
+            19 => 19,
+            20 => 20,
+            21 => 21,
+            22 => 22,
+            23 => 23,
+            24 => 24,
+            25 => 25,
+            26 => 26,
+            27 => 27,
+            28 => 28,
+            29 => 29,
+            30 => 30,
+            31 => 31
         );
     }
 
@@ -285,11 +320,11 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         $options = array();
 
         $options[self::FREQUENCY_DAILY] = Translation::get('Daily');
+        $options[self::FREQUENCY_WEEKDAYS] = Translation::get('Weekdays');
         $options[self::FREQUENCY_WEEKLY] = Translation::get('Weekly');
+        $options[self::FREQUENCY_BIWEEKLY] = Translation::get('BiWeekly');
         $options[self::FREQUENCY_MONTHLY] = Translation::get('Monthly');
         $options[self::FREQUENCY_YEARLY] = Translation::get('Yearly');
-        $options[self::FREQUENCY_WEEKDAYS] = Translation::get('Weekdays');
-        $options[self::FREQUENCY_BIWEEKLY] = Translation::get('BiWeekly');
 
         return $options;
     }
