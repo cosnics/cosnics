@@ -12,11 +12,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DeletePlatformGroupTeamComponent extends Manager
+class DeleteCourseTeamComponent extends Manager
 {
     /**
      * @return string|\Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
@@ -26,11 +25,9 @@ class DeletePlatformGroupTeamComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $platformGroupTeam = $this->getPlatformGroupTeamFromRequest();
-
         try
         {
-            $this->getPlatformGroupTeamService()->deletePlatformGroupTeam($platformGroupTeam);
+            $this->getCourseTeamService()->removeTeam($this->get_course());
             $message = 'TeamRemoved';
             $success = true;
         }
@@ -47,15 +44,9 @@ class DeletePlatformGroupTeamComponent extends Manager
 
         $this->redirect(
             $this->getTranslator()->trans($message, [], Manager::context()),
-            !$success, [self::PARAM_ACTION => self::ACTION_BROWSE], [self::PARAM_PLATFORM_GROUP_TEAM_ID]
+            !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]
         );
 
         return;
     }
-
-    public function get_additional_parameters()
-    {
-        return [self::PARAM_PLATFORM_GROUP_TEAM_ID];
-    }
-
 }

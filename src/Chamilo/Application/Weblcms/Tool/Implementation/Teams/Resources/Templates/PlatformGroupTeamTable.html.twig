@@ -58,7 +58,7 @@
                         <li><a :href="removeUsersUrl(data.item)">{{ 'RemoveUsersNotInGroups'|trans({}, appContext) }}</a></li>
                         <li class="divider"></li>
                         <li><a :href="editTeamUrl(data.item)">{{ 'EditPlatformGroupTeam'|trans({}, appContext) }}</a></li>
-                        <li><a title="{{ 'DeletePlatformGroupTeamDescription'|trans({}, appContext) }}" href="#" @click="deleteTeam(data.item)">{{ 'DeletePlatformGroupTeam'|trans({}, appContext) }}</a></li>
+                        <li><a title="{{ 'DeleteTeamDescription'|trans({}, appContext) }}" href="#" @click="deleteTeam(data.item)">{{ 'DeleteTeam'|trans({}, appContext) }}</a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -127,7 +127,7 @@
                         return urlTemplate.replace('__PLATFORM_GROUP_TEAM_ID__', team.id);
                     },
                     deleteTeam: function(team) {
-                        if(window.confirm('{{ 'DeletePlatformGroupConfirm'|trans({}, appContext) }}')) {
+                        if(window.confirm('{{ 'DeleteTeamConfirm'|trans({}, appContext) }}')) {
                             window.location.href = this.deleteTeamUrl(team);
                         }
                     }

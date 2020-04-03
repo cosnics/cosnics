@@ -53,6 +53,12 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}</a></li>
                         <li><a href="{{ REMOVE_TEAM_USERS_URL }}">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}</a></li>
+                        <li class="divider"></li>
+                        <li><a title="{{ 'DeleteTeamDescription'|trans({}, appContext) }}"
+                               href="{{ DELETE_COURSE_TEAM_URL }}"
+                               onclick="return confirm('{{ 'DeleteTeamConfirm'|trans({}, appContext) }}')">
+                                {{ 'DeleteTeam'|trans({}, appContext) }}
+                        </a></li>
                     </ul>
                 </div>
             {% endif %}

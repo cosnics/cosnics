@@ -56,6 +56,7 @@ class BrowserComponent extends Manager
                     self::ACTION_SUBSCRIBE_ALL_COURSE_USERS_TO_TEAM
                 ),
                 'CREATE_TEAM_URL' => $this->getUrlWithAction(self::ACTION_CREATE_TEAM),
+                'DELETE_COURSE_TEAM_URL' => $this->getUrlWithAction(self::ACTION_DELETE_TEAM),
                 'CREATE_PLATFORM_GROUP_TEAM_URL' => $this->getUrlWithAction(self::ACTION_CREATE_PLATFORM_GROUP_TEAM),
                 'SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL' => $this->getUrlWithAction(
                     self::ACTION_SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS,

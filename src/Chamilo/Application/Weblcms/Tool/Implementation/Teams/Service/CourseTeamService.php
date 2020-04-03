@@ -73,7 +73,7 @@ class CourseTeamService
         $teachers = $this->courseService->getTeachersFromCourse($course);
 
         $userCount = count($students) + count($teachers);
-        if($userCount >= TeamService::MAX_USERS)
+        if ($userCount >= TeamService::MAX_USERS)
         {
             throw new TooManyUsersException();
         }
@@ -147,7 +147,7 @@ class CourseTeamService
         $teachers = $this->courseService->getTeachersFromCourse($course);
 
         $team = $this->getTeam($course);
-        if(!$team)
+        if (!$team)
         {
             return;
         }
@@ -222,15 +222,23 @@ class CourseTeamService
         }
     }
 
-//    /**
-//     * @param Course $course
-//     */
-//    public function removeTeam(Course $course)
-//    {
-//        throw new \RuntimeException(
-//            sprintf(
-//                'Not yet implemented!'
-//            )
-//        );
-//    }
+    /**
+     * @param Course $course
+     */
+    public function removeTeam(Course $course)
+    {
+        $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
+
+        if (!$courseTeamRelation instanceof CourseTeamRelation)
+        {
+            return;
+        }
+
+        $courseTeamRelation->setActive(false);
+
+        if (!$this->courseTeamRelationRepository->updateCourseTeamRelation($courseTeamRelation))
+        {
+            throw new \RuntimeException('Could not deactivate the course team relation in the database');
+        }
+    }
 }

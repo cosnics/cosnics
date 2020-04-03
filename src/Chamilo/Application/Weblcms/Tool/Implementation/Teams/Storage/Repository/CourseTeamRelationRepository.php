@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -18,6 +19,7 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
 
     /**
      * @param Course $course
+     *
      * @return CourseTeamRelation
      */
     public function findByCourse(Course $course): ?CourseTeamRelation
@@ -28,7 +30,8 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
             CourseTeamRelation::class, new DataClassRetrieveParameters($condition)
         );
 
-        if(!$courseTeamRelation instanceof CourseTeamRelation) {
+        if (!$courseTeamRelation instanceof CourseTeamRelation)
+        {
             return null;
         }
 
@@ -36,16 +39,38 @@ class CourseTeamRelationRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param Course $course
-     * @return EqualityCondition
+     * @param CourseTeamRelation $courseTeamRelation
+     *
+     * @return bool
      */
-    protected function getConditionByCourse(Course $course): EqualityCondition
+    public function updateCourseTeamRelation(CourseTeamRelation $courseTeamRelation)
     {
-        return new EqualityCondition(
+        return $this->dataClassRepository->update($courseTeamRelation);
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return AndCondition
+     */
+    protected function getConditionByCourse(Course $course): AndCondition
+    {
+        $conditions = [];
+
+        $conditions[] =  new EqualityCondition(
             new PropertyConditionVariable(
                 CourseTeamRelation::class, CourseTeamRelation::PROPERTY_COURSE_ID
             ),
             new StaticConditionVariable((string) $course->getId())
         );
+
+        $conditions[] =  new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseTeamRelation::class, CourseTeamRelation::PROPERTY_ACTIVE
+            ),
+            new StaticConditionVariable(1)
+        );
+
+        return new AndCondition($conditions);
     }
 }
