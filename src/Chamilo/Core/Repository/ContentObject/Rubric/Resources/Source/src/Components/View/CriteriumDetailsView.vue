@@ -10,7 +10,7 @@
             <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight"/> %</div>
             <ul>
                 <li v-for="level in store.rubric.levels" :key="level.id">
-                    <div class="level-title">{{ level.title }}</div>
+                    <div class="level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle description" :title="level.description"></span></div>
                     <div class="level-input">
                         <textarea v-model="store.rubric.getChoice(criterium, level).feedback" class="ta-feedback"
                                   placeholder="Geef feedback"
@@ -189,4 +189,12 @@
         border: 1px solid hsla(200, 50%, 50%, 0.5);
     }
 
+    .description {
+        color: #999;
+        cursor: pointer;
+        transition: color 200ms;
+    }
+    .description:hover {
+        color: #666;
+    }
 </style>
