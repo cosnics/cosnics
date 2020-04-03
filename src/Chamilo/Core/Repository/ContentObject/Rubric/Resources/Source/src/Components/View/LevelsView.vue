@@ -88,8 +88,8 @@
             <div class="modal-level" @click.stop="">
                 <div class="title">Niveau '{{ removingLevel.title }}' verwijderen?</div>
                 <div>
-                    <button ref="btn-remove-level" class="btn" @click.stop="removeLevel(removingLevel)">OK</button>
-                    <button class="btn" @click.stop="hideRemoveLevelDialog">Cancel</button>
+                    <button ref="btn-remove-level" class="btn" @click.stop="removeLevel(removingLevel)">Verwijder</button>
+                    <button class="btn" @click.stop="hideRemoveLevelDialog">Annuleer</button>
                 </div>
             </div>
         </div>

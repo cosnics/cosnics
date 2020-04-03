@@ -1,13 +1,13 @@
 <template>
     <div class="name-input">
 		<span>
-			<input type="text" @keyup="onChange" :placeholder="placeholder" ref="name-new" @keyup.enter="addNew" @keyup.esc="cancelNew" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
+			<input type="text" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
             <i v-if="hasInput" class="fa fa-times-circle" @click="clearInput" />
 			<i v-else class="fa fa-times-circle muted" />
 		</span>
         <div>
-            <button @click="addNew" :disabled="!hasInput">Voeg Toe</button>
-            <button @click="cancelNew">Annuleer</button>
+            <button @click="ok" :disabled="!hasInput">{{ okTitle || 'OK' }}</button>
+            <button @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
         </div>
     </div>
 </template>
@@ -29,33 +29,43 @@
         @Prop()
         value!: string;
 
+        @Prop()
+        okTitle!: string;
+
+        @Prop()
+        cancelTitle!: string;
+
         hasInput: boolean = false;
 
-        addNew() {
+        ok() {
             if (!this.hasInput) { return; }
             this.$emit('ok');
         }
 
-        cancelNew() {
+        cancel() {
             this.$emit('cancel');
         }
 
         clearInput() {
             this.$emit('input', '');
-            if (this.$refs['name-new']) {
-                (this.$refs['name-new'] as HTMLElement).focus();
+            this.hasInput = false;
+            if (this.$refs['name-input']) {
+                (this.$refs['name-input'] as HTMLElement).focus();
             }
         }
 
         onChange() {
-            if (this.$refs['name-new']) {
-                this.$data.hasInput = (this.$refs['name-new'] as any).value !== '';
+            if (this.$refs['name-input']) {
+                this.hasInput = (this.$refs['name-input'] as any).value !== '';
             }
         }
         mounted() {
-            if (this.$refs['name-new']) {
+            if (this.value) {
+                this.hasInput = true;
+            }
+            if (this.$refs['name-input']) {
                 //@ts-ignore
-                this.$refs['name-new'].focus();
+                this.$refs['name-input'].focus();
             }
         }
     }

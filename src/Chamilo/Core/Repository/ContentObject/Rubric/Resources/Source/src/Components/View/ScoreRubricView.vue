@@ -1,48 +1,83 @@
 <template>
 	<div class="container" :class="mainClass">
-		<div>
+		<div @click="hideMenu">
 			<div>
 				<div class="clusters-view" @mouseover="dragMouseOver($event,'view1_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view1_clusters' }">
-					<draggable id="view1_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
+					<draggable :disabled="editTitleId || menuActionsId" id="view1_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
 							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
 						<li v-for="cluster in clusters" :id="`view1_${cluster.id}`" :key="`view1_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view1')}" @click="selectCluster(cluster, 'view1')">
 							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
-							<div class="item-actions" @click.stop="showClusterActions"><i class="fa fa-ellipsis-h"/></div>
+							<div class="item-actions" :class="{'show-menu': menuActionsId === `view1_${cluster.id}`}" @click.stop="toggleClusterActions($event, `view1_${cluster.id}`)"><i :class="menuActionsId === `view1_${cluster.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+							<div v-if="menuActionsId === `view1_${cluster.id}`" class="action-menu">
+								<ul>
+									<li @click.stop="editTitle(`view1_${cluster.id}`, cluster.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+									<li @click.stop="showRemoveDialog(cluster)"><i class="fa fa-remove" />Verwijder</li>
+								</ul>
+							</div>
+							<div v-if="editTitleId === `view1_${cluster.id}`" class="edit-title">
+								<div class="cover"></div>
+								<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(cluster)" placeholder="Titel voor cluster" v-model="cluster.title"/>
+							</div>
 						</li>
 					</draggable>
 					<div class="actions">
 						<div v-if="clusterDialogShown">
-							<name-input class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
+							<name-input ok-title="Voeg Toe" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancelNewCluster" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
 						</div>
 						<button v-else @click="showClusterDialog"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
 					</div>
 				</div>
 				<div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view1_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view1_categories' }">
-					<draggable id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
+					<draggable :disabled="editTitleId || menuActionsId" id="view1_categories" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categoriesView1" :forceFallback="true" :animation="250" :move="onMoveCategory"
 							   @start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view1')">
 						<div v-for="category in categoriesView1" @mouseover="criteriumDragging && dragMouseOver($event, `view1_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view1_${category.id}`" :key="`view1_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view1_${category.id}`, 'null-category': category.title === '' }">
-							<div v-if="category.title !== ''" class="handle handle-area-category">
+							<div v-if="category.color !== ''" class="handle handle-area-category">
 								<a :style="{'background-color': category.color}" tabindex="0" @click="() => openColorPickerForCategory(category)" @keyup.enter.space="() => openColorPickerForCategory(category)"></a>
 								<h2 class="handle-area-category">{{ category.title }}</h2>
 								<swatches v-if="isColorPickerOpened(category)" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
-								<div class="item-actions" @click.stop="showCategoryActions"><i class="fa fa-ellipsis-h"/></div>
+								<div class="item-actions" :class="{'show-menu': menuActionsId === `view1_${category.id}`}" @click.stop="toggleCategoryActions($event, `view1_${category.id}`)"><i :class="menuActionsId === `view1_${category.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+								<div v-if="menuActionsId === `view1_${category.id}`" class="action-menu">
+									<ul>
+										<li @click.stop="editTitle(`view1_${category.id}`, category.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+										<li @click.stop="showRemoveDialog(category)"><i class="fa fa-remove" />Verwijder</li>
+									</ul>
+								</div>
+								<div v-if="editTitleId === `view1_${category.id}`" class="edit-title">
+									<div class="cover"></div>
+									<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(category)" placeholder="Titel voor categorie" v-model="category.title"/>
+								</div>
 							</div>
 							<div v-else class="handle handle-area-category">
 								<h2 class="handle-area-category">Criteria</h2>
-								<div class="item-actions" @click.stop="showCriteriumListActions"><i class="fa fa-ellipsis-h"/></div>
+								<div class="item-actions" :class="{'show-menu': menuActionsId === `view1_${category.id}`}" @click.stop="toggleCriteriumListActions($event, `view1_${category.id}`)"><i :class="menuActionsId === `view1_${category.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+								<div v-if="menuActionsId === `view1_${category.id}`" class="action-menu">
+									<ul>
+										<li @click.stop="showRemoveDialog(category)"><i class="fa fa-remove" />Verwijder</li>
+									</ul>
+								</div>
 							</div>
-							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
+							<draggable :disabled="editTitleId || menuActionsId" tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria"	:forceFallback="true" :animation="250"
 									   :move="onMoveCriterium"	@start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
 								<div v-for="criterium in category.criteria" :id="`view1_${criterium.id}`" :key="`view1_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">
 									{{ criterium.title }}
-									<div class="item-actions" @click.stop="showCriteriumActions"><i class="fa fa-ellipsis-h"/></div>
+									<div class="item-actions" :class="{'show-menu': menuActionsId === `view1_${criterium.id}`}" @click.stop="toggleCriteriumActions($event, `view1_${criterium.id}`)"><i :class="menuActionsId === `view1_${criterium.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+									<div v-if="menuActionsId === `view1_${criterium.id}`" class="action-menu">
+										<ul>
+											<li @click.stop="editTitle(`view1_${criterium.id}`, criterium.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+											<li @click.stop="showRemoveDialog(criterium)"><i class="fa fa-remove" />Verwijder</li>
+										</ul>
+									</div>
+									<div v-if="editTitleId === `view1_${criterium.id}`" class="edit-title">
+										<div class="cover"></div>
+										<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(criterium)" placeholder="Titel voor criterium" v-model="criterium.title"/>
+									</div>
 								</div>
 							</draggable>
 							<div v-if="!isAddingCriteriumFor(category)" class="criterium-add-new" :class="{criteriumDragging: criteriumDragging}">
 								<button @click="() => addCriteriumForCategory(category)"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
 							</div>
 							<div v-else>
-								<name-input class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+								<name-input ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
 							</div>
 						</div>
 						<div class="category null-category cluster" v-if="criteriumDragging">
@@ -56,41 +91,76 @@
 						<button class="btn-criterium-add" @click="addCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium</button>
 					</div>
 					<div v-else-if="isAddingCategory" class="category newcategory">
-						<name-input class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
+						<name-input ok-title="Voeg Toe" class="category-new item-new" @ok="addNewCategory" @cancel="cancelNewCategory" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
 					</div>
 					<div v-else-if="isAddingCriteriumWithoutCategory" class="category newcategory">
-						<name-input class="category-new item-new" @ok="addNewCriterium(true)" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+						<name-input ok-title="Voeg Toe" class="category-new item-new" @ok="addNewCriterium(true)" @cancel="cancelNewCriterium" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
 					</div>
 				</div>
 			</div>
 			<div v-if="split">
 				<div class="clusters-view" @mouseover="dragMouseOver($event, 'view2_clusters')" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === 'view2_clusters' }">
-					<draggable id="view2_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
+					<draggable :disabled="editTitleId || menuActionsId" id="view2_clusters" tag="ul"	group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true"	:animation="250"
 							   :move="onMoveCluster" @start="startDragCluster"	@end="endDrag" @change="onChangeCluster">
 						<li v-for="cluster in clusters" :id="`view2_${cluster.id}`" :key="`view2_${cluster.id}`" class="cluster" :class="{selected: isSelected(cluster, 'view2')}" @click="selectCluster(cluster, 'view2')">
 							<div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
-							<div class="item-actions" @click.stop="showClusterActions"><i class="fa fa-ellipsis-h"/></div>
+							<div class="item-actions" :class="{'show-menu': menuActionsId === `view2_${cluster.id}`}" @click.stop="toggleClusterActions($event, `view2_${cluster.id}`)"><i :class="menuActionsId === `view2_${cluster.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+							<div v-if="menuActionsId === `view2_${cluster.id}`" class="action-menu">
+								<ul>
+									<li @click.stop="editTitle(`view2_${cluster.id}`, cluster.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+									<li @click.stop="showRemoveDialog(cluster)"><i class="fa fa-remove" />Verwijder</li>
+								</ul>
+							</div>
+							<div v-if="editTitleId === `view2_${cluster.id}`" class="edit-title">
+								<div class="cover"></div>
+								<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(cluster)" placeholder="Titel voor cluster" v-model="cluster.title"/>
+							</div>
 						</li>
 					</draggable>
 				</div>
 				<div class="cluster-content" @mouseover="categoryDragging && dragMouseOver($event,'view2_categories')" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === 'view2_categories' }">
-					<draggable id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
+					<draggable :disabled="editTitleId || menuActionsId" id="view2_categories" tag="div"	group="categories" handle=".handle"	ghost-class="ghost" :list="categoriesView2"	:forceFallback="true" :animation="250" :move="onMoveCategory"
 							   @start="startDragCategory" @end="endDrag" @change="onChangeCategory($event, 'view2')">
 						<div v-for="category in categoriesView2" class="category" @mouseover="criteriumDragging && dragMouseOver($event, `view2_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`view2_${category.id}`" :key="`view2_${category.id}`" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `view2_${category.id}`, 'null-category': category.title === '' }">
-							<div v-if="category.title !== ''" class="handle handle-area-category">
+							<div v-if="category.color !== ''" class="handle handle-area-category">
 								<a :style="{'background-color': category.color}" tabindex="0"></a>
 								<h2 class="handle-area-category">{{ category.title }}</h2>
-								<div class="item-actions" @click.stop="showCategoryActions"><i class="fa fa-ellipsis-h"/></div>
+								<div class="item-actions" :class="{'show-menu': menuActionsId === `view2_${category.id}`}" @click.stop="toggleCategoryActions($event, `view2_${category.id}`)"><i :class="menuActionsId === `view2_${category.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+								<div v-if="menuActionsId === `view2_${category.id}`" class="action-menu">
+									<ul>
+										<li @click.stop="editTitle(`view2_${category.id}`, category.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+										<li @click.stop="showRemoveDialog(category)"><i class="fa fa-remove" />Verwijder</li>
+									</ul>
+								</div>
+								<div v-if="editTitleId === `view2_${category.id}`" class="edit-title">
+									<div class="cover"></div>
+									<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(category)" placeholder="Titel voor categorie" v-model="category.title"/>
+								</div>
 							</div>
 							<div v-else class="handle handle-area-category">
 								<h2 class="handle-area-category">Criteria</h2>
-								<div class="item-actions" @click.stop="showCriteriumListActions"><i class="fa fa-ellipsis-h"/></div>
+								<div class="item-actions" :class="{'show-menu': menuActionsId === `view2_${category.id}`}" @click.stop="toggleCriteriumListActions($event, `view2_${category.id}`)"><i :class="menuActionsId === `view2_${category.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+								<div v-if="menuActionsId === `view2_${category.id}`" class="action-menu">
+									<ul>
+										<li @click.stop="showRemoveDialog(category)"><i class="fa fa-remove" />Verwijder</li>
+									</ul>
+								</div>
 							</div>
-							<draggable tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
+							<draggable :disabled="editTitleId || menuActionsId" tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
 									   :move="onMoveCriterium" @start="startDragCriterium"	@end="endDrag"	@change="onChangeCriterium($event, category)">
 								<div v-for="criterium in category.criteria" :id="`view2_${criterium.id}`" :key="`view2_${criterium.id}`" @click="selectCriterium(criterium)" class="criterium" :class="{selected: selectedCriterium === criterium}">
 									{{ criterium.title }}
-									<div class="item-actions" @click.stop="showCriteriumActions"><i class="fa fa-ellipsis-h"/></div>
+									<div class="item-actions" :class="{'show-menu': menuActionsId === `view2_${criterium.id}`}" @click.stop="toggleCriteriumActions($event, `view2_${criterium.id}`)"><i :class="menuActionsId === `view2_${criterium.id}` ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+									<div v-if="menuActionsId === `view2_${criterium.id}`" class="action-menu">
+										<ul>
+											<li @click.stop="editTitle(`view2_${criterium.id}`, criterium.title)"><i class="fa fa-pencil" />Wijzig naam</li>
+											<li @click.stop="showRemoveDialog(criterium)"><i class="fa fa-remove" />Verwijder</li>
+										</ul>
+									</div>
+									<div v-if="editTitleId === `view2_${criterium.id}`" class="edit-title">
+										<div class="cover"></div>
+										<name-input class="item-new" ok-title="Wijzig" @ok="commitEditTitle" @cancel="cancelEditTitle(criterium)" placeholder="Titel voor criterium" v-model="criterium.title"/>
+									</div>
 								</div>
 							</draggable>
 						</div>
@@ -103,12 +173,23 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal-bg" v-if="removeItem !== null" @click.stop="hideRemoveDialog">
+			<div class="modal-level" @click.stop="">
+				<div class="title" v-if="removeItem.constructor.name === 'Category' && removeItem.color === ''">Criteria verwijderen?</div>
+				<div class="title" v-else>{{ removeItem.constructor.name }} '{{ removeItem.title }}' verwijderen?</div>
+				<div>
+					<button ref="btn-remove" class="btn" @click.stop="onRemoveItem">Verwijder</button>
+					<button class="btn" @click.stop="hideRemoveDialog">Annuleer</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
 	import {Component, Prop, Watch, Vue} from "vue-property-decorator";
 	import draggable from 'vuedraggable';
+	import TreeNode from "../../Domain/TreeNode";
 	import Cluster from "../../Domain/Cluster";
 	import Criterium from "../../Domain/Criterium";
 	import Category from "../../Domain/Category";
@@ -140,9 +221,73 @@
 		private isAddingCategory: boolean = false;
 		private isAddingCriterium: boolean = false;
 		private isAddingCriteriumWithoutCategory: boolean = false;
+		private menuActionsId: string = '';
+		private editTitleId: string = '';
+		private oldTitle: string = '';
+		private removeItem: Cluster|Category|Criterium|null = null;
 
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 		@Prop(Boolean) readonly split!: boolean;
+
+		hideMenu() {
+			this.menuActionsId = '';
+		}
+
+		editTitle(id: string, oldTitle: string) {
+			this.editTitleId = id;
+			this.oldTitle = oldTitle;
+			this.hideMenu();
+		}
+
+		commitEditTitle() {
+			this.editTitleId = '';
+			this.oldTitle = '';
+		}
+
+		cancelEditTitle(item: Criterium|Category|Cluster) {
+			item.title = this.oldTitle;
+			this.editTitleId = '';
+			this.oldTitle = '';
+		}
+
+		showRemoveDialog(item: Cluster|Category|Criterium|null) {
+			this.removeItem = item;
+			this.hideMenu();
+		}
+
+		hideRemoveDialog() {
+			this.showRemoveDialog(null);
+		}
+
+		onRemoveItem() {
+			const item = this.removeItem as TreeNode;
+			if (item instanceof Criterium && item === this.selectedCriterium) {
+				this.selectCriterium(null);
+			} else if (item instanceof Category) {
+				if (this.selectedCriterium?.parent === item) {
+					this.selectCriterium(null);
+				}
+				if (item === this.selectedCategoryColorPicker) {
+					this.selectedCategoryColorPicker = null;
+				}
+				if (item === this.selectedCategoryNewCriterium) {
+					this.selectedCategoryNewCriterium = null;
+				}
+			} else if (item instanceof Cluster) {
+				if (this.selectedCriterium?.parent?.parent === item) {
+					this.selectCriterium(null);
+				}
+				if (item === this.selectedClusterView1) {
+					this.selectedClusterView1 = null;
+				}
+				if (item === this.selectedClusterView2) {
+					this.selectedClusterView2 = null;
+				}
+			}
+			item!.parent!.removeChild(item);
+			this.store.removeChild(item, item.parent);
+			this.hideRemoveDialog();
+		}
 
 		dragMouseOver(event: any, elementId: string) {
 			if (!this.initiatedDrag) { return; }
@@ -421,25 +566,41 @@
 			};
 		}
 
-		showClusterActions() {
-			console.log('cluster actions');
+		toggleClusterActions(event: any, id: string) {
+			if (this.menuActionsId === id) {
+				this.menuActionsId = '';
+			} else {
+				this.menuActionsId = id;
+			}
 		}
 
-		showCategoryActions() {
-			console.log('category actions');
+		toggleCategoryActions(event: any, id: string) {
+			if (this.menuActionsId === id) {
+				this.menuActionsId = '';
+			} else {
+				this.menuActionsId = id;
+			}
 		}
 
-		showCriteriumListActions() {
-			console.log('criterium list actions');
+		toggleCriteriumListActions(event: any, id: string) {
+			if (this.menuActionsId === id) {
+				this.menuActionsId = '';
+			} else {
+				this.menuActionsId = id;
+			}
 		}
 
-		showCriteriumActions() {
-			console.log('criterium actions');
+		toggleCriteriumActions(event: any, id: string) {
+			if (this.menuActionsId === id) {
+				this.menuActionsId = '';
+			} else {
+				this.menuActionsId = id;
+			}
 		}
 
 		@Watch('store.rubric')
 		onRubricChanged(){
-			console.log("change");
+			//console.log("change");
 		}
 
 		@Watch('isAddingCategory')
@@ -450,6 +611,14 @@
 					clusterContent.scrollTo(clusterContent.scrollWidth, 0);
 				});
 //			}
+		}
+		@Watch('removeItem')
+		onRemovingLevelChanged(item: Cluster|Category|Criterium|null) {
+			if (item) {
+				this.$nextTick(() => {
+					(this.$refs['btn-remove'] as HTMLElement).focus();
+				});
+			}
 		}
 		mounted() {
 		}
@@ -485,12 +654,15 @@
 	button:hover .fa {
 		color: white;
 	}
-	.item-new button { font-weight: normal; margin-bottom: 4px; }
-	.item-new button:not(:hover):nth-child(1) {
+	.name-input {
+		z-index: 20;
+	}
+	.name-input button { font-weight: normal; margin-bottom: 4px; }
+	.name-input button:not(:hover):nth-child(1) {
 		background: hsla(200, 100%, 57%, 1);
 		color: #fff;
 	}
-	.item-new button:not(:hover):nth-child(2) {
+	.name-input button:not(:hover):nth-child(2) {
 		background: transparent;
 		border: 1px solid #cdcdcd;
 	}
@@ -566,6 +738,7 @@
 		padding: 0;
 		color: #444;
 		position: relative;
+		cursor: default;
 	}
 	.clusters li.selected {
 		--background: hsla(190, 40%, 45%, 1);
@@ -727,7 +900,7 @@
 	.category > div:nth-child(1) {
 		background: #dfdfdf;
 		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0) 10px, rgba(0,0,0,0) 19px, rgba(0,0,0,0.08) 36px);
-		font-weight: bold;
+		/*font-weight: bold;*/
 		border-radius: 4px 4px 0 0;
 	}
 	.category.newcategory {
@@ -799,6 +972,7 @@
 		height: 14px;
 		outline-width: 2px;
 		box-shadow: 0px 0px 3px #999;
+		cursor: pointer;
 	}
 	.category.ghost {
 		background: rgba(255, 255, 255, 0.45);
@@ -808,6 +982,7 @@
 	}
 	.handle-area-category {
 		position: relative;
+		cursor: default;
 	}
 	.category.ghost > * {
 		visibility: hidden;
@@ -914,6 +1089,7 @@
 	}
 	.criterium {
 		position: relative;
+		cursor: default;
 	}
 	.item-actions {
 		position: absolute;
@@ -922,14 +1098,25 @@
 		width: 20px;
 		height: 20px;
 		opacity: 0;
-		display: block;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		background: transparent;
-		text-align: center;
+		/*text-align: center;*/
 		border: 1px solid transparent;
 		border-radius: 3px;
 		color: #777;
 		transition: all 200ms;
 		cursor: pointer;
+	}
+	.item-actions.show-menu {
+		opacity: 1;
+	}
+	.item-actions:not(.show-menu) i {
+		padding-top: 2px;
+	}
+	.item-actions i {
+		pointer-events: none;
 	}
 	.item-actions, .item-actions i, .clusters li .item-actions i {
 		font-size: 11px;
@@ -943,20 +1130,122 @@
 	.clusters li.selected:hover .item-actions {
 		color: white;
 	}
-	.item-actions:hover {
+	.item-actions.show-menu, .item-actions:hover {
 		background: #bbb;
 		color: white;
 	}
-	.clusters li .item-actions:hover {
+	.clusters li:hover .item-actions.show-menu, .clusters li .item-actions:hover {
 		background: hsla(190, 20%, 60%, 1);
 		color: white;
 	}
-	.clusters li.selected .item-actions:hover {
+	.clusters li.selected .item-actions.show-menu, .clusters li.selected .item-actions:hover {
 		background: hsla(190, 40%, 40%, 1);
 	}
-	.criterium.selected .item-actions:hover {
+	.criterium.selected .item-actions.show-menu, .criterium.selected .item-actions:hover {
 		background: #a3a3a3;
 	}
+	.action-menu {
+		position: absolute;
+		top: 34px;
+		right: -76px;
+		min-width: 100px;
+		background: white;
+		box-shadow: 0px 0px 3px #999;
+		border-radius: 3px;
+		z-index: 10;
+	}
+	.clusters-view .action-menu li {
+		margin-right: 0;
+		font-size: 13px;
+	}
+	.action-menu i {
+		margin-right: 4px;
+		color: #666;
+	}
+	.action-menu ul {
+		list-style: none;
+	}
+	.action-menu li {
+		padding: 2px 4px;
+		cursor: pointer;
+		pointer-events: all;
+	}
+	.action-menu li:hover {
+		background: #ddd;
+	}
+	.edit-title {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 10;
+		background: green;
+	}
+	.edit-title .cover {
+		position: fixed;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.31);
+		width: 100%;
+		height: 100%;
+		pointer-events:none;
+	}
+	.edit-title .name-input {
+		position: absolute;
+		background: hsla(165, 5%, 90%, 1);
+		padding-bottom: 4px;
+		width: 100%;
+		border-radius: 3px;
+	}
+
+	.modal-bg {
+		position: fixed!important;
+		background: rgba(0, 0, 0, 0.31);
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 10;
+	}
+	.modal-level {
+		background: hsl(165, 5%, 90%);
+		width: 420px;
+		height: 150px!important;
+		margin: 120px auto;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 4px;
+		box-shadow: 0px 6px 12px #666;
+	}
+	.modal-level .title {
+		padding-bottom: 16px;
+		margin-bottom: 10px;
+		border-bottom: 1px solid hsl(200, 30%, 80%);
+		width: 100%;
+		text-align: center;
+	}
+	.modal-level button {
+		outline-width: thin;
+	}
+	.modal-level button:first-child {
+		margin-right: 8px;
+	}
+	.modal-level button:hover {
+		color: white;
+	}
+	.clusters-view .name-input {
+		width: 240px;
+	}
+	.clusters-view .name-input >>> input {
+		color: #333;
+	}
+	.clusters-view .name-input >>> button:nth-child(2):not(:hover) {
+		background: hsla(165, 5%, 90%, 1);
+	}
+	.edit-title .name-input >>> button:first-child { margin-left: 4px; }
 	@keyframes fade-in {
 		from { opacity: 0 }
 		to { opacity: 1 }
