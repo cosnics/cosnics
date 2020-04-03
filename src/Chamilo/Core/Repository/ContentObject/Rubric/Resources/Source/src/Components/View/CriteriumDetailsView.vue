@@ -6,7 +6,7 @@
                 <label for="title" style="display:table-cell; width:1px">Criterium: </label>
                 <input type="text" v-model="criterium.title" id="title" name="title" style="display: table-cell; width: 100%"/>
             </h2>
-            <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} > {{ criterium.parent.title }}</div>
+            <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} <span v-if="criterium.parent.color !== ''"> > {{ criterium.parent.title }}</span></div>
             <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight"/> %</div>
             <ul>
                 <li v-for="level in store.rubric.levels" :key="level.id">
