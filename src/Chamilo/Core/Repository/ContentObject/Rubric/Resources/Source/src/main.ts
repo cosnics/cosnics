@@ -2,15 +2,14 @@ import Vue from 'vue';
 import App from './App2.vue';
 import ScoreRubric from './plugin';
 
-import BootstrapVue from 'bootstrap-vue'
+import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(BootstrapVue);
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-swatches/dist/vue-swatches.min.css';
-import 'jquery.fancytree/dist/skin-lion/ui.fancytree.css';
-import ScoreRubricStore from "./ScoreRubricStore";
-import { makeServer } from "./server"
+import ScoreRubricStore from './ScoreRubricStore';
+import { makeServer } from './server';
 
 if (process.env.NODE_ENV === "development") {
   makeServer();

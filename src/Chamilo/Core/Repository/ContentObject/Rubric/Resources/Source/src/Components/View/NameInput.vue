@@ -1,5 +1,5 @@
 <template>
-    <div class="name-input">
+    <div class="name-input" @click.stop="">
 		<span>
 			<input type="text" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
             <i v-if="hasInput" class="fa fa-times-circle" @click="clearInput" />
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({
         name: 'name-input',

@@ -28,10 +28,10 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Prop, Watch} from "vue-property-decorator";
-    import Criterium from "../../Domain/Criterium";
-    import Level from "../../Domain/Level";
-    import Choice from "../../Domain/Choice";
+    import {Component, Vue, Prop, Watch} from 'vue-property-decorator';
+    import Level from '../../Domain/Level';
+    import Criterium from '../../Domain/Criterium';
+    import Choice from '../../Domain/Choice';
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
@@ -81,7 +81,6 @@
             }
         }
     }
-
 </script>
 
 <style scoped>

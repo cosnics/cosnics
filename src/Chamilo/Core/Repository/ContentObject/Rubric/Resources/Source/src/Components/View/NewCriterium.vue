@@ -1,0 +1,45 @@
+<template>
+    <div v-if="inputFormShown">
+        <name-input ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+    </div>
+    <div v-else :class="{criteriumDragging}">
+        <button :disabled="!actionsEnabled" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
+    </div>
+</template>
+
+<script lang="ts">
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
+    import NameInput from './NameInput.vue';
+
+    @Component({
+        name: 'new-criterium',
+        components: { NameInput }
+    })
+    export default class NewCriterium extends Vue {
+        private newCriterium: Criterium|null = null;
+
+        @Prop({type: Category, required: true}) readonly category!: Category;
+        @Prop({type: Boolean, default: false}) readonly criteriumDragging!: boolean;
+        @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
+
+        get inputFormShown() {
+            return this.newCriterium !== null;
+        }
+
+        createNewCriterium() {
+            this.newCriterium = new Criterium();
+        }
+
+        addNewCriterium() {
+            this.category.addChild(this.newCriterium!, this.category.criteria.length);
+            this.cancel();
+        }
+
+        cancel() {
+            this.newCriterium = null;
+        }
+    }
+
+</script>

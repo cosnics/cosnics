@@ -97,14 +97,12 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Watch, Vue} from "vue-property-decorator";
-    import Level from "../../Domain/Level";
-    import ScoreRubricStore from "../../ScoreRubricStore";
-    import MoveDeleteBar from "../MoveDeleteBar.vue";
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
+    import Level from '../../Domain/Level';
+    import ScoreRubricStore from '../../ScoreRubricStore';
 
     @Component({
-        name: 'levels-view',
-        components: {MoveDeleteBar}
+        name: 'levels-view'
     })
     export default class LevelsView extends Vue {
         private selectedLevel: Level|null = null;

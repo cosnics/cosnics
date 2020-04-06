@@ -37,11 +37,11 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import ScoreRubricView from "./Components/View/ScoreRubricView.vue";
-    import CriteriumDetailsView from "./Components/View/CriteriumDetailsView.vue";
-    import ScoreRubricStore from "./ScoreRubricStore";
-    import Criterium from "./Domain/Criterium";
-    import LevelsView from "./Components/View/LevelsView.vue";
+    import ScoreRubricView from './Components/View/ScoreRubricView.vue';
+    import CriteriumDetailsView from './Components/View/CriteriumDetailsView.vue';
+    import ScoreRubricStore from './ScoreRubricStore';
+    import Criterium from './Domain/Criterium';
+    import LevelsView from './Components/View/LevelsView.vue';
 
     @Component({
         components: {
