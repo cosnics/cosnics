@@ -445,11 +445,17 @@ class PlatformGroupTeamService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @return \Microsoft\Graph\Model\Team|null
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     protected function getTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        return $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        try
+        {
+            return $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        }
+        catch(GraphException $exception)
+        {
+            return null;
+        }
     }
 
     /**

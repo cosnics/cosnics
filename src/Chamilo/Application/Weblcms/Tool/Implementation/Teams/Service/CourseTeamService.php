@@ -101,7 +101,6 @@ class CourseTeamService
      * @param Course $course
      *
      * @return Team|null
-     * @throws GraphException
      */
     public function getTeam(Course $course): ?Team
     {
@@ -112,7 +111,14 @@ class CourseTeamService
             return null;
         }
 
-        return $this->teamService->getTeam($courseTeamRelation->getTeamId());
+        try
+        {
+            return $this->teamService->getTeam($courseTeamRelation->getTeamId());
+        }
+        catch(GraphException $ex)
+        {
+            return null;
+        }
     }
 
     /**
