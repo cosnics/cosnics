@@ -12,6 +12,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
@@ -408,14 +409,20 @@ class PlatformGroupTeamService
      * @param int $platformGroupId
      *
      * @return string
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function updateLocalTeamNameById(int $platformGroupId)
     {
         $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
 
-        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        try
+        {
+            $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        }
+        catch(GraphException $ex)
+        {
+            $team = null;
+        }
+
         if (!$team instanceof Team)
         {
             return $platformGroupTeam->getName();
