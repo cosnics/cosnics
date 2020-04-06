@@ -29,7 +29,7 @@ class CalendarEventForm extends ContentObjectForm
     /**
      * @param string $type
      */
-    protected function addByDayByMonthDayOptionToForm(string $type)
+    protected function addByDayByMonthDayOptionPropertiesToForm(string $type)
     {
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
@@ -53,25 +53,13 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function addByDayRankToForm(string $type)
-    {
-        $this->addElement('html', '<div class="form-row col-md-12 col-lg-4">');
-
-        $this->add_select(
-            $type . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
-            CalendarEvent::get_rank_options(), false
-        );
-
-        $this->addElement('html', '</div>');
-    }
-
     /**
      * @param string $type
      * @param string $subElement
      * @param string $addonLabel
      * @param boolean $multiple
      */
-    protected function addBydayToForm(
+    protected function addByDayPropertiesToForm(
         string $type, string $subElement = self::PARAM_DAY, string $addonLabel = null, bool $multiple = false
     )
     {
@@ -125,7 +113,35 @@ class CalendarEventForm extends ContentObjectForm
     /**
      * @param string $type
      */
-    protected function addBymonthdayToForm(string $type)
+    protected function addByDayRankAndByDayPropertiesToForm(string $type)
+    {
+        $this->addElement('html', '<div class="row frequency-' . $type . '-byday">');
+
+        $this->addByDayRankPropertiesToForm($type);
+        $this->addByDayPropertiesToForm($type);
+
+        $this->addElement('html', '</div>');
+    }
+
+    /**
+     * @param string $type
+     */
+    protected function addByDayRankPropertiesToForm(string $type)
+    {
+        $this->addElement('html', '<div class="form-row col-md-12 col-lg-4">');
+
+        $this->add_select(
+            $type . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
+            CalendarEvent::get_rank_options(), false
+        );
+
+        $this->addElement('html', '</div>');
+    }
+
+    /**
+     * @param string $type
+     */
+    protected function addByMonthDayPropertiesToForm(string $type)
     {
         $html = array();
 
@@ -183,7 +199,7 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '<a class="btn btn-default" data-value="29">29</a>';
         $html[] = '<a class="btn btn-default" data-value="30">30</a>';
         $html[] = '<a class="btn btn-default" data-value="31">31</a>';
-        $html[] = '<a class="btn btn-default"data-value="-1">Last</a>';
+        $html[] = '<a class="btn btn-default" data-value="-1">Last</a>';
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -193,7 +209,35 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function addDailyFrequencyToForm()
+    /**
+     * @throws \Exception
+     */
+    public function addCalendarEventPropertiesToForm()
+    {
+        $this->addElement('category', Translation::get('Properties'));
+
+        $this->add_datepicker(CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), true);
+        $this->add_datepicker(CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), true);
+
+        $this->addRule(
+            CalendarEvent::PROPERTY_START_DATE,
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
+
+        $this->addRule(
+            CalendarEvent::PROPERTY_END_DATE,
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
+
+        $this->addFrequencyPropertiesToForm();
+
+        $this->add_textfield(CalendarEvent::PROPERTY_LOCATION, Translation::get('Location'), false);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function addDailyFrequencyPropertiesToForm()
     {
         $html = array();
 
@@ -223,7 +267,7 @@ class CalendarEventForm extends ContentObjectForm
      *
      * @throws \Exception
      */
-    protected function addFrequencyIntervalToForm(string $type, string $addonLabel)
+    protected function addFrequencyIntervalPropertiesToForm(string $type, string $addonLabel)
     {
         $html = array();
 
@@ -244,7 +288,77 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function addFrequencyRangeToForm()
+    /**
+     * @throws \Exception
+     */
+    protected function addFrequencyPropertiesToForm()
+    {
+        $html = array();
+
+        // Container START
+        $html[] = '<div class="form-row row">';
+        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">Herhaling</div >';
+        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+        $html[] = '<div class="element">';
+
+        $html[] = '<div class="frequency">';
+
+        // Frequency
+        $html[] = '<div class="row">';
+        $html[] = '<div class="form-row col-lg-12">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->add_select(CalendarEvent::PROPERTY_FREQUENCY, null, CalendarEvent::get_frequency_options(), false);
+
+        $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addDailyFrequencyPropertiesToForm();
+        $this->addWeeklyFrequencyPropertiesToForm();
+        $this->addMonthlyFrequencyPropertiesToForm();
+        $this->addYearyFrequencyPropertiesToForm();
+        $this->addFrequencyRangePropertiesToForm();
+
+        // Container END
+        $html = array();
+
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '<div class="form_feedback"></div>';
+        $html[] = '</div>';
+        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '</div>';
+
+        $html[] = '<script>';
+        $html[] = '(function ($) {';
+        $html[] = '    $(document).ready(function () {';
+        $html[] = '        $(".frequency").calendarFrequency({name: "test"});';
+        $html[] = '    })';
+        $html[] = '})(jQuery);';
+
+        $html[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+        $this->addElement(
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
+            'jquery.calendarFrequency.js'
+        )
+        );
+
+        $this->setFrequencyElementTemplates();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function addFrequencyRangePropertiesToForm()
     {
         $html = array();
 
@@ -263,9 +377,9 @@ class CalendarEventForm extends ContentObjectForm
         $html = array();
 
         $html[] = '<div class="btn-group btn-group-justified frequency-range">';
-        $html[] = '<a class="btn btn-default" data-range="frequency-range-none">Geen einddatum</a>';
-        $html[] = '<a class="btn btn-default" data-range="frequency-range-count">Beperkt aantal</a>';
-        $html[] = '<a class="btn btn-default" data-range="frequency-range-until">Tot</a>';
+        $html[] = '<a class="btn btn-default" data-value="1" data-range="frequency-range-none">Geen einddatum</a>';
+        $html[] = '<a class="btn btn-default" data-value="2" data-range="frequency-range-count">Beperkt aantal</a>';
+        $html[] = '<a class="btn btn-default" data-value="3" data-range="frequency-range-until">Tot</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -309,106 +423,30 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function addFrequencyToForm()
+    /**
+     * @throws \Exception
+     */
+    protected function addMonthlyFrequencyPropertiesToForm()
     {
-        $html = array();
+        $this->addElement('html', '<div class="frequency-option frequency-monthly">');
 
-        // Container START
-        $html[] = '<div class="form-row row">';
-        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">Herhaling</div >';
-        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $html[] = '<div class="element">';
+        $this->addElement('html', '<div class="row">');
 
-        $html[] = '<div class="frequency">';
-
-        // Frequency
-        $html[] = '<div class="row">';
-        $html[] = '<div class="form-row col-lg-12">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(CalendarEvent::PROPERTY_FREQUENCY, null, CalendarEvent::get_frequency_options(), false);
-
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->addDailyFrequencyToForm();
-        $this->addWeeklyFrequencyToForm();
-        $this->addMonthlyFrequencyToForm();
-        $this->addYearyFrequencyToForm();
-        $this->addFrequencyRangeToForm();
-
-        // Container END
-        $html = array();
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '<div class="form_feedback"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
-        $html[] = '</div>';
-
-        $html[] = '<script>';
-        $html[] = '(function ($) {';
-        $html[] = '    $(document).ready(function () {';
-        $html[] = '        $(".frequency").calendarFrequency({name: "test"});';
-        $html[] = '    })';
-        $html[] = '})(jQuery);';
-
-        $html[] = '</script>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-        $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
-            'jquery.calendarFrequency.js'
-        )
-        );
-
-        $this->setFrequencyElementTemplates();
-    }
-
-    protected function addByDayRandAndByDayToForm(string $type)
-    {
-
-    }
-
-    protected function addMonthlyFrequencyToForm()
-    {
-        $html = array();
-
-        $html[] = '<div class="frequency-option frequency-monthly">';
-        $html[] = '<div class="row">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->addFrequencyIntervalToForm(self::PARAM_MONTHLY, 'maand');
-
-        $this->addByDayByMonthDayOptionToForm(self::PARAM_MONTHLY);
-
-        $html = array();
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-monthly-byday">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->addByDayRankToForm(self::PARAM_MONTHLY);
-        $this->addBydayToForm(self::PARAM_MONTHLY);
+        $this->addFrequencyIntervalPropertiesToForm(self::PARAM_MONTHLY, 'maand');
+        $this->addByDayByMonthDayOptionPropertiesToForm(self::PARAM_MONTHLY);
 
         $this->addElement('html', '</div>');
 
-        $this->addBymonthdayToForm(self::PARAM_MONTHLY);
+        $this->addByDayRankAndByDayPropertiesToForm(self::PARAM_MONTHLY);
+        $this->addByMonthDayPropertiesToForm(self::PARAM_MONTHLY);
 
         $this->addElement('html', '</div>');
     }
 
-    protected function addWeeklyFrequencyToForm()
+    /**
+     * @throws \Exception
+     */
+    protected function addWeeklyFrequencyPropertiesToForm()
     {
         $html = array();
 
@@ -417,9 +455,9 @@ class CalendarEventForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->addFrequencyIntervalToForm(self::PARAM_WEEKLY, 'weken');
+        $this->addFrequencyIntervalPropertiesToForm(self::PARAM_WEEKLY, 'weken');
 
-        $this->addBydayToForm(self::PARAM_WEEKLY, '', 'Op', true);
+        $this->addByDayPropertiesToForm(self::PARAM_WEEKLY, '', 'Op', true);
 
         $html = array();
 
@@ -427,111 +465,119 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '</div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
-    }
-
-    protected function addYearyFrequencyToForm()
-    {
-        $html = array();
-
-        $html[] = '<div class="frequency-option frequency-yearly">';
-
-        $html[] = '<div class="row">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->addFrequencyIntervalToForm(self::PARAM_YEARLY, 'jaar');
-
-        $this->addByDayByMonthDayOptionToForm(self::PARAM_YEARLY);
-
-        $html = array();
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-yearly-byday">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->addByDayRankToForm(self::PARAM_YEARLY);
-        $this->addBydayToForm(self::PARAM_YEARLY);
-
-        $this->addElement('html', '</div>');
-
-        $this->addBymonthdayToForm(self::PARAM_YEARLY);
-
-        $this->addElement('html', '</div>');
     }
 
     /**
      * @throws \Exception
      */
-    public function add_calendar_form()
+    protected function addYearyFrequencyPropertiesToForm()
     {
-        $this->addElement('category', Translation::get('Properties'));
+        $this->addElement('html', '<div class="frequency-option frequency-yearly">');
 
-        $this->add_datepicker(CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), true);
-        $this->add_datepicker(CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), true);
+        $this->addElement('html', '<div class="row">');
 
-        $this->addRule(
-            CalendarEvent::PROPERTY_START_DATE,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        $this->addFrequencyIntervalPropertiesToForm(self::PARAM_YEARLY, 'jaar');
+        $this->addByDayByMonthDayOptionPropertiesToForm(self::PARAM_YEARLY);
+
+        $this->addElement('html', '</div>');
+
+        $this->addByDayRankAndByDayPropertiesToForm(self::PARAM_YEARLY);
+        $this->addByMonthDayPropertiesToForm(self::PARAM_YEARLY);
+
+        $html = array();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon">van de maand</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->add_select(
+            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTH . ']', '', CalendarEvent::get_bymonth_options()
         );
 
-        $this->addRule(
-            CalendarEvent::PROPERTY_END_DATE,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
-        );
+        $html = array();
 
-        $this->addFrequencyToForm();
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
-        $this->add_textfield(CalendarEvent::PROPERTY_LOCATION, Translation::get('Location'), false);
-    }
+        $this->addElement('html', implode(PHP_EOL, $html));
 
-    protected function build_creation_form()
-    {
-        parent::build_creation_form();
-        $this->add_calendar_form();
-    }
-
-    // Inherited
-
-    protected function build_editing_form()
-    {
-        parent::build_editing_form();
-        $this->add_calendar_form();
+        $this->addElement('html', '</div>');
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent $object
+     * @param string[] $htmleditorOptions
+     * @param boolean $inTab
      *
-     * @return mixed
+     * @throws \Exception
      */
-    public function configure_calendar_event($object)
+    protected function build_creation_form($htmleditorOptions = array(), $inTab = false)
+    {
+        parent::build_creation_form($htmleditorOptions, $inTab);
+        $this->addCalendarEventPropertiesToForm();
+    }
+
+    /**
+     * @param string[] $htmleditorOptions
+     * @param boolean $inTab
+     *
+     * @throws \Exception
+     */
+    protected function build_editing_form($htmleditorOptions = array(), $inTab = false)
+    {
+        parent::build_editing_form($htmleditorOptions, $inTab);
+        $this->addCalendarEventPropertiesToForm();
+    }
+
+    public function create_content_object()
+    {
+        $object = new CalendarEvent();
+        $object = $this->setCalendarEventProperties($object);
+
+        $this->set_content_object($object);
+
+        return parent::create_content_object();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent $calendarEvent
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent
+     */
+    public function setCalendarEventProperties($calendarEvent)
     {
         $values = $this->exportValues();
 
-        $object->set_location($values[CalendarEvent::PROPERTY_LOCATION]);
-        $object->set_start_date(DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_START_DATE]));
-        $object->set_end_date(DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_END_DATE]));
+        $calendarEvent->set_location($values[CalendarEvent::PROPERTY_LOCATION]);
+        $calendarEvent->set_start_date(
+            DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_START_DATE])
+        );
+        $calendarEvent->set_end_date(
+            DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_END_DATE])
+        );
         $frequency = $values[CalendarEvent::PROPERTY_FREQUENCY];
 
-        $object->set_frequency($values[CalendarEvent::PROPERTY_FREQUENCY]);
+        $calendarEvent->set_frequency($values[CalendarEvent::PROPERTY_FREQUENCY]);
 
         switch ($frequency)
         {
             case 0 :
-                $object->set_frequency(0);
-                $object->set_frequency_interval(null);
-                $object->set_frequency_count(0);
-                $object->set_until(0);
-                $object->set_byday(null);
-                $object->set_bymonthday(null);
-                $object->set_bymonth(null);
+                $calendarEvent->set_frequency(0);
+                $calendarEvent->set_frequency_interval(null);
+                $calendarEvent->set_frequency_count(0);
+                $calendarEvent->set_until(0);
+                $calendarEvent->set_byday(null);
+                $calendarEvent->set_bymonthday(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 1 :
                 $frequency_type = self::PARAM_DAILY;
-                $object->set_byday(null);
-                $object->set_bymonthday(null);
-                $object->set_bymonth(null);
+                $calendarEvent->set_byday(null);
+                $calendarEvent->set_bymonthday(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 2 :
                 $frequency_type = self::PARAM_WEEKLY;
@@ -540,67 +586,67 @@ class CalendarEventForm extends ContentObjectForm
                 {
                     $bydays[] = CalendarEvent::get_day_ical_format($byday);
                 }
-                $object->set_byday(implode(',', $bydays));
-                $object->set_bymonthday(null);
-                $object->set_bymonth(null);
+                $calendarEvent->set_byday(implode(',', $bydays));
+                $calendarEvent->set_bymonthday(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 3 :
-                $object->set_byday('MO,TU,WE,TH,FR');
-                $object->set_frequency(2);
-                $object->set_frequency_interval(1);
-                $object->set_bymonthday(null);
-                $object->set_bymonth(null);
+                $calendarEvent->set_byday('MO,TU,WE,TH,FR');
+                $calendarEvent->set_frequency(2);
+                $calendarEvent->set_frequency_interval(1);
+                $calendarEvent->set_bymonthday(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 4 :
-                $object->set_frequency(2);
-                $object->set_frequency_interval(2);
-                $object->set_byday(null);
-                $object->set_bymonthday(null);
-                $object->set_bymonth(null);
+                $calendarEvent->set_frequency(2);
+                $calendarEvent->set_frequency_interval(2);
+                $calendarEvent->set_byday(null);
+                $calendarEvent->set_bymonthday(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 5 :
                 $frequency_type = self::PARAM_MONTHLY;
                 if ($values[$frequency_type][self::PARAM_OPTION] == CalendarEvent::PROPERTY_BYDAY)
                 {
-                    $object->set_byday(
+                    $calendarEvent->set_byday(
                         CalendarEvent::get_byday_ical_format(
                             $values[$frequency_type][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK],
                             $values[$frequency_type][CalendarEvent::PROPERTY_BYDAY][self::PARAM_DAY]
                         )
                     );
 
-                    $object->set_bymonthday(null);
+                    $calendarEvent->set_bymonthday(null);
                 }
                 else
                 {
-                    $object->set_bymonthday(
+                    $calendarEvent->set_bymonthday(
                         implode(',', $values[$frequency_type][CalendarEvent::PROPERTY_BYMONTHDAY])
                     );
-                    $object->set_byday(null);
+                    $calendarEvent->set_byday(null);
                 }
-                $object->set_bymonth(null);
+                $calendarEvent->set_bymonth(null);
                 break;
             case 6 :
                 $frequency_type = self::PARAM_YEARLY;
 
                 if ($values[$frequency_type][self::PARAM_OPTION] == CalendarEvent::PROPERTY_BYDAY)
                 {
-                    $object->set_byday(
+                    $calendarEvent->set_byday(
                         CalendarEvent::get_byday_ical_format(
                             $values[$frequency_type][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK],
                             $values[$frequency_type][CalendarEvent::PROPERTY_BYDAY][self::PARAM_DAY]
                         )
                     );
-                    $object->set_bymonth($values[$frequency_type][CalendarEvent::PROPERTY_BYMONTH]);
-                    $object->set_bymonthday(null);
+                    $calendarEvent->set_bymonth($values[$frequency_type][CalendarEvent::PROPERTY_BYMONTH]);
+                    $calendarEvent->set_bymonthday(null);
                 }
                 else
                 {
-                    $object->set_bymonthday(
+                    $calendarEvent->set_bymonthday(
                         implode(',', $values[$frequency_type][CalendarEvent::PROPERTY_BYMONTHDAY])
                     );
-                    $object->set_bymonth($values[$frequency_type][CalendarEvent::PROPERTY_BYMONTH]);
-                    $object->set_byday(null);
+                    $calendarEvent->set_bymonth($values[$frequency_type][CalendarEvent::PROPERTY_BYMONTH]);
+                    $calendarEvent->set_byday(null);
                 }
 
                 break;
@@ -608,78 +654,75 @@ class CalendarEventForm extends ContentObjectForm
 
         if (in_array($frequency, array(1, 2, 5, 6)))
         {
-            $object->set_frequency_interval($values[$frequency_type][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL]);
+            $calendarEvent->set_frequency_interval(
+                $values[$frequency_type][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL]
+            );
         }
 
         switch ($values[self::PARAM_RANGE])
         {
             case 1:
-                $object->set_until(0);
-                $object->set_frequency_count(0);
+                $calendarEvent->set_until(0);
+                $calendarEvent->set_frequency_count(0);
                 break;
             case 2 :
-                $object->set_frequency_count($values[CalendarEvent::PROPERTY_FREQUENCY_COUNT]);
-                $object->set_until(0);
+                $calendarEvent->set_frequency_count($values[CalendarEvent::PROPERTY_FREQUENCY_COUNT]);
+                $calendarEvent->set_until(0);
                 break;
             case 3 :
-                $object->set_frequency_count(0);
-                $object->set_until(DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_UNTIL]));
+                $calendarEvent->set_frequency_count(0);
+                $calendarEvent->set_until(
+                    DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_UNTIL])
+                );
         }
 
-        return $object;
+        return $calendarEvent;
     }
 
-    public function create_content_object()
-    {
-        $object = new CalendarEvent();
-        $object = $this->configure_calendar_event($object);
-
-        $this->set_content_object($object);
-
-        return parent::create_content_object();
-    }
-
-    // Inherited
-
+    /**
+     * @param string[] $defaults
+     *
+     * @throws \Exception
+     */
     public function setDefaults($defaults = array())
     {
-        $calendar_event = $this->get_content_object();
+        $calendarEvent = $this->get_content_object();
 
-        if (isset($calendar_event) && $this->form_type == self::TYPE_EDIT)
+        if (isset($calendarEvent) && $this->form_type == self::TYPE_EDIT)
         {
-            $defaults[CalendarEvent::PROPERTY_LOCATION] = $calendar_event->get_location();
-            $defaults[CalendarEvent::PROPERTY_START_DATE] = $calendar_event->get_start_date();
-            $defaults[CalendarEvent::PROPERTY_END_DATE] = $calendar_event->get_end_date();
-            $defaults[CalendarEvent::PROPERTY_FREQUENCY] = $calendar_event->get_frequency();
+            $defaults[CalendarEvent::PROPERTY_LOCATION] = $calendarEvent->get_location();
+            $defaults[CalendarEvent::PROPERTY_START_DATE] = $calendarEvent->get_start_date();
+            $defaults[CalendarEvent::PROPERTY_END_DATE] = $calendarEvent->get_end_date();
+            $defaults[CalendarEvent::PROPERTY_FREQUENCY] = $calendarEvent->get_frequency();
 
-            $repeats = $calendar_event->has_frequency();
+            $repeats = $calendarEvent->has_frequency();
             if ($repeats)
             {
-                switch ($calendar_event->get_frequency())
+                switch ($calendarEvent->get_frequency())
                 {
                     case 1 :
                         $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] =
-                            $calendar_event->get_frequency_interval();
+                            $calendarEvent->get_frequency_interval();
                         $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
                         $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array(1);
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
                         break;
                     case 2 :
-                        if ($calendar_event->get_byday() == 'MO,TU,WE,TH,FR' &&
-                            $calendar_event->get_frequency_interval() == 1)
+                        if ($calendarEvent->get_byday() == 'MO,TU,WE,TH,FR' &&
+                            $calendarEvent->get_frequency_interval() == 1)
                         {
                             $defaults[CalendarEvent::PROPERTY_FREQUENCY] = 3;
                             $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
                             $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array(1);
                         }
-                        elseif ($calendar_event->get_frequency_interval() == 2 && $calendar_event->get_byday() == '')
+                        elseif ($calendarEvent->get_frequency_interval() == 2 && $calendarEvent->get_byday() == '')
                         {
                             $defaults[CalendarEvent::PROPERTY_FREQUENCY] = 4;
                             $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
@@ -687,7 +730,7 @@ class CalendarEventForm extends ContentObjectForm
                         }
                         else
                         {
-                            $bydays = CalendarEvent::get_byday_parts($calendar_event->get_byday());
+                            $bydays = CalendarEvent::get_byday_parts($calendarEvent->get_byday());
                             foreach ($bydays as $byday)
                             {
                                 $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY][] =
@@ -696,32 +739,32 @@ class CalendarEventForm extends ContentObjectForm
                                     );
                             }
                             $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] =
-                                $calendar_event->get_frequency_interval();
+                                $calendarEvent->get_frequency_interval();
                         }
                         $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
                         break;
 
                     case 5 :
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] =
-                            $calendar_event->get_frequency_interval();
-                        if ($calendar_event->get_bymonthday())
+                            $calendarEvent->get_frequency_interval();
+                        if ($calendarEvent->get_bymonthday())
                         {
-                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 1;
+                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYMONTHDAY;
                             $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYMONTHDAY] =
-                                $calendar_event->get_bymonthday();
+                                $calendarEvent->get_bymonthday();
                         }
                         else
                         {
-                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-                            $bydays = CalendarEvent::get_byday_parts($calendar_event->get_byday());
+                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
+                            $bydays = CalendarEvent::get_byday_parts($calendarEvent->get_byday());
                             foreach ($bydays as $byday)
                             {
                                 $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_DAY] =
@@ -734,27 +777,27 @@ class CalendarEventForm extends ContentObjectForm
                         }
                         $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
                         $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array(1);
+                        $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array();
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
+                        $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array();
                         break;
                     case 6 :
                         $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] =
-                            $calendar_event->get_frequency_interval();
-                        if ($calendar_event->get_bymonthday())
+                            $calendarEvent->get_frequency_interval();
+                        if ($calendarEvent->get_bymonthday())
                         {
-                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
+                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYMONTHDAY;
                             $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTHDAY] =
-                                $calendar_event->get_bymonthday();
+                                $calendarEvent->get_bymonthday();
                             $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTH] =
-                                $calendar_event->get_bymonth();
+                                $calendarEvent->get_bymonth();
                         }
                         else
                         {
-                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 1;
-                            $bydays = CalendarEvent::get_byday_parts($calendar_event->get_byday());
+                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
+                            $bydays = CalendarEvent::get_byday_parts($calendarEvent->get_byday());
                             foreach ($bydays as $byday)
                             {
                                 $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_DAY] =
@@ -764,24 +807,24 @@ class CalendarEventForm extends ContentObjectForm
                                 $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] =
                                     $byday[0];
                                 $defaults[self::PARAM_YEARLY][CalendarEvent::PROPERTY_BYMONTH] =
-                                    $calendar_event->get_bymonth();
+                                    $calendarEvent->get_bymonth();
                             }
                         }
                         $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
                         $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array(1);
+                        $defaults[self::PARAM_WEEKLY][CalendarEvent::PROPERTY_BYDAY] = array();
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
+                        $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = CalendarEvent::PROPERTY_BYDAY;
                         $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-                        $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array(1);
+                        $defaults[self::PARAM_MONTHLY][CalendarEvent::PROPERTY_BYMONTHDAY] = array();
                         break;
                 }
 
-                if ($calendar_event->get_until() == 0)
+                if ($calendarEvent->get_until() == 0)
                 {
-                    if ($calendar_event->get_frequency_count() > 0)
+                    if ($calendarEvent->get_frequency_count() > 0)
                     {
-                        $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = $calendar_event->get_frequency_count();
+                        $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = $calendarEvent->get_frequency_count();
                         $defaults[self::PARAM_RANGE] = 2;
                     }
                     else
@@ -794,7 +837,7 @@ class CalendarEventForm extends ContentObjectForm
                 else
                 {
                     $defaults[self::PARAM_RANGE] = 3;
-                    $defaults[CalendarEvent::PROPERTY_UNTIL] = $calendar_event->get_until();
+                    $defaults[CalendarEvent::PROPERTY_UNTIL] = $calendarEvent->get_until();
                     $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = 10;
                 }
             }
@@ -864,15 +907,15 @@ class CalendarEventForm extends ContentObjectForm
         }
     }
 
+    /**
+     * @return boolean
+     */
     public function update_content_object()
     {
-        $object = $this->get_content_object();
-        $object = $this->configure_calendar_event($object);
+        $this->setCalendarEventProperties($this->get_content_object());
 
         return parent::update_content_object();
     }
-
-    // Inherited
 
     /**
      * Validates the frequency interval
