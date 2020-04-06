@@ -112,28 +112,19 @@ class CourseTeamService
             return null;
         }
 
-        $team = $this->teamService->getTeam($courseTeamRelation->getTeamId());
-
-        if (is_null($team))
-        {
-            //team was deleted
-            $this->courseTeamRelationRepository->delete($courseTeamRelation);
-
-            return null;
-        }
-
-        return $team;
+        return $this->teamService->getTeam($courseTeamRelation->getTeamId());
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function courseHasTeam(Course $course)
     {
-        return $this->getTeam($course) instanceof Team;
+        $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
+
+        return $courseTeamRelation instanceof CourseTeamRelation;
     }
 
     /**

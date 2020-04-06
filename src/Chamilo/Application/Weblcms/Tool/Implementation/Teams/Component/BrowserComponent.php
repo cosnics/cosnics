@@ -28,21 +28,19 @@ class BrowserComponent extends Manager
         $courseTeamService = $this->getCourseTeamService();
         $courseTeamName = null;
 
-        // TODO: emergency bugfix for courses that could not be found, maybe a better solution should be put in place later.
         try
         {
             $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
+            if ($hasTeam)
+            {
+                $courseTeam = $courseTeamService->getTeam($this->get_course());
+                $courseTeamName = $courseTeam->getProperties()['displayName'];
+            }
         }
         catch(GraphException $ex)
         {
-            $this->getExceptionLogger()->logException($ex);
-            $hasTeam = false;
-        }
-
-        if ($hasTeam)
-        {
-            $courseTeam = $courseTeamService->getTeam($this->get_course());
-            $courseTeamName = $courseTeam->getProperties()['displayName'];
+            $hasTeam = true;
+            $courseTeamName = $this->get_course()->get_title();
         }
 
         return $this->render(
