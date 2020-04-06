@@ -79,9 +79,15 @@
 
                     if ($(this).hasClass('btn-primary')) {
                         $(this).removeClass('btn-primary');
+
+                        $('select[name="monthly[bymonthday][]"] option[value=' + $(this).data('value') +
+                            ']').removeAttr(
+                            'selected');
                     }
                     else {
                         $(this).addClass('btn-primary');
+                        $('select[name="monthly[bymonthday][]"] option[value=' + $(this).data('value') + ']').attr(
+                            'selected', 'selected');
                     }
                 }
 
@@ -92,12 +98,20 @@
                     $('.' + $(this).data('option')).show();
 
                     $('.frequency-yearly-option a.btn').removeClass('btn-primary');
+                    $('select[name="yearly[option]"] option').removeAttr('selected');
+
                     $(this).addClass('btn-primary');
+                    $('select[name="yearly[option]"] option[value=' + $(this).data('value') + ']').attr(
+                        'selected', 'selected');
                 }
 
                 function frequencyYearlyByDaySelected(event) {
                     $('.frequency-yearly-byday-day a.btn').removeClass('btn-primary');
+                    $('select[name="yearly[byday][day]"] option').removeAttr('selected');
+
                     $(this).addClass('btn-primary');
+                    $('select[name="yearly[byday][day]"] option[value=' + $(this).data('value') + ']').attr(
+                        'selected', 'selected');
                 }
 
                 function frequencyYearlyBymonthdaySelected(event) {
@@ -105,9 +119,14 @@
 
                     if ($(this).hasClass('btn-primary')) {
                         $(this).removeClass('btn-primary');
+
+                        $('select[name="yearly[bymonthday][]"] option[value=' + $(this).data('value') + ']').removeAttr(
+                            'selected');
                     }
                     else {
                         $(this).addClass('btn-primary');
+                        $('select[name="yearly[bymonthday][]"] option[value=' + $(this).data('value') + ']').attr(
+                            'selected', 'selected');
                     }
                 }
 

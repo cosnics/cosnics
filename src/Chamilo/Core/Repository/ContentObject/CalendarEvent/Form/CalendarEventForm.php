@@ -27,53 +27,178 @@ class CalendarEventForm extends ContentObjectForm
     const PARAM_YEARLY = 'yearly';
 
     /**
-     * @throws \Exception
+     * @param string $type
      */
-    public function add_calendar_form()
+    protected function addByDayByMonthDayOptionToForm(string $type)
     {
-        $this->addElement('category', Translation::get('Properties'));
+        $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
-        $this->add_datepicker(CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), true);
-        $this->add_datepicker(CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), true);
-
-        $this->addRule(
-            CalendarEvent::PROPERTY_START_DATE,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
-        );
-
-        $this->addRule(
-            CalendarEvent::PROPERTY_END_DATE,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        $this->add_select(
+            $type . '[' . self::PARAM_OPTION . ']', null, array(
+            CalendarEvent::PROPERTY_BYDAY => CalendarEvent::PROPERTY_BYDAY,
+            CalendarEvent::PROPERTY_BYMONTHDAY => CalendarEvent::PROPERTY_BYMONTHDAY
+        ), false, array('style' => 'display: none;')
         );
 
         $html = array();
 
-        // Container START
-        $html[] = '<div class="form-row row">';
-        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">Herhaling</div >';
-        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $html[] = '<div class="element">';
+        $html[] = '<div class="btn-group btn-group-justified frequency-' . $type . '-option">';
+        $html[] = '<a class="btn btn-default" data-option="frequency-' . $type .
+            '-byday" data-value="byday">op deze weekdagen</a>';
+        $html[] = '<a class="btn btn-default" data-option="frequency-' . $type .
+            '-bymonthday" data-value="bymonthday">op deze dagen</a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
-        $html[] = '<div class="frequency">';
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
 
-        // Frequency
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-lg-12">';
+    protected function addByDayRankToForm(string $type)
+    {
+        $this->addElement('html', '<div class="form-row col-md-12 col-lg-4">');
+
+        $this->add_select(
+            $type . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
+            CalendarEvent::get_rank_options(), false
+        );
+
+        $this->addElement('html', '</div>');
+    }
+
+    /**
+     * @param string $type
+     * @param string $subElement
+     * @param string $addonLabel
+     * @param boolean $multiple
+     */
+    protected function addBydayToForm(
+        string $type, string $subElement = self::PARAM_DAY, string $addonLabel = null, bool $multiple = false
+    )
+    {
+        $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
+
+        $attributes = array();
+        $attributes['style'] = 'display: none;';
+
+        if ($multiple)
+        {
+            $attributes['multiple'] = 'multiple';
+        }
+
+        $frequencyClass = 'frequency-' . $type . '-byday';
+        $elementNameParts = array();
+
+        $elementNameParts[] = $type;
+        $elementNameParts[] = '[' . CalendarEvent::PROPERTY_BYDAY . ']';
+
+        if (!empty($subElement))
+        {
+            $elementNameParts[] = '[' . $subElement . ']';
+            $frequencyClass .= '-' . $subElement;
+        }
+
+        $this->add_select(implode('', $elementNameParts), null, CalendarEvent::get_byday_options(), false, $attributes);
+
+        $html = array();
+
+        $html[] = '<div class="btn-group btn-group-justified ' . $frequencyClass . '">';
+
+        if (!empty($addonLabel))
+        {
+            $html[] = '<span class="input-group-addon">' . $addonLabel . '</span>';
+        }
+
+        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
+        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
+        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
+        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
+        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
+        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
+        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    /**
+     * @param string $type
+     */
+    protected function addBymonthdayToForm(string $type)
+    {
+        $html = array();
+
+        $html[] = '<div class="row frequency-' . $type . '-bymonthday">';
+
+        $html[] = '<div class="form-row col-md-12 col-lg-12">';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->add_select(CalendarEvent::PROPERTY_FREQUENCY, null, CalendarEvent::get_frequency_options(), false);
+        $this->add_select(
+            $type . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null, CalendarEvent::get_bymonthday_options(),
+            false, array('multiple' => 'multiple', 'style' => 'display: none;')
+        );
 
         $html = array();
 
-        $html[] = '</div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default" data-value="1">1</a>';
+        $html[] = '<a class="btn btn-default" data-value="2">2</a>';
+        $html[] = '<a class="btn btn-default" data-value="3">3</a>';
+        $html[] = '<a class="btn btn-default" data-value="4">4</a>';
+        $html[] = '<a class="btn btn-default" data-value="5">5</a>';
+        $html[] = '<a class="btn btn-default" data-value="6">6</a>';
+        $html[] = '<a class="btn btn-default" data-value="7">7</a>';
+        $html[] = '<a class="btn btn-default" data-value="8">8</a>';
         $html[] = '</div>';
 
-        // Daily
-        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Daily</h4></div></div>';
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default" data-value="9">9</a>';
+        $html[] = '<a class="btn btn-default" data-value="10">10</a>';
+        $html[] = '<a class="btn btn-default" data-value="11">11</a>';
+        $html[] = '<a class="btn btn-default" data-value="12">12</a>';
+        $html[] = '<a class="btn btn-default" data-value="13">13</a>';
+        $html[] = '<a class="btn btn-default" data-value="14">14</a>';
+        $html[] = '<a class="btn btn-default" data-value="15">15</a>';
+        $html[] = '<a class="btn btn-default" data-value="16">16</a>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default" data-value="17">17</a>';
+        $html[] = '<a class="btn btn-default" data-value="18">18</a>';
+        $html[] = '<a class="btn btn-default" data-value="19">19</a>';
+        $html[] = '<a class="btn btn-default" data-value="20">20</a>';
+        $html[] = '<a class="btn btn-default" data-value="21">21</a>';
+        $html[] = '<a class="btn btn-default" data-value="22">22</a>';
+        $html[] = '<a class="btn btn-default" data-value="23">23</a>';
+        $html[] = '<a class="btn btn-default" data-value="24">24</a>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="btn-group btn-group-justified">';
+        $html[] = '<a class="btn btn-default" data-value="25">25</a>';
+        $html[] = '<a class="btn btn-default" data-value="26">26</a>';
+        $html[] = '<a class="btn btn-default" data-value="27">27</a>';
+        $html[] = '<a class="btn btn-default" data-value="28">28</a>';
+        $html[] = '<a class="btn btn-default" data-value="29">29</a>';
+        $html[] = '<a class="btn btn-default" data-value="30">30</a>';
+        $html[] = '<a class="btn btn-default" data-value="31">31</a>';
+        $html[] = '<a class="btn btn-default"data-value="-1">Last</a>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    protected function addDailyFrequencyToForm()
+    {
+        $html = array();
 
         $html[] = '<div class="row frequency-option frequency-daily">';
-        $html[] = '<div class="form-group col-sm-12">';
+        $html[] = '<div class="form-row col-sm-12">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
 
@@ -89,363 +214,43 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '</div>';
         $html[] = '</div>';
 
-        // Weekly
-        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Weekly</h4></div></div>';
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
 
-        $html[] = '<div class="row frequency-option frequency-weekly">';
-        $html[] = '<div class="form-group col-md-12 col-lg-4">';
+    /**
+     * @param string $type
+     * @param string $addonLabel
+     *
+     * @throws \Exception
+     */
+    protected function addFrequencyIntervalToForm(string $type, string $addonLabel)
+    {
+        $html = array();
+
+        $html[] = '<div class="form-row col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Elke</div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->add_textfield(self::PARAM_WEEKLY . '[' . CalendarEvent::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
+        $this->add_textfield($type . '[' . CalendarEvent::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
 
         $html = array();
 
-        $html[] = '<div class="input-group-addon">weken</div>';
+        $html[] = '<div class="input-group-addon">' . $addonLabel . '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-8">';
 
         $this->addElement('html', implode(PHP_EOL, $html));
+    }
 
-        $this->add_select(
-            self::PARAM_WEEKLY . '[' . CalendarEvent::PROPERTY_BYDAY . ']', null, CalendarEvent::get_byday_options(),
-            false, array('multiple' => 'multiple', 'style' => 'display: none;')
-        );
-
+    protected function addFrequencyRangeToForm()
+    {
         $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified frequency-weekly-byday">';
-        $html[] = '<span class="input-group-addon">Op</span>';
-        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
-        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
-        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
-        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
-        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
-        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
-        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        // Monthly
-        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Monthly</h4></div></div>';
-
-        $html[] = '<div class="frequency-option frequency-monthly">';
-        $html[] = '<div class="row">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-4">';
-        $html[] = '<div class="input-group">';
-        $html[] = '<div class="input-group-addon">Elke</div>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_textfield(self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
-
-        $html = array();
-
-        $html[] = '<div class="input-group-addon">maand</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-8">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_MONTHLY . '[' . self::PARAM_OPTION . ']', null,
-            array(CalendarEvent::PROPERTY_BYDAY, 1 => CalendarEvent::PROPERTY_BYMONTH), false,
-            array('style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified frequency-monthly-option">';
-        $html[] =
-            '<a class="btn btn-default" data-option="frequency-monthly-byday" data-value="1">op deze weekdagen</a>';
-        $html[] =
-            '<a class="btn btn-default" data-option="frequency-monthly-bymonthday" data-value="2">op deze dagen</a>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-monthly-byday">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-4">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
-            CalendarEvent::get_rank_options(), false
-        );
-
-        $html = array();
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-8">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_DAY . ']', null,
-            CalendarEvent::get_byday_options(), false, array('style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified frequency-monthly-byday-day">';
-        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
-        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
-        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
-        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
-        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
-        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
-        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-monthly-bymonthday">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-12">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
-            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'multiple', 'style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">1</a>';
-        $html[] = '<a class="btn btn-default">2</a>';
-        $html[] = '<a class="btn btn-default">3</a>';
-        $html[] = '<a class="btn btn-default">4</a>';
-        $html[] = '<a class="btn btn-default">5</a>';
-        $html[] = '<a class="btn btn-default">6</a>';
-        $html[] = '<a class="btn btn-default">7</a>';
-        $html[] = '<a class="btn btn-default">8</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">9</a>';
-        $html[] = '<a class="btn btn-default">10</a>';
-        $html[] = '<a class="btn btn-default">11</a>';
-        $html[] = '<a class="btn btn-default">12</a>';
-        $html[] = '<a class="btn btn-default">13</a>';
-        $html[] = '<a class="btn btn-default">14</a>';
-        $html[] = '<a class="btn btn-default">15</a>';
-        $html[] = '<a class="btn btn-default">16</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">17</a>';
-        $html[] = '<a class="btn btn-default">18</a>';
-        $html[] = '<a class="btn btn-default">19</a>';
-        $html[] = '<a class="btn btn-default">20</a>';
-        $html[] = '<a class="btn btn-default">21</a>';
-        $html[] = '<a class="btn btn-default">22</a>';
-        $html[] = '<a class="btn btn-default">23</a>';
-        $html[] = '<a class="btn btn-default">24</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">25</a>';
-        $html[] = '<a class="btn btn-default">26</a>';
-        $html[] = '<a class="btn btn-default">27</a>';
-        $html[] = '<a class="btn btn-default">28</a>';
-        $html[] = '<a class="btn btn-default">29</a>';
-        $html[] = '<a class="btn btn-default">30</a>';
-        $html[] = '<a class="btn btn-default">31</a>';
-        $html[] = '<a class="btn btn-default">Last</a>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        // Yearly
-        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Yearly</h4></div></div>';
-
-        $html[] = '<div class="frequency-option frequency-yearly">';
 
         $html[] = '<div class="row">';
 
-        $html[] = '<div class="form-group col-md-12 col-lg-4">';
-        $html[] = '<div class="input-group">';
-        $html[] = '<div class="input-group-addon">Elke</div>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_textfield(self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
-
-        $html = array();
-
-        $html[] = '<div class="input-group-addon">jaar</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-8">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_YEARLY . '[' . self::PARAM_OPTION . ']', null,
-            array(CalendarEvent::PROPERTY_BYDAY, 1 => CalendarEvent::PROPERTY_BYMONTH), false,
-            array('style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified frequency-yearly-option">';
-        $html[] =
-            '<a class="btn btn-default" data-option="frequency-yearly-byday" data-value="1">op deze weekdagen</a>';
-        $html[] =
-            '<a class="btn btn-default" data-option="frequency-yearly-bymonthday" data-value="2">op deze dagen</a>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-yearly-byday">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-4">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_MONTHLY . '[' . CalendarEvent::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', null,
-            CalendarEvent::get_rank_options()
-        );
-
-        $html = array();
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-8">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']', null,
-            CalendarEvent::get_byday_options(), false, array('style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified frequency-yearly-byday-day">';
-        $html[] = '<a class="btn btn-default" data-value="1">Ma</a>';
-        $html[] = '<a class="btn btn-default" data-value="2">Di</a>';
-        $html[] = '<a class="btn btn-default" data-value="3">Wo</a>';
-        $html[] = '<a class="btn btn-default" data-value="4">Do</a>';
-        $html[] = '<a class="btn btn-default" data-value="5">Vr</a>';
-        $html[] = '<a class="btn btn-default" data-value="6">Za</a>';
-        $html[] = '<a class="btn btn-default" data-value="7">Zo</a>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row frequency-yearly-bymonthday">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-12">';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTHDAY . ']', null,
-            CalendarEvent::get_bymonthday_options(), false, array('multiple' => 'multiple', 'style' => 'display: none;')
-        );
-
-        $html = array();
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">1</a>';
-        $html[] = '<a class="btn btn-default">2</a>';
-        $html[] = '<a class="btn btn-default">3</a>';
-        $html[] = '<a class="btn btn-default">4</a>';
-        $html[] = '<a class="btn btn-default">5</a>';
-        $html[] = '<a class="btn btn-default">6</a>';
-        $html[] = '<a class="btn btn-default">7</a>';
-        $html[] = '<a class="btn btn-default">8</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">9</a>';
-        $html[] = '<a class="btn btn-default">10</a>';
-        $html[] = '<a class="btn btn-default">11</a>';
-        $html[] = '<a class="btn btn-default">12</a>';
-        $html[] = '<a class="btn btn-default">13</a>';
-        $html[] = '<a class="btn btn-default">14</a>';
-        $html[] = '<a class="btn btn-default">15</a>';
-        $html[] = '<a class="btn btn-default">16</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">17</a>';
-        $html[] = '<a class="btn btn-default">18</a>';
-        $html[] = '<a class="btn btn-default">19</a>';
-        $html[] = '<a class="btn btn-default">20</a>';
-        $html[] = '<a class="btn btn-default">21</a>';
-        $html[] = '<a class="btn btn-default">22</a>';
-        $html[] = '<a class="btn btn-default">23</a>';
-        $html[] = '<a class="btn btn-default">24</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="btn-group btn-group-justified">';
-        $html[] = '<a class="btn btn-default">25</a>';
-        $html[] = '<a class="btn btn-default">26</a>';
-        $html[] = '<a class="btn btn-default">27</a>';
-        $html[] = '<a class="btn btn-default">28</a>';
-        $html[] = '<a class="btn btn-default">29</a>';
-        $html[] = '<a class="btn btn-default">30</a>';
-        $html[] = '<a class="btn btn-default">31</a>';
-        $html[] = '<a class="btn btn-default"></a>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '<div class="row">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-12">';
-        $html[] = '<div class="input-group">';
-        $html[] = '<div class="input-group-addon">van de maand</div>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_select(
-            self::PARAM_YEARLY . '[' . CalendarEvent::PROPERTY_BYMONTH . ']', '', CalendarEvent::get_bymonth_options()
-        );
-
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        //Until
-        $html[] = '<div class="row"><div class="col-md-12 col-lg-6"><h4>Until</h4></div></div>';
-
-        $html[] = '<div class="row">';
-
-        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="form-row col-md-12 col-lg-12">';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
@@ -468,7 +273,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '<div class="row frequency-range-count">';
 
-        $html[] = '<div class="form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="form-row col-md-12 col-lg-12">';
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon">Maak</div>';
 
@@ -486,7 +291,7 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '<div class="row frequency-range-until">';
 
-        $html[] = '<div class="form-inline form-group col-md-12 col-lg-12">';
+        $html[] = '<div class="form-inline form-row col-md-12 col-lg-12">';
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
@@ -501,7 +306,44 @@ class CalendarEventForm extends ContentObjectForm
 
         $html[] = '</div>';
 
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    protected function addFrequencyToForm()
+    {
+        $html = array();
+
+        // Container START
+        $html[] = '<div class="form-row row">';
+        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">Herhaling</div >';
+        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+        $html[] = '<div class="element">';
+
+        $html[] = '<div class="frequency">';
+
+        // Frequency
+        $html[] = '<div class="row">';
+        $html[] = '<div class="form-row col-lg-12">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->add_select(CalendarEvent::PROPERTY_FREQUENCY, null, CalendarEvent::get_frequency_options(), false);
+
+        $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addDailyFrequencyToForm();
+        $this->addWeeklyFrequencyToForm();
+        $this->addMonthlyFrequencyToForm();
+        $this->addYearyFrequencyToForm();
+        $this->addFrequencyRangeToForm();
+
         // Container END
+        $html = array();
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -520,9 +362,6 @@ class CalendarEventForm extends ContentObjectForm
         $html[] = '</script>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
-
-        $this->add_textfield(CalendarEvent::PROPERTY_LOCATION, Translation::get('Location'), false);
-
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
@@ -531,6 +370,120 @@ class CalendarEventForm extends ContentObjectForm
         );
 
         $this->setFrequencyElementTemplates();
+    }
+
+    protected function addByDayRandAndByDayToForm(string $type)
+    {
+
+    }
+
+    protected function addMonthlyFrequencyToForm()
+    {
+        $html = array();
+
+        $html[] = '<div class="frequency-option frequency-monthly">';
+        $html[] = '<div class="row">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addFrequencyIntervalToForm(self::PARAM_MONTHLY, 'maand');
+
+        $this->addByDayByMonthDayOptionToForm(self::PARAM_MONTHLY);
+
+        $html = array();
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row frequency-monthly-byday">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addByDayRankToForm(self::PARAM_MONTHLY);
+        $this->addBydayToForm(self::PARAM_MONTHLY);
+
+        $this->addElement('html', '</div>');
+
+        $this->addBymonthdayToForm(self::PARAM_MONTHLY);
+
+        $this->addElement('html', '</div>');
+    }
+
+    protected function addWeeklyFrequencyToForm()
+    {
+        $html = array();
+
+        $html[] = '<div class="frequency-option frequency-weekly">';
+        $html[] = '<div class="row">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addFrequencyIntervalToForm(self::PARAM_WEEKLY, 'weken');
+
+        $this->addBydayToForm(self::PARAM_WEEKLY, '', 'Op', true);
+
+        $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    protected function addYearyFrequencyToForm()
+    {
+        $html = array();
+
+        $html[] = '<div class="frequency-option frequency-yearly">';
+
+        $html[] = '<div class="row">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addFrequencyIntervalToForm(self::PARAM_YEARLY, 'jaar');
+
+        $this->addByDayByMonthDayOptionToForm(self::PARAM_YEARLY);
+
+        $html = array();
+
+        $html[] = '</div>';
+
+        $html[] = '<div class="row frequency-yearly-byday">';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+
+        $this->addByDayRankToForm(self::PARAM_YEARLY);
+        $this->addBydayToForm(self::PARAM_YEARLY);
+
+        $this->addElement('html', '</div>');
+
+        $this->addBymonthdayToForm(self::PARAM_YEARLY);
+
+        $this->addElement('html', '</div>');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function add_calendar_form()
+    {
+        $this->addElement('category', Translation::get('Properties'));
+
+        $this->add_datepicker(CalendarEvent::PROPERTY_START_DATE, Translation::get('StartDate'), true);
+        $this->add_datepicker(CalendarEvent::PROPERTY_END_DATE, Translation::get('EndDate'), true);
+
+        $this->addRule(
+            CalendarEvent::PROPERTY_START_DATE,
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
+
+        $this->addRule(
+            CalendarEvent::PROPERTY_END_DATE,
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+        );
+
+        $this->addFrequencyToForm();
+
+        $this->add_textfield(CalendarEvent::PROPERTY_LOCATION, Translation::get('Location'), false);
     }
 
     protected function build_creation_form()
