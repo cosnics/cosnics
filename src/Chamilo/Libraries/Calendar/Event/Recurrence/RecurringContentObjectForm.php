@@ -328,7 +328,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
-            'jquery.contenObjectRecurrenceForm.js'
+            'jquery.contentObjectRecurrenceForm.js'
         )
         );
 
