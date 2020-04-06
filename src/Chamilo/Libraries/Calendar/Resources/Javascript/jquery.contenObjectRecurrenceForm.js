@@ -1,7 +1,7 @@
 (function ($) {
     $.fn
         .extend({
-            calendarFrequency: function (options) {
+            contentObjectRecurrenceForm: function (options) {
 
                 // Frequency options
                 const frequency = {1: 'daily', 2: 'weekly', 3: 'weekdays', 4: 'biweekly', 5: 'monthly', 6: 'yearly'};

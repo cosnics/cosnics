@@ -1,44 +1,18 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass;
+namespace Chamilo\Libraries\Calendar\Event\Recurrence;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Architecture\Interfaces\Includeable;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * @package Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass
+ * @package Chamilo\Libraries\Calendar\Event\Recurrence
  *
- * @author Hans De Bisschop
- * @author Dieter De Neef
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Task extends ContentObject implements Versionable, AttachmentSupport, Includeable
+class RecurringContentObject extends ContentObject
 {
-
-    const CATEGORY_ANNIVERSARY = 'Anniversary';
-    const CATEGORY_BUSINESS = 'Business';
-    const CATEGORY_CALL = 'Call';
-    const CATEGORY_CLIENT = 'Client';
-    const CATEGORY_COMPETITION = 'Competition';
-    const CATEGORY_CONFERENCE = 'Conference';
-    const CATEGORY_FAVORITE = 'Favorite';
-    const CATEGORY_GIFT = 'Gift';
-    const CATEGORY_HOLIDAY = 'Holiday';
-    const CATEGORY_IDEAS = 'Ideas';
-    const CATEGORY_MEETING = 'Meeting';
-    const CATEGORY_MONITORING = 'Monitoring';
-    const CATEGORY_PRIVATE = 'Private';
-    const CATEGORY_PROBLEMS = 'Problems';
-    const CATEGORY_PROFESSIONAL = 'Professional';
-    const CATEGORY_PROJECTS = 'Projects';
-    const CATEGORY_PUBLIC_HOLIDAY = 'PublicHoliday';
-    const CATEGORY_SUPPLIER = 'Supplier';
-    const CATEGORY_TRAVEL = 'Travel';
-    const CATEGORY_VARIOUS = 'Various';
-
     const FREQUENCY_BIWEEKLY = 4;
     const FREQUENCY_DAILY = 1;
     const FREQUENCY_MONTHLY = 5;
@@ -47,97 +21,15 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     const FREQUENCY_WEEKLY = 2;
     const FREQUENCY_YEARLY = 6;
 
-    const PRIORITY_HIGH = 1;
-    const PRIORITY_LOW = 9;
-    const PRIORITY_NONE = 0;
-    const PRIORITY_NORMAL = 5;
     const PROPERTY_BYDAY = 'byday';
     const PROPERTY_BYMONTH = 'bymonth';
     const PROPERTY_BYMONTHDAY = 'bymonthday';
-
-    const PROPERTY_CATEGORY = 'category';
-    const PROPERTY_DUE_DATE = 'due_date';
     const PROPERTY_FREQUENCY = 'frequency';
     const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
     const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
-    const PROPERTY_PRIORITY = 'priority';
-    const PROPERTY_START_DATE = 'start_date';
     const PROPERTY_UNTIL = 'until';
 
     public static $days = array(1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU');
-
-    /**
-     *
-     * @return string
-     */
-    public static function category_as_string($type)
-    {
-        switch ($type)
-        {
-            case self::CATEGORY_ANNIVERSARY :
-                $string = Translation::get('Anniversary');
-                break;
-            case self::CATEGORY_BUSINESS :
-                $string = Translation::get('Business');
-                break;
-            case self::CATEGORY_CALL :
-                $string = Translation::get('Call');
-                break;
-            case self::CATEGORY_HOLIDAY :
-                $string = Translation::get('Holiday');
-                break;
-            case self::CATEGORY_GIFT :
-                $string = Translation::get('Gift');
-                break;
-            case self::CATEGORY_CLIENT :
-                $string = Translation::get('Client');
-                break;
-            case self::CATEGORY_COMPETITION :
-                $string = Translation::get('Competition');
-                break;
-            case self::CATEGORY_CONFERENCE :
-                $string = Translation::get('Conference');
-                break;
-            case self::CATEGORY_VARIOUS :
-                $string = Translation::get('Various');
-                break;
-            case self::CATEGORY_SUPPLIER :
-                $string = Translation::get('Supplier');
-                break;
-            case self::CATEGORY_IDEAS :
-                $string = Translation::get('Ideas');
-                break;
-            case self::CATEGORY_PUBLIC_HOLIDAY :
-                $string = Translation::get('PublicHoliday');
-                break;
-            case self::CATEGORY_PRIVATE :
-                $string = Translation::get('Private');
-                break;
-            case self::CATEGORY_FAVORITE :
-                $string = Translation::get('Favorite');
-                break;
-            case self::CATEGORY_PROBLEMS :
-                $string = Translation::get('Problems');
-                break;
-            case self::CATEGORY_PROFESSIONAL :
-                $string = Translation::get('Professional');
-                break;
-            case self::CATEGORY_PROJECTS :
-                $string = Translation::get('Projects');
-                break;
-            case self::CATEGORY_MEETING :
-                $string = Translation::get('Meeting');
-                break;
-            case self::CATEGORY_MONITORING :
-                $string = Translation::get('Monitoring');
-                break;
-            case self::CATEGORY_TRAVEL :
-                $string = Translation::get('Travel');
-                break;
-        }
-
-        return $string;
-    }
 
     /**
      *
@@ -182,21 +74,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         return ($repeat_to == 0 || is_null($repeat_to));
     }
 
-    public static function get_additional_property_names()
-    {
-        return array(
-            self::PROPERTY_START_DATE,
-            self::PROPERTY_DUE_DATE,
-            self::PROPERTY_UNTIL,
-            self::PROPERTY_FREQUENCY,
-            self::PROPERTY_FREQUENCY_COUNT,
-            self::PROPERTY_FREQUENCY_INTERVAL,
-            self::PROPERTY_BYDAY,
-            self::PROPERTY_BYMONTH,
-            self::PROPERTY_BYMONTHDAY
-        );
-    }
-
     public function get_byday()
     {
         return $this->get_additional_property(self::PROPERTY_BYDAY);
@@ -234,9 +111,12 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     {
         $bydays = explode(',', $bydays);
         $parts = array();
+
         foreach ($bydays as $byday)
         {
+
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byday, $byday_parts);
+
             $parts[] = array($byday_parts[1] == 0 ? 0 : $byday_parts[1][0], $byday_parts[2][0]);
         }
 
@@ -317,21 +197,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         );
     }
 
-    /**
-     * Gets the type of this task
-     *
-     * @return int task type
-     */
-    public function get_category()
-    {
-        return $this->get_additional_property(self::PROPERTY_CATEGORY);
-    }
-
-    public function get_category_as_string()
-    {
-        return self::category_as_string($this->get_category());
-    }
-
     public static function get_day_format($day)
     {
         $days = array_flip(self::$days);
@@ -353,16 +218,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         $translation = self::get_byday_options();
 
         return $translation[$day_number];
-    }
-
-    /**
-     * Gets the due date of this calendar event
-     *
-     * @return int The due date
-     */
-    public function get_due_date()
-    {
-        return $this->get_additional_property(self::PROPERTY_DUE_DATE);
     }
 
     /**
@@ -398,38 +253,11 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         $options = array();
 
         $options[self::FREQUENCY_DAILY] = Translation::get('Daily');
+        $options[self::FREQUENCY_WEEKDAYS] = Translation::get('Weekdays');
         $options[self::FREQUENCY_WEEKLY] = Translation::get('Weekly');
+        $options[self::FREQUENCY_BIWEEKLY] = Translation::get('BiWeekly');
         $options[self::FREQUENCY_MONTHLY] = Translation::get('Monthly');
         $options[self::FREQUENCY_YEARLY] = Translation::get('Yearly');
-        $options[self::FREQUENCY_WEEKDAYS] = Translation::get('Weekdays');
-        $options[self::FREQUENCY_BIWEEKLY] = Translation::get('BiWeekly');
-
-        return $options;
-    }
-
-    /**
-     * Gets the priority of this task
-     *
-     * @return String task priority
-     */
-    public function get_priority()
-    {
-        return $this->get_additional_property(self::PROPERTY_PRIORITY);
-    }
-
-    public function get_priority_as_string()
-    {
-        return self::priority_as_string($this->get_priority());
-    }
-
-    public static function get_priority_options()
-    {
-        $options = array();
-
-        $options[self::PRIORITY_NONE] = Translation::get('Unspecified');
-        $options[self::PRIORITY_LOW] = Translation::get('Low');
-        $options[self::PRIORITY_NORMAL] = Translation::get('Normal');
-        $options[self::PRIORITY_HIGH] = Translation::get('High');
 
         return $options;
     }
@@ -456,15 +284,9 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     }
 
     /**
-     * Gets the start date of this calendar event
      *
-     * @return int The start date
+     * @return string
      */
-    public function get_start_date()
-    {
-        return $this->get_additional_property(self::PROPERTY_START_DATE);
-    }
-
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
@@ -480,35 +302,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         {
             return parent::get_type_string();
         }
-    }
-
-    public static function get_types_options()
-    {
-        $types = array();
-
-        $types[self::CATEGORY_ANNIVERSARY] = Translation::get('Anniversary');
-        $types[self::CATEGORY_BUSINESS] = Translation::get('Business');
-        $types[self::CATEGORY_CALL] = Translation::get('Call');
-        $types[self::CATEGORY_HOLIDAY] = Translation::get('Holiday');
-        $types[self::CATEGORY_GIFT] = Translation::get('Gift');
-        $types[self::CATEGORY_CLIENT] = Translation::get('Client');
-        $types[self::CATEGORY_COMPETITION] = Translation::get('Competition');
-        $types[self::CATEGORY_CONFERENCE] = Translation::get('Conference');
-        $types[self::CATEGORY_VARIOUS] = Translation::get('Various');
-        $types[self::CATEGORY_SUPPLIER] = Translation::get('Supplier');
-        $types[self::CATEGORY_IDEAS] = Translation::get('Ideas');
-        $types[self::CATEGORY_PUBLIC_HOLIDAY] = Translation::get('PublicHoliday');
-        $types[self::CATEGORY_PRIVATE] = Translation::get('Private');
-        $types[self::CATEGORY_FAVORITE] = Translation::get('Favorite');
-        $types[self::CATEGORY_PROBLEMS] = Translation::get('Problems');
-        $types[self::CATEGORY_PROFESSIONAL] = Translation::get('Professional');
-        $types[self::CATEGORY_PROJECTS] = Translation::get('Projects');
-        $types[self::CATEGORY_MEETING] = Translation::get('Meeting');
-        $types[self::CATEGORY_MONITORING] = Translation::get('Monitoring');
-        $types[self::CATEGORY_TRAVEL] = Translation::get('Travel');
-        asort($types);
-
-        return $types;
     }
 
     /**
@@ -533,27 +326,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         return ($repeat != '0');
     }
 
-    /**
-     * Return the task-priority as a string
-     */
-    public function priority_as_string($priority)
-    {
-        switch ($priority)
-        {
-            case self::PRIORITY_LOW :
-                $string = Translation::get('Low');
-                break;
-            case self::PRIORITY_NORMAL :
-                $string = Translation::get('Normal');
-                break;
-            case self::PRIORITY_HIGH :
-                $string = Translation::get('High');
-                break;
-        }
-
-        return $string;
-    }
-
     public function set_byday($byday)
     {
         return $this->set_additional_property(self::PROPERTY_BYDAY, $byday);
@@ -567,26 +339,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     public function set_bymonthday($bymonthday)
     {
         return $this->set_additional_property(self::PROPERTY_BYMONTHDAY, $bymonthday);
-    }
-
-    /**
-     * Sets the type of this task
-     *
-     * @param int The type
-     */
-    public function set_category($category)
-    {
-        return $this->set_additional_property(self::PROPERTY_CATEGORY, $category);
-    }
-
-    /**
-     * Sets the due date of this calendar event
-     *
-     * @param int The due date
-     */
-    public function set_due_date($due_date)
-    {
-        return $this->set_additional_property(self::PROPERTY_DUE_DATE, $due_date);
     }
 
     /**
@@ -607,26 +359,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     public function set_frequency_interval($frequency_interval)
     {
         return $this->set_additional_property(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
-    }
-
-    /**
-     * Sets the priority of this task
-     *
-     * @param String The priority
-     */
-    public function set_priority($priority)
-    {
-        return $this->set_additional_property(self::PROPERTY_PRIORITY, $priority);
-    }
-
-    /**
-     * Sets the start date of this calendar event
-     *
-     * @param int The start date
-     */
-    public function set_start_date($start_date)
-    {
-        return $this->set_additional_property(self::PROPERTY_START_DATE, $start_date);
     }
 
     /**
