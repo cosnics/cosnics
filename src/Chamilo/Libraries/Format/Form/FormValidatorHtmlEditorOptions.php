@@ -14,29 +14,6 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class FormValidatorHtmlEditorOptions
 {
-    const OPTION_SKIN = 'skin';
-
-    /**
-     * The name of the toolbar set e.g.
-     * Basic, Wiki, Assessment
-     */
-    const OPTION_TOOLBAR = 'toolbar';
-
-    /**
-     * Name of the language to be used for the editor
-     */
-    const OPTION_LANGUAGE = 'language';
-
-    /**
-     * The width of the editor in pixels or percent
-     */
-    const OPTION_WIDTH = 'width';
-
-    /**
-     * The height of the editor in pixels
-     */
-    const OPTION_HEIGHT = 'height';
-
     /**
      * Whether or not the toolbar should be collapse by default
      */
@@ -53,10 +30,34 @@ class FormValidatorHtmlEditorOptions
     const OPTION_FULL_PAGE = 'fullPage';
 
     /**
+     * The height of the editor in pixels
+     */
+    const OPTION_HEIGHT = 'height';
+
+    /**
+     * Name of the language to be used for the editor
+     */
+    const OPTION_LANGUAGE = 'language';
+
+    const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
+
+    const OPTION_SKIN = 'skin';
+
+    /**
      * Path to available templates for the editor
      */
     const OPTION_TEMPLATES = 'templates_files';
-    const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
+
+    /**
+     * The name of the toolbar set e.g.
+     * Basic, Wiki, Assessment
+     */
+    const OPTION_TOOLBAR = 'toolbar';
+
+    /**
+     * The width of the editor in pixels or percent
+     */
+    const OPTION_WIDTH = 'width';
 
     /**
      *
@@ -75,15 +76,92 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function format_for_javascript($value)
+    {
+        if (is_bool($value))
+        {
+            if ($value === true)
+            {
+                return 'true';
+            }
+            else
+            {
+                return 'false';
+            }
+        }
+        elseif (is_int($value))
+        {
+            return $value;
+        }
+        elseif (is_array($value))
+        {
+            $elements = array();
+
+            foreach ($value as $element)
+            {
+                $elements[] = self::format_for_javascript($element);
+            }
+
+            return '[' . implode(',', $elements) . ']';
+        }
+        else
+        {
+            return '\'' . $value . '\'';
+        }
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_mapping()
+    {
+        return array_combine($this->get_option_names(), $this->get_option_names());
+    }
+
+    /**
+     * Get a specific option's value or null if the option isn't set
+     *
+     * @param string $variable
+     *
+     * @return mixed the option's value
+     */
+    public function get_option($variable)
+    {
+        if (isset($this->options[$variable]))
+        {
+            return $this->options[$variable];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
      * Returns the names of all available options
      *
      * @return string[] The option names
      */
     public function get_option_names()
     {
-        return array(self::OPTION_COLLAPSE_TOOLBAR, self::OPTION_CONFIGURATION, self::OPTION_FULL_PAGE,
-            self::OPTION_LANGUAGE, self::OPTION_TEMPLATES, self::OPTION_TOOLBAR, self::OPTION_SKIN, self::OPTION_HEIGHT,
-            self::OPTION_WIDTH, self::OPTION_RENDER_RESOURCE_INLINE);
+        return array(
+            self::OPTION_COLLAPSE_TOOLBAR,
+            self::OPTION_CONFIGURATION,
+            self::OPTION_FULL_PAGE,
+            self::OPTION_LANGUAGE,
+            self::OPTION_TEMPLATES,
+            self::OPTION_TOOLBAR,
+            self::OPTION_SKIN,
+            self::OPTION_HEIGHT,
+            self::OPTION_WIDTH,
+            self::OPTION_RENDER_RESOURCE_INLINE
+        );
     }
 
     /**
@@ -107,46 +185,9 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
-     * Get a specific option's value or null if the option isn't set
-     *
-     * @param string $variable
-     * @return mixed the option's value
-     */
-    public function get_option($variable)
-    {
-        if (isset($this->options[$variable]))
-        {
-            return $this->options[$variable];
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    /**
-     * Sets a specific option
-     *
-     * @param string $variable
-     * @param mixed $value
-     */
-    public function set_option($variable, $value)
-    {
-        $this->options[$variable] = $value;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_mapping()
-    {
-        return array_combine($this->get_option_names(), $this->get_option_names());
-    }
-
-    /**
      *
      * @param boolean $value
+     *
      * @return boolean
      */
     public function process_toolbarStartupExpanded($value)
@@ -186,7 +227,8 @@ class FormValidatorHtmlEditorOptions
                         $value = call_user_func(array($this, $processing_function), $value);
                     }
 
-                    $javascript[] = '			' . $mapping[$available_option] . ' : ' . $this->format_for_javascript($value);
+                    $javascript[] =
+                        '			' . $mapping[$available_option] . ' : ' . $this->format_for_javascript($value);
                 }
             }
         }
@@ -196,17 +238,17 @@ class FormValidatorHtmlEditorOptions
 
     public function set_defaults()
     {
+        $pathUtilities = Path::getInstance();
         $application = Request::get('application');
-        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
+        $app_sys_path = $pathUtilities->getPluginPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
 
         if (file_exists($app_sys_path))
         {
-            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
+            $path = $pathUtilities->getPluginPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
         else
         {
-            $path = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'HtmlEditor/CkeditorInstanceConfig.js';
+            $path = $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
 
         $available_options = $this->get_option_names();
@@ -214,7 +256,7 @@ class FormValidatorHtmlEditorOptions
         foreach ($available_options as $available_option)
         {
             $value = $this->get_option($available_option);
-            if (! isset($value))
+            if (!isset($value))
             {
                 switch ($available_option)
                 {
@@ -256,41 +298,13 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
+     * Sets a specific option
      *
-     * @param string $value
-     * @return string
+     * @param string $variable
+     * @param mixed $value
      */
-    public function format_for_javascript($value)
+    public function set_option($variable, $value)
     {
-        if (is_bool($value))
-        {
-            if ($value === true)
-            {
-                return 'true';
-            }
-            else
-            {
-                return 'false';
-            }
-        }
-        elseif (is_int($value))
-        {
-            return $value;
-        }
-        elseif (is_array($value))
-        {
-            $elements = array();
-
-            foreach ($value as $element)
-            {
-                $elements[] = self::format_for_javascript($element);
-            }
-
-            return '[' . implode(',', $elements) . ']';
-        }
-        else
-        {
-            return '\'' . $value . '\'';
-        }
+        $this->options[$variable] = $value;
     }
 }

@@ -45,14 +45,19 @@ class ElementFinderFormType extends AbstractType
                 'element_types' => null,
                 'element_finder_configuration' => array(),
                 'compound' => false,
-                'data_class' => null));
+                'data_class' => null
+            )
+        );
 
         $resolver->setRequired(array('element_types'));
 
         $resolver->setAllowedTypes(
             array(
                 'element_types' => array(
-                    '\Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes')));
+                    '\Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes'
+                )
+            )
+        );
     }
 
     /**
@@ -64,14 +69,16 @@ class ElementFinderFormType extends AbstractType
         $view->vars['translations'] = array(
             'show' => Translation::get('Show'),
             'hide' => Translation::get('Hide'),
-            'select_element_type' => Translation::get('SelectElementType'));
+            'select_element_type' => Translation::get('SelectElementType')
+        );
 
         $view->vars['height'] = $options['height'];
         $view->vars['width'] = $options['width'];
         $view->vars['collapsed'] = $options['collapsed'];
 
-        $view->vars['element_finder_plugin'] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getPluginPath(null, true) . 'jquery/jquery.advelementfinder.js');
+        $view->vars['element_finder_plugin'] = ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.advelementfinder.js'
+        );
 
         $this->add_element_types($view, $options);
         $this->add_configuration_json($view, $options);

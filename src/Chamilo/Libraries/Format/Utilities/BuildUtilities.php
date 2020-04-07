@@ -159,12 +159,18 @@ class BuildUtilities
             Filesystem::recurse_copy($sourceResourceStylePath, $webResourceStylePath, true);
 
             // Javascript
-            $sourceResourceJavascriptPath =
-                Path::getInstance()->getResourcesPath($packageNamespace) . 'Javascript' . DIRECTORY_SEPARATOR;
+            $sourceResourceJavascriptPath = Path::getInstance()->getJavascriptPath($packageNamespace);
             $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
             Filesystem::remove($webResourceJavascriptPath);
             Filesystem::create_dir($webResourceJavascriptPath);
             Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
+
+            // Plugin
+            $sourceResourcePluginPath = Path::getInstance()->getPluginPath($packageNamespace);
+            $webResourcePluginPath = str_replace($basePath, $baseWebPath, $sourceResourcePluginPath);
+            Filesystem::remove($webResourcePluginPath);
+            Filesystem::create_dir($webResourcePluginPath);
+            Filesystem::recurse_copy($sourceResourcePluginPath, $webResourcePluginPath, true);
 
             $event->getIO()->write('Processed resources for: ' . $packageNamespace);
         }

@@ -1,11 +1,3 @@
-/* Bootstrap */
-@import url("Bootstrap/css/bootstrap.min.css");
-@import url("BootstrapCheckbox/awesome-bootstrap-checkbox.min.css");
-
-/* Font Awesome */
-@import url("FontAwesome5/css/all.min.css");
-@import url("ConnectIdents/ConnectIdents.min.css");
-
 /* Plugin CSS */
 @import url("Plugin.min.css");
 

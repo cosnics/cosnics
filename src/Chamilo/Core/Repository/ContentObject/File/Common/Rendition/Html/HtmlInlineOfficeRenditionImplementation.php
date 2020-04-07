@@ -74,8 +74,8 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
                 Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js'
             );
             $html[] = ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-                'Plugin/Jquery/jquery.fullscreen.min.js'
+                Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+                'Jquery/jquery.fullscreen.min.js'
             );
         }
         else
@@ -142,7 +142,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
         $html[] = Translation::get(
             'LiveViewNotSupported', [
-                'MAX_FILESIZE'     => Filesystem::format_file_size($this->getSizeLimit()),
+                'MAX_FILESIZE' => Filesystem::format_file_size($this->getSizeLimit()),
                 'CURRENT_FILESIZE' => Filesystem::format_file_size($this->get_content_object()->get_filesize())
             ]
         );

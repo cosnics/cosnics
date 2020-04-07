@@ -209,8 +209,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'LearningPathMenu.js'
         );
         $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-            'Plugin/Jquery/jquery.fullscreen.min.js'
+            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) . 'Jquery/jquery.fullscreen.min.js'
         );
 
         $html[] = parent::render_footer();

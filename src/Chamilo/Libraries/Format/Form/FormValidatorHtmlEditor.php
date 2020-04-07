@@ -13,25 +13,15 @@ use Chamilo\Libraries\Translation\Translation;
 class FormValidatorHtmlEditor
 {
     const SETTING_COLLAPSE_TOOLBAR = 'collapse_toolbar';
-
     const SETTING_CONFIGURATION = 'configuration';
-
     const SETTING_ENTER_MODE = 'enter_mode';
-
     const SETTING_FULL_PAGE = 'full_page';
-
     const SETTING_HEIGHT = 'height';
-
     const SETTING_LANGUAGE = 'language';
-
     const SETTING_SHIFT_ENTER_MODE = 'shift_enter_mode';
-
     const SETTING_TEMPLATES = 'templates';
-
     const SETTING_THEME = 'theme';
-
     const SETTING_TOOLBAR = 'toolbar';
-
     const SETTING_WIDTH = 'width';
 
     /**
@@ -132,8 +122,7 @@ class FormValidatorHtmlEditor
         $javascript = array();
 
         $javascript[] = '<script>';
-        $javascript[] =
-            'window.CKEDITOR_BASEPATH = "' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . Path::getInstance()->getPluginPath('Chamilo\Libraries', true) .
             '" + "HtmlEditor/Ckeditor/"';
         $javascript[] = '</script>';
 
@@ -208,25 +197,28 @@ class FormValidatorHtmlEditor
      */
     public function get_includes()
     {
-        $configFile = Path::getInstance()->getBasePath() .
-            '../web/Chamilo/Libraries/Resources/Javascript/HtmlEditor/CkeditorInstanceConfig.js';
+        $pathUtilities = Path::getInstance();
+        $resourceManager = ResourceManager::getInstance();
+
+        $configFile = $pathUtilities->getBasePath() .
+            '../web/Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorInstanceConfig.js';
 
         $timestamp = filemtime($configFile);
 
         $scripts = array();
 
-        $scripts[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js'
+        $scripts[] = $resourceManager->getResourceHtml(
+            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js'
         );
         $scripts[] = '<script>';
         $scripts[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
-        $scripts[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\';';
+        $scripts[] = 'var web_path = \'' . $pathUtilities->getBasePath(true) . '\';';
         $scripts[] = '</script>';
-        $scripts[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorGlobalConfig.js'
+        $scripts[] = $resourceManager->getResourceHtml(
+            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorGlobalConfig.js'
         );
-        $scripts[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/adapters/jquery.js'
+        $scripts[] = $resourceManager->getResourceHtml(
+            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/adapters/jquery.js'
         );
 
         return $scripts;

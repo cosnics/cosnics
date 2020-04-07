@@ -145,7 +145,8 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
-        $dropzoneHtml[] = '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
+        $dropzoneHtml[] =
+            '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
         $dropzoneHtml[] = '<div class="file-upload-buttons-group btn-group btn-group-vertical">';
         $dropzoneHtml[] = '<a data-dz-remove class="btn btn-warning cancel">';
 
@@ -192,8 +193,8 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             $dropzoneOptionsString[] = $optionKey . ': \'' . $optionValue . '\'';
         }
 
-        $dropzoneHtml[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'
+        $dropzoneHtml[] = ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
         );
 
         $dropzoneHtml[] = '<script>';
@@ -439,8 +440,8 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
         $html[] = '</div>';
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js'
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.imageselecter.js'
         );
         $html[] = '<script>';
 

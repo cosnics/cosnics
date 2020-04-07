@@ -72,7 +72,9 @@ class PdfExport extends Export
         if (is_array($data))
         {
             $pdf = new Cezpdf();
-            $pdf->selectFont(Path::getInstance()->getPluginPath() . 'ezpdf/fonts/Helvetica.afm');
+            $pdf->selectFont(
+                Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Plugin/ezpdf/fonts/Helvetica.afm'
+            );
             foreach ($data as $datapair)
             {
                 $title = $datapair['key'];

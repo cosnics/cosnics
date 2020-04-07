@@ -2,10 +2,10 @@
 
 {% set appContext = 'Chamilo\\Core\\Notification' %}
 
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{{ getPluginJavascript('VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getPluginJavascript('VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getPluginJavascript('VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getPluginJavascript('VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
 
 <div id="filterManager">
     <b-table striped bordered :items="filters" :fields="fields"

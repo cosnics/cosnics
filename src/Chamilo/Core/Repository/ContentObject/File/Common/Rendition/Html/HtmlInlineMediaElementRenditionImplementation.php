@@ -24,17 +24,17 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     {
         $html = array();
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-            'Plugin/MediaElementJS/build/mediaelement-and-player.min.js'
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+            'MediaElementJS/build/mediaelement-and-player.min.js'
         );
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
-            'Plugin/MediaElementJS/build/mediaelementplayer.min.css'
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+            'MediaElementJS/build/mediaelementplayer.min.css'
         );
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(File::package(), true) . 'MediaElementJS.js'
         );
 

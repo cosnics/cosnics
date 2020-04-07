@@ -233,7 +233,7 @@ class ResourceManagementExtension extends Twig_Extension
     {
         $context = $context ?: self::DEFAULT_CONTEXT;
 
-        return Path::getInstance()->namespaceToFullPath($context, true) . 'Resources/Javascript/' . $javascript;
+        return Path::getInstance()->getJavascriptPath($context, true) . $javascript;
     }
 
     /**
@@ -243,6 +243,34 @@ class ResourceManagementExtension extends Twig_Extension
     public function getName()
     {
         return 'resource_management';
+    }
+
+    /**
+     * @param string $javascript
+     * @param string $context
+     *
+     * @return string
+     */
+    public function getPluginJavascript($javascript, $context)
+    {
+        $javascriptPath = $this->getPluginPath($javascript, $context);
+
+        return $this->getJavascriptHtml($javascriptPath);
+    }
+
+    /**
+     * Returns the path to a plugin file in a given context
+     *
+     * @param string $javascript
+     * @param string $context
+     *
+     * @return string
+     */
+    public function getPluginPath($javascript, $context)
+    {
+        $context = $context ?: self::DEFAULT_CONTEXT;
+
+        return Path::getInstance()->getPluginPath($context, true) . $javascript;
     }
 
     /**

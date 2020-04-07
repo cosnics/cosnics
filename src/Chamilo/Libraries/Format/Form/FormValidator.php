@@ -259,7 +259,7 @@ EOT;
 
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
         )
         );
 
@@ -415,9 +415,8 @@ EOT;
         $this->disableSubmitButton();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'Plugin/Jquery/jquery.file.upload.single.js'
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.single.js'
         )
         );
     }

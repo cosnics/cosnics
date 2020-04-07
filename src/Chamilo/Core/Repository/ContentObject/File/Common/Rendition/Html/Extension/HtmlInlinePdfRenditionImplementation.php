@@ -27,8 +27,8 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1&saveName=' . urlencode($object->get_filename());
         
-        $viewerPath = Path::getInstance()->getResourcesPath(Utilities::COMMON_LIBRARIES, true) .
-             'Javascript/Plugin/PDFJS/web/viewer.html';
+        $viewerPath = Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+             'PDFJS/web/viewer.html';
         
         $url = $viewerPath . '?file=' . urlencode($url);
         
