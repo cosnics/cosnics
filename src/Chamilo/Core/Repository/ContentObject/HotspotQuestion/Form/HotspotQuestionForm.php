@@ -110,27 +110,15 @@ class HotspotQuestionForm extends ContentObjectForm
         }
         if (isset($_POST['remove']))
         {
-            /*
-             * $indexes = array_keys($_POST['remove']); if (!in_array($indexes[0],$_SESSION['mc_skip_options']))
-             * $_SESSION['mc_skip_options'][] = $indexes[0];
-             */
             $indexes = array_keys($_POST['remove']);
             $_SESSION['mc_number_of_options'] = $_SESSION['mc_number_of_options'] - 1;
-            // $this->move_answer_arrays($indexes[0]);
         }
         $object = $this->get_content_object();
         if (!$this->isSubmitted() && $object->get_number_of_answers() != 0)
         {
             $_SESSION['mc_number_of_options'] = $object->get_number_of_answers();
-            // $_SESSION['mc_answer_type'] = $object->get_answer_type();
         }
         $number_of_options = intval($_SESSION['mc_number_of_options']);
-
-        if (isset($_SESSION['file']))
-        {
-            $this->addElement('html', '<div class="content_object">');
-            $this->addElement('html', '</div>');
-        }
 
         $this->addElement(
             'hidden', 'mc_number_of_options', $_SESSION['mc_number_of_options'], array('id' => 'mc_number_of_options')
@@ -213,7 +201,10 @@ class HotspotQuestionForm extends ContentObjectForm
                 else
                 {
                     $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
-                    $hotspot_actions[] = $this->createElement('static', null, null, $glyph->render());
+                    $hotspot_actions[] = $this->createElement(
+                        'static', null, null,
+                        '<button class="btn btn-default" disabled=""disabled">' . $glyph->render() . '</button>'
+                    );
                 }
                 $group[] = $this->createElement(
                     'static', null, null,
@@ -283,8 +274,8 @@ class HotspotQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'Plugin/jquery.draw.js'
+            Path::getInstance()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'jquery.draw.js'
         )
         );
         $this->addElement(

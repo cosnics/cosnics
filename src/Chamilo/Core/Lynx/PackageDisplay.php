@@ -4,7 +4,6 @@ namespace Chamilo\Core\Lynx;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -13,12 +12,20 @@ class PackageDisplay
 
     /**
      *
-     * @var core\lynx\package\Package
+     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package
      */
     private $package_info;
 
+    /**
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
     private $application;
 
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     *
+     * @throws \Exception
+     */
     public function __construct($application)
     {
         $this->application = $application;
@@ -40,11 +47,17 @@ class PackageDisplay
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
     public function get_application()
     {
         return $this->application;
     }
 
+    /**
+     * @return string
+     */
     public function get_context()
     {
         return $this->get_application()->get_context();
@@ -81,27 +94,17 @@ class PackageDisplay
         $package_dependency = new DependencyVerifier($this->get_package_info());
         $success = $package_dependency->is_installable();
 
-        if ($success)
-        {
-            $glyph = new FontAwesomeGlyph(
-                'laugh-beam', array('text-success', 'fa-lg'), null, 'fas'
-            );
-        }
-        else
-        {
-            $glyph = new FontAwesomeGlyph(
-                'sad-cry', array('text-danger', 'fa-lg'), null, 'fas'
-            );
-        }
-
         $html = array();
+
         $html[] = '<h3>' . Translation::get(
                 'InstallationDependencies', array('VERSION' => $this->get_package_info()->get_version())
             ) . '</h3>';
-        $html[] = '<div class="content_object">';
-        $html[] = '<div class="title">' . $glyph->render() . ' ' . Translation::get(DependenciesResultVerification) .
-            '</div>';
-        $html[] = '<div class="description">';
+
+        $html[] = '<div class="panel panel-' . ($success ? 'success' : 'danger') . '">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . Translation::get('DependenciesResultVerification') . '</h3>';
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
         $html[] = $package_dependency->get_logger()->render();
         $html[] = '</div>';
         $html[] = '</div>';
@@ -111,7 +114,7 @@ class PackageDisplay
 
     /**
      *
-     * @return \core\lynx\package\Package
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
      */
     public function get_package_info()
     {
@@ -127,7 +130,9 @@ class PackageDisplay
         $properties = $package_info->get_default_property_names();
 
         $hidden_properties = array(
-            Package::PROPERTY_AUTHORS, Package::PROPERTY_VERSION, Package::PROPERTY_DEPENDENCIES,
+            Package::PROPERTY_AUTHORS,
+            Package::PROPERTY_VERSION,
+            Package::PROPERTY_DEPENDENCIES,
             Package::PROPERTY_EXTRA
         );
 
