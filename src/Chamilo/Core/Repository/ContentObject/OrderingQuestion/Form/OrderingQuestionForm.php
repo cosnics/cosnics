@@ -87,10 +87,10 @@ class OrderingQuestionForm extends ContentObjectForm
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th>' . Translation::get('Item') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation::get('Order') . '</th>';
+        $table_header[] = '<th class="cell-stat-x2">' . Translation::get('Order') . '</th>';
         $table_header[] = '<th>' . Translation::get('Feedback') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation::get('Score') . '</th>';
-        $table_header[] = '<th class="action"></th>';
+        $table_header[] = '<th class="cell-stat-x2">' . Translation::get('Score') . '</th>';
+        $table_header[] = '<th class="cell-stat-x2"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
@@ -169,7 +169,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clearfix"></div></div>', 'question_buttons'
         );
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'

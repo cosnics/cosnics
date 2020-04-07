@@ -26,31 +26,12 @@ class NotAuthenticatedResponse extends Response
         $page = Page::getInstance();
 
         $html = array();
-        $html[] = $page->getHeader()->toHtml();
+
+        $html[] = $page->getHeader()->render();
         $html[] = $this->renderPanel();
-        $html[] = $page->getFooter()->toHtml();
+        $html[] = $page->getFooter()->render();
 
         parent::__construct('', implode(PHP_EOL, $html));
-    }
-
-    /**
-     * Renders the panel with the not authenticated message and the login form
-     *
-     * @return string
-     */
-    public function renderPanel()
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-danger panel-not-authenticated">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-        $html[] = $this->displayLoginForm();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -66,8 +47,7 @@ class NotAuthenticatedResponse extends Response
         $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
 
         $form->get_renderer()->setElementTemplate('{element}');
-
-        $form->setRequiredNote(null);
+        $form->get_renderer()->setRequiredNoteTemplate(null);
 
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');
@@ -101,14 +81,44 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement('html', '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('sign-in-alt')
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
+            new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement('html', '</div>');
 
         $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
-
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
 
         return $form->toHtml();
+    }
+
+    /**
+     * Renders the panel with the not authenticated message and the login form
+     *
+     * @return string
+     */
+    public function renderPanel()
+    {
+        $html = array();
+
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="col-xs-12 col-md-2 col-lg-3"></div>';
+
+        $html[] = '<div class="col-xs-12 col-md-8 col-lg-6">';
+        $html[] = '<div class="panel panel-danger panel-not-authenticated">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = $this->displayLoginForm();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-12 col-md-2 col-lg-3"></div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }

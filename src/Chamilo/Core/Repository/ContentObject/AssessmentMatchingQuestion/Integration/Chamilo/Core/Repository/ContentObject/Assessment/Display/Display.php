@@ -43,7 +43,7 @@ class Display extends QuestionDisplay
         $table_header[] = '<tr>';
         $table_header[] = '<th class="cell-stat-x2"></th>';
         $table_header[] = '<th>' . Translation::get('Questions') . '</th>';
-        $table_header[] = '<th class="cell-stat" style="text-align:center;">' . Translation::get('MakeASelection') .
+        $table_header[] = '<th class="cell-stat text-center">' . Translation::get('MakeASelection') .
              '</th>';
 
         $table_header[] = '</tr>';

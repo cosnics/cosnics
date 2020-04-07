@@ -1044,7 +1044,7 @@ EOT;
         $html[] =
             '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $html[] = '<div class="form_feedback"></div></div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -1059,7 +1059,7 @@ EOT;
 
         $html[] = '<form {attributes}>';
         $html[] = '{content}';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</form>';
 
         return implode(PHP_EOL, $html);

@@ -96,9 +96,9 @@ class Display extends QuestionDisplay
         $element_template = array();
         $element_template[] =
             '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
-        $element_template[] = '<div class="clear">&nbsp;</div>';
+        $element_template[] = '<div class="clearfix"></div>';
         $element_template[] = '<div class="form_feedback"></div>';
-        $element_template[] = '<div class="clear">&nbsp;</div>';
+        $element_template[] = '<div class="clearfix"></div>';
         $element_template[] = '</div>';
         $element_template = implode(PHP_EOL, $element_template);
         $renderer = $this->get_renderer();

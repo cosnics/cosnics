@@ -80,13 +80,13 @@ class Display extends QuestionDisplay
             'px;background-image: url(' . Manager::get_document_downloader_url(
                 $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
-        $image_html[] = '<div class="clear"></div>';
+        $image_html[] = '<div class="clearfix"></div>';
         $image_html[] = '<div id="hotspot_marking_' . $question_id . '" class="hotspot_marking">';
         $image_html[] = '<div class="colour_box_label">' . Translation::get('CurrentlyMarking') . '</div>';
         $image_html[] = '<div class="colour_box"></div>';
-        $image_html[] = '<div class="clear"></div>';
+        $image_html[] = '<div class="clearfix"></div>';
         $image_html[] = '</div>';
-        $image_html[] = '<div class="clear"></div>';
+        $image_html[] = '<div class="clearfix"></div>';
         $image_html[] = '<div class="alert alert-info hotspot-question-info">' .
             Translation::getInstance()->getTranslation('HotspotQuestionExecuteInformation') . '</div>';
 
@@ -100,7 +100,7 @@ class Display extends QuestionDisplay
         $table_header[] = '<tr>';
         $table_header[] = '<th></th>';
         $table_header[] = '<th>' . $this->get_instruction() . '</th>';
-        $table_header[] = '<th class="action"></th>';
+        $table_header[] = '<th class="cell-stat-x2"></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';

@@ -56,17 +56,20 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
         $html[] = '<div class="panel panel-default panel-gallery">';
 
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = $this->renderTitle($result);
-        $html[] = '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body panel-body-thumbnail">';
 
         if ($this->get_table()->has_form_actions())
         {
             $html[] = '__CHECKBOX_PLACEHOLDER__';
         }
+
+        $title = $this->renderTitle($result);
+
+        $html[] = '<h3 class="panel-title" title="' . $title . '">';
+        $html[] = $title;
+        $html[] = '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body panel-body-thumbnail text-center">';
 
         $html[] = $this->renderContent($result);
         $html[] = '</div>';

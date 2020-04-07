@@ -169,7 +169,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
             $names[] = $parent->get_name();
         }
 
-        return implode(' <span class="visible">></span> ', array_reverse($names));
+        return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
     public function get_children_ids($recursive = true)

@@ -65,7 +65,7 @@ abstract class AssessmentQuestionResultDisplay
 
         if ($this->add_borders())
         {
-            $html[] = '<div class="clear"></div>';
+            $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
         }
 

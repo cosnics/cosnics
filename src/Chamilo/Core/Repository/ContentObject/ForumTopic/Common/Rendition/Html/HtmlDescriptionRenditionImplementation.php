@@ -107,7 +107,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
         if (DataManager::count_forum_topic_posts($this->object->get_id()) > 0)
         {
-            $html[] = '<div class="clear"></div><br />';
+            $html[] = '<div class="clearfix"></div><br />';
             $row = 0;
             $this->make_table($this->get_table_data($from, $this->total_number_of_items), $table, $row);
             $html[] = '<div>' . $table->toHtml() . '</div>';

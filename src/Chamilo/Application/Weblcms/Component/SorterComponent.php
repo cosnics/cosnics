@@ -221,7 +221,7 @@ class SorterComponent extends Manager
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = '<div class="clear"></div><br />';
+        $html[] = '<div class="clearfix"></div><br />';
 
         return implode(PHP_EOL, $html);
     }
@@ -667,7 +667,7 @@ class SorterComponent extends Manager
 
         $html[] = $this->display_page_header();
         $html[] = $this->getButtonToolbarRenderer($renderer)->render();
-        $html[] = '<div class="clear"></div><br />';
+        $html[] = '<div class="clearfix"></div><br />';
         $html[] = $renderer->as_html();
         $html[] = $this->render_footer();
 

@@ -49,9 +49,9 @@ class HotspotQuestionForm extends ContentObjectForm
         $html = array();
         $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation::get('CurrentlyMarking') .
             '</div><div class="colour_box"></div></div>';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '<br />';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
 
         if ($object->get_image())
         {
@@ -79,7 +79,7 @@ class HotspotQuestionForm extends ContentObjectForm
             $html[] = '<div id="hotspot_container"><div id="hotspot_image"></div></div>';
         }
 
-        // $html[] = '<div class="clear"></div>';
+        // $html[] = '<div class="clearfix"></div>';
         // $html[] = '<button id="change_image" class="negative delete">' . htmlentities(Translation ::
         // get('SelectAnotherImage')) . '</button>';
 
@@ -142,10 +142,10 @@ class HotspotQuestionForm extends ContentObjectForm
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="list"></th>';
+        $table_header[] = '<th class="cell-stat-x3"></th>';
         $table_header[] = '<th>' . Translation::get('HotspotDescription') . '</th>';
         $table_header[] = '<th>' . Translation::get('Feedback') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation::get('Score') . '</th>';
+        $table_header[] = '<th class="cell-stat-x2">' . Translation::get('Score') . '</th>';
         $table_header[] = '<th></th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -242,7 +242,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 'question_buttons'
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clearfix"></div></div>', 'question_buttons'
         );
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 'question_buttons'
@@ -302,9 +302,9 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div id="hotspot_marking" style="display: none;"><div class="colour_box_label">' . Translation::get(
                 'CurrentlyMarking'
             ) . '</div><div class="colour_box"></div></div>';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '<br />';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $redirect = new Redirect(
@@ -355,9 +355,9 @@ class HotspotQuestionForm extends ContentObjectForm
         $html = array();
         $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation::get('CurrentlyMarking') .
             '</div><div class="colour_box"></div></div>';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '<br />';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $redirect = new Redirect(

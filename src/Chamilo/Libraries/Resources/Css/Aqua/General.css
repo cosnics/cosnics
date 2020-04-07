@@ -52,64 +52,13 @@ footer.chamilo-footer {
     z-index: 9999;
 }
 
-/*****************************************************
- *  GENERAL STYLES                                    *
- *****************************************************/
-/* Invisibility style */
-.invisible {
-    color: #999999;
-}
-
-.visible {
-    color: #4171b5;
-    font-weight: bold;
-}
-
-.invisible a:link, .invisible a:visited {
-    color: #999999;
-}
-
-a.invisible:link, a.invisible:visited {
-    color: #999999;
-}
-
-.clear {
-    clear: both;
-    font-size: 0;
-    height: 0;
-    line-height: 0;
-}
-
-label.left {
-    float: left;
-    margin: 0 0 0.5em 0;
-    width: 15em;
-}
-
-/* Fix for alignment problem in IE-Win browsers  */
-/*  Hide from IE5-mac. Only IE-win sees this. \*/
-* html .label {
-    margin-right: 10px;
-}
-
-* html .data {
-    height: 1%;
-    margin-left: 0;
-}
-
-span.subtitle {
-    color: #787878;
-    font-size: 90%;
-    font-weight: bold;
-}
-
 .panel.panel-attachments {
     margin-bottom: 0px;
     margin-top: 20px;
 }
 
 /*****************************************************
- *  ICON BASED TOOLBAR STYLES                        *
+ *  TOOLBAR STYLES                        *
  *****************************************************/
 .btn-toolbar.btn-toolbar-cosnics .btn {
     padding: 2px;
@@ -148,6 +97,9 @@ a.help-modal-close {
     z-index: 3200;
 }
 
+/***********
+ * Various *
+ ***********/
 .element_finder_loading {
     display: inline-block;
     height: 64px;
@@ -168,35 +120,6 @@ iframe.preview {
     display: none;
 }
 
-span.highlight {
-    color: #b1071c;
-}
-
-pre.inline {
-    background: #f4f4f4;
-    border: solid 1px #e1e1e1;
-    clear: both;
-    color: #555555;
-    display: block;
-    font-family: "Courier 10 Pitch", Courier, monospace;
-    font-size: 90%;
-    height: 1%;
-    line-height: 1.2em;
-    padding: 1em 1em;
-    white-space: pre-wrap;
-    width: auto;
-}
-
-code.inline {
-    background: #f4f4f4;
-    color: #555555;
-    display: inline;
-    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-    font-size: 90%;
-    line-height: 1.2em;
-    padding: 1em 1em;
-}
-
 .panel.panel-not-authenticated {
     margin-left: auto;
     margin-right: auto;
@@ -211,6 +134,10 @@ code.inline {
 figcaption {
     padding-top: 8px !important;
 }
+
+/************
+ * CKEditor *
+ ************/
 
 .image-captioned {
     background: rgba(0, 0, 0, 0.05);

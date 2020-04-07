@@ -70,7 +70,7 @@ abstract class ContentObjectPublicationBrowser
         }
         return '<div style="float: left; width: 18%; overflow: auto;">' . $this->categoryTree->as_html() . '</div>' .
              '<div style="float: right; width: 80%">' . $this->listRenderer->as_html() . '</div>' .
-             '<div class="clear">&nbsp;</div>';
+             '<div class="clearfix"></div>';
     }
 
     /**

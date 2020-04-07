@@ -271,7 +271,7 @@ class PanelToolListRenderer extends ToolListRenderer
             }
             else
             {
-                $link_class = ' class="invisible"';
+                $link_class = ' class="text-muted"';
             }
 
             $title = htmlspecialchars($publication->get_content_object()->get_title());

@@ -91,7 +91,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
     {
         $html = array();
 
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
 
         if ($section->get_type() == CourseSection::TYPE_TOOL || $section->get_type() == CourseSection::TYPE_DISABLED)
         {
@@ -250,7 +250,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_SHOW_PUBLICATION;
                 $glyph = new FontAwesomeGlyph('eye-slash', array('text-muted'), null, 'fas');
                 $isDisabled = true;
-                $link_class = ' class="invisible"';
+                $link_class = ' class="text-muted"';
             }
 
             $title = htmlspecialchars($publication->get_content_object()->get_title());
@@ -442,7 +442,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = $title;
             $html[] = '</a>';
 
-            $html[] = '<div class="clear"></div>';
+            $html[] = '<div class="clearfix"></div>';
 
             $html[] = '</div>';
             $html[] = '</div>';

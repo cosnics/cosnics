@@ -77,7 +77,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         $html[] = $this->get_complex_content_object_table_html();
         $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
 
         $html[] = $this->render_footer();
 

@@ -44,7 +44,7 @@ class CourseImporterComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = '<div class="clear"></div><br />';
+            $html[] = '<div class="clearfix"></div><br />';
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();

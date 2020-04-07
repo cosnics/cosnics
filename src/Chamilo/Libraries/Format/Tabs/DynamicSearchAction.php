@@ -29,7 +29,7 @@ class DynamicSearchAction extends DynamicAction
 
         $renderer = $search_form->get_renderer();
         $renderer->setFormTemplate(
-            '<form {attributes}><div class="dynamic_search_action">{content}</div><div class="clear">&nbsp;</div></form>'
+            '<form {attributes}><div class="dynamic_search_action">{content}</div><div class="clearfix"></div></form>'
         );
         $renderer->setElementTemplate('{element}');
 

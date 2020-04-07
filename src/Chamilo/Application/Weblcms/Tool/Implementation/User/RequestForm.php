@@ -79,7 +79,7 @@ class RequestForm extends FormValidator
 
     public function build_request_form()
     {
-        $this->addElement('html', '<div class="clear">&nbsp;</div><br/>');
+        $this->addElement('html', '<div class="clearfix"></div><br/>');
         if ($this->form_type == self::TYPE_CREATE)
         {
 

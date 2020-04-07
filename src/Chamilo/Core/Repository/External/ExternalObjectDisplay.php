@@ -124,7 +124,7 @@ abstract class ExternalObjectDisplay
         $html[] = $glyph->render();
         $html[] = $text;
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

@@ -181,7 +181,7 @@ class Display extends QuestionDisplay
         }
 
         $this->add_html('</div>');
-        $this->add_html('<div class="clear"></div>');
+        $this->add_html('<div class="clearfix"></div>');
         $this->add_html('</div>');
 
         if (!$question->get_show_inline())
@@ -197,7 +197,7 @@ class Display extends QuestionDisplay
 
             if (count($parts) > 1)
             {
-                $table_header[] = '<th class="list"></th>';
+                $table_header[] = '<th class="cell-stat-x3"></th>';
                 $table_header[] = '<th>' . Translation::get(
                         'Answers', null, ContentObject::get_content_object_type_namespace($question->get_type_name())
                     ) . '</th>';

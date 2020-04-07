@@ -1156,7 +1156,7 @@ class Course extends DataClass
             $names[] = $category->get_fully_qualified_name();
         }
 
-        return implode(' <span class="visible">></span> ', array_reverse($names));
+        return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
     /**

@@ -80,7 +80,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th class="list"></th>';
+        $html[] = '<th class="cell-stat-x3"></th>';
 
         $html[] = '<th>' . $this->getAssessmentTranslation('Answer') . '</th>';
 
@@ -91,7 +91,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         if ($configuration->show_score())
         {
-            $html[] = '<th class="empty">' . $this->getAssessmentTranslation('Score') . '</th>';
+            $html[] = '<th class="cell-stat">' . $this->getAssessmentTranslation('Score') . '</th>';
         }
 
         $html[] = '</tr>';

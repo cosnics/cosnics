@@ -36,7 +36,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         $html[] = '<thead style="background-color: #f5f5f5; border-bottom: 2px solid #dddddd;">';
         $html[] = '<tr>';
-        $html[] = '<th class="list"></th>';
+        $html[] = '<th class="cell-stat-x3"></th>';
         $html[] = '<th>' . Translation::get('Question') . '</th>';
         $html[] = '<th>' . Translation::get('YourAnswer') . '</th>';
 
@@ -127,7 +127,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             ' style="margin-top: 30px; border-top: 2px solid #dddddd;">';
         $html[] = '<thead style="background-color: #f5f5f5; border-bottom: 2px solid #dddddd;">';
         $html[] = '<tr>';
-        $html[] = '<th class="list"></th>';
+        $html[] = '<th class="cell-stat-x3"></th>';
         $html[] = '<th>' . Translation::get('PossibleAnswers') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';

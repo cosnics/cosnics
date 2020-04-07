@@ -113,7 +113,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function afterPackagesInstallation()
     {
-        return '<div class="clear"></div>';
+        return '<div class="clearfix"></div>';
     }
 
     /**
@@ -122,7 +122,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function afterPreProduction()
     {
-        return '<div class="clear"></div>';
+        return '<div class="clearfix"></div>';
     }
 
     /**

@@ -311,7 +311,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $html[] = '</div>';
         $html[] = '<div class="form_feedback"></div>';
         $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         $html[] = '<script>';

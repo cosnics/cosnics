@@ -427,7 +427,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             $html[] = '<div id="selected_image"></div>';
         }
 
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
 
         $allow_change = $this->options['allow_change'];
         if ($allow_change)
@@ -435,7 +435,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
             $html[] = '<button id="change_image" class="negative delete">' . htmlentities(
                     Translation::get('SelectAnotherImage')
                 ) . '</button>';
-            $html[] = '<div class="clear">&nbsp;</div>';
+            $html[] = '<div class="clearfix"></div>';
         }
 
         $html[] = '</div>';

@@ -676,7 +676,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             );
         }
 
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

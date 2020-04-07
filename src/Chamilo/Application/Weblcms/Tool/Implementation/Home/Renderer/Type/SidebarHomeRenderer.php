@@ -104,7 +104,7 @@ class SidebarHomeRenderer extends HomeRenderer
 
             if ($toolbar->has_items())
             {
-                $html[] = $toolbar->as_html() . '<div class="clear"></div>';
+                $html[] = $toolbar->as_html() . '<div class="clearfix"></div>';
             }
 
             $html[] = '</div>';

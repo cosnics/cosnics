@@ -55,7 +55,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
             'HotspotQuestionResultDisplay.js'
         );
-        $html[] = '<div class="clear"></div></div>';
+        $html[] = '<div class="clearfix"></div></div>';
 
         $user_answers = $this->get_answers();
         $colors = array(
@@ -66,11 +66,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th class="list"></th>';
+        $html[] = '<th class="cell-stat-x3"></th>';
 
         if ($configuration->show_correction() || $configuration->show_solution())
         {
-            $html[] = '<th class="list"></th>';
+            $html[] = '<th class="cell-stat-x3"></th>';
         }
 
         $html[] = '<th>' . Translation::get('Answer') . '</th>';

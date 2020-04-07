@@ -34,7 +34,7 @@ class AdminForm extends FormValidator
         $element_template[] =
             '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '<div class="form_feedback"></div>';
-        $element_template[] = '<div class="clear">&nbsp;</div>';
+        $element_template[] = '<div class="clearfix"></div>';
         $element_template[] = '</div>';
         $element_template = implode(PHP_EOL, $element_template);
 

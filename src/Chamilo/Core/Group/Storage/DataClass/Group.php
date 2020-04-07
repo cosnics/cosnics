@@ -386,7 +386,7 @@ class Group extends NestedSet
             $names[] = $node->get_name();
         }
 
-        return implode(' <span class="visible">></span> ', array_reverse($names));
+        return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
     /**

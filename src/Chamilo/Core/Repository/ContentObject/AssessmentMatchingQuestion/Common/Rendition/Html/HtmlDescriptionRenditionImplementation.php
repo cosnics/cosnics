@@ -27,7 +27,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="list"></th>';
+        $table_header[] = '<th class="cell-stat-x3"></th>';
         $table_header[] = '<th>' . Translation::get('PossibleMatches') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -58,7 +58,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="list"></th>';
+        $table_header[] = '<th class="cell-stat-x3"></th>';
         $table_header[] = '<th>' . Translation::get('MatchOptionAnswer') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';

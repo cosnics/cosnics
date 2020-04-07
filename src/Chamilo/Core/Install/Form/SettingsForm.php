@@ -479,7 +479,7 @@ class SettingsForm extends FormValidator
             $this->setDefaults($defaults);
 
             $html = array();
-            $html[] = '<div class="clear"></div>';
+            $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
             $html[] = '</div>';
             $this->addElement('html', implode(PHP_EOL, $html));

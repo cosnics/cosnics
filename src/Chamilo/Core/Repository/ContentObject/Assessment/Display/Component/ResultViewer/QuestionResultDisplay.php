@@ -77,7 +77,7 @@ class QuestionResultDisplay
         if ($this->add_borders())
         {
             $footer = array();
-            $footer[] = '<div class="clear"></div>';
+            $footer[] = '<div class="clearfix"></div>';
             $footer[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $footer));
         }

@@ -90,7 +90,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $html[] = '<p>' . Translation::get('NoAnswer') . '</p>';
         }
 
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -113,7 +113,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         if (!$answer)
         {
 
-            $html[] = '<p>' . Translation::get('NoDocument') . '</p><div class="clear"></div><br />';
+            $html[] = '<p>' . Translation::get('NoDocument') . '</p><div class="clearfix"></div><br />';
 
             return;
         }

@@ -69,7 +69,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $html[] = '<th>' . Translation::get('Answer') . '</th>';
         $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         $html[] = '<th>' . Translation::get('Hint') . '</th>';
-        $html[] = '<th class="numeric">' . Translation::get('NonDefaultScore') . '</th>';
+        $html[] = '<th class="cell-stat-x2">' . Translation::get('NonDefaultScore') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
@@ -97,7 +97,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $html[] = '</table>';
         $html[] = '</div>';
         $html[] = '<div class="form_feedback"></div></div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
