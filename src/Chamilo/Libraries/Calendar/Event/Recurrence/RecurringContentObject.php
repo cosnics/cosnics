@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * @package Chamilo\Libraries\Calendar\Event\Recurrence
@@ -32,8 +33,10 @@ class RecurringContentObject extends ContentObject
     public static $days = array(1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU');
 
     /**
+     * @param integer $frequency
      *
      * @return string
+     * @throws \Exception
      */
     public static function frequency_as_string($frequency)
     {
@@ -57,14 +60,14 @@ class RecurringContentObject extends ContentObject
             case self::FREQUENCY_BIWEEKLY :
                 $string = Translation::get('Biweekly');
                 break;
+            default:
+                throw new Exception();
         }
 
         return $string;
     }
 
     /**
-     * Returns whether or not the calendar event repeats itself indefinately
-     *
      * @return boolean
      */
     public function frequency_is_indefinately()
@@ -74,11 +77,20 @@ class RecurringContentObject extends ContentObject
         return ($repeat_to == 0 || is_null($repeat_to));
     }
 
+    /**
+     * @return string
+     */
     public function get_byday()
     {
         return $this->get_additional_property(self::PROPERTY_BYDAY);
     }
 
+    /**
+     * @param integer $rank
+     * @param integer $day
+     *
+     * @return string
+     */
     public static function get_byday_ical_format($rank, $day)
     {
         $format = array();
@@ -92,6 +104,9 @@ class RecurringContentObject extends ContentObject
         return implode('', $format);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_byday_options()
     {
         $translator = Translation::getInstance();
@@ -107,6 +122,11 @@ class RecurringContentObject extends ContentObject
         );
     }
 
+    /**
+     * @param string $bydays
+     *
+     * @return string[]
+     */
     public static function get_byday_parts($bydays)
     {
         $bydays = explode(',', $bydays);
@@ -123,11 +143,17 @@ class RecurringContentObject extends ContentObject
         return $parts;
     }
 
+    /**
+     * @return string
+     */
     public function get_bymonth()
     {
         return $this->get_additional_property(self::PROPERTY_BYMONTH);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_bymonth_options()
     {
         $translator = Translation::getInstance();
@@ -148,6 +174,11 @@ class RecurringContentObject extends ContentObject
         );
     }
 
+    /**
+     * @param integer $month
+     *
+     * @return string
+     */
     public static function get_bymonth_string($month)
     {
         $translation = self::get_bymonth_options();
@@ -155,48 +186,27 @@ class RecurringContentObject extends ContentObject
         return $translation[$month];
     }
 
+    /**
+     * @return string
+     */
     public function get_bymonthday()
     {
         return $this->get_additional_property(self::PROPERTY_BYMONTHDAY);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_bymonthday_options()
     {
-        return array(
-            1 => 1,
-            2 => 2,
-            3 => 3,
-            4 => 4,
-            5 => 5,
-            6 => 6,
-            7 => 7,
-            8 => 8,
-            9 => 9,
-            10 => 10,
-            11 => 11,
-            12 => 12,
-            13 => 13,
-            14 => 14,
-            15 => 15,
-            16 => 16,
-            17 => 17,
-            18 => 18,
-            19 => 19,
-            20 => 20,
-            21 => 21,
-            22 => 22,
-            23 => 23,
-            24 => 24,
-            25 => 25,
-            26 => 26,
-            27 => 27,
-            28 => 28,
-            29 => 29,
-            30 => 30,
-            31 => 31
-        );
+        return range(1, 31);
     }
 
+    /**
+     * @param string $day
+     *
+     * @return integer
+     */
     public static function get_day_format($day)
     {
         $days = array_flip(self::$days);
@@ -204,11 +214,21 @@ class RecurringContentObject extends ContentObject
         return $days[$day];
     }
 
+    /**
+     * @param integer $day
+     *
+     * @return string
+     */
     public static function get_day_ical_format($day)
     {
         return self::$days[$day];
     }
 
+    /**
+     * @param integer $day_number
+     *
+     * @return string
+     */
     public static function get_day_string($day_number)
     {
         if (!is_numeric($day_number))
@@ -221,9 +241,7 @@ class RecurringContentObject extends ContentObject
     }
 
     /**
-     * Gets the frequency of this calendar event
-     *
-     * @return int The frequency
+     * @return integer
      */
     public function get_frequency()
     {
@@ -231,23 +249,33 @@ class RecurringContentObject extends ContentObject
     }
 
     /**
-     * Return the frequency as a string
+     * @return string
+     * @throws \Exception
      */
     public function get_frequency_as_string()
     {
         return self::frequency_as_string($this->get_frequency());
     }
 
+    /**
+     * @return integer
+     */
     public function get_frequency_count()
     {
         return $this->get_additional_property(self::PROPERTY_FREQUENCY_COUNT);
     }
 
+    /**
+     * @return integer
+     */
     public function get_frequency_interval()
     {
         return $this->get_additional_property(self::PROPERTY_FREQUENCY_INTERVAL);
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_frequency_options()
     {
         $options = array();
@@ -262,9 +290,13 @@ class RecurringContentObject extends ContentObject
         return $options;
     }
 
+    /**
+     * @return string[]
+     */
     public static function get_rank_options()
     {
         $ranks = array();
+
         $ranks[0] = Translation::get('Every');
         $ranks[1] = Translation::get('First');
         $ranks[2] = Translation::get('Second');
@@ -276,6 +308,11 @@ class RecurringContentObject extends ContentObject
         return $ranks;
     }
 
+    /**
+     * @param integer $rank
+     *
+     * @return string
+     */
     public static function get_rank_string($rank)
     {
         $translation = self::get_rank_options();
@@ -284,7 +321,6 @@ class RecurringContentObject extends ContentObject
     }
 
     /**
-     *
      * @return string
      */
     public static function get_type_name()
@@ -292,6 +328,9 @@ class RecurringContentObject extends ContentObject
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
+    /**
+     * @return string
+     */
     public function get_type_string()
     {
         if ($this->has_frequency())
@@ -305,9 +344,7 @@ class RecurringContentObject extends ContentObject
     }
 
     /**
-     * Gets the end date of this calendar event repetition
-     *
-     * @return int The repetition end date
+     * @return integer
      */
     public function get_until()
     {
@@ -315,8 +352,6 @@ class RecurringContentObject extends ContentObject
     }
 
     /**
-     * Returns whether or not the calendar event repeats itself
-     *
      * @return boolean
      */
     public function has_frequency()
@@ -326,45 +361,56 @@ class RecurringContentObject extends ContentObject
         return ($repeat != '0');
     }
 
+    /**
+     * @param string $byday
+     */
     public function set_byday($byday)
     {
         return $this->set_additional_property(self::PROPERTY_BYDAY, $byday);
     }
 
+    /**
+     * @param string $bymonth
+     */
     public function set_bymonth($bymonth)
     {
         return $this->set_additional_property(self::PROPERTY_BYMONTH, $bymonth);
     }
 
+    /**
+     * @param string $bymonthday
+     */
     public function set_bymonthday($bymonthday)
     {
         return $this->set_additional_property(self::PROPERTY_BYMONTHDAY, $bymonthday);
     }
 
     /**
-     * Sets the frequency of this calendar event
-     *
-     * @param int The frequency
+     * @param integer $frequency
      */
     public function set_frequency($frequency)
     {
         return $this->set_additional_property(self::PROPERTY_FREQUENCY, $frequency);
     }
 
+    /**
+     * @param integer $frequency_count
+     */
     public function set_frequency_count($frequency_count)
     {
         return $this->set_additional_property(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
     }
 
+    /**
+     * @param integer $frequency_interval
+     */
     public function set_frequency_interval($frequency_interval)
     {
         return $this->set_additional_property(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
     }
 
     /**
-     * Sets the end date of this calendar event repetition
-     *
-     * @param int The repetition end date
+     * @param integer $until
      */
     public function set_until($until)
     {

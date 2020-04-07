@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Configuration\Configuration;
@@ -34,13 +33,12 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -55,45 +53,29 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- *
- * @package repository.lib
- */
-
-/**
- * A form to create and edit a ContentObject.
+ * @package Chamilo\Core\Repository\Form
  */
 abstract class ContentObjectForm extends FormValidator
 {
+    use DependencyInjectionContainerTrait;
+
     const NEW_CATEGORY = 'new_category';
 
     const RESULT_ERROR = 'ObjectUpdateFailed';
-
     const RESULT_SUCCESS = 'ObjectUpdated';
 
     const TAB_ADD_METADATA = 'AddMetadata';
-
-    /**
-     * ***************************************************************************************************************
-     * Tabs *
-     * **************************************************************************************************************
-     */
     const TAB_CONTENT_OBJECT = 'ContentObject';
-
     const TAB_METADATA = 'Metadata';
 
     const TYPE_COMPARE = 3;
-
-    /**
-     * ***************************************************************************************************************
-     * Constants *
-     * **************************************************************************************************************
-     */
     const TYPE_CREATE = 1;
-
     const TYPE_EDIT = 2;
-
     const TYPE_REPLY = 4;
 
+    /**
+     * @var integer
+     */
     protected $form_type;
 
     /**
@@ -101,8 +83,14 @@ abstract class ContentObjectForm extends FormValidator
      */
     protected $selectedTabIdentifier;
 
+    /**
+     * @var boolean
+     */
     private $allow_new_version;
 
+    /**
+     * @var integer
+     */
     private $owner_id;
 
     /**
@@ -112,7 +100,7 @@ abstract class ContentObjectForm extends FormValidator
     private $workspace;
 
     /**
-     * The content object.
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $content_object;
 
@@ -121,6 +109,9 @@ abstract class ContentObjectForm extends FormValidator
      */
     private $extra;
 
+    /**
+     * @var \HTML_QuickForm_element[]
+     */
     private $additional_elements;
 
     /**
@@ -136,11 +127,12 @@ abstract class ContentObjectForm extends FormValidator
      * @param string $form_name
      * @param string $method
      * @param string $action
-     * @param array $extra
-     * @param array $additional_elements
+     * @param string[] $extra
+     * @param \HTML_QuickForm_element[] $additional_elements
      * @param boolean $allow_new_version
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
     public function __construct(
         $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post', $action = null,
@@ -149,12 +141,6 @@ abstract class ContentObjectForm extends FormValidator
     {
         parent::__construct($form_name, $method, $action);
 
-        if ($form_type == self::TYPE_EDIT &&
-            !$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->getId()))
-        {
-            throw new NotAllowedException();
-        }
-
         $this->form_type = $form_type;
         $this->workspace = $workspace;
         $this->content_object = $content_object;
@@ -162,6 +148,14 @@ abstract class ContentObjectForm extends FormValidator
         $this->extra = $extra;
         $this->additional_elements = $additional_elements;
         $this->allow_new_version = $allow_new_version;
+
+        $this->initializeContainer();
+
+        if ($form_type == self::TYPE_EDIT &&
+            !$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->getId()))
+        {
+            throw new NotAllowedException();
+        }
 
         $this->prepareTabs();
         $this->getTabsGenerator()->render();
@@ -204,6 +198,9 @@ abstract class ContentObjectForm extends FormValidator
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public function addMetadataTabs()
     {
         $relationService = new RelationService();
@@ -342,33 +339,16 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     *
-     * @deprecated Use buildInstructionsForm() now
-     */
-    protected function add_example_box()
-    {
-        $this->addElement(
-            'category', '<a href="#">' . Translation::get('Instructions', null, Utilities::COMMON_LIBRARIES) . '</a>'
-        );
-
-        $this->buildInstructionsForm();
-    }
-
-    /**
      * Adds a footer to the form, including a submit button.
      */
     protected function add_footer()
     {
-        // separated uplaod and check behaviour into independent javascript files
+        // separated upload and check behaviour into independent javascript files
         $this->addElement(
             'html', ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
         )
         );
-        // added platform option 'omit_content_object_title_check'
-        // when NULL (platform option not set) or FALSE (platform option set to false)
-        // check title duplicates of content objects; when it is both set and true,
-        // omit this check. (this way, the platform setting is unobtrusive).
 
         $omitContentObjectTitleCheck = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Repository', 'omit_content_object_title_check')
@@ -389,65 +369,46 @@ abstract class ContentObjectForm extends FormValidator
         )
         );
 
-        $buttons = array();
-
         // should not call your button submit as it is a function on the
         // javascrip file
         switch ($this->form_type)
         {
             case self::TYPE_COMPARE :
-                $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Compare', null, Utilities::COMMON_LIBRARIES), null, null,
-                    new FontAwesomeGlyph('transfer')
-                );
+                $glyphName = 'transfer';
+                $buttonVariable = 'Compare';
                 break;
             case self::TYPE_EDIT :
-                $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
-                    new FontAwesomeGlyph('arrow-right')
-                );
+                $glyphName = 'arrow-right';
+                $buttonVariable = 'Update';
                 break;
             case self::TYPE_REPLY :
-                $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Reply', null, Utilities::COMMON_LIBRARIES), null, null,
-                    new FontAwesomeGlyph('envelope')
-                );
+                $glyphName = 'envelope';
+                $buttonVariable = 'Reply';
                 break;
             default :
-                $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
-                );
+                $glyphName = 'check';
+                $buttonVariable = 'Create';
                 break;
         }
+
+        $buttons = array();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit_button',
+            Translation::get($buttonVariable, null, Utilities::COMMON_LIBRARIES), null, null,
+            new FontAwesomeGlyph($glyphName)
+        );
 
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
         );
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     * Adds the input field for the content object tags
+     * @return boolean
      */
-    protected function add_tags_input()
-    {
-        $tags = DataManager::retrieve_content_object_tags_for_user(Session::get_user_id());
-
-        if ($this->content_object->is_identified())
-        {
-            $default_tags = DataManager::retrieve_content_object_tags_for_content_object(
-                $this->content_object->get_id()
-            );
-        }
-
-        $tags_form_builder = new TagsFormBuilder($this);
-        $tags_form_builder->build_form($tags, $default_tags);
-    }
-
     protected function allows_category_selection()
     {
         return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_REPLY ||
@@ -463,6 +424,11 @@ abstract class ContentObjectForm extends FormValidator
         );
     }
 
+    /**
+     * @param string[] $htmleditor_options
+     *
+     * @throws \Exception
+     */
     private function build_basic_form($htmleditor_options = array())
     {
         $this->addElement('html', '<div id="message"></div>');
@@ -511,6 +477,12 @@ abstract class ContentObjectForm extends FormValidator
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
     }
 
+    /**
+     * @param string[] $htmleditor_options
+     * @param boolean $in_tab
+     *
+     * @throws \Exception
+     */
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         if (!$in_tab)
@@ -521,6 +493,12 @@ abstract class ContentObjectForm extends FormValidator
         $this->build_basic_form($htmleditor_options);
     }
 
+    /**
+     * @param string[] $htmleditor_options
+     * @param boolean $in_tab
+     *
+     * @throws \Exception
+     */
     protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         $object = $this->content_object;
@@ -573,6 +551,9 @@ abstract class ContentObjectForm extends FormValidator
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function build_general_form()
     {
         if ($this->form_type == self::TYPE_EDIT || $this->form_type == self::TYPE_REPLY)
@@ -605,7 +586,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * Adds the metadata form for this type
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance $schemaInstance
      */
     public function build_metadata_form(SchemaInstance $schemaInstance)
     {
@@ -689,16 +670,9 @@ EOT;
         }
     }
 
-    public function compare_content_object()
-    {
-        $values = $this->exportValues();
-        $ids = array();
-        $ids['object'] = $values['object'];
-        $ids['compare'] = $values['compare'];
-
-        return $ids;
-    }
-
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
     public function create_content_object()
     {
         $values = $this->exportValues();
@@ -745,12 +719,11 @@ EOT;
     }
 
     /**
-     * Creates a new category with a given name and parent id
-     *
      * @param string $category_name
-     * @param int $parent_id
+     * @param integer $parent_id
      *
-     * @return RepositoryCategory
+     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function create_new_category($category_name, $parent_id)
     {
@@ -802,23 +775,24 @@ EOT;
     }
 
     /**
-     * Creates a form object to manage an content object.
+     * @param integer $form_type
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
+     * @param string $form_name
+     * @param string $method
+     * @param string $action
+     * @param string[] $extra
+     * @param \HTML_QuickForm_element[] $additional_elements
+     * @param boolean $allow_new_version
+     * @param string $form_variant
      *
-     * @param $form_type int The form type; either ContentObjectForm :: TYPE_CREATE or ContentObjectForm :: TYPE_EDIT.
-     * @param $content_object ContentObject The object to create or update.
-     * @param $form_name string The name to use in the form tag.
-     * @param $method string The method to use ('post' or 'get').
-     * @param $action string The URL to which the form should be submitted.
-     *
-     * @return ContentObjectForm
+     * @return mixed
      */
     public static function factory(
         $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post', $action = null,
         $extra = null, $additional_elements = array(), $allow_new_version = true, $form_variant = null
     )
     {
-        $type = $content_object->get_type();
-
         $base_class_name = $content_object->package() . '\Form\\' . $content_object->class_name(false);
 
         if ($form_variant)
@@ -842,11 +816,12 @@ EOT;
      */
     protected function getPublicationAggregator()
     {
-        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $dependencyInjectionContainer->get(PublicationAggregator::class);
+        return $this->getService(PublicationAggregator::class);
     }
 
+    /**
+     * @return string
+     */
     public function getSelectedTabIdentifier()
     {
         return $this->selectedTabIdentifier;
@@ -867,9 +842,7 @@ EOT;
     }
 
     /**
-     * Gets the categories defined in the user's repository.
-     *
-     * @return array The categories.
+     * @return string[]
      */
     public function get_categories()
     {
@@ -881,9 +854,7 @@ EOT;
     }
 
     /**
-     * Returns the content object associated with this form.
-     *
-     * @return ContentObject The content object, or null if none.
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     public function get_content_object()
     {
@@ -891,15 +862,16 @@ EOT;
     }
 
     /**
-     * Sets the content object associated with this form.
-     *
-     * @param ContentObject $content_object
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      */
     protected function set_content_object($content_object)
     {
         $this->content_object = $content_object;
     }
 
+    /**
+     * @return string
+     */
     protected function get_content_object_class()
     {
         return (string) StringUtilities::getInstance()->createString($this->get_content_object_type())->upperCamelize();
@@ -934,33 +906,24 @@ EOT;
         return $this->get_content_object_template()->get_configuration();
     }
 
+    /**
+     * @return string
+     */
     protected function get_content_object_type()
     {
-        return $this->content_object->get_type();
+        return $this->content_object->getType();
     }
 
     /**
-     * Gets the html with an image of the content object type and the type name
+     * @return integer
      */
-    private function get_content_object_type_html()
-    {
-        $content_object = $this->get_content_object();
-        $type = $content_object->get_type();
-        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($type);
-        $name = Translation::get('TypeName', array(), $namespace);
-
-        return $content_object->getGlyph(IdentGlyph::SIZE_MINI)->render() . ' <b>' . $name . '</b>';
-    }
-
     public function get_form_type()
     {
         return $this->form_type;
     }
 
     /**
-     * Returns the ID of the owner of the content object being created or edited.
-     *
-     * @return int The ID.
+     * @return integer
      */
     protected function get_owner_id()
     {
@@ -968,9 +931,7 @@ EOT;
     }
 
     /**
-     * Sets the ID of the owner of the content object being created or edited.
-     *
-     * @param int The owner id.
+     * @param integer $owner_id
      */
     protected function set_owner_id($owner_id)
     {
@@ -986,6 +947,9 @@ EOT;
         return $this->workspace;
     }
 
+    /**
+     * @return boolean
+     */
     public function is_version()
     {
         $values = $this->exportValues();
@@ -993,6 +957,10 @@ EOT;
         return (isset($values['version']) && $values['version'] == 1);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public function prepareTabs()
     {
         $this->addDefaultTab();
@@ -1000,11 +968,12 @@ EOT;
     }
 
     /**
-     * @param array $defaults
+     * @param string[] $defaults
+     * @param mixed $filter
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $content_object = $this->content_object;
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
@@ -1053,7 +1022,7 @@ EOT;
     }
 
     /**
-     * @param $defaults
+     * @param string[] $defaults
      *
      * @throws \Exception
      */
@@ -1063,10 +1032,10 @@ EOT;
     }
 
     /**
-     * Sets the category id from the given form values
-     *
-     * @param ContentObject $object
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $object
      * @param string[] $values
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function set_category_from_values($object, $values)
     {
@@ -1110,7 +1079,7 @@ EOT;
     }
 
     /**
-     * @param $defaults
+     * @param string[] $defaults
      *
      * @throws \Exception
      */
@@ -1119,6 +1088,10 @@ EOT;
         parent::setDefaults($defaults);
     }
 
+    /**
+     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
     public function update_content_object()
     {
         $object = $this->content_object;
@@ -1198,9 +1171,8 @@ EOT;
     }
 
     /**
-     * Validates this form
-     *
-     * @see FormValidator::validate
+     * @return boolean
+     * @throws \Exception
      */
     public function validate()
     {

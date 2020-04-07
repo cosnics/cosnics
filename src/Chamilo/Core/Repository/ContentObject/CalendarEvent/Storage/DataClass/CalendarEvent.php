@@ -21,6 +21,9 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     const PROPERTY_LOCATION = 'location';
     const PROPERTY_START_DATE = 'start_date';
 
+    /**
+     * @return string[]
+     */
     public static function get_additional_property_names()
     {
         return array(
@@ -38,9 +41,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * Gets the end date of this calendar event
-     *
-     * @return int The end date
+     * @return integer
      */
     public function get_end_date()
     {
@@ -48,9 +49,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * Gets the start date of this calendar event
-     *
-     * @return int The start date
+     * @return string
      */
     public function get_location()
     {
@@ -58,9 +57,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * Gets the start date of this calendar event
-     *
-     * @return int The start date
+     * @return integer
      */
     public function get_start_date()
     {
@@ -68,7 +65,6 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     *
      * @return string
      */
     public static function get_type_name()
@@ -76,6 +72,9 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
+    /**
+     * @return string
+     */
     public function get_type_string()
     {
         if ($this->has_frequency())
@@ -88,15 +87,16 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
         }
     }
 
+    /**
+     * @return string
+     */
     public static function parent_class_name()
     {
         return ContentObject::class;
     }
 
     /**
-     * Sets the end date of this calendar event
-     *
-     * @param int The end date
+     * @param integer $end_date
      */
     public function set_end_date($end_date)
     {
@@ -104,9 +104,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * Sets the start date of this calendar event
-     *
-     * @param string
+     * @param $location
      */
     public function set_location($location)
     {
@@ -114,9 +112,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * Sets the start date of this calendar event
-     *
-     * @param int The start date
+     * @param integer $start_date
      */
     public function set_start_date($start_date)
     {
