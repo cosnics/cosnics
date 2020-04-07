@@ -22,7 +22,7 @@ class TeamNotFoundException extends UserException
      *
      * @param string $teamId
      */
-    public function __construct($teamId)
+    public function __construct($teamId = null)
     {
         parent::__construct(
             Translation::getInstance()->getTranslator()->trans("TeamNotFoundException", [], 'Chamilo\\Libraries')

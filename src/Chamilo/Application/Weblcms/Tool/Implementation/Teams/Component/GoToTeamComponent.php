@@ -31,10 +31,7 @@ class GoToTeamComponent extends Manager
      */
     public function run()
     {
-        /**
-         * @var CourseTeamService $courseTeamService
-         */
-        $courseTeamService = $this->getService(CourseTeamService::class);
+        $courseTeamService = $this->getCourseTeamService();
 
         $team = $courseTeamService->getTeam($this->get_course());
 

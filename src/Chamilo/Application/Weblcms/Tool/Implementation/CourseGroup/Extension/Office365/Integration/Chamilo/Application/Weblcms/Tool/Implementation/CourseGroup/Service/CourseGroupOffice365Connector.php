@@ -9,8 +9,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
+use Microsoft\Graph\Model\Team;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service
@@ -271,6 +273,7 @@ class CourseGroupOffice365Connector
      *
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws TeamNotFoundException
      */
     public function syncCourseGroupSubscriptions(CourseGroup $courseGroup)
     {
@@ -279,6 +282,12 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
             return;
+        }
+
+        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
+        if(!$team instanceof Team)
+        {
+            throw new TeamNotFoundException($reference->getOffice365GroupId());
         }
 
         $courseGroupUsers = $courseGroup->get_members(true, true, true);
@@ -306,9 +315,11 @@ class CourseGroupOffice365Connector
             throw new \RuntimeException('No team found for course group ' . $courseGroup->getId());
         }
 
+        $teamUrl = $this->teamService->getTeamUrl($reference->getOffice365GroupId());
+
         $this->groupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
 
-        return $this->teamService->getTeamUrl($reference->getOffice365GroupId());
+        return $teamUrl;
     }
 
     /**
