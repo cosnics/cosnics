@@ -157,6 +157,7 @@ class GroupRepository
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function subscribeOwnerInGroup($groupIdentifier, $azureUserIdentifier)
     {
@@ -170,12 +171,8 @@ class GroupRepository
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
-            {
-                throw new GroupNotExistsException($groupIdentifier);
-            }
-
-            throw $exception;
+            $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
+            return null;
         }
     }
 
@@ -264,7 +261,6 @@ class GroupRepository
 
             throw $exception;
         }
-
     }
 
     /**
@@ -289,22 +285,56 @@ class GroupRepository
         }
         catch (\GuzzleHttp\Exception\ClientException $exception)
         {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
-            {
-                //could also be that the user is not found.
-                $userNotFoundMsgPosition = strpos(
-                    $exception->getResponse()->getBody()->getContents(),
-                    'Resource \'' . $azureUserIdentifier . '\' does not exist'
-                );
-                if($userNotFoundMsgPosition !== false) {
-                    throw new UnknownAzureUserIdException($azureUserIdentifier);
-                } else {
-                    throw new GroupNotExistsException($groupIdentifier);
-                }
-            }
-
-            throw $exception;
+            $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
+            return null;
         }
+    }
+
+    /**
+     * @param \GuzzleHttp\Exception\ClientException $exception
+     *
+     * @param string $azureUserIdentifier
+     * @param string $groupIdentifier
+     *
+     * @throws GroupNotExistsException
+     * @throws UnknownAzureUserIdException
+     */
+    protected function handleSubscribeUserInGroupException(
+        \GuzzleHttp\Exception\ClientException $exception, string $azureUserIdentifier, string $groupIdentifier
+    )
+    {
+        if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+        {
+            //could also be that the user is not found.
+            $userNotFoundMsgPosition = strpos(
+                $exception->getResponse()->getBody()->getContents(),
+                'Resource \'' . $azureUserIdentifier . '\' does not exist'
+            );
+            if ($userNotFoundMsgPosition !== false)
+            {
+                throw new UnknownAzureUserIdException($azureUserIdentifier);
+            }
+            else
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+        }
+
+        // Catch the exception where the user is already added to the group silently
+        if ($exception->getCode() == GraphRepository::RESPONSE_CODE_BAD_REQUEST)
+        {
+            $alreadyAddedPosition = strpos(
+                $exception->getResponse()->getBody()->getContents(),
+                'One or more added object references already exist'
+            );
+
+            if ($alreadyAddedPosition !== false)
+            {
+                return;
+            }
+        }
+
+        throw $exception;
     }
 
     /**

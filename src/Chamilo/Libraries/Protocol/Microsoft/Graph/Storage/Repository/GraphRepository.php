@@ -23,6 +23,7 @@ class GraphRepository
 {
     const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
     const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
+    const RESPONSE_CODE_BAD_REQUEST = '400';
     const API_VERSION_V1 = 'V1.0';
     const API_VERSION_BETA = 'beta';
 

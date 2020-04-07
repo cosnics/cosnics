@@ -119,6 +119,7 @@ class GroupService
      * @throws AzureUserNotExistsException
      * @throws GroupNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function createGroupByName(User $owner, $groupName)
     {
@@ -179,10 +180,15 @@ class GroupService
             if ($this->isOwnerOfGroup($groupId, $user))
             {
                 $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
-                try {
+
+                try
+                {
                     $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
-                } catch (\Exception $exception) {
-                    //TODO: check if subscribe member bug is fixed. It seems so because GRAPH api is returning already subscribed errors
+                }
+                catch (\Exception $exception)
+                {
+                    //TODO: check if subscribe member bug is fixed. It seems so because
+                    // GRAPH api is returning already subscribed errors
                 }
             }
             else
@@ -317,7 +323,9 @@ class GroupService
                 /** BUG IN MICROSOFT: THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
                 $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
             }
-            catch(\Exception $ex) {}
+            catch (\Exception $ex)
+            {
+            }
 
             $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
         }

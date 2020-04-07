@@ -211,6 +211,7 @@ class CourseGroupOffice365Connector
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
+     * @throws TeamNotFoundException
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
@@ -219,6 +220,12 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
             return;
+        }
+
+        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
+        if(!$team instanceof Team)
+        {
+            throw new TeamNotFoundException($reference->getOffice365GroupId());
         }
 
         try
@@ -242,6 +249,7 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws TeamNotFoundException
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
@@ -250,6 +258,12 @@ class CourseGroupOffice365Connector
         if (!$reference instanceof CourseGroupOffice365Reference)
         {
             return;
+        }
+
+        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
+        if(!$team instanceof Team)
+        {
+            throw new TeamNotFoundException($reference->getOffice365GroupId());
         }
 
         try

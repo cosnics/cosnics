@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 
 /**
  * Decorates the service for course groups. Adding additional functionality for the common course group functionality
@@ -127,7 +129,11 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
-        $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
+        try
+        {
+            $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
+        }
+        catch(TeamNotFoundException $ex) {}
     }
 
     /**
@@ -140,7 +146,11 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
-        $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
+        try
+        {
+            $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
+        }
+        catch(TeamNotFoundException $ex) {}
     }
 
 }
