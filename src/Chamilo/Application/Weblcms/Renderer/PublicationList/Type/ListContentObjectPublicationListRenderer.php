@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Path;
@@ -1003,8 +1002,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $html[] = '<span class="text-danger">';
         }
-
-//        throw new NotAuthenticatedException();
 
         $glyph = new FontAwesomeGlyph('clock', array(), null, 'far');
 

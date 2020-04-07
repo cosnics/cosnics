@@ -101,12 +101,14 @@ class NotAuthenticatedResponse extends Response
     {
         $html = array();
 
+        $html[] = '<div class="clearfix">&nbsp;</div>';
+
         $html[] = '<div class="row">';
 
         $html[] = '<div class="col-xs-12 col-md-2 col-lg-3"></div>';
 
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-6">';
-        $html[] = '<div class="panel panel-danger panel-not-authenticated">';
+        $html[] = '<div class="panel panel-danger">';
         $html[] = '<div class="panel-heading">';
         $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
         $html[] = '</div>';

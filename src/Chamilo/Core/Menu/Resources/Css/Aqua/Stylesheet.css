@@ -18,7 +18,11 @@
 .navbar.navbar-inverse.navbar-cosnics .navbar-brand,
 .navbar.navbar-inverse.navbar-cosnics .navbar-brand img {
     height: auto;
-    max-height: 50px;
+    max-height: 80px;
+}
+
+.navbar.navbar-inverse.navbar-cosnics .navbar-brand img {
+    height: 50px;
 }
 
 .navbar.navbar-inverse.navbar-cosnics .navbar-nav > li > a {
