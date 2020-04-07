@@ -725,59 +725,7 @@ EOT;
      */
     public function add_receivers($elementName, $elementLabel, $attributes, $noSelection = 'Everybody', $legend = null)
     {
-        $choices = array();
-        $choices[] = $this->createElement(
-            'radio', $elementName . '_option', '', Translation::get($noSelection), '0', array(
-                'onclick' => 'javascript:receivers_hide(\'receivers_window_' . $elementName . '\')',
-                'id' => 'receiver_' . $elementName
-            )
-        );
-        $choices[] = $this->createElement(
-            'radio', $elementName . '_option', '', Translation::get('SelectGroupsUsers'), '1',
-            array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')')
-        );
-        $this->addGroup($choices, null, $elementLabel, '', false);
-        $this->addElement(
-            'html', '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">'
-        );
-
-        $this->add_element_finder_with_legend($elementName, null, $attributes, $legend);
-
-        $this->addElement('html', '</div>');
-        $this->addElement(
-            'html', ">
-					/* <![CDATA[ */
-					var expiration_;" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
-					if (expiration_" . $elementName . ".checked)
-					{
-						receivers_hide('receivers_window_" . $elementName . "');
-					}
-					function receivers_show(item) {
-						el = document.getElementById(item);
-						el.style.display='';
-					}
-					function receivers_hide(item) {
-						el = document.getElementById(item);
-						el.style.display='none';
-					}
-					function reset_receivers_" . $elementName . "();
-					{
-						setTimeout(
-							function()
-							{
-								if (expiration_" . $elementName . ".checked)
-									receivers_hide('receivers_window_" . $elementName . "');
-								else
-									receivers_show('receivers_window_" . $elementName . "');
-							},30);
-    				}
-    				$(document).ready(function ()
-					{
-						$(document).on('click', ':reset', reset_receivers_" . $elementName . ");
-					});
-					/* ]]> */
-					</script>\n"
-        );
+        $this->add_element_finder_with_legend($elementName, $elementLabel, $attributes, $legend);
     }
 
     /**

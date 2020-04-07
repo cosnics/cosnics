@@ -5,6 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Connection;
 use Chamilo\Libraries\Translation\Translation;
@@ -528,30 +530,28 @@ class Diagnoser
 
         $current_section = Request::get('section');
         $current_section = $current_section ? $current_section : 'chamilo';
-        $html[] = '<br /><div class="tabbed-pane"><ul class="tabbed-pane-tabs">';
+
+        $tabs = new DynamicVisualTabsRenderer('diagnoser');
 
         foreach ($sections as $section)
         {
-            $html[] = '<li><a';
-            if ($current_section == $section)
-            {
-                $html[] = ' class="current"';
-            }
             $params = $this->manager->get_parameters();
             $params['section'] = $section;
-            $html[] = ' href="' . $this->manager->get_url($params) . '">' .
-                htmlentities(Translation::get(ucfirst($section) . 'Title')) . '</a></li>';
-        }
 
-        $html[] = '</ul><div class="tabbed-pane-content">';
+            $tabs->add_tab(
+                new DynamicVisualTab(
+                    $section, Translation::get(ucfirst($section) . 'Title'), null, $this->manager->get_url($params),
+                    $current_section == $section, false, DynamicVisualTab::POSITION_LEFT, DynamicVisualTab::DISPLAY_TEXT
+                )
+            );
+        }
 
         $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
 
         $table = new SimpleTable($data, new DiagnoserCellRenderer(), null, 'diagnoser');
-        $html[] = $table->toHTML();
 
-        $html[] = '</div></div>';
+        $tabs->set_content($table->render());
 
-        return implode(PHP_EOL, $html);
+        return $tabs->render();
     }
 }

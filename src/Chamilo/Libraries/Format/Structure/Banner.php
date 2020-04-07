@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Renderer\MenuRenderer;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
@@ -54,60 +56,6 @@ class Banner
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getViewMode()
-    {
-        return $this->viewMode;
-    }
-
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
-    {
-        $this->viewMode = $viewMode;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
-    {
-        return $this->containerMode;
-    }
-
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
-    {
-        $this->containerMode = $containerMode;
-    }
-
-    /**
      * Creates the HTML output for the banner.
      */
     public function render()
@@ -116,7 +64,7 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
+            $user = DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
             $userFullName = $this->getApplication()->getUser()->get_fullname();
         }
         else
@@ -138,7 +86,7 @@ class Banner
             if (!empty($maintenanceWarning))
             {
                 $html[] = '<div class="warning-banner bg-warning text-warning">';
-                $html[] = '<strong>'. $maintenanceWarning . '</strong>';
+                $html[] = '<strong>' . $maintenanceWarning . '</strong>';
                 $html[] = '</div>';
             }
         }
@@ -147,16 +95,19 @@ class Banner
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER
+                    Application::PARAM_CONTEXT => Manager::context(),
+                    Application::PARAM_ACTION => Manager::ACTION_ADMIN_USER
                 )
             );
             $link = $redirect->getUrl();
 
-            $html[] = '<div class="warning-banner bg-warning text-warning">' .
-                Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' . $userFullName .
-                ' <a href="' . $link . '">' . Translation::get('Back', null, Utilities::COMMON_LIBRARIES) .
-                '</a></div>';
+            $html[] = '<div class="warning-banner bg-warning text-warning">';
+            $html[] = Translation::get('LoggedInAsUser', null, Manager::context());
+            $html[] = ' ';
+            $html[] = $userFullName;
+            $html[] = ' ';
+            $html[] = '<a href="' . $link . '">' . Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a>';
+            $html[] = '</div>';
         }
 
         $html[] = $this->getMenuRenderer()->render($this->getContainerMode(), $user);
@@ -179,6 +130,42 @@ class Banner
     }
 
     /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
+    }
+
+    /**
      * @return \Chamilo\Core\Menu\Renderer\MenuRenderer
      */
     public function getMenuRenderer()
@@ -186,5 +173,23 @@ class Banner
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $dependencyInjectionContainer->get(MenuRenderer::class);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
     }
 }

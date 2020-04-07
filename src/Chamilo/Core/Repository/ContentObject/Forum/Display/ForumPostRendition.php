@@ -115,14 +115,15 @@ class ForumPostRendition
 
         if (count($attachments))
         {
-            $html[] = '<div class="attachments" style="margin-top: 1em;">';
+            $html[] = '<div class="panel panel-default panel-attachments">';
 
             $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
 
-            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
-                htmlentities(Translation::get('Attachments')) . '</div>';
+            $html[] =
+                '<div class="panel-heading">' . $glyph->render() . ' ' . htmlentities(Translation::get('Attachments')) .
+                '</div>';
             Utilities::order_content_objects_by_title($attachments);
-            $html[] = '<ul class="attachments_list">';
+            $html[] = '<ul class="list-group">';
 
             /**
              * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
@@ -141,9 +142,8 @@ class ForumPostRendition
 
                 $glyph = $attachment->getGlyph(IdentGlyph::SIZE_MINI);
 
-                $html[] =
-                    '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
-                    '</a></li>';
+                $html[] = '<li class="list-group-item"><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' .
+                    $attachment->get_title() . '</a></li>';
             }
 
             $html[] = '</ul>';

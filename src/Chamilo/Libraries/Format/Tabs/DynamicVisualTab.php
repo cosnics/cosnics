@@ -13,18 +13,30 @@ use Chamilo\Libraries\Utilities\Utilities;
 class DynamicVisualTab extends DynamicTab
 {
     // Position constants
-    const POSITION_LEFT = 'left';
-    const POSITION_RIGHT = 'right';
-
-    // Display constants
-    const DISPLAY_ICON = 1;
-    const DISPLAY_TEXT = 2;
     const DISPLAY_BOTH = 3;
+
     const DISPLAY_BOTH_SELECTED = 4;
 
+    // Display constants
+
+    const DISPLAY_ICON = 1;
+    const DISPLAY_TEXT = 2;
+
+    const POSITION_LEFT = 'left';
+
+    const POSITION_RIGHT = 'right';
+
     // Target constants
-    const TARGET_WINDOW = 1;
+
     const TARGET_POPUP = 2;
+
+    const TARGET_WINDOW = 1;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $display;
 
     /**
      *
@@ -54,12 +66,6 @@ class DynamicVisualTab extends DynamicTab
      *
      * @var integer
      */
-    protected $display;
-
-    /**
-     *
-     * @var integer
-     */
     private $target;
 
     /**
@@ -75,8 +81,8 @@ class DynamicVisualTab extends DynamicTab
      * @param integer $target
      */
     public function __construct(
-        $id, $name, $image, $link, $selected = false, $confirmation = false, $position = self :: POSITION_LEFT,
-        $display = self :: DISPLAY_BOTH, $target = self :: TARGET_WINDOW
+        $id, $name, $image, $link, $selected = false, $confirmation = false, $position = self::POSITION_LEFT,
+        $display = self::DISPLAY_BOTH, $target = self::TARGET_WINDOW
     )
     {
         parent::__construct($id, $name, $image);
@@ -90,38 +96,56 @@ class DynamicVisualTab extends DynamicTab
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::get_link()
+     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::body()
      */
-    public function get_link()
+    public function body($isOnlyTab = false)
     {
-        return $this->link;
-    }
-
-    /**
-     *
-     * @param string $link
-     */
-    public function set_link($link)
-    {
-        $this->link = $link;
+        return null;
     }
 
     /**
      *
      * @return boolean
      */
-    public function get_selected()
+    public function get_confirmation()
     {
-        return $this->selected;
+        return $this->confirmation;
     }
 
     /**
      *
-     * @param boolean $selected
+     * @param boolean $confirmation
      */
-    public function set_selected($selected)
+    public function set_confirmation($confirmation)
     {
-        $this->selected = $selected;
+        $this->confirmation = $confirmation;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_display()
+    {
+        return $this->display;
+    }
+
+    /**
+     *
+     * @param integer $display
+     */
+    public function set_display($display)
+    {
+        $this->display = $display;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::get_link()
+     */
+    public function get_link()
+    {
+        return $this->link;
     }
 
     /**
@@ -146,52 +170,18 @@ class DynamicVisualTab extends DynamicTab
      *
      * @return boolean
      */
-    public function get_confirmation()
+    public function get_selected()
     {
-        return $this->confirmation;
+        return $this->selected;
     }
 
     /**
      *
-     * @param boolean $confirmation
+     * @param boolean $selected
      */
-    public function set_confirmation($confirmation)
+    public function set_selected($selected)
     {
-        $this->confirmation = $confirmation;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function needs_confirmation()
-    {
-        if ($this->get_confirmation() === false)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_display()
-    {
-        return $this->display;
-    }
-
-    /**
-     *
-     * @param integer $display
-     */
-    public function set_display($display)
-    {
-        $this->display = $display;
+        $this->selected = $selected;
     }
 
     /**
@@ -280,6 +270,10 @@ class DynamicVisualTab extends DynamicTab
         {
             $html[] = '<span class="title">' . $this->get_name() . '</span>';
         }
+        else
+        {
+            $html[] = '<span>' . $this->get_name() . '</span>';
+        }
 
         $html[] = '</a>';
         $html[] = '</li>';
@@ -289,10 +283,26 @@ class DynamicVisualTab extends DynamicTab
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::body()
+     * @return boolean
      */
-    public function body($isOnlyTab = false)
+    public function needs_confirmation()
     {
-        return null;
+        if ($this->get_confirmation() === false)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     *
+     * @param string $link
+     */
+    public function set_link($link)
+    {
+        $this->link = $link;
     }
 }

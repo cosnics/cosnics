@@ -143,8 +143,7 @@ class Publisher
             $html[] = '</h3>';
             $html[] = '</div>';
 
-            $html[] = '<div class="panel-body">';
-            $html[] = '<ul class="attachments_list">';
+            $html[] = '<ul class="list-group">';
 
             while ($content_object = $content_objects->next_result())
             {
@@ -153,7 +152,8 @@ class Publisher
 
                 if (RightsService::getInstance()->canUseContentObject($this->parent->get_user(), $content_object))
                 {
-                    $html[] = '<li>' . $glyph->render() . ' ' . $content_object->get_title() . '</li>';
+                    $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $content_object->get_title() .
+                        '</li>';
 
                     $publication = new ContentObjectPublication();
                     $publication->set_content_object_id($content_object->get_id());
@@ -165,14 +165,12 @@ class Publisher
                 }
                 else
                 {
-                    $html[] =
-                        '<li>' . $glyph->render() . ' ' . $content_object->get_title() . '<em class="text-danger">' .
-                        Translation::get('NotAllowed') . '</em>' . '</li>';
+                    $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $content_object->get_title() .
+                        '<em class="text-danger">' . Translation::get('NotAllowed') . '</em>' . '</li>';
                 }
             }
 
             $html[] = '</ul>';
-            $html[] = '</div>';
             $html[] = '</div>';
         }
 

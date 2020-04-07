@@ -60,7 +60,7 @@ class Banner
     {
         $html = array();
 
-        $html[] = '<nav class="navbar navbar-chamilo navbar-inverse">';
+        $html[] = '<nav class="navbar navbar-static-top navbar-cosnics navbar-inverse">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
 

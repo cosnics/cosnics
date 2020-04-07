@@ -133,8 +133,7 @@ class CreatorComponent extends Manager implements ViewerInterface
                     'SelectedContentObjects', null, Utilities::COMMON_LIBRARIES
                 ) . '</h3>';
             $html[] = '</div>';
-            $html[] = '<div class="panel-body">';
-            $html[] = '<ul class="attachments_list">';
+            $html[] = '<ul class="list-group">';
 
             while ($contentObject = $contentObjects->next_result())
             {
@@ -143,18 +142,17 @@ class CreatorComponent extends Manager implements ViewerInterface
 
                 if (RightsService::getInstance()->canUseContentObject($this->getUser(), $contentObject))
                 {
-                    $html[] = '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
+                    $html[] =
+                        '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
                 }
                 else
                 {
-                    $html[] =
-                        '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '<em class="text-danger">' .
-                        Translation::get('NotAllowed') . '</em>' . '</li>';
+                    $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() .
+                        '<em class="text-danger">' . Translation::get('NotAllowed') . '</em>' . '</li>';
                 }
             }
 
             $html[] = '</ul>';
-            $html[] = '</div>';
             $html[] = '</div>';
         }
 

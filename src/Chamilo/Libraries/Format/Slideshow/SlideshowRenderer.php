@@ -136,25 +136,20 @@ class SlideshowRenderer
 
         $html[] = '<div class="panel-body">';
 
-        $html[] = '<table class="table-slideshow">';
-        $html[] = '<tbody>';
-        $html[] = '<tr>';
-
-        $html[] = '<td class="control control-left">';
-        $html[] = $this->renderPreviousNavigation();
-        $html[] = '</td>';
-
-        $html[] = '<td class="thumbnail-container">';
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-lg-12 text-center">';
         $html[] = $this->getContentObjectRenditionImplementation()->render();
-        $html[] = '</td>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
-        $html[] = '<td class="control control-right">';
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-6 text-center">';
+        $html[] = $this->renderPreviousNavigation();
+        $html[] = '</div>';
+        $html[] = '<div class="col-xs-6 text-center">';
         $html[] = $this->renderNextNavigation();
-        $html[] = '</td>';
-
-        $html[] = '</tr>';
-        $html[] = '</tbody>';
-        $html[] = '</table>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         $html[] = '<div class="row panel-slideshow-actions">';
         $html[] = '<div class="col-xs-12">';
@@ -396,22 +391,22 @@ class SlideshowRenderer
         {
             $slideshowIndex = $this->getSlideshowIndex() + 1;
 
-            $glyph = new FontAwesomeGlyph('step-forward', array('fa-md'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw'), null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</a>';
 
             $slideshowIndex = $this->getContentObjectCount() - 1;
 
-            $glyph = new FontAwesomeGlyph('fast-forward', array('fa-md'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw'), null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</span></a>';
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('step-forward', array('fa-md', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
             $html[] = $glyph->render();
 
-            $glyph = new FontAwesomeGlyph('fast-forward', array('fa-md', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
             $html[] = $glyph->render();
         }
 
@@ -428,22 +423,22 @@ class SlideshowRenderer
 
         if (!$this->isFirst())
         {
-            $glyph = new FontAwesomeGlyph('fast-backward', array('fa-md'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw'), null, 'fas');
             $html[] =
                 '<a href="' . $this->determineUrl(0, $this->getSlideshowAutoPlay()) . '">' . $glyph->render() . '</a>';
 
             $slideshowIndex = $this->getSlideshowIndex() - 1;
 
-            $glyph = new FontAwesomeGlyph('step-backward', array('fa-md'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw'), null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</span></a>';
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('fast-backward', array('fa-md', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
             $html[] = $glyph->render();
 
-            $glyph = new FontAwesomeGlyph('step-backward', array('fa-md', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
             $html[] = $glyph->render();
         }
 

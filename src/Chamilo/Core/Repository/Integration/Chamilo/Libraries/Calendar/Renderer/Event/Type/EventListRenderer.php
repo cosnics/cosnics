@@ -59,11 +59,11 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                     Utilities::order_content_objects_by_title($attachments);
                     $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
 
-                    $html[] = '<div class="attachments" style="margin-top: 1em;">';
-                    $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' . htmlentities(
+                    $html[] = '<div class="panel panel-default panel-attachments">';
+                    $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' . htmlentities(
                             Translation::get('Attachments', null, Manager::context())
                         ) . '</div>';
-                    $html[] = '<ul class="attachments_list">';
+                    $html[] = '<ul class="list-group">';
 
                     foreach ($attachments as $attachment)
                     {
@@ -71,7 +71,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
 
                         $render = array();
 
-                        $render[] = '<li>';
+                        $render[] = '<li class="list-group-item">';
 
                         if ($url)
                         {
@@ -81,8 +81,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                         }
 
                         $glyph = new NamespaceIdentGlyph(
-                            $attachment->context(), true, false, false,
-                            IdentGlyph::SIZE_MINI, array('fa-fw')
+                            $attachment->context(), true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
                         );
 
                         $render[] = $glyph->render();
@@ -99,7 +98,8 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                         $html[] = implode('', $render);
                     }
 
-                    $html[] = '</ul></div>';
+                    $html[] = '</ul>';
+                    $html[] = '</div>';
 
                     return implode(PHP_EOL, $html);
                 }

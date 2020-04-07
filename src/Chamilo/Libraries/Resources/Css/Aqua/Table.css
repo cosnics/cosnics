@@ -115,61 +115,6 @@ td p {
     padding: 0;
 }
 
-/**
- * SLIDESHOW TABLE
- */
-.table-slideshow {
-    table-layout: fixed;
-    width: 100%;
-}
-
-.table-slideshow td {
-    text-align: center;
-}
-
-.table-slideshow .control {
-    font-size: 20px;
-    width: 55px;
-}
-
-.table-slideshow .control .disabled {
-    color: black;
-    opacity: 0.2;
-}
-
-.table-slideshow .control.control-left {
-    padding-right: 15px;
-}
-
-.table-slideshow .control.control-right {
-    padding-left: 15px;
-}
-
-.table-slideshow .control span.glyphicon {
-    width: 20px;
-}
-
-.table-slideshow .thumbnail-container .thumbnail {
-    display: inline;
-    max-height: 100%;
-    max-width: 100%;
-}
-
-.table-slideshow .thumbnail-container .no-preview span.glyphicon {
-    font-size: 60px;
-}
-
-@media ( min-width: 768px) {
-    .table-slideshow .control {
-        font-size: 40px;
-        width: 95px;
-    }
-
-    .table-slideshow .control span.glyphicon {
-        width: 40px;
-    }
-}
-
 .table th.cell-stat-x4, .table td.cell-stat-x4 {
     width: 1em;
 }

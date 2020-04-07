@@ -37,7 +37,7 @@ abstract class BasePublicationForm extends FormValidator
             return;
         }
 
-        $html[] = '<ul class="attachments_list">';
+        $html[] = '<ul class="list-group">';
 
         foreach ($this->selectedContentObjects as $contentObject)
         {
@@ -48,12 +48,13 @@ abstract class BasePublicationForm extends FormValidator
 
             if (RightsService::getInstance()->canUseContentObject($user, $contentObject))
             {
-                $html[] = '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
+                $html[] =
+                    '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
             }
             else
             {
-                $html[] = '<li>' . $glyph->render() . ' ' . $contentObject->get_title() . '<em class="text-danger">' .
-                    Translation::get('NotAllowed') . '</em>' . '</li>';
+                $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() .
+                    '<em class="text-danger">' . Translation::get('NotAllowed') . '</em>' . '</li>';
             }
         }
 

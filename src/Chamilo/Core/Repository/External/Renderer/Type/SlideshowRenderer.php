@@ -51,7 +51,8 @@ class SlideshowRenderer extends Renderer
                 new ToolbarItem(
                     Translation::get('Stop'), new FontAwesomeGlyph('stop'), $this->get_url(
                     array(
-                        self::SLIDESHOW_INDEX => Request::get(self::SLIDESHOW_INDEX), self::SLIDESHOW_AUTOPLAY => null
+                        self::SLIDESHOW_INDEX => Request::get(self::SLIDESHOW_INDEX),
+                        self::SLIDESHOW_AUTOPLAY => null
                     )
                 ), ToolbarItem::DISPLAY_ICON
                 )
@@ -63,7 +64,8 @@ class SlideshowRenderer extends Renderer
                 new ToolbarItem(
                     Translation::get('Play'), new FontAwesomeGlyph('play'), $this->get_url(
                     array(
-                        self::SLIDESHOW_INDEX => Request::get(self::SLIDESHOW_INDEX), self::SLIDESHOW_AUTOPLAY => 1
+                        self::SLIDESHOW_INDEX => Request::get(self::SLIDESHOW_INDEX),
+                        self::SLIDESHOW_AUTOPLAY => 1
                     )
                 ), ToolbarItem::DISPLAY_ICON
                 )
@@ -75,13 +77,15 @@ class SlideshowRenderer extends Renderer
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('First'), new FontAwesomeGlyph('fast-backward'),
+                    Translation::get('First'),
+                    new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw'), null, 'fas'),
                     $this->get_url(array(self::SLIDESHOW_INDEX => 0)), ToolbarItem::DISPLAY_ICON
                 )
             );
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Previous'), new FontAwesomeGlyph('step-backward'),
+                    Translation::get('Previous'),
+                    new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw'), null, 'fas'),
                     $this->get_url(array(self::SLIDESHOW_INDEX => $slideshow_index - 1)), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -90,13 +94,15 @@ class SlideshowRenderer extends Renderer
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('First'), new FontAwesomeGlyph('fast-backward', array('text-muted')), null,
+                    Translation::get('First'),
+                    new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw', 'text-muted')), null,
                     ToolbarItem::DISPLAY_ICON
                 )
             );
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Previous'), new FontAwesomeGlyph('step-backward', array('text-muted')), null,
+                    Translation::get('Previous'),
+                    new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw', 'text-muted')), null,
                     ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -106,13 +112,14 @@ class SlideshowRenderer extends Renderer
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Next'), new FontAwesomeGlyph('step-forward'),
+                    Translation::get('Next'), new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw'), null, 'fas'),
                     $this->get_url(array(self::SLIDESHOW_INDEX => $slideshow_index + 1)), ToolbarItem::DISPLAY_ICON
                 )
             );
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Last'), new FontAwesomeGlyph('fast-forward'),
+                    Translation::get('Last'),
+                    new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw'), null, 'fas'),
                     $this->get_url(array(self::SLIDESHOW_INDEX => $external_repository_object_count - 1)),
                     ToolbarItem::DISPLAY_ICON
                 )
@@ -122,14 +129,16 @@ class SlideshowRenderer extends Renderer
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Next'), new FontAwesomeGlyph('step-forward', array('text-muted')), null,
+                    Translation::get('Next'),
+                    new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas'), null,
                     ToolbarItem::DISPLAY_ICON
                 )
             );
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Last'), new FontAwesomeGlyph('fast-forward', array('text-muted')), null,
-                    ToolbarItem::DISPLAY_ICON
+                    Translation::get('Last'),
+                    new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas'),
+                    null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }

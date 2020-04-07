@@ -228,6 +228,12 @@ body.cke_editable {
     margin: 0;
 }
 
+.panel.panel-slideshow .thumbnail {
+    display: inline;
+    max-height: 100%;
+    max-width: 100%;
+}
+
 /****************************
  * SPECIFIC BOOTSTRAP FIXES *
  ****************************/

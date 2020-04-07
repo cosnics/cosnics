@@ -165,30 +165,29 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     {
         $html = array();
 
-        $html[] = '<div class="attachments">';
+        $html[] = '<div class="panel panel-default">';
 
         $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
         if (count($users) > 1)
         {
-            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+            $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' .
                 htmlentities(Translation::get('SelectedUsers')) . '</div>';
         }
         else
         {
-            $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+            $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' .
                 htmlentities(Translation::get('SelectedUser')) . '</div>';
         }
 
-        $html[] = '<ul class="attachments_list">';
+        $html[] = '<ul class="list-group">';
 
         $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
         foreach ($users as $user)
         {
-            $html[] =
-                '<li>' . $glyph->render() . ' ' . $user->get_fullname() . ' (' . $user->get_official_code() . ')' .
-                '</li>';
+            $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $user->get_fullname() . ' (' .
+                $user->get_official_code() . ')' . '</li>';
         }
 
         $html[] = '</ul>';

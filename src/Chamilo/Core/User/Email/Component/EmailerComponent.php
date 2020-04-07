@@ -59,8 +59,7 @@ class EmailerComponent extends Manager
         $html[] = '<h3 class="panel-title">' . Translation::get('SelectedUsers') . '</h3>';
         $html[] = '</div>';
 
-        $html[] = '<div class="panel-body">';
-        $html[] = '<ul class="attachments_list">';
+        $html[] = '<ul class="list-group">';
 
         $glyph = new FontAwesomeGlyph('users');
 
@@ -71,11 +70,10 @@ class EmailerComponent extends Manager
                 $target_user = $target_user->get_fullname() . ' &lt;' . $target_user->get_email() . '&gt;';
             }
 
-            $html[] = '<li>' . $glyph->render() . ' ' . $target_user . '</li>';
+            $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $target_user . '</li>';
         }
 
         $html[] = '</ul>';
-        $html[] = '</div>';
 
         $html[] = '</div>';
 

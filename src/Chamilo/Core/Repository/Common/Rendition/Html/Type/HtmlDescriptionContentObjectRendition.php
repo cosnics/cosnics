@@ -36,6 +36,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
     public function get_attachments()
     {
         $object = $this->get_content_object();
+
         $html = array();
 
         if ($object instanceof AttachmentSupport)
@@ -43,12 +44,12 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
             $attachments = $object->get_attachments();
             if (count($attachments))
             {
-                $html[] = '<div class="attachments" style="margin-top: 1em;">';
+                $html[] = '<div class="panel panel-default panel-attachments">';
                 $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
-                $html[] = '<div class="attachments_title">' . $glyph->render() . ' ' .
+                $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' .
                     htmlentities(Translation::get('Attachments')) . '</div>';
                 Utilities::order_content_objects_by_title($attachments);
-                $html[] = '<ul class="attachments_list">';
+                $html[] = '<ul class="list-group">';
 
                 /**
                  * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $attachments
@@ -62,8 +63,8 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                     $glyph = $attachment->getGlyph();
 
                     $html[] =
-                        '<li><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' . $attachment->get_title() .
-                        '</a></li>';
+                        '<li class="list-group-item"><a href="#" onClick="' . $url . '">' . $glyph->render() . ' ' .
+                        $attachment->get_title() . '</a></li>';
                 }
                 $html[] = '</ul>';
                 $html[] = '</div>';

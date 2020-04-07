@@ -2,39 +2,38 @@
     content: "\f14e";
 }
 
-.navbar.navbar-inverse.navbar-chamilo {
-    border-radius: 0px;
-    border-width: 0px;
+.navbar.navbar-inverse.navbar-cosnics {
+    border: 0px solid #406e8e;
     margin-bottom: 0px;
 }
 
-.navbar.navbar-inverse.navbar-chamilo .profile-picture {
+.navbar.navbar-inverse.navbar-cosnics .profile-picture {
     height: 49px;
 }
 
-.navbar.navbar-inverse.navbar-chamilo .img-thumbnail {
+.navbar.navbar-inverse.navbar-cosnics .img-thumbnail {
     border-width: 2px;
 }
 
-.navbar.navbar-inverse.navbar-chamilo .navbar-brand > img {
+.navbar.navbar-inverse.navbar-cosnics .navbar-brand > img {
     max-height: 65px;
 }
 
-.navbar.navbar-inverse.navbar-chamilo .navbar-nav > li > a {
+.navbar.navbar-inverse.navbar-cosnics .navbar-nav > li > a {
     text-align: center;
 }
 
-.navbar-inverse.navbar-chamilo,
-.navbar-inverse.navbar-chamilo .img-thumbnail,
-.navbar-inverse.navbar-chamilo .dropdown-menu > .active > a,
+.navbar-inverse.navbar-cosnics,
+.navbar-inverse.navbar-cosnics .img-thumbnail,
+.navbar-inverse.navbar-cosnics .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
 .dropdown-menu > .active > a:focus {
     background-color: #406e8e;
 }
 
-.navbar-inverse.navbar-chamilo .navbar-nav > .active > a,
-.navbar-inverse.navbar-chamilo .navbar-nav > .active > a:hover,
-.navbar-inverse.navbar-chamilo .navbar-nav > .active > a:focus {
+.navbar-inverse.navbar-cosnics .navbar-nav > .active > a,
+.navbar-inverse.navbar-cosnics .navbar-nav > .active > a:hover,
+.navbar-inverse.navbar-cosnics .navbar-nav > .active > a:focus {
     background-color: #355a73;
 }
 
