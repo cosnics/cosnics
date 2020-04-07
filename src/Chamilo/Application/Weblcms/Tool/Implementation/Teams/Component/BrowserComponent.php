@@ -26,21 +26,22 @@ class BrowserComponent extends Manager
     public function run(): string
     {
         $courseTeamService = $this->getCourseTeamService();
-        $courseTeamName = null;
+        $courseTeamName = $this->get_course()->get_title();
+        $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
 
         try
         {
-            $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
             if ($hasTeam)
             {
                 $courseTeam = $courseTeamService->getTeam($this->get_course());
-                $courseTeamName = $courseTeam->getProperties()['displayName'];
+                if($courseTeam)
+                {
+                    $courseTeamName = $courseTeam->getProperties()['displayName'];
+                }
             }
         }
         catch(GraphException $ex)
         {
-            $hasTeam = true;
-            $courseTeamName = $this->get_course()->get_title();
         }
 
         return $this->render(
