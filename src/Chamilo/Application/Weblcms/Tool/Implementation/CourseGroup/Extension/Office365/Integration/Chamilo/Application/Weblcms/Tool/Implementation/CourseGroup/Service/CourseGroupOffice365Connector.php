@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
@@ -222,11 +223,7 @@ class CourseGroupOffice365Connector
             return;
         }
 
-        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
-        if(!$team instanceof Team)
-        {
-            throw new TeamNotFoundException($reference->getOffice365GroupId());
-        }
+        $this->validateTeam($reference);
 
         try
         {
@@ -260,11 +257,7 @@ class CourseGroupOffice365Connector
             return;
         }
 
-        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
-        if(!$team instanceof Team)
-        {
-            throw new TeamNotFoundException($reference->getOffice365GroupId());
-        }
+        $this->validateTeam($reference);
 
         try
         {
@@ -277,6 +270,30 @@ class CourseGroupOffice365Connector
         catch (GroupNotExistsException $ex)
         {
 
+        }
+    }
+
+    /**
+     * @param CourseGroupOffice365Reference $courseGroupOffice365Reference
+     *
+     * @return Team|null
+     * @throws TeamNotFoundException
+     */
+    protected function validateTeam(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        try
+        {
+            $team = $this->teamService->getTeam($courseGroupOffice365Reference->getOffice365GroupId());
+            if (!$team instanceof Team)
+            {
+                throw new TeamNotFoundException($courseGroupOffice365Reference->getOffice365GroupId());
+            }
+
+            return $team;
+        }
+        catch(GraphException $graphException)
+        {
+            throw new TeamNotFoundException($courseGroupOffice365Reference->getOffice365GroupId());
         }
     }
 
@@ -298,12 +315,7 @@ class CourseGroupOffice365Connector
             return;
         }
 
-        $team = $this->teamService->getTeam($reference->getOffice365GroupId());
-        if(!$team instanceof Team)
-        {
-            throw new TeamNotFoundException($reference->getOffice365GroupId());
-        }
-
+        $this->validateTeam($reference);
         $courseGroupUsers = $courseGroup->get_members(true, true, true);
 
         $this->groupService->syncUsersToGroup($reference->getOffice365GroupId(), $courseGroupUsers);
