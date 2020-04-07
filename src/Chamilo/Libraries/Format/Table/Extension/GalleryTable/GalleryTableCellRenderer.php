@@ -18,6 +18,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTable $table
+     *
      * @throws \Exception
      */
     public function __construct($table)
@@ -26,9 +27,26 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
     }
 
     /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
+     * @return string
+     */
+    abstract public function renderContent($result);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
+     * @return string
+     */
+    abstract public function renderTitle($result);
+
+    /**
      * Renders a single cell
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
      * @return string
      */
     public function render_cell($result)
@@ -36,6 +54,13 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
         $html = array();
 
         $html[] = '<div class="panel panel-default panel-gallery">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">';
+        $html[] = $this->renderTitle($result);
+        $html[] = '</h3>';
+        $html[] = '</div>';
+
         $html[] = '<div class="panel-body panel-body-thumbnail">';
 
         if ($this->get_table()->has_form_actions())
@@ -46,15 +71,9 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
         $html[] = $this->renderContent($result);
         $html[] = '</div>';
 
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = $this->renderTitle($result);
-        $html[] = '</h3>';
-        $html[] = '</div>';
-
         if ($this instanceof TableCellRendererActionsColumnSupport)
         {
-            $html[] = '<div class="panel-body">';
+            $html[] = '<div class="panel-footer">';
             $html[] = $this->get_actions($result);
             $html[] = '</div>';
         }
@@ -63,18 +82,4 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
 
         return implode(PHP_EOL, $html);
     }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
-     * @return string
-     */
-    abstract public function renderContent($result);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
-     * @return string
-     */
-    abstract public function renderTitle($result);
 }

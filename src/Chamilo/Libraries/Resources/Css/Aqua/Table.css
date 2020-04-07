@@ -15,27 +15,15 @@
     float: left;
     padding-left: 8px;
     padding-right: 8px;
-    vertical-align: top;
 }
 
-.table-gallery tr.row td .panel.panel-gallery {
-    margin-bottom: 15px;
-    position: relative;
-}
-
-.table-gallery tr.row td .panel.panel-gallery .panel-heading {
-    border-bottom: 1px solid #dddddd;
-    border-radius: 0;
-    border-top: 1px solid #dddddd;
-}
-
-.table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail {
+.panel.panel-gallery .panel-body.panel-body-thumbnail {
     min-height: 230px;
     position: relative;
     text-align: center;
 }
 
-.table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail .checkbox {
+.panel.panel-gallery .panel-body.panel-body-thumbnail .checkbox {
     left: 34px;
     margin: 0;
     padding-left: 0;
@@ -44,35 +32,19 @@
     top: 13px;
 }
 
-.table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail .checkbox label::before {
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
-}
-
-.table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail .no-preview {
+.panel.panel-gallery .panel-body.panel-body-thumbnail .no-preview {
     line-height: 200px;
 }
 
-.table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail .thumbnail-image {
+.panel.panel-gallery .panel-body.panel-body-thumbnail .thumbnail-image {
     max-height: 200px;
     max-width: 100%;
 }
 
-.table-gallery tr.row td .panel.panel-gallery .panel-heading .panel-title {
-    margin-top: 0;
+.panel.panel-gallery .panel-heading .panel-title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.table-gallery tr.row td .panel.panel-gallery .panel-gallery-actions {
-    padding: 15px
-}
-
-/**
- * PROPERTIES TABLE
- */
-.table-properties {
-    width: auto;
 }
 
 /*****************************************************
