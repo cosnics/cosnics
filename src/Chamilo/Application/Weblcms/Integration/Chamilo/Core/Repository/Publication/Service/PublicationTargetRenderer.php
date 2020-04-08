@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Public
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service
@@ -28,12 +27,7 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
         $labelCollaborate = $this->getTranslator()->trans('CourseAdminCollaborate', [], $applicationContext);
         $labelEmail = $this->getTranslator()->trans('SendByEMail', [], $applicationContext);
 
-        $splitterHtml = array();
-        $splitterHtml[] = '<div class="form_splitter clearfix" >';
-        $splitterHtml[] = '<span class="category">' . $labelPublicationDetails . '</span>';
-        $splitterHtml[] = '</div>';
-
-        $form->addElement('html', implode(PHP_EOL, $splitterHtml));
+        $form->addElement('html', '<h5>' . $labelPublicationDetails . '</h5>');
 
         $form->addElement(
             'checkbox',

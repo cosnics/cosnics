@@ -85,11 +85,7 @@ class EditorComponent extends Manager implements DelegateComponent
             }
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT,
-                $this->getWorkspace(),
-                $object,
-                'edit',
-                'post',
+                ContentObjectForm::TYPE_EDIT, $this->getWorkspace(), $object, 'edit', 'post',
                 $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $id))
             );
 
@@ -106,9 +102,7 @@ class EditorComponent extends Manager implements DelegateComponent
                     $values = $form->exportValues();
 
                     Event::trigger(
-                        'Activity',
-                        Manager::context(),
-                        array(
+                        'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
@@ -139,11 +133,8 @@ class EditorComponent extends Manager implements DelegateComponent
                 $this->redirect(
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES
-                    ),
-                    ($success == ContentObjectForm::RESULT_SUCCESS ? false : true),
-                    $parameters
+                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                    ), ($success == ContentObjectForm::RESULT_SUCCESS ? false : true), $parameters
                 );
             }
             else
@@ -162,8 +153,7 @@ class EditorComponent extends Manager implements DelegateComponent
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('ContentObject')),
+                        'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
                         Utilities::COMMON_LIBRARIES
                     )
                 )

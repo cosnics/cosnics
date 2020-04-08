@@ -6,47 +6,35 @@
     vertical-align: middle;
 }
 
-.forum .fa {
-    width: 1em;
-    text-align: center;
-}
-
-.forum.table .btn-action-toolbar, .forum.media-list .btn-action-toolbar {
+.forum.table .btn-action-toolbar,
+.forum.media-list .btn-action-toolbar {
     margin-bottom: 0px;
 }
 
-.forum.table .btn-action-toolbar .btn, .forum.media-list .btn-action-toolbar .btn {
+.forum.table .btn-action-toolbar .btn,
+.forum.media-list .btn-action-toolbar .btn {
     padding: 0px 3px;
-}
-
-.forum.table .forum-row-icon {
-    font-size: 150%;
 }
 
 .forum .forum-post-panel {
     margin-bottom: 1em;
 }
 
-.forum.media-list li img.avatar {
-    display: block;
-    margin: 0 auto;
+.forum.media-list li .user-info {
+    width: 8em;
 }
 
-.forum.media-list li .user-info {
-    text-align: center;
-    width: 8em;
+.forum.media-list .media-body .media-body-title {
+    margin-bottom: 5px;
+    margin-top: 0px;
+    text-transform: uppercase;
 }
 
 @media ( max-width: 760px) {
     .forum.media-list li .user-info {
         float: none;
-        width: 100%;
         margin-bottom: 1em;
+        width: 100%;
     }
 }
 
-.forum.media-list .media-body .media-body-title {
-    margin-top: 0px;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}

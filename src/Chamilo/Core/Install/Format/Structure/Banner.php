@@ -1,13 +1,8 @@
 <?php
 namespace Chamilo\Core\Install\Format\Structure;
 
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -16,43 +11,8 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Banner
+class Banner extends \Chamilo\Libraries\Format\Structure\Banner
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
-     * @var integer
-     */
-    private $viewMode;
-
-    /**
-     *
-     * @var string
-     */
-    private $containerMode;
-
-    /**
-     * Banner constructor.
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application|null $application
-     * @param int $viewMode
-     * @param string $containerMode
-     */
-    public function __construct(
-        Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid'
-    )
-    {
-        $this->application = $application;
-        $this->viewMode = $viewMode;
-        $this->containerMode = $containerMode;
-    }
-
     /**
      * Creates the HTML output for the banner.
      */
@@ -65,10 +25,11 @@ class Banner
         $html[] = '<div class="navbar-header">';
 
         $brandSource = $this->getThemePathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
 
-        $html[] = '<a class="navbar-brand" href="' . $pathBuilder->getBasePath(true) . '">';
-        $html[] = '<img alt="' . Translation::get('ChamiloInstallationTitle') . '" src="' . $brandSource . '">';
+        $html[] = '<a class="navbar-brand" href="' . $this->getPathBuilder()->getBasePath(true) . '">';
+        $html[] =
+            '<img alt="' . $this->getTranslator()->trans('ChamiloInstallationTitle', array(), 'Chamilo\Core\Install') .
+            '" src="' . $brandSource . '">';
         $html[] = '</a>';
 
         $html[] = '</div>';
@@ -79,39 +40,11 @@ class Banner
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getApplication()
+    public function getPathBuilder()
     {
-        return $this->application;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
-    {
-        return $this->containerMode;
-    }
-
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
-    {
-        $this->containerMode = $containerMode;
+        return $this->getService(PathBuilder::class);
     }
 
     /**
@@ -119,24 +52,6 @@ class Banner
      */
     public function getThemePathBuilder()
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getViewMode()
-    {
-        return $this->viewMode;
-    }
-
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
-    {
-        $this->viewMode = $viewMode;
+        return $this->getService(ThemePathBuilder::class);
     }
 }

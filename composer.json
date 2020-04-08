@@ -15,6 +15,8 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.2.0",
+        "ext-dom": "*",
+        "ext-json": "*",
         "adodb/adodb-php": "5.*",
         "chamilo/pear-libraries": "*",
         "doctrine/cache": "1.10.*",
@@ -39,8 +41,7 @@
         "symfony/validator": "^4.4",
         "symfony/yaml": "^4.4",
         "twig/twig": "2.*",
-        "kriswallsmith/assetic": "^1.4",
-        "ext-dom": "*"
+        "kriswallsmith/assetic": "^1.4"
     },
     "require-dev": {
         "behat/behat": "*",

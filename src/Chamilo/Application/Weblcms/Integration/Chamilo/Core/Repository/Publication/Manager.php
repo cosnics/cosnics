@@ -37,6 +37,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Exception;
 
 class Manager implements PublicationInterface
 {
@@ -49,15 +50,9 @@ class Manager implements PublicationInterface
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__)
         );
 
-        $splitterHtml = array();
-
-        $splitterHtml[] = '<div class="form_splitter" >';
-        $splitterHtml[] = '<span class="category">' .
-            Translation::get('PublicationDetails', null, \Chamilo\Application\Weblcms\Manager::context()) . '</span>';
-        $splitterHtml[] = '<div style="clear: both;"></div>';
-        $splitterHtml[] = '</div>';
-
-        $form->addElement('html', implode(PHP_EOL, $splitterHtml));
+        $form->addElement(
+            'html', '<h5>' . Translation::get('PublicationDetails', null, 'Chamilo\Application\Weblcms') . '</h5>'
+        );
 
         $form->addElement(
             'checkbox', \Chamilo\Core\Repository\Publication\Manager::WIZARD_OPTION . '[' .
@@ -192,7 +187,7 @@ class Manager implements PublicationInterface
                 $assignmentPublicationService->deleteContentObjectPublicationsByObjectId($object_id);
             }
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -232,7 +227,7 @@ class Manager implements PublicationInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -341,7 +336,7 @@ class Manager implements PublicationInterface
                     if ($type == Introduction::class_name() && (!$course_settings_controller->get_course_setting(
                                 $course, CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
                             ) || !empty(
-                            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
+                            DataManager::retrieve_introduction_publication_by_course_and_tool(
                                 $course->getId(), $tool_names[$tool_id]
                             )
                             )))
@@ -546,7 +541,7 @@ class Manager implements PublicationInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

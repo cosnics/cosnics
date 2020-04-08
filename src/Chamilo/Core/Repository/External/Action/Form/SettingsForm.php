@@ -98,16 +98,16 @@ class SettingsForm extends FormValidator
 
                     if (!$has_settings && $categories > 1)
                     {
-                        $this->addElement('html', '<div class="configuration_form">');
+                        $this->addElement('html', '<fieldset>');
                         $this->addElement(
                             'html',
-                            '<span class="category">' .
+                            '<legend>' .
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($category_name)->upperCamelize(),
                                 null,
                                 $configuration['context']
                             ) .
-                            '</span>'
+                            '</legend>'
                         );
                         $has_settings = true;
                     }
@@ -288,8 +288,7 @@ class SettingsForm extends FormValidator
 
                 if ($has_settings && $categories > 1)
                 {
-                    $this->addElement('html', '<div style="clear: both;"></div>');
-                    $this->addElement('html', '</div>');
+                    $this->addElement('html', '</fieldset>');
                 }
             }
 

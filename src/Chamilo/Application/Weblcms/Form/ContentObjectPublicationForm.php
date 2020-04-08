@@ -380,11 +380,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
             array('class' => 'rights_selector inherit_rights_selector')
         );
 
-        $group[] = $this->createElement(
-            'button', 'show_inherited_rights', 'Show Inherited Rights',
-            array('class' => 'btn btn-info btn-inherited-rights')
-        );
-
         $html = array();
         $html[] = '<div class="target-entities-container" data-course-id="' . $this->get_course_id() . '" data-tool="' .
             $this->get_tool() . '">';
@@ -439,7 +434,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
 
         $group[] = $this->createElement('static', '', '', implode(PHP_EOL, $html));
 

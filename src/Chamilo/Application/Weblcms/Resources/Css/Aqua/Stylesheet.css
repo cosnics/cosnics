@@ -33,14 +33,14 @@
 }
 
 .row.course-home .course-home-sidebar .well h4 {
-    margin-top: 0px;
     margin-bottom: 5px;
+    margin-top: 0px;
 }
 
 .row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item {
+    background-color: transparent;
     border-width: 0px;
     padding: 10px 0px;
-    background-color: transparent;
 }
 
 .row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item:first-child {
@@ -63,26 +63,26 @@
  * OLD STYLES *
  **************/
 #publication_feedback {
-    border: 1px solid #C6C6C6;
+    border: 1px solid #c6c6c6;
     padding: 10px;
 }
 
 .toolSortHelper {
+    background-color: #f2f2f2;
     border: 1px dashed #c0c0c0;
-    background-color: #F2F2F2;
     display: inline;
     float: left;
-    padding: 0px;
     margin: 0px -1px 5px -1px;
+    padding: 0px;
 }
 
 .tool {
     display: inline;
     float: left;
-    padding: 0px;
+    height: 30px;
     margin: 0px;
     margin-bottom: 15px;
-    height: 30px;
+    padding: 0px;
 }
 
 td.publication_table_actions_column, td.publication_table_status_column, td.publication_table_order_column,
@@ -103,7 +103,9 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
     width: 150px;
 }
 
-/** Course List **/
+/***************
+ * COURSE LIST *
+ ***************/
 .nav.nav-tabs.course-list-tabs, .nav.nav-tabs.tool-list-tabs {
     border-left: 1px solid #dddddd;
     border-right: 1px solid #dddddd;
@@ -116,8 +118,8 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 }
 
 .nav.nav-tabs.course-list-tabs li a, .nav.nav-tabs.tool-list-tabs li a {
-    padding: 12px 15px;
     font-size: 13px;
+    padding: 12px 15px;
 }
 
 .nav.nav-tabs.course-list-tabs li.active a, .nav.nav-tabs.tool-list-tabs li.active a {
@@ -130,7 +132,7 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 
 .nav.nav-tabs.course-list-tabs, .nav.nav-tabs.tool-list-tabs,
 .course-list-tab-content .list-group-header {
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     color: #555555;
 }
 
@@ -144,8 +146,8 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 }
 
 .course-list-tab-content .list-group-item.list-group-header {
-    border-top: 1px solid #DDDDDD;
-    border-bottom: 2px solid #DDDDDD;
+    border-bottom: 2px solid #dddddd;
+    border-top: 1px solid #dddddd;
 }
 
 .course-list-tab-content .list-group-item.list-group-header:first-child {
@@ -171,7 +173,7 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 }
 
 .tool-list-content {
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     border-top: none;
     padding: 15px;
 }
@@ -195,29 +197,27 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
     margin-right: 10px;
 }
 
-.btn-inherited-rights {
-    margin-left: 25px;
-    display: none;
-}
-
+/***********************
+ * PUBLICATION TARGETS *
+ ***********************/
 .target-entities-container {
     margin-left: 25px;
     margin-top: 20px;
 }
 
 .target-entities-list {
-    width: 200px;
-    overflow: auto;
+    border-radius: 0;
     float: left;
     margin-right: 20px;
-    border-radius: 0;
+    overflow: auto;
+    width: 200px;
 }
 
 .target-entities-list .panel-heading {
-    font-weight: bold;
-    font-size: 14px;
-    color: #555555;
     border-radius: 0;
+    color: #555555;
+    font-size: 14px;
+    font-weight: bold;
     padding: 3px 10px;
 }
 
@@ -226,10 +226,10 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 }
 
 .target-entities-list ul {
-    overflow: auto;
-    max-height: 200px;
-    padding: 5px 0 5px 0;
     margin: 0;
+    max-height: 200px;
+    overflow: auto;
+    padding: 5px 0 5px 0;
 }
 
 .target-entities-list .list-group-item {

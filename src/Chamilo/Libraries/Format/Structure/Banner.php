@@ -1,16 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Renderer\MenuRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -22,6 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class Banner
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -53,18 +50,25 @@ class Banner
         $this->application = $application;
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
+
+        $this->initializeContainer();
     }
 
     /**
-     * Creates the HTML output for the banner.
+     * @return string
+     * @throws \Exception
      */
     public function render()
     {
+        $sessionUtilities = $this->getSessionUtilities();
+        $configurationConsulter = $this->getConfigurationConsulter();
+        $translator = $this->getTranslator();
+
         $html = array();
 
-        if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
+        if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $user = DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
+            $user = $this->getApplication()->getUser();
             $userFullName = $this->getApplication()->getUser()->get_fullname();
         }
         else
@@ -73,13 +77,12 @@ class Banner
             $userFullName = '';
         }
 
-        $showMaintenanceWarning = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'maintenance_warning_show')
-        );
+        $showMaintenanceWarning =
+            $configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'maintenance_warning_show'));
 
         if ($showMaintenanceWarning)
         {
-            $maintenanceWarning = Configuration::getInstance()->get_setting(
+            $maintenanceWarning = $configurationConsulter->getSetting(
                 array('Chamilo\Core\Admin', 'maintenance_warning_message')
             );
 
@@ -91,7 +94,7 @@ class Banner
             }
         }
 
-        if (!is_null(Session::get('_as_admin')))
+        if (!is_null($sessionUtilities->get('_as_admin')))
         {
             $redirect = new Redirect(
                 array(
@@ -102,27 +105,25 @@ class Banner
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">';
-            $html[] = Translation::get('LoggedInAsUser', null, Manager::context());
+            $html[] = $translator->trans('LoggedInAsUser', array(), 'Chamilo\Core\User');
             $html[] = ' ';
             $html[] = $userFullName;
             $html[] = ' ';
-            $html[] = '<a href="' . $link . '">' . Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a>';
+            $html[] =
+                '<a href="' . $link . '">' . $translator->trans('Back', array(), Utilities::COMMON_LIBRARIES) . '</a>';
             $html[] = '</div>';
         }
 
         $html[] = $this->getMenuRenderer()->render($this->getContainerMode(), $user);
 
-        if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
+        if ($this->getViewMode() == Page::VIEW_MODE_FULL)
         {
-            if ($this->getViewMode() == Page::VIEW_MODE_FULL)
-            {
-                $breadcrumbtrail = BreadcrumbTrail::getInstance();
-                $breadcrumbtrail->setContainerMode($this->getContainerMode());
+            $breadcrumbtrail = BreadcrumbTrail::getInstance();
+            $breadcrumbtrail->setContainerMode($this->getContainerMode());
 
-                if ($breadcrumbtrail->size() > 0)
-                {
-                    $html[] = $breadcrumbtrail->render();
-                }
+            if ($breadcrumbtrail->size() > 0)
+            {
+                $html[] = $breadcrumbtrail->render();
             }
         }
 
@@ -170,9 +171,7 @@ class Banner
      */
     public function getMenuRenderer()
     {
-        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $dependencyInjectionContainer->get(MenuRenderer::class);
+        return $this->getService(MenuRenderer::class);
     }
 
     /**

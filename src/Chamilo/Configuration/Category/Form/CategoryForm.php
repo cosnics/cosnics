@@ -150,8 +150,7 @@ class CategoryForm extends FormValidator
 
     public function build_footer($action_name)
     {
-        $this->addElement('html', '<div style="clear: both;"></div>');
-        $this->addElement('html', '</div>');
+        $this->addElement('html', '</fieldset>');
 
         // Submit button
         // $this->addElement('submit', 'submit', 'OK');
@@ -171,10 +170,9 @@ class CategoryForm extends FormValidator
 
     public function build_header()
     {
-        $this->addElement('html', '<div class="configuration_form">');
+        $this->addElement('html', '<fieldset>');
         $this->addElement(
-            'html',
-            '<span class="category">' . Translation::get('Required', null, Utilities::COMMON_LIBRARIES) . '</span>'
+            'html', '<legend>' . Translation::get('Required', null, Utilities::COMMON_LIBRARIES) . '</legend>'
         );
     }
 

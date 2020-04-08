@@ -89,7 +89,7 @@ class NotAuthenticatedResponse extends Response
         $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
 
-        return $form->toHtml();
+        return $form->render();
     }
 
     /**
@@ -100,8 +100,6 @@ class NotAuthenticatedResponse extends Response
     public function renderPanel()
     {
         $html = array();
-
-        $html[] = '<div class="clearfix">&nbsp;</div>';
 
         $html[] = '<div class="row">';
 
@@ -114,6 +112,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->displayLoginForm();
+        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
 

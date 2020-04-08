@@ -479,7 +479,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $userName = Translation::get('UserNotFound');
         }
 
-        $html[] = '<div class="pull-left user-info" href="#">';
+        $html[] = '<div class="pull-left text-center user-info" href="#">';
 
         if ($user instanceof User)
         {

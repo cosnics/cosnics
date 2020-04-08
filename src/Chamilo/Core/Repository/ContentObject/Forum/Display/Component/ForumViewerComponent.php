@@ -423,7 +423,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     {
         $isLocked = $this->isLocked() || $subforum->get_ref()->get_locked();
 
-        $subforumGlyphType = $isLocked ? 'lock' : 'file';
+        $subforumGlyphType = $isLocked ? 'lock' : 'folder-open';
         $subforumGlyph = new FontAwesomeGlyph($subforumGlyphType, array('text-muted'), Translation::get('NoNewPosts'));
 
         return $subforumGlyph->render();

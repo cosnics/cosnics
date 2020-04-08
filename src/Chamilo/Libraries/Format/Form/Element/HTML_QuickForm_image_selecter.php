@@ -131,7 +131,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $dropzoneHtml[] = $glyph->render();
 
         $dropzoneHtml[] = '</div>';
-        $dropzoneHtml[] = '<img data-dz-thumbnail alt="Dropzone Thumbnail" />';
+        $dropzoneHtml[] = '<img data-dz-thumbnail />';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="caption">';
         $dropzoneHtml[] = '<h3 data-dz-name>Dropzone Name</h3>';
@@ -170,11 +170,11 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
         $dropzoneHtml[] = '<div class="clearfix"></div>';
         $dropzoneHtml[] = '<div class="panel panel-default">';
-        $dropzoneHtml[] = '<div class="panel-body">';
+        $dropzoneHtml[] = '<div class="panel-body text-center" role="button">';
 
-        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x'), null, 'fas');
+        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x', 'text-primary'), null, 'fas');
         $plusGlyph = new FontAwesomeGlyph(
-            'plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x'), null, 'fas'
+            'plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x', 'text-primary'), null, 'fas'
         );
         $dropzoneHtml[] =
             '<span class="actions">' . $uploadGlyph->render() . '&nbsp;' . $plusGlyph->render() . '</span>';

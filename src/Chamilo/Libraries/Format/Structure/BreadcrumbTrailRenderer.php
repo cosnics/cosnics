@@ -130,6 +130,8 @@ class BreadcrumbTrailRenderer
         $html = array();
         $helpItem = $breadcrumbTrail->getHelpItem();
 
+//        var_dump($helpItem);
+
         if (is_array($helpItem) && count($helpItem) == 2)
         {
             $item = \Chamilo\Core\Help\Manager::get_tool_bar_help_item($helpItem);

@@ -111,7 +111,7 @@ class FormValidator extends HTML_QuickForm
             $element_template = <<<EOT
 	<div class="form-row">
 		<div class="form-label">
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+			<!-- BEGIN required --><span class="text-danger">*</span> <!-- END required -->{label}
 		</div>
 		<div class="formw">
 			<!-- BEGIN error --><!-- END error -->	{element}
@@ -174,7 +174,7 @@ EOT;
         $dropzoneHtml[] = $glyph->render();
 
         $dropzoneHtml[] = '</div>';
-        $dropzoneHtml[] = '<img data-dz-thumbnail alt="Dropzone Thumbnail" />';
+        $dropzoneHtml[] = '<img data-dz-thumbnail />';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="caption">';
         $dropzoneHtml[] = '<h3 data-dz-name>Dropzone Name</h3>';
@@ -207,11 +207,12 @@ EOT;
 
         $dropzoneHtml[] = '<div class="clearfix"></div>';
         $dropzoneHtml[] = '<div class="panel panel-default">';
-        $dropzoneHtml[] = '<div class="panel-body">';
+        $dropzoneHtml[] = '<div class="panel-body text-center" role="button">';
 
-        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x'), null, 'fas');
-        $plusGlyph =
-            new FontAwesomeGlyph('plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x'), null, 'fas');
+        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x', 'text-primary'), null, 'fas');
+        $plusGlyph = new FontAwesomeGlyph(
+            'plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x', 'text-primary'), null, 'fas'
+        );
 
         $dropzoneHtml[] =
             '<span class="actions">' . $uploadGlyph->render() . '&nbsp;' . $plusGlyph->render() . '</span>';
@@ -244,7 +245,7 @@ EOT;
         if ($markRequired)
         {
             $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
-            $label .= '<span class="form_required">&nbsp;' . $glyph->render() . '</span>';
+            $label .= '<span class="text-danger">&nbsp;' . $glyph->render() . '</span>';
         }
 
         $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
@@ -1037,12 +1038,12 @@ EOT;
 
         $html[] = '<div class="form-row row ' . $extraClasses . '">';
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
-        $html[] = '{label}<!-- BEGIN required --><span class="form_required">&nbsp;' . $glyph->render() .
+        $html[] = '{label}<!-- BEGIN required --><span class="text-danger">&nbsp;' . $glyph->render() .
             '</span> <!-- END required -->';
         $html[] = '</div>';
         $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
         $html[] =
-            '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
+            '<div class="element"><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}</div>';
         $html[] = '<div class="form_feedback"></div></div>';
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
@@ -1061,20 +1062,6 @@ EOT;
         $html[] = '{content}';
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</form>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return array|string
-     */
-    public function getHeaderTemplate()
-    {
-        $html = array();
-
-        $html[] = '<div class="form-row">';
-        $html[] = '<div class="form_header">{header}</div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -1305,7 +1292,7 @@ EOT;
         $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
 
         HTML_QuickForm::setRequiredNote(
-            '<span class="form_required">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
+            '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>'
         );
 
@@ -1313,7 +1300,6 @@ EOT;
 
         $this->renderer->setFormTemplate($this->getFormTemplate());
         $this->renderer->setElementTemplate($this->getElementTemplate());
-        $this->renderer->setHeaderTemplate($this->getHeaderTemplate());
         $this->renderer->setRequiredNoteTemplate($this->getRequiredNoteTemplate());
     }
 

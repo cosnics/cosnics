@@ -142,7 +142,7 @@ class SlideshowRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = '<div class="row">';
+        $html[] = '<div class="row panel-slideshow-actions">';
         $html[] = '<div class="col-xs-6 text-center">';
         $html[] = $this->renderPreviousNavigation();
         $html[] = '</div>';

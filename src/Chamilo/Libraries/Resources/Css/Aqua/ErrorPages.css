@@ -1,9 +1,13 @@
-body {
-    background: url("../../Images/Aqua/Background/ErrorPage.jpg");
+html,
+body,
+.main {
+    height: 100%;
 }
 
-html, body, .main {
-    height: 100%;
+body {
+    background-image: url("../../Images/Aqua/Background/ErrorPage.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .main {
@@ -14,31 +18,13 @@ html, body, .main {
 
 .error-message-container {
     background-color: rgba(255, 255, 255, 0.85);
-    border: 1px solid #efefef;
-    border-radius: 4px;
-    color: #666666;
-    font-size: 1.5em;
     margin: 30px;
-    padding: 20px;
-    position: relative;
-    text-align: justify;
-    width: 650px;
+    max-width: 650px;
+    padding: 30px;
 }
 
-.error-heading {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-.main .btn {
-    opacity: 1.2;
-}
-
-.logo {
-    background: url("../../Images/Aqua/LogoHeader.png");
-    height: 50px;
-    position: absolute;
-    right: 25px;
-    top: 25px;
-    width: 136px;
+@media screen and (min-width: 720px) {
+    .error-message-container {
+        width: 650px;
+    }
 }

@@ -1,31 +1,25 @@
+/******************************
+ * SPECIFIC BOOTSTRAP CHANGES *
+ ******************************/
 body {
     font-size: 13px;
 }
 
-mark {
-    background-color: yellow;
-}
-
-.container-headerless {
-    padding-bottom: 20px;
-    padding-top: 20px;
+body h3#page-title {
+    margin-top: 0;
 }
 
 blockquote {
     opacity: 0.7;
 }
 
-.cke_chrome {
-    box-shadow: none !important;
+.img-responsive {
+    display: inline-block;
 }
 
-body.cke_editable {
-    margin: 15px;
-}
-
-/**************
- * ACTION BAR *
- **************/
+/******************
+ * ACTION TOOLBAR *
+ ******************/
 .btn-action-toolbar {
     margin-bottom: 15px;
 }
@@ -53,12 +47,9 @@ body.cke_editable {
     text-align: left;
 }
 
-/*******************
- * LIST VIEW PANEL *
- *******************/
-.list-group-item.list-group-item-faded-faded {
-    opacity: 0.5;
-}
+/*******************************
+ * PUBLICATION LIST VIEW PANEL *
+ *******************************/
 
 .panel.panel-publication.panel-publication-with-actions {
     position: relative;
@@ -234,13 +225,6 @@ body.cke_editable {
     max-width: 100%;
 }
 
-/****************************
- * SPECIFIC BOOTSTRAP FIXES *
- ****************************/
-body h3#page-title {
-    margin-top: 0;
-}
-
 /*********
  * TABLE *
  *********/
@@ -253,7 +237,7 @@ body h3#page-title {
     margin-bottom: 5px;
 }
 
-.table .checkbox {
+.table th .checkbox {
     margin: 0;
 }
 
@@ -261,21 +245,11 @@ body h3#page-title {
     margin-right: 5px;
 }
 
-/***************
- * FILE UPLOAD *
- ***************/
+/************************
+ * DROPZONE FILE UPLOAD *
+ ************************/
 .file-upload {
     margin-bottom: 0;
-}
-
-.file-upload .panel-body {
-    cursor: pointer;
-    text-align: center;
-}
-
-.file-upload .panel .glyphicon {
-    color: #406e8e;
-    font-size: 48px;
 }
 
 .file-upload .file-previews .thumbnail {
@@ -300,13 +274,18 @@ body h3#page-title {
     width: 210px;
 }
 
-.file-upload-no-preview .glyphicon {
+.file-upload-no-preview .fas {
     font-size: 100px;
     line-height: 132px;
 }
 
 .file-upload-buttons, .file-upload .thumbnail .preview {
     text-align: center;
+}
+
+.file-upload-buttons .alert-import-success {
+    margin-bottom: 10px;
+    padding: 5px;
 }
 
 .file-upload-buttons.btn-toolbar.btn-action-toolbar.btn-action-toolbar-vertical {
@@ -317,9 +296,9 @@ body h3#page-title {
     margin-bottom: 0;
 }
 
-/*****************************************************
- *  Wizard Styles					                 *
- *****************************************************/
+/******************
+ *  WIZARD STYLES *
+ ******************/
 ul.nav-wizard {
     background-color: #f9f9f9;
     border: 1px solid #d4d4d4;
@@ -469,9 +448,9 @@ ul.nav-wizard.publication-wizard {
     margin-bottom: 20px;
 }
 
-/************************
-* BOOTSTRAP TREE VIEW   *
-*************************/
+/**********************
+* BOOTSTRAP TREE VIEW *
+***********************/
 
 .treeview .list-group .list-group-item {
     cursor: pointer !important;
@@ -501,7 +480,9 @@ ul.nav-wizard.publication-wizard {
     color: #777777 !important;
 }
 
-/** Context Menu **/
+/****************
+ * CONTEXT MENU *
+ ****************/
 .context-menu-item {
     padding: 7px 12px 7px 28px;
 }
@@ -515,6 +496,3 @@ ul.nav-wizard.publication-wizard {
     font-size: 14px;
 }
 
-.img-responsive {
-    display: inline-block;
-}

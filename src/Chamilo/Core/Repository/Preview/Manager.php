@@ -17,104 +17,62 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 abstract class Manager extends Application
 {
-    // Parameters
+    const ACTION_DISPLAY = 'Display';
+    const ACTION_RENDITION = 'Rendition';
+    const ACTION_RESET = 'Reset';
+
+    const DEFAULT_ACTION = self::ACTION_DISPLAY;
+
     const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
 
-    // Available actions
-    const ACTION_DISPLAY = 'Display';
-    const ACTION_RENDITION = 'Rendition';
-    const ACTION_REPORTING = 'Reporting';
-    const ACTION_RESET = 'Reset';
-
-    // The Default action
-    const DEFAULT_ACTION = self::ACTION_DISPLAY;
-
     /**
      *
-     * @var \core\repository\ContentObject
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $content_object;
 
+    /**
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
     private $buttonToolBarRenderer;
 
     /**
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      *
-     * @param \core\user\storage\data_class\User $user
-     * @param \libraries\architecture\application\Application,null $application
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
 
-        $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $content_object_id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
-            $content_object_id);
+            ContentObject::class_name(), $content_object_id
+        );
 
-        if (! $this->content_object instanceof ContentObject)
+        if (!$this->content_object instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $this->content_object->get_id());
+        $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $this->content_object->getId());
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\architecture\application\Application::render_header()
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
-    public function render_header()
-    {
-        $page = Page::getInstance();
-        $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
-
-        $html = array();
-
-        $html[] = $page->getHeader()->toHtml();
-        $html[] = $this->renderPreviewHeader();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    protected function renderPreviewHeader()
-    {
-        $html = array();
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
-        $html[] = '<div class="alert alert-warning">';
-        $html[] = $this->getButtonToolBarRenderer()->render();
-        $html[] = $this->getPreviewModeWarning();
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    protected function getPreviewModeWarning()
-    {
-        $translation = Translation::get('PreviewModeWarning', null, $this->get_content_object()->package() . '\Display');
-
-        if ($translation == 'PreviewModeWarning')
-        {
-            $translation = Translation::get('PreviewModeWarning');
-        }
-
-        return $translation;
-    }
-
     protected function getButtonToolBarRenderer()
     {
-        if (! isset($this->buttonToolBarRenderer))
+        if (!isset($this->buttonToolBarRenderer))
         {
             $buttonToolBar = new ButtonToolBar(null, array(), array('pull-right'));
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
@@ -125,29 +83,29 @@ abstract class Manager extends Application
 
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
             $previewExists = \Chamilo\Core\Repository\Display\Manager::exists(
-                $this->get_content_object()->package() . '\Display\Preview');
+                $this->get_content_object()->package() . '\Display\Preview'
+            );
 
             if ($previewExists)
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('DisplayPreview'),
-                        null,
+                        Translation::get('DisplayPreview'), null,
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
-                        SubButton::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        array(), null, ($isDisplayAction ? true : false)));
+                        SubButton::DISPLAY_ICON_AND_LABEL, false, array(), null, ($isDisplayAction ? true : false)
+                    )
+                );
             }
 
             if ($isDisplayAction && $previewExists && $this->getPreview()->supports_reset())
             {
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('ResetDisplayPreview'),
-                        new FontAwesomeGlyph('undo'),
+                        Translation::get('ResetDisplayPreview'), new FontAwesomeGlyph('undo'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
-                        SubButton::DISPLAY_ICON_AND_LABEL,
-                        true));
+                        SubButton::DISPLAY_ICON_AND_LABEL, true
+                    )
+                );
             }
 
             $dropdownButton->addSubButton(new SubButtonDivider());
@@ -159,7 +117,8 @@ abstract class Manager extends Application
                 ContentObjectRendition::VIEW_DESCRIPTION,
                 ContentObjectRendition::VIEW_FULL_THUMBNAIL,
                 ContentObjectRendition::VIEW_INLINE,
-                ContentObjectRendition::VIEW_FORM);
+                ContentObjectRendition::VIEW_FORM
+            );
 
             foreach ($views as $view)
             {
@@ -169,31 +128,15 @@ abstract class Manager extends Application
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('View' . StringUtilities::getInstance()->createString($view)->upperCamelize()),
-                        null,
-                        $this->get_url(
-                            array(
-                                self::PARAM_ACTION => self::ACTION_RENDITION,
-                                self::PARAM_FORMAT => $this->getCurrentFormat(),
-                                self::PARAM_VIEW => $view)),
-                        SubButton::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        array(), null, $isActive));
-            }
-
-            if ($this->has_reporting())
-            {
-                $dropdownButton->addSubButton(new SubButtonDivider());
-
-                $isActive = (self::PARAM_ACTION == self::ACTION_REPORTING ? true : false);
-
-                $dropdownButton->addSubButton(
-                    new SubButton(
-                        Translation::get('ReportingPreview'),
-                        null,
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING)),
-                        SubButton::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        array(), null, $isActive));
+                        null, $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_RENDITION,
+                            self::PARAM_FORMAT => $this->getCurrentFormat(),
+                            self::PARAM_VIEW => $view
+                        )
+                    ), SubButton::DISPLAY_ICON_AND_LABEL, false, array(), null, $isActive
+                    )
+                );
             }
         }
 
@@ -201,8 +144,55 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @return \core\repository\ContentObject
+     * @return string
+     */
+    public function getCurrentFormat()
+    {
+        return $this->getRequest()->query->get(self::PARAM_FORMAT, ContentObjectRendition::FORMAT_HTML);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentView()
+    {
+        return $this->getRequest()->query->get(self::PARAM_VIEW, ContentObjectRendition::VIEW_FULL);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     */
+    public function getPreview()
+    {
+        $package = $this->get_content_object()->package();
+        $context = $package . '\Display\Preview';
+
+        return $this->getApplicationFactory()->getApplication(
+            $context, new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPreviewModeWarning()
+    {
+        $translator = $this->getTranslator();
+
+        $translation =
+            $translator->trans('PreviewModeWarning', array(), $this->get_content_object()->package() . '\Display');
+
+        if ($translation == 'PreviewModeWarning')
+        {
+            $translation = $translator->trans('PreviewModeWarning', array(), Utilities::COMMON_LIBRARIES);
+        }
+
+        return $translation;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     public function get_content_object()
     {
@@ -210,42 +200,21 @@ abstract class Manager extends Application
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
-     */
-    public function has_reporting()
-    {
-        return self::reporting($this->get_content_object());
-    }
-
-    /**
-     *
-     * @param \core\repository\ContentObject $content_object
-     *
-     * @return boolean
-     */
-    public static function reporting($content_object)
-    {
-        $package = $content_object->package();
-        $reporting_manager_class = $package . '\Integration\Chamilo\Core\Reporting\Preview\Manager';
-
-        return class_exists($reporting_manager_class);
-    }
-
-    /**
-     *
-     * @param \core\repository\ContentObject,int $content_object
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     public static function get_content_object_default_action_link($contentObject)
     {
-        if (! $contentObject instanceof ContentObject && is_numeric($contentObject))
+        if (!$contentObject instanceof ContentObject && is_numeric($contentObject))
         {
             $contentObject = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $contentObject);
+                ContentObject::class_name(), $contentObject
+            );
         }
 
-        if (! $contentObject instanceof ContentObject)
+        if (!$contentObject instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
@@ -263,28 +232,48 @@ abstract class Manager extends Application
             array(
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => $action,
-                self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
+                self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()
+            )
+        );
 
         return $redirect->getUrl();
     }
 
-    public function getPreview()
+    /**
+     * @return string
+     */
+    protected function renderPreviewHeader()
     {
-        $package = $this->get_content_object()->package();
-        $context = $package . '\Display\Preview';
+        $html = array();
 
-        return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="alert alert-warning">';
+        $html[] = $this->getButtonToolBarRenderer()->render();
+        $html[] = $this->getPreviewModeWarning();
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
-    public function getCurrentView()
+    /**
+     * @param string $pageTitle
+     *
+     * @return string
+     */
+    public function render_header($pageTitle = '')
     {
-        return $this->getRequest()->query->get(self::PARAM_VIEW, ContentObjectRendition::VIEW_FULL);
-    }
+        $page = Page::getInstance();
+        $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-    public function getCurrentFormat()
-    {
-        return $this->getRequest()->query->get(self::PARAM_FORMAT, ContentObjectRendition::FORMAT_HTML);
+        $html = array();
+
+        $html[] = $page->getHeader()->toHtml();
+        $html[] = $this->renderPreviewHeader();
+
+        return implode(PHP_EOL, $html);
     }
 }

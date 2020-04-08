@@ -62,12 +62,12 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         $html[] = '<div class="anonymous-page">';
 
-        $html[] = '<div class="panel anonymous-container">';
+        $html[] = '<div class="panel anonymous-container lead text-justify text-muted"">';
         $html[] = '<div class="panel-body">';
 
-        $html[] = '<h2 class="header">';
+        $html[] = '<h1>';
         $html[] = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'institution'));
-        $html[] = '</h2>';
+        $html[] = '</h1>';
 
         $html[] = '<div class="anonymous-welcome-message">';
         $html[] = Translation::getInstance()->getTranslation('AnonymousWelcomeMessage', null, Manager::context());
@@ -96,51 +96,6 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     }
 
     /**
-     * Validates the given captcha value
-     *
-     * @param string $captchaResponseValue
-     *
-     * @throws \Exception
-     */
-    protected function validateCaptcha($captchaResponseValue)
-    {
-        $recaptchaSecretKey = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'recaptcha_secret_key')
-        );
-
-        $recaptcha = new ReCaptcha($recaptchaSecretKey);
-        $response = $recaptcha->verify($captchaResponseValue, $this->getRequest()->server->get('REMOTE_ADDR'));
-
-        if (!$response->isSuccess())
-        {
-            throw new Exception('Could not verify the captcha code: ' . implode(' / ', $response->getErrorCodes()));
-        }
-    }
-
-    /**
-     * Creates an anonymous user
-     *
-     * @return User
-     *
-     * @throws \Exception
-     */
-    protected function createAnonymousUser()
-    {
-        $user = new User();
-        $user->set_firstname('Anonymous');
-        $user->set_lastname('User');
-        $user->set_username(uniqid());
-        $user->set_email('no-reply@chamilo.org');
-
-        if (!$user->create())
-        {
-            throw new Exception('Could not create a new anonymous user');
-        }
-
-        return $user;
-    }
-
-    /**
      * Adds the anonymous role to the user
      *
      * @param User $user
@@ -149,36 +104,6 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     {
         $userRoleService = $this->getUserRoleService();
         $userRoleService->addRoleForUser($user, 'ROLE_ANONYMOUS');
-    }
-
-    /**
-     * Sets the anonymous authentication cookie
-     */
-    protected function setAuthenticationCookieAndRedirect(User $user)
-    {
-        $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
-
-        $parameters = Session::get('requested_url_parameters');
-
-        if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == self::context() &&
-                $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
-            $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home')
-        {
-            $parameters = array(
-                self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
-                    array('Chamilo\Core\Admin', 'page_after_anonymous_access')
-                )
-            );
-        }
-
-        $redirect = new Redirect($parameters);
-
-        $response = new RedirectResponse($redirect->getUrl());
-        $response->headers->setCookie($cookie);
-
-        $response->send();
-
-        exit();
     }
 
     /**
@@ -212,6 +137,37 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     }
 
     /**
+     * Creates an anonymous user
+     *
+     * @return User
+     *
+     * @throws \Exception
+     */
+    protected function createAnonymousUser()
+    {
+        $user = new User();
+        $user->set_firstname('Anonymous');
+        $user->set_lastname('User');
+        $user->set_username(uniqid());
+        $user->set_email('no-reply@chamilo.org');
+
+        if (!$user->create())
+        {
+            throw new Exception('Could not create a new anonymous user');
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return ConfigurationConsulter
+     */
+    public function getConfigurationConsulter()
+    {
+        return $this->getService(ConfigurationConsulter::class);
+    }
+
+    /**
      *
      * @return UserRoleServiceInterface
      */
@@ -221,10 +177,54 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     }
 
     /**
-     * @return ConfigurationConsulter
+     * Sets the anonymous authentication cookie
      */
-    public function getConfigurationConsulter()
+    protected function setAuthenticationCookieAndRedirect(User $user)
     {
-        return $this->getService(ConfigurationConsulter::class);
+        $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
+
+        $parameters = Session::get('requested_url_parameters');
+
+        if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == self::context() &&
+                $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
+            $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home')
+        {
+            $parameters = array(
+                self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'page_after_anonymous_access')
+                )
+            );
+        }
+
+        $redirect = new Redirect($parameters);
+
+        $response = new RedirectResponse($redirect->getUrl());
+        $response->headers->setCookie($cookie);
+
+        $response->send();
+
+        exit();
+    }
+
+    /**
+     * Validates the given captcha value
+     *
+     * @param string $captchaResponseValue
+     *
+     * @throws \Exception
+     */
+    protected function validateCaptcha($captchaResponseValue)
+    {
+        $recaptchaSecretKey = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'recaptcha_secret_key')
+        );
+
+        $recaptcha = new ReCaptcha($recaptchaSecretKey);
+        $response = $recaptcha->verify($captchaResponseValue, $this->getRequest()->server->get('REMOTE_ADDR'));
+
+        if (!$response->isSuccess())
+        {
+            throw new Exception('Could not verify the captcha code: ' . implode(' / ', $response->getErrorCodes()));
+        }
     }
 }

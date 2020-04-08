@@ -81,6 +81,7 @@ class MenuRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
+     * @throws \Exception
      */
     public function render(string $containerMode = 'container-fluid', User $user = null)
     {

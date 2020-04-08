@@ -1,5 +1,4 @@
 @import url(../../../Feedback/Resources/Css/Aqua/Stylesheet.min.css);
-@import url(../../../Publication/Resources/Css/Aqua/Stylesheet.min.css);
 
 .fas-ci-c6e4cf181180b6a731a2bc3cdfc5765f:before {
     content: "\f0a0";
@@ -61,7 +60,6 @@
     content: "\f630";
 }
 
-
 /*
  * Import Type: Chamilo\Core\Repository\Import\Cpo
  */
@@ -104,7 +102,6 @@
     content: "\f570";
 }
 
-
 /*
  * Import Type: Chamilo\Core\Repository\Import\Rar
  */
@@ -114,7 +111,7 @@
 
 .fas-ci-3fb13b6c869f4b3e3857f5e43be8512b,
 .fas-ci-5412d58b200bda2def589acf1d29d8ba {
-    font-family: 'Font Awesome 5 Brands';
+    font-family: "Font Awesome 5 Brands";
 }
 
 /*
@@ -131,6 +128,9 @@
     content: "\f167";
 }
 
+/*********************
+ * SEARCH PARAMETERS *
+ *********************/
 #search-parameters .list-group-item {
     border-top: 0px solid white;
     padding: 5px 15px;
@@ -144,47 +144,44 @@
     padding-bottom: 10px;
 }
 
-#search-parameters .panel-title .search-parameter span.fa.fa-times,
-#search-parameters .search-parameter.list-group-item span.fa.fa-times {
-    opacity: 0.25;
-    font-size: 13px;
+#search-parameters .panel-title .search-parameter span.fas.fa-times,
+#search-parameters .search-parameter.list-group-item span.fas.fa-times {
     cursor: pointer;
+    font-size: 13px;
+    opacity: 0.25;
 }
 
-#search-parameters .panel-title .search-parameter span.fa.fa-times {
+#search-parameters .panel-title .search-parameter span.fas.fa-times {
     opacity: 0.5;
 }
 
-.alert-import-success {
-    padding: 5px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
+/***********************
+ * BASIC TYPE SELECTOR *
+ ***********************/
 .content-object-options .content-object-options-type {
     border: 1px solid #dddddd;
 }
 
 .content-object-options h4 {
-    width: 100%;
-    line-height: 32px;
+    border-bottom: 1px dashed rgb(221, 221, 221);
     height: 52px;
+    line-height: 32px;
     margin: 0px;
     padding: 10px 15px;
-    border-bottom: 1px dashed rgb(221, 221, 221);
+    width: 100%;
 }
 
 .content-object-options .list-group {
-    margin-bottom: 0px;
-    -moz-column-width: 200px;
-    -moz-column-rule: 1px dashed rgb(221, 221, 221);
     -moz-column-count: 4;
-    -webkit-column-width: 200px;
-    -webkit-column-rule: 1px dashed rgb(221, 221, 221);
     -webkit-column-count: 4;
-    column-width: 200px;
-    column-rule: 1px dashed rgb(221, 221, 221);
     column-count: 4;
+    -moz-column-rule: 1px dashed rgb(221, 221, 221);
+    -webkit-column-rule: 1px dashed rgb(221, 221, 221);
+    column-rule: 1px dashed rgb(221, 221, 221);
+    -moz-column-width: 200px;
+    -webkit-column-width: 200px;
+    column-width: 200px;
+    margin-bottom: 0px;
 }
 
 .content-object-options {
@@ -194,19 +191,22 @@
 .content-object-options .list-group .list-group-item {
     border: 0px solid white;
     height: 52px;
-    text-overflow: ellipsis;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .content-object-options .list-group .list-group-item img {
-    max-width: 32px;
     max-height: 32px;
+    max-width: 32px;
 }
 
 .content-object-options .list-group .list-group-item a {
     line-height: 32px;
 }
 
+/*****************************
+ * CONTENT OBJECT COMPARISON *
+ *****************************/
 .table-difference td {
     font-family: Consolas, monospace;
 }
@@ -221,20 +221,20 @@
 
 .table-difference .ChangeReplace .Left,
 .table-difference .ChangeDelete .Left {
-    background: #fdd;
+    background: #ffdddd;
 }
 
 .table-difference .ChangeReplace .Right,
 .table-difference .ChangeInsert .Right {
-    background: #dfd;
+    background: #ddffdd;
 }
 
 .table-difference .ChangeReplace ins {
-    background: #9e9;
+    background: #99ee99;
 }
 
 .table-difference .ChangeReplace del {
-    background: #e99;
+    background: #ee9999;
 }
 
 .table-difference th.col-sm-1 {

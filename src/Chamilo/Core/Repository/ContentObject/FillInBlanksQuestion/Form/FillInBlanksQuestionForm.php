@@ -110,7 +110,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'textarea', FillInBlanksQuestion::PROPERTY_ANSWER_TEXT, Translation::get('QuestionText'),
-            'rows="10" class="answer"'
+            'rows="10" class="form-control"'
         );
         $this->addRule(
             FillInBlanksQuestion::PROPERTY_ANSWER_TEXT,

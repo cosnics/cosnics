@@ -4,25 +4,25 @@
 
 div.formw div.bootstrap-tagsinput input, div.row div.formw div.bootstrap-tagsinput input:hover,
 div.row div.formw div.bootstrap-tagsinput input:focus {
-    background-color: #F5F5F5;
-    min-width: 200px;
+    background-color: #f5f5f5;
     min-height: 18px;
+    min-width: 200px;
 }
 
 div.formw div.bootstrap-tagsinput {
     border: none;
     border-radius: 0px;
     box-shadow: none;
-    padding: 2px 4px 2px 0px;
     margin-bottom: 0px;
+    padding: 2px 4px 2px 0px;
 }
 
 .bootstrap-tagsinput .tag {
-    background-color: #D4E0F1;
-    padding: 2px 4px;
-    border: 1px solid #B5CAE7;
+    background-color: #d4e0f1;
+    border: 1px solid #b5cae7;
     border-radius: 3px;
-    color: #4171B5 !important;
+    color: #4171b5 !important;
+    padding: 2px 4px;
 }
 
 .bootstrap-tagsinput + a.vocabulary-selector > img {
@@ -38,11 +38,11 @@ div.formw div.bootstrap-tagsinput {
 }
 
 div.provided-element-value {
-    padding: 2px 5px;
-    background-color: #F5F5F5;
-    border: 1px solid #DEDEDE;
+    background-color: #f5f5f5;
+    border: 1px solid #dedede;
     color: gray;
     display: inline-block;
+    padding: 2px 5px;
 }
 
 div.locked-tags {
@@ -50,13 +50,13 @@ div.locked-tags {
 }
 
 span.locked-tag {
-    margin-right: 2px;
-    background-color: #F5F5F5;
-    padding: 2px 4px;
-    border: 1px solid #DEDEDE;
+    background-color: #f5f5f5;
+    border: 1px solid #dedede;
     border-radius: 3px;
     color: gray !important;
     line-height: 22px;
+    margin-right: 2px;
+    padding: 2px 4px;
 }
 
 div.provided-element-value + img, div.locked-tags + img {
@@ -64,7 +64,7 @@ div.provided-element-value + img, div.locked-tags + img {
 }
 
 .locked-action {
-    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ/SURBVDjLbVJBaxNBGH2bpEkTmxi1NTRKTZtoQUHEWz0Igj2I4kG9eVNQhEBO7bEHc+yv8JAiHnr2B4gFqVrQRhObljQolBSTJqZJdnZmfbNr2rU68DEz33zfm/fejGHbNrxjaWlpRCk1J6WcYZxkgPGTsWJZ1mIul/vlrTe8AIVC4Qqbl5PJ5GQsFoPP5wP36PV6qNfr2OIg0L35+fm1fwDYPMLDj+l0OmOaJmq1Gjqdjr4dgUAAiUTCqSsWixvMXV5YWOjqvW+AxOSz8fHxjBAC5XJ5s91up7gO6tDrUqn0QwOTXYZSsoO+wGDB5EwkEkGlUgGb7mSz2apHajWfz9+sVqvFVCrl1P4PYExr5m16vYUjQ+c0O11DtmN/ebD95pG9UpnGzl7Y0Xz30ir8toAtLdiWG0JIvFi76piaGG7g9plVTD/5YLgMCPLg/g0YtMTwhznfApRBfsP6kAYJSKuN57Md5oXTsvHy7aEEfZMutHZfIRAahWGMsHAICMeZVsD+HmTrG8zudyhrH+HJLGyz7wEgRSh9k4nm+nvqPIb4xWuovV5k/2lMXJ9F8+s6ARqIpk6QsIQtTC+AcGTYpBqfvgBfcJTuKMi+xKfdMCZgIp6eRK8TYu2+w2oA4PwDm+5qVK218XmNLN7xxILqKfS7pGqTWekLmuVtV65STs8hA73RqJQQP5+CP3KKACamHj7FlGBDawfH00kEW0MuA8o9AmA6qMrSHqwTIAoM08hAkHkN0ES3UYfotBGdiNFu5cr2AmgJobOPET7nhxEMuU/o40soSjO7iHbbVNgnUen6pY0/AOCTbC7PuV44H0f8Cetg5g9zP5aU7loDcfwGcrKyzYdvwUUAAAAASUVORK5CYII='),
+    cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ/SURBVDjLbVJBaxNBGH2bpEkTmxi1NTRKTZtoQUHEWz0Igj2I4kG9eVNQhEBO7bEHc+yv8JAiHnr2B4gFqVrQRhObljQolBSTJqZJdnZmfbNr2rU68DEz33zfm/fejGHbNrxjaWlpRCk1J6WcYZxkgPGTsWJZ1mIul/vlrTe8AIVC4Qqbl5PJ5GQsFoPP5wP36PV6qNfr2OIg0L35+fm1fwDYPMLDj+l0OmOaJmq1Gjqdjr4dgUAAiUTCqSsWixvMXV5YWOjqvW+AxOSz8fHxjBAC5XJ5s91up7gO6tDrUqn0QwOTXYZSsoO+wGDB5EwkEkGlUgGb7mSz2apHajWfz9+sVqvFVCrl1P4PYExr5m16vYUjQ+c0O11DtmN/ebD95pG9UpnGzl7Y0Xz30ir8toAtLdiWG0JIvFi76piaGG7g9plVTD/5YLgMCPLg/g0YtMTwhznfApRBfsP6kAYJSKuN57Md5oXTsvHy7aEEfZMutHZfIRAahWGMsHAICMeZVsD+HmTrG8zudyhrH+HJLGyz7wEgRSh9k4nm+nvqPIb4xWuovV5k/2lMXJ9F8+s6ARqIpk6QsIQtTC+AcGTYpBqfvgBfcJTuKMi+xKfdMCZgIp6eRK8TYu2+w2oA4PwDm+5qVK218XmNLN7xxILqKfS7pGqTWekLmuVtV65STs8hA73RqJQQP5+CP3KKACamHj7FlGBDawfH00kEW0MuA8o9AmA6qMrSHqwTIAoM08hAkHkN0ES3UYfotBGdiNFu5cr2AmgJobOPET7nhxEMuU/o40soSjO7iHbbVNgnUen6pY0/AOCTbC7PuV44H0f8Cetg5g9zP5aU7loDcfwGcrKyzYdvwUUAAAAASUVORK5CYII="),
     auto;
 }
 
@@ -73,6 +73,6 @@ div.row div.label span.locked-row-label {
 }
 
 div.row div.label span.locked-row-label img {
-    vertical-align: baseline;
     margin: 0px 0px 0px 5px;
+    vertical-align: baseline;
 }

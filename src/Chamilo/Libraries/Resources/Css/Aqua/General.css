@@ -12,6 +12,11 @@
     padding-right: 0;
 }
 
+.container-headerless {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -116,10 +121,6 @@ iframe.preview {
     width: 100%;
 }
 
-.hidden {
-    display: none;
-}
-
 [v-cloak] {
     display: none;
 }
@@ -131,6 +132,13 @@ figcaption {
 /************
  * CKEditor *
  ************/
+.cke_chrome {
+    box-shadow: none !important;
+}
+
+body.cke_editable {
+    margin: 15px;
+}
 
 .image-captioned {
     background: rgba(0, 0, 0, 0.05);

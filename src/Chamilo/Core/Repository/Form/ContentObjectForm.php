@@ -618,7 +618,7 @@ EOT;
         $renderer->setFormTemplate($form_template);
         $element_template = <<<EOT
 	<div>
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}
+			<!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}
 	</div>
 
 EOT;

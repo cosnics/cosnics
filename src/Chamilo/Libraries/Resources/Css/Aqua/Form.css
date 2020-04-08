@@ -1,47 +1,8 @@
-/********
- * FORM *
- ********/
-input.form-control[type="text"], input.form-control[type="password"] {
-    border: 1px solid #cccccc;
-    padding: 6px 12px;
-}
-
-form .radio input[type="radio"], form .radio input[type="checkbox"] {
-    margin-top: 0;
-}
-
-form .radio, form .checkbox {
-    margin-bottom: 5px;
-    margin-top: 0;
-}
-
-.radio + .radio, .checkbox + .checkbox {
-    margin-top: 0;
-}
-
+/****************
+ *  FORM STYLES *
+ ****************/
 form .form-row {
     margin: 0 0 5px;
-}
-
-form.table_form .form-row {
-    margin-bottom: 0;
-}
-
-form.table_form .form-row .btn-action-toolbar {
-    margin-bottom: 5px;
-}
-
-button.btn {
-    text-shadow: none;
-}
-
-#advanced_filter_form .input-date {
-    width: 90px;
-}
-
-div.column {
-    float: left;
-    margin-right: 10px;
 }
 
 .form-category {
@@ -54,20 +15,6 @@ div.column {
     margin-top: 35px;
 }
 
-/****************
- *  FORM STYLES *
- ****************/
-form div.form-row {
-    margin-bottom: 5px;
-}
-
-form div.form-row div.form_header {
-    background-color: #e5edf9;
-    border: 1px solid #4271b5;
-    padding: 2px;
-    white-space: nowrap;
-}
-
 form div.form-row div.form-label {
     color: #565656;
     font-weight: bold;
@@ -75,86 +22,61 @@ form div.form-row div.form-label {
     text-align: right;
 }
 
-form div.form-row div.formw {
-    text-align: left;
-}
-
-form div.formw input[type=text], form div.form-row div.formw input[type=password],
-form div.form-row div.formw select, form div.formw textarea {
+form input[type=text].form-control,
+form input[type=password].form-control,
+form select.form-control,
+form textarea.form-control {
     background-color: #f5f5f5;
     border: 1px solid #dedede;
 }
 
-form div.formw input[type=text]:hover, form div.form-row div.formw input[type=text]:focus,
-form div.form-row div.formw input[type=password]:hover, form div.form-row div.formw input[type=password]:focus,
-form div.form-row div.formw select:hover, form div.form-row div.formw select:focus,
-form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus {
-    background-color: #f7fbfd;
-    border-color: #4171b5;
-}
-
-form div.formw input[type=text].input_conflict, form div.form-row div.formw input[type=password].input_conflict,
-form div.form-row div.formw select.input_conflict,
-form div.formw input[type=text].input_conflict:hover, form div.form-row div.formw input[type=password].input_conflict:hover,
-form div.form-row div.formw select.input_conflict:hover, form div.formw input[type=text].input_conflict:focus,
-form div.form-row div.formw input[type=password].input_conflict:focus,
+form .input_conflict,
+form .input_conflict:hover
+form .input_conflict:focus,
 form div.form-row div.formw select.input_conflict:focus {
     background-color: #ffd1d1 !important;
     border: 1px solid #ff9b9d !important;
     color: #b40404 !important;
 }
 
-form div.formw input[type=text].input_valid, form div.form-row div.formw input[type=password].input_valid,
-form div.form-row div.formw select.input_valid, form div.formw input[type=text].input_valid:hover,
-form div.form-row div.formw input[type=password].input_valid:hover,
-form div.form-row div.formw select.input_valid:hover, form div.formw input[type=text].input_valid:focus,
-form div.form-row div.formw input[type=password].input_valid:focus,
-form div.form-row div.formw select.input_valid:focus {
+form .input_valid,
+form .input_valid:hover,
+form .input_valid:focus {
     background-color: #ddffaa !important;
     border: 1px solid #339900 !important;
     color: #006600 !important;
 }
 
-form div.formw input[type=text].input_warning, form div.form-row div.formw input[type=password].input_warning,
-form div.form-row div.formw select.input_warning,
-form div.formw input[type=text].input_warning:hover, form div.form-row div.formw input[type=password].input_warning:hover,
-form div.form-row div.formw select.input_warning:hover, form div.formw input[type=text].input_warning:focus,
-form div.form-row div.formw input[type=password].input_warning:focus,
-form div.form-row div.formw select.input_warning:focus {
+form .input_warning,
+form .input_warning:hover,
+form .input_warning:focus {
     background-color: #fff8aa !important;
     border: 1px solid #ffd89b !important;
     color: #996900 !important;
 }
 
-form div.dynamic_search_action {
-    padding: 15px 0;
-}
-
-form div.dynamic_search_action input[type=text], form div.dynamic_search_action div.form-row div.formw input[type=password],
-form div.dynamic_search_action div.form-row div.formw select {
-    background-color: #f5f5f5;
-    border: 1px solid #dedede;
-    margin-right: 10px;
-    padding: 6px;
-    position: relative;
-    top: 2px;
-}
-
-form div.form-row div.formwa, form div.form-row div.formwa_no_margin,
-form div.form-row div.formc, form div.form-row div.formc_no_margin,
-form div.form-row div.forme, form div.form-row div.forme_no_margin {
+form div.form-row div.formwa,
+form div.form-row div.formwa_no_margin,
+form div.form-row div.formc,
+form div.form-row div.formc_no_margin,
+form div.form-row div.forme,
+form div.form-row div.forme_no_margin {
     margin-left: 20%;
 }
 
-form div.form-row div.forme h2, form div.form-row div.forme_no_margin h2,
-form div.form-row div.formwa h2, form div.form-row div.formwa_no_margin h2,
-form div.form-row div.formc h2, form div.form-row div.formc_no_margin h2 {
+form div.form-row div.forme h2,
+form div.form-row div.forme_no_margin h2,
+form div.form-row div.formwa h2,
+form div.form-row div.formwa_no_margin h2,
+form div.form-row div.formc h2,
+form div.form-row div.formc_no_margin h2 {
     font-weight: bold;
     margin: 0;
     padding: 0 0 5px 0;
 }
 
-form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
+form div.form-row div.forme_no_margin,
+form div.form-row div.formwa_no_margin,
 form div.form-row div.formc_no_margin {
     margin-left: 0;
 }
@@ -170,146 +92,6 @@ form div.form-row div.feedback {
     position: relative;
 }
 
-form span.form_required {
-    color: #ff0000;
-}
-
-form span.form_required > img {
-    margin-top: -5px;
-}
-
-form span.form_error {
-    color: #ff0000;
-    font-size: x-small;
-    margin: 2px;
-}
-
-/* Form elements - some general styling */
-form select, textarea {
-    background-color: #f5f5f5;
-    border: 1px solid #dedede;
-}
-
-form input[type=text], form input[type=password] {
-    border: 1px solid #4171b5;
-    margin: 0;
-    padding: 2px 4px 2px 4px;
-}
-
-form input[type=color], form input.colour-selection {
-    padding: 0;
-    width: 30px;
-}
-
-/* Normal submit button */
-form input.mainoption {
-    font-weight: bold;
-}
-
-/* None-bold submit button */
-form input.liteoption {
-    font-weight: normal;
-}
-
-form select, form input[type=button], input[type=submit] {
-    cursor: pointer;
-    font-size: 12px;
-}
-
-form input[text] {
-    font-size: 12px;
-}
-
-form textarea {
-    padding: 2px 2px 2px 2px;
-}
-
-form textarea.answer {
-    width: 651px;
-}
-
-form .input_numeric {
-    text-align: right;
-}
-
-a.button {
-    background-color: #f5f5f5;
-    background-position: 10px center;
-    background-repeat: no-repeat;
-    border: 1px solid #dedede;
-    border-left: 1px solid #eeeeee;
-    border-top: 1px solid #eeeeee;
-    color: #565656;
-    cursor: pointer;
-    display: inline-block;
-    font-weight: bold;
-    line-height: 100%;
-    outline-style: none;
-    overflow: visible;
-    padding: 8px 10px 8px 36px;
-    text-decoration: none;
-    vertical-align: middle;
-    width: auto;
-}
-
-a.last_button {
-    margin: 0;
-}
-
-a.mini_button, a.mini_button:hover, a.mini_button:active {
-    background-color: transparent !important;
-    background-position: center center;
-    border: 0 solid white !important;
-    font-size: 0;
-    height: 22px;
-    line-height: 16px;
-    margin: -3px 0 0 -3px;
-    overflow: hidden;
-    padding: 0;
-    vertical-align: middle;
-    width: 22px;
-}
-
-a.mini_button {
-    border: 1px solid #dedede;
-}
-
-/*IE-fix to avoid adding unwanted margins to the form*/
-div.simple_search form {
-    margin: 0;
-    padding: 0;
-}
-
-div.configuration_form {
-    border: 1px solid #ebebeb;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    clear: both;
-    margin: 20px 2px 2px 2px;
-    padding: 10px;
-}
-
-div.form_splitter {
-    border-top: 1px solid #ebebeb;
-    clear: both;
-    height: 0;
-    margin: 20px -10px 0 -10px;
-    padding: 6px 10px;
-}
-
-div.configuration_form span.category, div.form_splitter span.category {
-    background-color: #ffffff;
-    color: #4271b5;
-    font-weight: bold;
-    padding: 0 5px 0 5px;
-    position: relative;
-    top: -20px;
-}
-
-div.form_splitter span.category {
-    top: -16px;
-}
-
 /*********************************************
  * QUICKFORM ELEMENT FINDER STYLES           *
  * ----------------------------------------- *
@@ -320,14 +102,12 @@ div.form_splitter span.category {
     border: 1px solid #dedede;
 }
 
-.active_elements:hover, .active_elements:focus, .inactive_elements:hover,
+.active_elements:hover,
+.inactive_elements:hover,
+.active_elements:focus,
 .inactive_elements:focus {
     background-color: #f7fbfd;
     border: 1px solid #4171b5;
-}
-
-div.element_finder_buttons {
-    text-align: center;
 }
 
 #selected_image {
@@ -335,7 +115,8 @@ div.element_finder_buttons {
     margin-bottom: 5px;
 }
 
-div.element_finder div.inactive_elements div.previous_elements, div.element_finder div.inactive_elements div.next_elements {
+div.element_finder div.inactive_elements div.previous_elements,
+div.element_finder div.inactive_elements div.next_elements {
     cursor: pointer;
     margin-left: -12px;
     margin-right: -12px;
@@ -352,115 +133,4 @@ div.element_finder div.inactive_elements div.previous_elements {
 div.element_finder div.inactive_elements div.next_elements {
     margin-bottom: -6px;
     margin-top: 6px;
-}
-
-/**********************
- * FILTER FORM STYLES *
- **********************/
-div.filter_form {
-    clear: both;
-    float: right;
-    padding-top: 4px;
-}
-
-div.filter_form div.form-row {
-    clear: none;
-    float: left;
-    margin-left: 10px;
-    padding: 0;
-}
-
-div.filter_form div.form-row div.formw {
-    float: none;
-    width: auto;
-}
-
-div.filter_form div.form-row div.formw button {
-    margin-top: -4px;
-}
-
-/**********************
- * ADVANCED FILTER FORM STYLES *
- **********************/
-div.advanced_filter_form {
-    clear: both;
-    font-size: 11px !important;
-    padding-top: 4px;
-}
-
-div.advanced_filter_form div.configuration_form {
-    border: 0 solid #000000 !important;
-    clear: both;
-    margin: 0 -10px 10px -10px;
-    padding: 0 10px 0 10px;
-}
-
-div.advanced_filter_form div.configuration_form span.category {
-    border-bottom: 1px solid #999999;
-    clear: both;
-    display: block;
-    font-weight: bold;
-    margin: 0 -10px 5px;
-    padding: 0 10px 0 10px;
-    position: relative;
-    top: 0 !important;
-}
-
-div.advanced_filter_form a.calendar_button:hover, div.advanced_filter_form a.calendar_button {
-    background-position: center center;
-    height: 16px;
-    margin: 0;
-    padding: 2px;
-    position: relative;
-    top: -2px;
-    width: 16px;
-}
-
-div.advanced_filter_form div.form-row {
-    clear: both;
-    padding: 0;
-    width: 100%;
-}
-
-div.advanced_filter_form div.form-row input, div.advanced_filter_form div.form-row select {
-    background-color: #f5f5f5;
-    border: 1px solid #dedede;
-    font-size: 11px !important;
-    height: 16px;
-}
-
-div.advanced_filter_form div.form-row select {
-    height: 22px;
-    margin: 0;
-    padding: 2px 2px;
-}
-
-div.advanced_filter_form div.form-row input.full, div.advanced_filter_form div.form-row select.full {
-    box-sizing: border-box;
-    height: 20px;
-    width: 100%;
-}
-
-form br {
-    clear: both;
-}
-
-/**************************
- * ACTION BAR SEARCH FORM *
- **************************/
-fieldset {
-    border: 1px solid #ebebeb;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    clear: both;
-    margin: 5px;
-    padding: 5px;
-}
-
-fieldset legend {
-    background-color: #ffffff;
-    color: #4271b5;
-    font-weight: bold;
-    margin-right: 10px;
-    padding: 0 5px 0 5px;
 }

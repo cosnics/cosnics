@@ -91,10 +91,8 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Creates the HTML output for the header.
-     * This function will send all http headers to the browser and return the head-tag of the html document
-     *
      * @return string
+     * @throws \Exception
      */
     public function render()
     {
@@ -135,7 +133,8 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Adds a css file
+     * @param string $file
+     * @param string $media
      */
     public function addCssFile($file, $media = 'screen')
     {
@@ -198,7 +197,7 @@ class BaseHeader implements HeaderInterface
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
         $parameters[Application::PARAM_ACTION] = 'Javascript';
-        $parameters[JavascriptComponent::PARAM_MODIFIED] = $cssModified;
+        $parameters[JavascriptComponent::PARAM_MODIFIED] = $javascriptModified;
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
         $this->addJavascriptCDNFiles();
@@ -218,7 +217,7 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Adds a html header
+     * @param string $html_header
      */
     public function addHtmlHeader($html_header)
     {
@@ -236,7 +235,7 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Adds a javascript file
+     * @param string $file
      */
     public function addJavascriptFile($file)
     {
@@ -245,7 +244,10 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * Adds a link
+     * @param string $url
+     * @param string $rel
+     * @param string $title
+     * @param string $type
      */
     public function addLink($url, $rel = null, $title = null, $type = null)
     {
@@ -276,7 +278,6 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\Banner
      */
     protected function getBanner()
@@ -403,6 +404,7 @@ class BaseHeader implements HeaderInterface
     /**
      *
      * @return string
+     * @throws \Exception
      * @deprecated Use render() now
      */
     public function toHtml()

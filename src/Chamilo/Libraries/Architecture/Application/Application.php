@@ -366,7 +366,7 @@ abstract class Application
      *
      * @return string[]
      */
-    public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
+    public static function get_active_packages($type = Registration::TYPE_APPLICATION)
     {
         $applications = \Chamilo\Configuration\Configuration::registrations_by_type($type);
 

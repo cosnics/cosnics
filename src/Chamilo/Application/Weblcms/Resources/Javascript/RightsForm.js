@@ -97,11 +97,6 @@ $(function ()
 
 
         $('select[name="category_id"]').on('change', retrieveTargetEntities);
-        $('input[name="inherit[show_inherited_rights]"]').on('click', function() {
-            $(this).hide();
-            retrieveTargetEntities();
-        });
-
         $('#content_object_publication_form').on('reset', function() { setTimeout(function () { initialize(); })});
 
         retrieveTargetEntities();

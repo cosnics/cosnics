@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
@@ -54,9 +55,10 @@ class Bootstrap
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
      * @param boolean $showErrors
      */
-    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request,
-        FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
-        ErrorHandler $errorHandler, $showErrors = false)
+    public function __construct(
+        ChamiloRequest $request, FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
+        ErrorHandler $errorHandler, $showErrors = false
+    )
     {
         $this->request = $request;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
@@ -66,21 +68,33 @@ class Bootstrap
     }
 
     /**
+     * Check if the system has been installed, if not display message accordingly
      *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
+     * @throws \Exception
      */
-    public function getRequest()
+    protected function checkInstallation()
     {
-        return $this->request;
+        if (!$this->getFileConfigurationLocator()->isAvailable())
+        {
+            $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+            // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
+            // working for now
+            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+
+            return $this;
+        }
+
+        return $this;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler
      */
-    public function setRequest(Request $request)
+    public function getErrorHandler()
     {
-        $this->request = $request;
+        return $this->errorHandler;
     }
 
     /**
@@ -103,6 +117,24 @@ class Bootstrap
 
     /**
      *
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     */
+    public function setRequest(ChamiloRequest $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities()
@@ -117,24 +149,6 @@ class Bootstrap
     public function setSessionUtilities(SessionUtilities $sessionUtilities)
     {
         $this->sessionUtilities = $sessionUtilities;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler
-     */
-    public function getErrorHandler()
-    {
-        return $this->errorHandler;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
-     */
-    public function setExceptionLogger(ErrorHandler $errorHandler)
-    {
-        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -156,22 +170,37 @@ class Bootstrap
     }
 
     /**
-     * Check if the system has been installed, if not display message accordingly
+     * Registers the error handler by using the error handler manager
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
-    protected function checkInstallation()
+    protected function registerErrorHandlers()
     {
-        if (! $this->getFileConfigurationLocator()->isAvailable())
+        if (!$this->getShowErrors())
         {
-            $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-            // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
-            // working for now
-            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-            return $this;
+            $this->getErrorHandler()->registerErrorHandlers();
         }
 
         return $this;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler $errorHandler
+     */
+    public function setExceptionLogger(ErrorHandler $errorHandler)
+    {
+        $this->errorHandler = $errorHandler;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
+     * @throws \Exception
+     */
+    public function setup()
+    {
+        return $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 
     /**
@@ -183,29 +212,5 @@ class Bootstrap
         $this->getSessionUtilities()->start();
 
         return $this;
-    }
-
-    /**
-     * Registers the error handler by using the error handler manager
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
-     */
-    protected function registerErrorHandlers()
-    {
-        if (! $this->getShowErrors())
-        {
-            $this->getErrorHandler()->registerErrorHandlers();
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
-     */
-    public function setup()
-    {
-        return $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 }

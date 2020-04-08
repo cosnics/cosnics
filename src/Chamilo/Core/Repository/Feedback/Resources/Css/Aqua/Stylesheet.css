@@ -1,12 +1,12 @@
 .panel.panel-default .panel-feedback-profile {
-    max-width: 40px;
-    max-height: 40px;
     margin-right: 15px;
+    max-height: 40px;
+    max-width: 40px;
 }
 
 .feedback-pagination ul.pagination {
-    margin-top: 0px;
     margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .receive-feedback-spacer {
@@ -15,8 +15,8 @@
 
 @media screen and (min-width: 1024px) {
     .receive-feedback-info {
-        margin-top: 8px;
         float: left;
+        margin-top: 8px;
     }
 
     .receive-feedback-buttons {
@@ -35,12 +35,12 @@
 }
 
 .feedback-date {
+    color: #777777;
     font-size: 11px;
-    color: #777;
     margin-top: 2px;
 }
 
 .feedback-content {
-    margin-top: 12px;
     margin-left: 57px;
+    margin-top: 12px;
 }

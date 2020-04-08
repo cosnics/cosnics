@@ -53,7 +53,7 @@ class Display extends QuestionDisplay
 
         $element_template = array();
         $element_template[] =
-            '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
+            '<div><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clearfix"></div>';
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clearfix"></div>';

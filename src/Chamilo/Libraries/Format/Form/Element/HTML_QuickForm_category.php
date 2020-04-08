@@ -10,9 +10,8 @@ class HTML_QuickForm_category extends HTML_QuickForm_html
     /**
      *
      * @param string $title
-     * @param string $extra_classes
      */
-    public function __construct($title = null, $extra_classes = null)
+    public function __construct($title = null)
     {
         $html = '';
 

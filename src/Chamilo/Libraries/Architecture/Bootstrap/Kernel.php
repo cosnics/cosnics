@@ -109,10 +109,9 @@ class Kernel
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function __construct(
-        ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
-        ApplicationFactory $applicationFactory, SessionUtilities $sessionUtilities,
-        ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator, $version,
-        User $user = null
+        ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
+        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
+        AuthenticationValidator $authenticationValidator, $version, User $user = null
     )
     {
         $this->request = $request;
@@ -128,6 +127,8 @@ class Kernel
     /**
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Exception
      */
     protected function buildApplication()
     {
@@ -197,6 +198,7 @@ class Kernel
     /**
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function configureContext()
     {
@@ -489,14 +491,14 @@ class Kernel
             $page->setApplication($this->getApplication());
 
             $html = array();
-            $html[] = $page->getHeader()->toHtml();
+            $html[] = $page->getHeader()->render();
             $html[] = '<br />';
             $html[] = '<div class="alert alert-danger text-center">';
             $html[] = $this->configurationConsulter->getSetting(
                 ['Chamilo\Core\Admin', 'maintenance_warning_message']
             );
             $html[] = '</div>';
-            $html[] = $page->getFooter()->toHtml();
+            $html[] = $page->getFooter()->render();
 
             $response = new Response(implode(PHP_EOL, $html));
             $response->send();
@@ -562,19 +564,16 @@ class Kernel
             if ($this->getUser() instanceof User)
             {
                 Event::trigger(
-                    'Online', \Chamilo\Core\Admin\Manager::context(), array('user' => $this->getUser()->get_id())
+                    'Online', \Chamilo\Core\Admin\Manager::context(), array('user' => $this->getUser()->getId())
                 );
-
-                $requestUri = $this->getRequest()->server->get('REQUEST_URI');
 
                 if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
-                    $return = Event::trigger(
+                    Event::trigger(
                         'Enter', Manager::context(), array(
                             Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                            Visit::PROPERTY_USER_ID  => $this->getUser(
-                            )->get_id()
+                            Visit::PROPERTY_USER_ID => $this->getUser()->getId()
                         )
                     );
                 }
