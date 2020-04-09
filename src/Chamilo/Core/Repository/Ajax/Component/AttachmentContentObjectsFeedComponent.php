@@ -37,17 +37,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
     const PROPERTY_ELEMENTS = 'elements';
     const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
-    /**
-     * @var integer
-     */
-    private $contentObjectCount = 0;
-
     public function run()
     {
         $result = new JsonAjaxResult();
 
         $result->set_property(self::PROPERTY_ELEMENTS, $this->getElements());
-        $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->contentObjectCount);
+        $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->countContentObjects());
 
         $result->display();
     }
@@ -68,7 +63,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[] $category
          */
-        $categories = $this->retrieveCategories()->as_array();
+        $categories = $this->retrieveCategories();
 
         if (count($categories))
         {
@@ -102,7 +97,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $contentObject
          */
-        $contentObjects = $this->retrieveContentObjects()->as_array();
+        $contentObjects = $this->retrieveContentObjects();
 
         if (count($contentObjects))
         {
@@ -123,6 +118,85 @@ class AttachmentContentObjectsFeedComponent extends Manager
 
     protected function addSearchQueryContentObjectElement(AdvancedElementFinderElements $elements)
     {
+        $contentObjects = $this->retrieveContentObjects();
+    }
+
+    protected function countContentObjects()
+    {
+        return DataManager::count_active_content_objects(
+            ContentObject::class_name(), new DataClassCountParameters($this->getContentObjectConditions())
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    protected function getContentObjectConditions()
+    {
+        $excludedContentObjectIdentifiers = $this->getPostDataValue(self::PARAM_EXCLUDE_CONTENT_OBJECT_IDS);
+        $searchQuery = $this->getSearchQuery();
+
+        $conditions = array();
+
+        if (!empty($searchQuery))
+        {
+            $conditions[] = Utilities::query_to_condition(
+                $searchQuery,
+                array(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE))
+            );
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+            $this->getContentObjectsFilter()
+        );
+
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                new StaticConditionVariable(ContentObject::STATE_RECYCLED)
+            )
+        );
+
+        if (is_array($excludedContentObjectIdentifiers) && count($excludedContentObjectIdentifiers) > 0)
+        {
+            $excludeConditions = array();
+            foreach ($excludedContentObjectIdentifiers as $excludedContentObjectIdentifier)
+            {
+                $excludeConditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new StaticConditionVariable($excludedContentObjectIdentifier)
+                );
+            }
+            $conditions[] = new NotCondition(new OrCondition($excludeConditions));
+        }
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+            DataManager::get_registered_types()
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * @return integer[]
+     */
+    protected function getContentObjectsFilter()
+    {
+        if (!empty($searchQuery))
+        {
+
+        }
+        else
+        {
+            return array($this->getFilter());
+        }
     }
 
     /**
@@ -192,6 +266,19 @@ class AttachmentContentObjectsFeedComponent extends Manager
     /**
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
+    protected function retrieveAllCategories()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+
+        return DataManager::retrieve_categories($condition);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[]
+     */
     protected function retrieveCategories()
     {
         $conditions = array();
@@ -206,74 +293,22 @@ class AttachmentContentObjectsFeedComponent extends Manager
             new StaticConditionVariable($this->getUser()->getId())
         );
 
-        return DataManager::retrieve_categories(new AndCondition($conditions));
+        return DataManager::retrieve_categories(new AndCondition($conditions))->as_array();
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     protected function retrieveContentObjects()
     {
-        $excludedContentObjectIdentifiers = $this->getPostDataValue(self::PARAM_EXCLUDE_CONTENT_OBJECT_IDS);
-        $searchQuery = $this->getSearchQuery();
-
-        $conditions = array();
-
-        if (!empty($searchQuery))
-        {
-            $conditions[] = Utilities::query_to_condition(
-                $searchQuery,
-                array(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE))
-            );
-        }
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getUser()->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->getFilter())
-        );
-
-        $conditions[] = new NotCondition(
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_RECYCLED)
-            )
-        );
-
-        if (is_array($excludedContentObjectIdentifiers) && count($excludedContentObjectIdentifiers) > 0)
-        {
-            $excludeConditions = array();
-            foreach ($excludedContentObjectIdentifiers as $excludedContentObjectIdentifier)
-            {
-                $excludeConditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                    new StaticConditionVariable($excludedContentObjectIdentifier)
-                );
-            }
-            $conditions[] = new NotCondition(new OrCondition($excludeConditions));
-        }
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            DataManager::get_registered_types()
-        );
-
-        $this->contentObjectCount = DataManager::count_active_content_objects(
-            ContentObject::class_name(), new DataClassCountParameters(new AndCondition($conditions))
-        );
-
         $parameters = new DataClassRetrievesParameters(
-            new AndCondition($conditions), 100, $this->getOffset(), array(
+            $this->getContentObjectConditions(), 100, $this->getOffset(), array(
                 new OrderBy(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
                 )
             )
         );
 
-        return DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        return DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters)->as_array();
     }
 }
