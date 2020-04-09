@@ -292,7 +292,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
 
         $html[] = parent::render_header();
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'InstallProcess.js'
         );
 

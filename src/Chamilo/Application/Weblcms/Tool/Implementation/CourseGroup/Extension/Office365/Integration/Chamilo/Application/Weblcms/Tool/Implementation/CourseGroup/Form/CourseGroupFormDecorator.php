@@ -61,7 +61,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 
         $courseGroupForm->addElement(
             'html',
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true) .
                 'TeamAndGroupFormSelection.js'));*/
 

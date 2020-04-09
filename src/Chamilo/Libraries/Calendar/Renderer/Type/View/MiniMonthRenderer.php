@@ -145,7 +145,7 @@ class MiniMonthRenderer extends ViewRenderer
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
         );
 

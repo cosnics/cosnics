@@ -313,7 +313,7 @@ class CourseGroupForm extends FormValidator
         $defaults = array();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
             ) . 'CourseGroupForm.js'
@@ -366,7 +366,7 @@ class CourseGroupForm extends FormValidator
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
             ) . 'CourseGroupForm.js'
@@ -614,7 +614,7 @@ class CourseGroupForm extends FormValidator
     {
         $counter = 0; // Index 0 is the 'parent' course group.
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
             ) . 'CourseGroupEditForm.js'

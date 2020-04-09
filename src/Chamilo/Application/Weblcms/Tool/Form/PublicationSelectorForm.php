@@ -42,11 +42,11 @@ class PublicationSelectorForm
 
         $context = 'Chamilo\Application\Weblcms\Tool';
 
-        $basePath = $path->namespaceToFullPath($context, true);
-
-        $html[] = $resourceManager->getResourceHtml($basePath . 'Resources/Javascript/Vendor/jstree/style.min.css');
-        $html[] = $resourceManager->getResourceHtml($basePath . 'Resources/Javascript/Vendor/jstree/jstree.min.js');
-        $html[] = $resourceManager->getResourceHtml($basePath . 'Resources/Javascript/PublicationSelector.js');
+        $html[] = $resourceManager->getResourceHtml($path->getPluginPath($context, true) . 'jstree/style.min.css');
+        $html[] = $resourceManager->getResourceHtml($path->getPluginPath($context, true) . 'jstree/jstree.min.js');
+        $html[] = $resourceManager->getResourceHtml(
+            $path->getJavascriptPath($context, true) . 'Resources/Javascript/PublicationSelector.js'
+        );
 
         $html[] = '<div id="dataJSON" style="display: none;">';
         $html[] = '<script id="categoriesJSON" type="application/json">' . json_encode($this->categories) . '</script>';

@@ -129,23 +129,23 @@ class DynamicTabsRenderer
      */
     public function get_selected_tab()
     {
-        $selected_tabs = Request::get(self::PARAM_SELECTED_TAB);
+        $selectedTabs = Request::get(self::PARAM_SELECTED_TAB);
 
-        if (!is_array($selected_tabs) && !empty($selected_tabs))
+        if (!is_array($selectedTabs) && !empty($selectedTabs))
         {
-            $selected_tab = $selected_tabs;
+            $selectedTabs = array($selectedTabs);
         }
 
-        $selected_tab = $selected_tabs[$this->get_name()];
+        $selectedTab = $selectedTabs[$this->get_name()];
 
-        if (!is_null($selected_tab))
+        if (!is_null($selectedTab))
         {
-            if (!$this->is_tab_active($selected_tab))
+            if (!$this->is_tab_active($selectedTab))
             {
                 return null;
             }
 
-            return $this->get_name() . '-' . $selected_tab;
+            return $this->get_name() . '-' . $selectedTab;
         }
         else
         {

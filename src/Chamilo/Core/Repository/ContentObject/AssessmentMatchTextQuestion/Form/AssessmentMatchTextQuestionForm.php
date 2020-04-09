@@ -61,7 +61,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'html',
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
                     true) . 'AssessmentMatchTextQuestion.js'));

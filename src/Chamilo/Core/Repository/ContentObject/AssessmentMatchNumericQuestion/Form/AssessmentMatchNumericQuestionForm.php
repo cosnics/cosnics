@@ -66,7 +66,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'html',
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion',
                     true) . 'AssessmentMatchNumericQuestion.js'));

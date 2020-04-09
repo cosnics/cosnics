@@ -194,7 +194,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         }
 
         $dropzoneHtml[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.min.js'
         );
 
         $dropzoneHtml[] = '<script>';
@@ -354,7 +354,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
 
         $html[] = $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
         );
 
@@ -441,7 +441,7 @@ class HTML_QuickForm_image_selecter extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.imageselecter.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.imageselecter.min.js'
         );
         $html[] = '<script>';
 

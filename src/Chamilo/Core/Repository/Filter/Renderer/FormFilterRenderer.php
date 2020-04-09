@@ -89,7 +89,7 @@ class FormFilterRenderer extends FilterRenderer
     function add_footer()
     {
         $this->form_validator->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Search.js'
         )
         );

@@ -81,7 +81,7 @@ abstract class BootstrapTreeMenu
             });
         </script>";
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
             'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js'
         );

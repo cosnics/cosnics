@@ -109,7 +109,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             );
         }
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
         );
 

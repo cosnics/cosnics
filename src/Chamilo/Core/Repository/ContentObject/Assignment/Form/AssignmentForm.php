@@ -141,13 +141,13 @@ class AssignmentForm extends ContentObjectForm
         $this->addFileDropzone('select_attachment_importer', $dropZoneParameters, true);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'UploadifyFeedback.js'
         )
         );

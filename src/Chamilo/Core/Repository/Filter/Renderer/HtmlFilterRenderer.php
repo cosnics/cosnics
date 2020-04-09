@@ -50,7 +50,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Search.js'
         );
 

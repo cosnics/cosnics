@@ -311,7 +311,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_creation_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
             ) . 'AssessmentMatchingQuestion.js'
@@ -324,7 +324,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_editing_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
             ) . 'AssessmentMatchingQuestion.js'

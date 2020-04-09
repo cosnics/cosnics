@@ -108,7 +108,7 @@ class ConfigurationForm extends FormValidator
         $form->addElement('category');
 
         $form->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment\Display', true) .
             'FeedbackForm.js'
         )

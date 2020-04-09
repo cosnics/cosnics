@@ -34,7 +34,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</select>';
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', 
                 true) . 'AssessmentRatingQuestion.js');

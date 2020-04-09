@@ -217,7 +217,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         $buttons->setElements($buttonElements);
 
         $importForm->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(self::package(), true) . 'ImporterComponent.js'
         )
         );

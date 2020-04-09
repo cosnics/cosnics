@@ -98,7 +98,7 @@ class ExternalObjectForm extends FormValidator
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\GoogleDocs', true) .
             'Upload.js'
         )

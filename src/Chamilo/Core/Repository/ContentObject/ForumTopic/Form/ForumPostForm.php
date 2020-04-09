@@ -125,7 +125,7 @@ class ForumPostForm extends FormValidator
         $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::context(), true) .
             'Plugin/jquery.file.upload.import.js'
         )
@@ -188,7 +188,7 @@ class ForumPostForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
         )
         );

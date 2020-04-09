@@ -54,7 +54,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'html',
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion',
                     true) . 'AssessmentMultipleChoiceQuestion.js'));

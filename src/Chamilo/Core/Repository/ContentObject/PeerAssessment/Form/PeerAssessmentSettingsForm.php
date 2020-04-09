@@ -105,7 +105,7 @@ class PeerAssessmentSettingsForm extends FormValidator
         
         $this->addElement(
             'html', 
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PeerAssessment', true) .
                      'Settings.js'));
     }

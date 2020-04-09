@@ -233,7 +233,7 @@ class Legend
                      json_encode($this->getDataProvider()->getVisibilityContext()) . ';';
                 $result[] = '</script>';
 
-                $result[] = ResourceManager::getInstance()->get_resource_html(
+                $result[] = ResourceManager::getInstance()->getResourceHtml(
                     Path::getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
 
                 if ($visibleSources == 0)

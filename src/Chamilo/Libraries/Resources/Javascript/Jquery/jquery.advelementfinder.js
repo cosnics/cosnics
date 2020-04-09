@@ -786,7 +786,7 @@
                     if (settings.elementTypes.length == 1) {
                         $('#element_types_selector', self).prop(
                             'selectedIndex', 1);
-                        $('#element_types_selector', self).toggle();
+                        $('#element_types_selector', self).parent().toggle();
                     }
                     else {
                         $('#element_types_selector', self).prop(

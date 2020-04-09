@@ -70,10 +70,10 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $html[] = '</div>';
 
-            $html[] = ResourceManager::getInstance()->get_resource_html(
+            $html[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js'
             );
-            $html[] = ResourceManager::getInstance()->get_resource_html(
+            $html[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
                 'Jquery/jquery.fullscreen.min.js'
             );

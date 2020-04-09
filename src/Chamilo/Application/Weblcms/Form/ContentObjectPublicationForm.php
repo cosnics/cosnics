@@ -200,7 +200,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     protected function addCreateJavascript()
     {
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->namespaceToFullPath(Manager::context(), true) .
             'Resources/Javascript/ContentObjectPublicationForm.js'
         )
@@ -381,7 +381,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $html = array();
-        $html[] = '<div class="target-entities-container" data-course-id="' . $this->get_course_id() . '" data-tool="' .
+        $html[] = '<div class="target-entities-container clearfix" data-course-id="' . $this->get_course_id() . '" data-tool="' .
             $this->get_tool() . '">';
 
         // $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager :: context()) .
@@ -477,7 +477,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addElement('html', '</div></div><div style="margin-bottom: 20px;"></div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
         )
         );

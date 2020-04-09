@@ -184,7 +184,7 @@ class GalleryHTMLTable extends HtmlTable
      */
     public function getTableActionsJavascript()
     {
-        return ResourceManager::getInstance()->get_resource_html(
+        return ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'GalleryTable.js'
         );
     }

@@ -79,15 +79,14 @@ class EntityFormService
     private function addDependencies()
     {
         $resource_manager = ResourceManager::getInstance();
-        $plugin_path =
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Plugin/Bootstrap/Tagsinput/';
+        $plugin_path = Path::getInstance()->getPluginPath('Chamilo\Core\Metadata', true) . 'Bootstrap/Tagsinput/';
 
         $dependencies = array();
 
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.css');
-        $dependencies[] = $resource_manager->get_resource_html(
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.js');
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.css');
+        $dependencies[] = $resource_manager->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Input.js'
         );
 
@@ -176,7 +175,8 @@ class EntityFormService
                     $tagElementGroup[] = $this->formValidator->createElement(
                         'text', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']', null,
                         array(
-                            'id' => $uniqueIdentifier, 'class' => $class,
+                            'id' => $uniqueIdentifier,
+                            'class' => $class,
                             'data-schema-id' => $this->getSchemaInstance()->get_schema_id(),
                             'data-schema-instance-id' => $this->getSchemaInstance()->get_id(),
                             'data-element-id' => $element->get_id(),

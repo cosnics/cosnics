@@ -545,7 +545,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
     public function render_footer()
     {
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
         );
 

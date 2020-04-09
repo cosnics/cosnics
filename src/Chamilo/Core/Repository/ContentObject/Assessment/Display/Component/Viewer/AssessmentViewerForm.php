@@ -74,7 +74,7 @@ class AssessmentViewerForm extends FormValidator
         $this->addElement('hidden', 'start_time', '', array('id' => 'start_time'));
         $this->addElement('hidden', 'max_time', '', array('id' => 'max_time'));
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
             'AssessmentViewer.js'
         )
@@ -99,7 +99,7 @@ class AssessmentViewerForm extends FormValidator
         }
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HeartBeat.js'
         )
         );

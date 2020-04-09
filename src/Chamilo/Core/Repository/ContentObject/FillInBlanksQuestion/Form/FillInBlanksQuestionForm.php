@@ -117,7 +117,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion', true
             ) . 'FillInTheBlanks.js'

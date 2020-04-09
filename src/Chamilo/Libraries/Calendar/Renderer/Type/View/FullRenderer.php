@@ -103,7 +103,7 @@ abstract class FullRenderer extends ViewRenderer
 
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
 
         return implode(PHP_EOL, $html);

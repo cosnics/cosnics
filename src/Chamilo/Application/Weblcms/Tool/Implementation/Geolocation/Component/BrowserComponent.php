@@ -26,7 +26,7 @@ class BrowserComponent extends Manager
 
             $html[] = '<br /><br /><h3>' . Translation::get('LocationsSummary') . '</h3>';
             $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';
-            $html[] = ResourceManager::getInstance()->get_resource_html(
+            $html[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
                      'Plugin\GoogleMaps.js');
             $html[] = '<div id="map_canvas" style="border: 1px solid black; height:500px"></div>';

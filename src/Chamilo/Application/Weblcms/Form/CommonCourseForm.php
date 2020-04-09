@@ -263,7 +263,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->addElement('html', '</div>');
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
         )
         );

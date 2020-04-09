@@ -84,17 +84,6 @@ class ResourceManager
     }
 
     /**
-     * @param $path
-     *
-     * @return string
-     * @deprecated Use getResourcesHtml() now
-     */
-    public function get_resource_html($path)
-    {
-        return $this->getResourceHtml($path);
-    }
-
-    /**
      *
      * @return string[]
      * @deprecated Use getResources() now

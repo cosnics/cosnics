@@ -36,9 +36,14 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -322,7 +327,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
             $this->addElement(
-                'html', ResourceManager::getInstance()->get_resource_html(
+                'html', ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
             )
             );
@@ -335,6 +340,18 @@ abstract class ContentObjectForm extends FormValidator
             {
                 $elem->excludeElements(array($object->get_id()));
             }
+
+            $types = new AdvancedElementFinderElementTypes();
+            $types->add_element_type(
+                new AdvancedElementFinderElementType(
+                    'content_objects', Translation::get('ContentObjects'), 'Chamilo\Core\Repository\Ajax',
+                    'AttachmentContentObjectsFeed', array('exclude_content_object_ids' => array($object->getId()))
+                )
+            );
+
+            $this->addElement(
+                'advanced_element_finder', 'attachments_beta', Translation::get('SelectAttachment'), $types
+            );
         }
     }
 
@@ -345,7 +362,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         // separated upload and check behaviour into independent javascript files
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
         )
         );
@@ -357,14 +374,14 @@ abstract class ContentObjectForm extends FormValidator
         if ($omitContentObjectTitleCheck != 1)
         {
             $this->addElement(
-                'html', ResourceManager::getInstance()->get_resource_html(
+                'html', ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormCheck.js'
             )
             );
         }
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HeartBeat.js'
         )
         );
@@ -545,7 +562,7 @@ abstract class ContentObjectForm extends FormValidator
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'
         )
         );
@@ -1017,6 +1034,24 @@ EOT;
         {
             $defaults['version'] = 1;
         }
+
+        $attachments = $content_object->get_attachments();
+
+        $defaultAttachments = new AdvancedElementFinderElements();
+
+        foreach ($attachments as $attachment)
+        {
+            $defaultAttachments->add_element(
+                new AdvancedElementFinderElement(
+                    'content_object_' . $attachment->getId(),
+                    $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+                    $attachment->get_title(), $attachment->get_type_string()
+                )
+            );
+        }
+
+        $element = $this->getElement('attachments_beta');
+        $element->setDefaultValues($defaultAttachments);
 
         parent::setDefaults($defaults);
     }

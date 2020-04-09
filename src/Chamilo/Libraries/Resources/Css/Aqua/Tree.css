@@ -56,6 +56,9 @@ ul.tree-menu li div a {
     clear: both;
     display: block;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 ul.tree-menu li div a.selected {

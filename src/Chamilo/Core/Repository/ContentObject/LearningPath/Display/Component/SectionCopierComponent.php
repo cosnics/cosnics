@@ -137,7 +137,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
         foreach ($javascriptFiles as $javascriptFile)
         {
-            $html[] = ResourceManager::getInstance()->get_resource_html(
+            $html[] = ResourceManager::getInstance()->getResourceHtml(
                 $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
             );
         }

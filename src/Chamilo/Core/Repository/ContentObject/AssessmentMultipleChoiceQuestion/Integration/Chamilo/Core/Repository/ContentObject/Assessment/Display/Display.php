@@ -113,7 +113,7 @@ class Display extends QuestionDisplay
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
 
         $formvalidator->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
         )
         );

@@ -125,7 +125,7 @@ class LogViewerComponent extends Manager
             array('class' => 'positive finish')
         );
         $form->addElement(
-            'html', ResourceManager::getInstance()->get_resource_html(
+            'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'
         )
         );

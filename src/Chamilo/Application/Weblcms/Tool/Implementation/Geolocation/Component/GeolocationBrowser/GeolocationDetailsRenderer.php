@@ -26,7 +26,7 @@ class GeolocationDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $html[] = $lo->get_description();
 
         $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
                  'Plugin\GoogleMaps.js');
         $html[] = '<div id="map_canvas" style="border: 1px solid black; height:500px"></div>';

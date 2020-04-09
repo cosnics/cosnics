@@ -457,7 +457,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             }
         }
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js'
         );
 

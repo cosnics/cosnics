@@ -52,7 +52,7 @@ class ImporterComponent extends Manager
         $html = array();
         $html[] = $this->render_header();
         $html[] = $this->get_tabs();
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin') . 'AdminBrowser.js'
         );
         $html[] = $this->render_footer();

@@ -64,11 +64,11 @@ class TagsFormBuilder
         
         $dependencies = array();
         
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
         
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.min.js');
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.min.js');
         
-        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.css');
+        $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.css');
         
         $this->form->addElement('html', implode(PHP_EOL, $dependencies));
     }

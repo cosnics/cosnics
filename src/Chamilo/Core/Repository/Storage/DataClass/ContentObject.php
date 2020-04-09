@@ -987,8 +987,16 @@ class ContentObject extends CompositeDataClass
         return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
     }
 
+    /**
+     * @param string $type
+     * @param array $order_by
+     * @param null $offset
+     * @param null $count
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     */
     public function get_attachments(
-        $type = self :: ATTACHMENT_NORMAL, $order_by = array(), $offset = null, $count = null
+        $type = self::ATTACHMENT_NORMAL, $order_by = array(), $offset = null, $count = null
     )
     {
         if (!is_array($this->attachments[$type]))

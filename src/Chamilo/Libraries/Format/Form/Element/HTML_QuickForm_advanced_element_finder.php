@@ -312,7 +312,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.advelementfinder.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.advelementfinder.min.js'
         );
         $html[] = '<script>';
 

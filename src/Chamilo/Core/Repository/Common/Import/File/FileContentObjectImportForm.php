@@ -74,7 +74,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $this->addElement(
             'html',
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
             )
         );

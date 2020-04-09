@@ -58,7 +58,7 @@ class CourseForm extends CommonCourseForm
         
         $this->addElement(
             'html', 
-            ResourceManager::getInstance()->get_resource_html(
+            ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Course', true) . 'CourseForm.js'));
     }
 

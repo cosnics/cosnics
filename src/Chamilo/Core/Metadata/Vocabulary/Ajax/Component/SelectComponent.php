@@ -112,9 +112,9 @@ class SelectComponent extends Manager implements TableSupport
                 $this->getRequest()->query->get(
                     Manager::PARAM_ELEMENT_IDENTIFIER)) . ';';
             $html[] = '</script>';
-            $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
-            $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
-            $html[] = $resource_manager->get_resource_html(
+            $html[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
+            $html[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.js');
+            $html[] = $resource_manager->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Selection.js');
         }
         else
