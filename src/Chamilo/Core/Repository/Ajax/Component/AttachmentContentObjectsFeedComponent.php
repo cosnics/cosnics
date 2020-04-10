@@ -160,8 +160,6 @@ class AttachmentContentObjectsFeedComponent extends Manager
                 $contentObject;
         }
 
-        var_dump($contentObjectCategories[0]);
-
         $this->addContentObjectElement($myRepositoryElement);
     }
 
