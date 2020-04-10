@@ -21,8 +21,12 @@ ul.tree-menu li {
     padding: 0;
 }
 
-ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
-ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand {
+ul.tree-menu li div,
+ul.tree-menu li div.last,
+ul.tree-menu li div.collapse,
+ul.tree-menu li div.lastCollapse,
+ul.tree-menu li div.expand,
+ul.tree-menu li div.lastExpand {
     background-repeat: no-repeat;
     clear: both;
     padding-left: 18px;
@@ -74,9 +78,10 @@ ul.tree-menu li div a.lastSelected {
     margin-left: -1px;
 }
 
-ul.tree-menu li div a.disabled {
-    color: #9f9f9f;
+ul.tree-menu li div a.disabled,
+ul.tree-menu li div a.category {
     cursor: default;
+    text-decoration: none;
 }
 
 ul.tree-menu li div img {
@@ -93,9 +98,4 @@ ul.tree-menu li.current > div a {
 
 ul.tree-menu li div.collapse {
     display: block;
-}
-
-ul.tree-menu li div a.no_link {
-    color: #797268;
-    cursor: default;
 }

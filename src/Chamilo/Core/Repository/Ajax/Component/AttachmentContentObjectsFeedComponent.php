@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use stdClass;
 
 /**
  * @package Chamilo\Core\Repository\Ajax\Component
@@ -37,6 +38,9 @@ class AttachmentContentObjectsFeedComponent extends Manager
     const PROPERTY_ELEMENTS = 'elements';
     const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function run()
     {
         $result = new JsonAjaxResult();
@@ -48,17 +52,11 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements $elements
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement $myRepositoryElement
      */
-    protected function addCategoryElement(AdvancedElementFinderElements $elements)
+    protected function addCategoryElement(AdvancedElementFinderElement $myRepositoryElement)
     {
         $glyph = new FontAwesomeGlyph('folder', array('fa-fw'), null, 'fas');
-
-        $myRepository = $this->getTranslator()->trans('Categories', array(), Utilities::COMMON_LIBRARIES);
-
-        $categoriesElement = new AdvancedElementFinderElement(
-            'categories', $glyph->getClassNamesString(), $myRepository, $myRepository
-        );
 
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[] $category
@@ -69,31 +67,23 @@ class AttachmentContentObjectsFeedComponent extends Manager
         {
             foreach ($categories as $category)
             {
-                $categoriesElement->add_child(
+                $myRepositoryElement->add_child(
                     new AdvancedElementFinderElement(
                         'category_' . $category->getId(), $glyph->getClassNamesString(), $category->get_name(),
                         $category->get_name(), AdvancedElementFinderElement::TYPE_FILTER
                     )
                 );
             }
-
-            $elements->add_element($categoriesElement);
         }
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements $elements
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement $myRepositoryElement
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    protected function addContentObjectElement(AdvancedElementFinderElements $elements)
+    protected function addContentObjectElement(AdvancedElementFinderElement $myRepositoryElement)
     {
-        $glyph = new FontAwesomeGlyph('folder', array('fa-fw'), null, 'fas');
-
-        $myRepository = $this->getTranslator()->trans('ContentObjects', array(), Utilities::COMMON_LIBRARIES);
-
-        $contentObjectElement = new AdvancedElementFinderElement(
-            'attachments', $glyph->getClassNamesString(), $myRepository, $myRepository
-        );
-
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $contentObject
          */
@@ -103,7 +93,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         {
             foreach ($contentObjects as $contentObject)
             {
-                $contentObjectElement->add_child(
+                $myRepositoryElement->add_child(
                     new AdvancedElementFinderElement(
                         'content_object_' . $contentObject->getId(),
                         $contentObject->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
@@ -111,14 +101,68 @@ class AttachmentContentObjectsFeedComponent extends Manager
                     )
                 );
             }
-
-            $elements->add_element($contentObjectElement);
         }
     }
 
-    protected function addSearchQueryContentObjectElement(AdvancedElementFinderElements $elements)
+    /**
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement $myRepositoryElement
+     */
+    protected function addSearchQueryContentObjectElement(AdvancedElementFinderElement $myRepositoryElement)
     {
         $contentObjects = $this->retrieveContentObjects();
+        $contentObjectCategories = array();
+
+        foreach ($contentObjects as $contentObject)
+        {
+            $parentContentObjectIdentifiers = array();
+
+            if ($contentObject->get_parent_id() != 0)
+            {
+                $category =
+                    DataManager::retrieve_by_id(RepositoryCategory::class_name(), $contentObject->get_parent_id());
+                $parentContentObjectIdentifiers = $category->get_parent_ids();
+            }
+
+            $parentContentObjectIdentifiers[] = $contentObject->get_parent_id();
+
+            $previousParent = null;
+
+            foreach ($parentContentObjectIdentifiers as $parentContentObjectIdentifier)
+            {
+                if (!array_key_exists($parentContentObjectIdentifier, $contentObjectCategories))
+                {
+                    $contentObjectCategory = new stdClass();
+
+                    $contentObjectCategory->categoryIdentifier = $parentContentObjectIdentifier;
+                    $contentObjectCategory->categoryObject =
+                        DataManager::retrieve_by_id(RepositoryCategory::class_name(), $parentContentObjectIdentifier);
+                    $contentObjectCategory->subCategories = array();
+                    $contentObjectCategory->contentObjects = array();
+
+                    $contentObjectCategories[$parentContentObjectIdentifier] = $contentObjectCategory;
+                }
+
+                if (!is_null($previousParent))
+                {
+                    if (!array_key_exists(
+                        $parentContentObjectIdentifier, $contentObjectCategories[$previousParent]->subCategories
+                    ))
+                    {
+                        $contentObjectCategories[$previousParent]->subCategories[$parentContentObjectIdentifier] =
+                            $contentObjectCategories[$parentContentObjectIdentifier];
+                    }
+                }
+
+                $previousParent = $parentContentObjectIdentifier;
+            }
+
+            $contentObjectCategories[$contentObject->get_parent_id()]->contentObjects[$contentObject->getId()] =
+                $contentObject;
+        }
+
+        var_dump($contentObjectCategories[0]);
+
+        $this->addContentObjectElement($myRepositoryElement);
     }
 
     protected function countContentObjects()
@@ -126,6 +170,37 @@ class AttachmentContentObjectsFeedComponent extends Manager
         return DataManager::count_active_content_objects(
             ContentObject::class_name(), new DataClassCountParameters($this->getContentObjectConditions())
         );
+    }
+
+    /**
+     * @return integer[]
+     */
+    protected function getCategoryIdentifiers()
+    {
+        $searchQuery = $this->getSearchQuery();
+
+        if (!empty($searchQuery))
+        {
+            if ($this->getFilter() == 0)
+            {
+                return array();
+            }
+
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $this->getFilter());
+
+            if ($category instanceof RepositoryCategory)
+            {
+                return $category->get_children_ids();
+            }
+            else
+            {
+                return array();
+            }
+        }
+        else
+        {
+            return array($this->getFilter());
+        }
     }
 
     /**
@@ -151,10 +226,15 @@ class AttachmentContentObjectsFeedComponent extends Manager
             new StaticConditionVariable($this->getUser()->getId())
         );
 
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
-            $this->getContentObjectsFilter()
-        );
+        $categoryIdentifiers = $this->getCategoryIdentifiers();
+
+        if (count($categoryIdentifiers) > 0)
+        {
+            $conditions[] = new InCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+                $categoryIdentifiers
+            );
+        }
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
@@ -185,35 +265,37 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return integer[]
-     */
-    protected function getContentObjectsFilter()
-    {
-        if (!empty($searchQuery))
-        {
-
-        }
-        else
-        {
-            return array($this->getFilter());
-        }
-    }
-
-    /**
-     * @return string[][]
+     * @return \string[][]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function getElements()
     {
         $elements = new AdvancedElementFinderElements();
 
+        $glyph = new FontAwesomeGlyph('hdd', array('fa-fw'), null, 'fas');
+
+        $myRepository = $this->getTranslator()->trans('MyRepository', array(), Utilities::COMMON_LIBRARIES);
+
+        $myRepositoryElement = new AdvancedElementFinderElement(
+            'my_repository', $glyph->getClassNamesString(), $myRepository, $myRepository,
+            AdvancedElementFinderElement::TYPE_VISUAL
+        );
+
         if ($this->getSearchQuery())
         {
-            $this->addSearchQueryContentObjectElement($elements);
+            $this->addSearchQueryContentObjectElement($myRepositoryElement);
         }
         else
         {
-            $this->addCategoryElement($elements);
-            $this->addContentObjectElement($elements);
+
+
+            $this->addCategoryElement($myRepositoryElement);
+            $this->addContentObjectElement($myRepositoryElement);
+        }
+
+        if ($myRepositoryElement->hasChildren())
+        {
+            $elements->add_element($myRepositoryElement);
         }
 
         return $elements->as_array();
@@ -230,7 +312,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         {
             $filterValues = explode('_', $filterValue);
 
-            if (count($filterValues) === 2 && $filterValues[0] == 'category')
+            if (count($filterValues) == 2 && $filterValues[0] == 'category')
             {
                 return $filterValues[1];
             }

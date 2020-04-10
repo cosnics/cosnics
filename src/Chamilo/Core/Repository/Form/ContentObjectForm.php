@@ -1035,23 +1035,26 @@ EOT;
             $defaults['version'] = 1;
         }
 
-        $attachments = $content_object->get_attachments();
-
-        $defaultAttachments = new AdvancedElementFinderElements();
-
-        foreach ($attachments as $attachment)
+        if ($content_object instanceof AttachmentSupport)
         {
-            $defaultAttachments->add_element(
-                new AdvancedElementFinderElement(
-                    'content_object_' . $attachment->getId(),
-                    $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
-                    $attachment->get_title(), $attachment->get_type_string()
-                )
-            );
-        }
+            $attachments = $content_object->get_attachments();
 
-        $element = $this->getElement('attachments_beta');
-        $element->setDefaultValues($defaultAttachments);
+            $defaultAttachments = new AdvancedElementFinderElements();
+
+            foreach ($attachments as $attachment)
+            {
+                $defaultAttachments->add_element(
+                    new AdvancedElementFinderElement(
+                        'content_object_' . $attachment->getId(),
+                        $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+                        $attachment->get_title(), $attachment->get_type_string()
+                    )
+                );
+            }
+
+            $element = $this->getElement('attachments_beta');
+            $element->setDefaultValues($defaultAttachments);
+        }
 
         parent::setDefaults($defaults);
     }

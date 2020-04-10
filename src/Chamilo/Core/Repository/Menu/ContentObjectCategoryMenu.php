@@ -65,15 +65,12 @@ class ContentObjectCategoryMenu extends HtmlMenu
     private $exclude_types;
 
     /**
-     * Creates a new category navigation menu.
-     *
-     * @param $owner int The ID of the owner of the categories to provide in this menu.
-     * @param $current_category int The ID of the current category in the menu.
-     * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
-     * @param $extra_items array An array of extra tree items, added to the root.
-     * @param $filter_count_on_types string[] - Array to define the types on which the count on the categories should be
-     *        filtered
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $currentWorkspace
+     * @param integer $current_category
+     * @param string $url_format
+     * @param array $extra_items
+     * @param array $filter_count_on_types
+     * @param array $exclude_types
      */
     public function __construct(
         WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s',
@@ -88,10 +85,15 @@ class ContentObjectCategoryMenu extends HtmlMenu
 
         $menu = $this->get_menu_items($extra_items);
         parent::__construct($menu);
-        $this->array_renderer = new HtmlMenuArrayRenderer();
+
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
 
+    /**
+     * @param int $parentId
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[]
+     */
     private function getCategories($parentId = 0)
     {
         if (!isset($this->categories))
@@ -121,15 +123,15 @@ class ContentObjectCategoryMenu extends HtmlMenu
     }
 
     /**
-     * Get the breadcrumbs which lead to the current category.
-     *
-     * @return array The breadcrumbs.
+     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
     public function get_breadcrumbs()
     {
         $trail = BreadcrumbTrail::getInstance();
-        $this->render($this->array_renderer, 'urhere');
-        $breadcrumbs = $this->array_renderer->toArray();
+        $htmlMenuArrayRenderer = new HtmlMenuArrayRenderer();
+
+        $this->render($htmlMenuArrayRenderer, 'urhere');
+        $breadcrumbs = $htmlMenuArrayRenderer->toArray();
 
         foreach ($breadcrumbs as $crumb)
         {
@@ -197,13 +199,9 @@ class ContentObjectCategoryMenu extends HtmlMenu
     }
 
     /**
-     * Returns the items of the sub menu.
+     * @param integer $parent
      *
-     * @param $categories array The categories to include in this menu.
-     * @param $parent int The parent category ID.
-     *
-     * @return array An array with all menu items. The structure of this array is the structure needed by
-     *         PEAR::HTML_Menu, on which this class is based.
+     * @return string[][]
      */
     private function get_sub_menu_items($parent = 0)
     {
@@ -213,10 +211,11 @@ class ContentObjectCategoryMenu extends HtmlMenu
         foreach ($objects as $category)
         {
             $menu_item = array();
-            $menu_item['title'] = $category->get_name()/* . ' (' . $count . ')'*/
-            ;
+            $menu_item['title'] = $category->get_name();
             $menu_item['url'] = $this->get_category_url($category->get_id());
+
             $sub_menu_items = $this->get_sub_menu_items($category->get_id());
+
             if (count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
@@ -232,6 +231,9 @@ class ContentObjectCategoryMenu extends HtmlMenu
         return $categories;
     }
 
+    /**
+     * @return string
+     */
     public static function get_tree_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);

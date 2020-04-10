@@ -73,8 +73,8 @@
                         }
                         item_url = sprintf(settings.item_url, the_leaf.id);
                         var li = $(
-                            '<li><div' + expand + '><a href="' + item_url + '" id="' + the_leaf.id + '" class="' +
-                            the_leaf.classes + '" title="' + the_leaf.title + '">' + the_leaf.title +
+                            '<li><div' + expand + '><a href="' + item_url + '" id="' + the_leaf.id + '" title="' +
+                            the_leaf.title + '"><span class="' + the_leaf.classes + '"></span> ' + the_leaf.title +
                             '</a></div></li>');
                         $(ul).append(li);
                     });

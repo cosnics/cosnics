@@ -91,18 +91,12 @@
                  * Sets the given element to enabled (both class / image)
                  */
                 function enableElement(theElement) {
-                    if (typeof theElement.css('background-image') !== 'undefined') {
-                        theElement.removeClass('disabled');
-                        theElement.css('background-image', theElement.css(
-                            'background-image').replace(
-                            'Na.png',
-                            '.png'
-                        ));
+                    theElement.removeClass('disabled');
+                    theElement.removeClass('text-muted');
 
-                        var filterBoxes = $('.filter_box', self);
-                        $('#' + theElement.attr('id'), filterBoxes).attr(
-                            'disabled', '');
-                    }
+                    var filterBoxes = $('.filter_box', self);
+                    $('#' + theElement.attr('id'), filterBoxes).attr(
+                        'disabled', '');
                 }
 
                 /**
@@ -110,17 +104,13 @@
                  * so it can not be selected again
                  */
                 function disableElement(theElement) {
-                    if (theElement.css('background-image')) {
-                        if (!theElement.hasClass('disabled')) {
-                            theElement.addClass('disabled');
-                            theElement.css('background-image', theElement
-                                .css('background-image').replace(
-                                    '.png', 'Na.png'));
+                    if (!theElement.hasClass('disabled')) {
+                        theElement.addClass('disabled');
+                        theElement.addClass('text-muted');
 
-                            var filterBoxes = $('.filter_box', self);
-                            $('#' + theElement.attr('id'), filterBoxes)
-                                .attr('disabled', 'disabled');
-                        }
+                        var filterBoxes = $('.filter_box', self);
+                        $('#' + theElement.attr('id'), filterBoxes)
+                            .attr('disabled', 'disabled');
                     }
                 }
 
@@ -644,7 +634,7 @@
                         ) != -1);
 
                         // If the element is a filter
-                        if (element.type > 1) {
+                        if (element.type == 2 || element.type == 3) {
                             var option = createFilterOption(
                                 element.id,
                                 element.title
@@ -665,8 +655,16 @@
                             disableElement(elementLink);
                         }
 
-                        if (element.type == 3) {
-                            elementLink.addClass('filter');
+                        if (element.type == 3 || element.type == 4) {
+                            elementLink.addClass('text-info');
+
+                            if (element.type == 3) {
+                                elementLink.addClass('filter');
+                            }
+
+                            if (element.type == 4) {
+                                elementLink.addClass('category');
+                            }
                         }
 
                         buildInactiveElements(element.children, elementLi);
