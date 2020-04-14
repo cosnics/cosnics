@@ -9,6 +9,8 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -109,15 +111,6 @@ class ForumPostForm extends FormValidator
             'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
         );
 
-        $url = Path::getInstance()->getBasePath(true) .
-            'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
-
-        $locale = array();
-        $locale['Display'] = Translation::get('AddAttachments');
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-
         $this->addElement(
             'category', '<a href="#">' . Translation::get('Attachments') . '</a>'
         );
@@ -126,13 +119,20 @@ class ForumPostForm extends FormValidator
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::context(), true) .
-            'Plugin/jquery.file.upload.import.js'
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 
-        $elem = $this->addElement(
-            'element_finder', 'attachments', Translation::get('SelectAttachment'), $url, $locale, $attachments
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'content_objects', Translation::get('ContentObjects'), 'Chamilo\Core\Repository\Ajax',
+                'AttachmentContentObjectsFeed'
+            )
+        );
+
+        $this->addElement(
+            'advanced_element_finder', 'attachments', Translation::get('SelectAttachment'), $types
         );
 
         if (count($this->additional_elements) > 0)

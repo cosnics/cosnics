@@ -417,7 +417,8 @@ EOT;
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.single.min.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+            'Jquery/jquery.file.upload.single.min.js'
         )
         );
     }
@@ -1203,9 +1204,6 @@ EOT;
         );
 
         // Element finder elements
-        $this->registerElementType(
-            'element_finder', $dir . 'Element/HTML_QuickForm_element_finder.php', 'HTML_QuickForm_element_finder'
-        );
         $this->registerElementType(
             'advanced_element_finder', $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
             'HTML_QuickForm_advanced_element_finder'

@@ -31,35 +31,35 @@ class ForumPostEditorComponent extends ForumPostFormAction
     {
         $this->selected_forum_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
         $this->forumpost = DataManager::retrieve_by_id(ForumPost::class_name(), $this->selected_forum_post_id);
-        
+
         if ($this->forumpost->get_user_id() == $this->get_user_id() || $this->get_parent()->is_allowed(EDIT_RIGHT))
         {
-            
+
             $form = new ForumPostForm(
-                ForumPostForm::TYPE_EDIT, 
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_EDIT_FORUM_POST, 
-                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(), 
-                        self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)), 
-                $this->forumpost, 
-                $this->selected_forum_post_id);
-            
+                ForumPostForm::TYPE_EDIT, $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_EDIT_FORUM_POST,
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
+                    self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id
+                )
+            ), $this->forumpost, $this->selected_forum_post_id
+            );
+
             if ($form->validate())
             {
-                
+
                 $values = $form->exportValues();
                 $this->forumpost->set_title($values[ForumPost::PROPERTY_TITLE]);
                 $this->forumpost->set_content($values[ForumPost::PROPERTY_CONTENT]);
-                
+
                 $success = $this->forumpost->update();
-                
+
                 if ($success)
                 {
-                    
+
                     // Process attachments
                     // Add the new attachments after the edit.
-                    foreach ($values['attachments']['lo'] as $value)
+                    foreach ($values['attachments']['content_object'] as $value)
                     {
                         $help = $value;
                         if (DataManager::retrieve_attached_object($this->selected_forum_post_id, $help) == null)
@@ -68,16 +68,16 @@ class ForumPostEditorComponent extends ForumPostFormAction
                         }
                     }
                 }
-                
+
                 // Remove the attachments that were removed during the edit.
                 foreach ($this->forumpost->get_attached_content_objects() as $object)
                 {
                     $counter = 0;
                     $found = false;
-                    $new_list_counter = count($values['attachments']['lo']);
+                    $new_list_counter = count($values['attachments']['content_object']);
                     while ($counter < $new_list_counter)
                     {
-                        if ($object->get_id() == $values['attachments']['lo'][$counter])
+                        if ($object->get_id() == $values['attachments']['content_object'][$counter])
                         {
                             $found = true;
                             break;
@@ -87,24 +87,24 @@ class ForumPostEditorComponent extends ForumPostFormAction
                             $counter ++;
                         }
                     }
-                    if (! $found)
+                    if (!$found)
                     {
                         DataManager::detach_content_object($this->forumpost, $object->get_id());
                     }
                 }
-                
+
                 $this->my_redirect($success);
             }
             else
             {
                 $this->add_common_breadcrumbtrails();
-                
+
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }
@@ -115,24 +115,6 @@ class ForumPostEditorComponent extends ForumPostFormAction
     }
 
     /**
-     * redirect
-     * 
-     * @param type $success
-     */
-    private function my_redirect($success)
-    {
-        $message = htmlentities(
-            Translation::get(
-                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
-                array('OBJECT' => Translation::get('ForumPost')), 
-                Utilities::COMMON_LIBRARIES));
-        $params = array();
-        $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;
-        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-        $this->redirect($message, ($success ? false : true), $params);
-    }
-
-    /**
      * add breadcrumbtrails
      */
     public function add_common_breadcrumbtrails()
@@ -140,7 +122,26 @@ class ForumPostEditorComponent extends ForumPostFormAction
         $trail = parent::add_common_breadcrumbtrails();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)), 
-                Translation::get('EditPost', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')));
+                $this->get_url(array(self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)),
+                Translation::get('EditPost', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')
+            )
+        );
+    }
+
+    /**
+     * @param $success
+     */
+    private function my_redirect($success)
+    {
+        $message = htmlentities(
+            Translation::get(
+                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('ForumPost')),
+                Utilities::COMMON_LIBRARIES
+            )
+        );
+        $params = array();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $this->redirect($message, ($success ? false : true), $params);
     }
 }

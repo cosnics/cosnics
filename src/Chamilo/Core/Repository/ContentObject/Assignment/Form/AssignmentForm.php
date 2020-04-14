@@ -108,14 +108,6 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement('category', Translation::get('AutomaticFeedback'));
 
         // attachment uploader and selector
-        $url = Path::getInstance()->getBasePath(true) .
-            'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
-        $locale = array();
-        $locale['Display'] = Translation::get('AddAttachments');
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 User::class_name(), (int) $this->get_owner_id()
@@ -152,9 +144,17 @@ class AssignmentForm extends ContentObjectForm
         )
         );
 
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'content_objects', Translation::get('ContentObjects'), 'Chamilo\Core\Repository\Ajax',
+                'AttachmentContentObjectsFeed'
+            )
+        );
+
         $this->addElement(
-            'element_finder', Assignment::PROPERTY_SELECT_ATTACHMENT, Translation::get('SelectFeedbackAttachment'),
-            $url, $locale, array()
+            'advanced_element_finder', Assignment::PROPERTY_SELECT_ATTACHMENT,
+            Translation::get('SelectFeedbackAttachment'), $types
         );
 
         $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
@@ -180,7 +180,7 @@ class AssignmentForm extends ContentObjectForm
 
         $cos = null;
 
-        foreach ($values[Assignment::PROPERTY_SELECT_ATTACHMENT]['lo'] as $co)
+        foreach ($values[Assignment::PROPERTY_SELECT_ATTACHMENT]['content_object'] as $co)
         {
             if ($cos == null)
             {
@@ -329,12 +329,34 @@ class AssignmentForm extends ContentObjectForm
             }
 
             $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
+
             if ($active)
             {
-                if ($active->_elements[0])
+                $contentObjectIdentifiers = $object->get_automatic_feedback_co_ids();
+                $condition = new InCondition(
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    $contentObjectIdentifiers
+                );
+
+                $attachments = DataManager::retrieve_active_content_objects(
+                    ContentObject::class_name(), new DataClassRetrievesParameters($condition)
+                )->as_array();
+
+                $defaultAttachments = new AdvancedElementFinderElements();
+
+                foreach ($attachments as $attachment)
                 {
-                    $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
+                    $defaultAttachments->add_element(
+                        new AdvancedElementFinderElement(
+                            'content_object_' . $attachment->getId(),
+                            $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+                            $attachment->get_title(), $attachment->get_type_string()
+                        )
+                    );
                 }
+
+                $element = $this->getElement(self::PROPERTY_ATTACHMENTS);
+                $element->setDefaultValues($defaultAttachments);
             }
         }
         else
@@ -365,7 +387,7 @@ class AssignmentForm extends ContentObjectForm
 
         $cos = null;
 
-        foreach ($values[Assignment::PROPERTY_SELECT_ATTACHMENT]['lo'] as $co)
+        foreach ($values[Assignment::PROPERTY_SELECT_ATTACHMENT]['content_object'] as $co)
         {
             if ($cos == null)
             {

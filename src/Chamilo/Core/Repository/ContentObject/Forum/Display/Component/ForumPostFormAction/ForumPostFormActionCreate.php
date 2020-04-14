@@ -40,7 +40,7 @@ abstract class ForumPostFormActionCreate extends ForumPostFormAction
         if ($value)
         {
             // Process attachments
-            $this->forumpost->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
+            $this->forumpost->attach_content_objects($values['attachments']['content_object'], ContentObject::ATTACHMENT_NORMAL);
         }
         
         return $value;

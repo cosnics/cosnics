@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -264,7 +263,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function getContentObjectConditions()
     {
-        $excludedContentObjectIdentifiers = $this->getPostDataValue(self::PARAM_EXCLUDE_CONTENT_OBJECT_IDS);
+        $excludedContentObjectIdentifiers = $this->getExcludedContentObjectIdentifiers();
         $searchQuery = $this->getSearchQuery();
 
         $conditions = array();
@@ -301,15 +300,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
 
         if (is_array($excludedContentObjectIdentifiers) && count($excludedContentObjectIdentifiers) > 0)
         {
-            $excludeConditions = array();
-            foreach ($excludedContentObjectIdentifiers as $excludedContentObjectIdentifier)
-            {
-                $excludeConditions[] = new EqualityCondition(
+            $conditions[] = new NotCondition(
+                new InCondition(
                     new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                    new StaticConditionVariable($excludedContentObjectIdentifier)
-                );
-            }
-            $conditions[] = new NotCondition(new OrCondition($excludeConditions));
+                    $excludedContentObjectIdentifiers
+                )
+            );
         }
 
         $conditions[] = new InCondition(
@@ -351,6 +347,14 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
+     * @return string
+     */
+    protected function getExcludedContentObjectIdentifiers()
+    {
+        return $this->getRequest()->request->get(self::PARAM_EXCLUDE_CONTENT_OBJECT_IDS);
+    }
+
+    /**
      * @return integer
      */
     protected function getFilter()
@@ -376,14 +380,6 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function getOffset()
     {
         return $this->getRequest()->request->get(self::PARAM_OFFSET, 0);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRequiredPostParameters()
-    {
-        return array(self::PARAM_EXCLUDE_CONTENT_OBJECT_IDS);
     }
 
     /**
