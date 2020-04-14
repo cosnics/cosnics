@@ -134,14 +134,14 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'activate_' . $this->getName(), Translation::get('AddToSelection', array(), Utilities::COMMON_LIBRARIES),
             array('id' => $activate_button_id, 'class' => 'btn-primary activate_elements form-control'), '',
-            new FontAwesomeGlyph('plus-circle', array(), null, 'fas')
+            new FontAwesomeGlyph('arrow-alt-circle-right', array(), null, 'fas')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'deactivate_' . $this->getName(),
             Translation::get('RemoveFromSelection', array(), Utilities::COMMON_LIBRARIES),
             array('id' => $deactivate_button_id, 'class' => 'btn-danger deactivate_elements form-control'), '',
-            new FontAwesomeGlyph('trash-alt', array(), null, 'fas')
+            new FontAwesomeGlyph('arrow-alt-circle-left', array(), null, 'fas')
         );
     }
 
@@ -248,9 +248,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html = array();
 
-        $html[] = '<div class="element_finder row" id="' . $id . '">';
+        $html[] = '<div class="element_finder" id="' . $id . '">';
 
-        $html[] = '<div class="col-md-12 col-lg-3">';
+        // Filter row
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="col-md-12">';
 
         $html[] = $this->_elements[0]->toHTML();
 
@@ -264,9 +267,13 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = '</div>';
 
-        $html[] = '<div class="col-md-6 col-lg-5">';
+        $html[] = '</div>';
 
-        // Search
+        // Search row
+        $html[] = '<div class="row">';
+
+        $html[] = '<div class="col-md-12">';
+
         $html[] = '<div class="element_finder_search form-group">';
         $html[] = '<div class="input-group">';
         $html[] = '<span class="input-group-addon"><span class="fas fa-search"></span></span>';
@@ -276,36 +283,41 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = '</div>';
         $html[] = '</div>';
+        $html[] = '</div>';
 
-        // The elements
+        $html[] = '</div>';
 
-        // Inactive
+        // Elements row
+        $html[] = '<div class="row">';
+
+        // Inactive elements
+        $html[] = '<div class="col-md-12 col-lg-6">';
         $html[] = '<div class="element_finder_inactive form-group">';
         $html[] =
             '<div id="inactive_elements" class="inactive_elements form-control" style="height: ' . $this->getHeight() .
-            'px; overflow: auto;">';
-        $html[] = '</div>';
+            'px; overflow: auto;"></div>';
         $html[] = '</div>';
 
-        $html[] = '</div>';
-        $html[] = '<div class="col-md-6 col-lg-4">';
-
-        $html[] = '<div class="element_finder_buttons row form-group">';
-
-        $html[] = '<div class="col-sm-6">';
+        $html[] = '<div class="element_finder_buttons form-group">';
         $html[] = $this->_elements[3]->toHTML();
         $html[] = '</div>';
-        $html[] = '<div class="col-sm-6">';
-        $html[] = $this->_elements[4]->toHTML();
-        $html[] = '</div>';
+
         $html[] = '</div>';
 
-        // Active
+        // Active elements
+        $html[] = '<div class="col-md-12 col-lg-6">';
         $html[] = '<div class="element_finder_active form-group">';
         $html[] =
             '<div id="active_elements" class="active_elements form-control" style="height: ' . $this->getHeight() .
             'px; overflow: auto;"></div>';
         $html[] = '</div>';
+
+        $html[] = '<div class="element_finder_buttons form-group">';
+        $html[] = $this->_elements[4]->toHTML();
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
         $html[] = '</div>';
 
         // Make sure everything is within the general div.

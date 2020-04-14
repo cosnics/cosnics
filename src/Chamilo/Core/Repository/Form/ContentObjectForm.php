@@ -65,6 +65,7 @@ abstract class ContentObjectForm extends FormValidator
     use DependencyInjectionContainerTrait;
 
     const NEW_CATEGORY = 'new_category';
+    const PROPERTY_ATTACHMENTS = 'attachments';
 
     const RESULT_ERROR = 'ObjectUpdateFailed';
     const RESULT_SUCCESS = 'ObjectUpdated';
@@ -302,24 +303,6 @@ abstract class ContentObjectForm extends FormValidator
                 'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
             );
 
-            if ($this->form_type != self::TYPE_REPLY)
-            {
-                $attached_objects = $object->get_attachments();
-                $attachments = Utilities::content_objects_for_element_finder($attached_objects);
-            }
-            else
-            {
-                $attachments = array();
-            }
-
-            $url = Path::getInstance()->getBasePath(true) .
-                'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
-            $locale = array();
-            $locale['Display'] = Translation::get('AddAttachments');
-            $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-            $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-            $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-
             $this->addElement(
                 'category', Translation::get('Attachments')
             );
@@ -332,15 +315,6 @@ abstract class ContentObjectForm extends FormValidator
             )
             );
 
-            $elem = $this->addElement(
-                'element_finder', 'attachments', Translation::get('SelectAttachment'), $url, $locale, $attachments
-            );
-
-            if ($id = $object->get_id())
-            {
-                $elem->excludeElements(array($object->get_id()));
-            }
-
             $types = new AdvancedElementFinderElementTypes();
             $types->add_element_type(
                 new AdvancedElementFinderElementType(
@@ -350,7 +324,7 @@ abstract class ContentObjectForm extends FormValidator
             );
 
             $this->addElement(
-                'advanced_element_finder', 'attachments_beta', Translation::get('SelectAttachment'), $types
+                'advanced_element_finder', self::PROPERTY_ATTACHMENTS, Translation::get('SelectAttachment'), $types
             );
         }
     }
@@ -729,7 +703,9 @@ EOT;
         // Process attachments
         if ($object instanceof AttachmentSupport)
         {
-            $object->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
+            $object->attach_content_objects(
+                $values[self::PROPERTY_ATTACHMENTS]['content_object'], ContentObject::ATTACHMENT_NORMAL
+            );
         }
 
         return $object;
@@ -1052,7 +1028,7 @@ EOT;
                 );
             }
 
-            $element = $this->getElement('attachments_beta');
+            $element = $this->getElement(self::PROPERTY_ATTACHMENTS);
             $element->setDefaultValues($defaultAttachments);
         }
 
@@ -1187,7 +1163,9 @@ EOT;
             {
                 $object->detach_content_object($attached_object_id->get_id(), ContentObject::ATTACHMENT_NORMAL);
             }
-            $object->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
+            $object->attach_content_objects(
+                $values[self::PROPERTY_ATTACHMENTS]['content_object'], ContentObject::ATTACHMENT_NORMAL
+            );
         }
 
         $user = new User();
