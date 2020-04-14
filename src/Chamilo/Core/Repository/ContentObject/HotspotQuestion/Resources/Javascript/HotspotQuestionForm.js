@@ -1,4 +1,28 @@
 /*global $, document, renderFckEditor, getPath, getTranslation, getTheme, setMemory, doAjaxPost, serialize, unserialize */
+if (typeof dropzoneCallbacks != 'undefined') {
+
+    if (typeof dropzoneCallbacks.chamilo.core === 'undefined') {
+        dropzoneCallbacks.chamilo.core = {'repository': {}};
+    }
+
+    dropzoneCallbacks.chamilo.core.repository.importImage = {
+        processUploadedFile: function (environment, file, serverResponse) {
+            dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.processUploadedFile(
+                'image_finder', environment, file, serverResponse
+            );
+        },
+        prepareRequest: function (environment, file, xhrObject, formData) {
+            dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.prepareRequest(
+                environment, file, xhrObject, formData
+            );
+        },
+        deleteUploadedFile: function (environment, file, serverResponse) {
+            dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.deleteUploadedFile(
+                'image_finder', environment, file, serverResponse
+            );
+        }
+    };
+}
 
 $(function () {
     // var colours = ['#00315b', '#00adef', '#aecee7', '#9dcfc3', '#016c62',
@@ -262,12 +286,6 @@ $(function () {
     }
 
     function setHotspotImage(ev, ui) {
-        $('div.form-label', $('#selected_image').closest('div.row')).remove();
-        $('div.formw', $('#selected_image').closest('div.row')).css(
-            'float',
-            'left'
-        ).css('width', '100%');
-
         $('#hotspot_options').show();
         $('#hotspot_marking').show();
 
@@ -290,7 +308,6 @@ $(function () {
         function () {
             // We've got JavaScript so we hide the warning message
             $('#hotspot_javascript').hide();
-            // $('#image_select').show();
 
             // Initialize possible existing polygons
             initializePolygons();
@@ -306,24 +323,16 @@ $(function () {
             $(document).on('click', '.remove_option', removeOption);
             $(document).on('click', '.add_option', addOption);
 
-            var value = $('input[name="image"]').val();
-            if (value != '') {
-                $('div.label', $('#selected_image').closest('div.row'))
-                    .remove();
-                $('div.formw', $('#selected_image').closest('div.row'))
-                    .css('float', 'left').css('width', '100%');
-            }
-
-            $('input[name="image"]').change(function () {
-                setHotspotImage();
-            });
-
             // Process image selection
-            $(document).on(
-                'click',
-                '.element_finder_inactive a:not(.disabled, .category)',
+            $(document).on('click', '#tbl_image_finder .element_finder_inactive a:not(.disabled, .category, .filter)',
                 setHotspotImage
             );
+
+            $('#tbl_image_finder .element_finder_inactive').on(
+                'click', 'a:not(.disabled, .category, .filter)', function () {
+                    
+                    setHotspotImage();
+                });
 
             $(document).on('click', 'input[name="recalculate_weight"]',
                 lockWeight

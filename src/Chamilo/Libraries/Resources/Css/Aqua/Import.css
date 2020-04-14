@@ -2,11 +2,11 @@
 @import url("../../Plugin/Bootstrap/css/bootstrap.min.css");
 @import url("../../Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css");
 
-/* Font Awesome */
+/*!* Font Awesome *!*/
 @import url("../../Plugin/FontAwesome5/css/all.min.css");
 @import url("../../Plugin/ConnectIdents/ConnectIdents.min.css");
 
-/* Plugin CSS */
+/*!* Plugin CSS *!*/
 @import url("../../Plugin/Dropzone/dropzone.min.css");
 @import url("../../Plugin/Jquery/jquery-ui.min.css");
 @import url("../../Plugin/Bootstrap/css/bootstrap-toggle.min.css");

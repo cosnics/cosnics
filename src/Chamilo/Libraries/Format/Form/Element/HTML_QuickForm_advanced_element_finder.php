@@ -127,8 +127,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             array('id' => $element_types_select_box_id, 'class' => 'form-control')
         );
 
+        $safe_name = str_replace('[', '_', $this->getName());
+        $safe_name = str_replace(']', '', $safe_name);
+
         $this->_elements[] = new HTML_QuickForm_text(
-            'search_' . $this->getName(), null, array('class' => 'element_query form-control', 'id' => 'search_field')
+            'search_' . $this->getName(), null,
+            array('class' => 'element_query form-control', 'id' => $safe_name . '_search_field')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(

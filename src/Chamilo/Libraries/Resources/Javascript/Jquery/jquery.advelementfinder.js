@@ -386,26 +386,6 @@
                 }
 
                 /**
-                 * Shows the element finder
-                 */
-                function showElementFinder(e) {
-                    e.preventDefault();
-                    $(this).hide();
-                    $('#' + settings.name + '_collapse_button').show();
-                    self.show();
-                }
-
-                /**
-                 * Hides the element finder
-                 */
-                function hideElementFinder(e) {
-                    e.preventDefault();
-                    $(this).hide();
-                    $('#' + settings.name + '_expand_button').show();
-                    self.hide();
-                }
-
-                /**
                  * Handles the selection of an element type
                  */
                 function elementTypeSelected(e) {
@@ -414,7 +394,7 @@
                     delete (selectedFilter);
 
                     // Clear search field
-                    $('#search_field', self).val('');
+                    $('.element_query', self).val('');
 
                     offset = 0;
                     updateElements();
@@ -429,7 +409,7 @@
                     parentFilterBox.nextAll().remove();
 
                     // Clear search field
-                    $('#search_field', self).val('');
+                    $('.element_query', self).val('');
 
                     var value = $(this).val();
                     if (value == -1) {
@@ -519,7 +499,7 @@
 
                     var elementType = getElementTypeById(selectedTypeId);
 
-                    var query = $('#search_field', self).val();
+                    var query = $('.element_query', self).val();
                     var result = loadElements(elementType, query,
                         selectedFilter
                     );
@@ -850,7 +830,7 @@
                     );
 
                     // Declare the events for the search field
-                    $('.element_query').keypress(searchFieldChanged);
+                    $('.element_query', self).keypress(searchFieldChanged);
 
                     // Declare the events for the pager
                     $(self).on('click', '.previous_elements', function () {
@@ -868,13 +848,10 @@
                         deactivateElements
                     );
 
-                    $('#' + settings.name + '_expand_button').click(
-                        showElementFinder);
-                    $('#' + settings.name + '_collapse_button').click(
-                        hideElementFinder);
-
                     // Declare the reset events
                     $(document).on('click', ':reset', initElements);
+
+                    $(self).on('updateSearch', updateElements);
                 }
 
                 return this.each(init);

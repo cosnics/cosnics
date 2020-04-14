@@ -337,7 +337,7 @@ abstract class ContentObjectForm extends FormValidator
         // separated upload and check behaviour into independent javascript files
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.min.js'
         )
         );
 

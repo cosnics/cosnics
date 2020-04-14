@@ -5,13 +5,17 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Hots
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestionAnswer;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -40,50 +44,60 @@ class HotspotQuestionForm extends ContentObjectForm
         '#8000ff'
     );
 
-    public function add_image()
+    protected function addFileUploadSelection()
     {
-        $object = $this->get_content_object();
+        $calculator = new Calculator(
+            DataManager::retrieve_by_id(
+                User::class, (int) Session::get_user_id()
+            )
+        );
 
-        $this->addElement('category', Translation::get('HotspotImage'));
+        $uploadUrl = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
+            )
+        );
 
-        $html = array();
-        $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation::get('CurrentlyMarking') .
-            '</div><div class="colour_box"></div></div>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '<br />';
-        $html[] = '<div class="clearfix"></div>';
+        $dropZoneParameters = array(
+            'name' => HotspotQuestion::PROPERTY_IMAGE . '_dropzone',
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'maxFiles' => 1,
+            'successCallbackFunction' => 'chamilo.core.repository.importImage.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.importImage.prepareRequest',
+            'removedfileCallbackFunction' => 'chamilo.core.repository.importImage.deleteUploadedFile'
+        );
 
-        if ($object->get_image())
-        {
-            $image_id = $object->get_image();
-            $image_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $image_id
-            );
+        $this->addFileDropzone(HotspotQuestion::PROPERTY_IMAGE . '_dropzone', $dropZoneParameters);
 
-            $dimensions = getimagesize($image_object->get_full_path());
+        $this->addElement(
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+        )
+        );
 
-            $scaledDimensions = Utilities::scaleDimensions(
-                600, 450, array('width' => $dimensions[0], 'height' => $dimensions[1])
-            );
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'content_objects', Translation::get('ContentObjects'), 'Chamilo\Core\Repository\Ajax',
+                'AttachmentImagesFeed'
+            )
+        );
 
-            $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
-                $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
-                'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
-                $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-                Manager::get_document_downloader_url(
-                    $image_object->get_id(), $image_object->calculate_security_code()
-                ) . ')"></div></div>';
-        }
-        else
-        {
-            $html[] = '<div id="hotspot_container"><div id="hotspot_image"></div></div>';
-        }
+        $this->addElement(
+            'advanced_element_finder', HotspotQuestion::PROPERTY_IMAGE . '_finder', Translation::get('SelectImage'),
+            $types
+        );
 
-        // $html[] = '<div class="clearfix"></div>';
-        // $html[] = '<button id="change_image" class="negative delete">' . htmlentities(Translation ::
-        // get('SelectAnotherImage')) . '</button>';
+        $this->addElement('hidden', HotspotQuestion::PROPERTY_IMAGE);
 
-        $this->addElement('html', implode(PHP_EOL, $html));
+        $this->addElement(
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'HotspotQuestionForm.js'
+        )
+        );
     }
 
     /**
@@ -278,12 +292,6 @@ class HotspotQuestionForm extends ContentObjectForm
             'jquery.draw.js'
         )
         );
-        $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'HotspotQuestionForm.js'
-        )
-        );
 
         $this->add_warning_message(
             'hotspot_javascript', Translation::get('HotspotJavascriptWarning'),
@@ -307,27 +315,8 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clearfix"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => 'Chamilo\Core\Repository\Ajax',
-                Application::PARAM_ACTION => 'XmlImageFeed'
-            )
-        );
+        $this->addFileUploadSelection();
 
-        $locale = array();
-        $locale['Display'] = Translation::get('AddAttachments');
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-
-        $image_selecter_options = array();
-        $image_selecter_options['rescale_image'] = true;
-        $image_selecter_options['allow_change'] = false;
-
-        $this->addElement(
-            'image_selecter', 'image', Translation::get('SelectImage'), $redirect->getUrl(), $locale, array(),
-            $image_selecter_options
-        );
         $this->addElement('html', '</div>');
 
         $this->set_session_answers();
@@ -338,18 +327,7 @@ class HotspotQuestionForm extends ContentObjectForm
         parent::build_creation_form();
 
         $this->addElement('category', Translation::get('Properties'));
-        $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'Plugin/jquery.draw.js'
-        )
-        );
-        $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'HotspotQuestionForm.js'
-        )
-        );
+
         $this->add_options();
 
         $html = array();

@@ -260,7 +260,7 @@ EOT;
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.min.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
         )
         );
 
@@ -418,7 +418,7 @@ EOT;
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'Jquery/jquery.file.upload.single.min.js'
+            'Jquery/jquery.file.upload.single.js'
         )
         );
     }

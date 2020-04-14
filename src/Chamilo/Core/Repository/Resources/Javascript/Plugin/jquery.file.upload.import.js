@@ -50,10 +50,14 @@ dropzoneCallbacks.chamilo = {
                     var name = serverResponse.properties.contentObjectTitle;
                     var contentObjectId = serverResponse.properties.contentObjectId;
 
-                    $('#' + elementFinderId + '_search_field').val(name);
-                    $('#tbl_' + elementFinderId).trigger('update_search');
+                    $('#' + elementFinderId + ' .element_query').val(name);
+                    $('#tbl_' + elementFinderId).trigger('updateSearch');
 
-                    $('#elf_' + elementFinderId + '_inactive').find('#lo_' + contentObjectId).trigger('activate');
+                    $('#tbl_' + elementFinderId + ' .element_finder_inactive').find(
+                        '#content_object_' + contentObjectId).trigger('click');
+                    $('#tbl_' + elementFinderId + ' #activate_button').trigger('click');
+                    $('#' + elementFinderId + ' .element_query').val('');
+                    $('#tbl_' + elementFinderId).trigger('updateSearch');
                 },
                 prepareRequest: function (environment, file, xhrObject, formData) {
                     formData.append('parentId', 0);
@@ -64,12 +68,13 @@ dropzoneCallbacks.chamilo = {
                     );
 
                     var contentObjectId = $(file.previewElement).data('content-object-id');
-                    $('#elf_' + elementFinderId + '_active').find('#lo_' + contentObjectId).trigger(
-                        'deactivateElement'
-                    );
+                    $('#tbl_' + elementFinderId + ' .element_finder_active').find(
+                        '#content_object_' + contentObjectId).trigger('click');
+                    $('#tbl_' + elementFinderId + ' #deactivate_button').trigger('click');
+
                     setTimeout(
                         function () {
-                            $('#tbl_' + elementFinderId).trigger('update_search')
+                            $('#tbl_' + elementFinderId).trigger('updateSearch')
                         }, 500
                     );
                 }

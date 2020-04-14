@@ -189,7 +189,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function countContentObjects()
     {
         return DataManager::count_active_content_objects(
-            ContentObject::class_name(), new DataClassCountParameters($this->getContentObjectConditions())
+            ContentObject::class, new DataClassCountParameters($this->getContentObjectConditions())
         );
     }
 
@@ -223,7 +223,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
                 return array();
             }
 
-            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $this->getFilter());
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class, $this->getFilter());
 
             if ($category instanceof RepositoryCategory)
             {
@@ -271,13 +271,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
         if (!empty($searchQuery))
         {
             $conditions[] = Utilities::query_to_condition(
-                $searchQuery,
-                array(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE))
+                $searchQuery, array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE))
             );
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->getUser()->getId())
         );
 
@@ -286,14 +285,14 @@ class AttachmentContentObjectsFeedComponent extends Manager
         if (count($categoryIdentifiers) > 0)
         {
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
                 $categoryIdentifiers
             );
         }
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_RECYCLED)
             )
         );
@@ -302,14 +301,14 @@ class AttachmentContentObjectsFeedComponent extends Manager
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $excludedContentObjectIdentifiers
                 )
             );
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
             DataManager::get_registered_types()
         );
 
@@ -398,12 +397,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($this->getFilter())
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->getUser()->getId())
         );
 
@@ -418,12 +417,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
         $parameters = new DataClassRetrievesParameters(
             $this->getContentObjectConditions(), 100, $this->getOffset(), array(
                 new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
                 )
             )
         );
 
-        return DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters)->as_array();
+        return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters)->as_array();
     }
 
     /**
@@ -435,7 +434,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     {
         if ($repositoryCategoryByIdentifier != 0)
         {
-            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $repositoryCategoryByIdentifier);
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class, $repositoryCategoryByIdentifier);
         }
         else
         {
