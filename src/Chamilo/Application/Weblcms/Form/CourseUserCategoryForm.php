@@ -5,7 +5,10 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -56,8 +59,8 @@ class CourseUserCategoryForm extends FormValidator
 
     public function build_basic_form()
     {
-        $this->addElement(
-            'text', CourseUserCategory::PROPERTY_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+        $this->add_textfield(
+            CourseUserCategory::PROPERTY_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES), true,
             array("maxlength" => 50, "size" => 50)
         );
         $this->addRule(
@@ -65,24 +68,36 @@ class CourseUserCategoryForm extends FormValidator
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
 
-        $attributes = array();
-        $attributes['search_url'] = Path::getInstance()->getBasePath(true) .
-            'index.php?go=XmlCourseTypeFeed&application=Chamilo%5CApplication%5CWeblcms%5CCourseType%5CAjax';
-        $locale = array();
-        $locale['Display'] = Translation::get('SelectRecipients');
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-        $locale['load_elements'] = true;
-        $attributes['locale'] = $locale;
-        $attributes['defaults'] = array();
+        //        $attributes = array();
+        //        $attributes['search_url'] = Path::getInstance()->getBasePath(true) .
+        //            'index.php?go=XmlCourseTypeFeed&application=Chamilo%5CApplication%5CWeblcms%5CCourseType%5CAjax';
+        //        $locale = array();
+        //        $locale['Display'] = Translation::get('SelectRecipients');
+        //        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
+        //        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
+        //        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
+        //        $locale['load_elements'] = true;
+        //        $attributes['locale'] = $locale;
+        //        $attributes['defaults'] = array();
+        //
+        //        $element_finder = $this->createElement(
+        //            'user_group_finder', self::COURSE_TYPE_TARGET_ELEMENTS, Translation::get('CourseType'),
+        //            $attributes['search_url'], $attributes['locale'], $attributes['defaults']
+        //        );
+        //        $element_finder->excludeElements($attributes['exclude']);
+        //        $this->addElement($element_finder);
 
-        $element_finder = $this->createElement(
-            'user_group_finder', self::COURSE_TYPE_TARGET_ELEMENTS, Translation::get('CourseType'),
-            $attributes['search_url'], $attributes['locale'], $attributes['defaults']
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'course_types', Translation::get('ContentObjects'), 'Chamilo\Application\Weblcms\CourseType\Ajax',
+                'CourseTypeFeed'
+            )
         );
-        $element_finder->excludeElements($attributes['exclude']);
-        $this->addElement($element_finder);
+
+        $this->addElement(
+            'advanced_element_finder', self::COURSE_TYPE_TARGET_ELEMENTS, Translation::get('CourseType'), $types
+        );
     }
 
     public function build_creation_form()
@@ -180,7 +195,7 @@ class CourseUserCategoryForm extends FormValidator
         $course_type_user_category_id = $this->course_user_category->get_id();
         $selected_course_types_array = array();
 
-        foreach ($values[self::COURSE_TYPE_TARGET_ELEMENTS]['coursetype'] as $value)
+        foreach ($values[self::COURSE_TYPE_TARGET_ELEMENTS]['course_type'] as $value)
         {
             $selected_course_type_user_category = new CourseTypeUserCategory();
             $selected_course_type_user_category->set_course_type_id($value);
@@ -212,21 +227,26 @@ class CourseUserCategoryForm extends FormValidator
                 ), new StaticConditionVariable($course_user_category->get_id())
             );
 
-            $course_types = DataManager::retrieves(
+            $courseTypeUserCategories = DataManager::retrieves(
                 CourseTypeUserCategory::class_name(), new DataClassRetrievesParameters($condition)
             );
 
-            while ($type = $course_types->next_result())
+            $defaultCourseTypes = new AdvancedElementFinderElements();
+            $courseTypeGlyph = new FontAwesomeGlyph('layer-group', array(), null, 'fas');
+
+            while ($type = $courseTypeUserCategories->next_result())
             {
-                $selected_course_type = $this->get_course_type_array($type->get_course_type_id());
-                $defaults[self::COURSE_TYPE_TARGET_ELEMENTS][$selected_course_type['id']] = $selected_course_type;
+                $courseType = DataManager::retrieve_by_id(CourseType::class, $type->get_course_type_id());
+                $defaultCourseTypes->add_element(
+                    new AdvancedElementFinderElement(
+                        'course_type_' . $type->get_course_type_id(), $courseTypeGlyph->getClassNamesString(),
+                        $courseType->get_title(), $courseType->get_title()
+                    )
+                );
             }
 
-            if (count($defaults[self::COURSE_TYPE_TARGET_ELEMENTS]) > 0)
-            {
-                $active = $this->getElement(self::COURSE_TYPE_TARGET_ELEMENTS);
-                $active->setValue($defaults[self::COURSE_TYPE_TARGET_ELEMENTS]);
-            }
+            $element = $this->getElement(self::COURSE_TYPE_TARGET_ELEMENTS);
+            $element->setDefaultValues($defaultCourseTypes);
         }
 
         parent::setDefaults($defaults);
@@ -269,33 +289,41 @@ class CourseUserCategoryForm extends FormValidator
         // get the selected course types
         $selected_types = $this->get_selected_course_types();
 
-        // uses the compare function of CourseTypeUserCategory
-        $compare_class = "Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory";
-        $compare_method = "compare";
+        $existingCourseTypeIds = array();
 
-        // create the types that are selected but don't exist, and delete the
-        // types that are no longer selected.
-        // update is not needed at the moment, but if it ever is: just update
-        // all elements that are in both arrays
-        $to_be_created = array_udiff($selected_types, $existing_types, array($compare_class, $compare_method));
-        $to_be_deleted = array_udiff($existing_types, $selected_types, array($compare_class, $compare_method));
-
-        // process changes
-        $failures = 0;
-        foreach ($to_be_created as $create_this)
+        foreach ($existing_types as $existing_type)
         {
-            if (!$create_this->create())
+            $existingCourseTypeIds[] = $existing_type->get_course_type_id();
+        }
+
+        $selectedCourseTypeIds = array();
+
+        foreach ($selected_types as $selected_type)
+        {
+            $selectedCourseTypeIds[] = $selected_type->get_course_type_id();
+        }
+
+        $failures = 0;
+        
+        foreach ($existing_types as $existing_type)
+        {
+            if (!in_array($existing_type->get_course_type_id(), $selectedCourseTypeIds))
             {
-                $failures ++;
+                if (!$existing_type->delete())
+                {
+                    $failures ++;
+                }
             }
         }
 
-        $failures += count($to_be_deleted);
-        foreach ($to_be_deleted as $delete_this)
+        foreach ($selected_types as $selected_type)
         {
-            if (!$delete_this->delete())
+            if (!in_array($selected_type->get_course_type_id(), $existingCourseTypeIds))
             {
-                $failures ++;
+                if (!$selected_type->create())
+                {
+                    $failures ++;
+                }
             }
         }
 
