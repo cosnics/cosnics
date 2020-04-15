@@ -316,7 +316,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function getElements()

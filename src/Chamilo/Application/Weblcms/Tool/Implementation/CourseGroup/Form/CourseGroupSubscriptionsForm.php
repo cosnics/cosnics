@@ -9,6 +9,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -54,9 +56,9 @@ class CourseGroupSubscriptionsForm extends FormValidator
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT                              => 'Chamilo\Application\Weblcms\Ajax',
+                Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
                 \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_COURSE_USER_GROUP_FEED,
-                Manager::PARAM_COURSE                                   => $this->parent->get_course_id()
+                Manager::PARAM_COURSE => $this->parent->get_course_id()
             )
         );
 
@@ -75,11 +77,11 @@ class CourseGroupSubscriptionsForm extends FormValidator
             while ($course_group_user = $course_group_users->next_result())
             {
                 $current[$course_group_user->get_id()] = array(
-                    'id'          => 'user_' . $course_group_user->get_id(),
-                    'title'       => Utilities::htmlentities($course_group_user->get_fullname()),
+                    'id' => 'user_' . $course_group_user->get_id(),
+                    'title' => Utilities::htmlentities($course_group_user->get_fullname()),
                     'description' => Utilities::htmlentities($course_group_user->get_username()),
-                    'classes'     => $glyph->getClassNamesString(),
-                    'sort_name'   => $course_group_user->get_lastname()
+                    'classes' => $glyph->getClassNamesString(),
+                    'sort_name' => $course_group_user->get_lastname()
                 );
             }
         }
@@ -113,15 +115,29 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $legend->set_items($legend_items);
         $legend->set_type(Toolbar::TYPE_HORIZONTAL);
 
-        $elem = $this->addElement(
-            'user_group_finder', 'users', Translation::get('SubscribeUsers'), $searchUrl->getUrl(), $locale, $current,
-            array('load_elements' => true)
+        //        $elem = $this->addElement(
+        //            'user_group_finder', 'users', Translation::get('SubscribeUsers'), $searchUrl->getUrl(), $locale, $current,
+        //            array('load_elements' => true)
+        //        );
+        //        $elem->setDefaults($defaults);
+
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type(
+            new AdvancedElementFinderElementType(
+                'user_group', Translation::get('UserGroup'), 'Chamilo\Application\Weblcms\Ajax', 'CourseUserGroupFeed',
+                array(Manager::PARAM_COURSE => $this->parent->get_course_id())
+            )
         );
-        $elem->setDefaults($defaults);
+
+        $this->addElement(
+            'advanced_element_finder', 'users', Translation::get('SubscribeUsers'), $types
+        );
+
         $this->addElement('static', null, null, $legend->as_html());
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Subscribe'), null, null, new FontAwesomeGlyph('sign-in-alt')
+            'style_submit_button', 'submit', Translation::get('Subscribe'), null, null,
+            new FontAwesomeGlyph('sign-in-alt')
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)

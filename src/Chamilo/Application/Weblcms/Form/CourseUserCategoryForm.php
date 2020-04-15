@@ -68,25 +68,6 @@ class CourseUserCategoryForm extends FormValidator
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
 
-        //        $attributes = array();
-        //        $attributes['search_url'] = Path::getInstance()->getBasePath(true) .
-        //            'index.php?go=XmlCourseTypeFeed&application=Chamilo%5CApplication%5CWeblcms%5CCourseType%5CAjax';
-        //        $locale = array();
-        //        $locale['Display'] = Translation::get('SelectRecipients');
-        //        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        //        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        //        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-        //        $locale['load_elements'] = true;
-        //        $attributes['locale'] = $locale;
-        //        $attributes['defaults'] = array();
-        //
-        //        $element_finder = $this->createElement(
-        //            'user_group_finder', self::COURSE_TYPE_TARGET_ELEMENTS, Translation::get('CourseType'),
-        //            $attributes['search_url'], $attributes['locale'], $attributes['defaults']
-        //        );
-        //        $element_finder->excludeElements($attributes['exclude']);
-        //        $this->addElement($element_finder);
-
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(
             new AdvancedElementFinderElementType(
@@ -304,7 +285,7 @@ class CourseUserCategoryForm extends FormValidator
         }
 
         $failures = 0;
-        
+
         foreach ($existing_types as $existing_type)
         {
             if (!in_array($existing_type->get_course_type_id(), $selectedCourseTypeIds))
