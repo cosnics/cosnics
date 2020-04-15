@@ -83,8 +83,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</table>';
         
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                 'Plugin/jquery.draw.js');
+            Path::getInstance()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                 'jquery.draw.js');
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Rendition.js');

@@ -55,7 +55,7 @@ div.panel div.feedback_splitter {
     font-weight: bold;
 }
 
-#selected_image, .selected_image, #hotspot_image, .hotspot_image {
+#hotspot-selected-image, .selected_image, #hotspot-image-select, .hotspot-image-select {
     position: relative;
 }
 
