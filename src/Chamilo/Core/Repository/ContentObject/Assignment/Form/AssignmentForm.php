@@ -93,7 +93,7 @@ class AssignmentForm extends ContentObjectForm
         $types->add_element_type(
             new AdvancedElementFinderElementType(
                 'assignment', Translation::get('AllowedContentTypes'),
-                'Chamilo\\Core\\Repository\\ContentObject\\Assignment\\Ajax', 'AllowedTypesXmlFeed'
+                'Chamilo\Core\Repository\ContentObject\Assignment\Ajax', 'AllowedTypesFeed'
             )
         );
 

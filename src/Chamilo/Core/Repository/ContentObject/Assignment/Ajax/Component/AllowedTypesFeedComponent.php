@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AllowedTypesXmlFeedComponent extends Manager
+class AllowedTypesFeedComponent extends Manager
 {
     const PARAM_SEARCH_QUERY = 'query';
     const PROPERTY_ELEMENTS = 'elements';
@@ -41,8 +41,7 @@ class AllowedTypesXmlFeedComponent extends Manager
 
             $glyphNamespace = $this->getClassnameUtilities()->getNamespaceParent($allowedType['type']);
             $glyph = new NamespaceIdentGlyph(
-                $glyphNamespace, true, false, false, IdentGlyph::SIZE_MINI,
-                array('fa-fw')
+                $glyphNamespace, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
             );
 
             $elements->add_element(

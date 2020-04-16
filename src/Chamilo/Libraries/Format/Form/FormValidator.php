@@ -12,12 +12,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 use HTML_QuickForm_RuleRegistry;
 
-define('NO_HTML', 1);
-define('STUDENT_HTML', 2);
-define('TEACHER_HTML', 3);
-define('STUDENT_HTML_FULLPAGE', 4);
-define('TEACHER_HTML_FULLPAGE', 5);
-
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
  *
