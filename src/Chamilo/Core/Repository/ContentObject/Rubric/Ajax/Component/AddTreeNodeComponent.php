@@ -1,6 +1,8 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
+namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Component;
+
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -19,7 +21,8 @@ class AddTreeNodeComponent extends Manager
     function runAjaxComponent()
     {
         return $this->getRubricAjaxService()->addTreeNode(
-            $this->getRubricDataId(), $this->getVersion(), $this->getTreeNodeData()
+            $this->getRubricDataId(), $this->getVersion(), $this->getTreeNodeData(),
+            $this->getRequest()->getFromPost(self::PARAM_NEW_PARENT_ID)
         );
     }
 

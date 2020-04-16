@@ -1,6 +1,8 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax;
+namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Component;
+
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax
@@ -13,7 +15,6 @@ class AddLevelComponent extends Manager
      * @return array
      *
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
     function runAjaxComponent()

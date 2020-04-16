@@ -38,21 +38,23 @@ class RubricAjaxService
      * @param int $rubricDataId
      * @param int $versionId
      * @param string $treeNodeJSONData
+     * @param int $parentId
      *
      * @return array
      *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Exception
      */
-    public function addTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
+    public function addTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData, int $parentId)
     {
         $treeNodeJSONModel = $this->parseTreeNodeData($treeNodeJSONData);
 
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
-        $parentTreeNode = $rubricData->getParentNodeById($treeNodeJSONModel->getParentId());
+        $parentTreeNode = $rubricData->getParentNodeById($parentId);
         $treeNode = $treeNodeJSONModel->toTreeNode($rubricData);
         $parentTreeNode->addChild($treeNode);
 
@@ -147,7 +149,7 @@ class RubricAjaxService
         $treeNode->setParentNode($newParentNode);
         $newParentNode->moveChild($treeNode, $newSort);
 
-        $treeNode->updateFromJSONModel($treeNodeJSONModel);
+//        $treeNode->updateFromJSONModel($treeNodeJSONModel);
 
         $this->rubricService->saveRubric($rubricData);
 

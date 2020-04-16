@@ -24,13 +24,13 @@ abstract class Manager extends AjaxManager
     const ACTION_MOVE_TREE_NODE = 'MoveTreeNode';
     const ACTION_UPDATE_TREE_NODE = 'UpdateTreeNode';
 
-    const PARAM_RUBRIC_DATA_ID = 'RubricId';
-    const PARAM_VERSION = 'Version';
-    const PARAM_TREE_NODE_DATA = 'TreeNodeData';
-    const PARAM_NEW_PARENT_ID = 'NewParentId';
-    const PARAM_NEW_SORT = 'NewSort';
-    const PARAM_LEVEL_DATA = 'LevelData';
-    const PARAM_CHOICE_DATA = 'ChoiceData';
+    const PARAM_RUBRIC_DATA_ID = 'rubricDataId';
+    const PARAM_VERSION = 'version';
+    const PARAM_TREE_NODE_DATA = 'treeNodeData';
+    const PARAM_NEW_PARENT_ID = 'newParentId';
+    const PARAM_NEW_SORT = 'newSort';
+    const PARAM_LEVEL_DATA = 'levelData';
+    const PARAM_CHOICE_DATA = 'choiceData';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
