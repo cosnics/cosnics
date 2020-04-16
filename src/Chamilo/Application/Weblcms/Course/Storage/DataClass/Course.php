@@ -847,7 +847,7 @@ class Course extends DataClass
     /**
      * Gets the subscribed groups of this course
      *
-     * @return \application\weblcms\course\CourseEntityRelation[]
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation[]
      */
     public function get_subscribed_groups()
     {

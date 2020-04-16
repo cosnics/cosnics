@@ -2,9 +2,12 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Form;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -68,21 +71,12 @@ class PublicationForm extends BasePublicationForm
     {
         $this->addSelectedContentObjects($this->formUser);
 
-        $shares = array();
-        $attributes = array();
-        $attributes['search_url'] = Path::getInstance()->getBasePath(true) .
-            'index.php?go=XmlUserGroupFeed&application=Chamilo%5CCore%5CGroup%5CAjax';
-        $locale = array();
-        $locale['Display'] = Translation::get('ShareWith', null, Utilities::COMMON_LIBRARIES);
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-        $attributes['locale'] = $locale;
-        $attributes['exclude'] = array('user_' . $this->formUser->get_id());
-        $attributes['defaults'] = array();
+        $types = new AdvancedElementFinderElementTypes();
+        $types->add_element_type($this->getUserEntityProvider()->getEntityElementFinderType());
+        $types->add_element_type($this->getGroupEntityProvider()->getEntityElementFinderType());
 
-        $this->add_receivers(
-            self::PARAM_SHARE, Translation::get('ShareWith', null, Utilities::COMMON_LIBRARIES), $attributes, 'Nobody'
+        $this->addElement(
+            'advanced_element_finder', self::PARAM_SHARE, Translation::get('ShareWith'), $types
         );
     }
 
@@ -92,6 +86,22 @@ class PublicationForm extends BasePublicationForm
     public function getFormUser()
     {
         return $this->formUser;
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
+     */
+    protected function getGroupEntityProvider()
+    {
+        return $this->getService(GroupEntityProvider::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    protected function getUserEntityProvider()
+    {
+        return $this->getService(UserEntityProvider::class);
     }
 
     /**
@@ -121,35 +131,54 @@ class PublicationForm extends BasePublicationForm
         $groupGlyph = new FontAwesomeGlyph('users', array(), null, 'fas');
         $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
 
+        $userEntityProvider = $this->getUserEntityProvider();
+        $groupEntityProvider = $this->getGroupEntityProvider();
+
+        $defaultTargets = new AdvancedElementFinderElements();
+
         foreach ($targetGroups as $targetGroup)
         {
-            $selectedGroup = array();
-            $selectedGroup['id'] = 'group_' . $targetGroup->getId();
-            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
-            $selectedGroup['title'] = $targetGroup->get_name();
-            $selectedGroup['description'] = $targetGroup->get_name();
-
-            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedGroup['id']] = $selectedGroup;
+            $defaultTargets->add_element($groupEntityProvider->getEntityElementFinderElement($targetGroup->getId()));
         }
 
         foreach ($targetUsers as $targetUser)
         {
-            $selectedUser = array();
-            $selectedUser['id'] = 'user_' . $targetUser->getId();
-            $selectedUser['classes'] = $userGlyph->getClassNamesString();
-            $selectedUser['title'] = $targetUser->get_fullname();
-            $selectedUser['description'] = $targetUser->get_username();
-
-            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedUser['id']] = $selectedUser;
+            $defaultTargets->add_element($userEntityProvider->getEntityElementFinderElement($targetUser->getId()));
         }
 
-        if (count($defaults[self::PARAM_SHARE_ELEMENTS]) > 0)
-        {
-            $defaults[self::PARAM_SHARE_OPTION] = '1';
-        }
 
-        $active = $this->getElement(self::PARAM_SHARE_ELEMENTS);
-        $active->_elements[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
+        $element = $this->getElement(self::PARAM_SHARE);
+        $element->setDefaultValues($defaultTargets);
+//
+//        foreach ($targetGroups as $targetGroup)
+//        {
+//            $selectedGroup = array();
+//            $selectedGroup['id'] = 'group_' . $targetGroup->getId();
+//            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
+//            $selectedGroup['title'] = $targetGroup->get_name();
+//            $selectedGroup['description'] = $targetGroup->get_name();
+//
+//            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedGroup['id']] = $selectedGroup;
+//        }
+//
+//        foreach ($targetUsers as $targetUser)
+//        {
+//            $selectedUser = array();
+//            $selectedUser['id'] = 'user_' . $targetUser->getId();
+//            $selectedUser['classes'] = $userGlyph->getClassNamesString();
+//            $selectedUser['title'] = $targetUser->get_fullname();
+//            $selectedUser['description'] = $targetUser->get_username();
+//
+//            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedUser['id']] = $selectedUser;
+//        }
+//
+//        if (count($defaults[self::PARAM_SHARE_ELEMENTS]) > 0)
+//        {
+//            $defaults[self::PARAM_SHARE_OPTION] = '1';
+//        }
+//
+//        $active = $this->getElement(self::PARAM_SHARE_ELEMENTS);
+//        $active->_elements[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
 
         parent::setDefaults($defaults);
     }

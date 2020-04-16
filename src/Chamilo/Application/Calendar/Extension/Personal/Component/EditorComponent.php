@@ -5,8 +5,10 @@ use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -83,8 +85,9 @@ class EditorComponent extends Manager implements DelegateComponent
                 if ($publicationForm->validate())
                 {
                     $values = $publicationForm->exportValues();
-                    $selectedUserIdentifiers = (array) $values[PublicationForm::PARAM_SHARE_ELEMENTS]['user'];
-                    $selectedGroupIdentifiers = (array) $values[PublicationForm::PARAM_SHARE_ELEMENTS]['group'];
+
+                    $selectedUserIdentifiers = (array) $values[PublicationForm::PARAM_SHARE][UserEntityProvider::ENTITY_TYPE];
+                    $selectedGroupIdentifiers = (array) $values[PublicationForm::PARAM_SHARE][GroupEntityProvider::ENTITY_TYPE];
 
                     $success = $this->getPublicationService()->updatePublicationWithRightsFromParameters(
                         $calendarEventPublication, $selectedUserIdentifiers, $selectedGroupIdentifiers

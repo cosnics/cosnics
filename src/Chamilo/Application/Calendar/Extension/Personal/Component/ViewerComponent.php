@@ -192,18 +192,49 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function get_publication_as_html()
     {
         $content_object = $this->getPublication()->get_publication_object();
-        $content_object_properties = $content_object->get_properties();
+        $publisher = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
+
         BreadcrumbTrail::getInstance()->add(
-            new Breadcrumb(null, $content_object_properties['default_properties']['title'])
+            new Breadcrumb(null, $content_object->get_title())
         );
 
         $html = array();
 
+        $html[] = '<div class="panel panel-default panel-publication panel-publication-">';
+        $html[] = '	<div class="panel-body">';
+        $html[] = '		<div class="row panel-publication-header">';
+        $html[] = '			<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
+        $html[] = '				<h3>' . $content_object->get_title() . '</h3>';
+        $html[] = '				<small>' . $publisher->get_fullname() . '</small>';
+        $html[] = '			</div>';
+        $html[] = '			<div class="col-xs-12 col-sm-2 panel-publication-header-actions"></div>';
+        $html[] = '		</div>';
+        $html[] = '		<div class="row panel-publication-body">';
+        $html[] = '			<div class="col-xs-12">';
+
         $html[] = ContentObjectRenditionImplementation::launch(
-            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
         );
 
-        $html[] = $this->render_info();
+        $html[] = '			</div>';
+        $html[] = '		</div>';
+        $html[] = '		<div class="row panel-publication-footer">';
+        $html[] = '			<div class="col-xs-12 col-sm-3 panel-publication-footer-date">';
+
+        $glyph = new FontAwesomeGlyph('clock', array(), null, 'far');
+
+        $html[] = '				' . $glyph->render() . ' ' . $this->render_publication_date();
+        $html[] = '			</div>';
+        $html[] = '			<div class="col-xs-12 col-sm-6 panel-publication-footer-visibility"></div>';
+        $html[] = '			<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
+
+        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
+        $html[] = $glyph->render() . ' ' . $this->render_publication_targets();
+        $html[] = '			</div>';
+        $html[] = '		</div>';
+        $html[] = '	</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -212,28 +243,6 @@ class ViewerComponent extends Manager implements DelegateComponent
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     */
-    public function render_info()
-    {
-        $publisher = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
-
-        $html = array();
-
-        $html[] = '<div class="event_publication_info">';
-        $html[] = htmlentities(Translation::get('PublishedOn', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-            $this->render_publication_date();
-        $html[] =
-            htmlentities(Translation::get('By', null, Utilities::COMMON_LIBRARIES)) . ' ' . $publisher->get_fullname();
-        $html[] = htmlentities(Translation::get('SharedWith', null, Utilities::COMMON_LIBRARIES)) . ' ' .
-            $this->render_publication_targets();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
      */
     public function render_publication_date()
     {
@@ -260,17 +269,17 @@ class ViewerComponent extends Manager implements DelegateComponent
             $users = $this->getRightsService()->getUsersForPublication($publication);
             $groups = $this->getRightsService()->getGroupsForPublication($publication);
 
-            if (count($users) + count($groups) == 1)
+            if (($users->count() + $groups->count()) == 1)
             {
-                if (count($users) == 1)
+                if ($users->count() == 1)
                 {
-                    $user = array_pop($users);
+                    $user = array_pop($users->getArrayCopy());
 
                     return $user->get_firstname() . ' ' . $user->get_lastname();
                 }
                 else
                 {
-                    $group = array_pop($groups);
+                    $group = array_pop($groups->getArrayCopy());
 
                     return $group->get_name();
                 }

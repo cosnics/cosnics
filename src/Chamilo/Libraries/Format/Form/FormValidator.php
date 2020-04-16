@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -24,6 +25,8 @@ define('TEACHER_HTML_FULLPAGE', 5);
  */
 class FormValidator extends HTML_QuickForm
 {
+    use DependencyInjectionContainerTrait;
+
     const FORM_METHOD_GET = 'get';
     const FORM_METHOD_POST = 'post';
 
@@ -83,6 +86,8 @@ class FormValidator extends HTML_QuickForm
         {
             $value = Security::remove_XSS($value);
         }
+
+        $this->initializeContainer();
     }
 
     /**
@@ -443,28 +448,6 @@ EOT;
     }
 
     /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string[] $attributes
-     * @param string $legend
-     */
-    public function add_element_finder_with_legend($elementName, $elementLabel, $attributes, $legend = null)
-    {
-        $element_finder = $this->createElement(
-            'user_group_finder', $elementName . '_elements', $elementLabel, $attributes['search_url'],
-            $attributes['locale'], $attributes['defaults'], $attributes['options']
-        );
-        $element_finder->excludeElements($attributes['exclude']);
-        $this->addElement($element_finder);
-
-        if ($legend)
-        {
-            $this->addElement('static', null, null, $legend->as_html());
-        }
-    }
-
-    /**
      * Adds javascript code to hide a certain element.
      *
      * @param string $type
@@ -714,108 +697,6 @@ EOT;
         }
 
         return $element;
-    }
-
-    /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string[] $attributes
-     * @param string $noSelection
-     * @param string $legend
-     */
-    public function add_receivers($elementName, $elementLabel, $attributes, $noSelection = 'Everybody', $legend = null)
-    {
-        $this->add_element_finder_with_legend($elementName, $elementLabel, $attributes, $legend);
-    }
-
-    /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string[] $attributes
-     * @param string[] $radioArray
-     */
-    public function add_receivers_variable($elementName, $elementLabel, $attributes, $radioArray)
-    {
-        $choices = array();
-
-        if (!is_array($radioArray))
-        {
-            $radioArray = array($radioArray);
-        }
-
-        foreach ($radioArray as $radioType)
-        {
-            $choices[] = $this->createElement(
-                'radio', $elementName . '_option', '', Translation::get($radioType), $radioType, array(
-                    'onclick' => 'javascript:receivers_hide(\'' . $elementName . 'receivers_window\')',
-                    'id' => $elementName . 'receiver'
-                )
-            );
-        }
-
-        $choices[] = $this->createElement(
-            'radio', $elementName . '_option', '', Translation::get('SelectGroupsUsers'), '1', array(
-                'onclick' => 'javascript:receivers_show(\'' . $elementName . 'receivers_window\')',
-                'id' => $elementName . 'group'
-            )
-        );
-        $this->addGroup($choices, null, $elementLabel, '<br />', false);
-        $idGroup = $elementName . 'group';
-        $nameWindow = $elementName . 'receivers_window';
-        $this->addElement(
-            'html', '<div style="margin-left: 25px; display: block;" id="' . $elementName . 'receivers_window">'
-        );
-
-        $element_finder = $this->createElement(
-            'user_group_finder', $elementName . '_elements', '', $attributes['search_url'], $attributes['locale'],
-            $attributes['defaults'], $attributes['options']
-        );
-
-        $element_finder->excludeElements($attributes['exclude']);
-
-        $this->addElement($element_finder);
-        $this->addElement('html', '</div>');
-
-        $this->addElement(
-            'html', ">
-					/* <![CDATA[ */
-					var expiration_;" . $elementName . " = document.getElementById('$idGroup');
-                if (expiration_" . $elementName . ".checked)
-                {
-                receivers_show('$nameWindow');
-    }
-                else
-                {
-                receivers_hide('$nameWindow');
-    }
-                function receivers_show(item) {
-                el = document.getElementById(item);
-                el.style.display='';
-    }
-                function receivers_hide(item) {
-                el = document.getElementById(item);
-                el.style.display='none';
-    }
-                function reset_receivers_" . $elementName . "();
-					{
-						setTimeout(
-							function()
-							{
-								if (expiration_" . $elementName . ".checked)
-                receivers_show('$nameWindow');
-                else
-                receivers_hide('$nameWindow');
-    },30);
-    }
-                $(document).ready(function ()
-                {
-                $(document).on('click', ':reset', reset_receivers_" . $elementName . ");
-					});
-					/* ]]> */
-					</script>\n"
-        );
     }
 
     /**
@@ -1206,11 +1087,6 @@ EOT;
         $this->registerElementType(
             'advanced_element_finder', $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
             'HTML_QuickForm_advanced_element_finder'
-        );
-
-        $this->registerElementType(
-            'user_group_finder', $dir . 'Element/HTML_QuickForm_user_group_finder.php',
-            'HTML_QuickForm_user_group_finder'
         );
 
         // Button elements

@@ -6,9 +6,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -50,55 +49,12 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $this->courseGroupDecoratorsManager = $courseGroupDecoratorsManager;
 
         $this->build_basic_form();
+
+        $this->setDefaults();
     }
 
     public function build_basic_form()
     {
-        $searchUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_COURSE_USER_GROUP_FEED,
-                Manager::PARAM_COURSE => $this->parent->get_course_id()
-            )
-        );
-
-        $url = Path::getInstance()->getBasePath(true) .
-            'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course=' .
-            $this->parent->get_course_id();
-
-        $course_group_users = DataManager::retrieve_course_group_users($this->course_group->get_id());
-        $defaults = array();
-        $current = array();
-
-        if ($course_group_users)
-        {
-            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
-
-            while ($course_group_user = $course_group_users->next_result())
-            {
-                $current[$course_group_user->get_id()] = array(
-                    'id' => 'user_' . $course_group_user->get_id(),
-                    'title' => Utilities::htmlentities($course_group_user->get_fullname()),
-                    'description' => Utilities::htmlentities($course_group_user->get_username()),
-                    'classes' => $glyph->getClassNamesString(),
-                    'sort_name' => $course_group_user->get_lastname()
-                );
-            }
-        }
-
-        usort(
-            $current, function ($courseGroupUser1, $courseGroupUser2) {
-            return strcmp($courseGroupUser1['sort_name'], $courseGroupUser2['sort_name']);
-        }
-        );
-
-        $locale = array();
-        $locale['Display'] = Translation::get('SelectGroupUsers');
-        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
-        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-        $locale['load_elements'] = true;
-
         $legend_items = array();
 
         $legend_items[] = new ToolbarItem(
@@ -115,16 +71,10 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $legend->set_items($legend_items);
         $legend->set_type(Toolbar::TYPE_HORIZONTAL);
 
-        //        $elem = $this->addElement(
-        //            'user_group_finder', 'users', Translation::get('SubscribeUsers'), $searchUrl->getUrl(), $locale, $current,
-        //            array('load_elements' => true)
-        //        );
-        //        $elem->setDefaults($defaults);
-
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(
             new AdvancedElementFinderElementType(
-                'user_group', Translation::get('UserGroup'), 'Chamilo\Application\Weblcms\Ajax', 'CourseUserGroupFeed',
+                'user_group', Translation::get('UserGroup'), 'Chamilo\Application\Weblcms\Ajax', 'CourseGroupUserFeed',
                 array(Manager::PARAM_COURSE => $this->parent->get_course_id())
             )
         );
@@ -149,6 +99,36 @@ class CourseGroupSubscriptionsForm extends FormValidator
     public function build_creation_form()
     {
         $this->build_basic_form();
+    }
+
+    function setDefaults($defaultValues = array(), $filter = null)
+    {
+        $courseGroupUsers = DataManager::retrieve_course_group_users($this->course_group->get_id())->as_array();
+
+        usort(
+            $courseGroupUsers, function ($courseGroupUser1, $courseGroupUser2) {
+            return strcmp($courseGroupUser1->get_lastname(), $courseGroupUser2->get_lastname());
+        }
+        );
+
+        $defaultUsers = new AdvancedElementFinderElements();
+
+        foreach ($courseGroupUsers as $courseGroupUser)
+        {
+            $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+
+            $defaultUsers->add_element(
+                new AdvancedElementFinderElement(
+                    'user_' . $courseGroupUser->getId(), $userGlyph->getClassNamesString(),
+                    $courseGroupUser->get_fullname(), $courseGroupUser->get_username()
+                )
+            );
+        }
+
+        $element = $this->getElement('users');
+        $element->setDefaultValues($defaultUsers);
+
+        parent::setDefaults($defaultValues, $filter);
     }
 
     public function update_course_group_subscriptions()
