@@ -74,10 +74,8 @@ abstract class ContentObjectForm extends FormValidator
     const TAB_CONTENT_OBJECT = 'ContentObject';
     const TAB_METADATA = 'Metadata';
 
-    const TYPE_COMPARE = 3;
     const TYPE_CREATE = 1;
     const TYPE_EDIT = 2;
-    const TYPE_REPLY = 4;
 
     /**
      * @var integer
@@ -166,10 +164,8 @@ abstract class ContentObjectForm extends FormValidator
         $this->prepareTabs();
         $this->getTabsGenerator()->render();
 
-        if ($this->form_type != self::TYPE_COMPARE)
-        {
-            $this->add_footer();
-        }
+        $this->add_footer();
+
         $this->setDefaults();
     }
 
@@ -364,17 +360,9 @@ abstract class ContentObjectForm extends FormValidator
         // javascrip file
         switch ($this->form_type)
         {
-            case self::TYPE_COMPARE :
-                $glyphName = 'transfer';
-                $buttonVariable = 'Compare';
-                break;
             case self::TYPE_EDIT :
                 $glyphName = 'arrow-right';
                 $buttonVariable = 'Update';
-                break;
-            case self::TYPE_REPLY :
-                $glyphName = 'envelope';
-                $buttonVariable = 'Reply';
                 break;
             default :
                 $glyphName = 'check';
@@ -402,8 +390,8 @@ abstract class ContentObjectForm extends FormValidator
      */
     protected function allows_category_selection()
     {
-        return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_REPLY ||
-                $this->form_type == self::TYPE_EDIT) && Session::get_user_id() == $this->get_owner_id();
+        return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_EDIT) &&
+            Session::get_user_id() == $this->get_owner_id();
     }
 
     public function buildInstructionsForm()
@@ -514,22 +502,21 @@ abstract class ContentObjectForm extends FormValidator
                 }
                 else
                 {
-                    $this->add_element_hider('script_block');
                     $this->addElement(
-                        'checkbox', 'version', Translation::get('CreateAsNewVersion'), null, array(
-                            'onclick' => 'javascript:showElement(\'' . ContentObject::PROPERTY_COMMENT . '\')',
-                            'class' => 'version'
-                        )
+                        'checkbox', 'version', Translation::get('CreateAsNewVersion'), null, array('class' => 'version')
                     );
-                    $this->add_element_hider('begin', ContentObject::PROPERTY_COMMENT);
+
+                    $this->addElement('html', '<div class="content-object-version-comment hidden">');
                     $this->addElement(
                         'text', ContentObject::PROPERTY_COMMENT, Translation::get('VersionComment'),
-                        array("size" => "50")
+                        array('size' => '50', 'class' => 'form-control')
                     );
-                    $this->add_element_hider('end', ContentObject::PROPERTY_COMMENT);
+
+                    $this->addElement('html', '</div>');
                 }
             }
         }
+
         $this->addElement('hidden', ContentObject::PROPERTY_ID, null, array('class' => 'content_object_id'));
         $this->addElement(
             'hidden', ContentObject::PROPERTY_MODIFICATION_DATE, null, array('class' => 'modification_date')
@@ -547,17 +534,13 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function build_general_form()
     {
-        if ($this->form_type == self::TYPE_EDIT || $this->form_type == self::TYPE_REPLY)
+        if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
         elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
-        }
-        elseif ($this->form_type == self::TYPE_COMPARE)
-        {
-            $this->build_version_compare_form();
         }
 
         $this->add_attachments_form();
@@ -588,77 +571,6 @@ abstract class ContentObjectForm extends FormValidator
         );
         $entityFormService->addElements();
         $entityFormService->setDefaults();
-    }
-
-    /**
-     * Builds a form to compare learning object versions.
-     */
-    protected function build_version_compare_form()
-    {
-        $renderer = $this->defaultRenderer();
-        $form_template = <<<EOT
-
-<form {attributes}>
-{content}
-	<div class="clear">
-		&nbsp;
-	</div>
-</form>
-
-EOT;
-        $renderer->setFormTemplate($form_template);
-        $element_template = <<<EOT
-	<div>
-			<!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}
-	</div>
-
-EOT;
-        $renderer->setElementTemplate($element_template);
-
-        if (isset($this->extra['version_data']))
-        {
-            $object = $this->content_object;
-            $this->add_element_hider('script_radio', $object);
-
-            $i = 0;
-
-            $radios = array();
-
-            foreach ($this->extra['version_data'] as $version)
-            {
-                $versions = array();
-                $versions[] = &$this->createElement(
-                    'static', null, null, '<span ' .
-                    ($i == ($object->get_version_count() - 1) ? 'style="visibility: hidden;"' :
-                        'style="visibility: visible;"') . ' id="A' . $i . '">'
-                );
-                $versions[] = &$this->createElement(
-                    'radio', 'object', null, null, $version['id'],
-                    'onclick="javascript:showRadio(\'B\',\'' . $i . '\')"'
-                );
-                $versions[] = &$this->createElement('static', null, null, '</span>');
-                $versions[] = &$this->createElement(
-                    'static', null, null,
-                    '<span ' . ($i == 0 ? 'style="visibility: hidden;"' : 'style="visibility: visible;"') . ' id="B' .
-                    $i . '">'
-                );
-                $versions[] = &$this->createElement(
-                    'radio', 'compare', null, null, $version['id'],
-                    'onclick="javascript:showRadio(\'A\',\'' . $i . '\')"'
-                );
-                $versions[] = &$this->createElement('static', null, null, '</span>');
-                $versions[] = &$this->createElement('static', null, null, $version['html']);
-
-                $this->addGroup($versions, null, null, PHP_EOL);
-                $i ++;
-            }
-
-            $buttons[] = $this->createElement(
-                'style_button', 'submit', Translation::get('CompareVersions'), null, null,
-                new FontAwesomeGlyph('transfer')
-            );
-            $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        }
     }
 
     /**
@@ -993,18 +905,10 @@ EOT;
 
         $defaults[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] = $content_object->get_template_registration_id();
 
-        if ($this->form_type == self::TYPE_REPLY)
-        {
-            $defaults[ContentObject::PROPERTY_TITLE] =
-                Translation::get('ReplyShort', null, Utilities::COMMON_LIBRARIES) . ' ' . $content_object->get_title();
-        }
-        else
-        {
-            $defaults[ContentObject::PROPERTY_TITLE] =
-                $defaults[ContentObject::PROPERTY_TITLE] == null ? $content_object->get_title() :
-                    $defaults[ContentObject::PROPERTY_TITLE];
-            $defaults[ContentObject::PROPERTY_DESCRIPTION] = $content_object->get_description();
-        }
+        $defaults[ContentObject::PROPERTY_TITLE] =
+            $defaults[ContentObject::PROPERTY_TITLE] == null ? $content_object->get_title() :
+                $defaults[ContentObject::PROPERTY_TITLE];
+        $defaults[ContentObject::PROPERTY_DESCRIPTION] = $content_object->get_description();
 
         if ($content_object instanceof ForcedVersionSupport && $this->form_type == self::TYPE_EDIT)
         {
@@ -1184,27 +1088,5 @@ EOT;
         );
 
         return $result;
-    }
-
-    /**
-     * @return boolean
-     * @throws \Exception
-     */
-    public function validate()
-    {
-        if ($this->isSubmitted())
-        {
-            $values = $this->exportValues();
-
-            if ($this->form_type == self::TYPE_COMPARE)
-            {
-                if (!isset($values['object']) || !isset($values['compare']))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return parent::validate();
     }
 }

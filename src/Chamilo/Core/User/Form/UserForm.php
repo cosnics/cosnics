@@ -145,7 +145,6 @@ class UserForm extends FormValidator
             )
         );
 
-        // $this->add_forever_or_expiration_date_window(User :: PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
         $this->add_forever_or_timewindow(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
 
         // Official Code

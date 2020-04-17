@@ -267,7 +267,11 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->build_rights_form();
 
-        $this->add_forever_or_timewindow();
+        $this->addTimePeriodSelection(
+            'PublicationPeriod', ContentObjectPublication::PROPERTY_FROM_DATE,
+            ContentObjectPublication::PROPERTY_TO_DATE
+        );
+//        $this->add_forever_or_timewindow();
         $this->addElement(
             'checkbox', ContentObjectPublication::PROPERTY_HIDDEN,
             Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES), null, array('class' => 'hidden_publication')
@@ -381,8 +385,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $html = array();
-        $html[] = '<div class="target-entities-container clearfix" data-course-id="' . $this->get_course_id() . '" data-tool="' .
-            $this->get_tool() . '">';
+        $html[] = '<div class="target-entities-container clearfix" data-course-id="' . $this->get_course_id() .
+            '" data-tool="' . $this->get_tool() . '">';
 
         // $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager :: context()) .
         // ':</h5>';

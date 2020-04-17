@@ -92,6 +92,10 @@ form div.form-row div.feedback {
     position: relative;
 }
 
+form .form-time-period-date {
+    margin-left: 25px;
+}
+
 /*********************************************
  * QUICKFORM ELEMENT FINDER STYLES           *
  * ----------------------------------------- *

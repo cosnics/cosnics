@@ -10,7 +10,6 @@ use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
-use HTML_QuickForm_RuleRegistry;
 
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
@@ -26,6 +25,8 @@ class FormValidator extends HTML_QuickForm
 
     const PARAM_RESET = 'reset';
     const PARAM_SUBMIT = 'submit';
+
+    const PROPERTY_TIME_PERIOD = 'time_period';
 
     /**
      *
@@ -421,6 +422,47 @@ EOT;
         );
     }
 
+    public function addTimePeriodSelection(
+        $elementLabel, $fromElementName = 'from_date', $toElementName = 'to_date', $foreverElementName = 'forever'
+    )
+    {
+        $choices = array();
+
+        $choices[] = $this->createElement(
+            'radio', self::PROPERTY_TIME_PERIOD . '[' . $foreverElementName . ']', '', $this->getTranslation('Forever'),
+            1
+        );
+
+        $choices[] = $this->createElement(
+            'radio', self::PROPERTY_TIME_PERIOD . '[' . $foreverElementName . ']', '',
+            $this->getTranslation('LimitedPeriod'), 0
+        );
+
+        $this->addElement('html', '<div class="form-time-period">');
+
+        $this->addGroup($choices, null, $this->getTranslation($elementLabel), '', false);
+
+        $this->addElement('html', '<div class="form-time-period-dates hidden">');
+        $this->add_timewindow($fromElementName, $toElementName, '', '');
+        $this->addElement('html', '</div>');
+
+        $this->addElement('html', '</div>');
+
+        $this->addElement(
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTimePeriod.min.js'
+        )
+        );
+
+        $template = str_replace(
+            '<div class="element form-inline">', '<div class="element form-time-period-date form-inline">',
+            $this->getDatePickerTemplate()
+        );
+
+        $this->get_renderer()->setElementTemplate($template, $fromElementName);
+        $this->get_renderer()->setElementTemplate($template, $toElementName);
+    }
+
     /**
      * Add a datepicker element to the form A rule is added to check if the date is a valid one
      *
@@ -436,97 +478,10 @@ EOT;
             'datepicker', $this->getAttribute('name'), $name, $label, array('class' => $name), $includeTimePicker
         );
         $this->addRule($name, Translation::get('InvalidDate'), 'date');
-        $this->get_renderer()->setElementTemplate($this->getDatePickerElementTemplate(), $name);
+
+        $this->get_renderer()->setElementTemplate($this->getDatePickerTemplate(), $name);
 
         return $element;
-    }
-
-    /**
-     * Adds javascript code to hide a certain element.
-     *
-     * @param string $type
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $extra
-     */
-    public function add_element_hider($type, $extra = null)
-    {
-        $html = array();
-        if ($type == 'script_block')
-        {
-            $html[] = '<script>';
-            $html[] = 'function showElement(item)';
-            $html[] = '{';
-            $html[] = '	if (document.getElementById(item).style.display == \'block\')';
-            $html[] = '  {';
-            $html[] = '		document.getElementById(item).style.display = \'none\';';
-            $html[] = '  }';
-            $html[] = '	else';
-            $html[] = '  {';
-            $html[] = '		document.getElementById(item).style.display = \'block\';';
-            $html[] = '		document.getElementById(item).value = \'Version comments here ...\';';
-            $html[] = '	}';
-            $html[] = '}';
-            $html[] = '</script>';
-        }
-        elseif ($type == 'script_radio')
-        {
-            $html[] = '<script>';
-            $html[] = 'function showRadio(type, item)';
-            $html[] = '{';
-            $html[] = '	if (type == \'A\')';
-            $html[] = '	{';
-            $html[] = '		for (var j = item; j >= 0; j--)';
-            $html[] = '		{';
-            $html[] = '			var it = type + j;';
-            $html[] = '			if (document.getElementById(it).style.visibility == \'hidden\')';
-            $html[] = '			{';
-            $html[] = '				document.getElementById(it).style.visibility = \'visible\';';
-            $html[] = '			};';
-            $html[] = '		}';
-            $html[] = '		for (var j = item; j < ' . $extra->get_version_count() . '; j++)';
-            $html[] = '		{';
-            $html[] = '			var it = type + j;';
-            $html[] = '			if (document.getElementById(it).style.visibility == \'visible\')';
-            $html[] = '			{';
-            $html[] = '				document.getElementById(it).style.visibility = \'hidden\';';
-            $html[] = '			};';
-            $html[] = '		}';
-            $html[] = '	}';
-            $html[] = '	else if (type == \'B\')';
-            $html[] = '	{';
-            $html[] = '		item++;';
-            $html[] = '		for (var j = item; j >= 0; j--)';
-            $html[] = '		{';
-            $html[] = '			var it = type + j;';
-            $html[] = '			if (document.getElementById(it).style.visibility == \'visible\')';
-            $html[] = '			{';
-            $html[] = '				document.getElementById(it).style.visibility = \'hidden\';';
-            $html[] = '			};';
-            $html[] = '		}';
-            $html[] = '		for (var j = item; j <= ' . $extra->get_version_count() . '; j++)';
-            $html[] = '		{';
-            $html[] = '			var it = type + j;';
-            $html[] = '			if (document.getElementById(it).style.visibility == \'hidden\')';
-            $html[] = '			{';
-            $html[] = '				document.getElementById(it).style.visibility = \'visible\';';
-            $html[] = '			};';
-            $html[] = '		}';
-            $html[] = '	}';
-            $html[] = '}';
-            $html[] = '</script>';
-        }
-        elseif ($type == 'begin')
-        {
-            $html[] = '<div id="' . $extra . '" style="display: none;">';
-        }
-        elseif ($type == 'end')
-        {
-            $html[] = '</div>';
-        }
-
-        if (isset($html))
-        {
-            $this->addElement('html', implode(PHP_EOL, $html));
-        }
     }
 
     /**
@@ -540,46 +495,6 @@ EOT;
     function add_error_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('danger', $name, $label, $message, $noMargin);
-    }
-
-    /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     */
-    public function add_forever_or_expiration_date_window($elementName, $elementLabel = 'ExpirationDate')
-    {
-        $choices[] = $this->createElement(
-            'radio', 'forever', '', Translation::get('Forever'), 1,
-            array('onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')', 'id' => 'forever')
-        );
-        $choices[] = $this->createElement(
-            'radio', 'forever', '', Translation::get('LimitedPeriod'), 0,
-            array('onclick' => 'javascript:timewindow_show(\'forever_timewindow\')')
-        );
-        $this->addGroup($choices, null, Translation::get($elementLabel), '<br />', false);
-        $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="forever_timewindow">');
-        $this->addElement('datepicker', $this->getAttribute('name'), $elementName, '', array(), false);
-        $this->addElement('html', '</div>');
-        $this->addElement(
-            'html', "<script type=\"text/javascript\">
-					/* <![CDATA[ */
-					var expiration = document.getElementById('forever');
-					if (expiration.checked)
-					{
-						timewindow_hide('forever_timewindow');
-					}
-					function timewindow_show(item) {
-						el = document.getElementById(item);
-						el.style.display='';
-					}
-					function timewindow_hide(item) {
-						el = document.getElementById(item);
-						el.style.display='none';
-					}
-					/* ]]> */
-					</script>\n"
-        );
     }
 
     /**
@@ -605,18 +520,24 @@ EOT;
             $toName = $elementNamePrefix . '[to_date]';
         }
 
+        $choices = array();
+
         $choices[] = $this->createElement(
-            'radio', $elementName, '', Translation::get('Forever'), 1,
+            'radio', $elementName, '', $this->getTranslation('Forever'), 1,
             array('id' => 'forever', 'onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')')
         );
+
         $choices[] = $this->createElement(
-            'radio', $elementName, '', Translation::get('LimitedPeriod'), 0,
+            'radio', $elementName, '', $this->getTranslation('LimitedPeriod'), 0,
             array('id' => 'limited', 'onclick' => 'javascript:timewindow_show(\'forever_timewindow\')')
         );
-        $this->addGroup($choices, null, Translation::get($elementLabel), '', false);
+
+        $this->addGroup($choices, null, $this->getTranslation($elementLabel), '', false);
+
         $this->addElement('html', '<div style="margin-left:25px;display:block;" id="forever_timewindow">');
         $this->add_timewindow($fromName, $toName, '', '');
         $this->addElement('html', '</div>');
+
         $this->addElement(
             'html', "<script type=\"text/javascript\">
 					/* <![CDATA[ */
@@ -681,8 +602,11 @@ EOT;
      */
     public function add_password($name, $label, $required = true, $attributes = array())
     {
-        $element = $this->create_password($name, $label, $attributes);
-        $this->addElement($element);
+        /**
+         * @var \HTML_QuickForm_password $element
+         */
+        $element = $this->addElement($this->create_password($name, $label, $attributes));
+
         if ($required)
         {
             $this->addRule(
@@ -706,9 +630,11 @@ EOT;
      */
     public function add_select($name, $label, $values, $required = true, $attributes = array())
     {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
+        /**
+         * @var \HTML_QuickForm_select $element
+         */
+        $element = $this->addElement($this->create_select($name, $label, $values, $attributes));
 
-        $element = $this->addElement('select', $name, $label, $values, $attributes);
         if ($required)
         {
             $this->addRule(
@@ -728,15 +654,18 @@ EOT;
      * @param boolean $required Is the form-element required (default=true)
      * @param string[] $attributes Optional list of attributes for the form-element
      *
-     * @return \HTML_QuickForm_input The element.
+     * @return \HTML_QuickForm_text The element.
      * @throws \Exception
      */
     public function add_textfield($name, $label, $required = true, $attributes = array())
     {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
+        /**
+         * @var \HTML_QuickForm_text $element
+         */
+        $element = $this->addElement($this->create_textfield($name, $label, $attributes));
 
-        $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
+
         if ($required)
         {
             $this->addRule(
@@ -756,7 +685,7 @@ EOT;
      * @param string $secondName The element name
      * @param string $firstLabel The label for the form-element
      * @param string $secondLabel The label for the form-element
-     * @param boolean $include_time_picker
+     * @param boolean $includeTimePicker
      *
      * @return \HTML_QuickForm_datepicker[]
      */
@@ -793,11 +722,11 @@ EOT;
      * @param string $name
      * @param string $groupLabel
      * @param string $separator
-     * @param string $appendName
+     * @param boolean $appendName
      *
      * @return \HTML_QuickForm_group
      */
-    function &createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
+    function createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
     {
         static $anonGroups = 1;
 
@@ -838,19 +767,16 @@ EOT;
      */
     public function create_password($name, $label, $attributes = array())
     {
-        if (!array_key_exists('size', $attributes))
-        {
-            $attributes['size'] = 50;
-        }
+        $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        if (!array_key_exists('class', $attributes))
-        {
-            $attributes['class'] = 'form-control';
-        }
+        return $this->createElement('password', $name, $label, $attributes);
+    }
 
-        $element = $this->createElement('password', $name, $label, $attributes);
+    public function create_select($name, $label, $values, $attributes = array())
+    {
+        $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        return $element;
+        return $this->createElement('select', $name, $label, $values, $attributes);
     }
 
     /**
@@ -863,18 +789,9 @@ EOT;
      */
     public function create_textfield($name, $label, $attributes = array())
     {
-        // if (! array_key_exists('size', $attributes))
-        // {
-        // $attributes['size'] = 50;
-        // }
-        if (!array_key_exists('class', $attributes))
-        {
-            $attributes['class'] = 'form-control';
-        }
+        $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        $element = $this->createElement('text', $name, $label, $attributes);
-
-        return $element;
+        return $this->createElement('text', $name, $label, $attributes);
     }
 
     /**
@@ -893,11 +810,9 @@ EOT;
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
     }
 
-    public function getDatePickerElementTemplate()
+    protected function getDatePickerTemplate()
     {
-        $template = $this->getElementTemplate();
-
-        return str_replace('<div class="element">', '<div class="element form-inline">', $template);
+        return str_replace('<div class="element">', '<div class="element form-inline">', $this->getElementTemplate());
     }
 
     /**
@@ -963,27 +878,7 @@ EOT;
      */
     protected function getTranslation($variable, $parameters = array())
     {
-        return Translation::getInstance()->getTranslation($variable, $parameters, Utilities::COMMON_LIBRARIES);
-    }
-
-    /**
-     *
-     * @param \HTML_QuickForm_group $group
-     * @param string $elementName
-     *
-     * @return \HTML_QuickForm_element
-     */
-    public function get_group_element($groupName, $elementName)
-    {
-        $groupElements = $this->getElement($groupName)->getElements();
-
-        foreach ($groupElements as $groupElement)
-        {
-            if ($groupElement->getName() == $elementName)
-            {
-                return $groupElement;
-            }
-        }
+        return $this->getTranslator()->trans($variable, $parameters, Utilities::COMMON_LIBRARIES);
     }
 
     /**
@@ -1168,26 +1063,14 @@ EOT;
     }
 
     /**
-     *
-     * @param string $elementName
-     */
-    public function setInlineElementTemplate($elementName)
-    {
-        $this->get_renderer()->setElementTemplate($this->getElementTemplate('form-inline'), $elementName);
-    }
-
-    public function set_error_reporting($enabled)
-    {
-        $this->no_errors = !$enabled;
-    }
-
-    /**
      * Returns the HTML representation of this form.
+     *
+     * @param string $in_data
      *
      * @return string
      * @deprecated Use render() now
      */
-    public function toHtml()
+    public function toHtml($in_data = null)
     {
         return $this->render();
     }
@@ -1204,51 +1087,5 @@ EOT;
         {
             unset($this->html_editors[$key]);
         }
-    }
-
-    /**
-     *
-     * @param string[] $value
-     *
-     * @return boolean
-     */
-    public function validate_csv($value)
-    {
-        $registry = &HTML_QuickForm_RuleRegistry::singleton();
-        $rulenr = '-1';
-
-        foreach ($this->_rules as $target => $rules)
-        {
-            $rulenr ++;
-            $submitValue = $value[$rulenr];
-
-            foreach ($rules as $elementName => $rule)
-            {
-                $result = $registry->validate($rule['type'], $submitValue, $rule['format'], false);
-                if (!$this->isElementRequired($target))
-                {
-                    if (!isset($submitValue) || '' == $submitValue)
-                    {
-                        continue 2;
-                    }
-                }
-
-                if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int) $result))
-                {
-
-                    if (isset($rule['group']))
-                    {
-
-                        $this->_errors[$rule['group']] = $rule['message'];
-                    }
-                    else
-                    {
-                        $this->_errors[$target] = $rule['message'];
-                    }
-                }
-            }
-        }
-
-        return (0 == count($this->_errors));
     }
 }
