@@ -26,7 +26,9 @@ class FormValidator extends HTML_QuickForm
     const PARAM_RESET = 'reset';
     const PARAM_SUBMIT = 'submit';
 
-    const PROPERTY_TIME_PERIOD = 'time_period';
+    const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
+    const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
+    const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
      *
@@ -70,7 +72,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerAdditionalRules();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
+            'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'
         )
         );
@@ -79,7 +81,7 @@ class FormValidator extends HTML_QuickForm
 
         foreach ($this->_submitValues as $index => & $value)
         {
-            $value = Security::remove_XSS($value);
+            $value = Security::removeXSS($value);
         }
 
         $this->initializeContainer();
@@ -124,7 +126,7 @@ EOT;
         elseif ($error)
         {
 
-            $html[] = Display::error_message(Translation::get('FormHasErrorsPleaseComplete'), true);
+            $html[] = Display::error_message($this->getTranslation('FormHasErrorsPleaseComplete'));
         }
 
         $html[] = parent::toHtml();
@@ -158,7 +160,7 @@ EOT;
         $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
 
         $this->addElement('html', '<div id="' . $elementName . '-upload-input">');
-        $this->addElement('file', $elementName, sprintf(Translation::get('FileName')));
+        $this->addElement('file', $elementName, sprintf($this->getTranslation('FileName')));
         $this->addElement('html', '</div>');
 
         $dropzoneHtml = array();
@@ -184,7 +186,7 @@ EOT;
         $dropzoneHtml[] =
             '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
         $dropzoneHtml[] =
-            '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
+            '<div class="progress-bar progress-bar-success" style="width: 0;" data-dz-uploadprogress></div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
@@ -219,7 +221,7 @@ EOT;
 
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="panel-footer">';
-        $dropzoneHtml[] = Translation::get('DropFileHereMessage');
+        $dropzoneHtml[] = $this->getTranslation('DropFileHereMessage');
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
@@ -259,7 +261,7 @@ EOT;
         }
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
+            'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
         )
         );
@@ -316,9 +318,8 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param boolean $required
      */
-    public function addImageUploader($name, $label, $required)
+    public function addImageUploader($name, $label)
     {
         $this->addElement('html', '<div class="image-uploader" id="image-uploader-' . $name . '">');
         $this->addElement(
@@ -335,7 +336,7 @@ EOT;
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
+            'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'
         )
         );
@@ -387,12 +388,12 @@ EOT;
         $buttons = array();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'submit', $this->getTranslation('Save', array(), Utilities::COMMON_LIBRARIES),
             array('class' => 'positive')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES),
+            'style_reset_button', 'reset', $this->getTranslation('Reset', array(), Utilities::COMMON_LIBRARIES),
             array('class' => 'normal empty')
         );
 
@@ -416,26 +417,40 @@ EOT;
         $this->disableSubmitButton();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
+            'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.single.js'
         )
         );
     }
 
+    /**
+     * @param string $elementLabel
+     * @param string $fromElementName
+     * @param string $toElementName
+     * @param string $foreverElementName
+     * @param string $elementNamePrefix
+     */
     public function addTimePeriodSelection(
-        $elementLabel, $fromElementName = 'from_date', $toElementName = 'to_date', $foreverElementName = 'forever'
+        string $elementLabel, string $fromElementName = self::PROPERTY_TIME_PERIOD_FROM_DATE,
+        string $toElementName = self::PROPERTY_TIME_PERIOD_TO_DATE,
+        string $foreverElementName = self::PROPERTY_TIME_PERIOD_FOREVER, string $elementNamePrefix = null
     )
     {
+        if ($elementNamePrefix)
+        {
+            $foreverElementName = $elementNamePrefix . '[' . $foreverElementName . ']';
+            $fromElementName = $elementNamePrefix . '[' . $fromElementName . ']';
+            $toElementName = $elementNamePrefix . '[' . $toElementName . ']';
+        }
+
         $choices = array();
 
         $choices[] = $this->createElement(
-            'radio', self::PROPERTY_TIME_PERIOD . '[' . $foreverElementName . ']', '', $this->getTranslation('Forever'),
-            1
+            'radio', $foreverElementName, '', $this->getTranslation('Forever'), 1
         );
 
         $choices[] = $this->createElement(
-            'radio', self::PROPERTY_TIME_PERIOD . '[' . $foreverElementName . ']', '',
-            $this->getTranslation('LimitedPeriod'), 0
+            'radio', $foreverElementName, '', $this->getTranslation('LimitedPeriod'), 0
         );
 
         $this->addElement('html', '<div class="form-time-period">');
@@ -449,7 +464,7 @@ EOT;
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
+            'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTimePeriod.min.js'
         )
         );
@@ -477,7 +492,7 @@ EOT;
         $element = $this->addElement(
             'datepicker', $this->getAttribute('name'), $name, $label, array('class' => $name), $includeTimePicker
         );
-        $this->addRule($name, Translation::get('InvalidDate'), 'date');
+        $this->addRule($name, $this->getTranslation('InvalidDate'), 'date');
 
         $this->get_renderer()->setElementTemplate($this->getDatePickerTemplate(), $name);
 
@@ -495,68 +510,6 @@ EOT;
     function add_error_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('danger', $name, $label, $message, $noMargin);
-    }
-
-    /**
-     *
-     * @param string $elementLabel
-     * @param string $elementNamePrefix
-     * @param boolean $useDimensions
-     */
-    public function add_forever_or_timewindow(
-        $elementLabel = 'PublicationPeriod', $elementNamePrefix = '', $useDimensions = false
-    )
-    {
-        if (!$useDimensions)
-        {
-            $elementName = $elementNamePrefix . 'forever';
-            $fromName = $elementNamePrefix . 'from_date';
-            $toName = $elementNamePrefix . 'to_date';
-        }
-        else
-        {
-            $elementName = $elementNamePrefix . '[forever]';
-            $fromName = $elementNamePrefix . '[from_date]';
-            $toName = $elementNamePrefix . '[to_date]';
-        }
-
-        $choices = array();
-
-        $choices[] = $this->createElement(
-            'radio', $elementName, '', $this->getTranslation('Forever'), 1,
-            array('id' => 'forever', 'onclick' => 'javascript:timewindow_hide(\'forever_timewindow\')')
-        );
-
-        $choices[] = $this->createElement(
-            'radio', $elementName, '', $this->getTranslation('LimitedPeriod'), 0,
-            array('id' => 'limited', 'onclick' => 'javascript:timewindow_show(\'forever_timewindow\')')
-        );
-
-        $this->addGroup($choices, null, $this->getTranslation($elementLabel), '', false);
-
-        $this->addElement('html', '<div style="margin-left:25px;display:block;" id="forever_timewindow">');
-        $this->add_timewindow($fromName, $toName, '', '');
-        $this->addElement('html', '</div>');
-
-        $this->addElement(
-            'html', "<script type=\"text/javascript\">
-					/* <![CDATA[ */
-					var expiration = document.getElementById('forever');
-					if (expiration.checked)
-					{
-						timewindow_hide('forever_timewindow');
-					}
-					function timewindow_show(item) {
-						el = document.getElementById(item);
-						el.style.display='';
-					}
-					function timewindow_hide(item) {
-						el = document.getElementById(item);
-						el.style.display='none';
-					}
-					/* ]]> */
-					</script>\n"
-        );
     }
 
     /**
@@ -610,7 +563,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -638,7 +591,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -669,7 +622,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -869,16 +822,25 @@ EOT;
     }
 
     /**
+     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
+     */
+    public function getResourceManager(): ResourceManager
+    {
+        return ResourceManager::getInstance();
+    }
+
+    /**
      * Helper Function
      *
      * @param string $variable
      * @param string[] $parameters
+     * @param string $context
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = array(), $context = Utilities::COMMON_LIBRARIES)
     {
-        return $this->getTranslator()->trans($variable, $parameters, Utilities::COMMON_LIBRARIES);
+        return $this->getTranslator()->trans($variable, $parameters, $context);
     }
 
     /**
@@ -1052,7 +1014,7 @@ EOT;
 
         HTML_QuickForm::setRequiredNote(
             '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES) . '</small></span>'
+            $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES) . '</small></span>'
         );
 
         $this->renderer = $this->defaultRenderer();

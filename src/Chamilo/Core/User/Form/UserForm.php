@@ -26,10 +26,8 @@ use Exception;
  * @package user.lib.forms
  */
 class UserForm extends FormValidator
-
 {
     use DependencyInjectionContainerTrait;
-    const PARAM_FOREVER = 'forever';
 
     const RESULT_ERROR = 'UserUpdateFailed';
 
@@ -145,7 +143,7 @@ class UserForm extends FormValidator
             )
         );
 
-        $this->add_forever_or_timewindow(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
+        $this->addTimePeriodSelection('ExpirationDate', User::PROPERTY_ACTIVATION_DATE, User::PROPERTY_EXPIRATION_DATE);
 
         // Official Code
         $this->addElement(
@@ -313,15 +311,15 @@ class UserForm extends FormValidator
             $user->set_password($this->getHashingUtilities()->hashString($password));
             $this->unencryptedpass = $password;
 
-            if ($values['ExpirationDateforever'] != 0)
+            if ($values[self::PROPERTY_TIME_PERIOD_FOREVER] != 0)
             {
                 $user->set_expiration_date(0);
                 $user->set_activation_date(0);
             }
             else
             {
-                $act_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDatefrom_date']);
-                $exp_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDateto_date']);
+                $act_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_ACTIVATION_DATE]);
+                $exp_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_EXPIRATION_DATE]);
                 $user->set_activation_date($act_date);
                 $user->set_expiration_date($exp_date);
             }
@@ -461,18 +459,19 @@ class UserForm extends FormValidator
     public function setDefaults($defaults = array())
     {
         $user = $this->user;
+
         if ($this->form_type == self::TYPE_EDIT)
         {
             $expiration_date = $user->get_expiration_date();
             if ($expiration_date != 0)
             {
-                $defaults['ExpirationDate' . self::PARAM_FOREVER] = 0;
-                $defaults['ExpirationDatefrom_date'] = $user->get_activation_date();
-                $defaults['ExpirationDateto_date'] = $user->get_expiration_date();
+                $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 0;
+                $defaults[User::PROPERTY_ACTIVATION_DATE] = $user->get_activation_date();
+                $defaults[User::PROPERTY_EXPIRATION_DATE] = $user->get_expiration_date();
             }
             else
             {
-                $defaults['ExpirationDate' . self::PARAM_FOREVER] = 1;
+                $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
             }
 
             $defaults['pw']['pass'] = 2;
@@ -481,9 +480,9 @@ class UserForm extends FormValidator
         }
         else
         {
-            $defaults['ExpirationDate' . self::PARAM_FOREVER] = 1;
+            $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
 
-            $defaults['ExpirationDate' . 'to_date'] = strtotime(
+            $defaults[User::PROPERTY_EXPIRATION_DATE] = strtotime(
                 '+ ' . intval(Configuration::getInstance()->get_setting(array(Manager::context(), 'days_valid'))) .
                 'Days', time()
             );
@@ -542,15 +541,15 @@ class UserForm extends FormValidator
         $user->set_email($values[User::PROPERTY_EMAIL]);
         $user->set_username($values[User::PROPERTY_USERNAME]);
 
-        if ($values['ExpirationDateforever'] != 0)
+        if ($values[self::PROPERTY_TIME_PERIOD_FOREVER] != 0)
         {
             $user->set_expiration_date(0);
             $user->set_activation_date(0);
         }
         else
         {
-            $act_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDatefrom_date']);
-            $exp_date = DatetimeUtilities::time_from_datepicker($values['ExpirationDateto_date']);
+            $act_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_ACTIVATION_DATE]);
+            $exp_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_EXPIRATION_DATE]);
             $user->set_activation_date($act_date);
             $user->set_expiration_date($exp_date);
         }
@@ -564,6 +563,7 @@ class UserForm extends FormValidator
         $user->set_active(intval($values['active'][User::PROPERTY_ACTIVE]));
         $user->set_platformadmin(intval($values['admin'][User::PROPERTY_PLATFORMADMIN]));
         $send_mail = intval($values['mail']['send_mail']);
+
         if ($send_mail)
         {
             $this->send_email($user);

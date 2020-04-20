@@ -146,25 +146,6 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
-     */
-    public static function getContentObjectPublicationLocations($content_object, $user = null)
-    {
-        $locations = new Locations(__NAMESPACE__);
-
-        return array($locations);
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
-     */
-    public static function publish_content_object(
-        ContentObject $content_object, LocationSupport $location, $options = array()
-    )
-    {
-    }
-
-    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
      */
     public static function add_publication_attributes_elements($form)

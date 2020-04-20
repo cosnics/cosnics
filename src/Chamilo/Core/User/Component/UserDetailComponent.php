@@ -194,8 +194,21 @@ class UserDetailComponent extends Manager
         $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
 
         $attributes = array(
-            'username', 'firstname', 'lastname', 'official_code', 'email', 'auth_source', 'phone', 'language', 'active',
-            'activation_date', 'expiration_date', 'registration_date', 'disk_quota', 'database_quota', 'version_quota'
+            'username',
+            'firstname',
+            'lastname',
+            'official_code',
+            'email',
+            'auth_source',
+            'phone',
+            'language',
+            'active',
+            'activation_date',
+            'expiration_date',
+            'registration_date',
+            'disk_quota',
+            'database_quota',
+            'version_quota'
         );
 
         foreach ($attributes as $i => $attribute)
@@ -226,15 +239,14 @@ class UserDetailComponent extends Manager
     {
         switch ($attribute)
         {
-            case 'active' :
+            case User::PROPERTY_ACTIVE :
                 return $value ? Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES) : Translation::get(
                     'ConfirmFalse', null, Utilities::COMMON_LIBRARIES
                 );
-            case 'activation_date' :
+            case User::PROPERTY_ACTIVATION_DATE :
+            case User::PROPERTY_EXPIRATION_DATE :
                 return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::format_locale_date(null, $value);
-            case 'expiration_date' :
-                return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::format_locale_date(null, $value);
-            case 'registration_date' :
+            case User:: PROPERTY_REGISTRATION_DATE :
                 return DatetimeUtilities::format_locale_date(null, $value);
             default :
                 return $value;

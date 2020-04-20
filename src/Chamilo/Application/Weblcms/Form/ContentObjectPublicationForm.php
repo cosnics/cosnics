@@ -57,7 +57,6 @@ use Exception;
  */
 class ContentObjectPublicationForm extends BasePublicationForm
 {
-    const PROPERTY_FOREVER = 'forever';
     const PROPERTY_FROM_DATE = 'from_date';
     const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
     const PROPERTY_PUBLISH_AND_VIEW = 'publish_and_view';
@@ -271,7 +270,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'PublicationPeriod', ContentObjectPublication::PROPERTY_FROM_DATE,
             ContentObjectPublication::PROPERTY_TO_DATE
         );
-//        $this->add_forever_or_timewindow();
+
         $this->addElement(
             'checkbox', ContentObjectPublication::PROPERTY_HIDDEN,
             Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES), null, array('class' => 'hidden_publication')
@@ -836,7 +835,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $publications = $this->publications;
 
         $defaults[ContentObjectPublication::PROPERTY_CATEGORY_ID] = Request::get(Manager::PARAM_CATEGORY);
-        $defaults[self::PROPERTY_FOREVER] = 1;
+        $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_INHERIT;
 
         if (count($publications) == 1)
@@ -849,7 +848,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
                 if ($first_publication->get_from_date() != 0)
                 {
-                    $defaults[self::PROPERTY_FOREVER] = 0;
+                    $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 0;
                     $defaults[ContentObjectPublication::PROPERTY_FROM_DATE] = $first_publication->get_from_date();
                     $defaults[ContentObjectPublication::PROPERTY_TO_DATE] = $first_publication->get_to_date();
                 }
@@ -1001,7 +1000,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             throw new UserException(Translation::get("PublicationInSelectedCategoryNotAllowed"));
         }
 
-        if ($values[self::PROPERTY_FOREVER] != 0)
+        if ($values[self::PROPERTY_TIME_PERIOD_FOREVER] != 0)
         {
             $from = $to = 0;
         }

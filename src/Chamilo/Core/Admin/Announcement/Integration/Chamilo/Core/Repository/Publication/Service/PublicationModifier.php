@@ -139,7 +139,7 @@ class PublicationModifier implements PublicationModifierInterface
      *
      * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
-     * @see PublicationInterface::publish_content_object()
+     * @see PublicationModifierInterface::publishContentObject()
      */
     public function publishContentObject(
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()

@@ -178,7 +178,7 @@ class PublicationModifier implements PublicationModifierInterface
      *
      * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
-     * @see PublicationInterface::publish_content_object()
+     * @see PublicationModifierInterface::publishContentObject()
      */
     public function publishContentObject(
         ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
@@ -202,10 +202,14 @@ class PublicationModifier implements PublicationModifierInterface
         $allowCollaboration = $options[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] ? 1 : 0;
         $publication->set_allow_collaboration($allowCollaboration);
 
-        if ($options['forever'] == 0)
+        if ($options[FormValidator::PROPERTY_TIME_PERIOD_FOREVER] == 0)
         {
-            $publication->set_from_date(DatetimeUtilities::time_from_datepicker($options['from_date']));
-            $publication->set_to_date(DatetimeUtilities::time_from_datepicker($options['to_date']));
+            $publication->set_from_date(
+                DatetimeUtilities::time_from_datepicker($options[ContentObjectPublication::PROPERTY_FROM_DATE])
+            );
+            $publication->set_to_date(
+                DatetimeUtilities::time_from_datepicker($options[ContentObjectPublication::PROPERTY_TO_DATE])
+            );
         }
 
         if (!$publication->create())

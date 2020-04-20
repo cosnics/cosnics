@@ -459,14 +459,14 @@ class PublicationService
      */
     public function savePublicationFromValues(Publication $publication, int $userIdentifier, array $values)
     {
-        if ($values[PublicationForm::PROPERTY_FOREVER] != 0)
+        if ($values[PublicationForm::PROPERTY_TIME_PERIOD_FOREVER] != 0)
         {
             $from = $to = 0;
         }
         else
         {
-            $from = DatetimeUtilities::time_from_datepicker($values[PublicationForm::PROPERTY_FROM_DATE]);
-            $to = DatetimeUtilities::time_from_datepicker($values[PublicationForm::PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities::time_from_datepicker($values[Publication::PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities::time_from_datepicker($values[Publication::PROPERTY_TO_DATE]);
         }
 
         $publication->set_from_date($from);

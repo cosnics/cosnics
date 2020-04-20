@@ -84,22 +84,6 @@ interface PublicationInterface
 
     /**
      *
-     * @param \core\repository\ContentObject $content_object
-     * @return multitype:mixed
-     */
-    public static function getContentObjectPublicationLocations($content_object, $user = null);
-
-    /**
-     *
-     * @param \core\repository\ContentObject $content_object
-     * @param string[] $location
-     * @param string[] $attributes
-     */
-    public static function publish_content_object(ContentObject $content_object, LocationSupport $location, 
-        $options = array());
-
-    /**
-     *
      * @param \libraries\format\FormValidator $form
      */
     public static function add_publication_attributes_elements($form);

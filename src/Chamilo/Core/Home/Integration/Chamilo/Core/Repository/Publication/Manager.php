@@ -203,28 +203,9 @@ class Manager implements PublicationInterface
     /*
      * Publication from the repository is not possible due to several home blocks being different
      */
-    public static function getContentObjectPublicationLocations($content_object, $user = null)
-    {
-        return null;
-    }
-
-    /*
-     * Publication from the repository is not possible due to several home blocks being different
-     */
     public static function get_allowed_content_object_types()
     {
         return array();
-    }
-
-    /*
-     * Publication from the repository is not possible due to several home blocks being different
-     */
-    public static function publish_content_object(
-        ContentObject $content_object, LocationSupport $location,
-        $options = array()
-    )
-    {
-        return false;
     }
 
     /*

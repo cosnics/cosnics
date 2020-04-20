@@ -21,26 +21,16 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class PublicationForm extends FormValidator
 {
-    const PROPERTY_FOREVER = 'forever';
-
-    const PROPERTY_FROM_DATE = 'from_date';
 
     const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
-
     const PROPERTY_RIGHT_OPTION = 'right_option';
-
     const PROPERTY_TARGETS = 'targets';
 
-    const PROPERTY_TO_DATE = 'to_date';
-
     const RIGHT_OPTION_ALL = 0;
-
     const RIGHT_OPTION_ME = 1;
-
     const RIGHT_OPTION_SELECT = 2;
 
     const TYPE_CREATE = 1;
-
     const TYPE_UPDATE = 2;
 
     /**
@@ -109,7 +99,10 @@ class PublicationForm extends FormValidator
     {
         $this->build_rights_form();
 
-        $this->add_forever_or_timewindow();
+        $this->addTimePeriodSelection(
+            'PublicationPeriod', Publication::PROPERTY_FROM_DATE, Publication::PROPERTY_TO_DATE
+        );
+
         $this->addElement(
             'checkbox', Publication::PROPERTY_HIDDEN, Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES)
         );
@@ -187,7 +180,7 @@ class PublicationForm extends FormValidator
     {
         $defaults = array();
 
-        $defaults[self::PROPERTY_FOREVER] = 1;
+        $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
 
         parent::setDefaults($defaults);
@@ -206,7 +199,7 @@ class PublicationForm extends FormValidator
 
         if ($publication->get_from_date() != 0)
         {
-            $defaults[self::PROPERTY_FOREVER] = 0;
+            $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 0;
             $defaults[Publication::PROPERTY_FROM_DATE] = $publication->get_from_date();
             $defaults[Publication::PROPERTY_TO_DATE] = $publication->get_to_date();
         }

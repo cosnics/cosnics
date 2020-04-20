@@ -35,8 +35,10 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
             $labelHidden
         );
 
-        $form->add_forever_or_timewindow(
-            'PublicationPeriod', $this->getPublicationAttributeElementName($publicationContext), true
+        $form->addTimePeriodSelection(
+            'PublicationPeriod', ContentObjectPublication::PROPERTY_FROM_DATE,
+            ContentObjectPublication::PROPERTY_TO_DATE, FormValidator::PROPERTY_TIME_PERIOD_FOREVER,
+            $this->getPublicationAttributeElementName($publicationContext)
         );
 
         $form->addElement(
@@ -51,7 +53,8 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
         ), $labelEmail
         );
 
-        $defaults[Manager::WIZARD_TARGET][$publicationContext][Manager::WIZARD_OPTION]['forever'] = 1;
+        $defaults[Manager::WIZARD_TARGET][$publicationContext][Manager::WIZARD_OPTION][FormValidator::PROPERTY_TIME_PERIOD_FOREVER] =
+            1;
         $defaults[Manager::WIZARD_TARGET][$publicationContext][Manager::WIZARD_OPTION][ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
             1;
 

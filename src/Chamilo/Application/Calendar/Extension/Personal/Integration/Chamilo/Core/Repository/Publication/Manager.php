@@ -64,15 +64,6 @@ class Manager implements PublicationInterface
     }
 
     /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::deleteContentObjectPublications()
-     */
-
-    public static function getContentObjectPublicationLocations($content_object, $user = null)
-    {
-        // TODO: Implement getContentObjectPublicationLocations() method.
-    }
-
-    /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::delete_content_object_publication()
      */
 
@@ -83,10 +74,6 @@ class Manager implements PublicationInterface
     {
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationLocations()
-     */
-
     public static function get_allowed_content_object_types()
     {
     }
@@ -95,18 +82,7 @@ class Manager implements PublicationInterface
     {
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
-     */
-
     public static function isContentObjectPublished($object_id)
-    {
-    }
-
-    public static function publish_content_object(
-        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
-        $options = array()
-    )
     {
     }
 

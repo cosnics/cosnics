@@ -53,8 +53,10 @@ class EditorComponent extends Manager
                 }
 
                 $publicationForm = new PublicationForm(
-                    PublicationForm::TYPE_UPDATE, $this->get_url(array('validated' => 1))
+                    PublicationForm::TYPE_UPDATE, $this->get_url(array('validated' => 1)),
+                    $this->getRightsService()->getEntities()
                 );
+
                 $publicationForm->setPublicationDefaults(
                     $this->getUser(), $publication,
                     $this->getRightsService()->getViewTargetUsersAndGroupsIdentifiersForPublicationIdentifier(
