@@ -27,7 +27,7 @@ class XmlFormParserResult
     /**
      * An array of the validation rules
      *
-     * @var \Chamilo\Libraries\Format\Form\XmlFormParserValidationRule
+     * @var \Chamilo\Libraries\Format\Form\XmlFormParserValidationRule[]
      */
     private $validation_rules;
 
@@ -50,9 +50,43 @@ class XmlFormParserResult
     }
 
     /**
+     * Adds an default value for an element to the default_values list
+     *
+     * @param string $elementName
+     * @param string $defaultValue
+     */
+    public function add_default_value($elementName, $defaultValue)
+    {
+        $this->default_values[$elementName] = $defaultValue;
+    }
+
+    /**
+     * Adds an element to the elements list
+     *
+     * @param \HTML_QuickForm_element $element
+     */
+    public function add_element($element)
+    {
+        $this->elements[] = $element;
+    }
+
+    /**
+     * Adds a given element to the form
+     *
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \HTML_QuickForm_element
+     */
+    protected function add_element_fo_form(FormValidator $form, $element)
+    {
+        $form->addElement($element);
+    }
+
+    /**
      * Adds this result to a given form
      *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     *
+     * @throws \Exception
      */
     public function add_result_to_form(FormValidator $form)
     {
@@ -70,53 +104,13 @@ class XmlFormParserResult
     }
 
     /**
-     * Adds a given element to the form
+     * Adds an validation_rule to the validation_rules list
      *
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param HTML_QuickForm_element
+     * @param \\Chamilo\Libraries\Format\Form\XmlFormParserValidationRule $validationRule
      */
-    protected function add_element_fo_form(FormValidator $form, $element)
+    public function add_validation_rule($validationRule)
     {
-        $form->addElement($element);
-    }
-
-    /**
-     * Adds an element to the elements list
-     *
-     * @param \HTML_QuickForm_element $element
-     */
-    public function add_element($element)
-    {
-        $this->elements[] = $element;
-    }
-
-    /**
-     * Clears the elements list
-     */
-    public function clear_elements()
-    {
-        $this->set_elements(array());
-    }
-
-    /**
-     * Returns wheter or not the result has elements
-     *
-     * @return boolean
-     */
-    public function has_elements()
-    {
-        return count($this->get_elements() > 0);
-    }
-
-    /**
-     * Adds an default value for an element to the default_values list
-     *
-     * @param string $elementName
-     * @param string $defaultValue
-     */
-    public function add_default_value($elementName, $defaultValue)
-    {
-        $this->default_values[$elementName] = $defaultValue;
+        $this->validation_rules[] = $validationRule;
     }
 
     /**
@@ -128,23 +122,11 @@ class XmlFormParserResult
     }
 
     /**
-     * Returns wheter or not the result has default_values
-     *
-     * @return boolean
+     * Clears the elements list
      */
-    public function has_default_values()
+    public function clear_elements()
     {
-        return count($this->get_default_values() > 0);
-    }
-
-    /**
-     * Adds an validation_rule to the validation_rules list
-     *
-     * @param \\Chamilo\Libraries\Format\Form\XmlFormParserValidationRule $validationRule
-     */
-    public function add_validation_rule($validationRule)
-    {
-        $this->validation_rules[] = $validationRule;
+        $this->set_elements(array());
     }
 
     /**
@@ -153,36 +135,6 @@ class XmlFormParserResult
     public function clear_validation_rules()
     {
         $this->set_validation_rules(array());
-    }
-
-    /**
-     * Returns wheter or not the result has validation_rules
-     *
-     * @return boolean
-     */
-    public function has_validation_rules()
-    {
-        return count($this->get_validation_rules() > 0);
-    }
-
-    /**
-     * Returns the elements
-     *
-     * @return \HTML_QuickForm_element[]
-     */
-    public function get_elements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * Sets the elements
-     *
-     * @param \HTML_QuickForm_element[] $elements
-     */
-    public function set_elements($elements)
-    {
-        $this->elements = $elements;
     }
 
     /**
@@ -206,6 +158,26 @@ class XmlFormParserResult
     }
 
     /**
+     * Returns the elements
+     *
+     * @return \HTML_QuickForm_element[]
+     */
+    public function get_elements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * Sets the elements
+     *
+     * @param \HTML_QuickForm_element[] $elements
+     */
+    public function set_elements($elements)
+    {
+        $this->elements = $elements;
+    }
+
+    /**
      * Returns the validation_rules
      *
      * @return \Chamilo\Libraries\Format\Form\XmlFormParserValidationRule[]
@@ -223,5 +195,35 @@ class XmlFormParserResult
     public function set_validation_rules($validationRules)
     {
         $this->validation_rules = $validationRules;
+    }
+
+    /**
+     * Returns wheter or not the result has default_values
+     *
+     * @return boolean
+     */
+    public function has_default_values()
+    {
+        return count($this->get_default_values()) > 0;
+    }
+
+    /**
+     * Returns wheter or not the result has elements
+     *
+     * @return boolean
+     */
+    public function has_elements()
+    {
+        return count($this->get_elements()) > 0;
+    }
+
+    /**
+     * Returns wheter or not the result has validation_rules
+     *
+     * @return boolean
+     */
+    public function has_validation_rules()
+    {
+        return count($this->get_validation_rules()) > 0;
     }
 }

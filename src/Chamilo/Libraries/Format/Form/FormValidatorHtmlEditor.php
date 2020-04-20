@@ -85,7 +85,7 @@ class FormValidatorHtmlEditor
 
     /**
      *
-     * @return \HTML_QuickForm_textarea
+     * @return string
      */
     public function render()
     {
@@ -99,6 +99,9 @@ class FormValidatorHtmlEditor
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function add()
     {
         $form = $this->get_form();
