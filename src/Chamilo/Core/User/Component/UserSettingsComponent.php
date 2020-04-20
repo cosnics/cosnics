@@ -9,6 +9,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -61,7 +62,8 @@ class UserSettingsComponent extends ProfileComponent
         }
 
         $this->form = new ConfigurationForm(
-            $this->context, 'config', 'post', $this->get_url(array(self::PARAM_CONTEXT => $this->context)), true
+            $this->context, 'config', FormValidator::FORM_METHOD_POST,
+            $this->get_url(array(self::PARAM_CONTEXT => $this->context)), true
         );
 
         if ($this->form->validate())
@@ -109,8 +111,7 @@ class UserSettingsComponent extends ProfileComponent
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new DynamicVisualTab(
                     $setting_context, Translation::get('TypeName', null, $setting_context), new NamespaceIdentGlyph(
-                    $setting_context, true, false, false,
-                    IdentGlyph::SIZE_SMALL, array()
+                    $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, array()
                 ), $package_url, $is_current_tab
                 );
                 $tabs->add_tab($tab);

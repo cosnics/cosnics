@@ -42,7 +42,7 @@ class AvailabilityForm extends FormValidator
      */
     public function __construct($actionUrl, User $user, AvailabilityService $availabilityService)
     {
-        parent::__construct('Availability', 'post', $actionUrl);
+        parent::__construct('Availability', self::FORM_METHOD_POST, $actionUrl);
 
         $this->user = $user;
         $this->availabilityService = $availabilityService;

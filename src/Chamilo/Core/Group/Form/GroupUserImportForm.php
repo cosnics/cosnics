@@ -32,7 +32,7 @@ class GroupUserImportForm extends FormValidator
      */
     public function __construct($action)
     {
-        parent::__construct('group_user_import', 'post', $action);
+        parent::__construct('group_user_import', self::FORM_METHOD_POST, $action);
 
         $this->failed_elements = array();
         $this->build_importing_form();

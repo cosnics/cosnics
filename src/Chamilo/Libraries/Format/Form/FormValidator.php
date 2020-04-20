@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 
@@ -53,7 +52,7 @@ class FormValidator extends HTML_QuickForm
      * Constructor
      *
      * @param string $formName Name of the form
-     * @param string $method Method ('post' (default) or 'get')
+     * @param string $method Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
      * @param string $action Action (default is $PHP_SELF)
      * @param string $target Form's target defaults to '_self'
      * @param string[] $attributes (optional)Extra attributes for <form> tag
@@ -61,7 +60,8 @@ class FormValidator extends HTML_QuickForm
      *        (default = true)
      */
     public function __construct(
-        $formName = '', $method = 'post', $action = '', $target = '', $attributes = array(), $trackSubmit = true
+        $formName = '', $method = self::FORM_METHOD_POST, $action = '', $target = '', $attributes = array(),
+        $trackSubmit = true
     )
     {
         $attributes['onreset'] = 'resetElements()';
@@ -650,7 +650,8 @@ EOT;
         $elements[] = $this->add_datepicker($secondName, $secondLabel, $includeTimePicker);
 
         $this->addRule(
-            array($firstName, $secondName), Translation::get('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte'
+            array($firstName, $secondName), $this->getTranslation('StartDateShouldBeBeforeEndDate'), 'date_compare',
+            'lte'
         );
 
         return $elements;

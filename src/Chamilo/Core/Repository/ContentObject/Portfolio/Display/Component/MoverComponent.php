@@ -37,17 +37,17 @@ class MoverComponent extends ItemComponent
     public function build()
     {
         $selected_steps = $this->getRequest()->request->get(self::PARAM_STEP);
-        if(empty($selected_steps))
+        if (empty($selected_steps))
         {
             $selected_steps = $this->getRequest()->query->get(self::PARAM_STEP);
         }
 
-        if(empty($selected_steps))
+        if (empty($selected_steps))
         {
             throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('Step'));
         }
 
-        if (! is_array($selected_steps))
+        if (!is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);
         }
@@ -60,7 +60,7 @@ class MoverComponent extends ItemComponent
         {
             $selected_node = $path->get_node($selected_step);
 
-            if(empty($selected_node))
+            if (empty($selected_node))
             {
                 throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $selected_step);
             }
@@ -82,27 +82,21 @@ class MoverComponent extends ItemComponent
 
             $this->redirect(
                 Translation::get(
-                    'NoObjectsToMove',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
+                    'NoObjectsToMove', array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
                     Utilities::COMMON_LIBRARIES
-                ),
-                true,
-                $parameters
+                ), true, $parameters
             );
         }
 
         $path = $this->get_root_content_object()->get_complex_content_object_path();
         $parents = $this->get_possible_parents();
 
-        $form = new FormValidator('move', 'post', $this->get_url());
+        $form = new FormValidator('move', FormValidator::FORM_METHOD_POST, $this->get_url());
 
         if (count($available_nodes) > 1)
         {
             $form->addElement(
-                'static',
-                null,
-                Translation::get('SelectedPortfolioItems'),
-                $this->get_available_nodes($available_nodes)
+                'static', null, Translation::get('SelectedPortfolioItems'), $this->get_available_nodes($available_nodes)
             );
         }
 
@@ -119,7 +113,7 @@ class MoverComponent extends ItemComponent
         {
             $selected_node_id = $form->exportValue(self::PARAM_NEW_PARENT);
 
-            if(empty($selected_node_id))
+            if (empty($selected_node_id))
             {
                 throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('NewParent'));
             }
@@ -169,9 +163,7 @@ class MoverComponent extends ItemComponent
                         }
 
                         Event::trigger(
-                            'Activity',
-                            Manager::context(),
-                            array(
+                            'Activity', Manager::context(), array(
                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM,
                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                 Activity::PROPERTY_DATE => time(),
@@ -181,10 +173,8 @@ class MoverComponent extends ItemComponent
                         );
 
                         if (!DataManager::update_node_ids(
-                            $current_node_ids,
-                            $new_node_ids
-                        )
-                        )
+                            $current_node_ids, $new_node_ids
+                        ))
                         {
                             $failures ++;
                         }
@@ -215,11 +205,8 @@ class MoverComponent extends ItemComponent
             $this->redirect(
                 Translation::get(
                     $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
-                    Utilities::COMMON_LIBRARIES
-                ),
-                $failures > 0,
-                $parameters
+                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')), Utilities::COMMON_LIBRARIES
+                ), $failures > 0, $parameters
             );
         }
         else
@@ -237,6 +224,15 @@ class MoverComponent extends ItemComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     *
+     * @see \libraries\SubManager::get_additional_parameters()
+     */
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_STEP);
     }
 
     /**
@@ -267,42 +263,6 @@ class MoverComponent extends ItemComponent
         {
             return '';
         }
-    }
-
-    /**
-     * Get a list of possible parent nodes for the currently selected node(s)
-     *
-     * @return string[]
-     */
-    private function get_possible_parents()
-    {
-        $path = $this->get_root_content_object()->get_complex_content_object_path();
-        $root = $path->get_root();
-
-        $firstSelectedNode = $this->selectedNodes[0];
-
-        if ($root->get_id() == $firstSelectedNode->get_parent()->get_id())
-        {
-            $name = $root->get_content_object()->get_title() . ' (' . Translation::get('Current') . ')';
-        }
-        else
-        {
-            $name = $root->get_content_object()->get_title();
-        }
-
-        if ($root->get_id() == $firstSelectedNode->get_id())
-        {
-            $node_disabled = true;
-        }
-        else
-        {
-            $node_disabled = false;
-        }
-
-        $parents = array(1 => array($name, $node_disabled));
-        $parents = $this->get_children_from_node($root, $node_disabled, $parents);
-
-        return $parents;
     }
 
     /**
@@ -355,11 +315,38 @@ class MoverComponent extends ItemComponent
     }
 
     /**
+     * Get a list of possible parent nodes for the currently selected node(s)
      *
-     * @see \libraries\SubManager::get_additional_parameters()
+     * @return string[]
      */
-    public function get_additional_parameters()
+    private function get_possible_parents()
     {
-        return array(self::PARAM_STEP);
+        $path = $this->get_root_content_object()->get_complex_content_object_path();
+        $root = $path->get_root();
+
+        $firstSelectedNode = $this->selectedNodes[0];
+
+        if ($root->get_id() == $firstSelectedNode->get_parent()->get_id())
+        {
+            $name = $root->get_content_object()->get_title() . ' (' . Translation::get('Current') . ')';
+        }
+        else
+        {
+            $name = $root->get_content_object()->get_title();
+        }
+
+        if ($root->get_id() == $firstSelectedNode->get_id())
+        {
+            $node_disabled = true;
+        }
+        else
+        {
+            $node_disabled = false;
+        }
+
+        $parents = array(1 => array($name, $node_disabled));
+        $parents = $this->get_children_from_node($root, $node_disabled, $parents);
+
+        return $parents;
     }
 }

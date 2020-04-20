@@ -9,7 +9,6 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -39,15 +38,6 @@ use Exception;
 class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 {
     const PARAM_RESET_KEY = 'key';
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
 
     /**
      * Runs this component and displays its output.
@@ -101,7 +91,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         }
         else
         {
-            $form = new FormValidator('lost_password', 'post', $this->get_url());
+            $form = new FormValidator('lost_password', FormValidator::FORM_METHOD_POST, $this->get_url());
             $form->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'));
             $form->addRule(
                 User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
@@ -185,6 +175,11 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         return implode(PHP_EOL, $html);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('user_password_resetter');
+    }
+
     /**
      * Creates a new random password for the given user and sends an email to this user with the new password.
      *
@@ -215,7 +210,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'MailResetPasswordSender', array(
                     'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
                         array('Chamilo\Core\Admin', 'administrator_firstname')
-                    ), 'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    ),
+                    'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
                         array('Chamilo\Core\Admin', 'administrator_surname')
                     )
                 )
@@ -238,6 +234,39 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         {
             return false;
         }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService(HashingUtilities::class);
+    }
+
+    /**
+     * Returns the admin breadcrumb generator
+     *
+     * @return \libraries\format\BreadcrumbGeneratorInterface
+     */
+    public function get_breadcrumb_generator()
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+    }
+
+    /**
+     * Creates a key which is used to identify the user
+     *
+     * @param User $user
+     *
+     * @return string The requested key
+     */
+    private function get_user_key($user)
+    {
+        global $security_key;
+
+        return $this->getHashingUtilities()->hashString($security_key . $user->get_email());
     }
 
     /**
@@ -266,7 +295,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'MailResetPasswordSender', array(
                     'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
                         array('Chamilo\Core\Admin', 'administrator_firstname')
-                    ), 'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    ),
+                    'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
                         array('Chamilo\Core\Admin', 'administrator_surname')
                     )
                 )
@@ -289,34 +319,5 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         {
             return false;
         }
-    }
-
-    /**
-     * Creates a key which is used to identify the user
-     *
-     * @param User $user
-     *
-     * @return string The requested key
-     */
-    private function get_user_key($user)
-    {
-        global $security_key;
-
-        return $this->getHashingUtilities()->hashString($security_key . $user->get_email());
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_password_resetter');
-    }
-
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

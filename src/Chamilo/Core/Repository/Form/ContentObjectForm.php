@@ -139,8 +139,8 @@ abstract class ContentObjectForm extends FormValidator
      * @throws \Exception
      */
     public function __construct(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post', $action = null,
-        $extra = null, $additional_elements, $allow_new_version = true
+        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
+        $action = null, $extra = null, $additional_elements, $allow_new_version = true
     )
     {
         parent::__construct($form_name, $method, $action);
@@ -694,8 +694,8 @@ abstract class ContentObjectForm extends FormValidator
      * @return mixed
      */
     public static function factory(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post', $action = null,
-        $extra = null, $additional_elements = array(), $allow_new_version = true, $form_variant = null
+        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
+        $action = null, $extra = null, $additional_elements = array(), $allow_new_version = true, $form_variant = null
     )
     {
         $base_class_name = $content_object->package() . '\Form\\' . $content_object->class_name(false);

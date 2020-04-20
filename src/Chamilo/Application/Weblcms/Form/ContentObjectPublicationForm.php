@@ -139,7 +139,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $selectedContentObjects = array()
     )
     {
-        parent::__construct('content_object_publication_form', 'post', $action);
+        parent::__construct('content_object_publication_form', self::FORM_METHOD_POST, $action);
 
         if (count($publications) <= 0)
         {

@@ -19,7 +19,7 @@ class ImpactViewForm extends FormValidator
      */
     public function __construct($action)
     {
-        parent::__construct('category_impact_view_form', 'post', $action);
+        parent::__construct('category_impact_view_form', self::FORM_METHOD_POST, $action);
 
         $this->addElement('checkbox', self::PROPERTY_ACCEPT_IMPACT, Translation::get('AcceptImpact'));
         $this->addRule(self::PROPERTY_ACCEPT_IMPACT, Translation::get('ThisFieldIsRequired'), 'required');

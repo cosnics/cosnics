@@ -43,7 +43,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $course_group, $action, $parent, CourseGroupDecoratorsManager $courseGroupDecoratorsManager
     )
     {
-        parent::__construct('course_settings', 'post', $action);
+        parent::__construct('course_settings', self::FORM_METHOD_POST, $action);
         $this->course_group = $course_group;
         $this->parent = $parent;
         $this->courseGroupDecoratorsManager = $courseGroupDecoratorsManager;

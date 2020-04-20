@@ -9,12 +9,13 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 
@@ -35,27 +36,33 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                 array(
                     self::PARAM_ACTION => self::ACTION_EDIT_SUBFORUM,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
-                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id()));
+                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id(
+                    )
+                )
+            );
 
             $forum_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $selected_complex_content_object_item->get_ref());
+                ContentObject::class_name(), $selected_complex_content_object_item->get_ref()
+            );
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
-                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
-                    $this->get_root_content_object()->get_title()));
+                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
+                        )
+                    ), $this->get_root_content_object()->get_title()
+                )
+            );
 
             if ($this->get_complex_content_object_item())
             {
 
                 $forums_with_key_cloi = array();
                 $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
-                    $this->get_root_content_object()->get_id(),
-                    $this->get_complex_content_object_item()->get_id());
+                    $this->get_root_content_object()->get_id(), $this->get_complex_content_object_item()->get_id()
+                );
 
                 if ($forums_with_key_cloi)
                 {
@@ -68,8 +75,11 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                                 $this->get_url(
                                     array(
                                         self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
-                                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
-                                $value->get_title()));
+                                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
+                                    )
+                                ), $value->get_title()
+                            )
+                        );
                     }
                 }
                 else
@@ -80,14 +90,13 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation::get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))));
+                    Translation::get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))
+                )
+            );
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT,
-                new PersonalWorkspace($this->get_user()),
-                $forum_object,
-                'edit',
-                'post',
-                $url);
+                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $forum_object, 'edit',
+                FormValidator::FORM_METHOD_POST, $url
+            );
 
             if ($form->validate())
             {
@@ -100,13 +109,12 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     $selected_complex_content_object_item->update();
 
                     $children = DataManager::retrieve_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(),
-                        new EqualityCondition(
+                        ComplexContentObjectItem::class_name(), new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(),
-                                ComplexContentObjectItem::PROPERTY_PARENT),
-                            new StaticConditionVariable($old_id),
-                            ComplexContentObjectItem::get_table_name()));
+                                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                            ), new StaticConditionVariable($old_id), ComplexContentObjectItem::get_table_name()
+                        )
+                    );
                     while ($child = $children->next_result())
                     {
                         $child->set_parent($new_id);
@@ -137,9 +145,10 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
     {
         $message = htmlentities(
             Translation::get(
-                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                array('OBJECT' => Translation::get('Subforum')),
-                Utilities::COMMON_LIBRARIES));
+                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('Subforum')),
+                Utilities::COMMON_LIBRARIES
+            )
+        );
 
         $params = array();
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;

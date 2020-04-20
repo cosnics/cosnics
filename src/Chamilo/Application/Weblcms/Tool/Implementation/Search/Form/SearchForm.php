@@ -32,7 +32,7 @@ class SearchForm extends FormValidator
      */
     public function __construct($url)
     {
-        parent::__construct(self::FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url);
 
         $query = $this->getQuery();
 

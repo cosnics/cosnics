@@ -39,7 +39,7 @@ class PeerAssessmentViewerForm extends FormValidator
      */
     public function __construct($viewer)
     {
-        parent::__construct(self::FORM_NAME, 'post', $viewer->get_url());
+        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $viewer->get_url());
         
         $this->viewer = $viewer;
         

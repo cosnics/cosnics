@@ -54,7 +54,7 @@ class UserForm extends FormValidator
      */
     public function __construct($form_type, $user, $form_user, $action)
     {
-        parent::__construct('user_settings', 'post', $action);
+        parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
         $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager::getInstance();

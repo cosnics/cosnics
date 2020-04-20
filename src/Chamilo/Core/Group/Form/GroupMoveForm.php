@@ -24,7 +24,7 @@ class GroupMoveForm extends FormValidator
 
     public function __construct($group, $action, $user)
     {
-        parent::__construct('group_move', 'post', $action);
+        parent::__construct('group_move', self::FORM_METHOD_POST, $action);
         $this->group = $group;
 
         $this->build_form();

@@ -27,7 +27,7 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      * @param string $action
      * @param string $method
      */
-    public function __construct(ComplexContentObjectItem $complex_content_object_item, $action = null, $method = 'post')
+    public function __construct(ComplexContentObjectItem $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST)
     {
         parent::__construct('complex_content_object_item_form', $method, $action);
         $this->complex_content_object_item = $complex_content_object_item;
@@ -59,7 +59,7 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      * @param string $method
      * @return \core\repository\form\ComplexContentObjectItemForm
      */
-    public static function factory($namespace, $complex_content_object_item, $action = null, $method = 'post')
+    public static function factory($namespace, $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST)
     {
         if (! $complex_content_object_item->is_extended())
         {

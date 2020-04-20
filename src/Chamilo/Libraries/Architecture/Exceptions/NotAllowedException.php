@@ -47,7 +47,7 @@ class NotAllowedException extends UserException
         $translator = Translation::getInstance();
         $redirect = new Redirect();
 
-        $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
+        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $redirect->getCurrentUrl());
 
         $form->get_renderer()->setElementTemplate('{element}');
 
@@ -85,7 +85,8 @@ class NotAllowedException extends UserException
 
         $form->addElement('html', '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('sign-in-alt')
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
+            new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement('html', '</div>');
 

@@ -52,7 +52,7 @@ class DirectMoverForm extends FormValidator
         TreeNode $treeNode, AutomaticNumberingService $automaticNumberingService
     )
     {
-        parent::__construct('direct_mover_form', 'post', $action);
+        parent::__construct('direct_mover_form', self::FORM_METHOD_POST, $action);
 
         $this->tree = $tree;
         $this->treeNode = $treeNode;

@@ -55,7 +55,7 @@ class UserImportForm extends FormValidator
      */
     public function __construct($form_type, $action, $form_user)
     {
-        parent::__construct('user_import', 'post', $action);
+        parent::__construct('user_import', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
         $this->form_user = $form_user;

@@ -5,6 +5,7 @@ use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -33,13 +34,13 @@ class EditorComponent extends Manager
             $content_object = $publication->get_content_object();
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit', 'post',
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_EDIT,
-                        self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                    )
+                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                FormValidator::FORM_METHOD_POST, $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_EDIT,
+                    self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
                 )
+            )
             );
 
             if ($form->validate() || $this->getRequest()->query->get('validated'))

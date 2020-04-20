@@ -39,7 +39,7 @@ class VocabularyForm extends FormValidator
         Vocabulary $vocabulary, EntityTranslationFormService $entityTranslationFormService, $formUrl
     )
     {
-        parent::__construct('vocabulary', 'post', $formUrl);
+        parent::__construct('vocabulary', self::FORM_METHOD_POST, $formUrl);
 
         $this->vocabulary = $vocabulary;
         $this->entityTranslationFormService = $entityTranslationFormService;

@@ -50,7 +50,7 @@ class RegisterForm extends FormValidator
      */
     public function __construct($user, $action)
     {
-        parent::__construct('user_settings', 'post', $action);
+        parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
         $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager::getInstance();

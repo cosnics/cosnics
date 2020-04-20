@@ -67,7 +67,7 @@ class LogViewerComponent extends Manager
 
     public function build_form()
     {
-        $form = new FormValidator('logviewer', 'post', $this->get_url());
+        $form = new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->get_url());
         $renderer = &$form->defaultRenderer();
         $renderer->setElementTemplate(' {element} ');
 
@@ -90,9 +90,9 @@ class LogViewerComponent extends Manager
         }
 
         $lines = array(
-            '10'  => '10 ' . Translation::get('Lines'),
-            '20'  => '20 ' . Translation::get('Lines'),
-            '50'  => '50 ' . Translation::get('Lines'),
+            '10' => '10 ' . Translation::get('Lines'),
+            '20' => '20 ' . Translation::get('Lines'),
+            '50' => '50 ' . Translation::get('Lines'),
             'all' => Translation::get('AllLines')
         );
 
@@ -109,7 +109,7 @@ class LogViewerComponent extends Manager
         }
 
         $server_types = array(
-            'php'   => Translation::get('PHPErrorLog'),
+            'php' => Translation::get('PHPErrorLog'),
             'httpd' => Translation::get('HTTPDErrorLog'),
             'mysql' => Translation::get('MYSQLErrorLog')
         );

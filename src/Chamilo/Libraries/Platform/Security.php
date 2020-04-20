@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -15,21 +17,179 @@ class Security
     use DependencyInjectionContainerTrait;
 
     /**
-     * This function tackles the XSS injections.
-     * Filtering for XSS is very easily done by using the htmlentities()
-     * function. This kind of filtering prevents JavaScript snippets to be understood as such.
+     * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
+     * attacks)
      *
-     * @param string $variable
-     * @param boolean $isAdmin
+     * @param string $array
      *
-     * @return string string
+     * @return boolean if it's the right token, false otherwise
+     */
+    public function checkToken($array = 'post')
+    {
+        $session_token = Session::retrieve('sec_token');
+
+        switch ($array)
+        {
+            case 'get' :
+                $get_token = Request::get('sec_token');
+                if (isset($session_token) && isset($get_token) && $session_token === $get_token)
+                {
+                    return true;
+                }
+
+                return false;
+            case 'post' :
+                $post_token = Request::post('sec_token');
+                if (isset($session_token) && isset($post_token) && $session_token === $post_token)
+                {
+                    return true;
+                }
+
+                return false;
+            default :
+                if (isset($session_token) && isset($array) && $session_token === $array)
+                {
+                    return true;
+                }
+
+                return false;
+        }
+    }
+
+    /**
+     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
+     *
+     * @return boolean
+     */
+    public function checkUa()
+    {
+        $session_agent = Session::retrieve('sec_ua');
+        $current_agent = Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed');
+
+        if (isset($session_agent) and $session_agent === $current_agent)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
+     * attacks)
+     *
+     * @param string $array
+     *
+     * @return boolean if it's the right token, false otherwise
      * @deprecated
      *
-     * @see removeXSS
+     * @see checkToken
      */
-    public function remove_XSS($variable, $isAdmin = null)
+    public function check_token($array = 'post')
     {
-        return self::removeXSS($variable, $isAdmin);
+        return self::checkToken($array);
+    }
+
+    /**
+     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
+     *
+     * @return boolean
+     *
+     * @deprecated
+     *
+     * @see checkUa
+     */
+    public function check_ua()
+    {
+        return self::checkUa();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities|object
+     */
+    public function getHashingUtilities()
+    {
+        $this->initializeContainer();
+
+        return $this->getService(HashingUtilities::class);
+    }
+
+    /**
+     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
+     * session.
+     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
+     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
+     * time). Check the token with check_token()
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
+        Session::register('sec_token', $token);
+
+        return $token;
+    }
+
+    /**
+     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
+     */
+    public function getUa()
+    {
+        Session::register('sec_ua_seed', uniqid(rand(), true));
+        Session::register('sec_ua', Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed'));
+    }
+
+    /**
+     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
+     * session.
+     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
+     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
+     * time). Check the token with check_token()
+     *
+     * @return string
+     *
+     * @deprecated
+     *
+     * @see getToken
+     */
+    public function get_token()
+    {
+        return $this->getToken();
+    }
+
+    /**
+     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
+     *
+     * @deprecated
+     *
+     * @see getUa
+     */
+    public function get_ua()
+    {
+        self::getUa();
+    }
+
+    /**
+     * Checks whether or not the logged in user is a platform admin or a teacher
+     *
+     * @return boolean
+     */
+    protected function isPlatformAdminOrTeacher()
+    {
+        $user_id = Session::getUserId();
+
+        if (!empty($user_id))
+        {
+            $user = DataManager::retrieve_by_id(
+                User::class_name(), $user_id
+            );
+
+            return $user->is_platform_admin() || $user->is_teacher();
+        }
+
+        return false;
     }
 
     /**
@@ -114,22 +274,6 @@ class Security
      * @param boolean $isAdmin
      *
      * @return string[]
-     *
-     * @deprecated
-     *
-     * @see removeXSSRecursive
-     */
-    public function remove_XSS_recursive($array, $isAdmin = null)
-    {
-        return self::removeXSSRecursive($array, $isAdmin);
-    }
-
-    /**
-     *
-     * @param string[] $array
-     * @param boolean $isAdmin
-     *
-     * @return string[]
      */
     public function removeXSSRecursive($array, $isAdmin = null)
     {
@@ -148,178 +292,36 @@ class Security
     }
 
     /**
-     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
+     * This function tackles the XSS injections.
+     * Filtering for XSS is very easily done by using the htmlentities()
+     * function. This kind of filtering prevents JavaScript snippets to be understood as such.
+     *
+     * @param string $variable
+     * @param boolean $isAdmin
+     *
+     * @return string string
+     * @deprecated
+     *
+     * @see removeXSS
+     */
+    public function remove_XSS($variable, $isAdmin = null)
+    {
+        return self::removeXSS($variable, $isAdmin);
+    }
+
+    /**
+     *
+     * @param string[] $array
+     * @param boolean $isAdmin
+     *
+     * @return string[]
      *
      * @deprecated
      *
-     * @see getUa
+     * @see removeXSSRecursive
      */
-    public function get_ua()
+    public function remove_XSS_recursive($array, $isAdmin = null)
     {
-        self::getUa();
-    }
-
-    /**
-     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
-     */
-    public function getUa()
-    {
-        Session::register('sec_ua_seed', uniqid(rand(), true));
-        Session::register('sec_ua', Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed'));
-    }
-
-    /**
-     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
-     *
-     * @return boolean
-     *
-     * @deprecated
-     *
-     * @see checkUa
-     */
-    public function check_ua()
-    {
-        return self::checkUa();
-    }
-
-    /**
-     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
-     *
-     * @return boolean
-     */
-    public function checkUa()
-    {
-        $session_agent = Session::retrieve('sec_ua');
-        $current_agent = Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed');
-
-        if (isset($session_agent) and $session_agent === $current_agent)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities|object
-     */
-    public function getHashingUtilities()
-    {
-        $this->initializeContainer();
-
-        return $this->getService(HashingUtilities::class);
-    }
-
-    /**
-     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session.
-     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
-     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
-     * time). Check the token with check_token()
-     *
-     * @return string
-     *
-     * @deprecated
-     *
-     * @see getToken
-     */
-    public function get_token()
-    {
-        return $this->getToken();
-    }
-
-    /**
-     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session.
-     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
-     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
-     * time). Check the token with check_token()
-     *
-     * @return string
-     */
-    public function getToken()
-    {
-        $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
-        Session::register('sec_token', $token);
-
-        return $token;
-    }
-
-    /**
-     * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
-     * attacks)
-     *
-     * @param string $array
-     *
-     * @return boolean if it's the right token, false otherwise
-     * @deprecated
-     *
-     * @see checkToken
-     */
-    public function check_token($array = 'post')
-    {
-        return self::checkToken($array);
-    }
-
-    /**
-     * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
-     * attacks)
-     *
-     * @param string $array
-     *
-     * @return boolean if it's the right token, false otherwise
-     */
-    public function checkToken($array = 'post')
-    {
-        $session_token = Session::retrieve('sec_token');
-
-        switch ($array)
-        {
-            case 'get' :
-                $get_token = Request::get('sec_token');
-                if (isset($session_token) && isset($get_token) && $session_token === $get_token)
-                {
-                    return true;
-                }
-
-                return false;
-            case 'post' :
-                $post_token = Request::post('sec_token');
-                if (isset($session_token) && isset($post_token) && $session_token === $post_token)
-                {
-                    return true;
-                }
-
-                return false;
-            default :
-                if (isset($session_token) && isset($array) && $session_token === $array)
-                {
-                    return true;
-                }
-
-                return false;
-        }
-    }
-
-    /**
-     * Checks whether or not the logged in user is a platform admin or a teacher
-     *
-     * @return boolean
-     */
-    protected function isPlatformAdminOrTeacher()
-    {
-        $user_id = Session::getUserId();
-
-        if (!empty($user_id))
-        {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), $user_id
-            );
-
-            return $user->is_platform_admin() || $user->is_teacher();
-        }
-
-        return false;
+        return self::removeXSSRecursive($array, $isAdmin);
     }
 }

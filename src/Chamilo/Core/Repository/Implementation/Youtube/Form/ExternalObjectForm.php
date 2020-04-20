@@ -28,7 +28,7 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        parent::__construct('youtube_upload', 'post', $action);
+        parent::__construct('youtube_upload', self::FORM_METHOD_POST, $action);
 
         $this->application = $application;
 

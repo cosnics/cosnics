@@ -23,7 +23,7 @@ class AnonymousUserForm extends FormValidator
      */
     public function __construct($action)
     {
-        parent::__construct('user_settings', 'post', $action);
+        parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $defaultRenderer = $this->defaultRenderer();
         $defaultRenderer->setElementTemplate('<div>{element}</div>');

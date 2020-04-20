@@ -49,7 +49,7 @@ class ProviderLinkForm extends FormValidator
     public function __construct(EntityService $entityService, ElementService $elementService, 
         RelationService $relationService, DataClassEntity $entity, $postUrl)
     {
-        parent::__construct('ProviderLink', 'post', $postUrl);
+        parent::__construct('ProviderLink', self::FORM_METHOD_POST, $postUrl);
         
         $this->entityService = $entityService;
         $this->elementService = $elementService;

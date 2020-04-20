@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Re
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  *
@@ -26,7 +28,7 @@ class MasteryComponent extends Manager
         {
             $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
-            $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
+            $this->redirect(Translation::get($message), !$succes, $this->get_application()->get_parameters());
         }
         else
         {
@@ -42,44 +44,9 @@ class MasteryComponent extends Manager
         return null;
     }
 
-    /**
-     * Renders a template from a given context
-     *
-     * @param string $context
-     * @param string $template
-     *
-     * @return string
-     */
-    protected function renderTemplate($context, $template, $parameters = array())
-    {
-        $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
-
-        if (! file_exists($templatePath))
-        {
-            throw new \InvalidArgumentException(
-                sprintf('The given template %s in context %s could not be found', $template, $context));
-        }
-
-        $contents = file_get_contents($templatePath);
-
-        if ($contents === false)
-        {
-            throw new \RuntimeException(
-                sprintf('The given template %s in context %s could not be loaded', $template, $context));
-        }
-
-        foreach ($parameters as $variable => $value)
-        {
-            $contents = str_replace('{ ' . $variable . ' }', $value, $contents);
-            $contents = str_replace('{' . $variable . '}', $value, $contents);
-        }
-
-        return $contents;
-    }
-
     public function get_form($url, TreeNodeData $treeNodeData)
     {
-        $form = new FormValidator('mastery_score', 'post', $url);
+        $form = new FormValidator('mastery_score', FormValidator::FORM_METHOD_POST, $url);
 
         $values = array();
         for ($i = 0; $i <= 100; $i ++)
@@ -101,6 +68,43 @@ class MasteryComponent extends Manager
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         return $form;
+    }
+
+    /**
+     * Renders a template from a given context
+     *
+     * @param string $context
+     * @param string $template
+     *
+     * @return string
+     */
+    protected function renderTemplate($context, $template, $parameters = array())
+    {
+        $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
+
+        if (!file_exists($templatePath))
+        {
+            throw new InvalidArgumentException(
+                sprintf('The given template %s in context %s could not be found', $template, $context)
+            );
+        }
+
+        $contents = file_get_contents($templatePath);
+
+        if ($contents === false)
+        {
+            throw new RuntimeException(
+                sprintf('The given template %s in context %s could not be loaded', $template, $context)
+            );
+        }
+
+        foreach ($parameters as $variable => $value)
+        {
+            $contents = str_replace('{ ' . $variable . ' }', $value, $contents);
+            $contents = str_replace('{' . $variable . '}', $value, $contents);
+        }
+
+        return $contents;
     }
 
     public function set_mastery_score(TreeNodeData $treeNodeData, $values)

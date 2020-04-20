@@ -27,7 +27,7 @@ class EmailForm extends FormValidator
      */
     public function __construct($action, $user, $target_users)
     {
-        parent::__construct('email_form', 'post', $action);
+        parent::__construct('email_form', self::FORM_METHOD_POST, $action);
 
         $this->target_users = $target_users;
         $this->user = $user;

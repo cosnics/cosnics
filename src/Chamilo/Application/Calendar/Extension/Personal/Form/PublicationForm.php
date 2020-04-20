@@ -40,7 +40,7 @@ class PublicationForm extends BasePublicationForm
      */
     public function __construct(User $formUser, $action, $selectedContentObjects = array())
     {
-        parent::__construct('publish', 'post', $action);
+        parent::__construct('publish', self::FORM_METHOD_POST, $action);
 
         $this->formUser = $formUser;
 
@@ -146,39 +146,38 @@ class PublicationForm extends BasePublicationForm
             $defaultTargets->add_element($userEntityProvider->getEntityElementFinderElement($targetUser->getId()));
         }
 
-
         $element = $this->getElement(self::PARAM_SHARE);
         $element->setDefaultValues($defaultTargets);
-//
-//        foreach ($targetGroups as $targetGroup)
-//        {
-//            $selectedGroup = array();
-//            $selectedGroup['id'] = 'group_' . $targetGroup->getId();
-//            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
-//            $selectedGroup['title'] = $targetGroup->get_name();
-//            $selectedGroup['description'] = $targetGroup->get_name();
-//
-//            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedGroup['id']] = $selectedGroup;
-//        }
-//
-//        foreach ($targetUsers as $targetUser)
-//        {
-//            $selectedUser = array();
-//            $selectedUser['id'] = 'user_' . $targetUser->getId();
-//            $selectedUser['classes'] = $userGlyph->getClassNamesString();
-//            $selectedUser['title'] = $targetUser->get_fullname();
-//            $selectedUser['description'] = $targetUser->get_username();
-//
-//            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedUser['id']] = $selectedUser;
-//        }
-//
-//        if (count($defaults[self::PARAM_SHARE_ELEMENTS]) > 0)
-//        {
-//            $defaults[self::PARAM_SHARE_OPTION] = '1';
-//        }
-//
-//        $active = $this->getElement(self::PARAM_SHARE_ELEMENTS);
-//        $active->_elements[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
+        //
+        //        foreach ($targetGroups as $targetGroup)
+        //        {
+        //            $selectedGroup = array();
+        //            $selectedGroup['id'] = 'group_' . $targetGroup->getId();
+        //            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
+        //            $selectedGroup['title'] = $targetGroup->get_name();
+        //            $selectedGroup['description'] = $targetGroup->get_name();
+        //
+        //            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedGroup['id']] = $selectedGroup;
+        //        }
+        //
+        //        foreach ($targetUsers as $targetUser)
+        //        {
+        //            $selectedUser = array();
+        //            $selectedUser['id'] = 'user_' . $targetUser->getId();
+        //            $selectedUser['classes'] = $userGlyph->getClassNamesString();
+        //            $selectedUser['title'] = $targetUser->get_fullname();
+        //            $selectedUser['description'] = $targetUser->get_username();
+        //
+        //            $defaults[self::PARAM_SHARE_ELEMENTS][$selectedUser['id']] = $selectedUser;
+        //        }
+        //
+        //        if (count($defaults[self::PARAM_SHARE_ELEMENTS]) > 0)
+        //        {
+        //            $defaults[self::PARAM_SHARE_OPTION] = '1';
+        //        }
+        //
+        //        $active = $this->getElement(self::PARAM_SHARE_ELEMENTS);
+        //        $active->_elements[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
 
         parent::setDefaults($defaults);
     }

@@ -30,7 +30,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
     public function __construct($course_section, $action)
     {
-        parent::__construct('course_sections', 'post', $action);
+        parent::__construct('course_sections', self::FORM_METHOD_POST, $action);
 
         $this->course_section = $course_section;
         $this->build_basic_form();

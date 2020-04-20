@@ -46,7 +46,7 @@ class UserViewForm extends FormValidator
      */
     public function __construct($form_type, $user_view, $action)
     {
-        parent::__construct('user_views_settings', 'post', $action);
+        parent::__construct('user_views_settings', self::FORM_METHOD_POST, $action);
 
         $this->user_view = $user_view;
 

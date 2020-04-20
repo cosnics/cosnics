@@ -24,7 +24,7 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
 
     public function __construct($course_type_user_category_rel_course, $user, $action)
     {
-        parent::__construct('course_type_user_category_rel_course_form', 'post', $action);
+        parent::__construct('course_type_user_category_rel_course_form', self::FORM_METHOD_POST, $action);
 
         $this->course_type_user_category_rel_course = $course_type_user_category_rel_course;
         $this->user = $user;

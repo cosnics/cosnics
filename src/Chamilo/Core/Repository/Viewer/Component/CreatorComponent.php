@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -136,7 +137,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         );
 
         $form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_CREATE, new PersonalWorkspace($this->get_user()), $object, 'create', 'post',
+            ContentObjectForm::TYPE_CREATE, new PersonalWorkspace($this->get_user()), $object, 'create',
+            FormValidator::FORM_METHOD_POST,
             $this->get_url(array_merge(array(TypeSelector::PARAM_SELECTION => $template_id), $this->get_parameters()))
         );
 
@@ -164,7 +166,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         );
 
         $form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit', 'post',
+            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+            FormValidator::FORM_METHOD_POST,
             $this->get_url(array_merge($this->get_parameters(), array(self::PARAM_EDIT_ID => $content_object_id)))
         );
 

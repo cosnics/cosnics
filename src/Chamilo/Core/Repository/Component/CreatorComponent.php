@@ -17,6 +17,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -92,7 +93,8 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             $object->set_template_registration_id($this->template_id);
 
             $content_object_form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $object, 'create_content_object', 'post',
+                ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $object, 'create_content_object',
+                FormValidator::FORM_METHOD_POST,
                 $this->get_url(array(TypeSelector::PARAM_SELECTION => $this->template_id)), null
             );
 
@@ -115,7 +117,8 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     Event::trigger(
                         'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_CREATED,
-                            Activity::PROPERTY_USER_ID => $this->get_user_id(), Activity::PROPERTY_DATE => time(),
+                            Activity::PROPERTY_USER_ID => $this->get_user_id(),
+                            Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                             Activity::PROPERTY_CONTENT => $object->get_title()
                         )

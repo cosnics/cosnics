@@ -58,7 +58,7 @@ class AccountForm extends FormValidator
      */
     public function __construct($form_type, $user, $action, AuthenticationValidator $authenticationValidator)
     {
-        parent::__construct('user_account', 'post', $action);
+        parent::__construct('user_account', self::FORM_METHOD_POST, $action);
 
         $this->user = $user;
         $this->adm = DataManager::getInstance();

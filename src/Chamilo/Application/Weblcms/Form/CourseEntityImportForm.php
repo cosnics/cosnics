@@ -14,7 +14,7 @@ class CourseEntityImportForm extends FormValidator
 
     public function __construct($action)
     {
-        parent::__construct('course_user_import', 'post', $action);
+        parent::__construct('course_user_import', self::FORM_METHOD_POST, $action);
 
         $this->addElement('file', 'file', Translation::get('FileName'));
 

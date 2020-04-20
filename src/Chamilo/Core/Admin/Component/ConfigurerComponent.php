@@ -7,6 +7,7 @@ use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeSettingsMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -41,7 +42,7 @@ class ConfigurerComponent extends Manager
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $form = new ConfigurationForm(
-            $this->get_context(), 'config', 'post',
+            $this->get_context(), 'config', FormValidator::FORM_METHOD_POST,
             $this->get_url(array(self::PARAM_CONTEXT => $this->get_context(), self::PARAM_TAB => $this->get_tab()))
         );
 
@@ -90,8 +91,7 @@ class ConfigurerComponent extends Manager
                     $tabs->add_tab(
                         new DynamicVisualTab(
                             $package, Translation::get('TypeName', null, $package), new NamespaceIdentGlyph(
-                            $package, true, false, false,
-                            IdentGlyph::SIZE_SMALL
+                            $package, true, false, false, IdentGlyph::SIZE_SMALL
                         ), $this->get_url(array(self::PARAM_TAB => $this->get_tab(), self::PARAM_CONTEXT => $package)),
                             $this->get_context() == $package
                         )

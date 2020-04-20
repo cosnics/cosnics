@@ -51,7 +51,7 @@ class CourseRequestForm extends FormValidator
         $form_type, $action, $course, $parent, $request, $multiple_users = false, $request_user_id = null
     )
     {
-        parent::__construct('course_request', 'post', $action);
+        parent::__construct('course_request', self::FORM_METHOD_POST, $action);
         $this->multiple_users = $multiple_users;
         $this->parent = $parent;
         $this->request = $request;

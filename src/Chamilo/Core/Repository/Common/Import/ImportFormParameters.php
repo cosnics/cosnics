@@ -3,11 +3,12 @@ namespace Chamilo\Core\Repository\Common\Import;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use InvalidArgumentException;
 
 /**
  * Parameters for the import form
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ImportFormParameters
@@ -59,7 +60,7 @@ class ImportFormParameters
 
     /**
      * ImportFormParameters constructor.
-     * 
+     *
      * @param string $importFormType
      * @param WorkspaceInterface $workspace
      * @param Application $application
@@ -68,8 +69,11 @@ class ImportFormParameters
      * @param bool $showCategories
      * @param int $maximumFilesToUpload
      */
-    public function __construct($importFormType, WorkspaceInterface $workspace, Application $application, $action, 
-        $method = 'post', $showCategories = true, $maximumFilesToUpload = self::IMPORT_MULTIPLE_FILES)
+    public function __construct(
+        $importFormType, WorkspaceInterface $workspace, Application $application, $action,
+        $method = FormValidator::FORM_METHOD_POST, $showCategories = true,
+        $maximumFilesToUpload = self::IMPORT_MULTIPLE_FILES
+    )
     {
         $this->importFormType = $importFormType;
         $this->workspace = $workspace;
@@ -77,33 +81,35 @@ class ImportFormParameters
         $this->method = $method;
         $this->action = $action;
         $this->showCategories = $showCategories;
-        
-        if (! in_array($maximumFilesToUpload, array(self::IMPORT_MULTIPLE_FILES, self::IMPORT_SINGLE_FILE)))
+
+        if (!in_array($maximumFilesToUpload, array(self::IMPORT_MULTIPLE_FILES, self::IMPORT_SINGLE_FILE)))
         {
             throw new InvalidArgumentException(
                 'The given parameter "maximumFilesToUpload" must be either ImportParameters::IMPORT_MULTIPLE_FILES' .
-                     ' (0) or ImportParameters::IMPORT_SINGLE_FILE (1)');
+                ' (0) or ImportParameters::IMPORT_SINGLE_FILE (1)'
+            );
         }
-        
+
         $this->maximumFilesToUpload = $maximumFilesToUpload;
+    }
+
+    /**
+     * Helper method to return whether or not the import form can import multiple files
+     *
+     * @return bool
+     */
+    public function canUploadMultipleFiles()
+    {
+        return $this->maximumFilesToUpload == self::IMPORT_MULTIPLE_FILES;
     }
 
     /**
      *
      * @return string
      */
-    public function getImportFormType()
+    public function getAction()
     {
-        return $this->importFormType;
-    }
-
-    /**
-     *
-     * @return WorkspaceInterface
-     */
-    public function getWorkspace()
-    {
-        return $this->workspace;
+        return $this->action;
     }
 
     /**
@@ -119,27 +125,9 @@ class ImportFormParameters
      *
      * @return string
      */
-    public function getMethod()
+    public function getImportFormType()
     {
-        return $this->method;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isShowCategories()
-    {
-        return $this->showCategories;
+        return $this->importFormType;
     }
 
     /**
@@ -152,12 +140,29 @@ class ImportFormParameters
     }
 
     /**
-     * Helper method to return whether or not the import form can import multiple files
-     * 
-     * @return bool
+     *
+     * @return string
      */
-    public function canUploadMultipleFiles()
+    public function getMethod()
     {
-        return $this->maximumFilesToUpload == self::IMPORT_MULTIPLE_FILES;
+        return $this->method;
+    }
+
+    /**
+     *
+     * @return WorkspaceInterface
+     */
+    public function getWorkspace()
+    {
+        return $this->workspace;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isShowCategories()
+    {
+        return $this->showCategories;
     }
 }

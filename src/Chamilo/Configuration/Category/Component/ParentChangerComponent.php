@@ -164,7 +164,7 @@ class ParentChangerComponent extends Manager
         $this->build_category_tree(0, $selected_categories, $current_parent);
         $form = new FormValidator(
             'select_category',
-            'post',
+            FormValidator::FORM_METHOD_POST,
             $this->get_url(
                 array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT)));
 

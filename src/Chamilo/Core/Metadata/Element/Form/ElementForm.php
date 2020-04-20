@@ -22,7 +22,7 @@ class ElementForm extends FormValidator
      */
     public function __construct($form_url, Element $element)
     {
-        parent::__construct('element', 'post', $form_url);
+        parent::__construct('element', self::FORM_METHOD_POST, $form_url);
 
         $this->element = $element;
         $this->build_form();

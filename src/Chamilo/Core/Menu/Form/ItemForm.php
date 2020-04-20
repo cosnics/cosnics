@@ -60,7 +60,7 @@ class ItemForm extends FormValidator
         ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter, string $action
     )
     {
-        parent::__construct('item-form', 'post', $action);
+        parent::__construct('item-form', self::FORM_METHOD_POST, $action);
 
         $this->translator = $translator;
         $this->itemService = $itemService;

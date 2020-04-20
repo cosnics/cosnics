@@ -44,7 +44,7 @@ class NotAuthenticatedResponse extends Response
         $translator = Translation::getInstance();
         $redirect = new Redirect();
 
-        $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
+        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $redirect->getCurrentUrl());
 
         $form->get_renderer()->setElementTemplate('{element}');
         $form->get_renderer()->setRequiredNoteTemplate(null);

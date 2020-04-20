@@ -54,7 +54,7 @@ class RightsForm extends FormValidator
      */
     public function __construct($formUrl, WorkspaceEntityRelation $entityRelation = null, $mode = self::MODE_CREATE)
     {
-        parent::__construct('rights', 'post', $formUrl);
+        parent::__construct('rights', self::FORM_METHOD_POST, $formUrl);
         
         $this->entityRelation = $entityRelation;
         $this->mode = $mode;

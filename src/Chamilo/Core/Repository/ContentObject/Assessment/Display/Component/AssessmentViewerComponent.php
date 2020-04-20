@@ -7,16 +7,18 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\As
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -56,11 +58,9 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     {
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                $this->get_url(),
-                Translation:: get(
-                    'AssessmentToolViewerComponent',
-                    array('TITLE' => $this->get_root_content_object()->get_title())
-                )
+                $this->get_url(), Translation:: get(
+                'AssessmentToolViewerComponent', array('TITLE' => $this->get_root_content_object()->get_title())
+            )
             )
         );
 
@@ -82,8 +82,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
 
         if (($this->result_form_submitted() || $this->question_form_submitted()) &&
-            $this->get_action() == self :: FORM_SUBMIT
-        )
+            $this->get_action() == self :: FORM_SUBMIT)
         {
             $result_processor = new AssessmentResultProcessor($this);
             $result_processor->finish_assessment();
@@ -100,7 +99,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                if($this->get_assessment_back_url())
+                if ($this->get_assessment_back_url())
                 {
                     $redirect = new Redirect();
                     $redirect->writeHeader($this->get_assessment_back_url());
@@ -120,7 +119,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->question_form = new AssessmentViewerForm($this, 'post', $this->get_url());
+            $this->question_form = new AssessmentViewerForm($this, FormValidator::FORM_METHOD_POST, $this->get_url());
 
             $html = array();
 
@@ -132,14 +131,19 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
     }
 
-    /**
-     * Returns the question form
-     *
-     * @return AssessmentViewerForm
-     */
-    public function get_question_form()
+    public function get_action()
     {
-        return $this->question_form;
+        $actions = array(self :: FORM_NEXT, self :: FORM_SUBMIT, self :: FORM_BACK);
+
+        foreach ($actions as $action)
+        {
+            if (!is_null(Request:: post($action)))
+            {
+                return $action;
+            }
+        }
+
+        return self::FORM_NEXT;
     }
 
     /**
@@ -152,61 +156,47 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         return $this->get_root_content_object();
     }
 
-    /**
-     * Initializes the assessment for usage in this viewer
-     */
-    protected function initialize_assessment()
+    public function get_previous_questions_page()
     {
-        $assessment = $this->get_root_content_object();
-
-        $this->initialize_questions();
-        $total_questions = count($this->questions);
-
-        $questions_per_page = $assessment->get_questions_per_page();
-
-        if ($questions_per_page == 0)
+        if (!$this->previous_page)
         {
-            $this->total_pages = 1;
+            if ($this->result_form_submitted() || $this->question_form_submitted())
+            {
+                $this->previous_page = $this->get_submitted_page_number() - 1;
+            }
+            else
+            {
+                $this->previous_page = 1;
+            }
         }
-        else
-        {
-            $this->total_pages = ceil($total_questions / $questions_per_page);
-        }
+
+        return $this->previous_page;
     }
 
     /**
-     * Initializes the questions for usage in this viewer
+     * Returns the answers for the questions
      */
-    protected function initialize_questions()
+    public function get_question_answers()
     {
-        $question_ids = $this->get_parent()->get_registered_question_ids();
-        $order_by = array();
+        $answers = array();
 
-        if (!is_array($question_ids) || count($question_ids) == 0)
+        $question_attempts = $this->get_parent()->get_assessment_question_attempts();
+        foreach ($question_attempts as $question_attempt)
         {
-            $question_ids = $this->get_question_ids_for_assessment();
-            $this->get_parent()->register_question_ids($question_ids);
+            $answers[$question_attempt->get_question_complex_id()] = unserialize($question_attempt->get_answer());
         }
 
-        $order_by[] = new OrderBy(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem:: class_name(),
-                ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
-            )
-        );
+        return $answers;
+    }
 
-        $condition = new InCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem:: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ID
-            ),
-            $question_ids
-        );
-
-        $this->questions = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem:: class_name(),
-            new DataClassRetrievesParameters($condition, null, null, $order_by)
-        )->as_array();
+    /**
+     * Returns the question form
+     *
+     * @return AssessmentViewerForm
+     */
+    public function get_question_form()
+    {
+        return $this->question_form;
     }
 
     /**
@@ -247,16 +237,6 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
 
         return $random_question_ids;
-    }
-
-    /**
-     * Returns the total number of pages
-     *
-     * @return int
-     */
-    public function get_total_pages()
-    {
-        return $this->total_pages;
     }
 
     /**
@@ -302,47 +282,6 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         return $page_questions;
     }
 
-    /**
-     * Returns the answers for the questions
-     */
-    public function get_question_answers()
-    {
-        $answers = array();
-
-        $question_attempts = $this->get_parent()->get_assessment_question_attempts();
-        foreach ($question_attempts as $question_attempt)
-        {
-            $answers[$question_attempt->get_question_complex_id()] = unserialize($question_attempt->get_answer());
-        }
-
-        return $answers;
-    }
-
-    public function result_form_submitted()
-    {
-        return !is_null(Request:: post('_qf__' . AssessmentResultViewerForm :: FORM_NAME));
-    }
-
-    public function question_form_submitted()
-    {
-        return !is_null(Request:: post('_qf__' . AssessmentViewerForm :: FORM_NAME));
-    }
-
-    public function get_action()
-    {
-        $actions = array(self :: FORM_NEXT, self :: FORM_SUBMIT, self :: FORM_BACK);
-
-        foreach ($actions as $action)
-        {
-            if (!is_null(Request:: post($action)))
-            {
-                return $action;
-            }
-        }
-
-        return self::FORM_NEXT;
-    }
-
     public function get_questions_page()
     {
         if (!$this->current_page)
@@ -376,23 +315,6 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         return $this->current_page;
     }
 
-    public function get_previous_questions_page()
-    {
-        if (!$this->previous_page)
-        {
-            if ($this->result_form_submitted() || $this->question_form_submitted())
-            {
-                $this->previous_page = $this->get_submitted_page_number() - 1;
-            }
-            else
-            {
-                $this->previous_page = 1;
-            }
-        }
-
-        return $this->previous_page;
-    }
-
     public function get_submitted_page_number()
     {
         $regex = '/^(' . AssessmentViewerForm :: PAGE_NUMBER . '|' . AssessmentResultViewerForm :: PAGE_NUMBER .
@@ -408,9 +330,82 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         return false;
     }
 
+    /**
+     * Returns the total number of pages
+     *
+     * @return int
+     */
+    public function get_total_pages()
+    {
+        return $this->total_pages;
+    }
+
+    /**
+     * Initializes the assessment for usage in this viewer
+     */
+    protected function initialize_assessment()
+    {
+        $assessment = $this->get_root_content_object();
+
+        $this->initialize_questions();
+        $total_questions = count($this->questions);
+
+        $questions_per_page = $assessment->get_questions_per_page();
+
+        if ($questions_per_page == 0)
+        {
+            $this->total_pages = 1;
+        }
+        else
+        {
+            $this->total_pages = ceil($total_questions / $questions_per_page);
+        }
+    }
+
+    /**
+     * Initializes the questions for usage in this viewer
+     */
+    protected function initialize_questions()
+    {
+        $question_ids = $this->get_parent()->get_registered_question_ids();
+        $order_by = array();
+
+        if (!is_array($question_ids) || count($question_ids) == 0)
+        {
+            $question_ids = $this->get_question_ids_for_assessment();
+            $this->get_parent()->register_question_ids($question_ids);
+        }
+
+        $order_by[] = new OrderBy(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem:: class_name(), ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
+            )
+        );
+
+        $condition = new InCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem:: class_name(), ComplexContentObjectItem :: PROPERTY_ID
+            ), $question_ids
+        );
+
+        $this->questions = DataManager:: retrieve_complex_content_object_items(
+            ComplexContentObjectItem:: class_name(), new DataClassRetrievesParameters($condition, null, null, $order_by)
+        )->as_array();
+    }
+
+    public function question_form_submitted()
+    {
+        return !is_null(Request:: post('_qf__' . AssessmentViewerForm :: FORM_NAME));
+    }
+
+    public function result_form_submitted()
+    {
+        return !is_null(Request:: post('_qf__' . AssessmentResultViewerForm :: FORM_NAME));
+    }
+
     public function showFeedbackAfterEveryPage()
     {
-        if(!$this->get_configuration()->show_feedback_after_every_page())
+        if (!$this->get_configuration()->show_feedback_after_every_page())
         {
             return false;
         }
@@ -418,7 +413,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         /** @var Assessment $assessment */
         $assessment = $this->get_root_content_object();
 
-        if($assessment->get_questions_per_page() == 0)
+        if ($assessment->get_questions_per_page() == 0)
         {
             return false;
         }

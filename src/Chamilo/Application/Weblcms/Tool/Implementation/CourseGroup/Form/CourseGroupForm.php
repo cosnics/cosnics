@@ -91,7 +91,7 @@ class CourseGroupForm extends FormValidator
         User $currentUser
     )
     {
-        parent::__construct('course_groups', 'post', $action);
+        parent::__construct('course_groups', self::FORM_METHOD_POST, $action);
         $this->form_type = $form_type;
         $this->course_group = $course_group;
         $this->currentUser = $currentUser;

@@ -39,7 +39,7 @@ class SchemaForm extends FormValidator
      */
     public function __construct(Schema $schema, EntityTranslationFormService $entityTranslationFormService, $formUrl)
     {
-        parent::__construct('schema', 'post', $formUrl);
+        parent::__construct('schema', self::FORM_METHOD_POST, $formUrl);
 
         $this->schema = $schema;
         $this->entityTranslationFormService = $entityTranslationFormService;

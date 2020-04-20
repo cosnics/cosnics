@@ -17,7 +17,7 @@ class HelpItemForm extends FormValidator
 
     public function __construct($help_item, $action)
     {
-        parent::__construct('help_item', 'post', $action);
+        parent::__construct('help_item', self::FORM_METHOD_POST, $action);
 
         $this->help_item = $help_item;
         $this->build_basic_form();

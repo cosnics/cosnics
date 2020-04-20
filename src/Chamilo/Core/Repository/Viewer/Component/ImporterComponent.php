@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -17,6 +18,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -31,7 +33,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Exception;
 
 class ImporterComponent extends Manager implements DelegateComponent
@@ -54,8 +55,8 @@ class ImporterComponent extends Manager implements DelegateComponent
         if ($type)
         {
             $importFormParameters = new ImportFormParameters(
-                $type, $this->getWorkspace(), $this, $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)), 'post',
-                true, $this->get_maximum_select()
+                $type, $this->getWorkspace(), $this, $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)),
+                FormValidator::FORM_METHOD_POST, true, $this->get_maximum_select()
             );
 
             $importForm = ContentObjectImportForm::factory($importFormParameters);

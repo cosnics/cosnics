@@ -73,7 +73,7 @@ class SimpleRightsEditorForm extends FormValidator
 
     public function __construct($action, $context, $locations, $available_rights, $entities)
     {
-        parent::__construct('simple_rights_editor', 'post', $action);
+        parent::__construct('simple_rights_editor', self::FORM_METHOD_POST, $action);
 
         $this->context = $context;
         $this->locations = $locations;

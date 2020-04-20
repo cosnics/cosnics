@@ -34,7 +34,7 @@ class RelationForm extends FormValidator
     public function __construct(Relation $relation, EntityTranslationFormService $entityTranslationFormServic, $form_url
     )
     {
-        parent::__construct('relation', 'post', $form_url);
+        parent::__construct('relation', self::FORM_METHOD_POST, $form_url);
 
         $this->relation = $relation;
         $this->entityTranslationFormService = $entityTranslationFormServic;

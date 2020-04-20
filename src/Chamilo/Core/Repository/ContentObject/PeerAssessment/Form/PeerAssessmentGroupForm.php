@@ -51,7 +51,7 @@ class PeerAssessmentGroupForm extends FormValidator
         $this->viewer = $viewer;
         $this->group_id = $group_id;
 
-        parent::__construct(self::FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url);
 
         $this->build_basic_form();
 

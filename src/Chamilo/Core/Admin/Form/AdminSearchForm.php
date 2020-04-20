@@ -26,7 +26,7 @@ class AdminSearchForm extends FormValidator
      */
     public function __construct($url, $form_id = '')
     {
-        parent::__construct(self::FORM_NAME . $form_id, 'post', $url);
+        parent::__construct(self::FORM_NAME . $form_id, self::FORM_METHOD_POST, $url);
         $this->updateAttributes(array('id' => self::FORM_NAME . $form_id));
         $this->build();
     }

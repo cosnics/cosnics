@@ -201,7 +201,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        $form = new FormValidator('translations', 'post', $this->get_url());
+        $form = new FormValidator('translations', FormValidator::FORM_METHOD_POST, $this->get_url());
         $form->addElement('file', self::PARAM_SOURCE_FILE, Translation::get('SourceFile'));
         $form->addElement(
             'style_submit_button', 'import_button', Translation::get('Import', null, Utilities::COMMON_LIBRARIES),

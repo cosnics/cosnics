@@ -28,7 +28,7 @@ class ConfigurationForm extends FormValidator
      */
     public function __construct(Configuration $configuration, $action)
     {
-        parent::__construct('configuration', 'post', $action);
+        parent::__construct('configuration', self::FORM_METHOD_POST, $action);
 
         $this->build_form();
 

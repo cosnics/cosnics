@@ -48,7 +48,7 @@ class RelationInstanceForm extends FormValidator
     public function __construct(RelationInstance $relationInstance, $sourceEntities, $relations, $targetEntities, 
         $postUrl)
     {
-        parent::__construct('relation', 'post', $postUrl);
+        parent::__construct('relation', self::FORM_METHOD_POST, $postUrl);
         
         $this->relationInstance = $relationInstance;
         $this->sourceEntities = $sourceEntities;

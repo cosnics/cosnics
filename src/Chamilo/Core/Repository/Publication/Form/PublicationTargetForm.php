@@ -70,7 +70,7 @@ class PublicationTargetForm extends FormValidator
     public function __construct(Application $application, $action)
     {
         $this->application = $application;
-        parent::__construct('page_locations', 'post', $action);
+        parent::__construct('page_locations', self::FORM_METHOD_POST, $action);
 
         $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->get(
             Manager::PARAM_CONTENT_OBJECT_ID

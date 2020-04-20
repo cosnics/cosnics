@@ -25,7 +25,7 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
+        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), self::FORM_METHOD_POST, $action);
 
         $this->application = $application;
 

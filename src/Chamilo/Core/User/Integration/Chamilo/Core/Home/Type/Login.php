@@ -48,8 +48,8 @@ class Login extends BlockRenderer
 
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT  => \Chamilo\Core\User\Ajax\Manager::context(),
-                    Application::PARAM_ACTION   => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                     Manager::PARAM_USER_USER_ID => $user->get_id()
                 )
             );
@@ -61,7 +61,7 @@ class Login extends BlockRenderer
             $redirect = new Redirect(
                 array(
                     Application::PARAM_CONTEXT => Manager::context(),
-                    Application::PARAM_ACTION  => Manager::ACTION_LOGOUT
+                    Application::PARAM_ACTION => Manager::ACTION_LOGOUT
                 )
             );
             $logoutLink = $redirect->getUrl();
@@ -83,12 +83,11 @@ class Login extends BlockRenderer
     {
         $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
 
-        $form = new FormValidator('formLogin', 'post');
+        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST);
         $renderer = &$form->defaultRenderer();
         $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
         $form->setRequiredNote(null);
-        $html =
-            '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
+        $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
         $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
@@ -99,7 +98,8 @@ class Login extends BlockRenderer
 
         $buttons = array();
         $buttons[] = $form->createElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null, new FontAwesomeGlyph('sign-in-alt')
+            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
+            new FontAwesomeGlyph('sign-in-alt')
         );
 
         if (Configuration::getInstance()->get_setting(
@@ -115,7 +115,7 @@ class Login extends BlockRenderer
                 $redirect = new Redirect(
                     array(
                         Application::PARAM_CONTEXT => Manager::context(),
-                        Application::PARAM_ACTION  => Manager::ACTION_REGISTER_USER
+                        Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
                     )
                 );
                 $link = $redirect->getUrl();
@@ -137,7 +137,7 @@ class Login extends BlockRenderer
                 $redirect = new Redirect(
                     array(
                         Application::PARAM_CONTEXT => Manager::context(),
-                        Application::PARAM_ACTION  => Manager::ACTION_RESET_PASSWORD
+                        Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
                     )
                 );
                 $link = $redirect->getUrl();

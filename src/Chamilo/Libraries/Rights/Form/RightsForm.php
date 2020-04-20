@@ -74,7 +74,7 @@ class RightsForm extends FormValidator
         string $postBackUrl, Translator $translator, bool $isAllowedToInherit, array $availableRights, array $entities
     )
     {
-        parent::__construct('simple_rights_editor', 'post', $postBackUrl);
+        parent::__construct('simple_rights_editor', self::FORM_METHOD_POST, $postBackUrl);
 
         $this->translator = $translator;
         $this->isAllowedToInherit = $isAllowedToInherit;

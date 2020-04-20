@@ -29,7 +29,7 @@ class ExecuteForm extends FormValidator
 
     public function __construct($form, $action, $user, $title)
     {
-        parent::__construct('dynamic_form_values', 'post', $action);
+        parent::__construct('dynamic_form_values', self::FORM_METHOD_POST, $action);
         $this->user = $user;
         $this->form = $form;
         $this->title = $title;

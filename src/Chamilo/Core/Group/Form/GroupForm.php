@@ -33,7 +33,7 @@ class GroupForm extends FormValidator
 
     public function __construct($form_type, $group, $action, $user)
     {
-        parent::__construct('groups_settings', 'post', $action);
+        parent::__construct('groups_settings', self::FORM_METHOD_POST, $action);
 
         $this->group = $group;
         $this->user = $user;

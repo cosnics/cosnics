@@ -79,7 +79,7 @@ class RightsForm extends FormValidator
      */
     public function __construct($url, $locations, $available_rights, $entities, $selected_entities)
     {
-        parent::__construct('simple_rights_editor', 'post', $url);
+        parent::__construct('simple_rights_editor', self::FORM_METHOD_POST, $url);
 
         $this->locations = $locations;
         $this->entities = $entities;

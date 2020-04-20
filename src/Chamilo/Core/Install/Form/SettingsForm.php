@@ -48,7 +48,7 @@ class SettingsForm extends FormValidator
      */
     public function __construct(Application $application, $action)
     {
-        parent::__construct('install_settings', $method = 'post', $action);
+        parent::__construct('install_settings',self::FORM_METHOD_POST, $action);
         $this->application = $application;
 
         $this->buildForm();

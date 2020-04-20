@@ -4,14 +4,17 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -35,17 +38,13 @@ class UpdaterComponent extends BaseHtmlTreeComponent
             $content_object = $this->getCurrentContentObject();
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT,
-                new PersonalWorkspace($this->get_user()),
-                $content_object,
-                'edit',
-                'post',
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
-                    )
+                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                FormValidator::FORM_METHOD_POST, $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                 )
+            )
             );
 
             if ($form->validate())
@@ -55,9 +54,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 if ($succes)
                 {
                     Event::trigger(
-                        'Activity',
-                        \Chamilo\Core\Repository\Manager::context(),
-                        array(
+                        'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
@@ -76,7 +73,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                             $this->getCurrentTreeNode(), $content_object->get_latest_version()
                         );
                     }
-                    catch (\Exception $ex)
+                    catch (Exception $ex)
                     {
                         $succes = false;
                     }
@@ -85,8 +82,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
                     )
                 );
 
@@ -95,11 +91,11 @@ class UpdaterComponent extends BaseHtmlTreeComponent
 
                 $values = $form->exportValues();
                 $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
-                if(isset($addMetadataSchema))
+                if (isset($addMetadataSchema))
                 {
                     $params[self::PARAM_ACTION] = self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM;
                     $params[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
-                        \Chamilo\Core\Repository\Manager::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
+                        Manager::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
                     );
 
                     $filters = [];
@@ -120,8 +116,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 else
                 {
                     $title = Translation::get(
-                        'EditContentObject',
-                        array('CONTENT_OBJECT' => $this->getCurrentContentObject()->get_title())
+                        'EditContentObject', array('CONTENT_OBJECT' => $this->getCurrentContentObject()->get_title())
                     );
                 }
 

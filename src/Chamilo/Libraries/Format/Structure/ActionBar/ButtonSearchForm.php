@@ -48,7 +48,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function __construct($url)
     {
-        parent::__construct(self::FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url);
 
         $this->actionURL = $url;
 

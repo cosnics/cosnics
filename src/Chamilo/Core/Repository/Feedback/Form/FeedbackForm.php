@@ -27,7 +27,7 @@ class FeedbackForm extends FormValidator
      */
     public function __construct(Application $application, $form_url, $feedback = null)
     {
-        parent::__construct('feedback', 'post', $form_url);
+        parent::__construct('feedback', self::FORM_METHOD_POST, $form_url);
         $this->application = $application;
         $this->build_form();
 

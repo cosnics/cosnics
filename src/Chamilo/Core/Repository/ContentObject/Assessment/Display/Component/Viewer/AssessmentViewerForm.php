@@ -26,7 +26,7 @@ class AssessmentViewerForm extends FormValidator
 
     private $questions;
 
-    public function __construct(AssessmentViewerComponent $assessment_viewer, $method = 'post', $action = null)
+    public function __construct(AssessmentViewerComponent $assessment_viewer, $method = self::FORM_METHOD_POST, $action = null)
     {
         parent::__construct(self::FORM_NAME, $method, $action);
 

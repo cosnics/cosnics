@@ -37,7 +37,7 @@ class InstanceForm extends FormValidator
     public function __construct(Application $application, $external_instance = null)
     {
         parent::__construct(
-            'external_instance', 'post', $application->get_url(
+            'external_instance', self::FORM_METHOD_POST, $application->get_url(
             array(
                 Manager::PARAM_IMPLEMENTATION => $application->get_implementation(),
                 Manager::PARAM_INSTANCE_ID => Request::get(Manager::PARAM_INSTANCE_ID)

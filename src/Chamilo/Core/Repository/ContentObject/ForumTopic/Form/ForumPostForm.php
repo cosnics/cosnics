@@ -58,7 +58,7 @@ class ForumPostForm extends FormValidator
      */
     public function __construct($form_type, $action, $forumpost, $id_reply_on)
     {
-        parent::__construct('forum_post_form', 'post', $action);
+        parent::__construct('forum_post_form', self::FORM_METHOD_POST, $action);
         $this->form_type = $form_type;
         $this->forumpost = $forumpost;
         $this->reply_on_id = $id_reply_on;

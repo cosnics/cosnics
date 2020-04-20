@@ -20,7 +20,7 @@ class AdminForm extends FormValidator
 
     public function __construct($application, $action)
     {
-        parent::__construct('admin', 'post', $action);
+        parent::__construct('admin', self::FORM_METHOD_POST, $action);
 
         $this->application = $application;
         $this->build_form();

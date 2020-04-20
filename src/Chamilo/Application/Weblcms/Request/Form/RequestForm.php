@@ -24,7 +24,7 @@ class RequestForm extends FormValidator
 
     function __construct($request, $action)
     {
-        parent::__construct('request', 'post', $action);
+        parent::__construct('request', self::FORM_METHOD_POST, $action);
 
         $this->request = $request;
 

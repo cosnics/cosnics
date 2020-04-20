@@ -45,26 +45,9 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
 
         $this->postback_url = $postback_url ? $postback_url : $parent->get_url();
         $this->form = new FormValidator(
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), 'post', $this->postback_url
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true),
+            FormValidator::FORM_METHOD_POST, $this->postback_url
         );
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_postback_url()
-    {
-        return $this->postback_url;
-    }
-
-    /**
-     *
-     * @return \libraries\format\FormValidator
-     */
-    public function get_form()
-    {
-        return $this->form;
     }
 
     /**
@@ -106,5 +89,23 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return \libraries\format\FormValidator
+     */
+    public function get_form()
+    {
+        return $this->form;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_postback_url()
+    {
+        return $this->postback_url;
     }
 }

@@ -48,7 +48,7 @@ class ScoreForm extends FormValidator
         Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, \Twig_Environment $twig
     )
     {
-        parent::__construct('details', 'post', $postUrl);
+        parent::__construct('details', self::FORM_METHOD_POST, $postUrl);
 
         $this->score = $score;
         $this->assignmentDataProvider = $assignmentDataProvider;

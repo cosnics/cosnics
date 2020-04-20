@@ -32,7 +32,7 @@ class CourseImportForm extends FormValidator
 
     public function __construct($form_type, $action)
     {
-        parent::__construct('course_import', 'post', $action);
+        parent::__construct('course_import', self::FORM_METHOD_POST, $action);
 
         $this->form_type = $form_type;
         $this->failedcsv = array();

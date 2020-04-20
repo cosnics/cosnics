@@ -19,7 +19,7 @@ class AssessmentResultViewerForm extends FormValidator
      */
     private $assessment_result_processor;
 
-    public function __construct(AssessmentResultProcessor $assessment_result_processor, $method = 'post', $action = null
+    public function __construct(AssessmentResultProcessor $assessment_result_processor, $method = self::FORM_METHOD_POST, $action = null
     )
     {
         parent::__construct('assessment_result_viewer_form', $method, $action);

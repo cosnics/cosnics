@@ -54,7 +54,7 @@ class PublicationForm extends FormValidator
      */
     public function __construct($formType, $action, array $entities)
     {
-        parent::__construct('publish', 'post', $action);
+        parent::__construct('publish', self::FORM_METHOD_POST, $action);
 
         $this->form_type = $formType;
 

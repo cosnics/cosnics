@@ -13,6 +13,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -85,7 +86,7 @@ class EditorComponent extends Manager implements DelegateComponent
             }
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, $this->getWorkspace(), $object, 'edit', 'post',
+                ContentObjectForm::TYPE_EDIT, $this->getWorkspace(), $object, 'edit', FormValidator::FORM_METHOD_POST,
                 $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $id))
             );
 

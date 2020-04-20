@@ -30,7 +30,7 @@ class WorkspaceForm extends FormValidator
      */
     public function __construct($formUrl, Workspace $workspace = null)
     {
-        parent::__construct('workspace', 'post', $formUrl);
+        parent::__construct('workspace', self::FORM_METHOD_POST, $formUrl);
         
         $this->workspace = $workspace;
         

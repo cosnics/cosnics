@@ -15,11 +15,11 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -71,7 +71,7 @@ class FormFilterRenderer extends FilterRenderer
 
         $this->user_id = $user_id;
         $this->content_object_types = $content_object_types;
-        $this->form_validator = new FormValidator('advanced_filter_form', 'post', $url);
+        $this->form_validator = new FormValidator('advanced_filter_form', FormValidator::FORM_METHOD_POST, $url);
         $this->renderer = clone $this->form_validator->defaultRenderer();
     }
 

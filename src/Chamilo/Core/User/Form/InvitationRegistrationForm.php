@@ -39,7 +39,7 @@ class InvitationRegistrationForm extends FormValidator
      */
     public function __construct($action, $invitation)
     {
-        parent::__construct('user_settings', 'post', $action);
+        parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
         $this->build_basic_form();

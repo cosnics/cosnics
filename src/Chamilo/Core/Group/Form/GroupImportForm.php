@@ -30,7 +30,7 @@ class GroupImportForm extends FormValidator
      */
     public function __construct($action)
     {
-        parent::__construct('group_import', 'post', $action);
+        parent::__construct('group_import', self::FORM_METHOD_POST, $action);
 
         $this->failed_elements = array();
         $this->build_importing_form();

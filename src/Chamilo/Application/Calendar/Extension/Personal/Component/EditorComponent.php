@@ -3,14 +3,13 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Component;
 
 use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -48,13 +47,13 @@ class EditorComponent extends Manager implements DelegateComponent
             );
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($user), $contentObject, 'edit', 'post',
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_EDIT,
-                        self::PARAM_PUBLICATION_ID => $calendarEventPublication->getId()
-                    )
+                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($user), $contentObject, 'edit',
+                FormValidator::FORM_METHOD_POST, $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_EDIT,
+                    self::PARAM_PUBLICATION_ID => $calendarEventPublication->getId()
                 )
+            )
             );
 
             if ($form->validate() || Request::get('validated'))
@@ -86,8 +85,10 @@ class EditorComponent extends Manager implements DelegateComponent
                 {
                     $values = $publicationForm->exportValues();
 
-                    $selectedUserIdentifiers = (array) $values[PublicationForm::PARAM_SHARE][UserEntityProvider::ENTITY_TYPE];
-                    $selectedGroupIdentifiers = (array) $values[PublicationForm::PARAM_SHARE][GroupEntityProvider::ENTITY_TYPE];
+                    $selectedUserIdentifiers =
+                        (array) $values[PublicationForm::PARAM_SHARE][UserEntityProvider::ENTITY_TYPE];
+                    $selectedGroupIdentifiers =
+                        (array) $values[PublicationForm::PARAM_SHARE][GroupEntityProvider::ENTITY_TYPE];
 
                     $success = $this->getPublicationService()->updatePublicationWithRightsFromParameters(
                         $calendarEventPublication, $selectedUserIdentifiers, $selectedGroupIdentifiers

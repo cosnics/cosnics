@@ -42,7 +42,7 @@ class CategoryForm extends FormValidator
      */
     public function __construct($form_type, $action, $category, $user, $manager)
     {
-        parent::__construct('category_form', 'post', $action);
+        parent::__construct('category_form', self::FORM_METHOD_POST, $action);
 
         $this->category = $category;
         $this->user = $user;

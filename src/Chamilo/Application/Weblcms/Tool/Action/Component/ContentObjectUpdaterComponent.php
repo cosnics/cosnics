@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -80,7 +81,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 new PersonalWorkspace($this->get_user()),
                 $content_object,
                 'edit',
-                'post',
+                FormValidator::FORM_METHOD_POST,
                 $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $pid)));
 
             if ($form->validate())

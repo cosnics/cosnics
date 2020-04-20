@@ -5,12 +5,13 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultVie
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -25,7 +26,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $form = new FormValidator('result_viewer', 'post', $this->get_url());
+        $form = new FormValidator('result_viewer', FormValidator::FORM_METHOD_POST, $this->get_url());
 
         $results = $this->get_parent()->retrieve_assessment_results();
         $question_cids = array_keys($results);
@@ -37,14 +38,13 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_ID),
-            $question_cids,
-            ComplexContentObjectItem::get_table_name());
+                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_ID
+            ), $question_cids, ComplexContentObjectItem::get_table_name()
+        );
 
-        $questions_cloi = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
-            $condition);
+        $questions_cloi = DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), $condition
+        );
 
         $assessment = $this->get_root_content_object();
         $form->add_information_message('information', $assessment->get_title(), $assessment->get_description(), true);
@@ -58,9 +58,9 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         {
             $result = $results[$question_cloi->get_id()];
 
-            $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
-                $question_cloi->get_ref());
+            $question = DataManager::retrieve_by_id(
+                ContentObject::class_name(), $question_cloi->get_ref()
+            );
             $answers = unserialize($result['answer']);
             $feedback = $result['feedback'];
 
@@ -73,15 +73,9 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $total_weight += $question_cloi->get_weight();
 
             $display = new QuestionResultDisplay(
-                $this,
-                $form,
-                $question_cloi,
-                $question_number,
-                $answers,
-                $score,
-                $result['hint'],
-                $feedback,
-                $this->get_parent()->can_change_answer_data());
+                $this, $form, $question_cloi, $question_number, $answers, $score, $result['hint'], $feedback,
+                $this->get_parent()->can_change_answer_data()
+            );
 
             $display->render();
 
@@ -144,13 +138,11 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         }
 
         $buttons[] = $form->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+        );
         $buttons[] = $form->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         if ($this->get_parent()->can_change_answer_data())
         {

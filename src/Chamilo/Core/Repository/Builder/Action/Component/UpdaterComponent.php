@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -74,8 +75,8 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
 
         $content_object_form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit', 'post',
-            $this->get_url($parameters), null, $elements
+            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+            FormValidator::FORM_METHOD_POST, $this->get_url($parameters), null, $elements
         );
         $content_object_form->setDefaults($defaults);
 

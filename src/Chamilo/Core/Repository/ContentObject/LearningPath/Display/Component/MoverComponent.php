@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -14,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -63,7 +65,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                     $available_nodes[] = $selected_node;
                 }
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $selected_step);
             }
@@ -73,9 +75,7 @@ class MoverComponent extends BaseHtmlTreeComponent
         {
             throw new UserException(
                 Translation::get(
-                    'NoObjectsToMove',
-                    array('OBJECTS' => Translation::get('Steps')),
-                    Utilities::COMMON_LIBRARIES
+                    'NoObjectsToMove', array('OBJECTS' => Translation::get('Steps')), Utilities::COMMON_LIBRARIES
                 )
             );
         }
@@ -83,14 +83,12 @@ class MoverComponent extends BaseHtmlTreeComponent
         $path = $this->getTree();
         $parents = $this->get_possible_parents($available_nodes);
 
-        $form = new FormValidator('move', 'post', $this->get_url());
+        $form = new FormValidator('move', FormValidator::FORM_METHOD_POST, $this->get_url());
 
         if (count($available_nodes) > 1)
         {
             $form->addElement(
-                'static',
-                null,
-                Translation::get('SelectedLearningPathItems'),
+                'static', null, Translation::get('SelectedLearningPathItems'),
                 $this->get_available_nodes($available_nodes)
             );
         }
@@ -128,9 +126,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                     $new_node = $available_node;
 
                     Event::trigger(
-                        'Activity',
-                        \Chamilo\Core\Repository\Manager::context(),
-                        array(
+                        'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
@@ -139,7 +135,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                         )
                     );
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                     $failures ++;
                 }
@@ -159,12 +155,9 @@ class MoverComponent extends BaseHtmlTreeComponent
 
             $this->redirect(
                 Translation::get(
-                    $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved',
-                    array('OBJECTS' => Translation::get('Steps')),
+                    $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved', array('OBJECTS' => Translation::get('Steps')),
                     Utilities::COMMON_LIBRARIES
-                ),
-                $failures > 0,
-                $parameters
+                ), $failures > 0, $parameters
             );
         }
         else
@@ -182,6 +175,15 @@ class MoverComponent extends BaseHtmlTreeComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     *
+     * @see \libraries\SubManager::get_additional_parameters()
+     */
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_CHILD_ID);
     }
 
     /**
@@ -215,35 +217,6 @@ class MoverComponent extends BaseHtmlTreeComponent
     }
 
     /**
-     * Get a list of possible parent nodes for the currently selected node(s)
-     *
-     * @param TreeNode[] $selectedNodes
-     *
-     * @return \string[]
-     */
-    private function get_possible_parents($selectedNodes = array())
-    {
-        $path = $this->getTree();
-        $root = $path->getRoot();
-
-        if (in_array($root, $selectedNodes))
-        {
-            $name = $root->getContentObject()->get_title() . ' (' . Translation::get('SelectedItem') . ')';
-            $node_disabled = true;
-        }
-        else
-        {
-            $name = $root->getContentObject()->get_title();
-            $node_disabled = false;
-        }
-
-        $parents = array($root->getId() => array($name, $node_disabled));
-        $parents = $this->get_children_from_node($root, $selectedNodes, $node_disabled, $parents);
-
-        return $parents;
-    }
-
-    /**
      * Get the possible parents for the current node based on the children of a given node
      *
      * @param TreeNode $node
@@ -260,7 +233,7 @@ class MoverComponent extends BaseHtmlTreeComponent
 
         foreach ($node->getChildNodes() as $child)
         {
-            if(!$child->getContentObject() instanceof Section)
+            if (!$child->getContentObject() instanceof Section)
             {
                 continue;
             }
@@ -290,11 +263,31 @@ class MoverComponent extends BaseHtmlTreeComponent
     }
 
     /**
+     * Get a list of possible parent nodes for the currently selected node(s)
      *
-     * @see \libraries\SubManager::get_additional_parameters()
+     * @param TreeNode[] $selectedNodes
+     *
+     * @return \string[]
      */
-    public function get_additional_parameters()
+    private function get_possible_parents($selectedNodes = array())
     {
-        return array(self::PARAM_CHILD_ID);
+        $path = $this->getTree();
+        $root = $path->getRoot();
+
+        if (in_array($root, $selectedNodes))
+        {
+            $name = $root->getContentObject()->get_title() . ' (' . Translation::get('SelectedItem') . ')';
+            $node_disabled = true;
+        }
+        else
+        {
+            $name = $root->getContentObject()->get_title();
+            $node_disabled = false;
+        }
+
+        $parents = array($root->getId() => array($name, $node_disabled));
+        $parents = $this->get_children_from_node($root, $selectedNodes, $node_disabled, $parents);
+
+        return $parents;
     }
 }

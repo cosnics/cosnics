@@ -24,7 +24,7 @@ class RightsForm extends FormValidator
 
     function __construct($form_user, $action)
     {
-        parent::__construct('rights', 'post', $action);
+        parent::__construct('rights', self::FORM_METHOD_POST, $action);
         $this->form_user = $form_user;
 
         $this->build_form();

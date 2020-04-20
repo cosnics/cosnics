@@ -29,7 +29,7 @@ class GroupExportForm extends FormValidator
      */
     public function __construct($form_type, $action)
     {
-        parent::__construct('group_export', 'post', $action, '_blank');
+        parent::__construct('group_export', self::FORM_METHOD_POST, $action, '_blank');
 
         $this->form_type = $form_type;
         $this->failedcsv = array();

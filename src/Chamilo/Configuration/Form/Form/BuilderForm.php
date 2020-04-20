@@ -30,7 +30,7 @@ class BuilderForm extends FormValidator
 
     public function __construct($form_type, $element, $action, $user)
     {
-        parent::__construct('dynamic_form_element', 'post', $action);
+        parent::__construct('dynamic_form_element', self::FORM_METHOD_POST, $action);
         $this->user = $user;
         $this->form_type = $form_type;
         $this->element = $element;

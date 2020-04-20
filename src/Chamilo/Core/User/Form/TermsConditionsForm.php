@@ -22,7 +22,7 @@ class TermsConditionsForm extends FormValidator
      */
     public function __construct($user, $action, $type)
     {
-        parent::__construct('user_settings', 'post', $action);
+        parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->user = $user;
 

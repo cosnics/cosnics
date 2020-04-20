@@ -35,10 +35,10 @@ class SettingsForm extends FormValidator
      *
      * @param $application string The name of the application.
      * @param $form_name string The name to use in the form tag.
-     * @param $method string The method to use ('post' or 'get').
+     * @param $method string The method to use (self::FORM_METHOD_POST or self::FORM_METHOD_GET).
      * @param $action string The URL to which the form should be submitted.
      */
-    public function __construct($configurer, $external_repository_id, $form_name, $method = 'post', $action = null)
+    public function __construct($configurer, $external_repository_id, $form_name, $method = self::FORM_METHOD_POST, $action = null)
     {
         parent::__construct($form_name, $method, $action);
 
