@@ -77,14 +77,14 @@ class FormValidator extends HTML_QuickForm
         )
         );
 
-        $this->setDefaultTemplates();
-
         foreach ($this->_submitValues as $index => & $value)
         {
             $value = Security::removeXSS($value);
         }
 
         $this->initializeContainer();
+
+        $this->setDefaultTemplates();
     }
 
     /**
