@@ -42,8 +42,12 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
     }
 
     /**
+     * Returns a 'safe' element's value
      *
-     * @see HTML_QuickForm_stylebutton::exportValue()
+     * @param array $submitValues array of submitted values to search
+     * @param bool $assoc whether to return the value as associative array
+     *
+     * @return mixed
      */
     public function exportValue(&$submitValues, $assoc = false)
     {

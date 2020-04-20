@@ -21,7 +21,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
     public function __construct($version, $content = '', $status = 200, $headers = array())
     {
         $headers['Content-Type'] = 'text/html';
-        $headers['X-Powered-By'] = 'Chamilo Connect ' . $version;
+        $headers['X-Powered-By'] = 'Cosnics ' . $version;
 
         parent::__construct($content, $status, $headers);
     }

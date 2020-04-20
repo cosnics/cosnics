@@ -11,6 +11,11 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 {
 
     /**
+     * @var string
+     */
+    private $separator;
+
+    /**
      *
      * @var string[]
      */
@@ -33,35 +38,49 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
     }
 
     /**
+     * Returns a 'safe' element's value
      *
-     * @see HTML_QuickForm_input::exportValue()
+     * @param array   array of submitted values to search
+     * @param bool    whether to return the value as associative array
+     *
+     * @access public
+     * @return mixed
      */
-    public function exportValue()
+    function exportValue(&$submitValues, $assoc = false)
     {
         return $this->getValue();
     }
 
     /**
+     * Returns the value of field without HTML tags
      *
-     * @see HTML_QuickForm_element::getFrozenHtml()
+     * @return    string
+     * @since     1.0
+     * @access    public
      */
     public function getFrozenHtml()
     {
-        $html = '<ol class="option-orderer oord-name_' . $this->getName() . '">';
-        $order = $this->getValue();
-        foreach ($order as $index)
-        {
-            $html .= '<li class="oord-value_' . $index . '">' . $this->options[$index] . '</li>';
-        }
-        $html .= '</ol>';
-        $html .= parent::toHtml();
+        $html = array();
 
-        return $html;
+        $html[] = '<ol class="option-orderer oord-name_' . $this->getName() . '">';
+
+        foreach ($this->getValue() as $index)
+        {
+            $html[] = '<li class="oord-value_' . $index . '">' . $this->options[$index] . '</li>';
+        }
+
+        $html[] = '</ol>';
+        $html[] = parent::toHtml();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
+     * Returns the value of the form element
      *
-     * @see HTML_QuickForm_input::getValue()
+     * @return    string
+     * @since     1.0
+     * @access    public
      */
     public function getValue()
     {
@@ -69,16 +88,21 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
     }
 
     /**
+     * Returns the input field in HTML
      *
-     * @see HTML_QuickForm_input::toHtml()
+     * @return    string
+     * @since     1.0
+     * @access    public
      */
     public function toHtml()
     {
-        $html = ResourceManager::getInstance()->getResourceHtml(
+        $html = array();
+
+        $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js'
         );
-        $html .= $this->getFrozenHtml();
+        $html[] = $this->getFrozenHtml();
 
-        return $html;
+        return implode(PHP_EOL, $html);
     }
 }

@@ -16,7 +16,7 @@ class JsonAjaxResult
      *
      * @var string[]
      */
-    private static $result_codes = Array(
+    private static $result_codes = array(
         100 => 'Continue',
         101 => 'SwitchingProtocols',
         102 => 'Processing',
@@ -71,7 +71,8 @@ class JsonAjaxResult
         506 => 'VariantAlsoNegotiates',
         507 => 'InsufficientStorage',
         509 => 'BandwidthLimitExceeded',
-        510 => 'NotExtended');
+        510 => 'NotExtended'
+    );
 
     /**
      * An HTTP status code
@@ -113,38 +114,106 @@ class JsonAjaxResult
     }
 
     /**
-     *  For backwards compatibility. Every response returns a 200 status code unless this function is called
-     */
-    public function returnActualStatusCode() {
-        $this->returnActualStatusCode = true;
-    }
-
-    /**
-     * Return the result message
-     *
-     * @return string
-     */
-    public function get_result_message()
-    {
-        return $this->result_message;
-    }
-
-    /**
-     * Set the result message
      *
      * @param string $resultMessage
      */
-    public function set_result_message($resultMessage)
+    public static function bad_request($resultMessage = null)
     {
-        $this->result_message = $resultMessage;
+        self::error(400, $resultMessage);
     }
 
     /**
-     * Reset the result message to the default as defined by the result code
+     * Convert a JSON object string into a JsonAjaxResult This function only works with UTF-8 encoded data
+     *
+     * @param string $jsonString
+     *
+     * @return \Chamilo\Libraries\Architecture\JsonAjaxResult
      */
-    public function reset_result_message()
+    public static function decode($jsonString)
     {
-        $this->result_message = Translation::get(self::$result_codes[$this->get_result_code()]);
+        $object = json_decode($jsonString);
+
+        return new self();
+    }
+
+    public function display()
+    {
+        if ($this->returnActualStatusCode)
+        {
+            http_response_code($this->get_result_code());
+        }
+        header('Content-type: application/json');
+
+        echo $this->encode();
+        exit();
+    }
+
+    /**
+     * Return a Json representation of the current object
+     *
+     * @return string
+     */
+    public function encode()
+    {
+        return json_encode($this);
+    }
+
+    /**
+     *
+     * @param integer $resultCode
+     * @param strning $resultMessage
+     */
+    public static function error($resultCode = 404, $resultMessage = null)
+    {
+        $json_ajax_result = new self($resultCode);
+
+        if ($resultMessage)
+        {
+            $json_ajax_result->set_result_message($resultMessage);
+        }
+
+        $json_ajax_result->display();
+    }
+
+    /**
+     *
+     * @param string $resultMessage
+     */
+    public static function general_error($resultMessage = null)
+    {
+        self::error(500, $resultMessage);
+    }
+
+    /**
+     * Get all properties
+     *
+     * @return string[]
+     */
+    public function get_properties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Set all properties
+     *
+     * @param string[] $properties
+     */
+    public function set_properties($properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     * Get a property
+     *
+     * @param string $property
+     *
+     * @return string
+     */
+    public function get_property($property)
+    {
+        return $this->properties[$property];
     }
 
     /**
@@ -169,95 +238,23 @@ class JsonAjaxResult
     }
 
     /**
-     * Get a property
-     *
-     * @param string $property
-     * @return string
-     */
-    public function get_property($property)
-    {
-        return $this->properties[$property];
-    }
-
-    /**
-     * Set a property Data must be UTF-8 encoded
-     *
-     * @param string $property
-     * @param string $value
-     */
-    public function set_property($property, $value)
-    {
-        $this->properties[$property] = $value;
-    }
-
-    /**
-     * Get all properties
-     *
-     * @return string[]
-     */
-    public function get_properties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     * Set all properties
-     *
-     * @param string[] $properties
-     */
-    public function set_properties($properties)
-    {
-        $this->properties = $properties;
-    }
-
-    /**
-     * Return a Json representation of the current object
+     * Return the result message
      *
      * @return string
      */
-    public function encode()
+    public function get_result_message()
     {
-        return json_encode($this);
-    }
-
-    public function display()
-    {
-        if($this->returnActualStatusCode) {
-            http_response_code($this->get_result_code());
-        }
-        header('Content-type: application/json');
-
-        echo $this->encode();
-        exit();
+        return $this->result_message;
     }
 
     /**
-     * Convert a JSON object string into a JsonAjaxResult This function only works with UTF-8 encoded data
+     * Set the result message
      *
-     * @param string $jsonString
-     * @return \Chamilo\Libraries\Architecture\JsonAjaxResult
+     * @param string $resultMessage
      */
-    public static function decode($jsonString)
+    public function set_result_message($resultMessage)
     {
-        $object = json_decode($jsonString);
-        return new self();
-    }
-
-    /**
-     *
-     * @param integer $resultCode
-     * @param strning $resultMessage
-     */
-    public static function error($resultCode = 404, $resultMessage = null)
-    {
-        $json_ajax_result = new self($resultCode);
-
-        if ($resultMessage)
-        {
-            $json_ajax_result->set_result_message($resultMessage);
-        }
-
-        $json_ajax_result->display();
+        $this->result_message = $resultMessage;
     }
 
     /**
@@ -279,21 +276,30 @@ class JsonAjaxResult
     }
 
     /**
-     *
-     * @param string $resultMessage
+     * Reset the result message to the default as defined by the result code
      */
-    public static function general_error($resultMessage = null)
+    public function reset_result_message()
     {
-        self::error(500, $resultMessage);
+        $this->result_message = Translation::get(self::$result_codes[$this->get_result_code()]);
     }
 
     /**
-     *
-     * @param string $resultMessage
+     *  For backwards compatibility. Every response returns a 200 status code unless this function is called
      */
-    public static function bad_request($resultMessage = null)
+    public function returnActualStatusCode()
     {
-        self::error(400, $resultMessage);
+        $this->returnActualStatusCode = true;
+    }
+
+    /**
+     * Set a property Data must be UTF-8 encoded
+     *
+     * @param string $property
+     * @param string|string[]|string[][] $value
+     */
+    public function set_property($property, $value)
+    {
+        $this->properties[$property] = $value;
     }
 
     /**

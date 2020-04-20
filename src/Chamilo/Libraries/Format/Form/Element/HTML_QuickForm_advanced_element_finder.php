@@ -15,10 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 {
-    const CONFIG_MAX_SELECTABLE_ITEMS = 'maxSelectableItems';
-
     const DEFAULT_HEIGHT = 300;
-
     const DEFAULT_WIDTH = 292;
 
     /**
@@ -47,7 +44,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      *
      * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
      */
-    private $default_values;
+    private $defaultValues;
 
     /**
      * An array of configuration values for the elementfinder (eg.
@@ -90,8 +87,14 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     }
 
     /**
+     * Accepts a renderer
      *
-     * @see HTML_QuickForm_group::accept()
+     * @param object     An HTML_QuickForm_Renderer object
+     * @param bool       Whether a group is required
+     * @param string     An error message associated with a group
+     *
+     * @access public
+     * @return void
      */
     public function accept($renderer, $required = false, $error = null)
     {
@@ -150,10 +153,15 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     }
 
     /**
+     * Returns a 'safe' element's value
      *
-     * @see HTML_QuickForm_group::exportValue()
+     * @param array   array of submitted values to search
+     * @param bool    whether to return the value as associative array
+     *
+     * @access public
+     * @return mixed
      */
-    public function exportValue($submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         return $this->_prepareValue($this->getValue(), $assoc);
     }
@@ -227,7 +235,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             return;
         }
 
-        $this->default_values = $defaultValues;
+        $this->defaultValues = $defaultValues;
 
         $default_ids = array();
         foreach ($defaultValues->get_elements() as $default_value)
@@ -332,9 +340,13 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         );
         $html[] = '<script>';
 
-        if ($this->default_values)
+        if ($this->defaultValues)
         {
-            $defaultValuesText = 'defaultValues: ' . json_encode($this->default_values->as_array()) . ', ';
+            $defaultValuesText = 'defaultValues: ' . json_encode($this->defaultValues->as_array()) . ', ';
+        }
+        else
+        {
+            $defaultValuesText = '';
         }
 
         $configurationJson = '';

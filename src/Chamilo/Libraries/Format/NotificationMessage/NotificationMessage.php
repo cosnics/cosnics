@@ -43,7 +43,7 @@ class NotificationMessage
      * @param string $type
      * @param string $category
      */
-    public function __construct($message, $type = self :: TYPE_INFO, $category = null)
+    public function __construct($message, $type = self::TYPE_INFO, $category = null)
     {
         $this->type = $type;
         $this->message = $message;

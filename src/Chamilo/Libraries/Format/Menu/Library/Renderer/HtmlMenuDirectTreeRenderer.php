@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\Library\Renderer;
 
+use Exception;
+
 /**
  * Originaly a PEAR library
  *
@@ -13,9 +15,9 @@ namespace Chamilo\Libraries\Format\Menu\Library\Renderer;
  */
 class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
 {
-    const HTML_MENU_ENTRY_INACTIVE = 0;
     const HTML_MENU_ENTRY_ACTIVE = 1;
     const HTML_MENU_ENTRY_ACTIVEPATH = 2;
+    const HTML_MENU_ENTRY_INACTIVE = 0;
 
     /**
      *
@@ -54,27 +56,13 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
     public $_entryTemplates = array(
         self::HTML_MENU_ENTRY_INACTIVE => '<a href="{url}">{title}</a>',
         self::HTML_MENU_ENTRY_ACTIVE => '<strong>{title}</strong>',
-        self::HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>');
+        self::HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>'
+    );
 
     /**
+     * Finish the tree level (for types 'tree' and 'sitemap')
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer::setMenuType()
-     */
-    public function setMenuType($menuType)
-    {
-        if ('tree' == $menuType || 'sitemap' == $menuType)
-        {
-            $this->_menuType = $menuType;
-        }
-        else
-        {
-            throw new \Exception("HTML_Menu_DirectTreeRenderer: unable to render '$menuType' type menu");
-        }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer::finishLevel()
+     * @param integer $level
      */
     public function finishLevel($level)
     {
@@ -84,7 +72,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
         if (0 < $level)
         {
             $this->_itemHtml[$level - 1] .= $this->_levelTemplate[0] . $this->_levelHtml[$level] .
-                 $this->_levelTemplate[1];
+                $this->_levelTemplate[1];
         }
         else
         {
@@ -95,12 +83,15 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
     }
 
     /**
+     * Renders the element of the menu
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer::renderEntry()
+     * @param string[] $node
+     * @param integer $level
+     * @param integer $type
      */
     public function renderEntry($node, $level, $type)
     {
-        if (! empty($this->_itemHtml[$level]))
+        if (!empty($this->_itemHtml[$level]))
         {
             isset($this->_levelHtml[$level]) or $this->_levelHtml[$level] = '';
             $this->_levelHtml[$level] .= $this->_itemTemplate[0] . $this->_itemHtml[$level] . $this->_itemTemplate[1];
@@ -118,35 +109,6 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
         }
 
         $this->_itemHtml[$level] = str_replace($keys, $values, $this->_entryTemplates[$type]);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function toHtml()
-    {
-        return $this->_html;
-    }
-
-    /**
-     *
-     * @param string this will be prepended to the entry HTML
-     * @param string this will be appended to the entry HTML
-     */
-    public function setItemTemplate($prepend, $append)
-    {
-        $this->_itemTemplate = array($prepend, $append);
-    }
-
-    /**
-     *
-     * @param string this will be prepended to the submenu HTML
-     * @param string this will be appended to the submenu HTML
-     */
-    public function setLevelTemplate($prepend, $append)
-    {
-        $this->_levelTemplate = array($prepend, $append);
     }
 
     /**
@@ -171,5 +133,52 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
         {
             $this->_entryTemplates[$type] = $template;
         }
+    }
+
+    /**
+     *
+     * @param string this will be prepended to the entry HTML
+     * @param string this will be appended to the entry HTML
+     */
+    public function setItemTemplate($prepend, $append)
+    {
+        $this->_itemTemplate = array($prepend, $append);
+    }
+
+    /**
+     *
+     * @param string this will be prepended to the submenu HTML
+     * @param string this will be appended to the submenu HTML
+     */
+    public function setLevelTemplate($prepend, $append)
+    {
+        $this->_levelTemplate = array($prepend, $append);
+    }
+
+    /**
+     *
+     * @param string $menuType
+     *
+     * @throws \Exception
+     */
+    public function setMenuType($menuType)
+    {
+        if ('tree' == $menuType || 'sitemap' == $menuType)
+        {
+            $this->_menuType = $menuType;
+        }
+        else
+        {
+            throw new Exception("HTML_Menu_DirectTreeRenderer: unable to render '$menuType' type menu");
+        }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function toHtml()
+    {
+        return $this->_html;
     }
 }

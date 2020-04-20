@@ -43,9 +43,8 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             return;
         }
 
-        $attributes['class'] = 'form-control';
+        $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        // unset($attributes['form_name']);
         HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
 
         $this->_persistantFreeze = true;
@@ -54,7 +53,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->includeTimePicker = $includeTimePicker;
         $this->formName = $formName;
 
-        $this->_options['format'] = $this->getDateFormat($elementName, $attributes, $includeTimePicker);
+        $this->_options['format'] = $this->getDateFormat($elementName, $includeTimePicker);
         $this->_options['minYear'] = date('Y') - 5;
         $this->_options['maxYear'] = date('Y') + 10;
         $this->_options['language'] = Translation::getInstance()->getLanguageIsocode();
@@ -63,11 +62,49 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     }
 
     /**
-     * Export the date value in MySQL format
+     * @param string[] $attributes
      *
-     * @return string YYYY-MM-DD HH:II:SS
+     * @return string[]
      */
-    public function exportValue()
+    protected function addFormControlToElementAttributes($attributes)
+    {
+        if (is_array($attributes))
+        {
+            if (!array_key_exists('class', $attributes))
+            {
+                $attributes['class'] = 'form-control';
+            }
+            else
+            {
+                $classAttributes = $attributes['class'];
+
+                if (!is_array($classAttributes))
+                {
+                    $classAttributes = explode(' ', $classAttributes);
+                }
+
+                if (!in_array('form-control', $classAttributes))
+                {
+                    array_unshift($classAttributes, 'form-control');
+                }
+
+                $attributes['class'] = implode(' ', $classAttributes);
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Returns a 'safe' element's value
+     *
+     * @param array   array of submitted values to search
+     * @param bool    whether to return the value as associative array
+     *
+     * @access public
+     * @return mixed
+     */
+    function exportValue(&$submitValues, $assoc = false)
     {
         $values = parent::getValue();
         $y = $values['Y'][0];
@@ -103,12 +140,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     /**
      * @param string $elementName
-     * @param string[] $attributes
      * @param boolean $includeTimePicker
      *
      * @return string
      */
-    public function getDateFormat($elementName, $attributes, $includeTimePicker)
+    public function getDateFormat($elementName, $includeTimePicker)
     {
         $js_form_name = $this->formName;
         $glyph = new FontAwesomeGlyph('calendar-alt');
@@ -133,26 +169,6 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         {
             return 'd F Y   ' . $popupLink;
         }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getElementJS()
-    {
-        $pathBuilder = Path::getInstance();
-
-        $html = array();
-
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
-        );
-        $html[] = '<script>';
-        $html[] = 'var max_year="' . (date('Y') + 10) . '";';
-        $html[] = '</script>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -217,9 +233,17 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function toHtml()
     {
+        $pathBuilder = Path::getInstance();
+        $resourceManager = ResourceManager::getInstance();
+
         $html = array();
 
-        $html[] = $this->getElementJS();
+        $html[] = $resourceManager->getResourceHtml(
+            $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
+        );
+        $html[] = '<script>';
+        $html[] = 'var max_year="' . (date('Y') + 10) . '";';
+        $html[] = '</script>';
         $html[] = parent::toHtml();
 
         return implode(PHP_EOL, $html);

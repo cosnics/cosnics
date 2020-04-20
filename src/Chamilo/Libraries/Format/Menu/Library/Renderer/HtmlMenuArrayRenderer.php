@@ -16,7 +16,7 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
 
     /**
      *
-     * @var string[]
+     * @var string[][]
      */
     public $_ary = array();
 
@@ -27,8 +27,9 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
     public $_menuAry = array();
 
     /**
+     * Finish the menu
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer::finishMenu()
+     * @param integer $level
      */
     public function finishMenu($level)
     {
@@ -44,8 +45,11 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
     }
 
     /**
+     * Renders the element of the menu
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer::renderEntry()
+     * @param string[] $node
+     * @param integer $level
+     * @param integer $type
      */
     public function renderEntry($node, $level, $type)
     {
@@ -58,7 +62,7 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
     /**
      * Returns the resultant array
      *
-     * @return string[]
+     * @return string[][]
      */
     public function toArray()
     {

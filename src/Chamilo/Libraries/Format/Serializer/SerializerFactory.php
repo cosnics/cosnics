@@ -40,7 +40,8 @@ class SerializerFactory
         $vendorPath = Path::getInstance()->getVendorPath();
 
         AnnotationRegistry::registerAutoloadNamespaces(
-            array('JMS\Serializer\Annotation' => $vendorPath . 'jms/serializer/src'));
+            array('JMS\Serializer\Annotation' => $vendorPath . 'jms/serializer/src')
+        );
 
         return $this->serializerBuilder->build();
     }

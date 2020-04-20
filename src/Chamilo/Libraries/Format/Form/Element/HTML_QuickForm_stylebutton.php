@@ -59,8 +59,12 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
+     * Returns a 'safe' element's value
      *
-     * @see HTML_QuickForm_element::exportValue()
+     * @param array $submitValues array of submitted values to search
+     * @param bool $assoc whether to return the value as associative array
+     *
+     * @return mixed
      */
     public function exportValue(&$submitValues, $assoc = false)
     {
@@ -76,8 +80,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
-     *
-     * @see HTML_QuickForm_element::getFrozenHtml()
+     * @return string
      */
     function getFrozenHtml()
     {
@@ -91,15 +94,6 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     public function getGlyph()
     {
         return $this->glyph;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
-     */
-    public function setGlyph(InlineGlyph $glyph = null)
-    {
-        $this->glyph = $glyph;
     }
 
     /**
@@ -130,8 +124,15 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
+     * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @see HTML_QuickForm_element::onQuickFormEvent()
+     * @param string $event Name of event
+     * @param mixed $arg event arguments
+     * @param object $caller calling object
+     *
+     * @return    boolean
+     * @since     1.0
+     * @access    public
      */
     public function onQuickFormEvent($event, $arg, &$caller)
     {
@@ -158,8 +159,13 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
+     * Sets the input field name
      *
-     * @see HTML_QuickForm_element::setName()
+     * @param string $name Input field name attribute
+     *
+     * @return    void
+     * @since     1.0
+     * @access    public
      */
     public function setName($name)
     {
@@ -177,8 +183,13 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
+     * Sets the value of the form element
      *
-     * @see HTML_QuickForm_element::setValue()
+     * @param string $value Default value of the form element
+     *
+     * @return    void
+     * @since     1.0
+     * @access    public
      */
     public function setValue($value)
     {
@@ -186,8 +197,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     }
 
     /**
-     *
-     * @see HTML_Common::toHtml()
+     * @return string
      */
     public function toHtml()
     {

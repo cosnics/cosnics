@@ -7,13 +7,9 @@ use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 
 /**
- *
- * @package common.libraries
- */
-
-/**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
  *
+ * @package Chamilo\Libraries\Format\Menu\TreeMenu
  * @author Pieterjan Broekaert - Original Author
  * @author Sven Vanpoucke - Refactoring + Comments
  */
@@ -48,6 +44,11 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
      * @var integer[]
      */
     protected $root_ids;
+
+    /**
+     * @var boolean
+     */
+    protected $include_fake_root;
 
     /**
      * Builds the treemenu
@@ -165,7 +166,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
      *
      * @param integer $nodeId
      *
-     * @return string[]
+     * @return boolean
      */
     public function create_tree_recursive($nodeId)
     {

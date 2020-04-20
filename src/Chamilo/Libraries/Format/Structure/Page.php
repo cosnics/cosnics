@@ -87,7 +87,6 @@ class Page
         $this->application = $application;
 
         $this->getHeader()->setApplication($this->application);
-        $this->getFooter()->setApplication($this->application);
     }
 
     /**

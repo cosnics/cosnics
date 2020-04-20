@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Format\Menu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
- * Renderer which can be used to create an array of options to use in a select
- * list.
+ * Renderer which can be used to create an array of options to use in a select list.
  * The options are displayed in a hierarchical way in the select list.
  *
  * @package Chamilo\Libraries\Format\Menu
@@ -13,6 +12,11 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 {
     const KEY_ID = 'id';
+
+    /**
+     * @var string[]
+     */
+    protected $exclude;
 
     /**
      * Create a new OptionsMenuRenderer
@@ -27,8 +31,11 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     }
 
     /**
+     * Renders the element of the menu
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer::renderEntry()
+     * @param string[] $node
+     * @param integer $level
+     * @param integer $type
      */
     public function renderEntry($node, $level, $type)
     {
@@ -37,7 +44,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
         {
             foreach ($node['sub'] as $child_id => $child)
             {
-                if (! in_array($child_id, $this->exclude))
+                if (!in_array($child_id, $this->exclude))
                 {
                     $this->exclude[] = $child_id;
                 }
@@ -53,8 +60,9 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     }
 
     /**
+     * Returns the resultant array
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer::toArray()
+     * @return string[]
      */
     public function toArray()
     {

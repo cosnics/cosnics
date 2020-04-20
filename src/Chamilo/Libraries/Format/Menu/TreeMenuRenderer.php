@@ -69,8 +69,9 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
     }
 
     /**
+     * Finish the tree level (for types 'tree' and 'sitemap')
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuDirectTreeRenderer::finishLevel()
+     * @param integer $level
      */
     public function finishLevel($level)
     {
@@ -92,8 +93,11 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
     }
 
     /**
+     * Renders the element of the menu
      *
-     * @see \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuDirectTreeRenderer::renderEntry()
+     * @param string[] $node
+     * @param integer $level
+     * @param integer $type
      */
     public function renderEntry($node, $level, $type)
     {

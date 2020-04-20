@@ -11,29 +11,17 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class NotificationMessageSessionStorage implements NotificationMessageStorageInterface
 {
+    const PARAM_CATEGORY = 'category';
+    const PARAM_MESSAGE = 'message';
     const PARAM_NOTIFICATION_MESSAGES = 'notification_messages';
     const PARAM_TYPE = 'type';
-    const PARAM_MESSAGE = 'message';
-    const PARAM_CATEGORY = 'category';
 
     /**
-     * Stores the notification messages
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
+     * Clears the notification messages
      */
-    public function store($notificationMessages = array())
+    public function clear()
     {
-        $notificationMessagesAsArray = array();
-
-        foreach ($notificationMessages as $notificationMessage)
-        {
-            $notificationMessagesAsArray[] = array(
-                self::PARAM_TYPE => $notificationMessage->getType(),
-                self::PARAM_MESSAGE => $notificationMessage->getMessage(),
-                self::PARAM_CATEGORY => $notificationMessage->getCategory());
-        }
-
-        Session::register(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
+        Session::unregister(self::PARAM_NOTIFICATION_MESSAGES);
     }
 
     /**
@@ -50,19 +38,32 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
         foreach ($notificationMessagesAsArray as $notificationMessageArray)
         {
             $notificationMessages[] = new NotificationMessage(
-                $notificationMessageArray[self::PARAM_MESSAGE],
-                $notificationMessageArray[self::PARAM_TYPE],
-                $notificationMessageArray[self::PARAM_CATEGORY]);
+                $notificationMessageArray[self::PARAM_MESSAGE], $notificationMessageArray[self::PARAM_TYPE],
+                $notificationMessageArray[self::PARAM_CATEGORY]
+            );
         }
 
         return $notificationMessages;
     }
 
     /**
-     * Clears the notification messages
+     * Stores the notification messages
+     *
+     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function clear()
+    public function store($notificationMessages = array())
     {
-        Session::unregister(self::PARAM_NOTIFICATION_MESSAGES);
+        $notificationMessagesAsArray = array();
+
+        foreach ($notificationMessages as $notificationMessage)
+        {
+            $notificationMessagesAsArray[] = array(
+                self::PARAM_TYPE => $notificationMessage->getType(),
+                self::PARAM_MESSAGE => $notificationMessage->getMessage(),
+                self::PARAM_CATEGORY => $notificationMessage->getCategory()
+            );
+        }
+
+        Session::register(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
     }
 }

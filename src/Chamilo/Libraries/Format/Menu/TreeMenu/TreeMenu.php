@@ -15,6 +15,11 @@ class TreeMenu extends HtmlMenu
 {
 
     /**
+     * @var \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer
+     */
+    protected $array_renderer;
+
+    /**
      *
      * @var string
      */
@@ -81,6 +86,15 @@ class TreeMenu extends HtmlMenu
     }
 
     /**
+     *
+     * @return string
+     */
+    public function get_tree_name()
+    {
+        return $this->name;
+    }
+
+    /**
      * Renders the menu as a tree
      *
      * @return string
@@ -89,15 +103,7 @@ class TreeMenu extends HtmlMenu
     {
         $renderer = new TreeMenuRenderer($this->get_tree_name());
         $this->render($renderer, 'sitemap');
-        return $renderer->toHTML();
-    }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_tree_name()
-    {
-        return $this->name;
+        return $renderer->toHTML();
     }
 }

@@ -18,7 +18,7 @@ class ExceptionResponse extends Response
      * Constructor
      *
      * @param \Exception $exception
-     * @param string $application
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
     public function __construct($exception, $application)
     {
@@ -26,9 +26,9 @@ class ExceptionResponse extends Response
         $page->setApplication($application);
 
         $html = array();
-        $html[] = $page->getHeader()->toHtml();
+        $html[] = $page->getHeader()->render();
         $html[] = Display::error_message($exception->getMessage());
-        $html[] = $page->getFooter()->toHtml();
+        $html[] = $page->getFooter()->render();
 
         parent::__construct('', implode(PHP_EOL, $html));
     }

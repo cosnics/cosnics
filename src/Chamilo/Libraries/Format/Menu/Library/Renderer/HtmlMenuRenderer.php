@@ -21,12 +21,12 @@ abstract class HtmlMenuRenderer
     public $_menuType;
 
     /**
+     * Finish the tree level (for types 'tree' and 'sitemap')
      *
-     * @param string $menuType
+     * @param integer $level
      */
-    public function setMenuType($menuType)
+    public function finishLevel($level)
     {
-        $this->_menuType = $menuType;
     }
 
     /**
@@ -35,15 +35,6 @@ abstract class HtmlMenuRenderer
      * @param integer $level
      */
     public function finishMenu($level)
-    {
-    }
-
-    /**
-     * Finish the tree level (for types 'tree' and 'sitemap')
-     *
-     * @param integer $level
-     */
-    public function finishLevel($level)
     {
     }
 
@@ -65,5 +56,14 @@ abstract class HtmlMenuRenderer
      */
     public function renderEntry($node, $level, $type)
     {
+    }
+
+    /**
+     *
+     * @param string $menuType
+     */
+    public function setMenuType($menuType)
+    {
+        $this->_menuType = $menuType;
     }
 }

@@ -21,7 +21,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class SlideshowRenderer
 {
     const PARAM_AUTOPLAY = 'autoplay';
-
     const PARAM_INDEX = 'slideshow';
 
     /**
@@ -114,7 +113,7 @@ class SlideshowRenderer
 
         if ($contentObjectCount == 0)
         {
-            $html[] = Display::normal_message(Translation::get('SlideshowNoContentAvailable'), true);
+            $html[] = Display::normal_message(Translation::get('SlideshowNoContentAvailable'));
 
             return implode(PHP_EOL, $html);
         }

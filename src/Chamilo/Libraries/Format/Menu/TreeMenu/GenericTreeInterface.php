@@ -17,7 +17,7 @@ interface GenericTreeInterface
 
     /**
      *
-     * @param unknown $nodeId
+     * @param integer $nodeId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
@@ -105,7 +105,7 @@ interface GenericTreeInterface
 
     /**
      *
-     * @param unknown $nodeId
+     * @param integer $nodeId
      *
      * @return boolean
      */

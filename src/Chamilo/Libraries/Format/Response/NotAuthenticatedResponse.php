@@ -57,7 +57,7 @@ class NotAuthenticatedResponse extends Response
         );
 
         $form->addElement(
-            'text', 'login', Translation::get('UserName'),
+            'text', 'login', $translator->getTranslation('UserName'),
             array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
         );
 
@@ -72,7 +72,7 @@ class NotAuthenticatedResponse extends Response
         );
 
         $form->addElement(
-            'password', 'password', Translation::get('Pass'),
+            'password', 'password', $translator->getTranslation('Pass'),
             array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
         );
 
@@ -81,13 +81,16 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement('html', '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
+            'style_submit_button', 'submitAuth', $translator->getTranslation('Login'), null, null,
             new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement('html', '</div>');
 
-        $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $form->addRule('password', $translator->getTranslation('ThisFieldIsRequired'), 'required');
+        $form->addRule(
+            'login', $translator->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES),
+            'required'
+        );
 
         return $form->render();
     }
@@ -108,7 +111,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-6">';
         $html[] = '<div class="panel panel-danger">';
         $html[] = '<div class="panel-heading">';
-        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->displayLoginForm();

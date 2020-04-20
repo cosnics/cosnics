@@ -13,11 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
     /**
-     * Returns the input field in HTML
-     *
-     * @return    string
-     * @since     1.0
-     * @access    public
+     * @return string
      */
     function toHtml()
     {

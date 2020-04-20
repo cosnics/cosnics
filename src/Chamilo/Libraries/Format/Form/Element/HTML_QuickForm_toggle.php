@@ -40,8 +40,7 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
     }
 
     /**
-     *
-     * @see HTML_QuickForm_extended_checkbox::toHtml()
+     * @return string
      */
     function toHtml()
     {

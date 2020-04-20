@@ -11,23 +11,15 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
 class AdvancedElementFinderElement
 {
     const PROPERTY_CHILDREN = 'children';
-
     const PROPERTY_CLASS = 'classes';
-
     const PROPERTY_DESCRIPTION = 'description';
-
     const PROPERTY_ID = 'id';
-
     const PROPERTY_TITLE = 'title';
-
     const PROPERTY_TYPE = 'type';
 
     const TYPE_FILTER = 3;
-
     const TYPE_SELECTABLE = 1;
-
     const TYPE_SELECTABLE_AND_FILTER = 2;
-
     const TYPE_VISUAL = 4;
 
     /**
@@ -71,7 +63,7 @@ class AdvancedElementFinderElement
     /**
      * Returns this element as an array
      *
-     * @return string[][]
+     * @return string[]
      */
     public function as_array()
     {
@@ -128,7 +120,7 @@ class AdvancedElementFinderElement
     /**
      * Sets the children of this element
      *
-     * @param Array $children
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     public function set_children($children)
     {

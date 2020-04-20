@@ -33,6 +33,23 @@ abstract class TreeMenuDataProvider
 
     /**
      *
+     * @param integer $id
+     *
+     * @return string
+     */
+    public function format_url($id)
+    {
+        return $this->get_url() . '&' . $this->get_id_param() . '=' . $id;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function get_id_param();
+
+    /**
+     *
      * @return integer
      */
     public function get_selected_tree_menu_item()
@@ -60,6 +77,12 @@ abstract class TreeMenuDataProvider
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem
+     */
+    abstract public function get_tree_menu_data();
+
+    /**
+     *
      * @return string
      */
     public function get_url()
@@ -75,26 +98,4 @@ abstract class TreeMenuDataProvider
     {
         $this->url = $url;
     }
-
-    /**
-     *
-     * @param integer $id
-     * @return string
-     */
-    public function format_url($id)
-    {
-        return $this->get_url() . '&' . $this->get_id_param() . '=' . $id;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem
-     */
-    abstract public function get_tree_menu_data();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function get_id_param();
 }

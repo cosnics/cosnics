@@ -11,11 +11,9 @@ interface NotificationMessageStorageInterface
 {
 
     /**
-     * Stores the notification messages
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
+     * Clears the notification messages
      */
-    public function store($notificationMessages = array());
+    public function clear();
 
     /**
      * Retrieves the notification messages
@@ -25,8 +23,10 @@ interface NotificationMessageStorageInterface
     public function retrieve();
 
     /**
-     * Clears the notification messages
+     * Stores the notification messages
+     *
+     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function clear();
+    public function store($notificationMessages = array());
 }
 

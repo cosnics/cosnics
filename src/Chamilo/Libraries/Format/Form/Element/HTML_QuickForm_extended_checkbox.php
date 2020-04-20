@@ -24,7 +24,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      * @param string $text (optional)Checkbox display text
      * @param string[] $attributes (optional)Either a typical HTML attribute string
      *        or an associative array
-     * @param string $value (optional)The value for the checkbox
+     * @param integer $value (optional)The value for the checkbox
      * @param string $return_value (optional)The return value when the checkbox is not selected
      *
      * @return void
@@ -50,8 +50,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     }
 
     /**
+     * Returns a 'safe' element's value
      *
-     * @see HTML_QuickForm_checkbox::exportValue()
+     * @param array   array of submitted values to search
+     * @param bool    whether to return the value as associative array
+     *
+     * @access public
+     * @return mixed
      */
     public function exportValue(&$submitValues, $assoc = false)
     {
@@ -102,8 +107,15 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     }
 
     /**
+     * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @see HTML_QuickForm_checkbox::onQuickFormEvent()
+     * @param string $event Name of event
+     * @param mixed $arg event arguments
+     * @param object $caller calling object
+     *
+     * @return    boolean
+     * @since     1.0
+     * @access    public
      */
     function onQuickFormEvent($event, $arg, &$caller)
     {
@@ -192,8 +204,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     }
 
     /**
+     * Sets the value of the form element
      *
-     * @see HTML_QuickForm_checkbox::setValue()
+     * @param string $value Default value of the form element
+     *
+     * @return    void
+     * @since     1.0
+     * @access    public
      */
     function setValue($value)
     {
