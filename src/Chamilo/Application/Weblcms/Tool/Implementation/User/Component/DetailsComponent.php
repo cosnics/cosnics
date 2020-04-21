@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserCourseGroups;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\UserDetails;
 use Chamilo\Core\User\UserGroups;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -28,8 +30,8 @@ class DetailsComponent extends Manager
         if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {
             /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $user = DataManager::retrieve_by_id(
+                User::class_name(),
                 Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS));
 
             $details = new UserDetails($user);
@@ -45,8 +47,8 @@ class DetailsComponent extends Manager
         {
             foreach ($_POST['user_id'] as $user_id)
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     $user_id);
                 $details = new UserDetails($user);
                 $groups = new UserGroups($user->get_id(), true, $availableGroups);

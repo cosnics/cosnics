@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Admin;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * Service class to validate if a user is an admin of a course
@@ -46,7 +47,7 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
             $class = $extensionPackageContext . '\\CourseAdminValidator';
             if (! class_exists($class))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'The given package %s does not contain a valid CourseAdminValidator class', 
                         $extensionPackageContext));

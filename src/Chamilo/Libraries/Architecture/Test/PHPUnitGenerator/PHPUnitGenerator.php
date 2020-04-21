@@ -3,6 +3,9 @@ namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
 
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Libraries\File\PathBuilder;
+use DOMDocument;
+use DOMXPath;
+use Twig\Environment;
 
 /**
  * Generates the global phpunit configuration file for Chamilo
@@ -45,7 +48,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
      * @param RegistrationConsulter $registrationConsulter
      */
     public function __construct(
-        \Twig\Environment $twig, PathBuilder $pathBuilder, RegistrationConsulter $registrationConsulter
+        Environment $twig, PathBuilder $pathBuilder, RegistrationConsulter $registrationConsulter
     )
     {
         $this->twig = $twig;
@@ -79,10 +82,10 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
                 continue;
             }
 
-            $domDocument = new \DOMDocument();
+            $domDocument = new DOMDocument();
             $domDocument->load($packagePHPUnitConfiguration);
 
-            $domXPath = new \DOMXPath($domDocument);
+            $domXPath = new DOMXPath($domDocument);
             $domNodeList = $domXPath->query('testsuites/testsuite');
 
             if ($domNodeList->length == 0)

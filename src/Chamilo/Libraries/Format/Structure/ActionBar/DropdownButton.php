@@ -10,5 +10,5 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  */
 class DropdownButton extends AbstractButton
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButtonTrait;
+    use DropdownButtonTrait;
 }

@@ -45,12 +45,21 @@ class GalleryTableProperty
             $context = ClassnameUtilities::getInstance()->getNamespaceFromClassname($called_class);
 
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(),
-                array(),
-                $context);
+                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(), array(), $context
+            );
         }
 
         $this->set_title($title);
+    }
+
+    /**
+     * Returns the name of this property
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return $this->property;
     }
 
     /**
@@ -91,15 +100,5 @@ class GalleryTableProperty
     public function set_title($title)
     {
         $this->title = $title;
-    }
-
-    /**
-     * Returns the name of this property
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->property;
     }
 }

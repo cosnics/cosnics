@@ -3,10 +3,12 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -39,7 +41,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             throw new NoObjectSelectedException($contentObjectPublicationTranslation);
         }
 
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $pid);
 
@@ -48,7 +50,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             throw new ObjectNotExistException($contentObjectPublicationTranslation, $pid);
         }
 
-        $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        $repositoryRightsService = RightsService::getInstance();
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject(

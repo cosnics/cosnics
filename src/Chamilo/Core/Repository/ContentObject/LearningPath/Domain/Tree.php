@@ -3,6 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
+use InvalidArgumentException;
+use RangeException;
+use RuntimeException;
 
 /**
  * Full in memory tree of a learning path. This class can be used to traverse through the nested tree in memory
@@ -47,7 +50,7 @@ class Tree
     {
         if (in_array($treeNode, $this->treeNodes))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given learning path three node is already added to the list of nodes'
             );
         }
@@ -71,7 +74,7 @@ class Tree
     {
         if (!is_integer($id))
         {
-            throw new \InvalidArgumentException('The given id should be valid integer');
+            throw new InvalidArgumentException('The given id should be valid integer');
         }
 
         if($id == 0)
@@ -99,12 +102,12 @@ class Tree
     {
         if (!is_integer($step))
         {
-            throw new \InvalidArgumentException('The given step should be valid integer');
+            throw new InvalidArgumentException('The given step should be valid integer');
         }
 
         if($step < 1 || $step > count($this->treeNodesByStep))
         {
-            throw new \RangeException(sprintf('The given step %s is not within the available range of steps', $step));
+            throw new RangeException(sprintf('The given step %s is not within the available range of steps', $step));
         }
 
         return $this->treeNodesByStep[$step];
@@ -129,7 +132,7 @@ class Tree
     {
         if (empty($this->treeNodes))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The learning path tree does not have a root node yet. Please use the ' .
                 'TreeBuilder service to populate the learning path tree'
             );

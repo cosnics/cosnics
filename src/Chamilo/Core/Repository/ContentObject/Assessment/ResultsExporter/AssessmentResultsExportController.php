@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
@@ -11,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use ReflectionClass;
 
 /**
  * Class that exports the results of an assessment
@@ -216,7 +219,7 @@ class AssessmentResultsExportController
      */
     protected function export_headers()
     {
-        $reflection_class = new \ReflectionClass(__CLASS__);
+        $reflection_class = new ReflectionClass(__CLASS__);
 
         $constants = $reflection_class->getConstants();
         foreach ($constants as $constant => $value)
@@ -286,8 +289,8 @@ class AssessmentResultsExportController
         ComplexContentObjectItem $complex_question, $assessment)
     {
         $assessment_result = $question_result->get_assessment_result();
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $user = DataManager::retrieve_by_id(
+            User::class_name(),
             $assessment_result->get_user_id());
 
         if ($user)

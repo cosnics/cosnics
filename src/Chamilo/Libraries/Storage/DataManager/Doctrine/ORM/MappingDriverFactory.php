@@ -6,8 +6,10 @@ use Chamilo\Libraries\File\Path;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use InvalidArgumentException;
 
 /**
  * Factory class to create a mapping driver for doctrine with a given configuration array
@@ -53,7 +55,7 @@ class MappingDriverFactory
      * @param \Doctrine\ORM\Configuration $doctrineConfiguration
      * @param string $chamiloRootPath
      */
-    public function __construct(\Doctrine\ORM\Configuration $doctrineConfiguration, $chamiloRootPath = null)
+    public function __construct(Configuration $doctrineConfiguration, $chamiloRootPath = null)
     {
         $this->doctrineConfiguration = $doctrineConfiguration;
         $this->chamiloRootPath = ! is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
@@ -149,7 +151,7 @@ class MappingDriverFactory
 
             if (! is_dir($absoluteMappingPath))
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'The given ' . $type . ' mapping path "' . $mappingPath . '" must be an existing directory');
             }
         }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
@@ -41,7 +42,7 @@ class DownloadSelectedPublicationsComponent extends Manager
         
         foreach ($publications_ids as $publication_id)
         {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publication_with_content_object(
+            $publication = DataManager::retrieve_content_object_publication_with_content_object(
                 $publication_id);
             
             if ($this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) &&

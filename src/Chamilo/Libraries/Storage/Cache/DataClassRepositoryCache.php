@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  *
@@ -162,13 +163,13 @@ class DataClassRepositoryCache
     {
         if (! $parameters instanceof DataClassRetrieveParameters && $parameters != null)
         {
-            throw new \Exception('Illegal parameters passed to the DataClassServiceCache');
+            throw new Exception('Illegal parameters passed to the DataClassServiceCache');
         }
 
         if (! $object instanceof DataClass)
         {
             $type = is_object($object) ? get_class($object) : gettype($object);
-            throw new \Exception(
+            throw new Exception(
                 'The DataClassServiceCache only allows for caching of DataClass objects. Currently trying to add: ' .
                      $type . '.');
         }
@@ -239,7 +240,7 @@ class DataClassRepositoryCache
     {
         if (! $object instanceof DataClass)
         {
-            throw new \Exception('Not a DataClass');
+            throw new Exception('Not a DataClass');
         }
 
         $className = $this->getDataClassCacheClassName($object);
@@ -268,13 +269,13 @@ class DataClassRepositoryCache
     {
         if (! $parameters instanceof DataClassRetrievesParameters)
         {
-            throw new \Exception('Illegal parameters passed to the DataClassResultSetCache');
+            throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
 
         if (! $dataClassIterator instanceof DataClassIterator)
         {
             $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
-            throw new \Exception(
+            throw new Exception(
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
@@ -294,13 +295,13 @@ class DataClassRepositoryCache
     {
         if (! $parameters instanceof DataClassCountParameters)
         {
-            throw new \Exception('Illegal parameters passed to the DataClassCountCache');
+            throw new Exception('Illegal parameters passed to the DataClassCountCache');
         }
 
         if (! is_integer($count))
         {
             $type = is_object($count) ? get_class($count) : gettype($count);
-            throw new \Exception(
+            throw new Exception(
                 'The DataClassCountCache cache only allows for caching of integers. Currently trying to add: ' . $type .
                      '.');
         }
@@ -320,13 +321,13 @@ class DataClassRepositoryCache
     {
         if (! $parameters instanceof DataClassDistinctParameters)
         {
-            throw new \Exception('Illegal parameters passed to the DataClassDistinctCache');
+            throw new Exception('Illegal parameters passed to the DataClassDistinctCache');
         }
 
         if (! is_array($propertyValues))
         {
             $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
-            throw new \Exception(
+            throw new Exception(
                 'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
                      $type . '.');
         }
@@ -346,13 +347,13 @@ class DataClassRepositoryCache
     {
         if (! $parameters instanceof DataClassCountGroupedParameters)
         {
-            throw new \Exception('Illegal parameters passed to the DataClassCountGroupedCache');
+            throw new Exception('Illegal parameters passed to the DataClassCountGroupedCache');
         }
 
         if (! is_array($counts))
         {
             $type = is_object($counts) ? get_class($counts) : gettype($counts);
-            throw new \Exception(
+            throw new Exception(
                 'The DataClassCountGroupedCache cache only allows for caching of integer arrays. Currently trying to add: ' .
                      $type . '.');
         }
@@ -372,7 +373,7 @@ class DataClassRepositoryCache
     {
         if (! is_array($record))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The RecordResultCache only allows for caching of records. Currently trying to add: ' . gettype($record) .
                      '.');
         }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Component;
 
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -30,7 +31,7 @@ class LogoutComponent extends Manager
         $condition = new AndCondition($conditions);
         
         $parameters = new DataClassRetrieveParameters($condition);
-        $user_setting = \Chamilo\Core\Repository\Storage\DataManager::retrieve(Setting::class_name(), $parameters);
+        $user_setting = DataManager::retrieve(Setting::class_name(), $parameters);
         
         if ($user_setting->delete())
         {

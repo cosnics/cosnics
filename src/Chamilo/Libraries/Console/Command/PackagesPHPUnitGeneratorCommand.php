@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Console\Command;
 
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Twig\Environment;
 
 /**
  * Command to generate the phpunit configuration file for all the chamilo packages individually
@@ -26,7 +28,7 @@ class PackagesPHPUnitGeneratorCommand extends Command
      *
      * @param \Twig\Environment $twig
      */
-    public function __construct(\Twig\Environment $twig)
+    public function __construct(Environment $twig)
     {
         parent::__construct();
 
@@ -56,7 +58,7 @@ class PackagesPHPUnitGeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list()->get_list(
+        $packages = PlatformPackageBundles::getInstance()->get_package_list()->get_list(
             true
         );
 

@@ -5,12 +5,14 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Common\Renditio
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -65,7 +67,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             {
                 $name = $object->get_filename();
                 $url = Path::getInstance()->getBasePath(true) .
-                    \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+                    Manager::get_document_downloader_url(
                         $object->get_id(),
                         $object->calculate_security_code()
                     );
@@ -79,7 +81,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 $number_of_events = $object->count_events();
                 $html[] = Translation::get('EventCount') . ' : ' . $number_of_events;
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $html[] =
                     '<div class="alert alert-danger">' . Translation::getInstance()->getTranslation('ICalParseError') .

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseModule;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BlockSortComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
+class BlockSortComponent extends Manager
 {
 
     function unserialize_jquery($jquery)

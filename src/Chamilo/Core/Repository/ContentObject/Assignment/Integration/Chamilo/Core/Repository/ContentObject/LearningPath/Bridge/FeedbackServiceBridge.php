@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge
@@ -44,7 +45,7 @@ class FeedbackServiceBridge implements \Chamilo\Core\Repository\ContentObject\As
     {
         if (!$treeNode->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }

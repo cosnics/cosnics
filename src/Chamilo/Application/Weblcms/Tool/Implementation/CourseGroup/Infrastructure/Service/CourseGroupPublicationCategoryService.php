@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
@@ -9,6 +10,7 @@ use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupPublicationCategory;
+use Exception;
 
 /**
  * Manages the CourseGroupPublicationCategories
@@ -77,7 +79,7 @@ class CourseGroupPublicationCategoryService
 
         if (!$this->courseGroupPublicationCategoryRepository->create($publicationCategory))
         {
-            throw new \Exception(
+            throw new Exception(
                 'Could not create a new category in tool ' . $toolName . ' for group ' . $courseGroup->get_name()
             );
         }
@@ -210,7 +212,7 @@ class CourseGroupPublicationCategoryService
 
         if (!$this->courseGroupPublicationCategoryRepository->update($location))
         {
-            throw new \Exception(
+            throw new Exception(
                 'Could not update the location for the publication category with id ' . $publicationCategory->getId()
             );
         }
@@ -218,14 +220,14 @@ class CourseGroupPublicationCategoryService
         foreach ($rights as $right)
         {
             if (!$this->weblcmsRights->set_location_entity_right(
-                \Chamilo\Application\Weblcms\Manager::context(),
+                Manager::context(),
                 $right,
                 $courseGroup->getId(),
                 CourseGroupEntity::ENTITY_TYPE,
                 $location->getId()
             ))
             {
-                throw new \Exception(
+                throw new Exception(
                     'Could not set right ' . $right . ' on publication category with id ' .
                     $publicationCategory->getId()
                 );
@@ -253,14 +255,14 @@ class CourseGroupPublicationCategoryService
         foreach ($rights as $right)
         {
             if (!$this->weblcmsRights->unset_location_entity_right(
-                \Chamilo\Application\Weblcms\Manager::context(),
+                Manager::context(),
                 $right,
                 $courseGroup->getId(),
                 CourseGroupEntity::ENTITY_TYPE,
                 $location->getId()
             ))
             {
-                throw new \Exception(
+                throw new Exception(
                     'Could not remove right ' . $right . ' from publication category with id ' .
                     $publicationCategory->getId()
                 );
@@ -285,7 +287,7 @@ class CourseGroupPublicationCategoryService
 
         if (!$location)
         {
-            throw new \Exception(
+            throw new Exception(
                 'No location found for the publication category with id ' . $publicationCategory->getId()
             );
         }
@@ -311,7 +313,7 @@ class CourseGroupPublicationCategoryService
 
         if (!$this->courseGroupPublicationCategoryRepository->create($courseGroupPublicationCategory))
         {
-            throw new \Exception(
+            throw new Exception(
                 sprintf(
                     'Could not create the course group publication category for group %s and publication category %s',
                     $courseGroup->getId(), $publicationCategory->getId()

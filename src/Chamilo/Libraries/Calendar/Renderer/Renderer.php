@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer;
 
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Exception;
 
 /**
  *
@@ -12,7 +14,7 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
  */
 abstract class Renderer
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *
@@ -29,7 +31,7 @@ abstract class Renderer
     {
         if (! $dataProvider instanceof CalendarRendererProviderInterface)
         {
-            throw new \Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
+            throw new Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
         }
 
         $this->dataProvider = $dataProvider;

@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Format\Twig\Extension;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Twig_Extension;
+use Twig_SimpleFilter;
 
 /**
  * Twig extension for DateTimeUtilities
@@ -12,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DateExtension extends \Twig_Extension
+class DateExtension extends Twig_Extension
 {
     /**
      * @return array|\Twig_SimpleFilter[]
@@ -20,8 +22,8 @@ class DateExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('formatDate', array($this, 'formatDate')),
-            new \Twig_SimpleFilter('formatLongDate', array($this, 'formatLongDate'))
+            new Twig_SimpleFilter('formatDate', array($this, 'formatDate')),
+            new Twig_SimpleFilter('formatLongDate', array($this, 'formatLongDate'))
         );
     }
 

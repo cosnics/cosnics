@@ -32,12 +32,19 @@ abstract class BaseFooter implements FooterInterface
     /**
      *
      * @param integer $viewMode
+     * @param string $containerMode
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
     }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Structure\FooterInterface::render()
+     */
+    abstract public function render();
 
     /**
      *
@@ -55,58 +62,6 @@ abstract class BaseFooter implements FooterInterface
     public function setApplication($application)
     {
         $this->application = $application;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getViewMode()
-    {
-        return $this->viewMode;
-    }
-
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
-    {
-        $this->viewMode = $viewMode;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
-    {
-        return $this->containerMode;
-    }
-
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
-    {
-        $this->containerMode = $containerMode;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getContainerHeader()
-    {
-        $html = array();
-
-        $html[] = '<footer class="chamilo-footer">';
-        $html[] = '<div class="' . $this->getContainerMode() . '">';
-        $html[] = '<div class="row footer">';
-        $html[] = '<div class="col-xs-12">';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -131,13 +86,34 @@ abstract class BaseFooter implements FooterInterface
      *
      * @return string
      */
-    protected function getHeader()
+    protected function getContainerHeader()
     {
         $html = array();
 
-        $html[] = '</div> <!-- end of .container-fluid" -->';
+        $html[] = '<footer class="chamilo-footer">';
+        $html[] = '<div class="' . $this->getContainerMode() . '">';
+        $html[] = '<div class="row footer">';
+        $html[] = '<div class="col-xs-12">';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
     }
 
     /**
@@ -157,16 +133,41 @@ abstract class BaseFooter implements FooterInterface
     /**
      *
      * @return string
+     */
+    protected function getHeader()
+    {
+        $html = array();
+
+        $html[] = '</div> <!-- end of .container-fluid" -->';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
+    }
+
+    /**
+     *
+     * @return string
      * @deprecated Use render() now
      */
     public function toHtml()
     {
         return $this->render();
     }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\FooterInterface::render()
-     */
-    abstract public function render();
 }

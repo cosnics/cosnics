@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -32,7 +33,7 @@ class StatusChangerPlatformgroupTeacherComponent extends StatusChangerComponent
         
         $condition = new AndCondition($conditions);
         
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
+        return DataManager::retrieve(
             CourseEntityRelation::class_name(), 
             new DataClassRetrieveParameters($condition));
     }

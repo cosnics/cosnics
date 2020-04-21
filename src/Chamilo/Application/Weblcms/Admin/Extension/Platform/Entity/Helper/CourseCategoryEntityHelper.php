@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseCategoryEn
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
+use Chamilo\Application\Weblcms\Course\Component\BrowseComponent;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -61,7 +62,7 @@ class CourseCategoryEntityHelper
             array(
                 \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER,
                 \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE,
-                \Chamilo\Application\Weblcms\Course\Component\BrowseComponent::PARAM_CATEGORY_ID => $result[self::PROPERTY_COURSE_CATEGORY_ID]),
+                BrowseComponent::PARAM_CATEGORY_ID => $result[self::PROPERTY_COURSE_CATEGORY_ID]),
             array(
                 Manager::PARAM_ACTION,
                 Manager::PARAM_TARGET_TYPE,
@@ -87,16 +88,16 @@ class CourseCategoryEntityHelper
         $properties->add(new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ORIGIN));
         $properties->add(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::PROPERTY_NAME));
+                CourseCategory::class_name(),
+                CourseCategory::PROPERTY_NAME));
         $properties->add(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::PROPERTY_CODE));
+                CourseCategory::class_name(),
+                CourseCategory::PROPERTY_CODE));
         $properties->add(
             new FixedPropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::PROPERTY_ID,
+                CourseCategory::class_name(),
+                CourseCategory::PROPERTY_ID,
                 self::PROPERTY_COURSE_CATEGORY_ID));
 
         $parameters = new RecordRetrievesParameters(
@@ -134,12 +135,12 @@ class CourseCategoryEntityHelper
     private static function get_joins()
     {
         $join = new Join(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
+            CourseCategory::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_ID),
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
-                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::PROPERTY_ID)));
+                    CourseCategory::class_name(),
+                    CourseCategory::PROPERTY_ID)));
         return new Joins(array($join));
     }
 
@@ -148,10 +149,10 @@ class CourseCategoryEntityHelper
         $entities = array();
 
         $course_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
+            CourseCategory::class_name(),
             $entity_id);
 
-        if ($course_category instanceof \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory)
+        if ($course_category instanceof CourseCategory)
         {
             $entities[CourseCategoryEntity::ENTITY_TYPE][] = $course_category->get_id();
 
@@ -169,10 +170,10 @@ class CourseCategoryEntityHelper
     public static function get_course_ids($entity_id)
     {
         $course_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory::class_name(),
+            CourseCategory::class_name(),
             $entity_id);
 
-        if ($course_category instanceof \Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory)
+        if ($course_category instanceof CourseCategory)
         {
             $course_category_ids = $course_category->get_children_ids();
             $course_category_ids[] = $course_category->get_id();

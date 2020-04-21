@@ -14,6 +14,7 @@ interface TableCellRendererActionsColumnSupport
      * Returns the actions toolbar
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
      * @return string
      */
     public function get_actions($result);

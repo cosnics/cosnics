@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
@@ -48,7 +49,7 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
         $type = $tool_browser->get_publication_type();
         switch ($type)
         {
-            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+            case Manager::PUBLICATION_TYPE_FROM_ME :
                 return DataManager::retrieve_my_publications(
                     $tool_browser->get_location(),
                     $tool_browser->get_entities(),
@@ -58,7 +59,7 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
                     $count,
                     $tool_browser->get_user_id());
                 break;
-            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+            case Manager::PUBLICATION_TYPE_ALL :
                 return DataManager::retrieve_content_object_publications(
                     $tool_browser->get_publication_conditions(),
                     $order_property,
@@ -94,14 +95,14 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
         {
             switch ($type)
             {
-                case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+                case Manager::PUBLICATION_TYPE_FROM_ME :
                     $this->count_cache = DataManager::count_my_publications(
                         $tool_browser->get_location(),
                         $tool_browser->get_entities(),
                         $tool_browser->get_publication_conditions(),
                         $tool_browser->get_user_id());
                     break;
-                case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+                case Manager::PUBLICATION_TYPE_ALL :
                     $this->count_cache = DataManager::count_content_object_publications(
                         $tool_browser->get_publication_conditions());
                     break;

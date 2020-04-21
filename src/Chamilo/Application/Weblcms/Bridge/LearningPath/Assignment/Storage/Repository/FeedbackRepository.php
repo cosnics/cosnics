@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -123,7 +124,7 @@ class FeedbackRepository  extends \Chamilo\Core\Repository\ContentObject\Assignm
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -131,6 +132,6 @@ class FeedbackRepository  extends \Chamilo\Core\Repository\ContentObject\Assignm
      */
     protected function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 }

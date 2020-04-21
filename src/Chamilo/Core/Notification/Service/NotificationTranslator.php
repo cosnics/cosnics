@@ -7,6 +7,7 @@ use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -119,7 +120,7 @@ class NotificationTranslator
 
         if (!$activeViewingContext)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('The given viewing context with path %s could not be found', $viewingContextPath)
             );
         }
@@ -131,7 +132,7 @@ class NotificationTranslator
 
         if (!array_key_exists($userLocale, $activeViewingContext))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'No valid translation has been found for the given locale nor for the english fallback'
             );
         }
@@ -156,7 +157,7 @@ class NotificationTranslator
 
         if (!array_key_exists($userLocale, $descriptions))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'No valid translation has been found for the given locale nor for the english fallback'
             );
         }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
@@ -45,7 +47,7 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
     {
         if ($this->getType() != self::DELETE)
         {
-            throw new \Exception();
+            throw new Exception();
         }
 
         if ($this->sql !== null && $this->state === self::STATE_CLEAN)

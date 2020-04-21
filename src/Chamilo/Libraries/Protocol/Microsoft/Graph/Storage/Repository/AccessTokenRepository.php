@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use League\OAuth2\Client\Token\AccessToken;
 
@@ -32,7 +33,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function __construct(\Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting,
+    public function __construct(
+        LocalSetting $localSetting,
         SessionUtilities $sessionUtilities)
     {
         $this->localSetting = $localSetting;

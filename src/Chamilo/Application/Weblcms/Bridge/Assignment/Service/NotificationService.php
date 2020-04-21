@@ -11,6 +11,8 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachm
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryFeedbackNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
+use Chamilo\Core\Notification\Service\NotificationManager;
+use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -38,8 +40,8 @@ class NotificationService
      * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
     public function __construct(
-        \Chamilo\Core\Notification\Service\NotificationManager $notificationManager,
-        \Chamilo\Core\Queue\Service\JobProducer $jobProducer
+        NotificationManager $notificationManager,
+        JobProducer $jobProducer
     )
     {
         $this->notificationManager = $notificationManager;

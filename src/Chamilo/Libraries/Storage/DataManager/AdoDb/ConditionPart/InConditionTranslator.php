@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use InvalidArgumentException;
 
 /**
  *
@@ -33,7 +34,7 @@ class InConditionTranslator extends ConditionTranslator
             }
             else
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'An InCondition only accepts an array or a scalar as input for the values'
                 );
             }

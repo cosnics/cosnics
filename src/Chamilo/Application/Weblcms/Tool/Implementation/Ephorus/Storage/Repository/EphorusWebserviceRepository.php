@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Reposi
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
+use nusoap_client;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository
@@ -112,7 +113,7 @@ class EphorusWebserviceRepository
      */
     protected function getSoapClient($wsdl)
     {
-        $client = new \nusoap_client($wsdl, true);
+        $client = new nusoap_client($wsdl, true);
 
         $client->setDebugLevel(0);
         $client->timeout = 500;
@@ -141,7 +142,7 @@ class EphorusWebserviceRepository
     /**
      * @param \nusoap_client $client
      */
-    protected function storeDebugInfo(\nusoap_client $client)
+    protected function storeDebugInfo(nusoap_client $client)
     {
         $html = array();
 

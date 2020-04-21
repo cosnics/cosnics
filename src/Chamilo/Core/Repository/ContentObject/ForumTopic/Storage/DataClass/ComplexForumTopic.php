@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\TopicEmailNotificator;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -37,11 +39,11 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
         $email_notificator = new TopicEmailNotificator();
 
-        $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $lo = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_ref());
 
-        $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $parent = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_parent());
 
@@ -53,7 +55,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                User::class_name(),
                 (int) Session::get_user_id()));
 
         $parent->add_topic();
@@ -69,11 +71,11 @@ class ComplexForumTopic extends ComplexContentObjectItem
     {
         parent::delete();
 
-        $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $lo = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_ref());
 
-        $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $parent = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $this->get_parent());
         $parent->remove_topic();

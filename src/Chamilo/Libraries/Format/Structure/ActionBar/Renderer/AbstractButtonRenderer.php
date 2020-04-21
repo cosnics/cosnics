@@ -25,11 +25,40 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 
     /**
      *
+     * @return string[]
+     */
+    public function determineClasses()
+    {
+        $classes = array();
+
+        $classes[] = 'btn';
+        $classes[] = 'btn-default';
+        $classes[] = $this->getButton()->getClasses();
+
+        return $classes;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getLabel()
     {
         return ($this->getButton()->getLabel() ? $this->getButton()->getLabel() : null);
+    }
+
+    public function getTitle()
+    {
+        return htmlspecialchars(strip_tags($this->getLabel()));
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderClasses()
+    {
+        return 'class="' . implode(' ', $this->determineClasses()) . '"';
     }
 
     /**
@@ -51,63 +80,9 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      *
      * @return string
      */
-    public function renderLinkOpeningTag()
-    {
-        $html = array();
-
-        $html[] = '<a';
-        $html[] = $this->renderClasses();
-        $html[] = $this->renderTitle();
-        $html[] = '>';
-
-        return implode(' ', $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function renderLinkClosingTag()
     {
         return '</a>';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderClasses()
-    {
-        return 'class="' . implode(' ', $this->determineClasses()) . '"';
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function determineClasses()
-    {
-        $classes = array();
-
-        $classes[] = 'btn';
-        $classes[] = 'btn-default';
-        $classes[] = $this->getButton()->getClasses();
-
-        return $classes;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderTitle()
-    {
-        return 'title="' . htmlentities($this->getTitle()) . '"';
-    }
-
-    public function getTitle()
-    {
-        return htmlspecialchars(strip_tags($this->getLabel()));
     }
 
     /**
@@ -122,8 +97,8 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 
         $html = array();
 
-        $displayLabel = $button->getDisplay() != AbstractButton::DISPLAY_ICON && ! empty($label);
-        $displayIcon = $button->getDisplay() != AbstractButton::DISPLAY_LABEL && ! empty($imagePath);
+        $displayLabel = $button->getDisplay() != AbstractButton::DISPLAY_ICON && !empty($label);
+        $displayIcon = $button->getDisplay() != AbstractButton::DISPLAY_LABEL && !empty($imagePath);
 
         if ($displayIcon)
         {
@@ -155,7 +130,32 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         else
         {
             return '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $title . '" title="' . $title .
-                 '"/>';
+                '"/>';
         }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderLinkOpeningTag()
+    {
+        $html = array();
+
+        $html[] = '<a';
+        $html[] = $this->renderClasses();
+        $html[] = $this->renderTitle();
+        $html[] = '>';
+
+        return implode(' ', $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderTitle()
+    {
+        return 'title="' . htmlentities($this->getTitle()) . '"';
     }
 }

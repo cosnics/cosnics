@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use RuntimeException;
 
 class ImporterComponent extends Manager
 {
@@ -26,7 +27,7 @@ class ImporterComponent extends Manager
             
             if (! in_array($export_format, $external_object->get_export_types()))
             {
-                throw new \RuntimeException('Invalid export type selected');
+                throw new RuntimeException('Invalid export type selected');
             }
             
             $document = ContentObject::factory(File::class_name());

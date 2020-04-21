@@ -9,13 +9,10 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class MessageLogger
 {
-    const TYPE_CONFIRM = '2';
-
-    const TYPE_ERROR = '4';
-
-    const TYPE_NORMAL = '1';
-
-    const TYPE_WARNING = '3';
+    const TYPE_CONFIRM = 2;
+    const TYPE_ERROR = 4;
+    const TYPE_NORMAL = 1;
+    const TYPE_WARNING = 3;
 
     /**
      *
@@ -51,22 +48,20 @@ class MessageLogger
      * @param string $message
      * @param integer $type
      */
-    public function add_message($message, $type = self :: TYPE_NORMAL)
+    public function add_message($message, $type = self::TYPE_NORMAL)
     {
         switch ($type)
         {
-            case self::TYPE_NORMAL :
-                $this->messages[] = $message;
-                break;
             case self::TYPE_CONFIRM :
-                $this->messages[] = '<span style="color: green; font-weight: bold;">' . $message . '</span>';
+                $this->messages[] = '<span class="text-success"><strong>' . $message . '</strong></span>';
                 break;
             case self::TYPE_WARNING :
-                $this->messages[] = '<span style="color: orange; font-weight: bold;">' . $message . '</span>';
+                $this->messages[] = '<span class="text-warning"><strong>' . $message . '</strong></span>';
                 break;
             case self::TYPE_ERROR :
-                $this->messages[] = '<span style="color: red; font-weight: bold;">' . $message . '</span>';
+                $this->messages[] = '<span class="text-danger"><strong>' . $message . '</strong></span>';
                 break;
+            case self::TYPE_NORMAL :
             default :
                 $this->messages[] = $message;
                 break;

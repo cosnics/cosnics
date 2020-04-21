@@ -31,6 +31,27 @@ class ButtonGroup extends AbstractButtonToolBarItem
 
     /**
      *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
+     */
+    public function addButton(AbstractButton $button)
+    {
+        $this->buttons[] = $button;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
+     */
+    public function addButtons($buttons)
+    {
+        foreach ($buttons as $button)
+        {
+            $this->addButton($button);
+        }
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[]
      */
     public function getButtons()
@@ -48,12 +69,13 @@ class ButtonGroup extends AbstractButtonToolBarItem
     }
 
     /**
+     * Returns whether or not the button group has buttons
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
+     * @return boolean
      */
-    public function addButton(AbstractButton $button)
+    public function hasButtons()
     {
-        $this->buttons[] = $button;
+        return count($this->buttons) > 0;
     }
 
     /**
@@ -67,19 +89,7 @@ class ButtonGroup extends AbstractButtonToolBarItem
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $button
-     */
-    public function addButtons($buttons)
-    {
-        foreach ($buttons as $button)
-        {
-            $this->addButton($button);
-        }
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $button
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      */
     public function prependButtons($buttons)
     {
@@ -87,15 +97,5 @@ class ButtonGroup extends AbstractButtonToolBarItem
         {
             $this->prependButton($button);
         }
-    }
-
-    /**
-     * Returns whether or not the button group has buttons
-     *
-     * @return boolean
-     */
-    public function hasButtons()
-    {
-        return count($this->buttons) > 0;
     }
 }

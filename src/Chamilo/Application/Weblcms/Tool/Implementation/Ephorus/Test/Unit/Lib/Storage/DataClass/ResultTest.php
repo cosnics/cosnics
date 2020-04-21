@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Test\Unit\Lib\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Result;
 use Chamilo\Libraries\Storage\DataClassTest;
 
 /**
@@ -57,7 +58,7 @@ class ResultTest extends DataClassTest
      */
     protected function get_data_class_object()
     {
-        return new \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Result();
+        return new Result();
     }
 
     /**

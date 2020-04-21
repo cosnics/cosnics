@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Component\CourseSections;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -34,7 +35,7 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
             new OrderBy(
                 new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)));
 
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             CourseSection::class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
@@ -46,7 +47,7 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::count(
+        return DataManager::count(
             CourseSection::class_name(),
             new DataClassCountParameters($condition));
     }

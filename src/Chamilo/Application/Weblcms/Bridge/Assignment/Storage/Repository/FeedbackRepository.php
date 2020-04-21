@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -127,7 +128,7 @@ class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject\Assignme
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -135,6 +136,6 @@ class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject\Assignme
      */
     protected function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 }

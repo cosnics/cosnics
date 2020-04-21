@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class DocumentPublisherComponent extends Manager implements ViewerInterface
 {
 
     /**

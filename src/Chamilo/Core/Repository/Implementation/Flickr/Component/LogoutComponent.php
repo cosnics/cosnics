@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Flickr\Component;
 
 use Chamilo\Core\Repository\Implementation\Flickr\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -40,7 +41,7 @@ class LogoutComponent extends Manager
         
         $condition = new AndCondition($conditions);
         
-        $setting = \Chamilo\Core\Repository\Storage\DataManager::retrieve(
+        $setting = DataManager::retrieve(
             Setting::class_name(), 
             new DataClassRetrieveParameters($condition));
         $setting->set_value(null);

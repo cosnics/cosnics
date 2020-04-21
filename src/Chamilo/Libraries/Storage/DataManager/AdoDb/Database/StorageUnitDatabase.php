@@ -3,9 +3,18 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Database;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
+use Exception;
+use PDOException;
 
 /**
  * This class provides basic functionality for storage unit manipulations via Doctrine
@@ -15,7 +24,7 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
  */
 class StorageUnitDatabase implements StorageUnitDatabaseInterface
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *
@@ -39,7 +48,8 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      *
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
+    public function __construct(
+        Connection $connection, StorageAliasGenerator $storageAliasGenerator,
         ExceptionLoggerInterface $exceptionLogger)
     {
         $this->connection = $connection;
@@ -105,10 +115,10 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      *
      * @param \Exception $exception
      */
-    public function handleError(\Exception $exception)
+    public function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
-            new \Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'),
+            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'),
             ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
     }
 
@@ -125,7 +135,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 $this->drop($storageUnitName);
             }
 
-            $schema = new \Doctrine\DBAL\Schema\Schema();
+            $schema = new Schema();
             $table = $schema->createTable($storageUnitName);
 
             foreach ($properties as $property => $attributes)
@@ -181,7 +191,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
             {
                 $statement = $this->getConnection()->query($query);
 
-                if ($statement instanceof \PDOException)
+                if ($statement instanceof PDOException)
                 {
                     $this->handleError($statement);
 
@@ -191,7 +201,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -214,7 +224,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      */
     public function drop($storageUnitName)
     {
-        $schema = new \Doctrine\DBAL\Schema\Schema(array(new \Doctrine\DBAL\Schema\Table($storageUnitName)));
+        $schema = new Schema(array(new Table($storageUnitName)));
 
         $newSchema = clone $schema;
         $newSchema->dropTable($storageUnitName);
@@ -225,7 +235,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         {
             $statement = $this->getConnection()->query($query);
 
-            if ($statement instanceof \PDOException)
+            if ($statement instanceof PDOException)
             {
                 $this->handleError($statement);
 
@@ -246,7 +256,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
         $statement = $this->getConnection()->query($query);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             return true;
         }
@@ -268,15 +278,15 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         {
             if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
             {
-                $column = new \Doctrine\DBAL\Schema\Column($property);
+                $column = new Column($property);
                 $query = 'ALTER TABLE ' . handleError . ' DROP COLUMN ' .
                      $column->getQuotedName($this->getConnection()->getDatabasePlatform());
             }
             else
             {
-                $column = new \Doctrine\DBAL\Schema\Column(
+                $column = new Column(
                     $property,
-                    \Doctrine\DBAL\Types\Type::getType($this->parsePropertyType($attributes)),
+                    Type::getType($this->parsePropertyType($attributes)),
                     $this->parseAttributes($attributes));
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
@@ -341,7 +351,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             $statement = $this->getConnection()->query($query);
 
-            if (! $statement instanceof \PDOException)
+            if (! $statement instanceof PDOException)
             {
                 return true;
             }
@@ -352,7 +362,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 return false;
             }
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -388,18 +398,18 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
             case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_INDEX :
                 $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
                     $name,
-                    new \Doctrine\DBAL\Schema\Index($name, $columns, false, false));
+                    new Index($name, $columns, false, false));
                 break;
             case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_UNIQUE :
                 $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
                     $name,
-                    new \Doctrine\DBAL\Schema\Index($name, $columns, true, false));
+                    new Index($name, $columns, true, false));
                 break;
         }
 
         $statement = $this->getConnection()->query($query);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             return true;
         }
@@ -422,7 +432,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             if ($optimize)
             {

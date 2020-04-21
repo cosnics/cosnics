@@ -2,6 +2,9 @@
 namespace Chamilo\Libraries\Protocol\MicrosoftClient;
 
 use Chamilo\Libraries\File\Redirect;
+use Guzzle\Http\Client;
+use Guzzle\Http\Message\Request;
+use RuntimeException;
 
 /**
  * Initializes and handles the login procedure for Microsoft REST API's
@@ -146,7 +149,7 @@ class MicrosoftClientService
      *
      * @return boolean|\Guzzle\Http\EntityBodyInterface|string
      */
-    public function sendRequest(\Guzzle\Http\Message\Request $request, $shouldDecodeContent = true)
+    public function sendRequest(Request $request, $shouldDecodeContent = true)
     {
         if ($this->hasAccessTokenExpired())
         {
@@ -196,7 +199,7 @@ class MicrosoftClientService
 
             $baseUrl .= '/';
 
-            $this->azureActiveDirectoryClient = new \Guzzle\Http\Client(array('base_url' => $baseUrl));
+            $this->azureActiveDirectoryClient = new Client(array('base_url' => $baseUrl));
         }
 
         return $this->azureActiveDirectoryClient;
@@ -211,7 +214,7 @@ class MicrosoftClientService
     {
         if (! isset($this->microsoftServiceClient))
         {
-            $this->microsoftServiceClient = new \Guzzle\Http\Client(
+            $this->microsoftServiceClient = new Client(
                 array('base_url' => $this->microsoftClientSettingsProvider->getServiceBaseUrl()));
         }
 
@@ -326,7 +329,7 @@ class MicrosoftClientService
 
         if (array_key_exists('error', $accessToken))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Requesting access token failed: ' . $accessToken->error_description . '. error code =' .
                      $accessToken->error_code . '.');
         }
@@ -365,7 +368,7 @@ class MicrosoftClientService
 
         if (array_key_exists('error', $accessToken))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Refreshing access token failed: ' . $accessToken->error_description . '. error code =' .
                      $accessToken->error_code . '.');
         }
@@ -401,7 +404,7 @@ class MicrosoftClientService
 
         if (empty($accessToken))
         {
-            throw new \RuntimeException('No access token created yet.');
+            throw new RuntimeException('No access token created yet.');
         }
 
         return $accessToken;

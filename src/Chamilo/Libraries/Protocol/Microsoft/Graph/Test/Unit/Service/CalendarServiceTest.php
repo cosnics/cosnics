@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
+use Microsoft\Graph\Model\Calendar;
 
 /**
  * Tests the CalendarService
@@ -61,7 +62,7 @@ class CalendarServiceTest extends ChamiloTestCase
         $user = new User();
         $azureUserIdentifier = 5;
 
-        $calendars = [new \Microsoft\Graph\Model\Calendar()];
+        $calendars = [new Calendar()];
 
         $this->mockGetAzureUser($user);
 
@@ -89,7 +90,7 @@ class CalendarServiceTest extends ChamiloTestCase
         $azureUserIdentifier = 5;
         $calendarIdentifier = 10;
 
-        $calendar = new \Microsoft\Graph\Model\Calendar();
+        $calendar = new Calendar();
 
         $this->mockGetAzureUser($user);
 
@@ -121,7 +122,7 @@ class CalendarServiceTest extends ChamiloTestCase
         $fromDate = time() - 1000;
         $toDate = time() + 1000;
 
-        $calendar = new \Microsoft\Graph\Model\Calendar();
+        $calendar = new Calendar();
 
         $this->mockGetAzureUser($user);
 

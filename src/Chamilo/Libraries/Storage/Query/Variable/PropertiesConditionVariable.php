@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query\Variable;
 
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Exception;
+
 /**
  * A ConditionVariable that describes all the properties of a DataClass
  *
@@ -29,7 +32,7 @@ class PropertiesConditionVariable extends ConditionVariable
     {
         if (! class_exists($class))
         {
-            throw new \Exception($class . ' does not exist');
+            throw new Exception($class . ' does not exist');
         }
         $this->class = $class;
     }
@@ -76,6 +79,6 @@ class PropertiesConditionVariable extends ConditionVariable
     public function get_alias()
     {
         $class_name = $this->get_class();
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::get_alias($class_name::get_table_name());
+        return DataManager::get_alias($class_name::get_table_name());
     }
 }

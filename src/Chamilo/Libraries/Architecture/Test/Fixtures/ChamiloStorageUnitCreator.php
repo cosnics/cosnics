@@ -4,6 +4,9 @@ namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use DOMDocument;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -42,7 +45,7 @@ class ChamiloStorageUnitCreator
         $storagePath = $this->pathBuilder->namespaceToFullPath($contextNamespace) . 'Resources/Storage';
         if (!is_dir($storagePath) || !file_exists($storagePath))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('The given context %s does not have a valid storage path', $contextNamespace)
             );
         }
@@ -83,7 +86,7 @@ class ChamiloStorageUnitCreator
         $properties = array();
         $indexes = array();
 
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load($file);
 
         $object = $doc->getElementsByTagname('object')->item(0);
@@ -128,7 +131,7 @@ class ChamiloStorageUnitCreator
 
         if (!$this->storageUnitRepository->create($name, $properties, $indexes))
         {
-            throw new \RuntimeException('Could not create the storage unit with name ' . $name);
+            throw new RuntimeException('Could not create the storage unit with name ' . $name);
         }
     }
 

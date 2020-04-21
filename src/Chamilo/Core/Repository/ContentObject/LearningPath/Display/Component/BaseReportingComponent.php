@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -121,7 +122,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
             return $this->getUser();
         }
 
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $userId);
+        $user = DataManager::retrieve_by_id(User::class_name(), $userId);
         if (!$user instanceof User)
         {
             return $this->getUser();

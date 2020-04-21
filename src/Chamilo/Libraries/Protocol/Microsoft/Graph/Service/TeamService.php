@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
 
@@ -70,7 +71,7 @@ class TeamService
         {
             return $this->teamRepository->getTeam($groupId);
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return null;
         }

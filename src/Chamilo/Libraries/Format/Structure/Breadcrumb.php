@@ -53,42 +53,6 @@ class Breadcrumb
      *
      * @return string
      */
-    public function get_url()
-    {
-        return $this->url;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     *
-     * @param string $url
-     */
-    public function set_url($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function getImage()
     {
         return $this->image;
@@ -119,5 +83,41 @@ class Breadcrumb
     public function setInlineGlyph(InlineGlyph $inlineGlyph = null)
     {
         $this->inlineGlyph = $inlineGlyph;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return $this->name;
+    }
+
+    /**
+     *
+     * @param string $name
+     */
+    public function set_name($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_url()
+    {
+        return $this->url;
+    }
+
+    /**
+     *
+     * @param string $url
+     */
+    public function set_url($url)
+    {
+        $this->url = $url;
     }
 }

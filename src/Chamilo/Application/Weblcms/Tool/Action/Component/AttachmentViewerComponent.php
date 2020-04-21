@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -92,7 +93,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
                     $this->get_url(array('object' => $object_id)),
                     Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::context())));
 
-            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $object_id);
 

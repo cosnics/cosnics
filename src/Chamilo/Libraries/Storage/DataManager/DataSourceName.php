@@ -7,6 +7,7 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 /**
  * Describes a generic database-backed storage layer connection string
@@ -459,7 +460,7 @@ abstract class DataSourceName
 
         if (! count($connectionString))
         {
-            throw new \Exception('The connection string passed to the DataSourceName :: parse() method is not valid');
+            throw new Exception('The connection string passed to the DataSourceName :: parse() method is not valid');
         }
 
         // Get (if found): username and password

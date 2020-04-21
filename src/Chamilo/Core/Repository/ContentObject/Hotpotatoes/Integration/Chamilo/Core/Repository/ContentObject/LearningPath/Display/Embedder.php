@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Libraries\File\Redirect;
@@ -29,9 +30,9 @@ class Embedder extends ContentObjectEmbedder
         $redirect = new Redirect(
             array(
                 \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT =>
-                    \Chamilo\Application\Weblcms\Ajax\Manager::context(),
+                    Manager::context(),
                 \Chamilo\Application\Weblcms\Manager::PARAM_ACTION =>
-                    \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE
+                    Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE
             )
         );
 

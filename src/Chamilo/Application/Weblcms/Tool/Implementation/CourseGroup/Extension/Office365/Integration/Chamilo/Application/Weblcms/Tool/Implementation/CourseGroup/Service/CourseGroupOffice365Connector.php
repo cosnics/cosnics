@@ -13,6 +13,7 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Microsoft\Graph\Model\Group;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service
@@ -88,7 +89,7 @@ class CourseGroupOffice365Connector
     {
         if ($this->courseGroupOffice365ReferenceService->courseGroupHasReference($courseGroup))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create a new office365 group for the given course group %s' .
                     'since there is a group already available'
@@ -317,7 +318,7 @@ class CourseGroupOffice365Connector
         $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
         if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
-            throw new \RuntimeException();
+            throw new RuntimeException();
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
@@ -355,7 +356,7 @@ class CourseGroupOffice365Connector
         $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
         if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
-            throw new \RuntimeException();
+            throw new RuntimeException();
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);
@@ -382,7 +383,7 @@ class CourseGroupOffice365Connector
         $office365ReferenceService = $this->courseGroupOffice365ReferenceService;
         if (!$office365ReferenceService->courseGroupHasLinkedReference($courseGroup))
         {
-            throw new \RuntimeException();
+            throw new RuntimeException();
         }
 
         $reference = $office365ReferenceService->getCourseGroupReference($courseGroup);

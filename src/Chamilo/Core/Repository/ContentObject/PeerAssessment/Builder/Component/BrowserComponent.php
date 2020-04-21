@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component;
 
+use Chamilo\Core\Repository\Component\BuilderComponent;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -12,7 +13,7 @@ class BrowserComponent extends Manager
     public function run()
     {
         // is context repository?
-        if ($this->get_parent() instanceof \Chamilo\Core\Repository\Component\BuilderComponent &&
+        if ($this->get_parent() instanceof BuilderComponent &&
              $this->get_root_content_object()->get_assessment_type() != PeerAssessment::TYPE_FEEDBACK)
         {
             return $this->getApplicationFactory()->getApplication(

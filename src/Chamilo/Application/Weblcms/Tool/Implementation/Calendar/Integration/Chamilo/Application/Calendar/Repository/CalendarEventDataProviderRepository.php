@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Repository;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
+use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -39,7 +40,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
      */
     protected function getSpecificContentObjectConditions($fromDate, $toDate)
     {
-        return \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataManager::getCalendarEventConditionsBetweenFromAndToDate(
+        return DataManager::getCalendarEventConditionsBetweenFromAndToDate(
             $fromDate, 
             $toDate);
     }

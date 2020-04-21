@@ -52,7 +52,7 @@ abstract class Embedder
      * @param TreeNode $treeNode
      */
     public function __construct(
-        \Chamilo\Libraries\Architecture\Application\Application $application,
+        Application $application,
         TrackingService $trackingService,
         LearningPath $learningPath,
         TreeNode $treeNode

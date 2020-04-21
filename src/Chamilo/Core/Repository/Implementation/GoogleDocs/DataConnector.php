@@ -11,6 +11,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientService;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Google_Service_Drive_DriveFile;
+use InvalidArgumentException;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -351,7 +353,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         if (! $externalExportURL)
         {
-            throw new \InvalidArgumentException('Could not import an Google Drive because the download URL is invalid');
+            throw new InvalidArgumentException('Could not import an Google Drive because the download URL is invalid');
         }
         if ($type=='get')
             $response = $this->service->files->get($externalExportURL,array('alt'=>'media'));//getClient()->getAuth()->authenticatedRequest($request);
@@ -364,7 +366,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function create_external_repository_object($file, $folder)
     {
-        $google_file = new \Google_Service_Drive_DriveFile();
+        $google_file = new Google_Service_Drive_DriveFile();
         
         if (is_array($file))
         {

@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -34,7 +35,7 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface $notificationServiceBridgeInterface
      */
     public function __construct(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\NotificationServiceBridgeInterface $notificationServiceBridgeInterface
+        Interfaces\NotificationServiceBridgeInterface $notificationServiceBridgeInterface
     )
     {
         $this->notificationServiceBridgeInterface = $notificationServiceBridgeInterface;
@@ -47,7 +48,7 @@ class NotificationServiceBridge implements NotificationServiceBridgeInterface
     {
         if (!$treeNode->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }

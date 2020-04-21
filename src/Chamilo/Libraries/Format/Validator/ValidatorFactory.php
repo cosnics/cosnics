@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Validator;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -60,7 +59,8 @@ class ValidatorFactory
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Validator\ValidatorDecorator | \Symfony\Component\Validator\Validator\ValidatorInterface
+     * @return \Chamilo\Libraries\Format\Validator\ValidatorDecorator |
+     *     \Symfony\Component\Validator\Validator\ValidatorInterface
      *
      * @throws \Exception
      */

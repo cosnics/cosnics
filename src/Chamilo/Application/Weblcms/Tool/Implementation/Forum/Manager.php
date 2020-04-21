@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -37,14 +38,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_subforum_parents($subforum_id)
     {
-        $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $parent = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(),
             $subforum_id);
 
         while (! empty($parent))
         {
             $parents[] = $parent;
-            $parent = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            $parent = DataManager::retrieve_complex_content_object_items(
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class_name(),

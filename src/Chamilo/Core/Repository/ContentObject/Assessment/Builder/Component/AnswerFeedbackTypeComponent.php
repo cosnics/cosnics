@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerFeedbackType\AnswerFeedbackTypeTable;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -57,7 +58,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
                 $complex_question_id);
             $condition = new AndCondition($conditions);
             
-            $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class_name(), 
                 new DataClassRetrievesParameters($condition));
             

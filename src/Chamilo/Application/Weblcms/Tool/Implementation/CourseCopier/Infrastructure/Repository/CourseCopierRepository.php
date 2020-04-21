@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastru
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -66,7 +67,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
                 ContentObjectPublicationCategory::class_name(), 
                 ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER));
         
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             ContentObjectPublicationCategory::class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
     }
@@ -80,7 +81,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
      */
     public function findContentObjectPublicationById($contentObjectPublicationId)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $contentObjectPublicationId);
     }

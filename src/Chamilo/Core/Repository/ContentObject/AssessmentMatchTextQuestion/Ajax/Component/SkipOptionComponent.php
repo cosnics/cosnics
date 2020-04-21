@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SkipOptionComponent extends \Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Ajax\Manager
+class SkipOptionComponent extends Manager
 {
     const PARAM_OPTION_NUMBER = 'option-number';
 

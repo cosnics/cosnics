@@ -28,6 +28,36 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
 
     /**
      *
+     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::render()
+     */
+    public function render()
+    {
+        $tabCount = count($this->get_tabs());
+
+        if ($tabCount > 1)
+        {
+            $this->form->addElement('html', $this->header());
+        }
+
+        /**
+         * @var \Chamilo\Libraries\Format\Tabs\DynamicFormTab[] $tabs
+         */
+        $tabs = $this->get_tabs();
+
+        foreach ($tabs as $key => $tab)
+        {
+            $tab->set_form($this->form);
+            $tab->body($tabCount == 1);
+        }
+
+        if ($tabCount > 1)
+        {
+            $this->form->addElement('html', $this->footer());
+        }
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
     public function get_form()
@@ -42,30 +72,5 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
     public function set_form($form)
     {
         $this->form = $form;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer::render()
-     */
-    public function render()
-    {
-        $tabCount = count($this->get_tabs());
-
-        if ($tabCount > 1)
-        {
-            $this->form->addElement('html', $this->header());
-        }
-
-        foreach ($this->get_tabs() as $key => $tab)
-        {
-            $tab->set_form($this->form);
-            $tab->body($tabCount == 1);
-        }
-
-        if ($tabCount > 1)
-        {
-            $this->form->addElement('html', $this->footer());
-        }
     }
 }

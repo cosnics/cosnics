@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Hashing;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 class HashingFactory
 {
@@ -82,7 +83,7 @@ class HashingFactory
         }
         else
         {
-            throw new \Exception('Hashing algorithm "' . $this->getConfiguredHashingAlgorithm() . '" doesn\'t exist');
+            throw new Exception('Hashing algorithm "' . $this->getConfiguredHashingAlgorithm() . '" doesn\'t exist');
         }
     }
 }

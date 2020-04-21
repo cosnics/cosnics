@@ -12,6 +12,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Exception;
+use RuntimeException;
 
 /**
  * Service to manage the repository publication functionality to check and provide publication information about
@@ -116,7 +118,7 @@ class PublicationService
                 {
                     $this->learningPathService->deleteContentObjectFromLearningPath($treeNode);
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                 }
             }
@@ -315,7 +317,7 @@ class PublicationService
 
         if (!$learningPath instanceof LearningPath)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'The given learning path child with id %s is found in a learning path that doesn\'t exist',
                     $treeNodeData->getId()

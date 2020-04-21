@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Course\Form;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Application\Weblcms\Form\CommonCourseForm;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Configuration\Configuration;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -81,7 +83,7 @@ class CourseForm extends CommonCourseForm
         
         $course_management_rights = CourseManagementRights::getInstance();
         
-        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
+        $course_types = DataManager::retrieve_active_course_types();
         while ($course_type = $course_types->next_result())
         {
             if ($this->get_base_object()->get_course_type_id() == $course_type->get_id() || $course_management_rights->is_allowed(
@@ -154,7 +156,7 @@ class CourseForm extends CommonCourseForm
         if (! $this->get_base_object()->is_identified())
         {
             $default_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS . '[' .
-                 CourseSettingsConnector::TITULAR . ']'] = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+                 CourseSettingsConnector::TITULAR . ']'] = Session::get_user_id();
             
             $this->setDefaults($default_values);
         }

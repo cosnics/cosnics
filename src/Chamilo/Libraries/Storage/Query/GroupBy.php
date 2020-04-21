@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
 /**
  * Describes the group by functionality of a query.
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 class GroupBy implements Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use HashableTrait;
 
     /**
      * List of ConditionVariables to group by

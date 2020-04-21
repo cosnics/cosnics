@@ -102,7 +102,7 @@ abstract class Authentication implements AuthenticationInterface
     /**
      * @return \Symfony\Component\Translation\Translator
      */
-    public function getTranslator(): \Symfony\Component\Translation\Translator
+    public function getTranslator(): Translator
     {
         return $this->translator;
     }
@@ -110,7 +110,7 @@ abstract class Authentication implements AuthenticationInterface
     /**
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function setTranslator(\Symfony\Component\Translation\Translator $translator): void
+    public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -8,7 +9,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @author Hans De Bisschop
  * @package repository.content_object.assessment_open_question;
  */
-class HintComponent extends \Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Ajax\Manager
+class HintComponent extends Manager
 {
     const PARAM_HINT_IDENTIFIER = 'hint_identifier';
     const PROPERTY_HINT = 'hint';

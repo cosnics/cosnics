@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -50,7 +51,7 @@ class GetTreeNodesComponent extends Manager
 
             return new JsonResponse($treeData);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return $this->handleException($ex);
         }

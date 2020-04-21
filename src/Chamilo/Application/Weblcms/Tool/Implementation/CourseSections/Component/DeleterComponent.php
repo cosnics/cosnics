@@ -2,7 +2,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -21,7 +23,7 @@ class DeleterComponent extends Manager
 
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $ids = $this->getRequest()->get(self::PARAM_COURSE_SECTION_ID);
@@ -37,7 +39,7 @@ class DeleterComponent extends Manager
             foreach ($ids as $id)
             {
                 /** @var CourseSection $course_section */
-                $course_section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                $course_section = DataManager::retrieve_by_id(
                     CourseSection::class_name(),
                     $id);
 

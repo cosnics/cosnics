@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Stub;
 
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 
 /**
@@ -15,6 +16,6 @@ class ClientExceptionStub extends ClientException
 {
     public function __construct($code)
     {
-        \Exception::__construct('test', $code);
+        Exception::__construct('test', $code);
     }
 }

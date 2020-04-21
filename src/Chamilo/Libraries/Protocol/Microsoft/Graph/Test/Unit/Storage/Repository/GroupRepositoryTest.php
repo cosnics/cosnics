@@ -6,6 +6,10 @@ use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Stub\ClientExceptionStub;
+use Microsoft\Graph\Model\Event;
+use Microsoft\Graph\Model\Group;
+use Microsoft\Graph\Model\PlannerPlan;
+use Microsoft\Graph\Model\User;
 
 /**
  * Tests the GroupRepository
@@ -60,7 +64,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             'visibility' => 'private'
         ];
 
-        $group = new \Microsoft\Graph\Model\Group();
+        $group = new Group();
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executePostWithAccessTokenExpirationRetry')
@@ -70,7 +74,7 @@ class GroupRepositoryTest extends ChamiloTestCase
                     return $groupData['displayName'] = $groupName
                         && $groupData['displayName'];
                 }
-            ), \Microsoft\Graph\Model\Group::class
+            ), Group::class
             )
             ->will($this->returnValue($group));
 
@@ -87,11 +91,11 @@ class GroupRepositoryTest extends ChamiloTestCase
             'displayName' => $groupName,
         ];
 
-        $group = new \Microsoft\Graph\Model\Group();
+        $group = new Group();
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executePatchWithAccessTokenExpirationRetry')
-            ->with('/groups/' . $groupIdentifier, $groupData, \Microsoft\Graph\Model\Event::class)
+            ->with('/groups/' . $groupIdentifier, $groupData, Event::class)
             ->will($this->returnValue($group));
 
         $this->assertEquals($group, $this->groupRepository->updateGroup($groupIdentifier, $groupName));
@@ -100,11 +104,11 @@ class GroupRepositoryTest extends ChamiloTestCase
     public function testGetGroup()
     {
         $groupIdentifier = 5;
-        $group = new \Microsoft\Graph\Model\Group();
+        $group = new Group();
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executeGetWithAccessTokenExpirationRetry')
-            ->with('/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class)
+            ->with('/groups/' . $groupIdentifier, Group::class)
             ->will($this->returnValue($group));
 
         $this->assertEquals($group, $this->groupRepository->getGroup($groupIdentifier));
@@ -119,7 +123,7 @@ class GroupRepositoryTest extends ChamiloTestCase
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executePostWithAccessTokenExpirationRetry')
-            ->with('/groups/' . $groupIdentifier . '/owners/$ref', $data, \Microsoft\Graph\Model\Event::class);
+            ->with('/groups/' . $groupIdentifier . '/owners/$ref', $data, Event::class);
 
         $this->groupRepository->subscribeOwnerInGroup($groupIdentifier, $office365UserIdentifier);
     }
@@ -133,7 +137,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeDeleteWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier . '/$ref',
-                \Microsoft\Graph\Model\Event::class
+                Event::class
             );
 
         $this->groupRepository->removeOwnerFromGroup($groupIdentifier, $office365UserIdentifier);
@@ -141,7 +145,7 @@ class GroupRepositoryTest extends ChamiloTestCase
 
     public function testGetGroupOwner()
     {
-        $user = new \Microsoft\Graph\Model\User();
+        $user = new User();
 
         $groupIdentifier = 5;
         $office365UserIdentifier = 8;
@@ -150,7 +154,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->returnValue($user));
 
@@ -168,7 +172,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->throwException(new ClientExceptionStub(GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)));
 
@@ -187,7 +191,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/owners/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->throwException(new ClientExceptionStub(301)));
 
@@ -198,13 +202,13 @@ class GroupRepositoryTest extends ChamiloTestCase
     {
         $groupIdentifier = 5;
 
-        $users = [new \Microsoft\Graph\Model\User()];
+        $users = [new User()];
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/owners',
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->returnValue($users));
 
@@ -220,7 +224,7 @@ class GroupRepositoryTest extends ChamiloTestCase
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executePostWithAccessTokenExpirationRetry')
-            ->with('/groups/' . $groupIdentifier . '/members/$ref', $data, \Microsoft\Graph\Model\Event::class);
+            ->with('/groups/' . $groupIdentifier . '/members/$ref', $data, Event::class);
 
         $this->groupRepository->subscribeMemberInGroup($groupIdentifier, $office365UserIdentifier);
     }
@@ -234,7 +238,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeDeleteWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier . '/$ref',
-                \Microsoft\Graph\Model\Event::class
+                Event::class
             );
 
         $this->groupRepository->removeMemberFromGroup($groupIdentifier, $office365UserIdentifier);
@@ -242,7 +246,7 @@ class GroupRepositoryTest extends ChamiloTestCase
 
     public function testGetGroupMember()
     {
-        $user = new \Microsoft\Graph\Model\User();
+        $user = new User();
 
         $groupIdentifier = 5;
         $office365UserIdentifier = 8;
@@ -251,7 +255,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->returnValue($user));
 
@@ -269,7 +273,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->throwException(new ClientExceptionStub(GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)));
 
@@ -288,7 +292,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/members/' . $office365UserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->throwException(new ClientExceptionStub(301)));
 
@@ -299,13 +303,13 @@ class GroupRepositoryTest extends ChamiloTestCase
     {
         $groupIdentifier = 5;
 
-        $users = [new \Microsoft\Graph\Model\User()];
+        $users = [new User()];
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executeGetWithAccessTokenExpirationRetry')
             ->with(
                 '/groups/' . $groupIdentifier . '/members',
-                \Microsoft\Graph\Model\User::class
+                User::class
             )
             ->will($this->returnValue($users));
 
@@ -316,13 +320,13 @@ class GroupRepositoryTest extends ChamiloTestCase
     {
         $groupIdentifier = 5;
 
-        $plans = [new \Microsoft\Graph\Model\PlannerPlan()];
+        $plans = [new PlannerPlan()];
 
         $this->graphRepositoryMock->expects($this->once())
             ->method('executeGetWithDelegatedAccess')
             ->with(
                 '/groups/' . $groupIdentifier . '/planner/plans',
-                \Microsoft\Graph\Model\PlannerPlan::class
+                PlannerPlan::class
             )
             ->will($this->returnValue($plans));
 
@@ -334,7 +338,7 @@ class GroupRepositoryTest extends ChamiloTestCase
         $groupIdentifier = 5;
         $planName = 'Planning in the Group 101';
 
-        $plan = new \Microsoft\Graph\Model\PlannerPlan();
+        $plan = new PlannerPlan();
 
         $body = ['owner' => $groupIdentifier, 'title' => $planName];
 
@@ -343,7 +347,7 @@ class GroupRepositoryTest extends ChamiloTestCase
             ->with(
                 '/planner/plans',
                 $body,
-                \Microsoft\Graph\Model\PlannerPlan::class
+                PlannerPlan::class
             )
             ->will($this->returnValue($plan));
 

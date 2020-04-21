@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -227,7 +228,7 @@ class Assignment extends ContentObject implements AttachmentSupport
     public function getAutomaticFeedbackObjects()
     {
         $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
-        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+        $contentObjects = DataManager::retrieves(
             ContentObject::class_name(), new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 explode(',', $automaticFeedbackContentObjectIds)

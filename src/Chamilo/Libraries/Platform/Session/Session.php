@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
+use Chamilo\Configuration\Configuration;
+
 /**
  *
  * @package Chamilo\Libraries\Platform\Session
@@ -19,7 +21,7 @@ class Session
          */
         session_cache_limiter('');
 
-        $configuration = \Chamilo\Configuration\Configuration::getInstance();
+        $configuration = Configuration::getInstance();
 
         if ($configuration->is_available() && $configuration->is_connectable())
         {
@@ -35,7 +37,7 @@ class Session
                     array($session_handler, 'garbage'));
             }
 
-            $session_key = \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'general', 'security_key');
+            $session_key = Configuration::get('Chamilo\Configuration', 'general', 'security_key');
             if (is_null($session_key))
             {
                 $session_key = 'dk_sid';

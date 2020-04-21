@@ -24,13 +24,9 @@ use HTML_Table;
 abstract class HtmlTable extends HTML_Table
 {
     const PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'per_page';
-
     const PARAM_ORDER_COLUMN = 'column';
-
     const PARAM_ORDER_DIRECTION = 'direction';
-
     const PARAM_PAGE_NUMBER = 'page_nr';
-
     const PARAM_SELECT_ALL = 'selectall';
 
     /**
@@ -151,13 +147,6 @@ abstract class HtmlTable extends HTML_Table
     private $contentCellAttributes;
 
     /**
-     * Additional attributes for the td-tags
-     *
-     * @var string[]
-     */
-    private $cellAttributes;
-
-    /**
      *
      * @var boolean
      */
@@ -218,6 +207,8 @@ abstract class HtmlTable extends HTML_Table
     /**
      * Returns the complete table HTML.
      *
+     * @param boolean $empty_table
+     *
      * @return string
      */
     public function render($empty_table = false)
@@ -238,7 +229,7 @@ abstract class HtmlTable extends HTML_Table
         $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
-        $html[] = $this->getBodyHtml();
+        $html[] = $this->renderTableBody();
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -277,6 +268,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
+     * @param integer $defaultNumberOfItemsPerPage
      *
      * @return integer
      */
@@ -290,7 +282,7 @@ abstract class HtmlTable extends HTML_Table
 
     /**
      *
-     * @return integer
+     * @return integer[]
      */
     protected function determineOrderColumn()
     {
@@ -361,7 +353,7 @@ abstract class HtmlTable extends HTML_Table
 
     /**
      *
-     * @return integer
+     * @return integer[]
      */
     protected function determineOrderDirection()
     {
@@ -462,50 +454,6 @@ abstract class HtmlTable extends HTML_Table
     public function setAdditionalParameters($parameters)
     {
         $this->additionalParameters = $parameters;
-    }
-
-    /**
-     * Get the HTML-code with the data-table.
-     *
-     * @return string
-     */
-    public function getBodyHtml()
-    {
-        $pager = $this->getPager();
-
-        try
-        { // invalid page number? set it to 0.
-            $offset = $pager->getCurrentRangeOffset();
-        }
-        catch (InvalidPageNumberException $exception)
-        {
-            $offset = 0;
-        }
-
-        $table_data = $this->getSourceData($offset);
-
-        foreach ($table_data as $index => $row)
-        {
-            $row_id = $row[0];
-            $row = $this->filterData($row);
-            $current_row = $this->addRow($row);
-
-            $this->processRowAttributes($row_id, $current_row);
-        }
-
-        $this->processContentAttributes();
-
-        foreach ($this->headerAttributes as $column => & $attributes)
-        {
-            $this->setCellAttributes(0, $column, $attributes);
-        }
-
-        foreach ($this->contentCellAttributes as $column => & $attributes)
-        {
-            $this->setColAttributes($column, $attributes);
-        }
-
-        return HTML_Table::toHTML();
     }
 
     /**
@@ -836,14 +784,46 @@ abstract class HtmlTable extends HTML_Table
         return $this->allowPageSelection;
     }
 
-    abstract public function processContentAttributes();
+    public function prepareTableData()
+    {
+        $this->processSourceData();
+        $this->processCellAttributes();
+    }
 
-    /**
-     *
-     * @param integer $rowIdentifier
-     * @param integer $currentRow
-     */
-    abstract public function processRowAttributes($rowIdentifier, $currentRow);
+    public function processCellAttributes()
+    {
+        foreach ($this->headerAttributes as $column => & $attributes)
+        {
+            $this->setCellAttributes(0, $column, $attributes);
+        }
+
+        foreach ($this->contentCellAttributes as $column => & $attributes)
+        {
+            $this->setColAttributes($column, $attributes);
+        }
+    }
+
+    public function processSourceData()
+    {
+        $pager = $this->getPager();
+
+        try
+        {
+            $offset = $pager->getCurrentRangeOffset();
+        }
+        catch (InvalidPageNumberException $exception)
+        {
+            $offset = 0;
+        }
+
+        $table_data = $this->getSourceData($offset);
+
+        foreach ($table_data as $index => $row)
+        {
+            $row = $this->filterData($row);
+            $this->addRow($row);
+        }
+    }
 
     /**
      *
@@ -909,6 +889,20 @@ abstract class HtmlTable extends HTML_Table
         }
 
         return '';
+    }
+
+    /**
+     * Get the HTML-code with the data-table.
+     *
+     * @return string
+     */
+    public function renderTableBody()
+    {
+
+
+        $this->prepareTableData();
+
+        return HTML_Table::toHTML();
     }
 
     /**
@@ -1118,8 +1112,9 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
+     * @param boolean $emptyTable
      *
-     * @see HTML_Table::toHtml()
+     * @return string
      * @deprecated User render() now
      */
     public function toHtml($emptyTable = false)

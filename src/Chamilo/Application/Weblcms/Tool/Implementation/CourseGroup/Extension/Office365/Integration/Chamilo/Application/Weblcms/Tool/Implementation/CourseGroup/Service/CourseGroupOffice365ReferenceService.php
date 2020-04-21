@@ -5,6 +5,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Repository\CourseGroupOffice365ReferenceRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Service
@@ -48,7 +50,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->createReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create a new CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
@@ -69,7 +71,7 @@ class CourseGroupOffice365ReferenceService
     {
         if (!$this->courseGroupOffice365ReferenceRepository->removeReferenceForCourseGroup($courseGroup))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not remove the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
@@ -132,7 +134,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -146,7 +148,7 @@ class CourseGroupOffice365ReferenceService
         $courseGroupOffice365Reference->setHasTeam(false);
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not unlink team for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -169,7 +171,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -192,7 +194,7 @@ class CourseGroupOffice365ReferenceService
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not link team for course group %s',
                     $courseGroupOffice365Reference->getCourseGroupId()
@@ -225,7 +227,7 @@ class CourseGroupOffice365ReferenceService
 
             if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                     )
@@ -247,14 +249,14 @@ class CourseGroupOffice365ReferenceService
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
         if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
-            throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
+            throw new InvalidArgumentException('The given course group is not connected to an office365 group');
         }
 
         $courseGroupOffice365Reference->setOffice365PlanId(null);
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
@@ -295,14 +297,14 @@ class CourseGroupOffice365ReferenceService
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
         if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
-            throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
+            throw new InvalidArgumentException('The given course group is not connected to an office365 group');
         }
 
         $courseGroupOffice365Reference->setHasTeam(true);
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )
@@ -319,14 +321,14 @@ class CourseGroupOffice365ReferenceService
             $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
         if (!$courseGroupOffice365Reference instanceof CourseGroupOffice365Reference)
         {
-            throw new \InvalidArgumentException('The given course group is not connected to an office365 group');
+            throw new InvalidArgumentException('The given course group is not connected to an office365 group');
         }
 
         $courseGroupOffice365Reference->setHasTeam(false);
 
         if (!$this->courseGroupOffice365ReferenceRepository->updateReference($courseGroupOffice365Reference))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update the CourseGroupOffice365Reference for course group %s', $courseGroup->getId()
                 )

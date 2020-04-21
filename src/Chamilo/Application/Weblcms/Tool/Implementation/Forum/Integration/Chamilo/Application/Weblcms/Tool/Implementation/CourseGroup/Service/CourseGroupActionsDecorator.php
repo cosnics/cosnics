@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupActionsDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -73,10 +74,10 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitForumUrl = $this->urlGenerator->generateURL(
             [
-                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Forum',
-                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION =>
+                Manager::PARAM_TOOL => 'Forum',
+                Manager::PARAM_TOOL_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager::ACTION_BROWSE,
-                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publicationCategories[0]->getId()
+                Manager::PARAM_CATEGORY => $publicationCategories[0]->getId()
             ]
         );
 

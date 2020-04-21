@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -62,7 +63,7 @@ class SubscribeComponent extends Manager
 
                     $status = Request::get(self::PARAM_STATUS) ? Request::get(self::PARAM_STATUS) : 5;
 
-                    if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::is_user_direct_subscribed_to_course(
+                    if (DataManager::is_user_direct_subscribed_to_course(
                             $userId, $course_id
                         ) || (!$this->get_user()->is_platform_admin() && !$course_management_rights->is_allowed(
                                 CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $course_id,
@@ -88,7 +89,7 @@ class SubscribeComponent extends Manager
                         continue;
                     }
 
-                    if (!\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
+                    if (!DataManager::subscribe_user_to_course(
                         $course_id, $status, $userId
                     ))
                     {

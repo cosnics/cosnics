@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use RuntimeException;
 
 /**
  * Custom publication handler for the assessment tool
@@ -36,7 +37,7 @@ class ContentObjectPublicationHandler extends \Chamilo\Application\Weblcms\Publi
             
             if (! $assessmentPublication->create())
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     'Could not create an assessment publication for publication with id ' . $publication->getId());
             }
         }

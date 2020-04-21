@@ -45,6 +45,8 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      * Creates a new search form
      *
      * @param string $url The location to which the search request should be posted.
+     *
+     * @throws \Exception
      */
     public function __construct($url)
     {
@@ -56,6 +58,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->renderer = clone $this->defaultRenderer();
 
         $query = $this->getQuery();
+
         if ($query)
         {
             $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));

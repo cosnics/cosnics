@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment
@@ -44,7 +45,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     {
         if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given content object publication does not reference a valid assignment and should not be used'
             );
         }

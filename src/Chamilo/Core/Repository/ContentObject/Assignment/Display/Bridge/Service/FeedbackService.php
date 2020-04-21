@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\FeedbackRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service
@@ -117,7 +118,7 @@ abstract class FeedbackService
 
         if(!$this->feedbackRepository->createFeedback($feedbackObject))
         {
-            throw new \RuntimeException('Could not create feedback in the database');
+            throw new RuntimeException('Could not create feedback in the database');
         }
 
         return $feedbackObject;
@@ -132,7 +133,7 @@ abstract class FeedbackService
     {
         if(!$this->feedbackRepository->updateFeedback($feedback))
         {
-            throw new \RuntimeException('Could not update feedback in the database');
+            throw new RuntimeException('Could not update feedback in the database');
         }
     }
 
@@ -143,7 +144,7 @@ abstract class FeedbackService
     {
         if(!$this->feedbackRepository->deleteFeedback($feedback))
         {
-            throw new \RuntimeException('Could not delete feedback in the database');
+            throw new RuntimeException('Could not delete feedback in the database');
         }
     }
 

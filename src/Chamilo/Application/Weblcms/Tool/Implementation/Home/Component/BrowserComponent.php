@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Component;
 
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -14,7 +15,7 @@ class BrowserComponent extends Manager
         
         $introductionAllowed = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(), 
-            \Chamilo\Application\Weblcms\CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
+            CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
         
         $type = 'Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer\Type\ListHomeRenderer';
         

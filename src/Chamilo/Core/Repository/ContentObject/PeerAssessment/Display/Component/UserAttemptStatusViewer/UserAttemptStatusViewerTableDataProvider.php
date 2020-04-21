@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use ErrorException;
 
 /**
  *
@@ -21,7 +22,7 @@ class UserAttemptStatusViewerTableDataProvider extends DataClassTableDataProvide
             $array_result = $this->get_component()->get_attempts($this->get_component()->get_publication_id());
             return new ArrayResultSet($array_result);
         }
-        catch (\ErrorException $e)
+        catch (ErrorException $e)
         {
             return false;
         }
@@ -34,7 +35,7 @@ class UserAttemptStatusViewerTableDataProvider extends DataClassTableDataProvide
             $array_result = $this->get_component()->get_attempts($this->get_component()->get_publication_id());
             return count($array_result);
         }
-        catch (\ErrorException $e)
+        catch (ErrorException $e)
         {
             return false;
         }

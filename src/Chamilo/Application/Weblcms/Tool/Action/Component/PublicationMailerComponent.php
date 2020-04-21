@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -30,7 +31,7 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
              *
              * @var ContentObjectPublication $publication
              */
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $publication = DataManager::retrieve_by_id(
                 ContentObjectPublication::class_name(), 
                 $publication_id);
             

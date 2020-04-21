@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Type;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTTP_Request;
 
 /**
  *
@@ -38,7 +39,7 @@ class PearRestClient extends RestClient
         $request_properties['user'] = $this->get_basic_login();
         $request_properties['pass'] = $this->get_basic_password();
 
-        $request = new \HTTP_Request($this->get_url(), $request_properties);
+        $request = new HTTP_Request($this->get_url(), $request_properties);
 
         /*
          * addition

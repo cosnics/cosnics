@@ -18,10 +18,14 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -105,7 +109,7 @@ class AssignmentDataProvider
     {
         if (!$treeNode->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }
@@ -532,7 +536,7 @@ class AssignmentDataProvider
     {
         if (!$entity instanceof User)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+            throw new InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
 
         return $entity->get_fullname();
@@ -546,10 +550,10 @@ class AssignmentDataProvider
      */
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
+        $user = DataManager::retrieve_by_id(User::class, $entityId);
         if (!$user instanceof User)
         {
-            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+            throw new InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
@@ -592,7 +596,7 @@ class AssignmentDataProvider
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
-            throw new \Exception('Could not find the entry for the given score');
+            throw new Exception('Could not find the entry for the given score');
         }
 
         $entryUser = new User();
@@ -619,7 +623,7 @@ class AssignmentDataProvider
                 $entry, $user, $submittedNote
             );
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -639,7 +643,7 @@ class AssignmentDataProvider
         {
             $this->learningPathAssignmentService->updateNote($note);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

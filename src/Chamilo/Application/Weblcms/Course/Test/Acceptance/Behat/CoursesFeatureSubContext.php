@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Test\Acceptance\Behat;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Exception;
 
 /**
  * Weblcms application courses submanager subcontext
@@ -141,7 +143,7 @@ class CoursesFeatureSubContext implements Context
             return false;
         }
         
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
+        return DataManager::subscribe_user_to_course(
             $course->get_id(), 
             $status, 
             $user->get_id());
@@ -209,13 +211,13 @@ class CoursesFeatureSubContext implements Context
             new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE), 
             new StaticConditionVariable($course_title));
         
-        $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
+        $course = DataManager::retrieve(
             Course::class_name(), 
             new DataClassRetrieveParameters($condition));
         
         if (! $course)
         {
-            throw new \Exception('Could not find course with title ' . $course_title);
+            throw new Exception('Could not find course with title ' . $course_title);
         }
         
         return $course;

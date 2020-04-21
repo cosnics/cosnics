@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -29,7 +30,7 @@ class LogoutComponent extends Manager
         $condition = new AndCondition($conditions);
         
         $parameters = new DataClassRetrievesParameters($condition, 1);
-        $settings = \Chamilo\Core\Repository\Storage\DataManager::retrieves(Setting::class_name(), $parameters);
+        $settings = DataManager::retrieves(Setting::class_name(), $parameters);
         
         if ($settings->size() > 0)
         {

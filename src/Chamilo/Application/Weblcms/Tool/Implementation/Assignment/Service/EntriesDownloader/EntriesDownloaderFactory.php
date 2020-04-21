@@ -4,7 +4,10 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
+use InvalidArgumentException;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Creates an entries download based on the given strategy
@@ -59,9 +62,9 @@ class EntriesDownloaderFactory
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
      */
     public function __construct(
-        \Symfony\Component\Translation\Translator $translator,
+        Translator $translator,
         \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $contentObjectPublicationRepository,
-        \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $assignmentPublicationRepository,
+        PublicationRepository $assignmentPublicationRepository,
         EntityServiceManager $entityServiceManager, AssignmentService $assignmentService, ArchiveCreator $archiveCreator
     )
     {
@@ -95,7 +98,7 @@ class EntriesDownloaderFactory
                     $this->archiveCreator
                 );
             default:
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('The given entries downloader strategy %s does not exist', $entriesDownloaderStrategy)
                 );
         }

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Table\Publication\Gallery;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\RecordGalleryTable\RecordGalleryTableCellRenderer;
@@ -27,8 +28,8 @@ class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRe
         
         $details_url = $this->get_component()->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW));
+                Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW));
         
         $thumbnail = ContentObjectRenditionImplementation::launch(
             $object, 

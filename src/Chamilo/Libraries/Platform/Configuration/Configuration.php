@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Platform\Configuration;
 
 use Chamilo\Libraries\File\Path;
+use Exception;
 
 /**
  * This class represents the current configuration.
@@ -110,12 +111,12 @@ class Configuration
     {
         if (! is_file($file))
         {
-            throw new \Exception("Config file {$file} not found");
+            throw new Exception("Config file {$file} not found");
         }
 
         if (! is_readable($file))
         {
-            throw new \Exception("Config file {$file} not readable");
+            throw new Exception("Config file {$file} not readable");
         }
 
         $this->params = parse_ini_file($file, true);

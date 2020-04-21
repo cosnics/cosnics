@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
@@ -36,6 +38,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * General and basic DataManager, providing basic functionality for all other DataManager objects
@@ -47,7 +50,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class DataManager
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     // Storage access layer types
     const TYPE_DOCTRINE = 'Doctrine';
@@ -97,7 +100,7 @@ class DataManager
      */
     public static function set_instance($instance)
     {
-        self::$instance[\Chamilo\Libraries\Architecture\ClassnameUtilities::getInstance()->getNamespaceFromObject(
+        self::$instance[ClassnameUtilities::getInstance()->getNamespaceFromObject(
             $instance)] = $instance;
     }
 
@@ -108,7 +111,7 @@ class DataManager
      */
     public static function get_type()
     {
-        return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database::STORAGE_TYPE;
+        return Database::STORAGE_TYPE;
     }
 
     /**
@@ -149,7 +152,7 @@ class DataManager
             {
                 return static::retrieveCompositeDataClass($class, $parameters);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 throw new UserException(
                     Translation::getInstance()->getTranslation(
@@ -182,7 +185,7 @@ class DataManager
 
         if (! $className)
         {
-            throw new \Exception('Could not determine the composite data class type');
+            throw new Exception('Could not determine the composite data class type');
         }
 
         $parameters = static::setCompositeDataClassParameters($parentClassName, $className, $parameters);

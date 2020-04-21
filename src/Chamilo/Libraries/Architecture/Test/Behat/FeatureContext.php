@@ -6,6 +6,7 @@ use Chamilo\Core\Install\Observer\Type\CommandLineInstaller;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Exception;
 
 /**
  * Extension on the mink context to define our own feature context for behat
@@ -156,7 +157,7 @@ class FeatureContext extends MinkContext
         $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
         if (! $row) 
         {
-            throw new \Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
+            throw new Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
         }
 
         $row->clickLink($linkName);

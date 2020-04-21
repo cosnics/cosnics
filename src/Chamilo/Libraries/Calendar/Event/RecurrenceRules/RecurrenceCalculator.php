@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 use Chamilo\Libraries\Calendar\Event\Event;
+use DateTime;
 use Sabre\VObject;
 
 /**
@@ -110,10 +111,10 @@ class RecurrenceCalculator
         {
             $vCalendar = new VObject\Component\VCalendar();
 
-            $startDateTime = new \DateTime();
+            $startDateTime = new DateTime();
             $startDateTime->setTimestamp($event->getStartDate());
 
-            $endDateTime = new \DateTime();
+            $endDateTime = new DateTime();
             $endDateTime->setTimestamp($event->getEndDate());
 
             $vEvent = $vCalendar->add('VEVENT');
@@ -128,10 +129,10 @@ class RecurrenceCalculator
             $vEvent->add('RRULE', $vObjectRecurrenceRules->format(($event->getRecurrenceRules())));
             $vEvent->add('UID', uniqid());
 
-            $fromDateTime = new \DateTime();
+            $fromDateTime = new DateTime();
             $fromDateTime->setTimestamp($this->getStartTime());
 
-            $toDateTime = new \DateTime();
+            $toDateTime = new DateTime();
             $toDateTime->setTimestamp($this->getEndTime());
 
             $vCalendar->expand($fromDateTime, $toDateTime);

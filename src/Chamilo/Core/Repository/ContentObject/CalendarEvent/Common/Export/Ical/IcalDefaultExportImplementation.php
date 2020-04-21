@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Common\Export\Ical
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Common\Export\IcalExportImplementation;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration\Chamilo\Libraries\Calendar\Event\RecurrenceRulesParser;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
+use DateTime;
+use DateTimeZone;
 
 class IcalDefaultExportImplementation extends IcalExportImplementation
 {
@@ -18,15 +20,15 @@ class IcalDefaultExportImplementation extends IcalExportImplementation
         
         $event->add(
             'DTSTART', 
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $content_object->get_start_date()), 
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
         
         $event->add(
             'DTEND', 
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $content_object->get_end_date()), 
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
         
         $description = trim(preg_replace('/\s\s+/', '\\n', strip_tags($content_object->get_description())));
         
@@ -38,21 +40,21 @@ class IcalDefaultExportImplementation extends IcalExportImplementation
         
         $event->add(
             'CREATED', 
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $content_object->get_creation_date()), 
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
         
         $event->add(
             'LAST-MODIFIED', 
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $content_object->get_modification_date()), 
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
         
         $event->add(
             'DTSTAMP', 
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $content_object->get_modification_date()), 
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
         
         $event->add('UID', uniqid());
         

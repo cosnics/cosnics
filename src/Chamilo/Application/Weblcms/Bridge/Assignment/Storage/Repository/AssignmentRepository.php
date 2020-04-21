@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -610,7 +612,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -618,7 +620,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment::class;
+        return EntryAttachment::class;
     }
 
     /**
@@ -626,6 +628,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -224,7 +225,7 @@ class UserEntityService implements EntityServiceInterface
     {
         if(!$entity instanceof User)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+            throw new InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
 
         return $entity->get_fullname();
@@ -250,7 +251,7 @@ class UserEntityService implements EntityServiceInterface
         $entity = DataManager::retrieve_by_id(User::class, $entityId);
         if(!$entity instanceof User)
         {
-            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+            throw new InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityName($entity);

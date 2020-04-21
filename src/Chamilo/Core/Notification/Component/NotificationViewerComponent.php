@@ -5,6 +5,7 @@ namespace Chamilo\Core\Notification\Component;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -26,12 +27,12 @@ class NotificationViewerComponent extends Manager
             $notification = $this->getNotificationManager()->getNotificationById($notificationId);
             if (!$this->getNotificationManager()->canUserViewNotification($notification, $this->getUser()))
             {
-                throw new \Exception(
+                throw new Exception(
                     sprintf('User %s can not view notification %s', $this->getUser()->getId(), $notificationId)
                 );
             }
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             throw new NotAllowedException();

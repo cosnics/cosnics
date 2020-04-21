@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -29,7 +30,7 @@ class SelfUnsubscriberComponent extends Manager
         }
         else
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
     }
 }

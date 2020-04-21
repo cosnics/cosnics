@@ -33,7 +33,7 @@ class TranslatorFactory
      *
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function __construct(\Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
     }

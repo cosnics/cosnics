@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -64,7 +65,7 @@ class GroupUsersSubscribeComponent extends Manager
 
     public function subscribe_group($group_id, $course)
     {
-        $group_users = \Chamilo\Core\Group\Storage\DataManager::retrieves(
+        $group_users = DataManager::retrieves(
             GroupRelUser::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
@@ -85,7 +86,7 @@ class GroupUsersSubscribeComponent extends Manager
             }
         }
 
-        $groups = \Chamilo\Core\Group\Storage\DataManager::retrieves(
+        $groups = DataManager::retrieves(
             Group::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(

@@ -28,15 +28,6 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
 
     /**
      *
-     * @return string
-     */
-    public function renderClasses()
-    {
-        return 'class="' . implode(' ', $this->determineClasses()) . '"';
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function determineClasses()
@@ -47,5 +38,22 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
         $classes[] = $this->getButton()->getClasses();
 
         return $classes;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader
+     */
+    public function getButton()
+    {
+        return parent::getButton();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderClasses()
+    {
+        return 'class="' . implode(' ', $this->determineClasses()) . '"';
     }
 }

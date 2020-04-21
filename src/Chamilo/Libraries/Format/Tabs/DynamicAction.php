@@ -45,7 +45,7 @@ class DynamicAction
      *
      * @param string $title
      * @param string $description
-     * @param string $image
+     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
      * @param string $url
      * @param boolean $confirm
      */
@@ -60,11 +60,9 @@ class DynamicAction
 
     /**
      *
-     * @param boolean $is_first
-     *
      * @return string
      */
-    public function render($is_first = false)
+    public function render()
     {
         $html = array();
 

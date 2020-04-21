@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Common\Rendition
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -49,7 +50,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
                  $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
                  'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
-                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . Manager::get_document_downloader_url(
                     $image->get_id(), 
                     $image->calculate_security_code()) . ')"></div></div>';
         }

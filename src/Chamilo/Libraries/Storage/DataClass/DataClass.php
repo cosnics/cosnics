@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -16,7 +18,7 @@ use Exception;
  */
 abstract class DataClass
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     // Constants
     const PROPERTY_ID = 'id';
@@ -376,7 +378,7 @@ abstract class DataClass
 
         if (is_null($foreign_property))
         {
-            $foreign_property = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+            $foreign_property = DataManager::retrieve_by_id(
                 $classname, $this->get_default_property($name . '_id')
             );
 
@@ -398,7 +400,7 @@ abstract class DataClass
     {
         if (is_null($value) || !$value instanceof DataClass)
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::get(
                     'ForeignObjectPropertyCanNotBeNull',
                     array('OBJECT' => $this->class_name(), 'FOREIGN_OBJECT' => $name)
@@ -538,7 +540,7 @@ abstract class DataClass
         $success = false;
         if ($this->check_before_save())
         {
-            $success = \Chamilo\Libraries\Storage\DataManager\DataManager::create($this);
+            $success = DataManager::create($this);
         }
 
         $this->notify(DataClassListener::AFTER_CREATE, array($success));
@@ -560,7 +562,7 @@ abstract class DataClass
 
         if ($this->check_before_save())
         {
-            $success = \Chamilo\Libraries\Storage\DataManager\DataManager::update($this);
+            $success = DataManager::update($this);
         }
 
         $this->notify(DataClassListener::AFTER_UPDATE, array($success));
@@ -585,7 +587,7 @@ abstract class DataClass
         }
         else
         {
-            $success = \Chamilo\Libraries\Storage\DataManager\DataManager::delete($this);
+            $success = DataManager::delete($this);
         }
 
         $this->notify(DataClassListener::AFTER_DELETE, array($success));
@@ -602,7 +604,7 @@ abstract class DataClass
     {
         foreach ($this->get_dependencies() as $dependency_class => $dependency_condition)
         {
-            $dependency_objects = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+            $dependency_objects = DataManager::retrieves(
                 $dependency_class, new DataClassRetrievesParameters($dependency_condition)
             );
 

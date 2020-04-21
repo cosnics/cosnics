@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Flickr\Component;
 
 use Chamilo\Core\Repository\Implementation\Flickr\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -15,7 +16,7 @@ class LoginComponent extends Manager
         {
             if ($this->get_external_repository_manager_connector()->login())
             {
-                if (! \Chamilo\Core\Repository\Instance\Storage\DataManager::activate_instance_objects(
+                if (! DataManager::activate_instance_objects(
                     $this->get_external_repository()->get_id(), 
                     $this->get_user_id(), 
                     $this->get_external_repository_manager_connector()->retrieve_user_id()))

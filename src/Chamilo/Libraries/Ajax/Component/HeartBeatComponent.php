@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @package Chamilo\Libraries\Ajax\Component
  * @author Sven Vanpoucke - Hogeschool Gent <sven.vanpoucke@hogent.be>
  */
-class HeartBeatComponent extends \Chamilo\Libraries\Ajax\Manager
+class HeartBeatComponent extends Manager
 {
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Service;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
@@ -96,11 +97,11 @@ class CategoryBreadcrumbsGenerator
             new Breadcrumb(
                 $urlGenerator->get_url(
                     [
-                        \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $contentObjectPublicationCategory->getId(),
+                        Manager::PARAM_CATEGORY => $contentObjectPublicationCategory->getId(),
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE
                     ],
                     [
-                        \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+                        Manager::PARAM_PUBLICATION
                     ]
                 ), $contentObjectPublicationCategory->get_name()
             )

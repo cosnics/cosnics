@@ -15,7 +15,7 @@ interface BreadcrumbGeneratorInterface
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumb_trail
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
      */
     public function __construct(Application $component, BreadcrumbTrail $breadcrumbTrail);
 

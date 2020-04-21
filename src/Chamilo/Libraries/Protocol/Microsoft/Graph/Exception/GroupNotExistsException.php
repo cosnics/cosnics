@@ -2,11 +2,12 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Exception;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 
 /**
  * Class GroupNotExistsException
  */
-class GroupNotExistsException extends \Exception
+class GroupNotExistsException extends Exception
 {
 
     /**

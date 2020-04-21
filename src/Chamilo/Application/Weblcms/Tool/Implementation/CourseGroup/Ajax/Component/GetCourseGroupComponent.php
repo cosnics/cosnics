@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Ajax\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Ajax backing to retrieve details of a course group.
  */
-class GetCourseGroupComponent extends \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Ajax\Manager
+class GetCourseGroupComponent extends Manager
 {
     const PARAM_COURSE_GROUP_ID = 'course_group_id';
     const PROPERTY_COURSE_GROUP = 'course_group';

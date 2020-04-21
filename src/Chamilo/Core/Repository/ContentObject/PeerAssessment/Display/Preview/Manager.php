@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview;
 
+use Chamilo\Core\Repository\Display\Preview;
+
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview
@@ -8,6 +10,6 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
+abstract class Manager extends Preview
 {
 }

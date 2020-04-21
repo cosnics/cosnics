@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File\PackagesContentFinder;
 
 use Chamilo\Libraries\File\PathBuilder;
+use Exception;
 
 /**
  * Abstract class that can be used to loop through a set of given packages and list content in an array based on
@@ -64,7 +65,7 @@ abstract class PackagesContentFinder
 
             if (! empty($content) && ! is_array($content))
             {
-                throw new \Exception(
+                throw new Exception(
                     'The given cache file ' . $this->cacheFile . ' contains invalid data, should be an array');
             }
         }

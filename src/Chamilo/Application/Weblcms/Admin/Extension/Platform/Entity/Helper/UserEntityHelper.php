@@ -5,6 +5,8 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\PlatformGroupEnt
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -24,14 +26,14 @@ class UserEntityHelper
     {
         $columns = array();
         $columns[] = new DataClassPropertyTableColumn(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME);
+            User::class_name(),
+            User::PROPERTY_LASTNAME);
         $columns[] = new DataClassPropertyTableColumn(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME);
+            User::class_name(),
+            User::PROPERTY_FIRSTNAME);
         $columns[] = new DataClassPropertyTableColumn(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-            \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_EMAIL);
+            User::class_name(),
+            User::PROPERTY_EMAIL);
         return $columns;
     }
 
@@ -39,14 +41,14 @@ class UserEntityHelper
     {
         switch ($column->get_name())
         {
-            case \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME :
+            case User::PROPERTY_FIRSTNAME :
                 $url = self::get_target_url($renderer, $result);
-                return '<a href="' . $url . '">' . $result[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME] .
+                return '<a href="' . $url . '">' . $result[User::PROPERTY_FIRSTNAME] .
                      '</a>';
                 break;
-            case \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME :
+            case User::PROPERTY_LASTNAME :
                 $url = self::get_target_url($renderer, $result);
-                return '<a href="' . $url . '">' . $result[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME] .
+                return '<a href="' . $url . '">' . $result[User::PROPERTY_LASTNAME] .
                      '</a>';
                 break;
             default :
@@ -82,8 +84,8 @@ class UserEntityHelper
             Admin::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID),
+                    User::class_name(),
+                    User::PROPERTY_ID),
                 new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
@@ -91,12 +93,12 @@ class UserEntityHelper
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
-                new PropertiesConditionVariable(\Chamilo\Core\User\Storage\DataClass\User::class_name())));
+                new PropertiesConditionVariable(User::class_name())));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
 
-        return \Chamilo\Core\User\Storage\DataManager::records(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        return DataManager::records(
+            User::class_name(),
             $parameters);
     }
 
@@ -113,8 +115,8 @@ class UserEntityHelper
             Admin::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID),
+                    User::class_name(),
+                    User::PROPERTY_ID),
                 new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
@@ -126,11 +128,11 @@ class UserEntityHelper
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
                         new PropertyConditionVariable(
-                            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                            \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID)))));
+                            User::class_name(),
+                            User::PROPERTY_ID)))));
 
-        return \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        return DataManager::count(
+            User::class_name(),
             $parameters);
     }
 
@@ -138,11 +140,11 @@ class UserEntityHelper
     {
         $entities = array();
 
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $user = DataManager::retrieve_by_id(
+            User::class_name(),
             $entity_id);
 
-        if ($user instanceof \Chamilo\Core\User\Storage\DataClass\User)
+        if ($user instanceof User)
         {
             $entities[UserEntity::ENTITY_TYPE][] = $user->get_id();
 

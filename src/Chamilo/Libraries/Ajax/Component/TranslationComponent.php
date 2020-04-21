@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package Chamilo\Libraries\Ajax\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TranslationComponent extends \Chamilo\Libraries\Ajax\Manager
+class TranslationComponent extends Manager
 {
 
     /**

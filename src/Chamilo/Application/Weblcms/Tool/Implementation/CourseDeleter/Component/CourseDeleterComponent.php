@@ -2,11 +2,14 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms\CourseDeleterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * this component is used to delete a course
@@ -26,7 +29,7 @@ class CourseDeleterComponent extends Manager
     {
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
         
         $this->delete_page = new CourseDeleterForm($this);
@@ -54,13 +57,13 @@ class CourseDeleterComponent extends Manager
      */
     public function delete_course()
     {
-        $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
+        $course = DataManager::retrieve_by_id(
             Course::class_name(), 
             $this->get_course_id());
         
         if (! $course->delete())
         {
-            throw new \Exception(Translation::get('CourseDeleteFailed'));
+            throw new Exception(Translation::get('CourseDeleteFailed'));
         }
         else
         {

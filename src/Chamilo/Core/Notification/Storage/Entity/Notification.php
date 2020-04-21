@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Notification\Storage\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -135,7 +136,7 @@ class Notification
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
-    public function setDate(\DateTime $date)
+    public function setDate(DateTime $date)
     {
         $this->date = $date;
 

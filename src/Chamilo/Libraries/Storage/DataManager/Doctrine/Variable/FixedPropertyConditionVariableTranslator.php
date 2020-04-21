@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 /**
@@ -22,7 +23,7 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
     {
         $class_name = $this->get_condition_variable()->get_class();
 
-        $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager::getInstance()->get_alias(
+        $table_alias = DataManager::getInstance()->get_alias(
             $class_name::get_table_name());
 
         return Database::escape_column_name($this->get_condition_variable()->get_property(), $table_alias) . ' AS ' .

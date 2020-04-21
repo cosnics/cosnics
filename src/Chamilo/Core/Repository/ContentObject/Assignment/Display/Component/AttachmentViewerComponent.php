@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -34,7 +35,7 @@ class AttachmentViewerComponent extends Manager
         }
 
         /** @var ContentObject $attachment */
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $attachment = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $attachment_id
         );

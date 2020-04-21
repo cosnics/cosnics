@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt;
+
 /**
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class TreeNodeQuestionAttempt extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt
+abstract class TreeNodeQuestionAttempt extends AbstractQuestionAttempt
 {
     const PROPERTY_TREE_NODE_ATTEMPT_ID = 'tree_node_attempt_id';
 

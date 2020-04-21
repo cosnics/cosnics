@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms\CourseCopierForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Repository\CourseCopierRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Service\CourseCopier;
@@ -41,11 +42,11 @@ class BrowserComponent extends Manager
         // $trail = BreadcrumbTrail :: getInstance();
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $contentObjectPublicationsCount =
-            \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
+            DataManager::count_course_content_object_publications(
                 $course_id
             );
 
@@ -56,7 +57,7 @@ class BrowserComponent extends Manager
             throw new UserException(Translation::get('NoPublications'));
         }
 
-        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_courses_from_user_where_user_is_teacher(
+        if (DataManager::count_courses_from_user_where_user_is_teacher(
                 $this->get_user()
             ) <= 1)
         {
@@ -71,7 +72,7 @@ class BrowserComponent extends Manager
         );
 
         $courses =
-            \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_from_user_where_user_is_teacher(
+            DataManager::retrieve_courses_from_user_where_user_is_teacher(
                 $this->get_parent()->get_user()
             );
 
@@ -85,7 +86,7 @@ class BrowserComponent extends Manager
             $course_ids = $values['course'];
             foreach ($course_ids as $course_id)
             {
-                $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
+                $course = DataManager::retrieve_by_id(
                     Course::class_name(),
                     $course_id
                 );

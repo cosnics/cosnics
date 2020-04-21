@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Iterator;
 
+use ArrayIterator;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 
 /**
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DataClassIterator extends \ArrayIterator
+class DataClassIterator extends ArrayIterator
 {
     const POSITION_FIRST = 1;
     const POSITION_LAST = 2;

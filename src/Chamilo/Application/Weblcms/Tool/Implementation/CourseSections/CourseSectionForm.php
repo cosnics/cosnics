@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -120,7 +121,7 @@ class CourseSectionForm extends FormValidator
         );
         $condition = new AndCondition($conditions);
 
-        $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $course_sections = DataManager::retrieves(
             CourseSection::class_name(), new DataClassRetrievesParameters($condition)
         );
 

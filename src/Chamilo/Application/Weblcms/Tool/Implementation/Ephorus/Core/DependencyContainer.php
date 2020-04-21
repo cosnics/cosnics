@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core;
 
+use InvalidArgumentException;
+
 /**
  * This class represents a dependency container which can be used to store dependencies of a class
  * 
@@ -42,14 +44,14 @@ class DependencyContainer
     {
         if (empty($dependency_name))
         {
-            throw new \InvalidArgumentException('Dependency name can not be empty');
+            throw new InvalidArgumentException('Dependency name can not be empty');
         }
         
         $this->check_valid_dependency($dependency);
         
         if (array_key_exists($dependency_name, $this->dependencies))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Dependency name must not exist, if you want to overwrite an existing' .
                      'dependency use the replace function');
         }
@@ -66,12 +68,12 @@ class DependencyContainer
     {
         if (empty($dependency_name))
         {
-            throw new \InvalidArgumentException('Dependency name can not be empty');
+            throw new InvalidArgumentException('Dependency name can not be empty');
         }
         
         if (! array_key_exists($dependency_name, $this->dependencies))
         {
-            throw new \InvalidArgumentException('Dependency name must exist in the container');
+            throw new InvalidArgumentException('Dependency name must exist in the container');
         }
         
         unset($this->dependencies[$dependency_name]);
@@ -87,12 +89,12 @@ class DependencyContainer
     {
         if (empty($dependency_name))
         {
-            throw new \InvalidArgumentException('Dependency name can not be empty');
+            throw new InvalidArgumentException('Dependency name can not be empty');
         }
         
         if (! array_key_exists($dependency_name, $this->dependencies))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Dependency name must exist in the container,
                 if you want to add a new dependency use the add function');
         }
@@ -111,12 +113,12 @@ class DependencyContainer
     {
         if (empty($dependency_name))
         {
-            throw new \InvalidArgumentException('Dependency name can not be empty');
+            throw new InvalidArgumentException('Dependency name can not be empty');
         }
         
         if (! array_key_exists($dependency_name, $this->dependencies))
         {
-            throw new \InvalidArgumentException('Dependency name must exist in the container');
+            throw new InvalidArgumentException('Dependency name must exist in the container');
         }
         
         return $this->dependencies[$dependency_name];
@@ -131,7 +133,7 @@ class DependencyContainer
     {
         if (is_null($dependency) || (! is_object($dependency) && ! class_exists($dependency)))
         {
-            throw new \InvalidArgumentException('Dependency must be an existing object or class name');
+            throw new InvalidArgumentException('Dependency must be an existing object or class name');
         }
     }
 

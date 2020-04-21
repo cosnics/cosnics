@@ -1,5 +1,6 @@
 <?php
 
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Display;
@@ -22,23 +23,23 @@ $jenkins_jobs_path = 'E:/jenkins/';
 
 if (!is_dir($jenkins_jobs_path))
 {
-    throw new \Exception('Jenkins jobs folder does not exist');
+    throw new Exception('Jenkins jobs folder does not exist');
 }
 
 $jenkins_config_path = $jenkins_jobs_path . 'config.xml';
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_type_packages();
+$package_list = PlatformPackageBundles::getInstance()->get_type_packages();
 
 if (!file_exists($jenkins_config_path))
 {
-    throw new \Exception('Jenkins config does not exist');
+    throw new Exception('Jenkins config does not exist');
 }
 
-$dom_document = new \DOMDocument('1.0', 'UTF-8');
+$dom_document = new DOMDocument('1.0', 'UTF-8');
 $dom_document->formatOutput = true;
 $dom_document->preserveWhiteSpace = false;
 $dom_document->load($jenkins_config_path);
-$dom_xpath = new \DOMXPath($dom_document);
+$dom_xpath = new DOMXPath($dom_document);
 $listViews_nodes = $dom_xpath->query('/hudson/views/listView');
 
 $existing_view_names = array();

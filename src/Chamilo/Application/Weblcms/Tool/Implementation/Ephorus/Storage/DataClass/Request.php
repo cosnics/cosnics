@@ -4,11 +4,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataCl
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
 
 /**
  * This class defines a request for the ephorus tool
@@ -220,7 +222,7 @@ class Request extends EphorusDataClass
     {
         if (! $this->is_identified())
         {
-            throw new \InvalidArgumentException('Can not truncate results if this object is not identified');
+            throw new InvalidArgumentException('Can not truncate results if this object is not identified');
         }
         
         $data_manager_class = $this->get_data_manager_class();
@@ -752,7 +754,7 @@ class Request extends EphorusDataClass
     public function get_author()
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class,
+            User::class,
             (int) $this->get_author_id());
     }
     // @codeCoverageIgnoreStop

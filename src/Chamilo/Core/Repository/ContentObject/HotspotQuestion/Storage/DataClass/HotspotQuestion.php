@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
@@ -72,7 +73,7 @@ class HotspotQuestion extends ContentObject implements Versionable
 
         if (isset($image) && $image != 0)
         {
-            return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $image);
+            return DataManager::retrieve_by_id(ContentObject::class_name(), $image);
         }
         else
         {

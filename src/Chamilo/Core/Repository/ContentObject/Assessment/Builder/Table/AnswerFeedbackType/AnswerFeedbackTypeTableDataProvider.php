@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerFeedbackType;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -30,7 +31,7 @@ class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
                 ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             ComplexContentObjectItem::class_name(),
             $parameters);
     }
@@ -41,7 +42,7 @@ class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager::count(
+        return DataManager::count(
             ComplexContentObjectItem::class_name(),
             new DataClassCountParameters($condition));
     }

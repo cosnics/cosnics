@@ -5,12 +5,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Ent
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
@@ -72,9 +74,9 @@ abstract class EntriesDownloader
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
      */
     public function __construct(
-        \Symfony\Component\Translation\Translator $translator,
+        Translator $translator,
         \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $contentObjectPublicationRepository,
-        \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository $assignmentPublicationRepository,
+        PublicationRepository $assignmentPublicationRepository,
         EntityServiceManager $entityServiceManager, AssignmentService $assignmentService, ArchiveCreator $archiveCreator
     )
     {

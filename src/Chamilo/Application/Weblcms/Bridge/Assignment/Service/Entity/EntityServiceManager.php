@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
+use InvalidArgumentException;
+
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity
  *
@@ -41,7 +43,7 @@ class EntityServiceManager
     {
         if(!array_key_exists($entityType, $this->entityServicesByType))
         {
-            throw new \InvalidArgumentException(sprintf('The given entityType %s is not supported', $entityType));
+            throw new InvalidArgumentException(sprintf('The given entityType %s is not supported', $entityType));
         }
 
         return $this->entityServicesByType[$entityType];

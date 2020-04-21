@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Exception;
 
 /**
  * Builds the SentryExceptionLogger class
@@ -42,7 +43,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
         if (empty($clientDSNKey))
         {
-            throw new \Exception(
+            throw new Exception(
                 'The DSN key should be configured when using the sentry exception logger. ' .
                      'The configuration should be put in ' .
                      'chamilo.configuration.error_handling["sentry_error_logger"]["DSN"]');

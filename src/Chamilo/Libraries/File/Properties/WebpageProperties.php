@@ -2,6 +2,9 @@
 namespace Chamilo\Libraries\File\Properties;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use DOMDocument;
+use DOMNode;
+use DOMXPath;
 
 /**
  *
@@ -177,9 +180,9 @@ class WebpageProperties
      */
     public static function determine_properties($fileProperties)
     {
-        $domDocument = new \DOMDocument();
+        $domDocument = new DOMDocument();
         $domDocument->loadHTMLFile($fileProperties->get_path());
-        $domXpath = new \DOMXPath($domDocument);
+        $domXpath = new DOMXPath($domDocument);
 
         $properties = new self();
         $properties->set_file_properties($fileProperties);
@@ -193,7 +196,7 @@ class WebpageProperties
 
         $description = $domXpath->query('/html/head/meta[@name="description"]')->item(0);
 
-        if ($description instanceof \DOMNode)
+        if ($description instanceof DOMNode)
         {
             if (StringUtilities::getInstance()->hasValue(trim($description->getAttribute('content')), true))
             {
@@ -203,7 +206,7 @@ class WebpageProperties
 
         $contentType = $domXpath->query('/html/head/meta[@http-equiv="content-type"]')->item(0);
 
-        if ($contentType instanceof \DOMNode)
+        if ($contentType instanceof DOMNode)
         {
             $contentTypeParts = explode(';', $contentType->getAttribute('content'));
             $properties->set_content_type(trim($contentTypeParts[0]));
@@ -221,7 +224,7 @@ class WebpageProperties
 
         $charset = $domXpath->query('/html/head/meta[@charset]')->item(0);
 
-        if ($charset instanceof \DOMNode)
+        if ($charset instanceof DOMNode)
         {
             $properties->set_encoding($charset->getAttribute('charset'));
         }

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,7 +30,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
         $treeNodeDataCondition = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->getEntryClassName(),
-                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
+                Entry::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($treeNodeDataIdentifier)
         );

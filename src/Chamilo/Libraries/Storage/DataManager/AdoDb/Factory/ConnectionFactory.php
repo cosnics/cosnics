@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Factory;
 
 use Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
+use Exception;
 
 require_once realpath(__DIR__ . '/../../../../../../../') . '/vendor/adodb/adodb-php/adodb.inc.php';
 
@@ -68,7 +69,7 @@ class ConnectionFactory
         {
             return $connection;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             throw new ConnectionException('Could not connect to the database. Please contact your system administrator.');
         }

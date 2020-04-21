@@ -9,7 +9,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Exception;
-use Symfony\Component\Validator\MetadataInterface;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -42,7 +41,7 @@ class ValidatorDecorator implements ValidatorInterface
      *
      * @param mixed $value Some value
      *
-     * @return MetadataInterface The metadata for the value
+     * @return \Symfony\Component\Validator\Mapping\MetadataInterface The metadata for the value
      *
      * @throws Exception\NoSuchMetadataException If no metadata exists for the given value
      */
@@ -61,6 +60,35 @@ class ValidatorDecorator implements ValidatorInterface
     public function hasMetadataFor($value)
     {
         return $this->symfonyValidator->hasMetadataFor($value);
+    }
+
+    /**
+     * Returns a validator in the given execution context.
+     *
+     * The returned validator adds all generated violations to the given
+     * context.
+     *
+     * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
+     *
+     * @return ContextualValidatorInterface The validator for that context
+     */
+    public function inContext(ExecutionContextInterface $context)
+    {
+        return $this->symfonyValidator->inContext($context);
+    }
+
+    /**
+     * Starts a new validation context and returns a validator for that context.
+     *
+     * The returned validator collects all violations generated within its
+     * context. You can access these violations with the
+     * {@link ContextualValidatorInterface::getViolations()} method.
+     *
+     * @return ContextualValidatorInterface The validator for the new context
+     */
+    public function startContext()
+    {
+        return $this->symfonyValidator->startContext();
     }
 
     /**
@@ -86,10 +114,10 @@ class ValidatorDecorator implements ValidatorInterface
         $constraintViolationList = $this->symfonyValidator->validate($value, $constraints, $groups);
         $decoratedConstraintViolationList = new ConstraintViolationList();
 
-        foreach($constraintViolationList as $constraintViolation)
+        foreach ($constraintViolationList as $constraintViolation)
         {
             $payload = $constraintViolation->getConstraint()->payload;
-            if(!array_key_exists('context', $payload))
+            if (!array_key_exists('context', $payload))
             {
                 $decoratedConstraintViolationList->add($constraintViolation);
                 continue;
@@ -98,22 +126,24 @@ class ValidatorDecorator implements ValidatorInterface
             $convertedParameters = [];
 
             $parameters = $constraintViolation->getParameters();
-            array_walk($parameters, function($parameter, $key) use(&$convertedParameters) {
+            array_walk(
+                $parameters, function ($parameter, $key) use (&$convertedParameters) {
                 $key = str_replace('{{ ', '{', $key);
                 $key = str_replace(' }}', '}', $key);
 
                 $convertedParameters[$key] = $parameter;
-            });
+            }
+            );
 
             $context = $payload['context'];
-            $translatedMessage = $this->translator->trans($constraintViolation->getMessage(), $convertedParameters, $context);
+            $translatedMessage =
+                $this->translator->trans($constraintViolation->getMessage(), $convertedParameters, $context);
 
             $constraintViolation = new ConstraintViolation(
-                $translatedMessage, $constraintViolation->getMessageTemplate(),
-                $constraintViolation->getParameters(), $constraintViolation->getRoot(),
-                $constraintViolation->getPropertyPath(),  $constraintViolation->getInvalidValue(),
-                $constraintViolation->getPlural(), $constraintViolation->getCode(),
-                $constraintViolation->getConstraint(), $constraintViolation->getCause()
+                $translatedMessage, $constraintViolation->getMessageTemplate(), $constraintViolation->getParameters(),
+                $constraintViolation->getRoot(), $constraintViolation->getPropertyPath(),
+                $constraintViolation->getInvalidValue(), $constraintViolation->getPlural(),
+                $constraintViolation->getCode(), $constraintViolation->getConstraint(), $constraintViolation->getCause()
             );
 
             $decoratedConstraintViolationList->add($constraintViolation);
@@ -158,34 +188,5 @@ class ValidatorDecorator implements ValidatorInterface
     public function validatePropertyValue($objectOrClass, $propertyName, $value, $groups = null)
     {
         return $this->symfonyValidator->validatePropertyValue($objectOrClass, $propertyName, $value, $groups);
-    }
-
-    /**
-     * Starts a new validation context and returns a validator for that context.
-     *
-     * The returned validator collects all violations generated within its
-     * context. You can access these violations with the
-     * {@link ContextualValidatorInterface::getViolations()} method.
-     *
-     * @return ContextualValidatorInterface The validator for the new context
-     */
-    public function startContext()
-    {
-        return $this->symfonyValidator->startContext();
-    }
-
-    /**
-     * Returns a validator in the given execution context.
-     *
-     * The returned validator adds all generated violations to the given
-     * context.
-     *
-     * @param \Symfony\Component\Validator\Context\ExecutionContextInterface $context
-     *
-     * @return ContextualValidatorInterface The validator for that context
-     */
-    public function inContext(ExecutionContextInterface $context)
-    {
-        return $this->symfonyValidator->inContext($context);
     }
 }

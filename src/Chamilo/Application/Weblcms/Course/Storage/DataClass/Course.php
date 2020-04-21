@@ -1208,7 +1208,7 @@ class Course extends DataClass
      *
      * @param \application\weblcms\course_type\CourseType $course_type
      */
-    public function set_course_type(\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $course_type)
+    public function set_course_type(CourseType $course_type)
     {
         if (! is_null($course_type))
         {

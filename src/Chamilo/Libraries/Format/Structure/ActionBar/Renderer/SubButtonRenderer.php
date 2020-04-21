@@ -13,8 +13,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
     use ActionButtonRendererTrait;
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\AbstractButtonRenderer::render()
+     * @return string
      */
     public function render()
     {
@@ -43,5 +42,13 @@ class SubButtonRenderer extends AbstractButtonRenderer
         }
 
         return $classes;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton
+     */
+    public function getButton()
+    {
+        return parent::getButton();
     }
 }

@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -58,8 +59,8 @@ class DocumentSaverComponent extends Manager
         $open_document_question_ids = $this->retrieve_open_document_question_ids($publication_id);
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+                AssessmentAttempt::class_name(),
+                AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication_id));
 
         $assessment_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieves(
@@ -95,13 +96,13 @@ class DocumentSaverComponent extends Manager
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
+                QuestionAttempt::class_name(),
+                QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
             $open_document_question_ids);
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+                QuestionAttempt::class_name(),
+                QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempt_tracker_ids);
         $condition = new AndCondition($conditions);
 
@@ -145,11 +146,11 @@ class DocumentSaverComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ID),
+                AssessmentAttempt::class_name(),
+                AssessmentAttempt::PROPERTY_ID),
             new StaticConditionVariable($assessment_attempt_tracker_id));
-        $assessment_attempts = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
+        $assessment_attempts = AssessmentAttempt::get_data(
+            AssessmentAttempt::class_name(),
             null,
             $condition)->as_array();
         $open_document_question_ids = $this->retrieve_open_document_question_ids(
@@ -173,7 +174,7 @@ class DocumentSaverComponent extends Manager
                 ComplexContentObjectItem::class_name(),
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($publication->get_content_object_id()));
-        $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_questions = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
             $condition)->as_array();
         // Array of open question ids in the publication that permit documents

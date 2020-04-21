@@ -23,6 +23,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
+use Exception;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -91,7 +93,7 @@ class AssignmentDataProvider
     {
         if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }
@@ -107,7 +109,7 @@ class AssignmentDataProvider
         if (!isset($this->contentObjectPublication) ||
             $this->contentObjectPublication->getId() != $assignmentPublication->getPublicationId())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given assignment publication does not belong to the given content object publication'
             );
         }
@@ -556,7 +558,7 @@ class AssignmentDataProvider
                 $entry, $user, $submittedNote
             );
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -576,7 +578,7 @@ class AssignmentDataProvider
         {
             $this->assignmentService->updateNote($note);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

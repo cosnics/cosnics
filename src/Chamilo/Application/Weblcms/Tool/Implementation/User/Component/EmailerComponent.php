@@ -2,7 +2,10 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -28,8 +31,8 @@ class EmailerComponent extends Manager
         {
             foreach ($ids as $id)
             {
-                $users[] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $users[] = DataManager::retrieve_by_id(
+                    User::class_name(),
                     $id);
             }
 
@@ -42,7 +45,7 @@ class EmailerComponent extends Manager
         }
         else
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(Translation::get('User'));
+            throw new NoObjectSelectedException(Translation::get('User'));
         }
     }
 

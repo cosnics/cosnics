@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
+use Mobile_Detect;
 
 class BrowserComponent extends Manager
 {
@@ -125,7 +126,7 @@ class BrowserComponent extends Manager
 
             if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
-                $detect = new \Mobile_Detect();
+                $detect = new Mobile_Detect();
                 if ($detect->isMobile() && ! $detect->isTablet())
                 {
                     $rendererType = ViewRenderer::TYPE_LIST;

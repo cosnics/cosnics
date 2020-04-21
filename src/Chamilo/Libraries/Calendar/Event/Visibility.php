@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -81,8 +83,8 @@ abstract class Visibility extends DataClass
     {
         if (isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $this->user = DataManager::retrieve_by_id(
+                User::class_name(),
                 (int) $this->getUserId());
         }
 

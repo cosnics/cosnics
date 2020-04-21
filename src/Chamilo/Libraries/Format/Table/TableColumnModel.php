@@ -15,21 +15,19 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 abstract class TableColumnModel extends TableComponent
 {
-    /**
-     * **************************************************************************************************************
-     * Default Constants *
-     * **************************************************************************************************************
-     */
-    const DEFAULT_ORDER_COLUMN_INDEX = 0;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
+    const DEFAULT_ORDER_COLUMN_INDEX = 0;
+
     const ORDER_COLUMN = 1;
     const ORDER_DIRECTION = 2;
 
     /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
+     * The columns that are currently ordered, the index of the column is the key of the array, de direction is
+     * the value
+     *
+     * @var integer[]
      */
+    protected $currentOrderedColumns;
 
     /**
      * The columns in the table.
@@ -51,20 +49,6 @@ abstract class TableColumnModel extends TableComponent
      * @var integer
      */
     private $default_order_direction;
-
-    /**
-     * The columns that are currently ordered, the index of the column is the key of the array, de direction is
-     * the value
-     *
-     * @var integer[]
-     */
-    protected $currentOrderedColumns;
-
-    /**
-     * **************************************************************************************************************
-     * Constructor *
-     * **************************************************************************************************************
-     */
 
     /**
      * Constructor
@@ -95,6 +79,126 @@ abstract class TableColumnModel extends TableComponent
      */
 
     /**
+     * Adds the action column only if the action column is not yet added
+     */
+    protected function addActionColumn()
+    {
+        foreach ($this->get_columns() as $column)
+        {
+            if ($column instanceof ActionsTableColumn)
+            {
+                return;
+            }
+        }
+
+        $this->add_column(new ActionsTableColumn());
+    }
+
+    /**
+     * Adds a current ordered column to the list
+     *
+     * @param integer $columnIndex
+     * @param integer $orderDirection
+     */
+    public function addCurrentOrderedColumn($columnIndex, $orderDirection = SORT_ASC)
+    {
+        $this->currentOrderedColumns[] = array(
+            self::ORDER_COLUMN => $this->get_column($columnIndex),
+            self::ORDER_DIRECTION => $orderDirection
+        );
+    }
+
+    /**
+     * Adds the given column at a given index or the end of the table.
+     *
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param integer $index
+     */
+    public function add_column(TableColumn $column, $index = null)
+    {
+        if (is_null($index))
+        {
+            $this->columns[] = $column;
+        }
+        else
+        {
+            array_splice($this->columns, $index, 0, array($column));
+        }
+    }
+
+    /**
+     * Delete a column at a given index
+     *
+     * @param integer $columnIndex
+     */
+    public function delete_column($columnIndex)
+    {
+        unset($this->columns[$columnIndex]);
+
+        $this->columns = array_values($this->columns);
+    }
+
+    /**
+     * Returns the current ordered columns
+     *
+     * @return integer[][]
+     */
+    public function getCurrentOrderedColumns()
+    {
+        return $this->currentOrderedColumns;
+    }
+
+    /**
+     * Sets the current ordered columns
+     *
+     * @param integer[][] $currentOrderedColumns
+     */
+    public function setCurrentOrderedColumns($currentOrderedColumns = array())
+    {
+        $this->currentOrderedColumns = $currentOrderedColumns;
+    }
+
+    /**
+     * Gets the column at the given index in the model.
+     *
+     * @param integer $index
+     *
+     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn
+     */
+    public function get_column($index)
+    {
+        return $this->columns[$index];
+    }
+
+    /**
+     * Returns the number of columns in the model.
+     *
+     * @return integer
+     */
+    public function get_column_count()
+    {
+        return count($this->columns);
+    }
+
+    /**
+     * Returns an object table order object by a given column number and order direction
+     *
+     * @param integer $columnNumber
+     * @param integer $orderDirection
+     *
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     */
+    public function get_column_object_table_order($columnNumber, $orderDirection)
+    {
+        $column = $this->get_sortable_column($columnNumber);
+
+        if ($column)
+        {
+            return new OrderBy($column->getConditionVariable(), $orderDirection);
+        }
+    }
+
+    /**
      * Returns the columns
      *
      * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
@@ -111,6 +215,16 @@ abstract class TableColumnModel extends TableComponent
     public function set_columns($columns)
     {
         $this->columns = $columns;
+    }
+
+    /**
+     * Returns the component of the object table
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function get_component()
+    {
+        return $this->get_table()->get_component();
     }
 
     /**
@@ -154,139 +268,17 @@ abstract class TableColumnModel extends TableComponent
     }
 
     /**
-     * Returns the current ordered columns
-     *
-     * @return integer[][]
-     */
-    public function getCurrentOrderedColumns()
-    {
-        return $this->currentOrderedColumns;
-    }
-
-    /**
-     * Sets the current ordered columns
-     *
-     * @param integer[][] $currentOrderedColumns
-     */
-    public function setCurrentOrderedColumns($currentOrderedColumns = array())
-    {
-        $this->currentOrderedColumns = $currentOrderedColumns;
-    }
-
-    /**
-     * Adds a current ordered column to the list
-     *
-     * @param integer $columnIndex
-     * @param integer $orderDirection
-     */
-    public function addCurrentOrderedColumn($columnIndex, $orderDirection = SORT_ASC)
-    {
-        $this->currentOrderedColumns[] = array(
-            self::ORDER_COLUMN => $this->get_column($columnIndex),
-            self::ORDER_DIRECTION => $orderDirection);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Delegation Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the component of the object table
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function get_component()
-    {
-        return $this->get_table()->get_component();
-    }
-
-    /**
-     * **************************************************************************************************************
-     * List Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the number of columns in the model.
-     *
-     * @return integer
-     */
-    public function get_column_count()
-    {
-        return count($this->columns);
-    }
-
-    /**
-     * Gets the column at the given index in the model.
-     *
-     * @param integer $index
-     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn
-     */
-    public function get_column($index)
-    {
-        return $this->columns[$index];
-    }
-
-    /**
-     * Adds the given column at a given index or the end of the table.
-     *
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
-     * @param integer $index
-     */
-    public function add_column(TableColumn $column, $index = null)
-    {
-        if (is_null($index))
-        {
-            $this->columns[] = $column;
-        }
-        else
-        {
-            array_splice($this->columns, $index, 0, array($column));
-        }
-    }
-
-    /**
-     * Delete a column at a given index
-     *
-     * @param integer $columnIndex
-     */
-    public function delete_column($columnIndex)
-    {
-        unset($this->columns[$columnIndex]);
-
-        $this->columns = array_values($this->columns);
-    }
-
-    /**
-     * Returns an object table order object by a given column number and order direction
-     *
-     * @param integer $columnNumber
-     * @param integer $orderDirection
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
-     */
-    public function get_column_object_table_order($columnNumber, $orderDirection)
-    {
-        $column = $this->get_sortable_column($columnNumber);
-
-        if ($column)
-        {
-            return new OrderBy($column->getConditionVariable(), $orderDirection);
-        }
-    }
-
-    /**
      * Returns a column by a given column index if it exists and is sortable, otherwise it returns the default column.
      *
      * @param integer $columnNumber
+     *
      * @return \Chamilo\Libraries\Format\Table\Column\TableColumn
      */
     protected function get_sortable_column($columnNumber)
     {
         $column = $this->get_column($columnNumber);
 
-        if (! $column instanceof TableColumn || ! $column->is_sortable())
+        if (!$column instanceof TableColumn || !$column->is_sortable())
         {
             if ($columnNumber != $this->get_default_order_column())
             {
@@ -300,8 +292,14 @@ abstract class TableColumnModel extends TableComponent
     }
 
     /**
+     * Initializes the columns for the table
+     */
+    abstract public function initialize_columns();
+
+    /**
      *
      * @param string $type
+     *
      * @return boolean
      */
     public function is_order_column_type($type)
@@ -316,26 +314,5 @@ abstract class TableColumnModel extends TableComponent
         {
             return false;
         }
-    }
-
-    /**
-     * Initializes the columns for the table
-     */
-    abstract public function initialize_columns();
-
-    /**
-     * Adds the action column only if the action column is not yet added
-     */
-    protected function addActionColumn()
-    {
-        foreach ($this->get_columns() as $column)
-        {
-            if ($column instanceof ActionsTableColumn)
-            {
-                return;
-            }
-        }
-
-        $this->add_column(new ActionsTableColumn());
     }
 }

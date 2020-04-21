@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Authentication\Anonymous;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -84,8 +85,8 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ACCESS_ANONYMOUSLY
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_ACCESS_ANONYMOUSLY
             )
         );
 

@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview\Component;
 
+use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview\Manager;
+use Exception;
+
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview\Component
@@ -8,11 +11,11 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview\C
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Preview\Manager
+class ViewerComponent extends Manager
 {
 
     public function run()
     {
-        throw new \Exception('PreviewNotAvailable');
+        throw new Exception('PreviewNotAvailable');
     }
 }

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -36,7 +37,7 @@ class VisitGroupComponent extends Manager
             $groupUrl =
                 $this->getCourseGroupOffice365Connector()->getGroupUrlForVisit($courseGroup, $this->getUser());
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             throw new NotAllowedException();

@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RegexIterator;
+
 /**
  *
  * @package Chamilo\Libraries\Architecture\Traits
@@ -20,11 +24,11 @@ trait DirectoryScanner
      */
     protected function scan_files_in_directory($directory, $pattern, $depth = -1)
     {
-        $directory = new \RecursiveDirectoryIterator($directory);
-        $iterator = new \RecursiveIteratorIterator($directory);
+        $directory = new RecursiveDirectoryIterator($directory);
+        $iterator = new RecursiveIteratorIterator($directory);
         $iterator->setMaxDepth($depth);
 
-        $regex = new \RegexIterator($iterator, $pattern, \RegexIterator::GET_MATCH);
+        $regex = new RegexIterator($iterator, $pattern, RegexIterator::GET_MATCH);
 
         $files = array();
 

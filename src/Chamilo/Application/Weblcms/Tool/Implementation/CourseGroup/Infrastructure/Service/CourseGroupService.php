@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
+use InvalidArgumentException;
 
 /**
  * Course group service to help with the management of course groups
@@ -80,7 +81,7 @@ class CourseGroupService implements CourseGroupServiceInterface
 
         if (!$courseGroupUserRelation instanceof CourseGroupUserRelation)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'There is no subscription from the given user %s in the given course group %s', $user->getId(),
                     $courseGroup->getId()

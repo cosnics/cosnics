@@ -7,6 +7,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Result;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Translation\Translation;
+use DOMDocument;
+use Twig\Environment;
+use XSLTProcessor;
 
 /**
  * Class that converts the database result to html
@@ -47,7 +50,7 @@ class ReportRenderer
      * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
-        RequestManager $requestManager, UserService $userService, \Twig\Environment $twigRenderer
+        RequestManager $requestManager, UserService $userService, Environment $twigRenderer
     )
     {
         $this->requestManager = $requestManager;
@@ -160,13 +163,13 @@ class ReportRenderer
         $this->xslt_path = realpath(__DIR__ . '/../Resources/Xslt');
 
         $string = str_replace(array('<diff>', '</diff>'), '', $result->get_diff());
-        $diff = new \DOMDocument();
+        $diff = new DOMDocument();
         $diff->loadXML($string);
 
-        $stylesheet = new \DOMDocument();
+        $stylesheet = new DOMDocument();
         $stylesheet->load($this->xslt_path . '/diff.xslt');
 
-        $xslt = new \XSLTProcessor();
+        $xslt = new XSLTProcessor();
         $xslt->setParameter('sablotron', 'xslt_base_dir', $this->xslt_path);
         $xslt->setParameter('', 'original', addslashes(Translation::get('OriginalText')));
         $xslt->setParameter('', 'found', addslashes(Translation::get('FoundByEphorus')));

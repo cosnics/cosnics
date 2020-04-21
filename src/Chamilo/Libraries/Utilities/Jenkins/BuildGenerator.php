@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -877,7 +878,7 @@ class BuildGenerator
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
+$package_list = PlatformPackageBundles::getInstance()->get_package_list();
 
 $web_url = 'http://10.2.201.104/html/jenkins/dev/';
 $system_url = '/var/www/html/jenkins/dev/';

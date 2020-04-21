@@ -5,7 +5,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Exception;
 
 /**
  *
@@ -13,7 +15,7 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarRendererProvider implements
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+    CalendarRendererProviderInterface
 {
     const SOURCE_TYPE_INTERNAL = 1;
     const SOURCE_TYPE_EXTERNAL = 2;
@@ -228,7 +230,7 @@ abstract class CalendarRendererProvider implements
 
             if (! class_exists($ajaxVisibilityClassName))
             {
-                throw new \Exception(
+                throw new Exception(
                     'Please add an ajax Class CalendarEventVisibilityComponent to your implementing context\'s Ajax subpackage (' .
                          $this->getVisibilityContext() .
                          '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');

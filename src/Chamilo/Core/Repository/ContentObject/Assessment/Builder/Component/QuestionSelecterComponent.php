@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -26,7 +27,7 @@ class QuestionSelecterComponent extends Manager
 
         if ($assessment_id)
         {
-            $clois = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            $clois = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(
@@ -72,7 +73,7 @@ class QuestionSelecterComponent extends Manager
 
         foreach ($question_ids as $question_id)
         {
-            $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $question = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $question_id);
 
@@ -84,7 +85,7 @@ class QuestionSelecterComponent extends Manager
             $cloi->set_ref($question_id);
             $cloi->set_parent($parent);
             $cloi->set_user_id($this->get_user_id());
-            $cloi->set_display_order(\Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parent));
+            $cloi->set_display_order(DataManager::select_next_display_order($parent));
 
             $succes &= $cloi->create();
         }

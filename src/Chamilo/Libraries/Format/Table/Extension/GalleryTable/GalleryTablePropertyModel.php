@@ -15,8 +15,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 abstract class GalleryTablePropertyModel extends TableComponent
 {
-    const DEFAULT_ORDER_PROPERTY_INDEX = 0;
     const DEFAULT_ORDER_PROPERTY_DIRECTION = SORT_ASC;
+    const DEFAULT_ORDER_PROPERTY_INDEX = 0;
 
     /**
      * The properties in the table.
@@ -54,12 +54,55 @@ abstract class GalleryTablePropertyModel extends TableComponent
     }
 
     /**
+     * Adds the given property at the end of the table.
+     *
+     * @param \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty $property
+     */
+    public function add_property($property)
+    {
+        $this->properties[] = $property;
+    }
+
+    /**
+     * Delete a property at a given index
+     *
+     * @param integer $propertyIndex
+     */
+    public function delete_property($propertyIndex)
+    {
+        unset($this->properties[$propertyIndex]);
+
+        $this->properties = array_values($this->properties);
+    }
+
+    /**
+     * Gets the default order direction.
+     *
+     * @return integer
+     */
+    public function get_default_order_direction()
+    {
+        return $this->orderDirection;
+    }
+
+    /**
+     * Returns the index of the default property to order objects by
+     *
+     * @return integer
+     */
+    public function get_default_order_property()
+    {
+        return $this->orderProperty;
+    }
+
+    /**
      * Returns an ObjectTableOrder with the given order column index.
      * If the selected index is not sortable, the default
      * column index will be used. If the default column is not sortable then no order will be given
      *
      * @param integer $propertyNumber
      * @param integer $orderDirection
+     *
      * @return \Chamilo\Libraries\Storage\Query\OrderBy
      */
     public function get_order_property($propertyNumber, $orderDirection)
@@ -69,8 +112,8 @@ abstract class GalleryTablePropertyModel extends TableComponent
         if ($property instanceof DataClassGalleryTableProperty)
         {
             return new OrderBy(
-                new PropertyConditionVariable($property->get_class_name(), $property->get_property()),
-                $orderDirection);
+                new PropertyConditionVariable($property->get_class_name(), $property->get_property()), $orderDirection
+            );
         }
         else
         {
@@ -106,43 +149,15 @@ abstract class GalleryTablePropertyModel extends TableComponent
     }
 
     /**
-     * Returns the index of the default property to order objects by
+     * Gets the property at the given index in the model.
      *
-     * @return integer
-     */
-    public function get_default_order_property()
-    {
-        return $this->orderProperty;
-    }
-
-    /**
-     * Sets the index of the default property to order objects by
+     * @param integer $index
      *
-     * @param integer $propertyIndex
+     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty
      */
-    public function set_default_order_property($propertyIndex)
+    public function get_property($index)
     {
-        $this->orderProperty = $propertyIndex;
-    }
-
-    /**
-     * Gets the default order direction.
-     *
-     * @return integer
-     */
-    public function get_default_order_direction()
-    {
-        return $this->orderDirection;
-    }
-
-    /**
-     * Sets the default order direction.
-     *
-     * @param integer $direction
-     */
-    public function set_default_order_direction($direction)
-    {
-        $this->orderDirection = $direction;
+        return $this->properties[$index];
     }
 
     /**
@@ -156,41 +171,27 @@ abstract class GalleryTablePropertyModel extends TableComponent
     }
 
     /**
-     * Gets the property at the given index in the model.
-     *
-     * @param integer $index
-     *
-     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty
-     */
-    public function get_property($index)
-    {
-        return $this->properties[$index];
-    }
-
-    /**
-     * Adds the given property at the end of the table.
-     *
-     * @param \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty $property
-     */
-    public function add_property($property)
-    {
-        $this->properties[] = $property;
-    }
-
-    /**
-     * Delete a property at a given index
-     *
-     * @param integer $propertyIndex
-     */
-    public function delete_property($propertyIndex)
-    {
-        unset($this->properties[$propertyIndex]);
-
-        $this->properties = array_values($this->properties);
-    }
-
-    /**
      * Initializes the properties for the table
      */
     abstract public function initialize_properties();
+
+    /**
+     * Sets the default order direction.
+     *
+     * @param integer $direction
+     */
+    public function set_default_order_direction($direction)
+    {
+        $this->orderDirection = $direction;
+    }
+
+    /**
+     * Sets the index of the default property to order objects by
+     *
+     * @param integer $propertyIndex
+     */
+    public function set_default_order_property($propertyIndex)
+    {
+        $this->orderProperty = $propertyIndex;
+    }
 }

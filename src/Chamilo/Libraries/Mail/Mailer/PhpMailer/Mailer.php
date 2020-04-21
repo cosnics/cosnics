@@ -3,9 +3,12 @@ namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use RuntimeException;
 
 /**
  * PHPMailer mailer service
@@ -177,7 +180,7 @@ class Mailer extends AbstractMailer
         if (! $this->phpMailer->send())
         {
             $this->logMail($mail, MailLog::STATE_FAILED, $this->phpMailer->ErrorInfo);
-            throw new \RuntimeException('Could not send e-mail');
+            throw new RuntimeException('Could not send e-mail');
         }
         else
         {
@@ -204,7 +207,7 @@ class Mailer extends AbstractMailer
             {
                 $this->send($mail);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $recipientsFailed[] = $recipient;
             }
@@ -214,7 +217,7 @@ class Mailer extends AbstractMailer
 
         if (count($recipientsFailed) > 0)
         {
-            throw new \Exception('Some mails could not be send (' . implode(', ', $recipientsFailed) . ')');
+            throw new Exception('Some mails could not be send (' . implode(', ', $recipientsFailed) . ')');
         }
     }
 
@@ -239,7 +242,7 @@ class Mailer extends AbstractMailer
         if (! isset($phpMailer) || ! $phpMailer instanceof PHPMailer)
         {
             global $phpMailerConfiguration;
-            require_once (\Chamilo\Libraries\File\Path::getInstance()->getStoragePath() .
+            require_once (Path::getInstance()->getStoragePath() .
                  'configuration/phpmailer.conf.php');
 
             $phpMailer = new PHPMailer();

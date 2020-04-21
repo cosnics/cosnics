@@ -11,8 +11,12 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service
@@ -84,7 +88,7 @@ class RequestManager
             {
                 $this->handInDocumentObject($contentObject, $user, $courseId);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $failures ++;
             }
@@ -111,7 +115,7 @@ class RequestManager
 
         if (!$request->is_content_object_valid())
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given base request is not valid: ' . implode(PHP_EOL, $request->get_errors())
             );
         }
@@ -121,7 +125,7 @@ class RequestManager
         $documentGUID = $this->ephorusWebserviceRepository->handInDocument($document, $author);
         if (!$documentGUID)
         {
-            throw new \RuntimeException('Could not create the document in the ephorus webservice');
+            throw new RuntimeException('Could not create the document in the ephorus webservice');
         }
 
         $request->set_guid($documentGUID);
@@ -129,7 +133,7 @@ class RequestManager
 
         if (!$this->requestRepository->create($request))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Could not create the request in the database for guid: ' . $request->get_guid()
             );
         }
@@ -142,7 +146,7 @@ class RequestManager
      *
      * @return int
      */
-    public function changeDocumentsVisibility(\Chamilo\Libraries\Storage\Iterator\DataClassIterator $requests)
+    public function changeDocumentsVisibility(DataClassIterator $requests)
     {
         $failures = 0;
 
@@ -152,7 +156,7 @@ class RequestManager
             {
                 $this->changeDocumentVisibility($request);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $failures ++;
             }
@@ -170,13 +174,13 @@ class RequestManager
             $request->get_guid(), !$request->is_visible_in_index()
         ))
         {
-            throw new \RuntimeException('The given document visibility could not be changed');
+            throw new RuntimeException('The given document visibility could not be changed');
         }
 
         $request->set_visible_on_index(!$request->is_visible_in_index());
         if (!$this->requestRepository->update($request))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'The given request with guid %s could not be updated in the database',
                     $request->get_guid()
@@ -196,7 +200,7 @@ class RequestManager
     {
         if (!$documentGuid)
         {
-            throw new \InvalidArgumentException('A valid guid is required to retrieve a request by guid');
+            throw new InvalidArgumentException('A valid guid is required to retrieve a request by guid');
         }
 
         return $this->requestRepository->findRequestByGuid($documentGuid);
@@ -213,7 +217,7 @@ class RequestManager
     {
         if (!$id)
         {
-            throw new \InvalidArgumentException('A valid id is required to retrieve a request by id');
+            throw new InvalidArgumentException('A valid id is required to retrieve a request by id');
         }
 
         return $this->requestRepository->findRequestById($id);
@@ -275,7 +279,7 @@ class RequestManager
 
         if (!$author)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('The given author with id %s can not be retrieved', $baseRequest->get_author_id())
             );
         }

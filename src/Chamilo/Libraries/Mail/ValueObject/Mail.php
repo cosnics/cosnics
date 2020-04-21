@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Mail\ValueObject;
 
+use InvalidArgumentException;
+
 /**
  * Describes the content and metadata for an e-mail
  *
@@ -138,7 +140,7 @@ class Mail
     {
         if ($sendIndividually && (! empty($cc) || ! empty($bcc)))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'A mail that is set to send individually to the target users should not include cc or bcc recipients');
         }
 

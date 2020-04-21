@@ -136,7 +136,7 @@ class CourseImportForm extends FormValidator
                     $course->create_course_settings_from_values($setting_values);
                     CourseManagementRights::getInstance()->create_rights_from_values($course, array());
 
-                    if (!\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
+                    if (!CourseDataManager::subscribe_user_to_course(
                         $course->get_id(), '1', $teacher_info->get_id()
                     ))
                     {

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -28,7 +29,7 @@ abstract class StatusChangerComponent extends Manager
         
         if (! $objects /* || !$status*/)
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(
+            throw new NoObjectSelectedException(
                 Translation::get('UserRelation'));
         }
         

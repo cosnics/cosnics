@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -42,7 +43,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface $learningPathAssignmentServiceBridge
      */
     public function __construct(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\AssignmentServiceBridgeInterface $learningPathAssignmentServiceBridge
+        Interfaces\AssignmentServiceBridgeInterface $learningPathAssignmentServiceBridge
     )
     {
         $this->learningPathAssignmentServiceBridge = $learningPathAssignmentServiceBridge;
@@ -55,7 +56,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         if (!$treeNode->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }

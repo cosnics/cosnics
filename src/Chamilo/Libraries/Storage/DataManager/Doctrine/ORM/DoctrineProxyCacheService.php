@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 use Chamilo\Libraries\File\Filesystem;
 use Doctrine\ORM\EntityManager;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
+use RuntimeException;
 
 /**
  * Manages the cache for the doctrine ORM proxies
@@ -41,13 +42,13 @@ class DoctrineProxyCacheService extends FileBasedCacheService
         {
             if (! Filesystem::create_dir($proxyCacheDir))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf('Unable to create the Doctrine Proxy directory "%s".', $proxyCacheDir));
             }
         }
         elseif (! is_writable($proxyCacheDir))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'The Doctrine Proxy directory "%s" is not writeable for the current system user.',
                     $proxyCacheDir));

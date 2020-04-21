@@ -19,6 +19,7 @@ abstract class RecordTableCellRenderer extends TableCellRenderer
      *
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
      * @param string[] $record
+     *
      * @return string
      */
     public function render_cell($column, $record)
@@ -36,6 +37,7 @@ abstract class RecordTableCellRenderer extends TableCellRenderer
      * checkboxes
      *
      * @param string[] $row
+     *
      * @return integer
      */
     public function render_id_cell($row)

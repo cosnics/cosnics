@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class VanAchterUserResultReportingBlock extends UserResultReportingBlock
@@ -43,8 +45,8 @@ class VanAchterUserResultReportingBlock extends UserResultReportingBlock
             }
             else
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $user_id);
             }
 

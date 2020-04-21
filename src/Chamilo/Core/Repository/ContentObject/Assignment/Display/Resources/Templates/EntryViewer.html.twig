@@ -208,14 +208,14 @@
                                         {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
                                             <tr id="attachment{{ ATTACHED_CONTENT_OBJECT.attachment_id }}">
                                                 <td><a href="#"
-                                                       onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': ATTACHED_CONTENT_OBJECT.content_object.id}) }}'); return false;">{{ ATTACHED_CONTENT_OBJECT.content_object.title }}
+                                                       onclick="openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': ATTACHED_CONTENT_OBJECT.content_object.id}) }}'); return false;">{{ ATTACHED_CONTENT_OBJECT.content_object.title }}
                                                     </a>
                                                 </td>
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.user }}</td>
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.date }}</td>
                                                 {% if CAN_EDIT_ASSIGNMENT %}
                                                 <td align="center"><a href="#"
-                                                                      onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
+                                                                      onclick="removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
                                                                       class="btn btn-default btn-xs"><span
                                                                 class="fas fa-times"></span></a></td>
                                                 {% endif %}
@@ -369,7 +369,7 @@
                     {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
                         <li class="list-group-item">
                             <a href="#"
-                               onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                               onclick="openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
                                 {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
                             </a>
                         </li>

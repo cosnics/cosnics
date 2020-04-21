@@ -9,6 +9,7 @@ use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -44,7 +45,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
 
         if (!$this->isConfigured())
         {
-            throw new \Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
+            throw new Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
         }
 
         $password = $this->request->getFromPost(self::PARAM_PASSWORD);

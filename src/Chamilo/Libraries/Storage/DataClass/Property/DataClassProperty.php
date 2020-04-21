@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\Property;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class DataClassProperty implements Hashable
 {
 
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use HashableTrait;
 
     /**
      *

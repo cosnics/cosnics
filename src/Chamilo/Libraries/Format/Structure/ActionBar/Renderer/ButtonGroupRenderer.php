@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 /**
  *
@@ -27,6 +27,30 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
     public function __construct(ButtonGroup $buttonGroup)
     {
         $this->buttonGroup = $buttonGroup;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = '<div class="' . $this->getClasses() . '">';
+
+        foreach ($this->getButtonGroup()->getButtons() as $button)
+        {
+            $rendererClassName =
+                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
+            $renderer = new $rendererClassName($button);
+
+            $html[] = $renderer->render($button);
+        }
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -58,29 +82,5 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
         $classes[] = 'btn-group';
 
         return implode(' ', $classes);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = '<div class="' . $this->getClasses() . '">';
-
-        foreach ($this->getButtonGroup()->getButtons() as $button)
-        {
-            $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
-            $renderer = new $rendererClassName($button);
-
-            $html[] = $renderer->render($button);
-        }
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 }

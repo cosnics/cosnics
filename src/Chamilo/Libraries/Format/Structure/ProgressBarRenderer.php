@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use InvalidArgumentException;
+
 /**
  * Renders a progressbar
  *
@@ -9,11 +11,11 @@ namespace Chamilo\Libraries\Format\Structure;
  */
 class ProgressBarRenderer
 {
-    const MODE_DEFAULT = 'default';
-    const MODE_SUCCESS = 'success';
-    const MODE_INFO = 'info';
-    const MODE_WARNING = 'warning';
     const MODE_DANGER = 'danger';
+    const MODE_DEFAULT = 'default';
+    const MODE_INFO = 'info';
+    const MODE_SUCCESS = 'success';
+    const MODE_WARNING = 'warning';
 
     /**
      * Renders a progressbar for a given percentage
@@ -22,6 +24,7 @@ class ProgressBarRenderer
      * @param string $mode
      * @param integer $maxWidth
      * @param boolean $striped
+     *
      * @return string
      */
     public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150, $striped = false)
@@ -61,32 +64,35 @@ class ProgressBarRenderer
     }
 
     /**
-     * Validates the progress parameter
-     *
-     * @param integer $progress
-     */
-    protected function validateProgress($progress)
-    {
-        if (! is_int($progress) || $progress < 0 || $progress > 100)
-        {
-            throw new \InvalidArgumentException(
-                'The given progress must be a valid integer and must be between 0 and 100');
-        }
-    }
-
-    /**
      * Validates the mode of the progress bar
      *
      * @param string $mode
      */
     protected function validateMode($mode = self::MODE_DEFAULT)
     {
-        if (! in_array($mode, $this->getAllowedModes()))
+        if (!in_array($mode, $this->getAllowedModes()))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The given mode must be a valid string and must be one of (%s)',
-                    implode(', ', $this->getAllowedModes())));
+                    implode(', ', $this->getAllowedModes())
+                )
+            );
+        }
+    }
+
+    /**
+     * Validates the progress parameter
+     *
+     * @param integer $progress
+     */
+    protected function validateProgress($progress)
+    {
+        if (!is_int($progress) || $progress < 0 || $progress > 100)
+        {
+            throw new InvalidArgumentException(
+                'The given progress must be a valid integer and must be between 0 and 100'
+            );
         }
     }
 }

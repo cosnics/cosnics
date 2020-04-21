@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
 
+use PDO;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet
@@ -20,7 +22,7 @@ class RecordResultSet extends \Chamilo\Libraries\Storage\ResultSet\RecordResultS
     {
         $records = array();
 
-        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
+        while ($record = $handle->fetch(PDO::FETCH_ASSOC))
         {
             $records[] = $this->process_record($record);
         }

@@ -15,6 +15,8 @@ use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\Notification\Storage\Repository\NotificationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use DateTime;
+use RuntimeException;
 
 /**
  * Tests the NotificationManager
@@ -90,7 +92,7 @@ class NotificationManagerTest extends ChamiloTestCase
             'Chamilo\Application\Weblcms::Course:5'
         ];
 
-        $date = new \DateTime();
+        $date = new DateTime();
 
         $notificationContext = new NotificationContext();
         $notificationContext->setPath('Chamilo');
@@ -154,7 +156,7 @@ class NotificationManagerTest extends ChamiloTestCase
             'Chamilo\Application\Weblcms::Course:5'
         ];
 
-        $date = new \DateTime();
+        $date = new DateTime();
 
         $notificationContext = new NotificationContext();
         $notificationContext->setPath('Chamilo');
@@ -174,7 +176,7 @@ class NotificationManagerTest extends ChamiloTestCase
         $userNotification->setRead(false);
         $userNotification->setViewed(false);
 
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
 
         $notification = new Notification();
         $this->set_property_value($notification, 'id', 10);
@@ -274,7 +276,7 @@ class NotificationManagerTest extends ChamiloTestCase
         $this->notificationContextManagerMock->expects($this->once())
             ->method('getContextByPath')
             ->with($contextPath)
-            ->will($this->throwException(new \RuntimeException()));
+            ->will($this->throwException(new RuntimeException()));
 
         $notifications = $this->notificationManager->getNotificationsByContextPathsForUser([$contextPath], $user, 0, 10);
         $this->assertEmpty($notifications);
@@ -346,7 +348,7 @@ class NotificationManagerTest extends ChamiloTestCase
         $this->notificationContextManagerMock->expects($this->once())
             ->method('getContextByPath')
             ->with($contextPath)
-            ->will($this->throwException(new \RuntimeException()));
+            ->will($this->throwException(new RuntimeException()));
 
         $count = $this->notificationManager->countUnseenNotificationsByContextPathsForUser([$contextPath], $user);
         $this->assertEquals(0, $count);
@@ -411,7 +413,7 @@ class NotificationManagerTest extends ChamiloTestCase
         $this->notificationContextManagerMock->expects($this->once())
             ->method('getContextByPath')
             ->with($contextPath)
-            ->will($this->throwException(new \RuntimeException()));
+            ->will($this->throwException(new RuntimeException()));
 
         $this->notificationManager->setNotificationsViewedForUserAndContextPaths([$contextPath], $user);
     }

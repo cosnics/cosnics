@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Exception;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component
@@ -37,7 +38,7 @@ class DeleteEntryAttachmentComponent extends Manager
 
             $this->getDataProvider()->deleteEntryAttachment($entryAttachment);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $result = new JsonAjaxResult();
             $result->set_result_code(500);

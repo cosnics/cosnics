@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
+use Exception;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -170,7 +171,7 @@ class ChamiloPropertyAccessor implements PropertyAccessorInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

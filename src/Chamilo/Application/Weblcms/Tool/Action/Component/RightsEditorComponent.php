@@ -7,8 +7,10 @@ use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -36,7 +38,7 @@ class RightsEditorComponent extends Manager
         $course = $this->get_course();
         if (! $course->is_course_admin($this->get_user()) && ! $this->get_user()->is_platform_admin())
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $locations = $this->get_locations();
@@ -98,7 +100,7 @@ class RightsEditorComponent extends Manager
 
                 foreach ($publication_ids as $publication_id)
                 {
-                    $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                    $publication = DataManager::retrieve_by_id(
                         ContentObjectPublication::class_name(),
                         $publication_id);
 
@@ -146,7 +148,7 @@ class RightsEditorComponent extends Manager
                     if ($category_id)
                     {
                         // get the given category
-                        $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                        $category = DataManager::retrieve_by_id(
                             ContentObjectPublicationCategory::class_name(),
                             $category_id);
 
@@ -170,7 +172,7 @@ class RightsEditorComponent extends Manager
                                 array_splice($info, $index, 0, $category_link);
 
                                 // parent
-                                $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                                $category = DataManager::retrieve_by_id(
                                     ContentObjectPublicationCategory::class_name(),
                                     $category->get_parent());
                             }

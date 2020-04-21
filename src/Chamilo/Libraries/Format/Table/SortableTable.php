@@ -17,12 +17,37 @@ class SortableTable extends HtmlTable
 {
 
     /**
+     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
+     * checkbox
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
+     * @param string[] $row
+     *
+     * @return string[]
      */
-    public function getTableClasses()
+    public function filterData($row)
     {
-        return 'table table-striped table-bordered table-hover table-data';
+        $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
+            $this->getTableFormActions()->has_form_actions();
+
+        if ($hasActions)
+        {
+            if (strlen($row[0]) > 0)
+            {
+                $row[0] = $this->getCheckboxHtml($row[0]);
+            }
+        }
+
+        foreach ($row as $index => & $value)
+        {
+            if (!is_numeric($value) && empty($value))
+            {
+                $value = '-';
+            }
+        }
+
+        return $row;
     }
 
     /**
@@ -50,7 +75,17 @@ class SortableTable extends HtmlTable
     public function getTableActionsJavascript()
     {
         return ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js');
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js'
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
+     */
+    public function getTableClasses()
+    {
+        return 'table table-striped table-bordered table-hover table-data';
     }
 
     /**
@@ -63,26 +98,7 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processRowAttributes()
-     */
-    public function processRowAttributes($rowIdentifier, $currentRow)
-    {
-        // $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processContentAttributes()
-     */
-    public function processContentAttributes()
-    {
-        // $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::setTableFormActions()
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     public function setTableFormActions(TableFormActions $actions = null)
     {
@@ -90,7 +106,8 @@ class SortableTable extends HtmlTable
 
         if ($actions instanceof TableFormActions && $actions->has_form_actions())
         {
-            $columnHeaderHtml = '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
+            $columnHeaderHtml =
+                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
         }
         else
         {
@@ -98,33 +115,5 @@ class SortableTable extends HtmlTable
         }
 
         $this->setColumnHeader(0, $columnHeaderHtml, false);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::filterData()
-     */
-    public function filterData($row)
-    {
-        $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
-             $this->getTableFormActions()->has_form_actions();
-
-        if ($hasActions)
-        {
-            if (strlen($row[0]) > 0)
-            {
-                $row[0] = $this->getCheckboxHtml($row[0]);
-            }
-        }
-
-        foreach ($row as $index => & $value)
-        {
-            if (! is_numeric($value) && empty($value))
-            {
-                $value = '-';
-            }
-        }
-
-        return $row;
     }
 }

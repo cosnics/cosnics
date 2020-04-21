@@ -17,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class FullTableRenderer extends FullRenderer
 {
 
-    use \Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
+    use TableRenderer;
 
     /**
      * Adds a navigation bar to the calendar

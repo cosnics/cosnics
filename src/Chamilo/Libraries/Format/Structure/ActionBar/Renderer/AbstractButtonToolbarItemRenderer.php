@@ -30,6 +30,12 @@ abstract class AbstractButtonToolbarItemRenderer
 
     /**
      *
+     * @return string
+     */
+    abstract function render();
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem
      */
     public function getButton()
@@ -45,10 +51,4 @@ abstract class AbstractButtonToolbarItemRenderer
     {
         $this->button = $button;
     }
-
-    /**
-     *
-     * @return string
-     */
-    abstract function render();
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Mail\Mailer;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Factory to instantiate the mailer
@@ -73,7 +74,7 @@ class MailerFactory
         $mailerClass = $this->configuration->get_setting(array('Chamilo\Core\Admin', 'mailer'));
         if (! class_exists($mailerClass))
         {
-            throw new \Exception(Translation::getInstance()->getTranslation('InvalidMailerClass'));
+            throw new Exception(Translation::getInstance()->getTranslation('InvalidMailerClass'));
         }
         
         return new $mailerClass($this->configuration);

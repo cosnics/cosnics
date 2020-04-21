@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use InvalidArgumentException;
 
 /**
  * Dataclass listener which manipulates the crud methods to notify the implementation packages
@@ -72,7 +73,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     {
         if (empty($context))
         {
-            throw new \InvalidArgumentException('The context should not be empty');
+            throw new InvalidArgumentException('The context should not be empty');
         }
 
         $this->context = $context;
@@ -88,7 +89,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     {
         if (! $data_class instanceof DataClass)
         {
-            throw new \InvalidArgumentException('The data class should be an instance of DataClass');
+            throw new InvalidArgumentException('The data class should be an instance of DataClass');
         }
 
         $this->data_class = $data_class;
@@ -104,14 +105,14 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     {
         if (! is_array($methodMapping) || count($methodMapping) == 0)
         {
-            throw new \InvalidArgumentException('The method mapping should at least contain 1 method');
+            throw new InvalidArgumentException('The method mapping should at least contain 1 method');
         }
 
         foreach ($methodMapping as $method => $data_manager_method)
         {
             if (! method_exists($this, $method))
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'The method ' . $method . ' does not exist in the data class listener');
             }
         }

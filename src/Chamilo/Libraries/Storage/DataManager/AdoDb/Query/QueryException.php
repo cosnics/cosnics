@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query;
 
+use Exception;
+
 /**
  * Based on the Doctrine DBAL Query-builder architecture
  *
@@ -9,7 +11,7 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @license MIT
  */
-class QueryException extends \Exception
+class QueryException extends Exception
 {
 
     /**

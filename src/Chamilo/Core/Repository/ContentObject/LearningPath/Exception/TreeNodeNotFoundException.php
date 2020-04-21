@@ -2,10 +2,12 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Exception;
 
+use Exception;
+
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TreeNodeNotFoundException extends \Exception
+class TreeNodeNotFoundException extends Exception
 {
     /**
      * @var int

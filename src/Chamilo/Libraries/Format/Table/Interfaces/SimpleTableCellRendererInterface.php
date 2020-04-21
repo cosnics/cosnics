@@ -11,10 +11,9 @@ interface SimpleTableCellRendererInterface
 
     /**
      *
-     * @param string $defaultProperty
-     * @param string[] $data
+     * @return string
      */
-    public function render_cell($defaultProperty, $data);
+    public function get_prefix();
 
     /**
      *
@@ -24,7 +23,8 @@ interface SimpleTableCellRendererInterface
 
     /**
      *
-     * @return string
+     * @param string $defaultProperty
+     * @param string[] $data
      */
-    public function get_prefix();
+    public function render_cell($defaultProperty, $data);
 }

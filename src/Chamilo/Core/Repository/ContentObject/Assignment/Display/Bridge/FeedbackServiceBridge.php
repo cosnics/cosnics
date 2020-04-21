@@ -29,7 +29,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge
      */
-    public function __construct(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge)
+    public function __construct(Interfaces\FeedbackServiceBridgeInterface $assignmentFeedbackServiceBridge)
     {
         $this->assignmentFeedbackServiceBridge = $assignmentFeedbackServiceBridge;
     }

@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -134,7 +135,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Application\Weblcms\Storage\DataManager::count(
+        return DataManager::count(
             ContentObjectPublicationCategory::class_name(), new DataClassCountParameters($condition)
         );
     }
@@ -505,20 +506,20 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME)
         {
-            $count = \Chamilo\Application\Weblcms\Storage\DataManager::count_my_publications(
+            $count = DataManager::count_my_publications(
                 $this->get_location(), $this->get_entities(), $this->get_publication_conditions(), $this->get_user_id()
             );
         }
         elseif ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)
         {
-            $count = \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications(
+            $count = DataManager::count_content_object_publications(
                 $this->get_publication_conditions()
             );
         }
         else
         {
             $count =
-                \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
+                DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
                     $this->get_location(), $this->get_entities(), $this->get_publication_conditions(),
                     $this->get_user_id()
                 );
@@ -562,7 +563,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME)
             {
 
-                $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_my_publications(
+                $publications_resultset = DataManager::retrieve_my_publications(
                     $this->get_location(), $this->get_entities(), $this->get_publication_conditions(),
                     $object_table_order, $offset, $max_objects, $this->get_user_id()
                 );
@@ -570,14 +571,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             elseif ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)
             {
                 $publications_resultset =
-                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                    DataManager::retrieve_content_object_publications(
                         $this->get_publication_conditions(), $object_table_order, $offset, $max_objects
                     );
             }
             else
             {
                 $publications_resultset =
-                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
+                    DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
                         $this->get_location(), $this->get_entities(), $this->get_publication_conditions(),
                         $object_table_order, $offset, $max_objects, $this->get_user_id()
                     );
@@ -720,7 +721,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $course_settings_controller = CourseSettingsController::getInstance();
 
         if ($course_settings_controller->get_course_setting(
-            $this->get_course(), \Chamilo\Application\Weblcms\CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
+            $this->get_course(), CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
         ))
         {
             return $this->get_parent()->display_introduction_text($this->getIntroductionText());
@@ -831,7 +832,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        $objects = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $objects = DataManager::retrieves(
             ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters($condition)
         );
 
@@ -840,7 +841,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function tool_category_has_new_publications($category_id)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::tool_category_has_new_publications(
+        return DataManager::tool_category_has_new_publications(
             $this->get_tool_id(), $this->get_user(), $this->get_course(), $category_id
         );
     }

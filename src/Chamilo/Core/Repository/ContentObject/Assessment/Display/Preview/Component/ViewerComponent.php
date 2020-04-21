@@ -4,11 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\Compo
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -44,7 +46,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
         }
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
@@ -67,7 +69,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
         }
         else
         {
-            throw new \Exception(Translation::get('DummyAttemptNotCreated'));
+            throw new Exception(Translation::get('DummyAttemptNotCreated'));
         }
     }
 
@@ -170,7 +172,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
             }
             else
             {
-                throw new \Exception(Translation::get('DummyQuestionAttemptNotCreated'));
+                throw new Exception(Translation::get('DummyQuestionAttemptNotCreated'));
             }
         }
     }

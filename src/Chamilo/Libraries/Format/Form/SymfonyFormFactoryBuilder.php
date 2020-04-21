@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Form;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Hogent\Application\Weblcms\Tool\Implementation\Survey\Form\CustomCourseSurveyDates\FormType;
+use InvalidArgumentException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
@@ -13,6 +14,8 @@ use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Twig_Environment;
+use Twig_FactoryRuntimeLoader;
+use Twig_Loader_Chain;
 use Twig_Loader_Filesystem;
 
 /**
@@ -54,7 +57,7 @@ class SymfonyFormFactoryBuilder
      *
      * @return \Symfony\Component\Form\FormFactoryInterface
      */
-    public function buildFormFactory(\Twig_Environment $twig, ValidatorInterface $validator)
+    public function buildFormFactory(Twig_Environment $twig, ValidatorInterface $validator)
     {
         $chamiloFormTemplatesPath = __DIR__ . '/../../Resources/Templates/Form';
 
@@ -76,7 +79,7 @@ class SymfonyFormFactoryBuilder
      * @param string $chamiloFormTemplatesPath
      * @throws \InvalidArgumentException
      */
-    protected function createTwigLoader(\Twig_Environment $twig, $chamiloFormTemplatesPath)
+    protected function createTwigLoader(Twig_Environment $twig, $chamiloFormTemplatesPath)
     {
         $vendorTwigBridgeDir = Path::getInstance()->getBasePath() . '../vendor/symfony/twig-bridge/';
 
@@ -84,9 +87,9 @@ class SymfonyFormFactoryBuilder
             array($chamiloFormTemplatesPath, $vendorTwigBridgeDir . '/Resources/views/Form'));
 
         $loader = $twig->getLoader();
-        if (! $loader instanceof \Twig_Loader_Chain)
+        if (! $loader instanceof Twig_Loader_Chain)
         {
-            throw new \InvalidArgumentException('The given Twig_Environment must use a chain loader');
+            throw new InvalidArgumentException('The given Twig_Environment must use a chain loader');
         }
 
         $loader->addLoader($form_loader);
@@ -98,14 +101,14 @@ class SymfonyFormFactoryBuilder
      * @param \Twig_Environment $twig
      * @param string $chamiloFormTemplatesPath
      */
-    protected function createTwigExtension(\Twig_Environment $twig, $chamiloFormTemplatesPath)
+    protected function createTwigExtension(Twig_Environment $twig, $chamiloFormTemplatesPath)
     {
         $chamilo_files = Filesystem::get_directory_content($chamiloFormTemplatesPath, Filesystem::LIST_FILES, false);
         $twig_rendering_files = array_merge(array('form_div_layout.html.twig'), $chamilo_files);
 
         $formEngine = new TwigRendererEngine($twig_rendering_files, $twig);
 
-        $twig->addRuntimeLoader(new \Twig_FactoryRuntimeLoader(array(
+        $twig->addRuntimeLoader(new Twig_FactoryRuntimeLoader(array(
             FormRenderer::class => function () use ($formEngine) {
                 return new FormRenderer($formEngine);
             },

@@ -16,11 +16,13 @@ use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Service\JobProcessorInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use DateTime;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
@@ -153,7 +155,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $viewingContexts = $this->getNotificationViewingContexts($publication, $assignment, $course, $entry);
         $notificationContexts = $this->getNotificationContexts($publication, $course);
 
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->setTimestamp($this->getCreationDate($entry));
 
         $this->notificationManager->createNotificationForUsers(
@@ -177,10 +179,10 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
             \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id(),
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY,
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID => $entry->getId(),
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(
+            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+            Manager::PARAM_ENTRY_ID => $entry->getId(),
+            Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
+            Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(
             )
         ];
 

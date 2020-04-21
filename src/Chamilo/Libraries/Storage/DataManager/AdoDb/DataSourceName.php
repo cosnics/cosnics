@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb
@@ -35,7 +37,7 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
                 return self::DRIVER_OCI;
                 break;
             default :
-                throw new \Exception(
+                throw new Exception(
                     'The requested driver (' . $this->get_driver() .
                          ') is not available in ADOdb. Please provide a driver for ADOdb or choose another implementation');
                 break;

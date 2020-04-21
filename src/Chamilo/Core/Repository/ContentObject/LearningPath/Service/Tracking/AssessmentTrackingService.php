@@ -9,6 +9,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Service to track attempts on assessments within a LearningPath
@@ -99,7 +101,7 @@ class AssessmentTrackingService
 
         if (!$treeNodeQuestionAttempt instanceof TreeNodeQuestionAttempt)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('The given TreeNodeQuestionAttempt for the question %s is not found', $questionIdentifier)
             );
         }
@@ -182,7 +184,7 @@ class AssessmentTrackingService
 
         if (!$treeNodeQuestionAttempt instanceof TreeNodeQuestionAttempt)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('The given TreeNodeQuestionAttempt for the question %s is not found', $questionIdentifier)
             );
         }
@@ -277,7 +279,7 @@ class AssessmentTrackingService
     {
         if (!$treeNode->getContentObject() instanceof Assessment)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given TreeNode is not connected to an assessment'
             );
         }

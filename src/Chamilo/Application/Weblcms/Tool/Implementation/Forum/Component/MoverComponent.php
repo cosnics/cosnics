@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -26,7 +27,7 @@ class MoverComponent extends Manager
                 $move = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION);
             }
             
-            $forum_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $forum_publication = DataManager::retrieve_by_id(
                 ContentObjectPublication::class_name(), 
                 Request::get(self::PARAM_PUBLICATION_ID));
             

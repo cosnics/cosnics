@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\AssignmentRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service
@@ -43,7 +44,7 @@ abstract class AssignmentService
     {
         if (!$this->assignmentRepository->deleteEntry($entry))
         {
-            throw new \RuntimeException('Could not delete entry ' . $entry->getId());
+            throw new RuntimeException('Could not delete entry ' . $entry->getId());
         }
 
         $this->assignmentRepository->deleteScoreForEntry($entry);
@@ -65,7 +66,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createScore($score))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $score->getEntryId());
+            throw new RuntimeException('Could not create a new score for entry ' . $score->getEntryId());
         }
 
         return $score;
@@ -81,7 +82,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->updateScore($score))
         {
-            throw new \RuntimeException('Could not update the score ' . $score->getId());
+            throw new RuntimeException('Could not update the score ' . $score->getId());
         }
     }
 
@@ -108,7 +109,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createEntry($entry))
         {
-            throw new \RuntimeException('Could not create a new score for entry ' . $entry->getId());
+            throw new RuntimeException('Could not create a new score for entry ' . $entry->getId());
         }
 
         return $entry;
@@ -212,7 +213,7 @@ abstract class AssignmentService
 
         if (!$this->assignmentRepository->createEntryAttachment($entryAttachment))
         {
-            throw new \RuntimeException('Could not attach a content object to entry ' . $entryAttachment->getId());
+            throw new RuntimeException('Could not attach a content object to entry ' . $entryAttachment->getId());
         }
 
         return $entryAttachment;
@@ -243,7 +244,7 @@ abstract class AssignmentService
     {
         if (!$this->assignmentRepository->deleteEntryAttachment($entryAttachment))
         {
-            throw new \RuntimeException('Could not detach a content object to entry ' . $entryAttachment->getId());
+            throw new RuntimeException('Could not detach a content object to entry ' . $entryAttachment->getId());
         }
     }
 
@@ -254,7 +255,7 @@ abstract class AssignmentService
     {
         if (!$this->assignmentRepository->updateEntryAttachment($entryAttachment))
         {
-            throw new \RuntimeException('Could not update an entry attachment with id ' . $entryAttachment->getId());
+            throw new RuntimeException('Could not update an entry attachment with id ' . $entryAttachment->getId());
         }
     }
 

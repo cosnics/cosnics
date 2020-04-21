@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use InvalidArgumentException;
 
 /**
  * This class represents the datamanager for this tool
@@ -29,7 +30,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (! $guid)
         {
-            throw new \InvalidArgumentException('A valid guid is required to retrieve a request by guid');
+            throw new InvalidArgumentException('A valid guid is required to retrieve a request by guid');
         }
         
         $condition = new EqualityCondition(

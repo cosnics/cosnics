@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -32,7 +33,7 @@ class GetWorkspacesWithCopyRightComponent extends Manager
 
             return new JsonResponse($workspacesDataArray);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return $this->handleException($ex);
         }

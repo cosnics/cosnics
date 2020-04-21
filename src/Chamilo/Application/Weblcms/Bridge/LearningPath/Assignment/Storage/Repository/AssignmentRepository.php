@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
@@ -311,7 +313,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -319,7 +321,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 
     /**
@@ -327,7 +329,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment::class;
+        return EntryAttachment::class;
     }
 
     /**

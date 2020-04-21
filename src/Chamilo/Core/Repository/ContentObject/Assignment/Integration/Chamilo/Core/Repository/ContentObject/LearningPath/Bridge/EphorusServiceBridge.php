@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service
@@ -32,7 +33,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface $ephorusServiceBridgeInterface
      */
     public function __construct(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface $ephorusServiceBridgeInterface
+        Interfaces\EphorusServiceBridgeInterface $ephorusServiceBridgeInterface
     )
     {
         $this->ephorusServiceBridgeInterface = $ephorusServiceBridgeInterface;
@@ -45,7 +46,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     {
         if (!$treeNode->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }

@@ -13,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -259,7 +260,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     {
         if(!$entity instanceof CourseGroup)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . CourseGroup::class);
+            throw new InvalidArgumentException('The given entity must be of the type ' . CourseGroup::class);
         }
 
         return $entity->get_name();
@@ -285,7 +286,7 @@ class CourseGroupEntityService implements EntityServiceInterface
         $entity = DataManager::retrieve_by_id(CourseGroup::class, $entityId);
         if(!$entity instanceof CourseGroup)
         {
-            throw new \InvalidArgumentException('The given course group with id ' . $entityId . ' does not exist');
+            throw new InvalidArgumentException('The given course group with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityName($entity);

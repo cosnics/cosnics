@@ -2,9 +2,11 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
+use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Exception;
 
 /**
  *
@@ -15,7 +17,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LeaveItemComponent extends
-    \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager
+    Manager
 {
     const PARAM_TRACKER_ID = 'tracker_id';
 
@@ -36,7 +38,7 @@ class LeaveItemComponent extends
 
             $trackingService->setAttemptTotalTimeByTreeNodeAttemptId($treeNodeAttemptId);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             JsonAjaxResult::bad_request();
         }

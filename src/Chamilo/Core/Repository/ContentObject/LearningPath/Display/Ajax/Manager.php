@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use RuntimeException;
 
 /**
  * Class Manager
@@ -31,7 +32,7 @@ abstract class Manager extends AjaxManager
         parent::__construct($applicationConfiguration);
         if(!$this->get_application() instanceof AjaxComponent)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The LearningPath display ajax application should only be run from ' .
                 'the LearningPath display AjaxComponent'
             );

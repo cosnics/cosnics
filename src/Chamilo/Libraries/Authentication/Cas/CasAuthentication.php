@@ -9,6 +9,7 @@ use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Exception;
 use phpCAS;
 use Symfony\Component\Translation\Translator;
 
@@ -54,7 +55,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     /**
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
-    public function getSessionUtilities(): \Chamilo\Libraries\Platform\Session\SessionUtilities
+    public function getSessionUtilities(): SessionUtilities
     {
         return $this->sessionUtilities;
     }
@@ -62,7 +63,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     /**
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function setSessionUtilities(\Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities): void
+    public function setSessionUtilities(SessionUtilities $sessionUtilities): void
     {
         $this->sessionUtilities = $sessionUtilities;
     }
@@ -219,7 +220,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     {
         if (!$this->isConfigured())
         {
-            throw new \Exception($this->getTranslator()->trans('CheckCASConfiguration'));
+            throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
         }
         else
         {

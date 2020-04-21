@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  *
@@ -59,7 +60,7 @@ class UserRepository
                 '/users/' . $user->get_email(),
                 \Microsoft\Graph\Model\User::class);
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (ClientException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {

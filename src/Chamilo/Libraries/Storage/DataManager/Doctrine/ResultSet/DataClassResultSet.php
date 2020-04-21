@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet;
 
+use PDO;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet
@@ -22,7 +24,7 @@ class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassR
     {
         $objects = array();
 
-        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
+        while ($record = $handle->fetch(PDO::FETCH_ASSOC))
         {
             $objects[] = $this->get_object($className, $this->process_record($record));
         }

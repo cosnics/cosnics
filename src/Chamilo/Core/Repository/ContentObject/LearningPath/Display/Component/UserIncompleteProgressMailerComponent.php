@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Mails the users that do not have completed the given TreeNode
@@ -72,7 +73,7 @@ class UserIncompleteProgressMailerComponent extends Manager
             $success = true;
             $message = 'IncompleteProgressMailSent';
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = 'IncompleteProgressMailNotSent';

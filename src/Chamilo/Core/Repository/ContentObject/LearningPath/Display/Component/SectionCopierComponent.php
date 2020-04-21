@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to copy sections from other learning paths to the current learning path
@@ -97,7 +98,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                 $message = 'LearningPathNodesCopied';
                 $success = true;
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
                 $message = 'LearningPathNodesNotCopied';

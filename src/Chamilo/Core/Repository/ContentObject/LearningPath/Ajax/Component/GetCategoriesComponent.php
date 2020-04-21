@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -23,7 +24,7 @@ class GetCategoriesComponent extends Manager
         {
             return new JsonResponse($this->getCategories());
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             return $this->handleException($ex);
         }

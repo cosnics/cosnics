@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreServic
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormHandler;
+use Exception;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,7 +55,7 @@ class SetScoreFormHandler extends FormHandler
     public function handle(FormInterface $form, Request $request) : bool
     {
         if(empty($this->user)) {
-            throw new \Exception('User must be defined. Use setter');
+            throw new Exception('User must be defined. Use setter');
         }
 
         if(parent::handle($form, $request)) {

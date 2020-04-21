@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -46,7 +47,7 @@ class DeleterComponent extends Manager
                     $available_nodes[] = $selected_node;
                 }
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $selected_step);
             }
@@ -74,7 +75,7 @@ class DeleterComponent extends Manager
                 $learningPathService->deleteContentObjectFromLearningPath($available_node);
                 $success = true;
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
             }

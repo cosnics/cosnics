@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentResult;
@@ -183,7 +184,7 @@ class AssessmentRawResultsExporterComponent extends Manager
         if (!array_key_exists($userId, $this->courseGroups))
         {
             $this->courseGroups[$userId] =
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::get_course_groups_from_user_as_string(
+                DataManager::get_course_groups_from_user_as_string(
                     $userId, $this->get_course_id()
                 );
         }

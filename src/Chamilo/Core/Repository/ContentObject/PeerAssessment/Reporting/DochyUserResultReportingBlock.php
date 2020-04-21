@@ -2,6 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -13,7 +16,7 @@ class DochyUserResultReportingBlock extends UserResultReportingBlock
         $publication_id = $this->get_parent()->get_parent()->get_publication_id();
         // $attempts = $this->get_parent()->get_parent()->get_attempts();
         $attempt_id = Request::get(
-            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ATTEMPT);
+            Manager::PARAM_ATTEMPT);
 
         // $group = $this->get_parent()->get_parent()->get_user_group($this->user_id);
         // $group_id = $group->get_id();
@@ -52,8 +55,8 @@ class DochyUserResultReportingBlock extends UserResultReportingBlock
             }
             else
             {
-                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $user = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $user_id);
             }
 

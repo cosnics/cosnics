@@ -12,24 +12,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class DynamicVisualTab extends DynamicTab
 {
-    // Position constants
     const DISPLAY_BOTH = 3;
-
     const DISPLAY_BOTH_SELECTED = 4;
-
-    // Display constants
-
     const DISPLAY_ICON = 1;
     const DISPLAY_TEXT = 2;
 
     const POSITION_LEFT = 'left';
-
     const POSITION_RIGHT = 'right';
 
-    // Target constants
-
     const TARGET_POPUP = 2;
-
     const TARGET_WINDOW = 1;
 
     /**
@@ -37,12 +28,6 @@ class DynamicVisualTab extends DynamicTab
      * @var integer
      */
     protected $display;
-
-    /**
-     *
-     * @var string
-     */
-    private $content;
 
     /**
      *
@@ -67,6 +52,11 @@ class DynamicVisualTab extends DynamicTab
      * @var integer
      */
     private $target;
+
+    /**
+     * @var string
+     */
+    private $link;
 
     /**
      *
@@ -95,8 +85,9 @@ class DynamicVisualTab extends DynamicTab
     }
 
     /**
+     * @param bool $isOnlyTab
      *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::body()
+     * @return string|null
      */
     public function body($isOnlyTab = false)
     {
@@ -146,6 +137,15 @@ class DynamicVisualTab extends DynamicTab
     public function get_link()
     {
         return $this->link;
+    }
+
+    /**
+     *
+     * @param string $link
+     */
+    public function set_link($link)
+    {
+        $this->link = $link;
     }
 
     /**
@@ -295,14 +295,5 @@ class DynamicVisualTab extends DynamicTab
         {
             return true;
         }
-    }
-
-    /**
-     *
-     * @param string $link
-     */
-    public function set_link($link)
-    {
-        $this->link = $link;
     }
 }

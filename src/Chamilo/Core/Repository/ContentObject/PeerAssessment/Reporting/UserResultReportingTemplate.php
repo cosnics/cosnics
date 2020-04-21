@@ -2,7 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -22,9 +25,9 @@ class UserResultReportingTemplate extends ReportingTemplate
         
         $user_id = Request::get(\Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::PARAM_USER);
         $attempt_id = Request::get(
-            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ATTEMPT);
-        $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            Manager::PARAM_ATTEMPT);
+        $this->user = DataManager::retrieve_by_id(
+            User::class_name(),
             (int) $user_id);
         
         $this->peer_assessment = $this->get_parent()->get_root_content_object();

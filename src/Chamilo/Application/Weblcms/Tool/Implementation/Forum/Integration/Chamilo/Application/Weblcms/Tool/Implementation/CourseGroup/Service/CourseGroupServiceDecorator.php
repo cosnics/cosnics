@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 
 /**
  * Decorates the service for course groups. Adding additional functionality for the common course group functionality
@@ -112,7 +113,7 @@ class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceD
 
         if (!$forum->create())
         {
-            throw new \Exception('Could not create a new forum for course group with id ' . $courseGroup->getId());
+            throw new Exception('Could not create a new forum for course group with id ' . $courseGroup->getId());
         }
 
         return $forum;
@@ -145,7 +146,7 @@ class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceD
 
         if (!$content_object_publication->create())
         {
-            throw new \Exception('Could not publish the forum for course group with id ' . $courseGroup->getId());
+            throw new Exception('Could not publish the forum for course group with id ' . $courseGroup->getId());
         }
 
         return $content_object_publication;

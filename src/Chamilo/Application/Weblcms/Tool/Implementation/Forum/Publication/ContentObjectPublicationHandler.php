@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Publication;
 
+use Chamilo\Application\Weblcms\Tool\Manager;
+
 /**
  * Custom publication handler for the forum tool
  * 
@@ -17,8 +19,8 @@ class ContentObjectPublicationHandler extends \Chamilo\Application\Weblcms\Publi
     protected function getDisplayParameters()
     {
         $parameters = parent::getDisplayParameters();
-        
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
         
         return $parameters;
     }

@@ -2,13 +2,14 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Core\Help\Manager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
 
 /**
  *
@@ -52,23 +53,10 @@ class BreadcrumbTrail
     private $containerMode;
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
-     */
-    public static function getInstance()
-    {
-        if (self::$instance == null)
-        {
-            self::$instance = new BreadcrumbTrail(true, 'container-fluid');
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     *
      * @param boolean $includeMainIndex
      * @param string $containerMode
+     *
+     * @throws \Exception
      */
     public function __construct($includeMainIndex = true, $containerMode = 'container-fluid')
     {
@@ -100,6 +88,60 @@ class BreadcrumbTrail
      *
      * @return string
      */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = '<div class="container-breadcrumb">';
+        $html[] = '<div class="' . $this->getContainerMode() . '">';
+        $html[] = $this->render_breadcrumbs();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb $breadcrumb
+     */
+    public function add($breadcrumb)
+    {
+        $this->breadcrumbtrail[] = $breadcrumb;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $extraItem
+     */
+    public function add_extra($extraItem)
+    {
+        $this->extra_items[] = $extraItem;
+    }
+
+    /**
+     *
+     * @param string $context
+     * @param string $identifier
+     */
+    public function add_help($context, $identifier = null)
+    {
+        $this->set_help_item(array($context, $identifier));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
+     */
+    public function getBreadcrumbs()
+    {
+        return $this->breadcrumbtrail;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getContainerMode()
     {
         return $this->containerMode;
@@ -116,59 +158,63 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb $breadcrumb
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public function add($breadcrumb)
+    public function getExtraItems()
     {
-        $this->breadcrumbtrail[] = $breadcrumb;
+        return $this->extra_items;
     }
 
     /**
      *
-     * @param string $context
-     * @param string $identifier
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $extraItems
      */
-    public function add_help($context, $identifier = null)
+    public function setExtraItems($extraItems)
     {
-        $this->set_help_item(array($context, $identifier));
+        $this->extra_items = $extraItems;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $extraItem
+     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
      */
-    public function add_extra($extraItem)
+    public static function getInstance()
     {
-        $this->extra_items[] = $extraItem;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_help_item()
-    {
-        return $this->help_item;
-    }
-
-    /**
-     *
-     * @param string $helpItem
-     */
-    public function set_help_item($helpItem)
-    {
-        $this->help_item = $helpItem;
-    }
-
-    public function remove($breadcrumbIndex)
-    {
-        if ($breadcrumbIndex < 0)
+        if (self::$instance == null)
         {
-            $breadcrumbIndex = count($this->breadcrumbtrail) + $breadcrumbIndex;
+            self::$instance = new BreadcrumbTrail(true, 'container-fluid');
         }
 
-        unset($this->breadcrumbtrail[$breadcrumbIndex]);
-        $this->breadcrumbtrail = array_values($this->breadcrumbtrail);
+        return self::$instance;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
+     */
+    public function get_breadcrumbs()
+    {
+        return $this->breadcrumbtrail;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
+     */
+    public function get_breadcrumbtrail()
+    {
+        return $this->breadcrumbtrail;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbtrail
+     *
+     * @deprecated Deprecated method
+     */
+    public function set_breadcrumbtrail($breadcrumbtrail)
+    {
+        $this->set($breadcrumbtrail);
     }
 
     /**
@@ -178,6 +224,45 @@ class BreadcrumbTrail
     public function get_first()
     {
         return $this->breadcrumbtrail[0];
+    }
+
+    /**
+     *
+     * @return string[]
+     * @deprecated Use getHelpItem() now
+     */
+    public function get_help_item()
+    {
+        return $this->getHelpItem();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getHelpItem()
+    {
+        return $this->help_item;
+    }
+
+    /**
+     *
+     * @param string[] $helpItem
+     *
+     * @deprecated Use setHelpItem() now
+     */
+    public function set_help_item($helpItem)
+    {
+        $this->setHelpItem($helpItem);
+    }
+
+    /**
+     *
+     * @param string[] $helpItem
+     */
+    public function setHelpItem($helpItem)
+    {
+        $this->help_item = $helpItem;
     }
 
     /**
@@ -194,37 +279,34 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param boolean $keepMainIndex
+     * @param string $variable
+     * @param string $application
+     *
+     * @return string
      */
-    public function truncate($keepMainIndex = false)
+    public function get_setting($variable, $application)
     {
-        $this->breadcrumbtrail = array();
-        if ($keepMainIndex)
-        {
-            $this->add(
-                new Breadcrumb(
-                    Path::getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin')
-                )
-            );
-        }
+        return Configuration::getInstance()->get_setting(array($application, $variable));
     }
 
     /**
      *
-     * @return string
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $trail
      */
-    public function render()
+    public function merge($trail)
     {
-        $html = array();
+        $this->breadcrumbtrail = array_merge($this->breadcrumbtrail, $trail->get_breadcrumbtrail());
+    }
 
-        $html[] = '<div class="container-breadcrumb">';
-        $html[] = '<div class="' . $this->getContainerMode() . '">';
-        $html[] = $this->render_breadcrumbs();
-        $html[] = '</div>';
-        $html[] = '</div>';
+    public function remove($breadcrumbIndex)
+    {
+        if ($breadcrumbIndex < 0)
+        {
+            $breadcrumbIndex = count($this->breadcrumbtrail) + $breadcrumbIndex;
+        }
 
-        return implode(PHP_EOL, $html);
+        unset($this->breadcrumbtrail[$breadcrumbIndex]);
+        $this->breadcrumbtrail = array_values($this->breadcrumbtrail);
     }
 
     /**
@@ -277,33 +359,6 @@ class BreadcrumbTrail
      *
      * @return string
      */
-    public function render_help()
-    {
-        $html = array();
-        $help_item = $this->help_item;
-
-        if (is_array($help_item) && count($help_item) == 2)
-        {
-            $item = \Chamilo\Core\Help\Manager::get_tool_bar_help_item($help_item);
-
-            if ($item instanceof ToolbarItem)
-            {
-                $html[] = '<div id="help_item">';
-                $toolbar = new Toolbar();
-                $toolbar->set_items(array($item));
-                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
-                $html[] = $toolbar->as_html();
-                $html[] = '</div>';
-            }
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function render_extra()
     {
         $html = array();
@@ -326,31 +381,29 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return integer
+     * @return string
      */
-    public function size()
+    public function render_help()
     {
-        return count($this->breadcrumbtrail);
-    }
+        $html = array();
+        $help_item = $this->help_item;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
-     */
-    public function get_breadcrumbtrail()
-    {
-        return $this->breadcrumbtrail;
-    }
+        if (is_array($help_item) && count($help_item) == 2)
+        {
+            $item = Manager::get_tool_bar_help_item($help_item);
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbtrail
-     *
-     * @deprecated Deprecated method
-     */
-    public function set_breadcrumbtrail($breadcrumbtrail)
-    {
-        $this->set($breadcrumbtrail);
+            if ($item instanceof ToolbarItem)
+            {
+                $html[] = '<div id="help_item">';
+                $toolbar = new Toolbar();
+                $toolbar->set_items(array($item));
+                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
+                $html[] = $toolbar->as_html();
+                $html[] = '</div>';
+            }
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -364,45 +417,6 @@ class BreadcrumbTrail
 
     /**
      *
-     * @param string $variable
-     * @param string $application
-     *
-     * @return string
-     */
-    public function get_setting($variable, $application)
-    {
-        return Configuration::getInstance()->get_setting(array($application, $variable));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
-     */
-    public function get_breadcrumbs()
-    {
-        return $this->breadcrumbtrail;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $trail
-     */
-    public function merge($trail)
-    {
-        $this->breadcrumbtrail = array_merge($this->breadcrumbtrail, $trail->get_breadcrumbtrail());
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
-     */
-    public function getBreadcrumbs()
-    {
-        return $this->breadcrumbtrail;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
      */
     public function setBreadcrumbs($breadcrumbs)
@@ -412,37 +426,28 @@ class BreadcrumbTrail
 
     /**
      *
-     * @return string[]
+     * @return integer
      */
-    public function getHelpItem()
+    public function size()
     {
-        return $this->help_item;
+        return count($this->breadcrumbtrail);
     }
 
     /**
      *
-     * @param string[] $helpItem
+     * @param boolean $keepMainIndex
      */
-    public function setHelpItem($helpItem)
+    public function truncate($keepMainIndex = false)
     {
-        $this->help_item = $helpItem;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    public function getExtraItems()
-    {
-        return $this->extra_items;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $extraItems
-     */
-    public function setExtraItems($extraItems)
-    {
-        $this->extra_items = $extraItems;
+        $this->breadcrumbtrail = array();
+        if ($keepMainIndex)
+        {
+            $this->add(
+                new Breadcrumb(
+                    Path::getInstance()->getBasePath(true) . 'index.php',
+                    $this->get_setting('site_name', 'Chamilo\Core\Admin')
+                )
+            );
+        }
     }
 }

@@ -11,8 +11,8 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
 abstract class AbstractButton extends AbstractButtonToolBarItem
 {
     const DISPLAY_ICON = 1;
-    const DISPLAY_LABEL = 2;
     const DISPLAY_ICON_AND_LABEL = 3;
+    const DISPLAY_LABEL = 2;
 
     /**
      *
@@ -39,31 +39,15 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
      * @param integer $display
      * @param string $classes
      */
-    public function __construct($label = null, $imagePath = null, $display = self::DISPLAY_ICON_AND_LABEL, $classes = null)
+    public function __construct(
+        $label = null, $imagePath = null, $display = self::DISPLAY_ICON_AND_LABEL, $classes = null
+    )
     {
         parent::__construct($classes);
 
         $this->label = $label;
         $this->display = $display;
         $this->imagePath = $imagePath;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
     }
 
     /**
@@ -100,5 +84,23 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
     public function setImagePath($imagePath)
     {
         $this->imagePath = $imagePath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     *
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
     }
 }

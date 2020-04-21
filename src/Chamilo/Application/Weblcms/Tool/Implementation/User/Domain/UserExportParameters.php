@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Domain;
 
+use InvalidArgumentException;
+
 /**
  * Export parameters for users
  *
@@ -48,7 +50,7 @@ class UserExportParameters
     {
         if (!is_array($users))
         {
-            throw new \InvalidArgumentException('The given users parameters should be a valid array');
+            throw new InvalidArgumentException('The given users parameters should be a valid array');
         }
 
         $this->users = $users;
@@ -73,7 +75,7 @@ class UserExportParameters
     {
         if (empty($exportFilename) || !is_string($exportFilename))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given export filename should be a valid string and should not be empty'
             );
         }

@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -66,7 +67,7 @@ class ZipAndDownloadComponent extends Manager
         }
         else
         {
-            $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $category = WeblcmsDataManager::retrieve_by_id(
                 ContentObjectPublicationCategory::class_name(),
                 $category_id);
 
@@ -122,7 +123,7 @@ class ZipAndDownloadComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                $publications = WeblcmsDataManager::retrieve_content_object_publications(
                     $condition);
             }
             else
@@ -174,7 +175,7 @@ class ZipAndDownloadComponent extends Manager
 
                     $count ++;
 
-                    $document = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $document = DataManager::retrieve_by_id(
                         ContentObject::class_name(),
                         $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
@@ -254,7 +255,7 @@ class ZipAndDownloadComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        $categories = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class_name(),
             new DataClassRetrievesParameters($condition));
 

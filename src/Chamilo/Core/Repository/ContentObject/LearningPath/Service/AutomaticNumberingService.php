@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use RuntimeException;
 
 /**
  * Service to determine the automatic numbering of tree nodes
@@ -45,7 +46,7 @@ class AutomaticNumberingService
 
         if (!array_key_exists($treeNode->getId(), $this->automaticNumberingCache[$learningPath->getId()]))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Could not generate an automatic number for the TreeNode with id ' .
                 $treeNode->getId()
             );

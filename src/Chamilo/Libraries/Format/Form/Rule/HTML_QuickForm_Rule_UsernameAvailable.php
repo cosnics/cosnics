@@ -1,5 +1,6 @@
 <?php
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -38,8 +39,8 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
         }
 
         $condition = new AndCondition($conditions);
-        $count = \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $count = DataManager::count(
+            User::class_name(),
             new DataClassCountParameters($condition));
 
         return $count == 0;

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager as ForumDataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,7 +34,7 @@ class ForumSubscribeComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $object = DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             Request::get(self::PARAM_FORUM_ID));
         

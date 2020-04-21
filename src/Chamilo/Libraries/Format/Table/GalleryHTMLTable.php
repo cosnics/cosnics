@@ -54,10 +54,10 @@ class GalleryHTMLTable extends HtmlTable
      * @param string[] $sourcePropertiesFunction
      * @param integer $defaultOrderColumn
      * @param integer $defaultNumberOfItemsPerPage
-     * @param string $defaultOrderDirection
-     * @param string $allowOrderDirection
-     * @param string $allowPageSelection
-     * @param string $allowPageNavigation
+     * @param integer $defaultOrderDirection
+     * @param boolean $allowOrderDirection
+     * @param boolean $allowPageSelection
+     * @param boolean $allowPageNavigation
      */
     public function __construct(
         $tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
@@ -76,8 +76,14 @@ class GalleryHTMLTable extends HtmlTable
     }
 
     /**
+     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
+     * checkbox
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::filterData()
+     * @param string[] $row
+     *
+     * @return string[]
      */
     public function filterData($row)
     {
@@ -107,7 +113,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getActionsButtonToolbar()
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
      */
     public function getActionsButtonToolbar()
     {
@@ -134,7 +140,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
+     * @return integer
      */
     public function getColumnCount()
     {
@@ -143,7 +149,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getFormClasses()
+     * @return string
      */
     public function getFormClasses()
     {
@@ -180,7 +186,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableActionsJavascript()
+     * @return string
      */
     public function getTableActionsJavascript()
     {
@@ -191,7 +197,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
+     * @return string
      */
     public function getTableClasses()
     {
@@ -200,29 +206,21 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableContainerClasses()
+     * @return string
      */
     public function getTableContainerClasses()
     {
         return 'table-gallery-container';
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processContentAttributes()
-     */
-    public function processContentAttributes()
+    public function prepareTableData()
     {
+        $this->processSourceData();
+
         $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
         $this->setAllAttributes(array('class' => 'col-xs-6 col-lg-3'));
-    }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processRowAttributes()
-     */
-    public function processRowAttributes($rowIdentifier, $currentRow)
-    {
+        $this->processCellAttributes();
     }
 
     /**
@@ -382,7 +380,7 @@ class GalleryHTMLTable extends HtmlTable
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::renderTableFilters()
+     * @return string
      */
     public function renderTableFilters()
     {

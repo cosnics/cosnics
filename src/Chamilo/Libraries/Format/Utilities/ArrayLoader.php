@@ -9,8 +9,10 @@ class ArrayLoader extends \Composer\Package\Loader\ArrayLoader
 {
 
     /**
+     * @param array $config
+     * @param string $class
      *
-     * @see \Composer\Package\Loader\ArrayLoader::load()
+     * @return \Composer\Package\AliasPackage|\Composer\Package\CompletePackageInterface|\Composer\Package\PackageInterface|\Composer\Package\RootAliasPackage|mixed
      */
     public function load(array $config, $class = 'Composer\Package\CompletePackage')
     {
@@ -20,6 +22,7 @@ class ArrayLoader extends \Composer\Package\Loader\ArrayLoader
         {
             $package->setRepositories($config['repositories']);
         }
+
         return $package;
     }
 }

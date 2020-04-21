@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Exception;
 
 /**
  * Course Copier service
@@ -112,7 +113,7 @@ class CourseCopier implements CourseCopierInterface
                         $categoryIdMapping
                     );
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                 }
             }
@@ -165,7 +166,7 @@ class CourseCopier implements CourseCopierInterface
 
         if (!$contentObjectPublication->create())
         {
-            throw new \Exception('Could not copy the content object publication with id ' . $oldId);
+            throw new Exception('Could not copy the content object publication with id ' . $oldId);
         }
 
         if ($publicationExtension instanceof DataClass)
@@ -173,7 +174,7 @@ class CourseCopier implements CourseCopierInterface
             $publicationExtension->set_publication_id($contentObjectPublication->get_id());
             if (!$publicationExtension->create())
             {
-                throw new \Exception(
+                throw new Exception(
                     'Could not copy the content object publication extension class for ' .
                     'content object publication with id ' . $oldId
                 );
@@ -217,7 +218,7 @@ class CourseCopier implements CourseCopierInterface
 
                     $categoryIdMapping[$courseId][$oldId] = $publicationCategory->getId();
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                 }
             }
@@ -255,7 +256,7 @@ class CourseCopier implements CourseCopierInterface
 
         if (!$publicationCategory->create())
         {
-            throw new \Exception('Could not copy category with id ' . $oldId);
+            throw new Exception('Could not copy category with id ' . $oldId);
         }
 
         return $publicationCategory;
@@ -291,7 +292,7 @@ class CourseCopier implements CourseCopierInterface
                         $user
                     );
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                 }
             }
@@ -324,7 +325,7 @@ class CourseCopier implements CourseCopierInterface
 
         if (!$courseGroup->create())
         {
-            throw new \Exception('Could not create course group with id "' . $oldId . '"');
+            throw new Exception('Could not create course group with id "' . $oldId . '"');
         }
 
         while ($courseGroupChild = $courseGroupChildren->next_result())
@@ -333,7 +334,7 @@ class CourseCopier implements CourseCopierInterface
             {
                 $this->copyCourseGroupsToNewParent($courseGroupChild, $targetCourseId, $courseGroup, $user);
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
             }
         }

@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -24,7 +25,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * @package application\weblcms;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Installer
+abstract class ToolInstaller extends Installer
 {
 
     /**
@@ -119,7 +120,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         if ($tool_object->create())
         {
             $this->add_message(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('RegisteredTool')
+                Installer::TYPE_NORMAL, Translation::get('RegisteredTool')
             );
             $this->tool_registration = $tool_object;
 
@@ -128,7 +129,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         else
         {
             return $this->failed(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('CouldNotRegisterTool')
+                Installer::TYPE_NORMAL, Translation::get('CouldNotRegisterTool')
             );
         }
     }
@@ -176,7 +177,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             if (!$course_setting->create())
             {
                 return $this->failed(
-                    \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                    Installer::TYPE_NORMAL,
                     Translation::get('CouldNotInstallStaticSettings')
                 );
             }
@@ -188,7 +189,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             if (!$course_setting_default_value->create())
             {
                 return $this->failed(
-                    \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                    Installer::TYPE_NORMAL,
                     Translation::get('CouldNotInstallStaticSettings')
                 );
             }
@@ -197,7 +198,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         }
 
         $this->add_message(
-            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettings')
+            Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettings')
         );
 
         return true;
@@ -219,14 +220,14 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             ))
             {
                 return $this->failed(
-                    \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                    Installer::TYPE_NORMAL,
                     Translation::get('CouldNotInstallStaticSettingsForExistingCourseTypes')
                 );
             }
         }
 
         $this->add_message(
-            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+            Installer::TYPE_NORMAL,
             Translation::get('InstalledStaticSettingsForExistingCourseTypes')
         );
 
@@ -251,7 +252,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             ))
             {
                 return $this->failed(
-                    \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                    Installer::TYPE_NORMAL,
                     Translation::get('CouldNotInstallStaticSettingsForExistingCourses')
                 );
             }
@@ -260,7 +261,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
                 $course_management_rights->get_courses_subtree_root_id($course->get_id());
 
             $this->add_message(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                Installer::TYPE_NORMAL,
                 Translation::get('InstalledStaticSettingsForExistingCourses')
             );
 
@@ -270,14 +271,14 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             ))
             {
                 return $this->failed(
-                    \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+                    Installer::TYPE_NORMAL,
                     Translation::get('CouldNotInstallRightsLocationForExistingCourseTypes')
                 );
             }
         }
 
         $this->add_message(
-            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL,
+            Installer::TYPE_NORMAL,
             Translation::get('InstalledRightsLocationForExistingCourses')
         );
 

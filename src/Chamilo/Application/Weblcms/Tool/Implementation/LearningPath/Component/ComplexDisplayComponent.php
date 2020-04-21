@@ -50,6 +50,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
@@ -119,7 +120,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             {
                 $this->checkMaximumAssessmentAttempts();
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $html = array();
 
@@ -524,7 +525,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_wiki_publication()
     {
-        throw new \Exception("Unimplemented method : " . __CLASS__ . ':' . __METHOD__);
+        throw new Exception("Unimplemented method : " . __CLASS__ . ':' . __METHOD__);
     }
 
     public function get_assessment_continue_url()
@@ -604,7 +605,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $this->getCurrentTreeNode()
         ))
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::getInstance()->getTranslation(
                     'YouHaveReachedYourMaximumAttempts',
                     null,

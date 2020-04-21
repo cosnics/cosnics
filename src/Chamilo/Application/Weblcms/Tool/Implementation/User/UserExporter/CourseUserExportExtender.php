@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\UserExporter\UserExportExtender;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
@@ -31,7 +32,7 @@ class CourseUserExportExtender implements UserExportExtender
      */
     public function __construct($course_id)
     {
-        $course_platform_groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_subscribed_platform_groups(
+        $course_platform_groups = DataManager::retrieve_all_subscribed_platform_groups(
             array($course_id));
         
         $this->course_platform_groups = array();

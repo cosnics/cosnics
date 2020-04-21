@@ -15,7 +15,7 @@ class SortableTableFromArray extends SortableTable
     /**
      * The array containing all data for this table
      *
-     * @var string[]
+     * @var string[][]
      */
     private $tableData;
 
@@ -86,21 +86,18 @@ class SortableTableFromArray extends SortableTable
      * @param boolean $enableSorting
      * @param boolean $allowPageNavigation
      */
-    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
-        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
-        $allowPageNavigation = true)
+    public function __construct(
+        $tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1, $defaultPerPage = 20,
+        $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
+        $enableSorting = true, $allowPageNavigation = true
+    )
     {
         $this->tableName = $tableName;
 
         parent::__construct(
-            $tableName,
-            array($this, 'countData'),
-            array($this, 'getData'),
-            $defaultOrderColumn,
-            $defaultPerPage,
-            $defaultOrderDirection,
-            $allowPageSelection,
-            $allowPageNavigation);
+            $tableName, array($this, 'countData'), array($this, 'getData'), $defaultOrderColumn, $defaultPerPage,
+            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
+        );
 
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
@@ -113,63 +110,96 @@ class SortableTableFromArray extends SortableTable
         $this->enableSorting = $enableSorting;
         $this->allowPageNavigation = $allowPageNavigation;
 
-        if (! $allowPageSelection)
+        if (!$allowPageSelection)
         {
             $this->defaultPerPage = count($tableData);
         }
     }
 
     /**
+     * Returns the complete table HTML.
      *
-     * @return string
-     * @deprecated Use render() now
-     */
-    public function toHtml()
-    {
-        return $this->render();
-    }
-
-    /**
+     * @param boolean $emptyTable
      *
      * @return string
      */
-    public function render()
+    public function render($emptyTable = false)
     {
         $this->initializeTable();
 
-        return parent::render();
+        return parent::render($emptyTable);
     }
 
     /**
-     * Initialize the table
+     *
+     * @param string[] $dataRow
      */
-    protected function initializeTable()
+    public function addTableData($dataRow)
     {
-        $this->setAdditionalParameters($this->getAdditionalParameters());
+        $this->tableData[] = $dataRow;
+    }
 
-        foreach ($this->getTableColumns() as $key => $tableColumn)
-        {
-            $headerAttributes = $contentAttributes = array();
+    /**
+     *
+     * @return integer
+     */
+    public function countData()
+    {
+        return count($this->getTableData());
+    }
 
-            $cssClasses = $tableColumn->getCssClasses();
+    /**
+     *
+     * @return string[]
+     */
+    public function getAdditionalParameters()
+    {
+        return $this->additionalParameters;
+    }
 
-            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-            }
+    /**
+     *
+     * @param string[] $additionalParameters
+     */
+    public function setAdditionalParameters($additionalParameters)
+    {
+        $this->additionalParameters = $additionalParameters;
+    }
 
-            if (! empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
-            }
+    /**
+     *
+     * @return boolean
+     */
+    public function getAllowPageNavigation()
+    {
+        return $this->allowPageNavigation;
+    }
 
-            $this->setColumnHeader(
-                $key,
-                Security::remove_XSS($tableColumn->get_title()),
-                $tableColumn->is_sortable(),
-                $headerAttributes,
-                $contentAttributes);
-        }
+    /**
+     *
+     * @param boolean $allowPageNavigation
+     */
+    public function setAllowPageNavigation($allowPageNavigation)
+    {
+        $this->allowPageNavigation = $allowPageNavigation;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getAllowPageSelection()
+    {
+        return $this->allowPageSelection;
+    }
+
+    /**
+     *
+     * @param boolean $allowPageSelection
+     */
+    public function setAllowPageSelection($allowPageSelection)
+    {
+        $this->allowPageSelection = $allowPageSelection;
     }
 
     /**
@@ -178,6 +208,7 @@ class SortableTableFromArray extends SortableTable
      * @param integer $count
      * @param integer $orderColumn
      * @param integer $orderDirection
+     *
      * @return string[][]
      */
     public function getData($offset = null, $count = null, $orderColumn = 0, $orderDirection = SORT_ASC)
@@ -202,78 +233,6 @@ class SortableTableFromArray extends SortableTable
      *
      * @return integer
      */
-    public function countData()
-    {
-        return count($this->getTableData());
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getTableData()
-    {
-        return $this->tableData;
-    }
-
-    /**
-     *
-     * @param string[][] $tableData
-     */
-    public function setTableData($tableData)
-    {
-        $this->tableData = $tableData;
-    }
-
-    /**
-     *
-     * @param string[] $dataRow
-     */
-    public function addTableData($dataRow)
-    {
-        $this->tableData[] = $dataRow;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
-     */
-    public function getTableColumns()
-    {
-        return $this->tableColumns;
-    }
-
-    /**
-     *
-     * @param string[] $tableColumns
-     */
-    public function setTableColumns($tableColumns)
-    {
-        $this->tableColumns = $tableColumns;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getAdditionalParameters()
-    {
-        return $this->additionalParameters;
-    }
-
-    /**
-     *
-     * @param string[] $additionalParameters
-     */
-    public function setAdditionalParameters($additionalParameters)
-    {
-        $this->additionalParameters = $additionalParameters;
-    }
-
-    /**
-     *
-     * @return integer
-     */
     public function getDefaultOrderColumn()
     {
         return $this->defaultOrderColumn;
@@ -286,42 +245,6 @@ class SortableTableFromArray extends SortableTable
     public function setDefaultOrderColumn($defaultOrderColumn)
     {
         $this->defaultOrderColumn = $defaultOrderColumn;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getDefaultPerPage()
-    {
-        return $this->defaultPerPage;
-    }
-
-    /**
-     *
-     * @param integer $defaultPerPage
-     */
-    public function setDefaultPerPage($defaultPerPage)
-    {
-        $this->defaultPerPage = $defaultPerPage;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     *
-     * @param string $tableName
-     */
-    public function setTableName($tableName)
-    {
-        $this->tableName = $tableName;
     }
 
     /**
@@ -344,20 +267,20 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @return boolean
+     * @return integer
      */
-    public function getAllowPageSelection()
+    public function getDefaultPerPage()
     {
-        return $this->allowPageSelection;
+        return $this->defaultPerPage;
     }
 
     /**
      *
-     * @param boolean $allowPageSelection
+     * @param integer $defaultPerPage
      */
-    public function setAllowPageSelection($allowPageSelection)
+    public function setDefaultPerPage($defaultPerPage)
     {
-        $this->allowPageSelection = $allowPageSelection;
+        $this->defaultPerPage = $defaultPerPage;
     }
 
     /**
@@ -380,19 +303,96 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @return boolean
+     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
-    public function getAllowPageNavigation()
+    public function getTableColumns()
     {
-        return $this->allowPageNavigation;
+        return $this->tableColumns;
     }
 
     /**
      *
-     * @param boolean $allowPageNavigation
+     * @param string[] $tableColumns
      */
-    public function setAllowPageNavigation($allowPageNavigation)
+    public function setTableColumns($tableColumns)
     {
-        $this->allowPageNavigation = $allowPageNavigation;
+        $this->tableColumns = $tableColumns;
+    }
+
+    /**
+     *
+     * @return string[][]
+     */
+    public function getTableData()
+    {
+        return $this->tableData;
+    }
+
+    /**
+     *
+     * @param string[][] $tableData
+     */
+    public function setTableData($tableData)
+    {
+        $this->tableData = $tableData;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     *
+     * @param string $tableName
+     */
+    public function setTableName($tableName)
+    {
+        $this->tableName = $tableName;
+    }
+
+    /**
+     * Initialize the table
+     */
+    protected function initializeTable()
+    {
+        $this->setAdditionalParameters($this->getAdditionalParameters());
+
+        foreach ($this->getTableColumns() as $key => $tableColumn)
+        {
+            $headerAttributes = $contentAttributes = array();
+
+            $cssClasses = $tableColumn->getCssClasses();
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+            }
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
+            }
+
+            $this->setColumnHeader(
+                $key, Security::remove_XSS($tableColumn->get_title()), $tableColumn->is_sortable(), $headerAttributes,
+                $contentAttributes
+            );
+        }
+    }
+
+    /**
+     * @param boolean $emptyTable
+     *
+     * @return string
+     * @deprecated User render() now
+     */
+    public function toHtml($emptyTable = false)
+    {
+        return $this->render($emptyTable);
     }
 }

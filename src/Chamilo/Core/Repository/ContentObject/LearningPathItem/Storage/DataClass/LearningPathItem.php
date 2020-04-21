@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataCla
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -86,7 +87,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     {
         if (! $this->reference_object instanceof LearningPath)
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->reference_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $this->get_reference());
         }

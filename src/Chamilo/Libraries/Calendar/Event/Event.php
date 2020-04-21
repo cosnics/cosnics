@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 
 /**
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
  */
 class Event
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *

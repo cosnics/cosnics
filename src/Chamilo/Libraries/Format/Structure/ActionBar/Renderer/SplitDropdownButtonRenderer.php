@@ -12,8 +12,24 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class SplitDropdownButtonRenderer extends AbstractButtonRenderer
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRendererTrait;
-    use \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ActionButtonRendererTrait;
+    use DropdownButtonRendererTrait;
+    use ActionButtonRendererTrait;
+
+    /**
+     *
+     * @return string[]
+     */
+    public function determineDropdownActionClasses()
+    {
+        $classes = array();
+
+        $classes[] = 'btn';
+        $classes[] = 'btn-default';
+        $classes[] = 'dropdown-toggle';
+        $classes[] = $this->getButton()->getClasses();
+
+        return $classes;
+    }
 
     /**
      *
@@ -38,21 +54,5 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
         $html[] = $this->renderSubButtons();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function determineDropdownActionClasses()
-    {
-        $classes = array();
-
-        $classes[] = 'btn';
-        $classes[] = 'btn-default';
-        $classes[] = 'dropdown-toggle';
-        $classes[] = $this->getButton()->getClasses();
-
-        return $classes;
     }
 }

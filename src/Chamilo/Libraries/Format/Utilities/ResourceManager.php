@@ -136,8 +136,7 @@ class ResourceManager
                 return '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($path) . '?' .
                     $modificationTime . '"/>';
             case 'js' :
-                return '<script src="' . htmlspecialchars($path) . '?' . $modificationTime .
-                    '"></script>';
+                return '<script src="' . htmlspecialchars($path) . '?' . $modificationTime . '"></script>';
             default :
                 die('Unknown resource type: ' . $path);
         }

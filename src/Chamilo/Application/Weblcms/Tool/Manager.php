@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Renderer\ToolList\Type\ShortcutToolListRenderer;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
@@ -16,11 +17,14 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -49,6 +53,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * This is the base class for all tools used in applications.
@@ -272,7 +277,7 @@ abstract class Manager extends Application
     {
         $tools = array();
 
-        $course_tools = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $course_tools = DataManager::retrieves(
             CourseTool::class_name(), new DataClassRetrievesParameters()
         );
 
@@ -458,7 +463,7 @@ abstract class Manager extends Application
             if (empty($this->get_course_id()))
             {
                 $this->getExceptionLogger()->logException(
-                    new \Exception('The is_allowed method has been called without a valid course_id'),
+                    new Exception('The is_allowed method has been called without a valid course_id'),
                     ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
                 );
             }
@@ -478,7 +483,7 @@ abstract class Manager extends Application
             $category = null;
             if ($category_id != 0)
             {
-                $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                $category = DataManager::retrieve_by_id(
                     ContentObjectPublicationCategory::class_name(), $category_id
                 );
 
@@ -540,7 +545,7 @@ abstract class Manager extends Application
 
                 if ($category_id != 0)
                 {
-                    $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                    $category = DataManager::retrieve_by_id(
                         ContentObjectPublicationCategory::class_name(), $category_id
                     );
 
@@ -576,7 +581,7 @@ abstract class Manager extends Application
 
                 if ($category_id && $category_id !== 0)
                 {
-                    $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                    $category = DataManager::retrieve_by_id(
                         ContentObjectPublicationCategory::class_name(), $category_id
                     );
 
@@ -702,7 +707,7 @@ abstract class Manager extends Application
             $toolbar = new ButtonToolBar();
             $buttonGroup = new ButtonGroup();
 
-            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+            $repositoryRightsService = RightsService::getInstance();
             $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
             $canEditContentObject = $repositoryRightsService->canEditContentObject(
@@ -787,7 +792,7 @@ abstract class Manager extends Application
             $this->introduction_cache[$course_id][$tool_id] = false;
 
             $publication =
-                \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
+                DataManager::retrieve_introduction_publication_by_course_and_tool(
                     $course_id, $tool_id
                 );
 
@@ -817,7 +822,7 @@ abstract class Manager extends Application
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_REPORTING_TEMPLATE,
                     self::PARAM_PUBLICATION_ID => Request::get(self::PARAM_PUBLICATION_ID),
-                    self::PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate::class_name(
+                    self::PARAM_TEMPLATE_NAME => PublicationDetailTemplate::class_name(
                     )
                 )
             );
@@ -848,7 +853,7 @@ abstract class Manager extends Application
 
     public static function get_pcattree_parents($pcattree)
     {
-        $parent = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $parent = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), $pcattree
         );
 
@@ -856,7 +861,7 @@ abstract class Manager extends Application
 
         while ($parent && $parent->get_parent() != 0)
         {
-            $parent = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $parent = DataManager::retrieve_by_id(
                 ContentObjectPublication::class_name(), $parent->get_parent()
             );
 
@@ -986,7 +991,7 @@ abstract class Manager extends Application
         {
             $namespace = __NAMESPACE__ . '\Implementation\\' . $directory;
 
-            if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
+            if (Package::exists($namespace))
             {
                 $types[] = $namespace;
             }
@@ -998,7 +1003,7 @@ abstract class Manager extends Application
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
+            Action\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }

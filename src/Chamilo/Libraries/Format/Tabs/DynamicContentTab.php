@@ -30,6 +30,21 @@ class DynamicContentTab extends DynamicTab
     }
 
     /**
+     * @param boolean $isOnlyTab
+     *
+     * @return string
+     */
+    public function body($isOnlyTab = false)
+    {
+        $html = array();
+        $html[] = $this->body_header();
+        $html[] = $this->content;
+        $html[] = $this->body_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
      *
      * @return string
      */
@@ -54,18 +69,5 @@ class DynamicContentTab extends DynamicTab
     public function get_link()
     {
         return '#' . $this->get_id();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::body()
-     */
-    public function body($isOnlyTab = false)
-    {
-        $html = array();
-        $html[] = $this->body_header();
-        $html[] = $this->content;
-        $html[] = $this->body_footer();
-        return implode(PHP_EOL, $html);
     }
 }

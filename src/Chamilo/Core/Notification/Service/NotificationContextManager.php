@@ -4,6 +4,7 @@ namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Storage\Entity\NotificationContext;
 use Chamilo\Core\Notification\Storage\Repository\NotificationContextRepository;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -70,7 +71,7 @@ class NotificationContextManager
             $this->notificationContextByPathCache[$contextPath] = $this->notificationContextRepository->findByPath($contextPath);
             if(!$this->notificationContextByPathCache[$contextPath] instanceof NotificationContext)
             {
-                throw new \RuntimeException(sprintf('The given context %s could not be found', $contextPath));
+                throw new RuntimeException(sprintf('The given context %s could not be found', $contextPath));
             }
         }
 

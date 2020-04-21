@@ -6,6 +6,8 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesForma
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
+use DateTime;
+use DateTimeZone;
 use kigkonsult\iCalcreator\timezoneHandler;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
@@ -124,15 +126,15 @@ class ICalRenderer extends Renderer
 
         $event->add(
             'DTSTART',
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $providedEvent->getStartDate()),
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
 
         $event->add(
             'DTEND',
-            new \DateTime(
+            new DateTime(
                 date('Y-m-d\TH:i:s', $providedEvent->getEndDate()),
-                new \DateTimeZone(date_default_timezone_get())));
+                new DateTimeZone(date_default_timezone_get())));
 
         $description = trim(strip_tags($providedEvent->getContent()));
 
@@ -142,10 +144,10 @@ class ICalRenderer extends Renderer
 
         $event->add(
             'CREATED',
-            new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
+            new DateTime(date('Y-m-d\TH:i:s', time()), new DateTimeZone(date_default_timezone_get())));
         $event->add(
             'DTSTAMP',
-            new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
+            new DateTime(date('Y-m-d\TH:i:s', time()), new DateTimeZone(date_default_timezone_get())));
 
         $uniqueIdentifiers = array(
             $providedEvent->getSource(),

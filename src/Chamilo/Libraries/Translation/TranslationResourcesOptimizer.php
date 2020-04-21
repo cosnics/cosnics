@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
+use InvalidArgumentException;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 
@@ -59,14 +60,14 @@ class TranslationResourcesOptimizer
     {
         if (empty($translationLoaders))
         {
-            throw new \InvalidArgumentException('You must provide at least one valid translation loader');
+            throw new InvalidArgumentException('You must provide at least one valid translation loader');
         }
 
         foreach ($translationLoaders as $translationLoader)
         {
             if (! $translationLoader instanceof LoaderInterface)
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'The translation loader "' . get_class($translationLoader) .
                          '" must be an instance of \Symfony\Component\Translation\Loader\LoaderInterface');
             }
@@ -94,7 +95,7 @@ class TranslationResourcesOptimizer
     {
         if (empty($optimizedTranslationsCachePath))
         {
-            throw new \InvalidArgumentException('You must provide a valid cache path');
+            throw new InvalidArgumentException('You must provide a valid cache path');
         }
 
         $this->optimizedTranslationsCachePath = $optimizedTranslationsCachePath;
@@ -188,7 +189,7 @@ class TranslationResourcesOptimizer
     {
         if (! array_key_exists($type, $this->translationLoaders))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given type "' . $type . '" is not supported by the current loaders. ' .
                      'Please add the loader for this type or choose between "' .
                      implode(', ', array_keys($this->translationLoaders)));

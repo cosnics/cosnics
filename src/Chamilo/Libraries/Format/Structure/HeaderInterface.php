@@ -12,26 +12,20 @@ interface HeaderInterface
 
     /**
      *
-     * @param string $viewMode
+     * @return string
      */
-    public function setViewMode($viewMode);
+    public function render();
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application);
 
     /**
      *
      * @param string $containerMode
      */
     public function setContainerMode($containerMode);
-
-    /**
-     * \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application);
-
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title);
 
     /**
      *
@@ -41,7 +35,13 @@ interface HeaderInterface
 
     /**
      *
-     * @return string
+     * @param string $title
      */
-    public function render();
+    public function setTitle($title);
+
+    /**
+     *
+     * @param string $viewMode
+     */
+    public function setViewMode($viewMode);
 }

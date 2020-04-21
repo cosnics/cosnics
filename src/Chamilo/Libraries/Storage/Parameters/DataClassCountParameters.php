@@ -5,6 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Exception;
 
 /**
  *
@@ -87,7 +88,7 @@ class DataClassCountParameters extends DataClassParameters
         }
         else
         {
-            throw new \Exception('Illegal parameter passed to the DataManager :: count() method.');
+            throw new Exception('Illegal parameter passed to the DataManager :: count() method.');
         }
     }
 }

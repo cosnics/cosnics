@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Core\Help\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -29,24 +30,6 @@ class BreadcrumbTrailRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
-    {
-        return $this->stringUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities($stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
      *
      * @return string
@@ -67,6 +50,24 @@ class BreadcrumbTrailRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities()
+    {
+        return $this->stringUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities($stringUtilities)
+    {
+        $this->stringUtilities = $stringUtilities;
     }
 
     /**
@@ -125,37 +126,6 @@ class BreadcrumbTrailRenderer
      *
      * @return string
      */
-    public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
-    {
-        $html = array();
-        $helpItem = $breadcrumbTrail->getHelpItem();
-
-//        var_dump($helpItem);
-
-        if (is_array($helpItem) && count($helpItem) == 2)
-        {
-            $item = \Chamilo\Core\Help\Manager::get_tool_bar_help_item($helpItem);
-
-            if ($item instanceof ToolbarItem)
-            {
-                $html[] = '<div id="help_item">';
-                $toolbar = new Toolbar();
-                $toolbar->set_items(array($item));
-                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
-                $html[] = $toolbar->render();
-                $html[] = '</div>';
-            }
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     *
-     * @return string
-     */
     public function renderExtra(BreadcrumbTrail $breadcrumbTrail)
     {
         $html = array();
@@ -173,6 +143,37 @@ class BreadcrumbTrailRenderer
 
         $html[] = $toolbar->render();
         $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     *
+     * @return string
+     */
+    public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
+    {
+        $html = array();
+        $helpItem = $breadcrumbTrail->getHelpItem();
+
+        //        var_dump($helpItem);
+
+        if (is_array($helpItem) && count($helpItem) == 2)
+        {
+            $item = Manager::get_tool_bar_help_item($helpItem);
+
+            if ($item instanceof ToolbarItem)
+            {
+                $html[] = '<div id="help_item">';
+                $toolbar = new Toolbar();
+                $toolbar->set_items(array($item));
+                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
+                $html[] = $toolbar->render();
+                $html[] = '</div>';
+            }
+        }
 
         return implode(PHP_EOL, $html);
     }

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Exception;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 
 /**
  *
@@ -9,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AzureUserNotExistsException extends \Exception
+class AzureUserNotExistsException extends Exception
 {
 
     /**

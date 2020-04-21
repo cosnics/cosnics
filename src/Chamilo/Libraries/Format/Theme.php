@@ -24,6 +24,7 @@ class Theme
     /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      *
+     * @throws \Exception
      * @deprecated Use this as a service now
      */
     static public function getInstance()

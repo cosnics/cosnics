@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\Mapping\DefaultNamingStrategy;
+use ReflectionClass;
 
 /**
  * The chamilo naming strategy, defining table prefixes by the use of a const or the package name
@@ -35,7 +36,7 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
 
         if (class_exists($className))
         {
-            $class = new \ReflectionClass($className);
+            $class = new ReflectionClass($className);
             if ($class->hasConstant('TABLE_PREFIX'))
             {
                 $prefix = $class->getConstant('TABLE_PREFIX');

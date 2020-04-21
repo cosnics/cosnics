@@ -13,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -248,7 +249,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     {
         if(!$entity instanceof Group)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . Group::class);
+            throw new InvalidArgumentException('The given entity must be of the type ' . Group::class);
         }
 
         return $entity->get_name();
@@ -274,7 +275,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
         $entity = DataManager::retrieve_by_id(Group::class, $entityId);
         if(!$entity instanceof Group)
         {
-            throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
+            throw new InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityName($entity);

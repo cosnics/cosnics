@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
+use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -100,7 +102,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function save_assessment_answer($complex_question_id, $answer, $score, $hint = null)
     {
         $this->trackingService->saveAnswerForQuestion(
-            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(),
+            Preview::get_root_content_object(),
             $this->getUser(),
             $this->getCurrentTreeNode(),
             $complex_question_id,
@@ -117,7 +119,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function save_assessment_result($total_score)
     {
         $this->trackingService->saveAssessmentScore(
-            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(),
+            Preview::get_root_content_object(),
             $this->getUser(),
             $this->getCurrentTreeNode(),
             $total_score);
@@ -129,7 +131,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function get_assessment_current_attempt_id()
     {
         return $this->get_parameter(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID);
+            Manager::PARAM_LEARNING_PATH_ITEM_ID);
     }
 
     /**
@@ -140,7 +142,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     public function get_assessment_question_attempts()
     {
         return $this->trackingService->getQuestionAttempts(
-            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(),
+            Preview::get_root_content_object(),
             $this->getUser(),
             $this->getCurrentTreeNode());
     }
@@ -153,7 +155,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     protected function retrieve_question_attempts()
     {
         return $this->trackingService->getQuestionAttempts(
-            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(),
+            Preview::get_root_content_object(),
             $this->getUser(),
             $this->getCurrentTreeNode());
     }
@@ -234,9 +236,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Preview\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY;
         $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] = '__NODE__';
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN);
+        $parameters[Manager::PARAM_CHILD_ID] = '__NODE__';
+        $parameters[Manager::PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
+            Manager::PARAM_FULL_SCREEN);
 
         $redirect = new Redirect($parameters);
 
@@ -286,7 +288,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     public function register_question_ids($question_ids)
     {
         $this->question_attempts = $this->trackingService->registerQuestionAttempts(
-            \Chamilo\Core\Repository\Display\Preview::get_root_content_object(),
+            Preview::get_root_content_object(),
             $this->getUser(),
             $this->getCurrentTreeNode(),
             $question_ids);

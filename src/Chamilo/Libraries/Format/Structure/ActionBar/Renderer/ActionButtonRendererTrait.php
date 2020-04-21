@@ -13,54 +13,25 @@ trait ActionButtonRendererTrait
 
     /**
      *
-     * @return string
-     */
-    abstract function renderClasses();
-
-    /**
-     *
-     * @return string
-     */
-    abstract function renderTitle();
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
-     */
-    abstract function getButton();
-
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkOpeningTag()
-    {
-        $html = array();
-
-        $html[] = '<a';
-        $html[] = $this->renderClasses();
-        $html[] = $this->renderTitle();
-        $html[] = $this->renderAction();
-        $html[] = '>';
-
-        return implode(' ', $html);
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function determineClasses()
     {
         $classes = parent::determineClasses();
 
-        if (! $this->getButton()->getAction())
+        if (!$this->getButton()->getAction())
         {
             $classes[] = 'disabled';
         }
 
         return $classes;
     }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
+     */
+    abstract function getButton();
 
     /**
      *
@@ -88,4 +59,33 @@ trait ActionButtonRendererTrait
 
         return implode(' ', $html);
     }
+
+    /**
+     *
+     * @return string
+     */
+    abstract function renderClasses();
+
+    /**
+     *
+     * @return string
+     */
+    public function renderLinkOpeningTag()
+    {
+        $html = array();
+
+        $html[] = '<a';
+        $html[] = $this->renderClasses();
+        $html[] = $this->renderTitle();
+        $html[] = $this->renderAction();
+        $html[] = '>';
+
+        return implode(' ', $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract function renderTitle();
 }

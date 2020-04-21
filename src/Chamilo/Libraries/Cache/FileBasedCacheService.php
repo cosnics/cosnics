@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Cache;
 
 use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
 use Chamilo\Libraries\File\Filesystem;
+use RuntimeException;
 
 /**
  * Abstract service class to manage caches that are file based
@@ -34,7 +35,7 @@ abstract class FileBasedCacheService implements CacheResetterInterface
         {
             if (! Filesystem::remove($cachePath))
             {
-                throw new \RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
+                throw new RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
             }
         }
 

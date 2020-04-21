@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -143,7 +144,7 @@ class AuthenticationValidator
      */
     protected function trackLogin(User $user)
     {
-        Event::trigger('Login', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
     }
 
     /**
@@ -192,7 +193,7 @@ class AuthenticationValidator
      */
     public function logout(User $user)
     {
-        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Event::trigger('Logout', Manager::context(), array('server' => $_SERVER, 'user' => $user));
         Session::destroy();
 
         foreach($this->authentications as $authentication)

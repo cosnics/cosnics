@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Exception;
 
 /**
  * Builds the exception logger(s) based on the given configuration file
@@ -75,7 +76,7 @@ class ExceptionLoggerFactory
         {
             if (! class_exists($exceptionLoggerClass))
             {
-                throw new \Exception(
+                throw new Exception(
                     sprintf('The given exception logger class does not exist (%s)', $exceptionLoggerClass));
             }
 
@@ -86,7 +87,7 @@ class ExceptionLoggerFactory
 
                 if (! class_exists($exceptionLoggerBuilderClass))
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf(
                             'The given exception logger builder class does not exist (%s)',
                             $exceptionLoggerBuilderClass));
@@ -96,7 +97,7 @@ class ExceptionLoggerFactory
 
                 if (! $exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface)
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf(
                             'The given exception logger builder must implement the ExceptionLoggerBuilderInterface (%s)',
                             $exceptionLoggerBuilderClass));
@@ -111,7 +112,7 @@ class ExceptionLoggerFactory
 
             if (! $exceptionLogger instanceof ExceptionLoggerInterface)
             {
-                throw new \Exception(
+                throw new Exception(
                     sprintf(
                         'The given exception logger must implement the ExceptionLoggerInterface (%s)',
                         get_class($exceptionLogger)));

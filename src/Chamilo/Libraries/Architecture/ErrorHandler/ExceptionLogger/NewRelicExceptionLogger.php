@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\Session;
+use Exception;
 
 /**
  * Logs errors to New Relic
@@ -22,7 +23,7 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
     {
         if (! extension_loaded('newrelic'))
         {
-            throw new \Exception('Can not use the NewRelicExceptionLogger when the newrelic extension is not loaded');
+            throw new Exception('Can not use the NewRelicExceptionLogger when the newrelic extension is not loaded');
         }
 
         $this->configureChamiloParameters();

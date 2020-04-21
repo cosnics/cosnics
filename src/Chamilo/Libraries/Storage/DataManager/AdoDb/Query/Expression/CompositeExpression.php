@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression;
 
+use Countable;
+
 /**
  * Composite expression is responsible to build a group of similar expression.
  * Based on the Doctrine DBAL Query-builder architecture
@@ -12,7 +14,7 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @license MIT
  */
-class CompositeExpression implements \Countable
+class CompositeExpression implements Countable
 {
     /**
      * Constant that represents an AND composite expression.

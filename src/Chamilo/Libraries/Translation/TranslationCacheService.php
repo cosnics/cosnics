@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 
@@ -23,7 +24,7 @@ class TranslationCacheService extends FileBasedCacheService
      *
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function __construct(\Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
     }

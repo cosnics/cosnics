@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Exception;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -227,7 +228,7 @@ class MigrationFixer
 
             if (!$this->contentObjectRepository->create($section))
             {
-                throw new \Exception('Could not create a new section');
+                throw new Exception('Could not create a new section');
             }
 
             echo "Create Section " . $section->getId() . PHP_EOL;

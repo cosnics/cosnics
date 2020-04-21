@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\File\Rss\Parser;
 
+use HTMLPurifier;
+use SimplePie;
+
 /**
  *
  * @package Chamilo\Libraries\File\Rss\Parser
@@ -17,13 +20,13 @@ class RssFeedParserFactory
      *
      * @return RssFeedParserInterface
      */
-    public static function create(\HTMLPurifier $purifier, $type)
+    public static function create(HTMLPurifier $purifier, $type)
     {
         $feedParser = null;
 
         if ($type == self::SIMPLE_PIE_FEED_PARSER)
         {
-            $feedParser = new SimplePieRssFeedParser(new \SimplePie(), $purifier);
+            $feedParser = new SimplePieRssFeedParser(new SimplePie(), $purifier);
         }
 
         return $feedParser;

@@ -15,6 +15,7 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsExcep
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use Microsoft\Graph\Model\Group;
 
 /**
  * Tests the CourseGroupOffice365Connector
@@ -866,7 +867,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
             ->with(['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri'])
             ->will($this->returnValue($baseUrl));
 
-        $group = new \Microsoft\Graph\Model\Group(['mailNickname' => 'MyFirstGroup']);
+        $group = new Group(['mailNickname' => 'MyFirstGroup']);
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')

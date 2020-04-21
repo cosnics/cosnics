@@ -8,6 +8,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use DOMDocument;
+use DOMElement;
+use Exception;
 
 class CpoDefaultExportImplementation extends CpoExportImplementation
 {
@@ -37,7 +40,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
      * @param \DOMDocument $document
      */
     protected function exportTreeNodesData(
-        LearningPath $learningPath, \DOMElement $contentObjectNode, \DOMDocument $document
+        LearningPath $learningPath, DOMElement $contentObjectNode, DOMDocument $document
     )
 
     {
@@ -62,7 +65,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
                     }
                 }
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 continue;
             }

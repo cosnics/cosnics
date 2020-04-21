@@ -9,6 +9,7 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 /**
  *
@@ -104,7 +105,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
         {
             if (! $this->warmUpForIdentifier($identifier))
             {
-                throw new \Exception('CacheError');
+                throw new Exception('CacheError');
             }
         }
 

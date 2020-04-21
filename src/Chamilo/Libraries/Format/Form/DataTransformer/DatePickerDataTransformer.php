@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\DataTransformer;
 
+use InvalidArgumentException;
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
@@ -26,7 +27,7 @@ class DatePickerDataTransformer implements DataTransformerInterface
 
         if (! is_numeric($value))
         {
-            throw new \InvalidArgumentException('The value for the datepicker should be a valid timestamp');
+            throw new InvalidArgumentException('The value for the datepicker should be a valid timestamp');
         }
 
         return date('d/m/Y  H:i', $value);
@@ -47,7 +48,7 @@ class DatePickerDataTransformer implements DataTransformerInterface
 
         if (! $timestamp || ! is_numeric($timestamp))
         {
-            throw new \InvalidArgumentException('The given value ' . $value . ' could not be transformed to a timestamp');
+            throw new InvalidArgumentException('The given value ' . $value . ' could not be transformed to a timestamp');
         }
 
         return $timestamp;

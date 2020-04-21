@@ -8,6 +8,8 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
+use RuntimeException;
 
 /**
  * A mover component which moves the selected object directly to a different parent
@@ -32,7 +34,7 @@ class DirectMoverComponent extends Manager
 
         if (!isset($parentId) || !isset($displayOrder))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'For the direct mover to work you need to specify a parent and a display order'
             );
         }
@@ -43,7 +45,7 @@ class DirectMoverComponent extends Manager
         {
             $parentNode = $path->getTreeNodeById((int) $parentId);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Step'), $parentId);
         }
@@ -56,7 +58,7 @@ class DirectMoverComponent extends Manager
             );
             $success = true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
         }

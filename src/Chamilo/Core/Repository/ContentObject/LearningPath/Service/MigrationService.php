@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * Migrates old learning paths to the new learning path structure
@@ -137,7 +138,7 @@ class MigrationService
             {
                 $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 continue;
             }
@@ -171,7 +172,7 @@ class MigrationService
                 {
                     $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                     continue;
                 }
@@ -267,7 +268,7 @@ class MigrationService
 
             if (!$this->contentObjectRepository->create($section))
             {
-                throw new \Exception('Could not create a new section');
+                throw new Exception('Could not create a new section');
             }
 
             $this->contentObjectRepository->copyIncludesFromContentObject($learningPath, $section);

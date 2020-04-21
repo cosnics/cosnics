@@ -42,24 +42,6 @@ class ButtonToolBarRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    public function getButtonToolBar()
-    {
-        return $this->buttonToolBar;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
-     */
-    public function setButtonToolBar(ButtonToolBar $buttonToolBar)
-    {
-        $this->buttonToolBar = $buttonToolBar;
-    }
-
-    /**
-     *
      * @return string
      */
     public function render()
@@ -68,10 +50,11 @@ class ButtonToolBarRenderer
 
         $html[] = '<div class="' . $this->getClasses() . '">';
 
-        foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
+        foreach ($this->getButtonToolBar()->getItems() as $buttonGroup)
         {
-            $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities::getInstance()->getClassnameFromObject($buttonGroup) . 'Renderer';
+            $rendererClassName =
+                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($buttonGroup) .
+                'Renderer';
             $renderer = new $rendererClassName($buttonGroup);
             $html[] = $renderer->render($buttonGroup);
         }
@@ -96,6 +79,24 @@ class ButtonToolBarRenderer
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+     */
+    public function getButtonToolBar()
+    {
+        return $this->buttonToolBar;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
+     */
+    public function setButtonToolBar(ButtonToolBar $buttonToolBar)
+    {
+        $this->buttonToolBar = $buttonToolBar;
+    }
+
+    /**
+     *
      * @return string
      */
     protected function getClasses()
@@ -107,29 +108,17 @@ class ButtonToolBarRenderer
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm
-     */
-    public function getSearchForm()
-    {
-        if (! isset($this->searchForm))
-        {
-            $this->searchForm = new ButtonSearchForm($this->getButtonToolBar()->getSearchUrl());
-        }
-
-        return $this->searchForm;
-    }
-
-    /**
      * Returns the search query conditions
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @throws \Exception
      */
-    public function getConditions($properties = array ())
+    public function getConditions($properties = array())
     {
         // check input parameter
-        if (! is_array($properties))
+        if (!is_array($properties))
         {
             $properties = array($properties);
         }
@@ -144,6 +133,23 @@ class ButtonToolBarRenderer
 
             $condition = $search_conditions;
         }
+
         return $condition;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm
+     *
+     * @throws \Exception
+     */
+    public function getSearchForm()
+    {
+        if (!isset($this->searchForm))
+        {
+            $this->searchForm = new ButtonSearchForm($this->getButtonToolBar()->getSearchUrl());
+        }
+
+        return $this->searchForm;
     }
 }

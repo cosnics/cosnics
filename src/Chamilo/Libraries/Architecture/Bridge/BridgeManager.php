@@ -2,6 +2,8 @@
 
 namespace Chamilo\Libraries\Architecture\Bridge;
 
+use RuntimeException;
+
 /**
  * @package Chamilo\Libraries\Architecture\Bridge
  *
@@ -33,7 +35,7 @@ class BridgeManager
         {
             if (array_key_exists($bridgeInterface, $this->bridges))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf('A bridge for the interface %s has already been registered', $bridgeInterface)
                 );
             }
@@ -51,7 +53,7 @@ class BridgeManager
     {
         if(!array_key_exists($bridgeInterface, $this->bridges))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('A bridge for the interface %s could not be found', $bridgeInterface)
             );
         }

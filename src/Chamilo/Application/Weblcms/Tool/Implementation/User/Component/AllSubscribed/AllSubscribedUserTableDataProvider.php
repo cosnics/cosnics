@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribed;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
@@ -25,7 +26,7 @@ class AllSubscribedUserTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users(
+        return DataManager::retrieve_all_course_users(
             $this->get_component()->get_course_id(), 
             $condition, 
             $offset, 
@@ -42,7 +43,7 @@ class AllSubscribedUserTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_all_course_users(
+        return DataManager::count_all_course_users(
             $this->get_component()->get_course_id(), 
             $condition);
     }

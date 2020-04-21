@@ -16,6 +16,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment
@@ -70,7 +71,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given treenode does not reference a valid assignment and should not be used'
             );
         }
@@ -86,7 +87,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         if (!isset($this->contentObjectPublication) ||
             $this->contentObjectPublication->getId() != $assignmentPublication->getPublicationId())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given assignment publication does not belong to the given content object publication'
             );
         }

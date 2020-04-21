@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration\Chamilo\Application\Calendar\Extension\Personal\Repository;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
+use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -32,7 +33,7 @@ class PersonalCalendarEventDataProviderRepository extends \Chamilo\Application\C
      */
     protected function getContentObjectCondition($fromDate, $toDate)
     {
-        return \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataManager::getCalendarEventConditionsBetweenFromAndToDate(
+        return DataManager::getCalendarEventConditionsBetweenFromAndToDate(
             $fromDate, 
             $toDate);
     }

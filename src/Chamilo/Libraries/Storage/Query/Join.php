@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class Join implements Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use HashableTrait;
 
     // Constants
     const TYPE_NORMAL = 1;

@@ -16,8 +16,11 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -233,7 +236,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function getCurrentEntityType(TreeNode $treeNode)
     {
-        return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER;
+        return Entry::ENTITY_TYPE_USER;
     }
 
     /**
@@ -280,7 +283,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function isUserPartOfEntity(User $user, $entityType, $entityId)
     {
         return $entityType ==
-            \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::ENTITY_TYPE_USER &&
+            Entry::ENTITY_TYPE_USER &&
             $entityId == $user->getId();
     }
 
@@ -420,7 +423,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
         if (!$entity instanceof User)
         {
-            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+            throw new InvalidArgumentException('The given entity must be of the type ' . User::class);
         }
 
         return $entity->get_fullname();
@@ -434,10 +437,10 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $entityId);
+        $user = DataManager::retrieve_by_id(User::class, $entityId);
         if(!$user instanceof User)
         {
-            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+            throw new InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityNameByEntityTypeAndEntity($entityType, $user);
@@ -485,7 +488,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $entry = $this->findEntryByIdentifier($score->getEntryId());
         if (!$entry instanceof Entry)
         {
-            throw new \Exception('Could not find the entry for the given score');
+            throw new Exception('Could not find the entry for the given score');
         }
 
         /** @var \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath */

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
+use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 
 /**
@@ -10,6 +11,6 @@ use Chamilo\Core\Repository\Display\PreviewResetSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implements PreviewResetSupport
+abstract class Manager extends Preview implements PreviewResetSupport
 {
 }

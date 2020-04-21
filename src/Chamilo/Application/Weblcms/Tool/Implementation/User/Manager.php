@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -135,7 +136,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     public function isGroupSubscribed($groupId)
     {
         /** @var Group $group */
-        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        $group = DataManager::retrieve_by_id(Group::class_name(), $groupId);
         $parents = $group->get_ancestors();
 
         $subscribedPlatformGroupIds = $this->get_subscribed_platformgroup_ids($this->get_course_id());

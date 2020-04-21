@@ -31,7 +31,7 @@ class DataClassGalleryTableProperty extends GalleryTableProperty
 
         $context = $className::context();
 
-        if (! $title)
+        if (!$title)
         {
             $title = Translation::get($property, null, $context);
         }

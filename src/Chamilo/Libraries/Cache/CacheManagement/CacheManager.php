@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use InvalidArgumentException;
 
 /**
  * Cache director to clear and / or warmup caches
@@ -111,7 +112,7 @@ class CacheManager
         {
             if (!array_key_exists($cacheServiceAlias, $this->cacheServices))
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('The given cache service alias %s does not exist', $cacheServiceAlias)
                 );
             }

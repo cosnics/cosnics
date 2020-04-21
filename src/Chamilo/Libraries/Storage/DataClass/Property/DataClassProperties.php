@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\Property;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
 /**
  *
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 class DataClassProperties implements Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use HashableTrait;
 
     /**
      *

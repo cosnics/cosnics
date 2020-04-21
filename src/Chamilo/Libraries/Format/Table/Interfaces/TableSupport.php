@@ -22,6 +22,7 @@ interface TableSupport
      * Returns the condition
      *
      * @param string $tableClassname
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($tableClassname);

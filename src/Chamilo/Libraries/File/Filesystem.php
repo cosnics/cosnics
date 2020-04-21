@@ -5,6 +5,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use DirectoryIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use function Fileperms;
 
 /**
  * This class implements some usefull functions to hanlde the filesystem
@@ -65,7 +66,7 @@ class Filesystem
 
         foreach ($uncreated_directories as $path)
         {
-            $perms = \Fileperms($path);
+            $perms = Fileperms($path);
             $currentPermString = substr(decoct($perms), - 4);
             $targetPermString = decoct($mode);
             // only try to chmod if needed
@@ -756,7 +757,7 @@ class Filesystem
 
             if(is_dir($filePath) && $recursive)
             {
-                $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($filePath));
+                $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($filePath));
 
                 foreach($iterator as $item)
                 {

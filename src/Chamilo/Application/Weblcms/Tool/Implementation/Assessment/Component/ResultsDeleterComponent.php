@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -34,12 +36,12 @@ class ResultsDeleterComponent extends Manager
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ID),
+                    AssessmentAttempt::class_name(),
+                    AssessmentAttempt::PROPERTY_ID),
                 new StaticConditionVariable($uaid));
 
             $item = DataManager::retrieve(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
+                AssessmentAttempt::class_name(),
                 new DataClassRetrieveParameters($condition));
 
             if ($item)
@@ -72,12 +74,12 @@ class ResultsDeleterComponent extends Manager
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+                    QuestionAttempt::class_name(),
+                    QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
                 new StaticConditionVariable($user_assessment->get_id()));
 
             $items = DataManager::retrieves(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
+                QuestionAttempt::class_name(),
                 new DataClassRetrievesParameters($condition));
 
             while ($question_attempt = $items->next_result())
@@ -93,12 +95,12 @@ class ResultsDeleterComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+                AssessmentAttempt::class_name(),
+                AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($aid));
 
         $items = DataManager::retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
+            AssessmentAttempt::class_name(),
             new DataClassRetrievesParameters($condition));
 
         while ($assessment_attempt = $items->next_result())

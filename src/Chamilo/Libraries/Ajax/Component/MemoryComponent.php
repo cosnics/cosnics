@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MemoryComponent extends \Chamilo\Libraries\Ajax\Manager
+class MemoryComponent extends Manager
 {
 
     /**

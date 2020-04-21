@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Architecture\Test\Source;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -9,9 +11,9 @@ use Chamilo\Libraries\File\Path;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase
+abstract class CheckSourceCodeTest extends ChamiloTestCase
 {
-    use \Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
+    use DirectoryScanner;
 
     /**
      * **************************************************************************************************************

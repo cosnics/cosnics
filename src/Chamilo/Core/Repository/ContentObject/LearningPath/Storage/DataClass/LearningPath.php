@@ -5,12 +5,14 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
+use InvalidArgumentException;
 
 /**
  *
@@ -70,7 +72,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     {
         if (!in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The given automaticNumberingOption must be one of %s',
                     explode(',', self::getAutomaticNumberingOptions())
@@ -100,7 +102,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     {
         if (!is_bool($enforceDefaultTraversingOrder))
         {
-            throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
 
         $this->set_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
@@ -219,7 +221,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
             }
 
             if ($parentRegistration[Registration::PROPERTY_TYPE] ==
-                \Chamilo\Core\Repository\Manager::context() . '\ContentObject')
+                Manager::context() . '\ContentObject')
             {
                 $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                     $registration[Registration::PROPERTY_CONTEXT], 6

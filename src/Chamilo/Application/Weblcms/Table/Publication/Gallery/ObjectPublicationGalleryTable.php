@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Table\Publication\Gallery;
 
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\RecordGalleryTable\RecordGalleryTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
@@ -15,7 +16,7 @@ class ObjectPublicationGalleryTable extends RecordGalleryTable implements TableF
     /**
      * The identifier for the table (used for table actions)
      */
-    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
     /**
      * Returns the implemented form actions

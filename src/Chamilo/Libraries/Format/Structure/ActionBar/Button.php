@@ -10,7 +10,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  */
 class Button extends AbstractButton
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\ActionButtonTrait;
+    use ActionButtonTrait;
 
     /**
      *

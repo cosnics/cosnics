@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\PackagesTranslationResourcesFinder;
 use Chamilo\Libraries\Translation\TranslationResourcesFinderInterface;
 use Chamilo\Libraries\Translation\TranslationResourcesOptimizer;
+use stdClass;
 use Symfony\Component\Translation\MessageCatalogue;
 
 /**
@@ -94,7 +95,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
     public function test_create_class_with_invalid_translation_loaders()
     {
         new TranslationResourcesOptimizer(
-            array(new \stdClass()),
+            array(new stdClass()),
             $this->translationResourcesFinderMock,
             $this->cache_path);
     }

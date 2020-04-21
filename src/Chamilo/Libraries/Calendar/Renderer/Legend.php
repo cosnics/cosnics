@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -141,7 +142,7 @@ class Legend
 
         if ($sourceKey === false)
         {
-            throw new \Exception(Translation::get('InvalidLegendSource'));
+            throw new Exception(Translation::get('InvalidLegendSource'));
         }
         else
         {

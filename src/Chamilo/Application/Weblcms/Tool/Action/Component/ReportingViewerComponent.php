@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -71,10 +72,10 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
 
         if (Request::get('cid') != null)
         {
-            $cloi = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $cloi = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class_name(),
                 Request::get('cid'));
-            $wp = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $wp = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $cloi->get_ref());
 

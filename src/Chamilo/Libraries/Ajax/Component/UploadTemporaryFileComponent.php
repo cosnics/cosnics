@@ -1,12 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -33,7 +35,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
         }
 
         $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
-        $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
+        $owner = $this->getPostDataValue(Manager::PARAM_USER_USER_ID);
 
         Filesystem::create_dir($temporaryPath);
 
@@ -64,7 +66,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
         if (empty($filePropertyName))
         {
-            throw new \Exception('filePropertyName parameter not available in request');
+            throw new Exception('filePropertyName parameter not available in request');
         }
 
         $file = $this->getRequest()->files->get($filePropertyName);
@@ -78,7 +80,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
                 $errorMessage .= " Available file keys: " . implode(', ', $availableKeys) . ".";
             }
 
-            throw new \Exception($errorMessage);
+            throw new Exception($errorMessage);
         }
 
         return $file;

@@ -6,10 +6,12 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\N
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -18,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
+abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implements FeedbackSupport
 {
     const PARAM_ACTION = 'assignment_display_action';
 
@@ -142,7 +144,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
             {
                 $this->initializeEntry();
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
             }
         }

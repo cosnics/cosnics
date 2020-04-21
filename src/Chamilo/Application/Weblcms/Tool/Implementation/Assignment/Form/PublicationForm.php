@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -206,7 +207,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
             return $publication->update();
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

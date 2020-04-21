@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Storage\DataClass;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 /**
  *
@@ -90,7 +91,7 @@ class AssessmentMatchNumericQuestionOption
                 return $min <= $answer && $answer <= $max;
             
             default :
-                throw new \Exception('Unknown tolerance type');
+                throw new Exception('Unknown tolerance type');
         }
     }
 }

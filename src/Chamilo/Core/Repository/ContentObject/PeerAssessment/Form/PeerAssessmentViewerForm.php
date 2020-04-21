@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
+use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
@@ -68,7 +69,7 @@ class PeerAssessmentViewerForm extends FormValidator
     {
         // there should be users and indicators, otherwise don't render
         $params = array(
-            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager::ACTION_VIEW_USER_ATTEMPT_STATUS);
+            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_ATTEMPT_STATUS);
         
         if (count($this->indicators) === 0 && $assessment_type != PeerAssessment::TYPE_FEEDBACK)
             $this->viewer->redirect(Translation::get('NoIndicators'), 1, $params);

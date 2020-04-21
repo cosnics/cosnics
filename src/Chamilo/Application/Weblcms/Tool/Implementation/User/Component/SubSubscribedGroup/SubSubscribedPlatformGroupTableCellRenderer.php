@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubscribedGroup;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -37,7 +38,7 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
             case Translation::get(
                 SubSubscribedPlatformGroupTableColumnModel::USERS, 
                 null, 
-                \Chamilo\Core\User\Manager::context()) :
+                Manager::context()) :
                 return $group->count_users();
             case Translation::get(SubSubscribedPlatformGroupTableColumnModel::SUBGROUPS) :
                 return $group->count_subgroups(true, true);

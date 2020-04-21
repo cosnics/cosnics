@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Platform\Configuration;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
@@ -206,7 +207,7 @@ class LocalSetting
             $condition = new AndCondition($conditions);
 
             /** @var UserSetting $user_setting */
-            $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
+            $user_setting = DataManager::retrieve(
                 UserSetting::class_name(),
                 new DataClassRetrieveParameters($condition)
             );

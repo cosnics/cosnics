@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
 /**
  *
@@ -11,8 +13,8 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 abstract class ConditionPart implements Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use ClassContext;
+    use HashableTrait;
 
     /**
      *

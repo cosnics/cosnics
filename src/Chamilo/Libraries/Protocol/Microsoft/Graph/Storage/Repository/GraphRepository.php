@@ -2,6 +2,8 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Exception;
+use GuzzleHttp\Exception\ClientException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
@@ -244,7 +246,7 @@ class GraphRepository
         {
             return $graphRequest->execute();
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (ClientException $exception)
         {
             if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
             {
@@ -273,7 +275,7 @@ class GraphRepository
 
         if(!$this->delegatedAccessToken instanceof AccessToken)
         {
-            throw new \Exception('The delegated access token could not be activated');
+            throw new Exception('The delegated access token could not be activated');
         }
 
         /**

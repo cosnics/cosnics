@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
@@ -16,6 +17,7 @@ class Header extends BaseHeader
 
     /**
      * Adds some default headers to the output
+     * @throws \Exception
      */
     protected function addDefaultHeaders()
     {
@@ -25,20 +27,22 @@ class Header extends BaseHeader
 
     /**
      * Adds the google analytics tracking to the header if configured
+     * @throws \Exception
      */
     protected function addGoogleAnalyticsTracking()
     {
         $fileConfigurationLocator = new FileConfigurationLocator(new PathBuilder(ClassnameUtilities::getInstance()));
 
-        if (! $fileConfigurationLocator->isAvailable())
+        if (!$fileConfigurationLocator->isAvailable())
         {
             return;
         }
 
-        $googleAnalyticsTrackingId = \Chamilo\Configuration\Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'google_analytics_tracking_id'));
+        $googleAnalyticsTrackingId = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'google_analytics_tracking_id')
+        );
 
-        if (! empty($googleAnalyticsTrackingId))
+        if (!empty($googleAnalyticsTrackingId))
         {
             $html = array();
 

@@ -548,7 +548,7 @@ class Diagnoser
 
         $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
 
-        $table = new SimpleTable($data, new DiagnoserCellRenderer(), null, 'diagnoser');
+        $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
 
         $tabs->set_content($table->render());
 

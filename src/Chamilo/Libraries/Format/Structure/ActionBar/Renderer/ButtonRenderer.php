@@ -10,5 +10,5 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
  */
 class ButtonRenderer extends AbstractButtonRenderer
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ActionButtonRendererTrait;
+    use ActionButtonRendererTrait;
 }

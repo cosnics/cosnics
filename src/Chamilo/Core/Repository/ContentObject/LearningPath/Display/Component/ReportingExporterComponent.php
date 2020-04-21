@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer\CsvWriter;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
+use InvalidArgumentException;
 
 /**
  * Exports the reporting data
@@ -82,7 +83,7 @@ class ReportingExporterComponent extends BaseReportingComponent
 
         if(!in_array($exportMode, $exportModes))
         {
-            throw new \InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
+            throw new InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
         }
 
         if($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())

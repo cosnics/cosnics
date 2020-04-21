@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Architecture\Application\Routing;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -25,7 +27,7 @@ class UrlGenerator
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
-    public function __construct(\Chamilo\Libraries\Platform\ChamiloRequest $request)
+    public function __construct(ChamiloRequest $request)
     {
         $this->setUrlParameterBag($request->query);
     }
@@ -40,7 +42,7 @@ class UrlGenerator
     {
         if (! $urlParameterBag instanceof ParameterBag)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given url parameter bag is not an instance of "\Symfony\Component\HttpFoundation\ParameterBag", ' .
                      'instead "' . get_class($urlParameterBag) . '" was given.');
         }

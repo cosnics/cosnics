@@ -1,8 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Database;
 
+use ADOConnection;
+use ADORecordSet;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -33,7 +36,7 @@ use Exception;
  */
 class DataClassDatabase implements DataClassDatabaseInterface
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *
@@ -80,7 +83,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor $parametersProcessor
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor $recordProcessor
      */
-    public function __construct(\ADOConnection $connection, StorageAliasGenerator $storageAliasGenerator,
+    public function __construct(
+        ADOConnection $connection, StorageAliasGenerator $storageAliasGenerator,
         ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
         ParametersProcessor $parametersProcessor, RecordProcessor $recordProcessor = null)
     {
@@ -105,7 +109,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \ADOConnection $connection
      */
-    public function setConnection(\ADOConnection $connection)
+    public function setConnection(ADOConnection $connection)
     {
         $this->connection = $connection;
     }
@@ -204,10 +208,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Exception $exception
      */
-    protected function handleError(\Exception $exception)
+    protected function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
-            new \Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'));
+            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'));
     }
 
     /**
@@ -240,7 +244,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if ($result === false)
             {
-                throw new \Exception('Insert object Failed. Query: ' . $insertSql);
+                throw new Exception('Insert object Failed. Query: ' . $insertSql);
             }
 
             if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
@@ -258,13 +262,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
                 if ($result === false)
                 {
-                    throw new \Exception('Insert Failed. Query: ' . $insertSql);
+                    throw new Exception('Insert Failed. Query: ' . $insertSql);
                 }
             }
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -285,10 +289,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if ($result === false)
             {
-                throw new \Exception('Insert record Failed. Query: ' . $insertSql);
+                throw new Exception('Insert record Failed. Query: ' . $insertSql);
             }
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -384,7 +388,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($result === false)
         {
-            $this->handleError(new \Exception('Update Failed. Query: ' . $queryBuilder->getSQL()));
+            $this->handleError(new Exception('Update Failed. Query: ' . $queryBuilder->getSQL()));
 
             return false;
         }
@@ -427,7 +431,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if ($statement === false)
             {
-                $this->handleError(new \Exception('Insert Failed. Query: ' . $queryBuilder->getSQL()));
+                $this->handleError(new Exception('Insert Failed. Query: ' . $queryBuilder->getSQL()));
 
                 return false;
             }
@@ -454,7 +458,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($statement === false)
         {
-            $this->handleError(new \Exception('Delete Failed. Query: ' . $queryBuilder->getSQL()));
+            $this->handleError(new Exception('Delete Failed. Query: ' . $queryBuilder->getSQL()));
 
             return false;
         }
@@ -482,7 +486,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
-        if ($statement instanceof \ADORecordSet)
+        if ($statement instanceof ADORecordSet)
         {
             $record = $statement->FetchRow();
 
@@ -490,7 +494,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         else
         {
-            $this->handleError(new \Exception('Count Failed. Query: ' . $queryBuilder->getSQL()));
+            $this->handleError(new Exception('Count Failed. Query: ' . $queryBuilder->getSQL()));
 
             return false;
         }
@@ -516,7 +520,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
-        if ($statement instanceof \ADORecordSet)
+        if ($statement instanceof ADORecordSet)
         {
             $counts = array();
             while ($record = $statement->FetchRow())
@@ -530,7 +534,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         else
         {
-            $this->handleError(new \Exception('Count Grouped Failed. Query: ' . $queryBuilder->getSQL()));
+            $this->handleError(new Exception('Count Grouped Failed. Query: ' . $queryBuilder->getSQL()));
 
             return false;
         }
@@ -556,7 +560,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
-        if ($statement instanceof \ADORecordSet)
+        if ($statement instanceof ADORecordSet)
         {
             $distinctElements = array();
 
@@ -576,7 +580,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         else
         {
-            $this->handleError(new \Exception('Distinct Failed. Query: ' . $queryBuilder->getSQL()));
+            $this->handleError(new Exception('Distinct Failed. Query: ' . $queryBuilder->getSQL()));
 
             return false;
         }
@@ -681,7 +685,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($recordSet === false)
         {
-            $this->handleError(new \Exception('No Records Found. Query: ' . $sql));
+            $this->handleError(new Exception('No Records Found. Query: ' . $sql));
             throw new DataClassNoResultException($dataClassName, $parameters, $sql);
         }
         else
@@ -802,19 +806,19 @@ class DataClassDatabase implements DataClassDatabaseInterface
          */
         $statement = $this->getConnection()->SelectLimit($sqlQuery, $parameters->getCount(), $parameters->getOffset());
 
-        if ($statement instanceof \ADORecordSet)
+        if ($statement instanceof ADORecordSet)
         {
             $record = $statement->FetchRow();
         }
         else
         {
-            $this->handleError(new \Exception('No record found. Query: ' . $sqlQuery));
+            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
         if ($record === false)
         {
-            $this->handleError(new \Exception('No record found. Query: ' . $sqlQuery));
+            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
@@ -831,7 +835,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \ADORecordSet $statement
      * @return string[]
      */
-    protected function fetchRecords(\ADORecordSet $statement)
+    protected function fetchRecords(ADORecordSet $statement)
     {
         $records = array();
 

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -44,7 +45,7 @@ abstract class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject
         $treeNodeDataCondition = new EqualityCondition(
             new PropertyConditionVariable(
                 $this->getEntryClassName(),
-                \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry::PROPERTY_TREE_NODE_DATA_ID
+                Entry::PROPERTY_TREE_NODE_DATA_ID
             ),
             new StaticConditionVariable($treeNodeDataIdentifier)
         );

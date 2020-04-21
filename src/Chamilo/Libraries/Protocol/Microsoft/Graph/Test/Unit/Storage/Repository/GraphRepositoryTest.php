@@ -11,6 +11,7 @@ use League\OAuth2\Client\Token\AccessToken;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphRequest;
 use Microsoft\Graph\Http\GraphResponse;
+use Microsoft\Graph\Model\User;
 use PHPUnit\Framework\MockObject\Stub;
 
 /**
@@ -139,17 +140,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockRequest(
-            'GET', '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class,
+            'GET', '/users/no-reply@example.com', User::class,
             $this->returnValue($microsoftUser)
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class
+                '/users/no-reply@example.com', User::class
             )
         );
     }
@@ -158,17 +159,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockCollectionRequest(
-            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            'GET', '/users', User::class,
             $this->returnValue([$microsoftUser])
         );
 
         $this->assertEquals(
             [$microsoftUser],
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users', \Microsoft\Graph\Model\User::class, true
+                '/users', User::class, true
             )
         );
     }
@@ -177,17 +178,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockCollectionRequest(
-            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            'GET', '/users', User::class,
             $this->returnValue([$microsoftUser]), 1, false
         );
 
         $this->assertEquals(
             [$microsoftUser],
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users', \Microsoft\Graph\Model\User::class, true
+                '/users', User::class, true
             )
         );
     }
@@ -196,17 +197,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockCollectionRequest(
-            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            'GET', '/users', User::class,
             $this->returnValue([$microsoftUser])
         );
 
         $this->assertEquals(
             [$microsoftUser],
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users', \Microsoft\Graph\Model\User::class, true
+                '/users', User::class, true
             )
         );
     }
@@ -215,17 +216,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockCollectionRequest(
-            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            'GET', '/users', User::class,
             $this->returnValue([$microsoftUser]), 0
         );
 
         $this->assertEquals(
             [],
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users', \Microsoft\Graph\Model\User::class, true
+                '/users', User::class, true
             )
         );
     }
@@ -237,10 +238,10 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockRequest(
-            'GET', '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class,
+            'GET', '/users/no-reply@example.com', User::class,
             $this->throwException(new ClientExceptionStub(GraphRepository::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED))
         );
 
@@ -260,7 +261,7 @@ class GraphRepositoryTest extends ChamiloTestCase
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-                '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class
+                '/users/no-reply@example.com', User::class
             )
         );
     }
@@ -273,12 +274,12 @@ class GraphRepositoryTest extends ChamiloTestCase
         $this->constructWithStoredAccessToken();
 
         $this->mockRequest(
-            'GET', '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class,
+            'GET', '/users/no-reply@example.com', User::class,
             $this->throwException(new ClientExceptionStub(GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND))
         );
 
         $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-            '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class
+            '/users/no-reply@example.com', User::class
         );
     }
 
@@ -286,17 +287,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken(true);
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockRequest(
-            'GET', '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class,
+            'GET', '/users/no-reply@example.com', User::class,
             $this->returnValue($microsoftUser)
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executeGetWithDelegatedAccess(
-                '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class
+                '/users/no-reply@example.com', User::class
             )
         );
     }
@@ -305,17 +306,17 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken(true);
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockCollectionRequest(
-            'GET', '/users', \Microsoft\Graph\Model\User::class,
+            'GET', '/users', User::class,
             $this->returnValue([$microsoftUser])
         );
 
         $this->assertEquals(
             [$microsoftUser],
             $this->graphRepository->executeGetWithDelegatedAccess(
-                '/users', \Microsoft\Graph\Model\User::class, true
+                '/users', User::class, true
             )
         );
     }
@@ -370,17 +371,17 @@ class GraphRepositoryTest extends ChamiloTestCase
 
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
 
         $this->mockRequest(
-            'GET', '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class,
+            'GET', '/users/no-reply@example.com', User::class,
             $this->returnValue($microsoftUser)
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executeGetWithDelegatedAccess(
-                '/users/no-reply@example.com', \Microsoft\Graph\Model\User::class
+                '/users/no-reply@example.com', User::class
             )
         );
     }
@@ -389,18 +390,18 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
         $body = ['username' => 'testUser'];
 
         $this->mockRequest(
-            'POST', '/users', \Microsoft\Graph\Model\User::class,
+            'POST', '/users', User::class,
             $this->returnValue($microsoftUser), $body
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executePostWithAccessTokenExpirationRetry(
-                '/users', $body, \Microsoft\Graph\Model\User::class
+                '/users', $body, User::class
             )
         );
     }
@@ -409,18 +410,18 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken(true);
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
         $body = ['username' => 'testUser'];
 
         $this->mockRequest(
-            'POST', '/users', \Microsoft\Graph\Model\User::class,
+            'POST', '/users', User::class,
             $this->returnValue($microsoftUser), $body
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executePostWithDelegatedAccess(
-                '/users', $body, \Microsoft\Graph\Model\User::class
+                '/users', $body, User::class
             )
         );
     }
@@ -429,18 +430,18 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken();
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
         $body = ['username' => 'testUser'];
 
         $this->mockRequest(
-            'PATCH', '/users', \Microsoft\Graph\Model\User::class,
+            'PATCH', '/users', User::class,
             $this->returnValue($microsoftUser), $body
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executePatchWithAccessTokenExpirationRetry(
-                '/users', $body, \Microsoft\Graph\Model\User::class
+                '/users', $body, User::class
             )
         );
     }
@@ -449,18 +450,18 @@ class GraphRepositoryTest extends ChamiloTestCase
     {
         $this->constructWithStoredAccessToken(true);
 
-        $microsoftUser = new \Microsoft\Graph\Model\User();
+        $microsoftUser = new User();
         $body = ['username' => 'testUser'];
 
         $this->mockRequest(
-            'PATCH', '/users', \Microsoft\Graph\Model\User::class,
+            'PATCH', '/users', User::class,
             $this->returnValue($microsoftUser), $body
         );
 
         $this->assertEquals(
             $microsoftUser,
             $this->graphRepository->executePatchWithDelegatedAccess(
-                '/users', $body, \Microsoft\Graph\Model\User::class
+                '/users', $body, User::class
             )
         );
     }
@@ -470,12 +471,12 @@ class GraphRepositoryTest extends ChamiloTestCase
         $this->constructWithStoredAccessToken();
 
         $this->mockRequest(
-            'DELETE', '/users/5', \Microsoft\Graph\Model\User::class,
+            'DELETE', '/users/5', User::class,
             $this->returnValue(null)
         );
 
         $this->graphRepository->executeDeleteWithAccessTokenExpirationRetry(
-            '/users/5', \Microsoft\Graph\Model\User::class
+            '/users/5', User::class
         );
     }
 
@@ -484,12 +485,12 @@ class GraphRepositoryTest extends ChamiloTestCase
         $this->constructWithStoredAccessToken(true);
 
         $this->mockRequest(
-            'DELETE', '/users/5', \Microsoft\Graph\Model\User::class,
+            'DELETE', '/users/5', User::class,
             $this->returnValue(null)
         );
 
         $this->graphRepository->executeDeleteWithDelegatedAccess(
-            '/users/5', \Microsoft\Graph\Model\User::class
+            '/users/5', User::class
         );
     }
 

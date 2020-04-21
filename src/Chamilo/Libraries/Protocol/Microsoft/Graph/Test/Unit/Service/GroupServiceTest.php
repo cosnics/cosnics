@@ -9,6 +9,8 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use Microsoft\Graph\Model\Group;
+use Microsoft\Graph\Model\PlannerPlan;
 
 /**
  * Tests the GroupService
@@ -78,7 +80,7 @@ class GroupServiceTest extends ChamiloTestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('createGroup')
             ->with($groupName)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5])));
+            ->will($this->returnValue(new Group(['id' => 5])));
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeMemberInGroup')
@@ -434,8 +436,8 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $groupPlans = [
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 3]),
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
+            new PlannerPlan(['id' => 3]),
+            new PlannerPlan(['id' => 9]),
         ];
 
         $this->groupRepositoryMock->expects($this->once())
@@ -451,8 +453,8 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $groupPlans = [
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 3]),
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
+            new PlannerPlan(['id' => 3]),
+            new PlannerPlan(['id' => 9]),
         ];
 
         $this->groupRepositoryMock->expects($this->once())
@@ -484,7 +486,7 @@ class GroupServiceTest extends ChamiloTestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+            ->will($this->returnValue(new PlannerPlan(['id' => 3])));
 
         $this->assertEquals(3, $this->groupService->createPlanForGroup($groupId, $planName));
     }
@@ -497,12 +499,12 @@ class GroupServiceTest extends ChamiloTestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')
             ->with($groupId)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
+            ->will($this->returnValue(new Group(['id' => 5, 'displayName' => $planName])));
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+            ->will($this->returnValue(new PlannerPlan(['id' => 3])));
 
         $this->assertEquals(3, $this->groupService->createPlanForGroup($groupId));
     }
@@ -512,8 +514,8 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $groupPlans = [
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 3]),
-            new \Microsoft\Graph\Model\PlannerPlan(['id' => 9]),
+            new PlannerPlan(['id' => 3]),
+            new PlannerPlan(['id' => 9]),
         ];
 
         $this->groupRepositoryMock->expects($this->once())
@@ -537,12 +539,12 @@ class GroupServiceTest extends ChamiloTestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')
             ->with($groupId)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => $planName])));
+            ->will($this->returnValue(new Group(['id' => 5, 'displayName' => $planName])));
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('createPlanForGroup')
             ->with($groupId, $planName)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\PlannerPlan(['id' => 3])));
+            ->will($this->returnValue(new PlannerPlan(['id' => 3])));
 
         $this->assertEquals(3, $this->groupService->getOrCreatePlanIdForGroup($groupId));
     }
@@ -569,7 +571,7 @@ class GroupServiceTest extends ChamiloTestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getGroup')
             ->with($groupId)
-            ->will($this->returnValue(new \Microsoft\Graph\Model\Group(['id' => 5, 'displayName' => 'Group 101'])));
+            ->will($this->returnValue(new Group(['id' => 5, 'displayName' => 'Group 101'])));
 
         $this->userServiceMock->expects($this->exactly(3))
             ->method('getAzureUserIdentifier')
@@ -631,7 +633,7 @@ class GroupServiceTest extends ChamiloTestCase
             ->with($groupId)
             ->will(
                 $this->returnValue(
-                    new \Microsoft\Graph\Model\Group(
+                    new Group(
                         ['id' => 5, 'displayName' => 'Group 101', 'mailNickname' => 'testgroup@microsoft.com']
                     )
                 )

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Datamanager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
@@ -40,7 +41,7 @@ class UserStatusViewerComponent extends Manager
         
         if ($this->user_id != $this->get_user()->get_id())
         {
-            $subject_user = \Chamilo\Core\User\Storage\Datamanager::retrieve_by_id(User::class_name(), $this->user_id);
+            $subject_user = Datamanager::retrieve_by_id(User::class_name(), $this->user_id);
         }
         else
         {

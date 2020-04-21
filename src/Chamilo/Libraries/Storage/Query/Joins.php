@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
+use Countable;
 
 /**
  *
@@ -10,9 +12,9 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Joins implements \Countable, Hashable
+class Joins implements Countable, Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use HashableTrait;
 
     /**
      *

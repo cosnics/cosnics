@@ -5,7 +5,9 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use League\OAuth2\Client\Provider\GenericProvider;
 use Microsoft\Graph\Graph;
+use stdClass;
 
 /**
  * Factory class for Microsoft Graph
@@ -87,14 +89,14 @@ class GraphRepositoryFactory
             )
         );
 
-        $oauthClient = $provider = new \League\OAuth2\Client\Provider\GenericProvider(
+        $oauthClient = $provider = new GenericProvider(
             [
                 'clientId' => $clientId,
                 'clientSecret' => $clientSecret,
                 'urlAuthorize' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/authorize',
                 'urlAccessToken' => 'https://login.microsoftonline.com/' . $tenantId . '/oauth2/token',
                 'redirectUri' => $redirect->getUrl(),
-                'urlResourceOwnerDetails' => new \stdClass(),
+                'urlResourceOwnerDetails' => new stdClass(),
                 'state' => $state
             ]
         );

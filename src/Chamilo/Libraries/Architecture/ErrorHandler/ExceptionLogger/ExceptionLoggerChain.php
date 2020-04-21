@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Exception;
 
 /**
  * Exception Logger that chains other exception loggers
@@ -29,7 +30,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
     {
         if (empty($exceptionLoggers))
         {
-            throw new \Exception(
+            throw new Exception(
                 'You must provide at least one exception logger that implements ExceptionLoggerInterface');
         }
 
@@ -37,7 +38,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         {
             if (! $exceptionLogger instanceof ExceptionLoggerInterface)
             {
-                throw new \Exception(
+                throw new Exception(
                     sprintf(
                         'The given exception logger does not implement ExceptionLoggerInterface (%s)',
                         get_class($exceptionLogger)));

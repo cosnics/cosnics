@@ -3,6 +3,8 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\Session;
+use Exception;
+use Raven_Client;
 
 /**
  * Logs Exceptions to Sentry (sentry.io)
@@ -33,17 +35,17 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     {
         if (! class_exists('\Raven_Client'))
         {
-            throw new \Exception('Can not use the SentryExceptionLogger when sentry is not included');
+            throw new Exception('Can not use the SentryExceptionLogger when sentry is not included');
         }
 
         if (empty($sentryConnectionString))
         {
-            throw new \Exception('The given connection string for sentry can not be empty');
+            throw new Exception('The given connection string for sentry can not be empty');
         }
 
         $this->sentryConnectionString = $sentryConnectionString;
 
-        $this->sentryClient = new \Raven_Client(
+        $this->sentryClient = new Raven_Client(
             $sentryConnectionString,
             array('install_default_breadcrumb_handlers' => false));
     }

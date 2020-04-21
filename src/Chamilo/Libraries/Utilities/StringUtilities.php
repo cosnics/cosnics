@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Utilities;
 
+use Stringy\Stringy;
+
 /**
  *
  * @package Chamilo\Libraries\Utilities
@@ -59,7 +61,7 @@ class StringUtilities
      */
     public function createString($string)
     {
-        return \Stringy\Stringy::create($string, $this->encoding);
+        return Stringy::create($string, $this->encoding);
     }
 
     /**

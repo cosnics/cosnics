@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -16,8 +18,8 @@ use Chamilo\Libraries\Storage\Query\GroupBy;
  */
 abstract class DataClassParameters implements Hashable
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+    use ClassContext;
+    use HashableTrait;
 
     /**
      * The condition to be applied to the action

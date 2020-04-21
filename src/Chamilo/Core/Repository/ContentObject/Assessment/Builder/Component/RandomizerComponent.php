@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\ComplexHotspotQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\ComplexOrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,7 +22,7 @@ class RandomizerComponent extends Manager
 
     public function run()
     {
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(), 
             new DataClassRetrievesParameters(
                 new EqualityCondition(

@@ -28,6 +28,16 @@ abstract class TableComponent
     }
 
     /**
+     * Returns the component of the object table
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function get_component()
+    {
+        return $this->get_table()->get_component();
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Format\Table\Table
      */
@@ -43,15 +53,5 @@ abstract class TableComponent
     public function set_table(Table $table)
     {
         $this->table = $table;
-    }
-
-    /**
-     * Returns the component of the object table
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function get_component()
-    {
-        return $this->get_table()->get_component();
     }
 }

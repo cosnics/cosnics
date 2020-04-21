@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use InvalidArgumentException;
 
 /**
  * Tracking parameters for the learning path tracking service and repository
@@ -65,7 +66,7 @@ class TrackingParameters implements TrackingParametersInterface
     {
         if (empty($publicationId) || ! is_int($publicationId))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given publicationId should be a valid integer and should not be empty');
         }
 

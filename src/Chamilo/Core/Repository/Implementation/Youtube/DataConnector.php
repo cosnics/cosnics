@@ -17,6 +17,19 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use DateInterval;
+use Exception;
+use Google_Http_MediaFileUpload;
+use Google_Service_YouTube;
+use Google_Service_YouTube_Playlist;
+use Google_Service_YouTube_PlaylistItem;
+use Google_Service_YouTube_PlaylistItemSnippet;
+use Google_Service_YouTube_PlaylistSnippet;
+use Google_Service_YouTube_PlaylistStatus;
+use Google_Service_YouTube_ResourceId;
+use Google_Service_YouTube_Video;
+use Google_Service_YouTube_VideoSnippet;
+use Google_Service_YouTube_VideoStatus;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -56,7 +69,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         
         $this->client = $this->googleClientService->getGoogleClient();
         
-        $this->youtube = new \Google_Service_YouTube($this->client);
+        $this->youtube = new Google_Service_YouTube($this->client);
     }
 
     /**
@@ -125,30 +138,30 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function create_playlist(PlayList $playlist/*, $video*/)
     {
-        $playlistSnippet = new \Google_Service_YouTube_PlaylistSnippet();
+        $playlistSnippet = new Google_Service_YouTube_PlaylistSnippet();
         $playlistSnippet->setTitle($playlist->get_title() . $playlist->get_date());
         $playlistSnippet->setDescription($playlist->get_description());
         
-        $playlistStatus = new \Google_Service_YouTube_PlaylistStatus();
+        $playlistStatus = new Google_Service_YouTube_PlaylistStatus();
         $playlistStatus->setPrivacyStatus('private');
         
-        $youTubePlaylist = new \Google_Service_YouTube_Playlist();
+        $youTubePlaylist = new Google_Service_YouTube_Playlist();
         $youTubePlaylist->setSnippet($playlistSnippet);
         $youTubePlaylist->setStatus($playlistStatus);
         
         $playlistResponse = $this->youtube->playlists->insert('snippet,status', $youTubePlaylist);
         $playlistId = $playlistResponse['id'];
         
-        $resourceId = new \Google_Service_YouTube_ResourceId();
+        $resourceId = new Google_Service_YouTube_ResourceId();
         $resourceId->setVideoId('SZj6rAYkYOg');
         $resourceId->setKind('youtube#video');
         
-        $playlistItemSnippet = new \Google_Service_YouTube_PlaylistItemSnippet();
+        $playlistItemSnippet = new Google_Service_YouTube_PlaylistItemSnippet();
         $playlistItemSnippet->setTitle('First video in the test playlist');
         $playlistItemSnippet->setPlaylistId($playlistId);
         $playlistItemSnippet->setResourceId($resourceId);
         
-        $playlistItem = new \Google_Service_YouTube_PlaylistItem();
+        $playlistItem = new Google_Service_YouTube_PlaylistItem();
         $playlistItem->setSnippet($playlistItemSnippet);
         $playlistItemResponse = $this->youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
         return $playlistItemResponse;
@@ -273,10 +286,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
             try
             {
-                $date_interval = new \DateInterval($iso_duration);
+                $date_interval = new DateInterval($iso_duration);
                 $object->set_duration($date_interval->format('%s'));
             }
-            catch(\Exception $ex)
+            catch(Exception $ex)
             {
                 $object->set_duration(0);
             }
@@ -347,7 +360,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_modified(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
         
         $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
-        $date_interval = new \DateInterval($iso_duration);
+        $date_interval = new DateInterval($iso_duration);
         $object->set_duration($date_interval->format('%s'));
         
         $thumbnails = $videosResponse['modelData']['items'][0]['snippet']['thumbnails'];
@@ -407,7 +420,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function export_external_repository_object($object)
     {
         $videoPath = $object->get_full_path();
-        $snippet = new \Google_Service_YouTube_VideoSnippet();
+        $snippet = new Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($object->get_title());
         $snippet->setDescription(strip_tags($object->get_description()));
         $snippet->setTags(array("tag1", "tag2"));
@@ -415,18 +428,18 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // Category Education
         $snippet->setCategoryId(27);
         
-        $status = new \Google_Service_YouTube_VideoStatus();
+        $status = new Google_Service_YouTube_VideoStatus();
         $status->privacyStatus = "unlisted";
         $status->embeddable = true;
         
-        $video = new \Google_Service_YouTube_Video();
+        $video = new Google_Service_YouTube_Video();
         $video->setSnippet($snippet);
         $video->setStatus($status);
         $chunkSizeBytes = 1 * 1024 * 1024;
         $this->client->setDefer(true);
         $insertRequest = $this->youtube->videos->insert("status,snippet", $video);
         
-        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
+        $media = new Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($videoPath));
         $status = false;
         $handle = fopen($videoPath, "rb");
@@ -444,17 +457,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function upload_video($values, $_video_file)
     {
-        $snippet = new \Google_Service_YouTube_VideoSnippet();
+        $snippet = new Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($values[ExternalObjectForm::VIDEO_TITLE]);
         $snippet->setDescription($values[ExternalObjectForm::VIDEO_DESCRIPTION]);
         $snippet->setTags($values[ExternalObjectForm::VIDEO_TAGS]);
         $snippet->setCategoryId($values[ExternalObjectForm::VIDEO_CATEGORY]);
         
-        $status = new \Google_Service_YouTube_VideoStatus();
+        $status = new Google_Service_YouTube_VideoStatus();
         $status->privacyStatus = "unlisted";
         $status->embeddable = true;
         
-        $video = new \Google_Service_YouTube_Video();
+        $video = new Google_Service_YouTube_Video();
         $video->setSnippet($snippet);
         $video->setStatus($status);
         
@@ -462,7 +475,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->client->setDefer(true);
         
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
-        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
+        $media = new Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
         $status = false;
         $handle = fopen($_video_file['tmp_name'], "rb");

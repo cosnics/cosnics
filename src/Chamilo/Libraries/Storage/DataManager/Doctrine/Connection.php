@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
+use Exception;
 
 /**
  *
@@ -40,7 +42,7 @@ class Connection
         if (is_null($connection))
         {
             $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName::getFromConfiguration('Doctrine');
-            $configuration = new \Doctrine\DBAL\Configuration();
+            $configuration = new Configuration();
             $connection_parameters = array(
                 'dbname' => $data_source_name->getDatabase(), 'user' => $data_source_name->getUsername(),
                 'password' => $data_source_name->getPassword(), 'host' => $data_source_name->getHost(),
@@ -53,7 +55,7 @@ class Connection
 
                 $this->connection->connect();
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 throw new ConnectionException(
                     'Could not connect to the database. Please contact your system administrator.'

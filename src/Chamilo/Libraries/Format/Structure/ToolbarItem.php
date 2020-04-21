@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -14,9 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ToolbarItem
 {
     const DISPLAY_ICON = 1;
-
     const DISPLAY_ICON_AND_LABEL = 3;
-
     const DISPLAY_LABEL = 2;
 
     /**
@@ -86,7 +83,7 @@ class ToolbarItem
      * @param string[] $extraAttributes
      */
     public function __construct(
-        $label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false,
+        $label = null, $image = null, $href = null, $display = self::DISPLAY_ICON_AND_LABEL, $confirmation = false,
         $class = null, $target = null, $confirmationMessage = null, $extraAttributes = null
     )
     {
@@ -130,103 +127,6 @@ class ToolbarItem
         $buttonRenderer = new ButtonRenderer($button);
 
         return $buttonRenderer->render();
-
-        $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
-        if (!$this->get_display())
-        {
-            $this->display = self::DISPLAY_ICON;
-        }
-
-        $displayLabel = ($this->display & self::DISPLAY_LABEL) == self::DISPLAY_LABEL && !empty($label);
-
-        $button = '';
-
-        if (($this->display & self::DISPLAY_ICON) == self::DISPLAY_ICON && isset($this->image))
-        {
-            if (!$this->image instanceof InlineGlyph)
-            {
-                $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' .
-                    htmlentities($label) . '"' . ($displayLabel ? ' class="labeled"' : '') . '/>';
-            }
-            else
-            {
-                $button .= $this->image->render();
-            }
-        }
-
-        if ($this->class)
-        {
-            $class = ' class="btn btn-default ' . $this->class . '"';
-        }
-        else
-        {
-            $class = ' class="btn btn-default"';
-        }
-
-        if ($displayLabel)
-        {
-            if ($this->get_href())
-            {
-                $button .= '<span>' . $label . '</span>';
-            }
-            else
-            {
-                $button .= '<span' . $class . '>' . $label . '</span>';
-            }
-        }
-
-        $elementName = $this->get_href() ? 'a' : 'div';
-
-        $elementAttributes = array();
-
-        if ($this->get_href())
-        {
-            if ($this->get_confirmation() === true)
-            {
-                $this->set_confirmation(Translation::get($this->confirmationMessage));
-            }
-
-            if ($this->target)
-            {
-                $target = ' target="' . $this->target . '"';
-            }
-            else
-            {
-                $target = '';
-            }
-
-            $extraAttributesString = array();
-
-            foreach ($this->getExtraAttributes() as $extraAttributeKey => $extraAttributeValue)
-            {
-                $extraAttributesString[] = $extraAttributeKey . '="' . $extraAttributeValue . '"';
-            }
-
-            $extraAttributesString = implode(' ', $extraAttributesString);
-
-            $html[] =
-                '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . htmlentities($label) .
-                '"' . ($this->needs_confirmation() ?
-                    ' onclick="return confirm(\'' . addslashes(htmlentities($this->get_confirmation())) . '\');"' :
-                    '') . ' ' . $extraAttributesString . '>';
-        }
-
-        if (($this->display & self::DISPLAY_ICON) == self::DISPLAY_ICON && isset($this->image))
-        {
-            if (!$this->image instanceof InlineGlyph)
-            {
-                $html[] = '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' .
-                    htmlentities($label) . '"' . ($displayLabel ? ' class="labeled"' : '') . '/>';
-            }
-            else
-            {
-                $html[] = $this->image->render();
-            }
-        }
-
-        $html[] = '</' . $elementName . '>';
-
-        return implode('', $html);
     }
 
     /**
@@ -250,7 +150,7 @@ class ToolbarItem
 
     /**
      *
-     * @return string
+     * @return string[]
      */
     public function getExtraAttributes()
     {
@@ -358,7 +258,7 @@ class ToolbarItem
 
     /**
      *
-     * @param unknown $label
+     * @param string $label
      */
     public function set_label($label)
     {

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
@@ -255,7 +256,7 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntryTableForEntityTypeAndId()
      */
     public function getEntryTableForEntityTypeAndId(
-        \Chamilo\Libraries\Architecture\Application\Application $application,
+        Application $application,
         $entityType, $entityId
     )
     {
@@ -276,7 +277,7 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntry()
      */
     public function countFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+        Entry $entry
     )
     {
         // TODO Auto-generated method stub
@@ -287,8 +288,8 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createNote()
      */
     public function createNote(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry,
-        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedNote
+        Entry $entry,
+        User $user, $submittedNote
     )
     {
         // TODO Auto-generated method stub
@@ -336,7 +337,7 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findFeedbackByEntry()
      */
     public function findFeedbackByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+        Entry $entry
     )
     {
         // TODO Auto-generated method stub
@@ -356,7 +357,7 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findNoteByEntry()
      */
     public function findNoteByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+        Entry $entry
     )
     {
         // TODO Auto-generated method stub
@@ -367,7 +368,7 @@ class AssignmentDataProvider implements
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findScoreByEntry()
      */
     public function findScoreByEntry(
-        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+        Entry $entry
     )
     {
         // TODO Auto-generated method stub
@@ -408,7 +409,7 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::updateNote()
      */
-    public function updateNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note $note)
+    public function updateNote(Note $note)
     {
         // TODO Auto-generated method stub
     }
@@ -417,7 +418,7 @@ class AssignmentDataProvider implements
      *
      * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::updateScore()
      */
-    public function updateScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
+    public function updateScore(Score $score
     )
     {
         // TODO Auto-generated method stub

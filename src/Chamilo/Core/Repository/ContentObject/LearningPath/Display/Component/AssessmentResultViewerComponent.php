@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -24,7 +25,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
 
         $this->getRequest()->query->set(
             \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
-            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT);
+            Manager::ACTION_VIEW_ASSESSMENT_RESULT);
 
         return $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\ContentObject\Assessment\Display',

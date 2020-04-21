@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * @package Chamilo\Libraries\Rights\Domain
@@ -102,7 +103,7 @@ class RightsLocation extends NestedSet
         }
         else
         {
-            throw new \Exception(Translation::get('InvalidDataRetrievedFromDatabase'));
+            throw new Exception(Translation::get('InvalidDataRetrievedFromDatabase'));
         }
     }
 

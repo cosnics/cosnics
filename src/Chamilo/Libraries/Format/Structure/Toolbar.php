@@ -44,7 +44,7 @@ class Toolbar
      * @param string[] $class_names
      * @param string $css
      */
-    public function __construct($type = self :: TYPE_HORIZONTAL, $class_names = array(), $css = null)
+    public function __construct($type = self::TYPE_HORIZONTAL, $class_names = array(), $css = null)
     {
         $this->type = $type;
         $this->class_names = $class_names;
@@ -77,7 +77,6 @@ class Toolbar
 
         $html[] = '<div class="btn-toolbar btn-toolbar-cosnics">';
         $html[] = '<div class="btn-group ">';
-        //        $html[] = '<ul class="' . implode(' ', $class_names) . '"' . (isset($css) ? ' style="' . $css . '"' : '') . '>';
 
         foreach ($toolbar_data as $index => $toolbar_item)
         {
@@ -93,13 +92,9 @@ class Toolbar
                 $classes[] = 'last';
             }
 
-            //            $html[] = '<li' . (count($classes) ? ' class="' . implode(' ', $classes) . '"' : '') . '>' .
-            //                 $toolbar_item->as_html() . '</li>';
-
             $html[] = $toolbar_item->render();
         }
 
-        //        $html[] = '</ul>';
         $html[] = '</div>';
         $html[] = '</div>';
 

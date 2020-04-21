@@ -28,6 +28,20 @@ class FontAwesomeGlyph extends InlineGlyph
     }
 
     /**
+     *
+     * @see \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph::getBaseClassNames()
+     */
+    public function getBaseClassNames()
+    {
+        $baseClassNames = parent::getBaseClassNames();
+
+        $baseClassNames[] = $this->getStyle();
+        $baseClassNames[] = 'fa-' . $this->getType();
+
+        return $baseClassNames;
+    }
+
+    /**
      * @return string
      */
     public function getStyle(): string
@@ -45,19 +59,5 @@ class FontAwesomeGlyph extends InlineGlyph
         $this->style = $style;
 
         return $this;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph::getBaseClassNames()
-     */
-    public function getBaseClassNames()
-    {
-        $baseClassNames = parent::getBaseClassNames();
-
-        $baseClassNames[] = $this->getStyle();
-        $baseClassNames[] = 'fa-' . $this->getType();
-
-        return $baseClassNames;
     }
 }

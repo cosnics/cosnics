@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Exception;
 
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
+use Exception;
 use Throwable;
 
 /**
@@ -9,6 +10,6 @@ use Throwable;
  *
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DisplayOrderException extends \Exception
+class DisplayOrderException extends Exception
 {
 }

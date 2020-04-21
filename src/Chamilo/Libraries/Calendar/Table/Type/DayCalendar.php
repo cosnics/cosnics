@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -298,7 +299,7 @@ class DayCalendar extends Calendar
                     $cellContent .= $item;
                     $this->setCellContents($row, 1, $cellContent);
                 }
-                catch (\Exception $exception)
+                catch (Exception $exception)
                 {
                 }
             }

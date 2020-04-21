@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Mail\Mailer;
 
+use Chamilo\Libraries\Mail\ValueObject\Mail;
+
 /**
  * Interface for mailer services
  *
@@ -16,7 +18,7 @@ interface MailerInterface
      * 
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
-    public function sendMail(\Chamilo\Libraries\Mail\ValueObject\Mail $mail);
+    public function sendMail(Mail $mail);
 
     /**
      * Sends multiple mails

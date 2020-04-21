@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\File\PackagesContentFinder;
 
+use InvalidArgumentException;
+
 /**
  * Base class that can be used by other classes to include the PackagesClassFinder
  *
@@ -36,7 +38,7 @@ abstract class PackagesClassFinderAware
     {
         if (! $packagesClassFinder instanceof PackagesClassFinder)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given packages class finder should be an instance of' .
                      ' "\common\libraries\PackagesClassFinder", instead "' . get_class($packagesClassFinder) .
                      '" was given');

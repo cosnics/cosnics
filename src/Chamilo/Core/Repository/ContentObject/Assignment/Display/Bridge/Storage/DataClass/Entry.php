@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Exception;
 
 /**
  *
@@ -160,7 +162,7 @@ abstract class Entry extends DataClass
         {
             if (!isset($this->contentObject))
             {
-                $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $this->contentObject = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $this->getContentObjectId()
                 );
@@ -168,7 +170,7 @@ abstract class Entry extends DataClass
 
             return $this->contentObject;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return null;
         }

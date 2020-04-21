@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
+use Exception;
 
 /**
  *
@@ -12,10 +13,9 @@ use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
  */
 class Pager
 {
-    const DISPLAY_PER_PAGE_LIMIT = 500;
-    const DISPLAY_PER_INCREMENT = 20;
-    const DISPLAY_PER_INCREMENT_INTERVAL_LIMIT = 60;
     const DISPLAY_ALL = 'all';
+    const DISPLAY_PER_INCREMENT = 20;
+    const DISPLAY_PER_PAGE_LIMIT = 500;
 
     /**
      *
@@ -84,18 +84,93 @@ class Pager
      *
      * @return integer
      */
-    public function getNumberOfRows()
+    public function getCurrentPageNumber()
     {
-        return $this->numberOfRows;
+        return $this->currentPageNumber;
     }
 
     /**
      *
-     * @param integer $numberOfRows
+     * @param integer $currentPageNumber
      */
-    public function setNumberOfRows($numberOfRows)
+    public function setCurrentPageNumber($currentPageNumber)
     {
-        $this->numberOfRows = $numberOfRows;
+        $this->currentPageNumber = $currentPageNumber;
+    }
+
+    /**
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getCurrentRangeEnd()
+    {
+        try
+        {
+            if (!isset($this->currentRangeEnd))
+            {
+                $currentRangeStart = $this->getCurrentRangeStart();
+                $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage() - 1;
+
+                if ($calculatedRangeEnd > $this->getNumberOfItems())
+                {
+                    return $this->getNumberOfItems();
+                }
+
+                $this->currentRangeEnd = $calculatedRangeEnd;
+            }
+
+            return $this->currentRangeEnd;
+        }
+        catch (Exception $exception)
+        {
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return integer
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
+    public function getCurrentRangeOffset()
+    {
+        return $this->getPreviousRangeEnd();
+    }
+
+    /**
+     *
+     * @return integer
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
+    public function getCurrentRangeStart()
+    {
+        try
+        {
+            if (!isset($this->currentRangeStart))
+            {
+                try
+                {
+                    $calculatedRangeStart = $this->getPreviousRangeEnd() + 1;
+                }
+                catch (InvalidPageNumberException $exception)
+                {
+                    $calculatedRangeStart = 0;
+                }
+
+                if ($calculatedRangeStart > $this->getNumberOfItems())
+                {
+                    throw new Exception('Invalid page number');
+                }
+
+                $this->currentRangeStart = $calculatedRangeStart;
+            }
+
+            return $this->currentRangeStart;
+        }
+        catch (Exception $exception)
+        {
+            throw $exception;
+        }
     }
 
     /**
@@ -138,124 +213,9 @@ class Pager
      *
      * @return integer
      */
-    public function getCurrentPageNumber()
-    {
-        return $this->currentPageNumber;
-    }
-
-    /**
-     *
-     * @param integer $currentPageNumber
-     */
-    public function setCurrentPageNumber($currentPageNumber)
-    {
-        $this->currentPageNumber = $currentPageNumber;
-    }
-
-    /**
-     *
-     * @return integer
-     */
     public function getNumberOfItemsPerPage()
     {
         return $this->getNumberOfRows() * $this->getNumberOfColumns();
-    }
-
-    /**
-     *
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @return integer
-     */
-    public function getPreviousRangeEnd()
-    {
-        if (! isset($this->previousRangeEnd))
-        {
-            $calculatedRangeEnd = ($this->getCurrentPageNumber() - 1) * $this->getNumberOfItemsPerPage();
-
-            if ($calculatedRangeEnd > $this->getNumberOfItems())
-            {
-                throw new InvalidPageNumberException();
-            }
-
-            $this->previousRangeEnd = $calculatedRangeEnd;
-        }
-
-        return $this->previousRangeEnd;
-    }
-
-    /**
-     *
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @return integer
-     */
-    public function getCurrentRangeStart()
-    {
-        try
-        {
-            if (! isset($this->currentRangeStart))
-            {
-                try
-                {
-                    $calculatedRangeStart = $this->getPreviousRangeEnd() + 1;
-                }
-                catch (InvalidPageNumberException $exception)
-                {
-                    $calculatedRangeStart = 0;
-                }
-
-                if ($calculatedRangeStart > $this->getNumberOfItems())
-                {
-                    throw new \Exception('Invalid page number');
-                }
-
-                $this->currentRangeStart = $calculatedRangeStart;
-            }
-
-            return $this->currentRangeStart;
-        }
-        catch (\Exception $exception)
-        {
-            throw $exception;
-        }
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentRangeOffset()
-    {
-        return $this->getPreviousRangeEnd();
-    }
-
-    /**
-     *
-     * @throws \Exception
-     * @return integer
-     */
-    public function getCurrentRangeEnd()
-    {
-        try
-        {
-            if (! isset($this->currentRangeEnd))
-            {
-                $currentRangeStart = $this->getCurrentRangeStart();
-                $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage() - 1;
-
-                if ($calculatedRangeEnd > $this->getNumberOfItems())
-                {
-                    return $this->getNumberOfItems();
-                }
-
-                $this->currentRangeEnd = $calculatedRangeEnd;
-            }
-
-            return $this->currentRangeEnd;
-        }
-        catch (\Exception $exception)
-        {
-            throw $exception;
-        }
     }
 
     /**
@@ -264,7 +224,7 @@ class Pager
      */
     public function getNumberOfPages()
     {
-        if (! isset($this->numberOfPages))
+        if (!isset($this->numberOfPages))
         {
             if ($this->getNumberOfItemsPerPage() == Pager::DISPLAY_ALL)
             {
@@ -277,5 +237,45 @@ class Pager
         }
 
         return $this->numberOfPages;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getNumberOfRows()
+    {
+        return $this->numberOfRows;
+    }
+
+    /**
+     *
+     * @param integer $numberOfRows
+     */
+    public function setNumberOfRows($numberOfRows)
+    {
+        $this->numberOfRows = $numberOfRows;
+    }
+
+    /**
+     *
+     * @return integer
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
+    public function getPreviousRangeEnd()
+    {
+        if (!isset($this->previousRangeEnd))
+        {
+            $calculatedRangeEnd = ($this->getCurrentPageNumber() - 1) * $this->getNumberOfItemsPerPage();
+
+            if ($calculatedRangeEnd > $this->getNumberOfItems())
+            {
+                throw new InvalidPageNumberException();
+            }
+
+            $this->previousRangeEnd = $calculatedRangeEnd;
+        }
+
+        return $this->previousRangeEnd;
     }
 }

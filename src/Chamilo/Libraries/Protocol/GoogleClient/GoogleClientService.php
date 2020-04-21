@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Protocol\GoogleClient;
 
 use Chamilo\Libraries\File\Redirect;
+use Google_Auth_Exception;
+use Google_Client;
 
 /**
  * Initializes and handles the login procedure for the Google Client
@@ -32,11 +34,11 @@ class GoogleClientService
      * @param \Google_Client $googleClient
      */
     public function __construct(GoogleClientSettingsProviderInterface $googleClientSettingsProvider,
-        \Google_Client $googleClient = null)
+        Google_Client $googleClient = null)
     {
         if (! $googleClient)
         {
-            $googleClient = new \Google_Client();
+            $googleClient = new Google_Client();
         }
 
         $this->googleClient = $googleClient;
@@ -79,7 +81,7 @@ class GoogleClientService
                     }
                 }
             }
-            catch (\Google_Auth_Exception $exception)
+            catch (Google_Auth_Exception $exception)
             {
                 $this->removeUserTokens();
             }

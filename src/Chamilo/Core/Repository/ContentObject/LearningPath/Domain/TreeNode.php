@@ -5,6 +5,9 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * A single node for a tree. Used in an in-memory tree
@@ -120,7 +123,7 @@ class TreeNode
     {
         if (isset($this->step))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given step is already set and synced with the learning path tree and should not be changed'
             );
         }
@@ -239,7 +242,7 @@ class TreeNode
     {
         if (isset($this->parentNode))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The parent node is already set, please recalculate the entire tree using the tree builder service'
             );
         }
@@ -358,7 +361,7 @@ class TreeNode
         {
             return $this->getTree()->getTreeNodeByStep($this->getStep() + 1);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return null;
         }
@@ -375,7 +378,7 @@ class TreeNode
         {
             return $this->getTree()->getTreeNodeByStep($this->getStep() - 1);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return null;
         }

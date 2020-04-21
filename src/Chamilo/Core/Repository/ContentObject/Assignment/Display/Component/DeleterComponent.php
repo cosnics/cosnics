@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
@@ -34,7 +35,7 @@ class DeleterComponent extends Manager
             $success = true;
             $message = 'EntryDeleted';
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = 'EntryNotDeleted';

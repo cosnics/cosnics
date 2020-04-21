@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\TopicEmailNoti
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -76,7 +77,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
-        ;
     }
 
     /**
@@ -481,7 +481,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                        User::class_name(),
                         (int) Session::get_user_id()));
                 $email_notificator->set_is_topic_edited(true);
 

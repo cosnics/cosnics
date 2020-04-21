@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -229,7 +230,7 @@ abstract class NestedSet extends DataClass
      */
     public function count_ancestors($include_self = true, $condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
+        return DataManager::count(
             get_class($this), new DataClassCountParameters($this->build_ancestry_condition($include_self, $condition))
         );
     }
@@ -243,7 +244,7 @@ abstract class NestedSet extends DataClass
      */
     public function count_children($condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
+        return DataManager::count(
             get_class($this), new DataClassCountParameters($this->build_offspring_condition(false, false, $condition))
         );
     }
@@ -257,7 +258,7 @@ abstract class NestedSet extends DataClass
      */
     public function count_descendants($condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
+        return DataManager::count(
             get_class($this), new DataClassCountParameters($this->build_offspring_condition(true, false, $condition))
         );
     }
@@ -272,7 +273,7 @@ abstract class NestedSet extends DataClass
      */
     public function count_siblings($include_self = true, $condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
+        return DataManager::count(
             get_class($this), new DataClassCountParameters($this->build_sibling_condition($include_self, $condition))
         );
     }
@@ -325,7 +326,7 @@ abstract class NestedSet extends DataClass
 
         $nested_set = $this;
 
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::transactional(
+        return DataManager::transactional(
             function ($c) use ($nested_set, $insert_after) { // Correct the left and right values wherever necessary.
                 if (!$nested_set->pre_insert($insert_after, 1))
                 {
@@ -364,7 +365,7 @@ abstract class NestedSet extends DataClass
         // Use a transaction to guarantee this.
         $nested_set = $this;
 
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::transactional(
+        return DataManager::transactional(
             function ($c) use ($condition, $nested_set) { // Keep track the descendants that need their related data
                 // cleaned up.
                 $descendants = $nested_set->get_descendants($condition);
@@ -379,7 +380,7 @@ abstract class NestedSet extends DataClass
                 }
 
                 // Delete this node as well as its offspring
-                if (!\Chamilo\Libraries\Storage\DataManager\DataManager::deletes(
+                if (!DataManager::deletes(
                     get_class($nested_set), $nested_set->build_offspring_condition(true, true, $condition)
                 ))
                 {
@@ -440,7 +441,7 @@ abstract class NestedSet extends DataClass
             new StaticConditionVariable($object_or_id)
         );
 
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve(
+        return DataManager::retrieve(
             get_class($this), new DataClassRetrieveParameters(new AndCondition($conditions))
         );
     }
@@ -455,7 +456,7 @@ abstract class NestedSet extends DataClass
      */
     private function find_values_to_fix($parent_id = 0, &$traversal_data = array('count' => 1, 'updates' => array()))
     {
-        $groups = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $groups = DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
                 $this->build_offspring_condition(), null, null, $this->build_pre_order_ordering()
             )
@@ -563,7 +564,7 @@ abstract class NestedSet extends DataClass
      */
     public function get_ancestors($include_self = true, $condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        return DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
                 $this->build_ancestry_condition($include_self, $condition), null, null,
                 $this->build_post_order_ordering()
@@ -580,7 +581,7 @@ abstract class NestedSet extends DataClass
      */
     public function get_children($condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        return DataManager::retrieves(
             get_class($this),
             new DataClassRetrievesParameters($this->build_offspring_condition(false, false, $condition))
         );
@@ -611,7 +612,7 @@ abstract class NestedSet extends DataClass
      */
     public function get_descendants($condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        return DataManager::retrieves(
             get_class($this),
             new DataClassRetrievesParameters($this->build_offspring_condition(true, false, $condition))
         );
@@ -684,7 +685,7 @@ abstract class NestedSet extends DataClass
      */
     public function get_siblings($include_self = true, $condition = null)
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        return DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
                 $this->build_sibling_condition($include_self, $condition), null, null, $this->build_pre_order_ordering()
             )
@@ -848,7 +849,7 @@ abstract class NestedSet extends DataClass
 
         $nested_set = $this;
 
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::transactional(
+        return DataManager::transactional(
             function ($c) use ($nested_set, $insert_after, $condition
             ) { // Step 0: Compute the auxiliary values used by this
                 // algorithm
@@ -926,7 +927,7 @@ abstract class NestedSet extends DataClass
                     )
                 );
 
-                $res = \Chamilo\Libraries\Storage\DataManager\DataManager::updates(
+                $res = DataManager::updates(
                     get_class($nested_set), $properties, $update_condition
                 );
 
@@ -1018,7 +1019,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        $res = \Chamilo\Libraries\Storage\DataManager\DataManager::updates(
+        $res = DataManager::updates(
             get_class($this), $properties, $update_condition
         );
 
@@ -1052,7 +1053,7 @@ abstract class NestedSet extends DataClass
         $properties = array();
         $properties[] = $right_value_data_class_property;
 
-        $res = \Chamilo\Libraries\Storage\DataManager\DataManager::updates(
+        $res = DataManager::updates(
             get_class($this), $properties, $update_condition
         );
 
@@ -1111,7 +1112,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        $res = \Chamilo\Libraries\Storage\DataManager\DataManager::updates(
+        $res = DataManager::updates(
             get_class($this), $properties, $update_condition
         );
 
@@ -1145,7 +1146,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        $res = \Chamilo\Libraries\Storage\DataManager\DataManager::updates(
+        $res = DataManager::updates(
             get_class($this), $properties, $update_condition
         );
 

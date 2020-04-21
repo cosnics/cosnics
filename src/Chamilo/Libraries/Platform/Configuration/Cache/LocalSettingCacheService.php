@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -79,7 +80,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
      */
     public function getIdentifiers()
     {
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::distinct(
+        return DataManager::distinct(
             User::class_name(),
             new DataClassDistinctParameters(
                 null,

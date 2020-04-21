@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
@@ -9,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDo
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -36,7 +38,7 @@ class BrowserComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING,
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentScoresTemplate::class_name(
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentScoresTemplate::class_name(
                         ),
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW
                     )
@@ -50,7 +52,7 @@ class BrowserComponent extends Manager
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $object = DataManager::retrieve_by_id(
             Assignment::class_name(),
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );

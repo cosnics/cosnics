@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Form\PublicationSelectorForm;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
@@ -69,7 +70,7 @@ class CourseTruncaterForm extends FormValidator
                 $translations[$tool] = Translation::get(
                     'TypeName', 
                     null, 
-                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool));
+                    Manager::get_tool_type_namespace($tool));
             }
         }
         
@@ -87,7 +88,7 @@ class CourseTruncaterForm extends FormValidator
                 $translations[$tool] = Translation::get(
                     'TypeName', 
                     null, 
-                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool));
+                    Manager::get_tool_type_namespace($tool));
             }
         }
         

@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Filesystem;
@@ -207,7 +208,7 @@ class ExporterComponent extends Manager
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
             );
 
-            $groupUsers = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            $groupUsers = DataManager::retrieves(
                 User::class_name(), new DataClassRetrievesParameters(
                     $condition, null, null, $orderBy
                 )

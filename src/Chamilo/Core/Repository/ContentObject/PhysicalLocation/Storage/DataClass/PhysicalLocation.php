@@ -19,7 +19,6 @@ class PhysicalLocation extends ContentObject implements Versionable
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
-        ;
     }
 
     public function get_location()

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -8,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use SessionHandlerInterface;
 
 /**
  *
@@ -15,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class SessionHandler implements \SessionHandlerInterface
+class SessionHandler implements SessionHandlerInterface
 {
 
     /**
@@ -74,7 +76,7 @@ class SessionHandler implements \SessionHandlerInterface
     public function read($session_id)
     {
         DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class_name());
-        $session = \Chamilo\Core\User\Storage\DataManager::retrieve(
+        $session = DataManager::retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
             new DataClassRetrieveParameters($this->getCondition($session_id)));
 
@@ -105,7 +107,7 @@ class SessionHandler implements \SessionHandlerInterface
 
         DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class_name());
 
-        $session = \Chamilo\Core\User\Storage\DataManager::retrieve(
+        $session = DataManager::retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
             new DataClassRetrieveParameters($this->getCondition($session_id)));
 
@@ -137,7 +139,7 @@ class SessionHandler implements \SessionHandlerInterface
      */
     public function destroy($session_id)
     {
-        return \Chamilo\Core\User\Storage\DataManager::deletes(
+        return DataManager::deletes(
             \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
             $this->getCondition($session_id));
     }
@@ -156,7 +158,7 @@ class SessionHandler implements \SessionHandlerInterface
             ComparisonCondition::LESS_THAN,
             new StaticConditionVariable($border));
 
-        return \Chamilo\Core\User\Storage\DataManager::deletes(
+        return DataManager::deletes(
             \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
             $condition);
     }

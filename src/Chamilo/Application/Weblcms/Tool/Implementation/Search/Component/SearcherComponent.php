@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Search\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Search\Form\SearchForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Search\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
@@ -84,7 +85,7 @@ class SearcherComponent extends Manager
                 $course_group_ids[] = $course_group->get_id();
             }
             
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            $publications = DataManager::retrieves(
                 ContentObjectPublication::class_name(), 
                 new DataClassRetrievesParameters($this->get_retrieve_publications_condition()));
             

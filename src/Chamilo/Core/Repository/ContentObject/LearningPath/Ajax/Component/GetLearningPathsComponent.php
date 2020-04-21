@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -26,7 +27,7 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
      */
     protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
     {
-        $templateRegistration = \Chamilo\Core\Repository\Configuration::getInstance()->get_registration_default_by_type(
+        $templateRegistration = Configuration::getInstance()->get_registration_default_by_type(
             LearningPath::package()
         );
 

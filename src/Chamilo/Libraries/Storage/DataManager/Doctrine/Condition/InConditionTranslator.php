@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
+use InvalidArgumentException;
 
 /**
  *
@@ -35,7 +36,7 @@ class InConditionTranslator extends ConditionTranslator
             }
             else
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'An InCondition only accepts an array or a scalar as input for the values');
             }
         }

@@ -3,6 +3,9 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\AssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
@@ -391,7 +394,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     protected function createEntryInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry(
+        return new Entry(
         );
     }
 
@@ -400,7 +403,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     protected function createEntryAttachmentInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment();
+        return new EntryAttachment();
     }
 
     /**
@@ -410,7 +413,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     protected function createScoreInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score(
+        return new Score(
         );
     }
 
@@ -419,7 +422,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -427,7 +430,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 
     /**
@@ -435,6 +438,6 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      */
     public function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 }

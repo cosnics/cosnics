@@ -13,7 +13,6 @@ class DynamicTabsRenderer
     const PARAM_SELECTED_TAB = 'tab';
 
     const TYPE_ACTIONS = 2;
-
     const TYPE_CONTENT = 1;
 
     /**
@@ -44,6 +43,8 @@ class DynamicTabsRenderer
      */
     public function render()
     {
+        $html = array();
+
         if ($this->hasTabs())
         {
             $html = array();
@@ -58,9 +59,9 @@ class DynamicTabsRenderer
             }
 
             $html[] = $this->footer();
-
-            return implode(PHP_EOL, $html);
         }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

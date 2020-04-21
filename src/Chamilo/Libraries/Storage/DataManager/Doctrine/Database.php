@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
@@ -23,7 +24,14 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Exception;
+use PDO;
+use PDOException;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -38,7 +46,7 @@ use Exception;
  */
 class Database
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     // Constants
     const STORAGE_TYPE = 'Doctrine';
@@ -169,7 +177,7 @@ class Database
                 $this->drop_storage_unit($name);
             }
 
-            $schema = new \Doctrine\DBAL\Schema\Schema();
+            $schema = new Schema();
             $table = $schema->createTable($table_name);
 
             foreach ($properties as $property => $attributes)
@@ -229,7 +237,7 @@ class Database
             {
                 $statement = $this->get_connection()->query($query);
 
-                if ($statement instanceof \PDOException)
+                if ($statement instanceof PDOException)
                 {
                     $this->error_handling($statement);
 
@@ -239,7 +247,7 @@ class Database
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->error_handling($exception);
             return false;
@@ -387,7 +395,7 @@ class Database
                 {
                     $result = $this->connection->insert($object->get_table_name(), $props);
                 }
-                catch (\Exception $exception)
+                catch (Exception $exception)
                 {
                     $this->error_handling($exception);
 
@@ -397,7 +405,7 @@ class Database
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->error_handling($exception);
 
@@ -418,7 +426,7 @@ class Database
         {
             $result = $this->connection->insert($class_name::get_table_name(), $record);
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->error_handling($exception);
 
@@ -477,7 +485,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if ($statement instanceof \PDOException)
+        if ($statement instanceof PDOException)
         {
             $this->error_handling($statement);
 
@@ -506,7 +514,7 @@ class Database
 
             $statement = $this->get_connection()->query($query_builder->getSQL());
 
-            if ($statement instanceof \PDOException)
+            if ($statement instanceof PDOException)
             {
                 $this->error_handling($statement);
 
@@ -551,7 +559,7 @@ class Database
 
             $statement = $this->get_connection()->query($query_builder->getSQL());
 
-            if (! $statement instanceof \PDOException)
+            if (! $statement instanceof PDOException)
             {
                 return true;
             }
@@ -584,7 +592,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             return true;
         }
@@ -605,7 +613,7 @@ class Database
      */
     public function drop_storage_unit($table_name)
     {
-        $schema = new \Doctrine\DBAL\Schema\Schema(array(new \Doctrine\DBAL\Schema\Table($table_name)));
+        $schema = new Schema(array(new Table($table_name)));
 
         $new_schema = clone $schema;
         $new_schema->dropTable($table_name);
@@ -616,7 +624,7 @@ class Database
         {
             $statement = $this->get_connection()->query($query);
 
-            if ($statement instanceof \PDOException)
+            if ($statement instanceof PDOException)
             {
                 $this->error_handling($statement);
 
@@ -640,7 +648,7 @@ class Database
 
         $statement = $this->get_connection()->query($query);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             return true;
         }
@@ -667,15 +675,15 @@ class Database
         {
             if ($type == DataManager::ALTER_STORAGE_UNIT_DROP)
             {
-                $column = new \Doctrine\DBAL\Schema\Column($property);
+                $column = new Column($property);
                 $query = 'ALTER TABLE ' . $table_name . ' DROP COLUMN ' .
                      $column->getQuotedName($this->get_connection()->getDatabasePlatform());
             }
             else
             {
-                $column = new \Doctrine\DBAL\Schema\Column(
+                $column = new Column(
                     $property,
-                    \Doctrine\DBAL\Types\Type::getType(self::parse_storage_unit_property_type($attributes)),
+                    Type::getType(self::parse_storage_unit_property_type($attributes)),
                     self::parse_storage_unit_attributes($attributes));
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
@@ -741,7 +749,7 @@ class Database
 
             $statement = $this->get_connection()->query($query);
 
-            if (! $statement instanceof \PDOException)
+            if (! $statement instanceof PDOException)
             {
                 return true;
             }
@@ -752,7 +760,7 @@ class Database
                 return false;
             }
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->error_handling($exception);
 
@@ -793,18 +801,18 @@ class Database
             case DataManager::ALTER_STORAGE_UNIT_ADD_INDEX :
                 $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
                     $name,
-                    new \Doctrine\DBAL\Schema\Index($name, $columns, false, false));
+                    new Index($name, $columns, false, false));
                 break;
             case DataManager::ALTER_STORAGE_UNIT_ADD_UNIQUE :
                 $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
                     $name,
-                    new \Doctrine\DBAL\Schema\Index($name, $columns, true, false));
+                    new Index($name, $columns, true, false));
                 break;
         }
 
         $statement = $this->get_connection()->query($query);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             return true;
         }
@@ -845,9 +853,9 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
-            $record = $statement->fetch(\PDO::FETCH_NUM);
+            $record = $statement->fetch(PDO::FETCH_NUM);
 
             return (int) $record[0];
         }
@@ -889,16 +897,16 @@ class Database
         $query_builder->having(ConditionTranslator::render($parameters->get_having()));
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             $counts = array();
 
-            while ($record = $statement->fetch(\PDO::FETCH_NUM))
+            while ($record = $statement->fetch(PDO::FETCH_NUM))
             {
                 $counts[$record[0]] = $record[1];
             }
 
-            $record = $statement->fetch(\PDO::FETCH_NUM);
+            $record = $statement->fetch(PDO::FETCH_NUM);
 
             return $counts;
         }
@@ -982,7 +990,7 @@ class Database
         {
             return $this->get_connection()->query($sql);
         }
-        catch (\PDOException $exception)
+        catch (PDOException $exception)
         {
             $this->error_handling($exception);
             throw new DataClassNoResultException($class, $parameters, $sql);
@@ -1072,9 +1080,9 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
-            $record = $statement->fetch(\PDO::FETCH_NUM);
+            $record = $statement->fetch(PDO::FETCH_NUM);
 
             return (int) $record[0];
         }
@@ -1100,7 +1108,7 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             if ($optimize)
             {
@@ -1237,9 +1245,9 @@ class Database
 
         $statement = $this->get_connection()->query($sqlQuery);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
-            $record = $statement->fetch(\PDO::FETCH_ASSOC);
+            $record = $statement->fetch(PDO::FETCH_ASSOC);
         }
         else
         {
@@ -1247,7 +1255,7 @@ class Database
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
-        if ($record instanceof \PDOException)
+        if ($record instanceof PDOException)
         {
             $this->error_handling($record);
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
@@ -1299,10 +1307,10 @@ class Database
 
         $statement = $this->get_connection()->query($query_builder->getSQL());
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             $distinct_elements = array();
-            while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+            while ($record = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 if (count($parameters->getDataClassProperties()->get()) > 1)
                 {
@@ -1423,10 +1431,10 @@ class Database
 
         $statement = $this->get_connection()->query($query);
 
-        if (! $statement instanceof \PDOException)
+        if (! $statement instanceof PDOException)
         {
             $distinct_elements = array();
-            $record = $statement->fetch(\PDO::FETCH_ASSOC);
+            $record = $statement->fetch(PDO::FETCH_ASSOC);
 
             $additional_properties = array();
 

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -45,7 +46,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
     {
         if (! $this->reference_object instanceof Portfolio)
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->reference_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $this->get_reference());
         }

@@ -5,11 +5,12 @@ namespace Chamilo\Libraries\Architecture\Test;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassFile;
 use Chamilo\Libraries\Architecture\Traits\ClassSubClass;
+use Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 trait TestApplication
 {
-    use \Chamilo\Libraries\Architecture\Traits\DirectoryScanner, \Chamilo\Libraries\Architecture\Traits\ClassFile, \Chamilo\Libraries\Architecture\Traits\ClassSubClass
+    use DirectoryScanner, ClassFile, ClassSubClass
     {
         ClassFile::getClassNameFromPHPFile insteadof ClassSubClass;
     }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -21,7 +22,11 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
 use Exception;
+use PDO;
+use PDOException;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -35,7 +40,7 @@ use Exception;
  */
 class DataClassDatabase implements DataClassDatabaseInterface
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     /**
      *
@@ -83,7 +88,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
      */
     public function __construct(
-        \Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
+        Connection $connection, StorageAliasGenerator $storageAliasGenerator,
         ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
         ParametersProcessor $parametersProcessor, RecordProcessor $recordProcessor = null
     )
@@ -172,9 +177,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (!$statement instanceof PDOException)
         {
-            $record = $statement->fetch(\PDO::FETCH_NUM);
+            $record = $statement->fetch(PDO::FETCH_NUM);
 
             return (int) $record[0];
         }
@@ -205,11 +210,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (!$statement instanceof PDOException)
         {
             $counts = array();
 
-            while ($record = $statement->fetch(\PDO::FETCH_NUM))
+            while ($record = $statement->fetch(PDO::FETCH_NUM))
             {
                 $counts[$record[0]] = $record[1];
             }
@@ -267,7 +272,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -285,7 +290,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->getConnection()->insert($dataClassName::get_table_name(), $record);
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
 
@@ -314,7 +319,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (!$statement instanceof PDOException)
         {
             return true;
         }
@@ -345,11 +350,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if (!$statement instanceof \PDOException)
+        if (!$statement instanceof PDOException)
         {
             $distinctElements = array();
 
-            while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+            while ($record = $statement->fetch(PDO::FETCH_ASSOC))
             {
                 if (count($record) > 1)
                 {
@@ -430,9 +435,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($sqlQuery);
 
-        if (!$statement instanceof \PDOException)
+        if (!$statement instanceof PDOException)
         {
-            $record = $statement->fetch(\PDO::FETCH_ASSOC);
+            $record = $statement->fetch(PDO::FETCH_ASSOC);
         }
         else
         {
@@ -440,7 +445,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
-        if ($record instanceof \PDOException)
+        if ($record instanceof PDOException)
         {
             $this->handleError($record);
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
@@ -460,11 +465,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]
      */
-    protected function fetchRecords(\Doctrine\DBAL\Driver\Statement $statement)
+    protected function fetchRecords(Statement $statement)
     {
         $records = array();
 
-        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+        while ($record = $statement->fetch(PDO::FETCH_ASSOC))
         {
             $records[] = $this->processRecord($record);
         }
@@ -512,7 +517,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function setConnection(\Doctrine\DBAL\Connection $connection)
+    public function setConnection(Connection $connection)
     {
         $this->connection = $connection;
     }
@@ -586,7 +591,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             return $this->getConnection()->query($sql);
         }
-        catch (\PDOException $exception)
+        catch (PDOException $exception)
         {
             $this->handleError($exception);
             throw new DataClassNoResultException($dataClassName, $parameters, $sql);
@@ -615,10 +620,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Exception $exception
      */
-    protected function handleError(\Exception $exception)
+    protected function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
-            new \Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
+            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
         );
     }
 
@@ -806,7 +811,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-        if ($statement instanceof \PDOException)
+        if ($statement instanceof PDOException)
         {
             $this->handleError($statement);
 
@@ -848,7 +853,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
-            if (!$statement instanceof \PDOException)
+            if (!$statement instanceof PDOException)
             {
                 return true;
             }

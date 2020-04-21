@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use RuntimeException;
 
 class InternalSyncerComponent extends Manager
 {
@@ -36,7 +37,7 @@ class InternalSyncerComponent extends Manager
         
         if (! $exportFormat)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Can not synchronize the google docs because there is no valid export format for the current file');
         }
         

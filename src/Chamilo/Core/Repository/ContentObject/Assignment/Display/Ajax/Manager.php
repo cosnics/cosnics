@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\N
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax
@@ -37,7 +38,7 @@ abstract class Manager extends AjaxManager
     {
         if (!$applicationConfiguration->getApplication() instanceof AjaxComponent)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The ajax components from the assignment display manager can only be called from ' .
                 'within the AjaxComponent of the assignment display application'
             );

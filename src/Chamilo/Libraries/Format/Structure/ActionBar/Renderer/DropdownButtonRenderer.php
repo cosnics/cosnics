@@ -10,33 +10,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
  */
 class DropdownButtonRenderer extends AbstractButtonRenderer
 {
-    use \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRendererTrait;
-
-    /**
-     *
-     * @return string
-     */
-    public function renderDropdown()
-    {
-        return $this->renderSubButtons();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkOpeningTag()
-    {
-        $html = array();
-
-        $html[] = '<a';
-        $html[] = $this->renderDropdownAttributes();
-        $html[] = $this->renderClasses();
-        $html[] = $this->renderTitle();
-        $html[] = '>';
-
-        return implode(' ', $html);
-    }
+    use DropdownButtonRendererTrait;
 
     /**
      *
@@ -55,6 +29,15 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
      *
      * @return string
      */
+    public function renderDropdown()
+    {
+        return $this->renderSubButtons();
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function renderLinkContent()
     {
         $html = array();
@@ -63,5 +46,22 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
         $html[] = $this->renderCaret();
 
         return implode('', $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderLinkOpeningTag()
+    {
+        $html = array();
+
+        $html[] = '<a';
+        $html[] = $this->renderDropdownAttributes();
+        $html[] = $this->renderClasses();
+        $html[] = $this->renderTitle();
+        $html[] = '>';
+
+        return implode(' ', $html);
     }
 }

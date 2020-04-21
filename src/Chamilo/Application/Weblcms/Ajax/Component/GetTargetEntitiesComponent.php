@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
@@ -162,7 +163,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     {
         return WeblcmsRights::getInstance()->get_target_entities(
             $this->getRight(), 
-            \Chamilo\Application\Weblcms\Manager::context(), 
+            Manager::context(),
             $identifier, 
             $type, 
             $this->getCourseId(), 

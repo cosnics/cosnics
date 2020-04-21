@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
+use InvalidArgumentException;
 
 class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 {
@@ -95,7 +97,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         
         if (! array_key_exists($exportFormat, $exportLinks))
         {
-            throw new \InvalidArgumentException('Could not find a valid export link for the given format');
+            throw new InvalidArgumentException('Could not find a valid export link for the given format');
         }
         
         return $exportLinks[$exportFormat];
@@ -112,7 +114,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_content_data($exportFormat)
     {
-        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
+        $external_repository = DataManager::retrieve_by_id(
             Instance::class_name(), 
             $this->get_external_repository_id());
         $downloadMethod = $this->get_export_link($exportFormat);

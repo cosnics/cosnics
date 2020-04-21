@@ -8,6 +8,7 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsExcep
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Microsoft\Graph\Model\Group;
+use RuntimeException;
 
 /**
  *
@@ -430,7 +431,7 @@ class GroupService
         $group = $this->groupRepository->getGroup($groupId);
         if (!$group instanceof Group)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );
         }
@@ -450,7 +451,7 @@ class GroupService
         $group = $this->groupRepository->getGroup($groupId);
         if (!$group instanceof Group)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );
         }

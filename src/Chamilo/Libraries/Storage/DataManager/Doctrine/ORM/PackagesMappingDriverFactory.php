@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Parser;
 
@@ -67,7 +69,7 @@ class PackagesMappingDriverFactory
     {
         if (empty($packages))
         {
-            throw new \InvalidArgumentException('The given list of packages can not be empty');
+            throw new InvalidArgumentException('The given list of packages can not be empty');
         }
 
         $configurations = array();
@@ -76,7 +78,7 @@ class PackagesMappingDriverFactory
         {
             if (! file_exists($packageConfigFile))
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf(
                         'There is no valid configuration for the package %s at location %s',
                         $package,
@@ -93,7 +95,7 @@ class PackagesMappingDriverFactory
 
         if (empty($configurations))
         {
-            throw new \RuntimeException('There is no mapping driver configuration available in the given packages');
+            throw new RuntimeException('There is no mapping driver configuration available in the given packages');
         }
 
         $librariesConfiguration = new LibrariesConfiguration();
@@ -103,7 +105,7 @@ class PackagesMappingDriverFactory
              ! array_key_exists('orm', $packageConfiguration['doctrine']) ||
              ! array_key_exists('mappings', $packageConfiguration['doctrine']['orm']))
         {
-            throw new \RuntimeException('There is no mapping driver configuration available in the given packages 2');
+            throw new RuntimeException('There is no mapping driver configuration available in the given packages 2');
         }
 
         $mappingDriver = $this->mappingDriverFactory->createMappingDriver(

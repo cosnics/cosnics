@@ -2,6 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
+
 /**
  *
  * @package Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry\User
@@ -18,7 +21,7 @@ class EntryTableColumnModel
      */
     function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -26,6 +29,6 @@ class EntryTableColumnModel
      */
     function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 }

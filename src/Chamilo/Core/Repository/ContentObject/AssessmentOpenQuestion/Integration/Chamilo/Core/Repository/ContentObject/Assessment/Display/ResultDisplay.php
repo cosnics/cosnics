@@ -5,7 +5,9 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -118,7 +120,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             return;
         }
 
-        $document = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $answer);
+        $document = DataManager::retrieve_by_id(ContentObject::class_name(), $answer);
 
         $html[] = '<br />';
 
@@ -128,7 +130,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         $html[] = sprintf(Translation::get('LPDownloadDocument'), $document->get_filename(), $document->get_filesize());
         $html[] .= '<br /><a target="about:blank" href="' .
-            \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+            Manager::get_document_downloader_url(
                 $document->get_id(),
                 $document->calculate_security_code()
             ) . '">' . Translation::get('Download') . '</a>';

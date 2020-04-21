@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Form\DataTransformer;
 
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use InvalidArgumentException;
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
@@ -26,7 +27,7 @@ class ElementFinderDataTransformer implements DataTransformerInterface
 
         if (! $value instanceof AdvancedElementFinderElements)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The value for the element finder must be an instance of AdvancedElementFinderElements');
         }
 
@@ -50,7 +51,7 @@ class ElementFinderDataTransformer implements DataTransformerInterface
 
         if (is_null($values))
         {
-            throw new \InvalidArgumentException('The given value ' . $value . ' can not be decoded with json_decode');
+            throw new InvalidArgumentException('The given value ' . $value . ' can not be decoded with json_decode');
         }
 
         foreach ($values as $value)

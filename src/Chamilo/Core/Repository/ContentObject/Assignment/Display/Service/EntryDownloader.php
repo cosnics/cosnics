@@ -16,6 +16,8 @@ use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -384,7 +386,7 @@ class EntryDownloader
                     $entry->getEntityType(), $entry->getEntityId()
                 );
             }
-            catch(\Exception $ex)
+            catch(Exception $ex)
             {
                 continue;
             }
@@ -398,7 +400,7 @@ class EntryDownloader
 //                continue;
 //            }
 
-            $fileName = \Chamilo\Libraries\File\Filesystem::create_safe_name(
+            $fileName = Filesystem::create_safe_name(
                 $entityName . '_' . $contentObject->get_filename()
             );
 
@@ -430,7 +432,7 @@ class EntryDownloader
 
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename,
-            \Chamilo\Libraries\File\Filesystem::create_safe_name($filename)
+            Filesystem::create_safe_name($filename)
         );
 
         $response->setRemoveFileAfterDownload($removeAfterDownload);
@@ -463,7 +465,7 @@ class EntryDownloader
 
                 $this->entityFoldersCache[$cacheKey] = $folder;
             }
-            catch(\Exception $ex)
+            catch(Exception $ex)
             {
                 $this->entityFoldersCache[$cacheKey] = null;
             }
@@ -481,7 +483,7 @@ class EntryDownloader
     {
         if (empty($downloadResponse))
         {
-            throw new \RuntimeException('No downloadable entries found');
+            throw new RuntimeException('No downloadable entries found');
         }
 
         $downloadResponse->prepare($request);

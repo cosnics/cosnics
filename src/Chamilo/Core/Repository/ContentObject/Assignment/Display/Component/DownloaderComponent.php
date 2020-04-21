@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryDownloader;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
+use Exception;
 
 /**
  *
@@ -32,7 +33,7 @@ class DownloaderComponent extends Manager
         {
             $entryCompressor->downloadByRequest($this->getRequest());
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             throw new UserException($this->getTranslator()->trans('EntriesNotDownloadable', [], Manager::context()));
         }

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Column;
 
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -30,22 +30,31 @@ class DataClassPropertyTableColumn extends TableColumn
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
-    public function __construct($className, $property, $title = null, $sortable = true, $headerCssClasses = null,
-        $contentCssClasses = null)
+    public function __construct(
+        $className, $property, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+    )
     {
         $this->className = $className;
 
         $context = $className::context();
 
-        if (! $title)
+        if (!$title)
         {
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(),
-                null,
-                $context);
+                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(), null, $context
+            );
         }
 
         parent::__construct($property, $title, $sortable, $headerCssClasses, $contentCssClasses);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
     }
 
     /**
@@ -66,14 +75,5 @@ class DataClassPropertyTableColumn extends TableColumn
     public function set_class_name($className)
     {
         $this->className = $className;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
     }
 }

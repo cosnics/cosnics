@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use RuntimeException;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment
@@ -49,7 +50,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     {
         if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The given content object publication does not reference a valid assignment and should not be used'
             );
         }

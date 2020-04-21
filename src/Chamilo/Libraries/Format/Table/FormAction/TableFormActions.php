@@ -46,23 +46,31 @@ class TableFormActions
     }
 
     /**
-     * Returns the namespace of the table
+     * Adds a form action
      *
-     * @return string
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction $formAction
      */
-    public function get_namespace()
+    public function add_form_action($formAction)
     {
-        return $this->tableNamespace;
+        $this->formActions[] = $formAction;
     }
 
     /**
-     * Sets the namespace of the table
      *
-     * @param string $namespace
+     * @return string
      */
-    public function set_namespace($namespace)
+    public function getIdentifierName()
     {
-        $this->tableNamespace = $namespace;
+        return $this->identifierName;
+    }
+
+    /**
+     *
+     * @param string $identifierName
+     */
+    public function setIdentifierName($identifierName)
+    {
+        $this->identifierName = $identifierName;
     }
 
     /**
@@ -86,19 +94,13 @@ class TableFormActions
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Adds a form action
+     * Returns the namespace of the table
      *
-     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction $formAction
+     * @return string
      */
-    public function add_form_action($formAction)
+    public function get_namespace()
     {
-        $this->formActions[] = $formAction;
+        return $this->tableNamespace;
     }
 
     /**
@@ -112,20 +114,12 @@ class TableFormActions
     }
 
     /**
+     * Sets the namespace of the table
      *
-     * @return string
+     * @param string $namespace
      */
-    public function getIdentifierName()
+    public function set_namespace($namespace)
     {
-        return $this->identifierName;
-    }
-
-    /**
-     *
-     * @param string $identifierName
-     */
-    public function setIdentifierName($identifierName)
-    {
-        $this->identifierName = $identifierName;
+        $this->tableNamespace = $namespace;
     }
 }

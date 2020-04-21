@@ -12,6 +12,8 @@ use Chamilo\Core\Notification\Storage\Repository\NotificationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Faker\Provider\DateTime;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Notification\Service
@@ -73,7 +75,7 @@ class NotificationManager
         {
             if (!$filter instanceof Filter)
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('The given filters should be an instance of Filter, %s given', get_class($filter))
                 );
             }
@@ -154,13 +156,13 @@ class NotificationManager
     {
         if (empty($notificationId))
         {
-            throw new \RuntimeException('The given notification id can not be empty');
+            throw new RuntimeException('The given notification id can not be empty');
         }
 
         $notification = $this->notificationRepository->find($notificationId);
         if (!$notification instanceof Notification)
         {
-            throw new \RuntimeException(sprintf('The notification with id %s could not be found', $notificationId));
+            throw new RuntimeException(sprintf('The notification with id %s could not be found', $notificationId));
         }
 
         return $notification;
@@ -198,7 +200,7 @@ class NotificationManager
             {
                 $contexts[] = $this->contextManager->getContextByPath($contextPath);
             }
-            catch(\RuntimeException $ex)
+            catch(RuntimeException $ex)
             {
 
             }
@@ -255,7 +257,7 @@ class NotificationManager
             {
                 $contexts[] = $this->contextManager->getContextByPath($contextPath);
             }
-            catch(\RuntimeException $ex)
+            catch(RuntimeException $ex)
             {
 
             }
@@ -292,7 +294,7 @@ class NotificationManager
             {
                 $contexts[] = $this->contextManager->getContextByPath($contextPath);
             }
-            catch(\RuntimeException $ex)
+            catch(RuntimeException $ex)
             {
 
             }

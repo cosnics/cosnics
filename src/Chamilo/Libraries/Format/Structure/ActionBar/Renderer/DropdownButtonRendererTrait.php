@@ -17,18 +17,6 @@ trait DropdownButtonRendererTrait
      *
      * @return string
      */
-    abstract public function getButton();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderDropdown();
-
-    /**
-     *
-     * @return string
-     */
     public function render()
     {
         $html = array();
@@ -37,29 +25,6 @@ trait DropdownButtonRendererTrait
         $html[] = parent::render();
         $html[] = $this->renderDropdown();
         $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderSubButtons()
-    {
-        $html = array();
-
-        $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
-
-        foreach ($this->getButton()->getSubButtons() as $subButton)
-        {
-            $rendererClassName = __NAMESPACE__ . '\\' .
-                 ClassnameUtilities::getInstance()->getClassnameFromObject($subButton) . 'Renderer';
-            $renderer = new $rendererClassName($subButton);
-            $html[] = $renderer->render($subButton);
-        }
-
-        $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
     }
@@ -76,13 +41,19 @@ trait DropdownButtonRendererTrait
 
         $dropdownClasses = $this->getButton()->getDropdownClasses();
 
-        if (! empty($dropdownClasses))
+        if (!empty($dropdownClasses))
         {
             $classes[] = $dropdownClasses;
         }
 
         return $classes;
     }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
+     */
+    abstract public function getButton();
 
     /**
      *
@@ -97,8 +68,38 @@ trait DropdownButtonRendererTrait
      *
      * @return string
      */
+    abstract public function renderDropdown();
+
+    /**
+     *
+     * @return string
+     */
     public function renderDropdownAttributes()
     {
         return 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderSubButtons()
+    {
+        $html = array();
+
+        $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
+
+        foreach ($this->getButton()->getSubButtons() as $subButton)
+        {
+            $rendererClassName =
+                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($subButton) .
+                'Renderer';
+            $renderer = new $rendererClassName($subButton);
+            $html[] = $renderer->render($subButton);
+        }
+
+        $html[] = '</ul>';
+
+        return implode(PHP_EOL, $html);
     }
 }

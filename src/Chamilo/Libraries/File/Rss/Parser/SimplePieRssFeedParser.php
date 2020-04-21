@@ -3,6 +3,9 @@ namespace Chamilo\Libraries\File\Rss\Parser;
 
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use HTMLPurifier;
+use InvalidArgumentException;
+use SimplePie;
 
 /**
  * Parses Rss Feeds with SimplePie
@@ -31,7 +34,7 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
      * @param \SimplePie $simplePie
      * @param \HTMLPurifier $purifier
      */
-    public function __construct(\SimplePie $simplePie, \HTMLPurifier $purifier)
+    public function __construct(SimplePie $simplePie, HTMLPurifier $purifier)
     {
         $cachePath = Path::getInstance()->getCachePath() . 'rss';
         if (! is_dir($cachePath))
@@ -53,7 +56,7 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
     {
         if (! $url || empty($url) || ! $numberOfEntries || $numberOfEntries < 1)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('URL %s or number of entries %s invalid', $url, $numberOfEntries));
         }
 

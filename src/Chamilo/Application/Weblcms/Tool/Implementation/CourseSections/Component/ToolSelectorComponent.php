@@ -2,8 +2,10 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\CourseSectionToolSelectorForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -25,12 +27,12 @@ class ToolSelectorComponent extends Manager
 
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
         $id = Request::get(self::PARAM_COURSE_SECTION_ID);
         if ($id)
         {
-            $course_section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $course_section = DataManager::retrieve_by_id(
                 CourseSection::class_name(),
                 (int) $id);
 

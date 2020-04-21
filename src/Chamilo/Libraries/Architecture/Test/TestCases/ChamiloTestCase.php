@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * This abstract test case is used as a base for all chamilo tests
@@ -30,7 +31,7 @@ abstract class ChamiloTestCase extends TestCase
      */
     protected function get_method($class_name, $method_name)
     {
-        $reflection_class = new \ReflectionClass($class_name);
+        $reflection_class = new ReflectionClass($class_name);
         
         $reflection_method = $reflection_class->getMethod($method_name);
         $reflection_method->setAccessible(true);
@@ -48,7 +49,7 @@ abstract class ChamiloTestCase extends TestCase
      */
     protected function get_property($class_name, $property_name)
     {
-        $reflection_class = new \ReflectionClass($class_name);
+        $reflection_class = new ReflectionClass($class_name);
         
         $reflection_property = $reflection_class->getProperty($property_name);
         $reflection_property->setAccessible(true);
@@ -112,7 +113,7 @@ abstract class ChamiloTestCase extends TestCase
     {
         $returned_constants = array();
         
-        $reflection_class = new \ReflectionClass($object);
+        $reflection_class = new ReflectionClass($object);
         $constants = $reflection_class->getConstants();
         
         foreach ($constants as $constant_name => $constant_value)

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
@@ -32,7 +33,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
-        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $this->publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $publication_id);
 

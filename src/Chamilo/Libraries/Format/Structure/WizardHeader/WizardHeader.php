@@ -36,21 +36,13 @@ class WizardHeader
     }
 
     /**
+     * Adds a step title
      *
-     * @return string[]
+     * @param string $stepTitle
      */
-    public function getStepTitles()
+    public function addStepTitle($stepTitle)
     {
-        return $this->stepTitles;
-    }
-
-    /**
-     *
-     * @param string[] $stepTitles
-     */
-    public function setStepTitles($stepTitles)
-    {
-        $this->stepTitles = $stepTitles;
+        $this->stepTitles[] = $stepTitle;
     }
 
     /**
@@ -72,6 +64,24 @@ class WizardHeader
     }
 
     /**
+     *
+     * @return string[]
+     */
+    public function getStepTitles()
+    {
+        return $this->stepTitles;
+    }
+
+    /**
+     *
+     * @param string[] $stepTitles
+     */
+    public function setStepTitles($stepTitles)
+    {
+        $this->stepTitles = $stepTitles;
+    }
+
+    /**
      * Checks whether or not the given step index is currently selected
      *
      * @param integer $stepIndex
@@ -81,15 +91,5 @@ class WizardHeader
     public function isStepSelected($stepIndex)
     {
         return $stepIndex == $this->selectedStepIndex;
-    }
-
-    /**
-     * Adds a step title
-     *
-     * @param string $stepTitle
-     */
-    public function addStepTitle($stepTitle)
-    {
-        $this->stepTitles[] = $stepTitle;
     }
 }

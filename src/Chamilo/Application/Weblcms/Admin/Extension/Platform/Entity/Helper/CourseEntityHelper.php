@@ -135,10 +135,10 @@ class CourseEntityHelper
         $entities = array();
 
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(),
+            Course::class_name(),
             $entity_id);
 
-        if ($course instanceof \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course)
+        if ($course instanceof Course)
         {
             $entities[CourseEntity::ENTITY_TYPE][] = $course->get_id();
 

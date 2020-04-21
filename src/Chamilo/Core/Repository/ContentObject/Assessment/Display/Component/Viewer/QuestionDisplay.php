@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Vie
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
@@ -146,7 +147,7 @@ abstract class QuestionDisplay
 
     public static function factory($formvalidator, $complex_content_object_question, $question_nr)
     {
-        $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $question = DataManager::retrieve_by_id(
             ContentObject::class_name(),
             $complex_content_object_question->get_ref());
         $type = $question->get_type();

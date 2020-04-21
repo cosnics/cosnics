@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * Dataclass listener which manipulates the crud methods to support common functionality for sort order logic
@@ -57,7 +58,7 @@ class DisplayOrderDataClassListener extends DataClassListener
     {
         if (!$dataClass instanceof DisplayOrderDataClassListenerSupport)
         {
-            throw new \Exception(
+            throw new Exception(
                 Translation::get('InterfaceRequired', array('INTERFACE' => 'DisplayOrderDataClassListener'))
             );
         }

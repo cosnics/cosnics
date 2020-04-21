@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component\GeolocationBrowser;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationBrowser;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -15,7 +16,7 @@ class GeolocationBrowser extends ContentObjectPublicationBrowser
     {
         parent::__construct($parent, 'geolocation');
 
-        $this->set_publication_id(Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+        $this->set_publication_id(Request::get(Manager::PARAM_PUBLICATION_ID));
         $renderer = new GeolocationDetailsRenderer($this);
 
         $this->set_publication_list_renderer($renderer);

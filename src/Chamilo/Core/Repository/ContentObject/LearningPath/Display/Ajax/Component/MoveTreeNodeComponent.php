@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Compon
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -41,7 +43,7 @@ class MoveTreeNodeComponent extends Manager
 
             if (!isset($parentId) || !isset($displayOrder))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     'For the direct mover to work you need to specify a parent and a display order'
                 );
             }
@@ -55,7 +57,7 @@ class MoveTreeNodeComponent extends Manager
 
             return new JsonResponse(null, 200);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return $this->handleException($ex);
         }

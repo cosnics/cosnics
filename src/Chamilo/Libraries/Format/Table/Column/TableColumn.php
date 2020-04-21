@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\Column;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -14,9 +15,18 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class TableColumn
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    const CSS_CLASSES_COLUMN_HEADER = 'header';
+    use ClassContext;
+
     const CSS_CLASSES_COLUMN_CONTENT = 'content';
+
+    const CSS_CLASSES_COLUMN_HEADER = 'header';
+
+    /**
+     * The CSS Classes
+     *
+     * @var string[]
+     */
+    protected $cssClasses;
 
     /**
      * The name of the column
@@ -38,13 +48,6 @@ abstract class TableColumn
     private $sortable;
 
     /**
-     * The CSS Classes
-     *
-     * @var string[]
-     */
-    protected $cssClasses;
-
-    /**
      *
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
@@ -52,7 +55,9 @@ abstract class TableColumn
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
-    public function __construct($name = '', $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null)
+    public function __construct(
+        $name = '', $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+    )
     {
         $this->set_name($name);
 
@@ -71,9 +76,8 @@ abstract class TableColumn
             while ($context == __NAMESPACE__);
 
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                array(),
-                $context);
+                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), array(), $context
+            );
         }
 
         $this->set_title($title);
@@ -82,7 +86,27 @@ abstract class TableColumn
         $this->setCssClasses(
             array(
                 self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
-                self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses));
+                self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
+            )
+        );
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getCssClasses()
+    {
+        return $this->cssClasses;
+    }
+
+    /**
+     *
+     * @param string[] $cssClasses
+     */
+    public function setCssClasses($cssClasses)
+    {
+        $this->cssClasses = $cssClasses;
     }
 
     /**
@@ -143,24 +167,6 @@ abstract class TableColumn
     public function set_sortable($sortable)
     {
         $this->sortable = $sortable;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getCssClasses()
-    {
-        return $this->cssClasses;
-    }
-
-    /**
-     *
-     * @param string[] $cssClasses
-     */
-    public function setCssClasses($cssClasses)
-    {
-        $this->cssClasses = $cssClasses;
     }
 
     /**

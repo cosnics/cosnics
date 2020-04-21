@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
@@ -108,9 +109,9 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     public function forum_topic_viewed($complex_topic_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->publication_id;
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
+        $parameters[ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
+        $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->publication_id;
+        $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
 
         Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
     }
@@ -119,18 +120,18 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID),
+                ForumTopicView::class_name(),
+                ForumTopicView::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
+                ForumTopicView::class_name(),
+                ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($complex_topic_id));
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
+            ForumTopicView::class_name(),
             new DataClassCountParameters($condition));
     }
 

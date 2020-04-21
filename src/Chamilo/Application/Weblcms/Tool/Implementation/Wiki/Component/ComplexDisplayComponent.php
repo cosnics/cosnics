@@ -1,8 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -26,7 +29,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
-        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $this->publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $publication_id);
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
@@ -63,12 +66,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
 
     public function get_wiki_page_statistics_reporting_template_name()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate::class_name();
+        return WikiPageTemplate::class_name();
     }
 
     public function get_wiki_statistics_reporting_template_name()
     {
-        return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate::class_name();
+        return WikiTemplate::class_name();
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS

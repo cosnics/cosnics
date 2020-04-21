@@ -7,6 +7,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use InvalidArgumentException;
+use RangeException;
 
 /**
  * Describes a relation between a learning path and another content object
@@ -88,7 +90,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (empty($learningPathId) || !is_integer($learningPathId))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given learning path id must be a valid integer and must not be empty'
             );
         }
@@ -115,7 +117,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($parentTreeNodeDataId))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given parent learning path child id must be a valid integer'
             );
         }
@@ -142,7 +144,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (empty($contentObjectId) || !is_integer($contentObjectId))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given content object id must be a valid integer and must not be empty'
             );
         }
@@ -169,7 +171,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($maxAttempts))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given max attempts must be a valid integer'
             );
         }
@@ -196,12 +198,12 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($masteryScore))
         {
-            throw new \InvalidArgumentException('The given mastery score must be a valid integer');
+            throw new InvalidArgumentException('The given mastery score must be a valid integer');
         }
 
         if ($masteryScore < 0 || $masteryScore > 100)
         {
-            throw new \RangeException('The given mastery score must be between 0 and 100');
+            throw new RangeException('The given mastery score must be between 0 and 100');
         }
 
         $this->set_default_property(self::PROPERTY_MASTERY_SCORE, $masteryScore);
@@ -226,7 +228,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_bool($allowHints))
         {
-            throw new \InvalidArgumentException('The given allow hints must be a valid boolean');
+            throw new InvalidArgumentException('The given allow hints must be a valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_ALLOW_HINTS, $allowHints);
@@ -251,7 +253,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_bool($showScore))
         {
-            throw new \InvalidArgumentException('The given show score must be a valid boolean');
+            throw new InvalidArgumentException('The given show score must be a valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_SHOW_SCORE, $showScore);
@@ -276,7 +278,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_bool($showCorrection))
         {
-            throw new \InvalidArgumentException('The given show correction must be a valid boolean');
+            throw new InvalidArgumentException('The given show correction must be a valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_SHOW_CORRECTION, $showCorrection);
@@ -301,7 +303,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_bool($showSolution))
         {
-            throw new \InvalidArgumentException('The given show solution must be a valid boolean');
+            throw new InvalidArgumentException('The given show solution must be a valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_SHOW_SOLUTION, $showSolution);
@@ -326,7 +328,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($showAnswerFeedback))
         {
-            throw new \InvalidArgumentException('The given show answer feedback must be a valid integer');
+            throw new InvalidArgumentException('The given show answer feedback must be a valid integer');
         }
 
         $this->set_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $showAnswerFeedback);
@@ -351,7 +353,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($feedbackLocation))
         {
-            throw new \InvalidArgumentException('The given feedback location must be a valid integer');
+            throw new InvalidArgumentException('The given feedback location must be a valid integer');
         }
 
         $this->set_default_property(self::PROPERTY_FEEDBACK_LOCATION, $feedbackLocation);
@@ -376,7 +378,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_bool($blocked))
         {
-            throw new \InvalidArgumentException('The given blocked must be a valid boolean');
+            throw new InvalidArgumentException('The given blocked must be a valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_BLOCKED, $blocked);
@@ -401,7 +403,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($displayOrder))
         {
-            throw new \InvalidArgumentException('The given display order must be a valid integer');
+            throw new InvalidArgumentException('The given display order must be a valid integer');
         }
 
         $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
@@ -426,7 +428,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($userId))
         {
-            throw new \InvalidArgumentException('The given user id must be a valid integer');
+            throw new InvalidArgumentException('The given user id must be a valid integer');
         }
 
         $this->set_default_property(self::PROPERTY_USER_ID, $userId);
@@ -451,7 +453,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if (!is_integer($addedDate))
         {
-            throw new \InvalidArgumentException('The given added date must be a valid integer');
+            throw new InvalidArgumentException('The given added date must be a valid integer');
         }
 
         $this->set_default_property(self::PROPERTY_ADDED_DATE, $addedDate);
@@ -491,7 +493,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     {
         if(!is_bool($enforceDefaultTraversingOrder))
         {
-            throw new \InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
 
         $this->set_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);

@@ -22,15 +22,6 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
 
     /**
      *
-     * @return string
-     */
-    public function renderClasses()
-    {
-        return 'class="' . implode(' ', $this->determineClasses()) . '"';
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function determineClasses()
@@ -41,5 +32,14 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
         $classes[] = $this->getButton()->getClasses();
 
         return $classes;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderClasses()
+    {
+        return 'class="' . implode(' ', $this->determineClasses()) . '"';
     }
 }

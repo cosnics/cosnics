@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Exception;
 
 /**
  *
@@ -23,7 +24,7 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 
         if (!$distinctConditionVariable->hasConditionVariables())
         {
-            throw new \Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
+            throw new Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
         }
 
         $strings = array();

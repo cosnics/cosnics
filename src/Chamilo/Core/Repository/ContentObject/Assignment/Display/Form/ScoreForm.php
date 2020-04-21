@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
+use Twig_Environment;
 
 /**
  *
@@ -45,7 +46,7 @@ class ScoreForm extends FormValidator
      * @param \Twig_Environment $twig
      */
     public function __construct(
-        Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, \Twig_Environment $twig
+        Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, Twig_Environment $twig
     )
     {
         parent::__construct('details', self::FORM_METHOD_POST, $postUrl);

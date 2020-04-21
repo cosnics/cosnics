@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Component;
 
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -11,7 +12,7 @@ class LoginComponent extends Manager
 
     public function run()
     {
-        $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieveUserSetting(
+        $setting = DataManager::retrieveUserSetting(
             $this->get_external_repository()->getId(), 
             $this->getUser()->getId(), 
             'session_token');

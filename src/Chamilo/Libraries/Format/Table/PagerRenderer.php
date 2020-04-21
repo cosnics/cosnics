@@ -22,9 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class PagerRenderer
 {
     const PAGE_SELECTOR_TRANSLATION_ROW = 'row';
-
     const PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
-
     const PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
 
     /**
@@ -77,8 +75,9 @@ class PagerRenderer
     }
 
     /**
-     *
      * @return string
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Exception
      */
     public function renderCurrentRange()
     {
@@ -141,6 +140,7 @@ class PagerRenderer
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
         $buttonToolBar->addButtonGroup($buttonGroup);
+        $pager = $this->getPager();
 
         $defaultTranslationVariables[Application::PARAM_CONTEXT] = Utilities::COMMON_LIBRARIES;
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
@@ -149,10 +149,10 @@ class PagerRenderer
 
         $translationVariables = array_merge($defaultTranslationVariables, $translationVariables);
 
-        $currentNumberOfRowsPerPage = $this->getPager()->getNumberOfRows();
-        $numberOfItems = $this->getPager()->getNumberOfItems();
+        $currentNumberOfRowsPerPage = $pager->getNumberOfRows();
+        $numberOfItems = $pager->getNumberOfItems();
 
-        if ($this->getPager()->getNumberOfItemsPerPage() >= $this->getPager()->getNumberOfItems())
+        if ($pager->getNumberOfItemsPerPage() >= $pager->getNumberOfItems())
         {
             $dropDownButtonLabel = Translation::get(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], null,
@@ -163,8 +163,7 @@ class PagerRenderer
         {
             $dropDownButtonLabel = Translation::get(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE],
-                array('NUMBER' => $this->getPager()->getNumberOfItemsPerPage()),
-                $translationVariables[Application::PARAM_CONTEXT]
+                array('NUMBER' => $pager->getNumberOfItemsPerPage()), $translationVariables[Application::PARAM_CONTEXT]
             );
         }
 
@@ -177,7 +176,7 @@ class PagerRenderer
             $nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $numberOfItems && $nr <= 100; $nr += Pager::DISPLAY_PER_INCREMENT
         )
         {
-            $nrOfRows = ($nr / $this->getPager()->getNumberOfColumns());
+            $nrOfRows = ($nr / $pager->getNumberOfColumns());
 
             $dropDownButton->addSubButton(
                 new SubButton(
@@ -185,8 +184,7 @@ class PagerRenderer
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], array('NUMBER' => $nr),
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
-                    SubButton::DISPLAY_LABEL, false, array(), null,
-                    ($nrOfRows == $currentNumberOfRowsPerPage ? true : false)
+                    SubButton::DISPLAY_LABEL, false, array(), null, $nrOfRows == $currentNumberOfRowsPerPage
                 )
             );
         }
@@ -200,8 +198,7 @@ class PagerRenderer
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager::DISPLAY_ALL),
                     SubButton::DISPLAY_LABEL, false, array(), null,
-                    ($this->getPager()->getNumberOfItemsPerPage() == $this->getPager()->getNumberOfItems() ? true :
-                        false)
+                    $pager->getNumberOfItemsPerPage() == $pager->getNumberOfItems()
                 )
             );
         }
@@ -248,15 +245,17 @@ class PagerRenderer
         $queryParameters, $pageNumberParameterName, $start, $end, $includeRange = true
     )
     {
+        $pager = $this->getPager();
+
         $html = array();
 
         $html[] = '<nav class="pull-right">';
         $html[] = '<ul class="pagination">';
 
-        if ($this->getPager()->getNumberOfPages() > 1)
+        if ($pager->getNumberOfPages() > 1)
         {
 
-            $isDisabled = ($this->getPager()->getCurrentPageNumber() == 1);
+            $isDisabled = ($pager->getCurrentPageNumber() == 1);
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters, $pageNumberParameterName, $isDisabled, '&laquo;', Translation::get('First'), 1
@@ -264,26 +263,25 @@ class PagerRenderer
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters, $pageNumberParameterName, $isDisabled, '&lsaquo;', Translation::get('Previous'),
-                $this->getPager()->getCurrentPageNumber() - 1
+                $pager->getCurrentPageNumber() - 1
             );
 
             for ($i = $start; $i <= $end; $i ++)
             {
-                $html[] =
-                    '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') . '><a href="' .
+                $html[] = '<li' . ($pager->getCurrentPageNumber() == $i ? ' class="active"' : '') . '><a href="' .
                     $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i . '</a></li>';
             }
 
-            $isDisabled = ($this->getPager()->getCurrentPageNumber() == $this->getPager()->getNumberOfPages());
+            $isDisabled = ($pager->getCurrentPageNumber() == $pager->getNumberOfPages());
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters, $pageNumberParameterName, $isDisabled, '&rsaquo;', Translation::get('Next'),
-                $this->getPager()->getCurrentPageNumber() + 1
+                $pager->getCurrentPageNumber() + 1
             );
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters, $pageNumberParameterName, $isDisabled, '&raquo;', Translation::get('Last'),
-                $this->getPager()->getNumberOfPages()
+                $pager->getNumberOfPages()
             );
         }
 
@@ -315,7 +313,8 @@ class PagerRenderer
         $queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7, $includeRange = true
     )
     {
-        $currentPageNumber = $this->getPager()->getCurrentPageNumber();
+        $pager = $this->getPager();
+        $currentPageNumber = $pager->getCurrentPageNumber();
 
         if ($pageLimit % 2 == 0)
         {
@@ -330,28 +329,28 @@ class PagerRenderer
         $calculatedStartPage = $currentPageNumber - $itemsBefore;
         $calculatedEndPage = $currentPageNumber + $itemsAfter;
 
-        if ($calculatedStartPage < 1 && $calculatedEndPage > $this->getPager()->getNumberOfPages())
+        if ($calculatedStartPage < 1 && $calculatedEndPage > $pager->getNumberOfPages())
         {
             $startPage = 1;
-            $endPage = $this->getPager()->getNumberOfPages();
+            $endPage = $pager->getNumberOfPages();
         }
-        elseif ($calculatedStartPage < 1 && $calculatedEndPage <= $this->getPager()->getNumberOfPages())
+        elseif ($calculatedStartPage < 1 && $calculatedEndPage <= $pager->getNumberOfPages())
         {
             $startPage = 1;
             $calculatedEndPage = $startPage + $pageLimit - 1;
 
-            if ($calculatedEndPage > $this->getPager()->getNumberOfPages())
+            if ($calculatedEndPage > $pager->getNumberOfPages())
             {
-                $endPage = $this->getPager()->getNumberOfPages();
+                $endPage = $pager->getNumberOfPages();
             }
             else
             {
                 $endPage = $calculatedEndPage;
             }
         }
-        elseif ($calculatedStartPage >= 1 && $calculatedEndPage > $this->getPager()->getNumberOfPages())
+        elseif ($calculatedStartPage >= 1 && $calculatedEndPage > $pager->getNumberOfPages())
         {
-            $endPage = $this->getPager()->getNumberOfPages();
+            $endPage = $pager->getNumberOfPages();
             $calculatedStartPage = $endPage - $pageLimit + 1;
 
             if ($calculatedStartPage < 1)

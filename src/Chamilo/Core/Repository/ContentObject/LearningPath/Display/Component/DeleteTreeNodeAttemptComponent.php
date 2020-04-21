@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Deletes a specific attempt for a tree node
@@ -54,7 +55,7 @@ class DeleteTreeNodeAttemptComponent extends BaseReportingComponent
                 array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
             );
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $is_error = true;
 

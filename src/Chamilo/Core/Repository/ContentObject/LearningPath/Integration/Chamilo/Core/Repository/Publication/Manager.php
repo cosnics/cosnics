@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Exception;
 
 class Manager implements PublicationInterface
 {
@@ -99,7 +100,7 @@ class Manager implements PublicationInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -118,7 +119,7 @@ class Manager implements PublicationInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }
@@ -139,7 +140,7 @@ class Manager implements PublicationInterface
 
             return true;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return false;
         }

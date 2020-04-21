@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManag
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EphorusComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus
@@ -40,7 +41,7 @@ abstract class Manager extends Application
 
         if (!$this->get_application() instanceof EphorusComponent)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'This extension can only be run from within the assignment application with the EphorusComponent'
             );
         }

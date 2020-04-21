@@ -8,6 +8,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
+use DOMXPath;
 use HTML_Table;
 
 /**
@@ -167,7 +168,7 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
     {
         $doc = new DOMDocument();
         $doc->loadHTML($body);
-        $xpath = new \DOMXPath($doc);
+        $xpath = new DOMXPath($doc);
         
         $elements = $xpath->query('//resource');
         

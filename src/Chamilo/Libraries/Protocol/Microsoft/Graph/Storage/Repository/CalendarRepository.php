@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Microsoft\Graph\Model\Calendar;
+use Microsoft\Graph\Model\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
@@ -53,7 +56,7 @@ class CalendarRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars',
-            \Microsoft\Graph\Model\Calendar::class,
+            Calendar::class,
             true);
     }
 
@@ -68,7 +71,7 @@ class CalendarRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
-            \Microsoft\Graph\Model\Calendar::class);
+            Calendar::class);
     }
 
     /**
@@ -88,7 +91,7 @@ class CalendarRepository
 
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
-            \Microsoft\Graph\Model\Event::class,
+            Event::class,
             true);
     }
 }

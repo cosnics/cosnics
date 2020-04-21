@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\C
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 
 /**
  *
@@ -31,7 +32,7 @@ class Manager extends InternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         return $this->calendarEventDataProvider->getEvents(

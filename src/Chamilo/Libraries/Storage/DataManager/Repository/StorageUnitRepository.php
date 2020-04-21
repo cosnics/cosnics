@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterfac
  */
 class StorageUnitRepository
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
 
     // Storage unit actions
     const ALTER_STORAGE_UNIT_ADD = 1;

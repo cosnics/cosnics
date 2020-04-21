@@ -3,7 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -12,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Component that allows the user to add content to the learning_path
@@ -19,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface,
+class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
     DelegateComponent
 {
     const PARAM_CREATE_MODE = 'CreateMode';
@@ -75,7 +79,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
             foreach ($object_ids as $object_id)
             {
                 /** @var ContentObject $object */
-                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $object = DataManager::retrieve_by_id(
                     ContentObject::class_name(),
                     $object_id);
 
@@ -95,7 +99,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
 
                     Event::trigger(
                         'Activity',
-                        \Chamilo\Core\Repository\Manager::context(),
+                        Manager::context(),
                         array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
@@ -104,7 +108,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
                             Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() . ' > ' .
                                  $object->get_title()));
                 }
-                catch (\Exception $ex)
+                catch (Exception $ex)
                 {
                     $failures ++;
                 }

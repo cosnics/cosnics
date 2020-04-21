@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarPopupComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAuthenticationSupport
+class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**

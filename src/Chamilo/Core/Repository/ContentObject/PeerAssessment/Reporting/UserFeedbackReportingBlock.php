@@ -3,6 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Reporting;
 
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class UserFeedbackReportingBlock extends ReportingBlock
@@ -41,7 +44,7 @@ class UserFeedbackReportingBlock extends ReportingBlock
     {
         return array(
 
-        \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        Html::VIEW_TABLE);
     }
 
     public function get_data_manager()
@@ -73,8 +76,8 @@ class UserFeedbackReportingBlock extends ReportingBlock
             }
             else
             {
-                $giver = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $giver = DataManager::retrieve_by_id(
+                    User::class_name(),
                     (int) $user_id);
             }
 

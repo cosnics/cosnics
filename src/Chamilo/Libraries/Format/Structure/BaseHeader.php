@@ -359,6 +359,7 @@ class BaseHeader implements HeaderInterface
 
     /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     * @throws \Exception
      */
     public function getThemePathBuilder()
     {

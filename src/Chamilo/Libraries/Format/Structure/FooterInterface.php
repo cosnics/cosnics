@@ -12,9 +12,14 @@ interface FooterInterface
 
     /**
      *
-     * @param string $viewMode
+     * @return string
      */
-    public function setViewMode($viewMode);
+    public function render();
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application);
 
     /**
      *
@@ -23,13 +28,8 @@ interface FooterInterface
     public function setContainerMode($containerMode);
 
     /**
-     * \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application);
-
-    /**
      *
-     * @return string
+     * @param string $viewMode
      */
-    public function render();
+    public function setViewMode($viewMode);
 }

@@ -7,6 +7,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Service class to manage TreeNodeData classes
@@ -65,7 +67,7 @@ class TreeNodeDataService
     {
         if (!is_int($userId) || $userId <= 0)
         {
-            throw new \InvalidArgumentException('The given user id must be a valid integer and must be bigger than 0');
+            throw new InvalidArgumentException('The given user id must be a valid integer and must be bigger than 0');
         }
 
         return $this->treeNodeDataRepository->findTreeNodesDataByUserId($userId);
@@ -130,7 +132,7 @@ class TreeNodeDataService
 
         if(!$treeNodeData instanceof TreeNodeData)
         {
-            throw new \RuntimeException('No TreeNodeData was found for LearningPath ' . $learningPath->getId());
+            throw new RuntimeException('No TreeNodeData was found for LearningPath ' . $learningPath->getId());
         }
 
         $treeNodeData->setEnforceDefaultTraversingOrder($learningPath->enforcesDefaultTraversingOrder());
@@ -146,7 +148,7 @@ class TreeNodeDataService
     {
         if(!$this->treeNodeDataRepository->deleteTreeNodeDataForLearningPath($learningPath))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not delete the TreeNodeDataObject for learning path %s',
                     $learningPath->getId()
@@ -164,7 +166,7 @@ class TreeNodeDataService
     {
         if (!$this->treeNodeDataRepository->create($treeNodeData))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create a TreeNodeDataObject for learning path %s parent %s and child %s',
                     $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
@@ -183,7 +185,7 @@ class TreeNodeDataService
     {
         if (!$this->treeNodeDataRepository->update($treeNodeData))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update a TreeNodeDataObject for learning path %s parent %s and child %s',
                     $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
@@ -202,7 +204,7 @@ class TreeNodeDataService
     {
         if (!$this->treeNodeDataRepository->delete($treeNodeData))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not update a TreeNodeDataObject for learning path %s parent %s and child %s',
                     $treeNodeData->getLearningPathId(), $treeNodeData->getParentTreeNodeDataId(),
@@ -221,7 +223,7 @@ class TreeNodeDataService
     {
         if (!$this->treeNodeDataRepository->deleteTreeNodesFromLearningPath($learningPath))
         {
-            throw new \RuntimeException('Could not delete the tree nodes for learning path ' . $learningPath->getId());
+            throw new RuntimeException('Could not delete the tree nodes for learning path ' . $learningPath->getId());
         }
     }
 

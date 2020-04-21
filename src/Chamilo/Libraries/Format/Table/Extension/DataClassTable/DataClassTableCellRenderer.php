@@ -17,7 +17,8 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
      * Renders a single cell
      *
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $data_class
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return string
      */
     public function render_cell($column, $dataClass)
@@ -27,7 +28,7 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
             return parent::render_cell($column, $dataClass);
         }
 
-        return $dataClass->get_default_property($column->get_name());
+        return $dataClass->getDefaultProperty($column->get_name());
     }
 
     /**
@@ -35,10 +36,11 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
      * checkboxes
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return integer
      */
     public function render_id_cell($dataClass)
     {
-        return $dataClass->get_id();
+        return $dataClass->getId();
     }
 }

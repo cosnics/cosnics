@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
 
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Driver\PDOConnection;
+use PDO;
+
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql
@@ -8,7 +12,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection implements \Doctrine\DBAL\Driver\Connection
+class MsSqlDoctrinePdoConnection extends PDOConnection implements Connection
 {
 
     /**
@@ -24,7 +28,7 @@ class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection imp
 
         if (! extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
         {
-            $stmt->setAttribute(\PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_UTF8);
+            $stmt->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
         }
 
         return $stmt;

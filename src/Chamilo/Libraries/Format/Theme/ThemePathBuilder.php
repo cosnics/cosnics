@@ -73,7 +73,7 @@ class ThemePathBuilder
         $path = $this->getCssPath('Chamilo\Configuration', false, false);
         $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
 
-        foreach ($directories as $index => & $directory)
+        foreach ($directories as $index => $directory)
         {
             if (substr($directory, 0, 1) != '.')
             {

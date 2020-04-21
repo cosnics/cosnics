@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class represents a table form action
@@ -56,64 +56,18 @@ class TableFormAction
         $this->confirmationMessage = $confirmationMessage;
     }
 
-    /**
-     * Returns the action
-     *
-     * @return string
-     */
-    public function get_action()
+    public function getConfirmation()
     {
-        return $this->action;
-    }
+        $confirmation = false;
 
-    /**
-     * Returns the title
-     *
-     * @return string
-     */
-    public function get_title()
-    {
-        return $this->title;
-    }
+        if ($this->get_confirm() == true)
+        {
+            $confirmation = $this->getConfirmationMessage() ? $this->getConfirmationMessage() : Translation::get(
+                'ConfirmYourSelectionAndAction', null, Utilities::COMMON_LIBRARIES
+            );
+        }
 
-    /**
-     * Returns the confirm flag
-     *
-     * @return boolean
-     */
-    public function get_confirm()
-    {
-        return $this->confirm;
-    }
-
-    /**
-     * Sets the action
-     *
-     * @param string $action
-     */
-    public function set_action($action)
-    {
-        $this->action = $action;
-    }
-
-    /**
-     * Sets the title
-     *
-     * @param string $title
-     */
-    public function set_title($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Sets the confirm flag
-     *
-     * @param boolean $confirm
-     */
-    public function set_confirm($confirm)
-    {
-        $this->confirm = $confirm;
+        return $confirmation;
     }
 
     /**
@@ -134,18 +88,63 @@ class TableFormAction
         $this->confirmationMessage = $confirmationMessage;
     }
 
-    public function getConfirmation()
+    /**
+     * Returns the action
+     *
+     * @return string
+     */
+    public function get_action()
     {
-        $confirmation = false;
+        return $this->action;
+    }
 
-        if ($this->get_confirm() == true)
-        {
-            $confirmation = $this->getConfirmationMessage() ? $this->getConfirmationMessage() : Translation::get(
-                'ConfirmYourSelectionAndAction',
-                null,
-                Utilities::COMMON_LIBRARIES);
-        }
+    /**
+     * Sets the action
+     *
+     * @param string $action
+     */
+    public function set_action($action)
+    {
+        $this->action = $action;
+    }
 
-        return $confirmation;
+    /**
+     * Returns the confirm flag
+     *
+     * @return boolean
+     */
+    public function get_confirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
+     * Sets the confirm flag
+     *
+     * @param boolean $confirm
+     */
+    public function set_confirm($confirm)
+    {
+        $this->confirm = $confirm;
+    }
+
+    /**
+     * Returns the title
+     *
+     * @return string
+     */
+    public function get_title()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Sets the title
+     *
+     * @param string $title
+     */
+    public function set_title($title)
+    {
+        $this->title = $title;
     }
 }

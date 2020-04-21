@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use RuntimeException;
 
 /**
  * Custom publication handler for the assessment tool
@@ -33,7 +34,7 @@ class ContentObjectPublicationHandler extends \Chamilo\Application\Weblcms\Publi
 
             if (! $assignmentPublication->create())
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     'Could not create an assignment publication for publication with id ' . $publication->getId());
             }
         }

@@ -5,6 +5,9 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
@@ -26,7 +29,7 @@ class GroupSubscribeComponent extends Manager
     {
         if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
 
         $course = $this->get_course();
@@ -74,8 +77,8 @@ class GroupSubscribeComponent extends Manager
 
                     if (! $parent_group_id)
                     {
-                        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                            \Chamilo\Core\Group\Storage\DataClass\Group::class_name(),
+                        $group = DataManager::retrieve_by_id(
+                            Group::class_name(),
                             $group_id);
                         $parent_group_id = $group->get_parent_id();
                     }

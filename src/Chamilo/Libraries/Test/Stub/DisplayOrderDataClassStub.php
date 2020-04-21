@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Test\Stub;
 
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
+use InvalidArgumentException;
 
 /**
  * @package Chamilo\Libraries\Test\Stub
@@ -62,7 +63,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
                 return $this->parentId;
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             sprintf('The given property with name %s could not be found', $propertyName)
         );
     }
@@ -85,7 +86,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
                 return;
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             sprintf('The given property with name %s could not be found', $propertyName)
         );
     }

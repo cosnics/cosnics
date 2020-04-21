@@ -3,6 +3,11 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Utilities\UUID;
+use GuzzleHttp\Exception\ClientException;
+use Microsoft\Graph\Model\Event;
+use Microsoft\Graph\Model\Group;
+use Microsoft\Graph\Model\PlannerPlan;
+use Microsoft\Graph\Model\User;
 
 /**
  *
@@ -80,7 +85,7 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups',
             $groupData,
-            \Microsoft\Graph\Model\Group::class
+            Group::class
         );
     }
 
@@ -99,7 +104,7 @@ class GroupRepository
         return $this->getGraphRepository()->executePatchWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier,
             $groupData,
-            \Microsoft\Graph\Model\Event::class
+            Event::class
         );
     }
 
@@ -113,7 +118,7 @@ class GroupRepository
     public function getGroup($groupIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class
+            '/groups/' . $groupIdentifier, Group::class
         );
     }
 
@@ -130,7 +135,7 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners/$ref',
             ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class
+            Event::class
         );
     }
 
@@ -146,7 +151,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class
+            Event::class
         );
     }
 
@@ -163,10 +168,10 @@ class GroupRepository
         {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/owners/' . $azureUserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (ClientException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -188,7 +193,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/owners',
-            \Microsoft\Graph\Model\User::class, true
+            User::class, true
         );
     }
 
@@ -204,7 +209,7 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members/$ref',
             ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class
+            Event::class
         );
     }
 
@@ -220,7 +225,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class
+            Event::class
         );
     }
 
@@ -237,10 +242,10 @@ class GroupRepository
         {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/members/' . $azureUserIdentifier,
-                \Microsoft\Graph\Model\User::class
+                User::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (ClientException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -262,7 +267,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/groups/' . $groupIdentifier . '/members',
-            \Microsoft\Graph\Model\User::class, true
+            User::class, true
         );
     }
 
@@ -277,7 +282,7 @@ class GroupRepository
     {
         return $this->getGraphRepository()->executeGetWithDelegatedAccess(
             '/groups/' . $groupIdentifier . '/planner/plans',
-            \Microsoft\Graph\Model\PlannerPlan::class, true
+            PlannerPlan::class, true
         );
     }
 
@@ -294,7 +299,7 @@ class GroupRepository
         return $this->getGraphRepository()->executePostWithDelegatedAccess(
             '/planner/plans',
             ['owner' => $groupIdentifier, 'title' => $planName],
-            \Microsoft\Graph\Model\PlannerPlan::class
+            PlannerPlan::class
         );
     }
 }

@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager as ForumDataManager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -87,7 +88,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        $this->introduction_text = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve(
+        $this->introduction_text = WeblcmsDataManager::retrieve(
             ContentObjectPublication::class_name(),
             new DataClassRetrieveParameters($condition));
 
@@ -227,7 +228,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 ContentObjectPublicationCategory::class_name(),
                 ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER));
 
-        $categories = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class_name(),
             new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $order));
 
@@ -309,7 +310,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+            $publications = WeblcmsDataManager::retrieve_content_object_publications(
                 $condition,
                 $order);
         }
@@ -344,7 +345,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                User::class_name(),
                 $lastPost->get_user_id());
 
             $muteClass = $publication[ContentObjectPublication::PROPERTY_HIDDEN] ? ' text-muted-invisible' : '';
@@ -455,7 +456,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 if (! ($publication[ContentObjectPublication::PROPERTY_HIDDEN] &&
                      ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT)))
                 {
-                    $forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    $forum = DataManager::retrieve_by_id(
                         Forum::class_name(),
                         $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
@@ -513,7 +514,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getForumActions($publication, $first, $last)
     {
-        $forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $forum = DataManager::retrieve_by_id(
             Forum::class_name(),
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 

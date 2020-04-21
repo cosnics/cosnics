@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Mail\Mailer\Platform;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use RuntimeException;
 
 /**
  * Default platform mailer
@@ -68,7 +69,7 @@ class Mailer extends AbstractMailer
         if (! mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
         {
             $this->logMail($mail, MailLog::STATE_FAILED);
-            throw new \RuntimeException('Could not send e-mail');
+            throw new RuntimeException('Could not send e-mail');
         }
 
         $this->logMail($mail);

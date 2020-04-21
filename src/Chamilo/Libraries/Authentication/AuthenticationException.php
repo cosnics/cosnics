@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  *
@@ -13,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AuthenticationException extends \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+class AuthenticationException extends NotAllowedException
 {
 
     /**
@@ -44,7 +46,7 @@ class AuthenticationException extends \Chamilo\Libraries\Architecture\Exceptions
         $html[] = Translation::getInstance()->getTranslation('LoginTryAgain', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</a></p>';
 
-        \Exception::__construct(implode(PHP_EOL, $html), $code, $previous);
+        Exception::__construct(implode(PHP_EOL, $html), $code, $previous);
     }
 
     /**

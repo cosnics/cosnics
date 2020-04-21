@@ -25,12 +25,14 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestionOption;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Exception;
 
 /**
  *
@@ -39,7 +41,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
+class UpgraderComponent extends Manager
 {
 
     /**
@@ -76,7 +78,7 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                 $existingTemplate->set_template($template);
                 $existingTemplate->update();
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $existingTemplate->delete();
             }

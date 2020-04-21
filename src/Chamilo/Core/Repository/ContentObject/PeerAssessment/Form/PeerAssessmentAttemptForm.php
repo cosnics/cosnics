@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
@@ -46,7 +47,7 @@ class PeerAssessmentAttemptForm extends FormValidator
         $this->add_textfield(self::PARAM_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES));
         
         $value = Configuration::getInstance()->get_setting(
-            array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
+            array(Manager::context(), 'description_required'));
         
         $required = ($value == 1) ? true : false;
         $name = Translation::get('Description', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this));

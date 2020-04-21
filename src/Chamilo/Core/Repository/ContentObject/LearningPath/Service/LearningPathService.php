@@ -11,6 +11,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Service to manage learning paths
@@ -150,7 +152,7 @@ class LearningPathService
     {
         if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('The given ContentObject type %s is not a valid content object', $contentObjectType)
             );
         }
@@ -162,7 +164,7 @@ class LearningPathService
 
         if (!$this->contentObjectRepository->create($contentObject))
         {
-            throw new \RuntimeException(sprintf('Could not create a new ContentObject of type %s', $contentObjectType));
+            throw new RuntimeException(sprintf('Could not create a new ContentObject of type %s', $contentObjectType));
         }
 
         return $this->addContentObjectToLearningPath(
@@ -228,7 +230,7 @@ class LearningPathService
 
         if (!$treeNodeData)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given learning path tree node does not have a valid learning path child object'
             );
         }
@@ -249,7 +251,7 @@ class LearningPathService
 
         if (!$treeNodeData)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given learning path tree node does not have a valid learning path child object'
             );
         }
@@ -278,14 +280,14 @@ class LearningPathService
     {
         if (empty($newTitle) || !is_string($newTitle))
         {
-            throw new \InvalidArgumentException('The given title should not be empty and should be a valid string');
+            throw new InvalidArgumentException('The given title should not be empty and should be a valid string');
         }
 
         $contentObject = $treeNode->getContentObject();
 
         if (!$contentObject instanceof ContentObject)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'The given TreeNode with id %s does not have a valid content object attached',
                     $treeNode->getId()
@@ -297,7 +299,7 @@ class LearningPathService
 
         if (!$this->contentObjectRepository->update($contentObject))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('Could not update the Contentobject with id %S', $contentObject->getId())
             );
         }
@@ -315,7 +317,7 @@ class LearningPathService
 
         if (!$treeNodeData)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given learning path tree node does not have a valid learning path child object'
             );
         }

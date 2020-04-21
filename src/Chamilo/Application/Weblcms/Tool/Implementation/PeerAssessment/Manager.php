@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use ErrorException;
 
 /**
  * This tool allows a user to publish peer assessments in a course.
@@ -333,7 +334,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         }
         else
         {
-            throw new \ErrorException('NoPublicationId');
+            throw new ErrorException('NoPublicationId');
         }
     }
 

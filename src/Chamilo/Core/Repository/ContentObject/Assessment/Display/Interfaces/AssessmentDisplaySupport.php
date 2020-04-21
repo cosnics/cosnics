@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces;
 
+use Chamilo\Core\Repository\Display\DisplaySupport;
+
 /**
  * A class implements the <code>AssessmentDisplaySupport</code> interface to indicate that it will serve as a launch
  * base for a repository\content_object\assessment\display.
  * 
  * @author Hans De Bisschop
  */
-interface AssessmentDisplaySupport extends \Chamilo\Core\Repository\Display\DisplaySupport
+interface AssessmentDisplaySupport extends DisplaySupport
 {
 
     /**

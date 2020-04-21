@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -36,7 +37,7 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
         $temporaryFileName = $this->getPostDataValue(self::PARAM_FILE);
 
         $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
-        $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
+        $owner = $this->getPostDataValue(Manager::PARAM_USER_USER_ID);
 
         $temporaryFilePath = $temporaryPath . $temporaryFileName;
 

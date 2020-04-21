@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager
+class ClearParameterComponent extends Manager
 {
     const PARAM_PARAMETER = 'parameter';
 

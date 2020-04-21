@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Exception;
 
 /**
  *
@@ -49,7 +50,7 @@ class AnswerFeedbackDisplay
     {
         if (! $complex_question instanceof AnswerFeedbackDisplaySupport)
         {
-            throw new \Exception(
+            throw new Exception(
                 'ComplexContentObjectItem needs to implement the AnswerFeedbackDisplaySupport interface');
         }
         

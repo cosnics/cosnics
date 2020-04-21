@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
@@ -43,7 +44,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
 
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             CourseGroup::class_name(), $course_group_id
         );
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression;
 
+use ADOConnection;
+
 /**
  * Based on the Doctrine DBAL Query-builder architecture
  *
@@ -32,7 +34,7 @@ class ExpressionBuilder
      *
      * @param \ADOConnection $connection The AdoDB Connection.
      */
-    public function __construct(\ADOConnection $connection)
+    public function __construct(ADOConnection $connection)
     {
         $this->connection = $connection;
     }

@@ -11,17 +11,35 @@ class Html5Format
 
     /**
      *
+     * @return string[][]
+     */
+    static public function codecs_compatible()
+    {
+        $codecs_compatible = array();
+
+        $codecs_compatible['VP8'] = array('Vorbis');
+        $codecs_compatible['AVC'] = array('AAC');
+        $codecs_compatible['Theora'] = array('Vorbis');
+
+        $codecs_compatible['Vorbis'] = array('VP8', 'Theora');
+        $codecs_compatible['AAC'] = array('AVC');
+
+        return $codecs_compatible;
+    }
+
+    /**
+     *
      * @return string[]
      */
-    public static function get_video_extensions()
+    static public function get_audio_codecs()
     {
-        $extensions = array();
+        $codecs = array();
 
-        $extensions[] = 'OGV';
-        $extensions[] = 'WEBM';
-        $extensions[] = 'MP4';
+        $codecs[] = 'Vorbis';
+        $codecs[] = 'AAC';
+        $codecs[] = 'MP3';
 
-        return $extensions;
+        return $codecs;
     }
 
     /**
@@ -43,30 +61,6 @@ class Html5Format
      *
      * @return string[]
      */
-    public function get_extensions()
-    {
-        return array_merge(self::get_audio_extensions(), self::get_video_extensions());
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public static function get_video_mimetypes()
-    {
-        $mimetypes = array();
-
-        $mimetypes[] = 'video/webm';
-        $mimetypes[] = 'video/ogg';
-        $mimetypes[] = 'video/mp4';
-
-        return $mimetypes;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
     public static function get_audio_mimetypes()
     {
         $mimetypes = array();
@@ -76,6 +70,15 @@ class Html5Format
         $mimetypes[] = 'audio/vorbis';
 
         return $mimetypes;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    static public function get_extensions()
+    {
+        return array_merge(self::get_audio_extensions(), self::get_video_extensions());
     }
 
     /**
@@ -106,32 +109,29 @@ class Html5Format
      *
      * @return string[]
      */
-    static public function get_audio_codecs()
+    public static function get_video_extensions()
     {
-        $codecs = array();
+        $extensions = array();
 
-        $codecs[] = 'Vorbis';
-        $codecs[] = 'AAC';
-        $codecs[] = 'MP3';
+        $extensions[] = 'OGV';
+        $extensions[] = 'WEBM';
+        $extensions[] = 'MP4';
 
-        return $codecs;
+        return $extensions;
     }
 
     /**
      *
-     * @return string[][]
+     * @return string[]
      */
-    static public function codecs_compatible()
+    public static function get_video_mimetypes()
     {
-        $codecs_compatible = array();
+        $mimetypes = array();
 
-        $codecs_compatible['VP8'] = array('Vorbis');
-        $codecs_compatible['AVC'] = array('AAC');
-        $codecs_compatible['Theora'] = array('Vorbis');
+        $mimetypes[] = 'video/webm';
+        $mimetypes[] = 'video/ogg';
+        $mimetypes[] = 'video/mp4';
 
-        $codecs_compatible['Vorbis'] = array('VP8', 'Theora');
-        $codecs_compatible['AAC'] = array('AVC');
-
-        return $codecs_compatible;
+        return $mimetypes;
     }
 }

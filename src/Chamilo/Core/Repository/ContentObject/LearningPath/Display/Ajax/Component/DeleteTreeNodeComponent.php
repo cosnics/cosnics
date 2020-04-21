@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -31,7 +32,7 @@ class DeleteTreeNodeComponent extends Manager
 
             return new JsonResponse();
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             return $this->handleException($ex);
         }

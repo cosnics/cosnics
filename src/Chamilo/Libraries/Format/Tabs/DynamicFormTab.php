@@ -24,7 +24,7 @@ class DynamicFormTab extends DynamicTab
 
     /**
      *
-     * @var unknown
+     * @var \Chamilo\Libraries\Format\Form\FormValidator
      */
     private $form;
 
@@ -44,21 +44,28 @@ class DynamicFormTab extends DynamicTab
     }
 
     /**
-     *
-     * @return string
+     * @param boolean $isOnlyTab
      */
-    public function get_method()
+    public function body($isOnlyTab = false)
     {
-        return $this->method;
-    }
+        if (!$isOnlyTab)
+        {
+            $this->get_form()->addElement('html', $this->body_header());
+        }
 
-    /**
-     *
-     * @param string $method
-     */
-    public function set_method($method)
-    {
-        $this->method = $method;
+        $method = $this->get_method();
+
+        if (!is_array($method))
+        {
+            $method = array($this->get_form(), $method);
+        }
+
+        call_user_func_array($method, $this->parameters);
+
+        if (!$isOnlyTab)
+        {
+            $this->get_form()->addElement('html', $this->body_footer());
+        }
     }
 
     /**
@@ -81,36 +88,28 @@ class DynamicFormTab extends DynamicTab
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::body()
-     */
-    public function body($isOnlyTab = false)
-    {
-        if (! $isOnlyTab)
-        {
-            $this->get_form()->addElement('html', $this->body_header());
-        }
-
-        $method = $this->get_method();
-
-        if (! is_array($method))
-        {
-            $method = array($this->get_form(), $method);
-        }
-
-        call_user_func_array($method, $this->parameters);
-
-        if (! $isOnlyTab)
-        {
-            $this->get_form()->addElement('html', $this->body_footer());
-        }
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Format\Tabs\DynamicTab::get_link()
      */
     public function get_link()
     {
         return "#" . $this->get_id();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_method()
+    {
+        return $this->method;
+    }
+
+    /**
+     *
+     * @param string $method
+     */
+    public function set_method($method)
+    {
+        $this->method = $method;
     }
 }

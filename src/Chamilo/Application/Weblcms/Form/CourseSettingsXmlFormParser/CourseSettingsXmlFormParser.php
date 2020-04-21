@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Form\CourseSettingsXmlFormParser;
 
 use Chamilo\Application\Weblcms\Interfaces\CourseSettingsXmlFormParserSupport;
 use Chamilo\Libraries\Format\Form\SettingsXmlFormParser;
+use DOMElement;
+use Exception;
 
 /**
  * This class extends the common settings xml form parser to parse course settings with locked and frozen elements
@@ -50,7 +52,7 @@ class CourseSettingsXmlFormParser extends SettingsXmlFormParser
     {
         if (! $parent instanceof CourseSettingsXmlFormParserSupport)
         {
-            throw new \Exception(
+            throw new Exception(
                 'The parent of the CourseSettingsXmlFormParser object should be an instance of
                 CourseSettingsXmlFormParserSupport');
         }
@@ -66,7 +68,7 @@ class CourseSettingsXmlFormParser extends SettingsXmlFormParser
      * 
      * @param $element_node \DOMElement
      */
-    protected function parse_element_node(\DOMElement $element_node)
+    protected function parse_element_node(DOMElement $element_node)
     {
         $element_name = $element_node->getAttribute('name');
         

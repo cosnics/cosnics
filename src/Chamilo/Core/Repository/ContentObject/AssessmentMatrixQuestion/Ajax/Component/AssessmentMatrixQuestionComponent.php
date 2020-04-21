@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AssessmentMatrixQuestionComponent extends \Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Manager
+class AssessmentMatrixQuestionComponent extends Manager
 {
 
     public function run()

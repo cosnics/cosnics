@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Ajax\Component;
 
+use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
 
-class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Ajax\Manager
+class ClearParameterComponent extends Manager
 {
     const PARAM_PARAMETER = 'parameter';
 

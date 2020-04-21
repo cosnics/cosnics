@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use RuntimeException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -30,7 +32,7 @@ class EphorusWebserviceRepositoryFactory
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter, Translator $translator
+        ConfigurationConsulter $configurationConsulter, Translator $translator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -48,7 +50,7 @@ class EphorusWebserviceRepositoryFactory
 
         if (empty($handInWsdl))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 $this->translator->trans('HandInWsdlNotConfigured', [], self::TRANSLATION_CONTEXT)
             );
         }
@@ -59,7 +61,7 @@ class EphorusWebserviceRepositoryFactory
 
         if (empty($handInWsdl))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 $this->translator->trans('HandInCodeNotConfigured', [], self::TRANSLATION_CONTEXT)
             );
         }
@@ -70,7 +72,7 @@ class EphorusWebserviceRepositoryFactory
 
         if (empty($handInWsdl))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 $this->translator->trans('IndexDocumentWsdlNotConfigured', [], self::TRANSLATION_CONTEXT)
             );
         }

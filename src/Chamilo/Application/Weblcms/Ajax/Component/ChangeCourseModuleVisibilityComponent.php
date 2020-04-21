@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -11,7 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ChangeCourseModuleVisibilityComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
+class ChangeCourseModuleVisibilityComponent extends Manager
 {
 
     public function run()
@@ -20,7 +22,7 @@ class ChangeCourseModuleVisibilityComponent extends \Chamilo\Application\Weblcms
         $visible = Request::post('visible');
         $course = Request::post('course');
         
-        \Chamilo\Application\Weblcms\Course\Storage\DataManager::set_tool_visibility_by_tool_id(
+        DataManager::set_tool_visibility_by_tool_id(
             $course, 
             $module_id, 
             $visible);

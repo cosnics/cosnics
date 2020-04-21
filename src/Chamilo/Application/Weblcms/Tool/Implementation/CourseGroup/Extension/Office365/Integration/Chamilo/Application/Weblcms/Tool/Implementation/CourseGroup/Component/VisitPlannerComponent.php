@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -37,7 +38,7 @@ class VisitPlannerComponent extends Manager
             $plannerUrl =
                 $this->getCourseGroupOffice365Connector()->getPlannerUrlForVisit($courseGroup, $this->getUser());
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
             throw new UserException($this->getTranslator()->trans('CouldNotVisitPlaner', null, Manager::context()));

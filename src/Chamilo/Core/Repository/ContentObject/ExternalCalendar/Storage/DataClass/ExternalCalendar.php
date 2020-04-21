@@ -13,6 +13,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use DateTime;
+use Exception;
 
 /**
  *
@@ -216,10 +218,10 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
             {
                 $calendar = $this->get_calendar();
                 
-                $start_date_time = new \DateTime();
+                $start_date_time = new DateTime();
                 $start_date_time->setTimestamp($start_timestamp);
                 
-                $end_date_time = new \DateTime();
+                $end_date_time = new DateTime();
                 $end_date_time->setTimestamp($end_timestamp);
                 
                 $calendar->expand($start_date_time, $end_date_time);
@@ -228,7 +230,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 $cache->save($cacheId, $occurences, 3600);
             }
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
         }
         
@@ -269,7 +271,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         {
             if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
             {
-                throw new \Exception('A File can not have a temporary file path and in memory content');
+                throw new Exception('A File can not have a temporary file path and in memory content');
             }
             
             $this->temporary_file_path = $temporary_file_path;

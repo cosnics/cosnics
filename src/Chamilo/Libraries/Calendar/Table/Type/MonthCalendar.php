@@ -5,6 +5,7 @@ use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Configuration\Configuration;
+use Exception;
 
 /**
  *
@@ -250,7 +251,7 @@ class MonthCalendar extends Calendar
                     $cellContent .= $item;
                     $this->setCellContents($row, $column, $cellContent);
                 }
-                catch (\Exception $exception)
+                catch (Exception $exception)
                 {
                 }
             }

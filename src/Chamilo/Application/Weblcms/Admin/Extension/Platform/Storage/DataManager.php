@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\UserEntit
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -189,25 +190,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $properties = new DataClassProperties(
                 array(
                     new PropertiesConditionVariable(
-                        \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name())));
+                        Course::class_name())));
             
             $parameters = new RecordRetrievesParameters(
                 $properties, 
                 new InCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(), 
-                        \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::PROPERTY_ID), 
+                        Course::class_name(),
+                        Course::PROPERTY_ID),
                     $course_ids), 
                 null, 
                 null, 
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(), 
-                            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::PROPERTY_TITLE))));
+                            Course::class_name(),
+                            Course::PROPERTY_TITLE))));
             
             return DataManager::records(
-                \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(), 
+                Course::class_name(),
                 $parameters);
         }
         else

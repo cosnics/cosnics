@@ -284,7 +284,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                    User::class_name(),
                     (int) Session::get_user_id()
                 )
             );
@@ -331,7 +331,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                    User::class_name(),
                     (int) Session::get_user_id()
                 )
             );

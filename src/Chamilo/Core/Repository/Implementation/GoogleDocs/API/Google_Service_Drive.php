@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs\API;
 
+use Google_Client;
+
 /**
  * Small extension to cover the fact that the orderBy parameter is missing in the definition of the list-method in
  * \Google_Service_Drive_Files_Resource
@@ -17,7 +19,7 @@ class Google_Service_Drive extends \Google_Service_Drive
      *
      * @param \Google_Client $client
      */
-    public function __construct(\Google_Client $client)
+    public function __construct(Google_Client $client)
     {
         parent::__construct($client);
         

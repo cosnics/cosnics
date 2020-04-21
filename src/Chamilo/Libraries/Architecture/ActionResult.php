@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -61,7 +62,7 @@ class ActionResult
 
         if ($this->hasFailed())
         {
-            throw new \Exception($this->getMessage());
+            throw new Exception($this->getMessage());
         }
     }
 

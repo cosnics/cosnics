@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use RuntimeException;
 
 /**
  * Service to track attempts on learning paths for a specific node and user
@@ -168,7 +169,7 @@ class AttemptTrackingService
             }
         }
 
-        throw new \RuntimeException('Could not find the TreeNodeAttempt by id ' . $treeNodeAttemptId);
+        throw new RuntimeException('Could not find the TreeNodeAttempt by id ' . $treeNodeAttemptId);
     }
 
     /**

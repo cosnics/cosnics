@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\User\Service\SessionHandler;
+use Exception;
 
 /**
  *
@@ -131,7 +132,7 @@ class SessionUtilities
                 session_name($sessionKey);
                 session_start();
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 session_start();
             }

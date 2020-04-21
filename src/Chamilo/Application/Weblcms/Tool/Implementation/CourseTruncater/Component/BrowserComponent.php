@@ -3,11 +3,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Compon
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Forms\CourseTruncaterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /*
  * Component for emptying the course publication,publication categories and sections @author Maarten Volckaert -
@@ -28,10 +31,10 @@ class BrowserComponent extends Manager
         
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
+            throw new NotAllowedException();
         }
         
-        $count_custom_course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::count_custom_course_sections_from_course(
+        $count_custom_course_sections = DataManager::count_custom_course_sections_from_course(
             $course_id);
         
         if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
@@ -48,7 +51,7 @@ class BrowserComponent extends Manager
         
         if ($count_custom_course_sections > 0)
         {
-            $course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::retrieve_custom_course_sections_as_array(
+            $course_sections = DataManager::retrieve_custom_course_sections_as_array(
                 $course_id);
         }
         else
@@ -74,18 +77,18 @@ class BrowserComponent extends Manager
                 $success = true;
                 if (count($course_sections_ids) > 0)
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_course_sections(
+                    $success = $success && DataManager::delete_course_sections(
                         $course_sections_ids);
                 }
                 if ($delete_categories == 1 && count($categories_ids) > 0)
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_publications_and_categories(
+                    $success = $success && DataManager::delete_publications_and_categories(
                         $publications_ids, 
                         $categories_ids);
                 }
                 else
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_publications(
+                    $success = $success && DataManager::delete_publications(
                         $publications_ids);
                 }
                 
@@ -99,7 +102,7 @@ class BrowserComponent extends Manager
                 }
                 else
                 {
-                    throw new \Exception(Translation::get('NotAllSelectedObjectsRemoved'));
+                    throw new Exception(Translation::get('NotAllSelectedObjectsRemoved'));
                 }
             }
             else

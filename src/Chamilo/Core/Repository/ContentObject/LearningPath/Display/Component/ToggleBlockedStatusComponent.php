@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Toggles the blocked status of a given step
@@ -33,7 +34,7 @@ class ToggleBlockedStatusComponent extends Manager
             $learningPathService->toggleContentObjectBlockedStatus($currentTreeNode);
             $success = true;
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             $success = false;
         }

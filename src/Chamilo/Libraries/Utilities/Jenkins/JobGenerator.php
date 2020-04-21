@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -134,7 +135,7 @@ class JobGenerator
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
+$package_list = PlatformPackageBundles::getInstance()->get_package_list();
 $job_path = 'E:/jenkins/';
 
 $generator = new JobGenerator($package_list, $job_path);

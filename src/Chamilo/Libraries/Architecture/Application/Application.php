@@ -1,12 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -31,8 +35,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Application
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+    use ClassContext;
+    use DependencyInjectionContainerTrait;
 
     const PARAM_ACTION = 'go';
 
@@ -329,8 +333,8 @@ abstract class Application
      */
     protected function getPageTitle()
     {
-        return \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
-            \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'site_name');
+        return Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
+            Configuration::get('Chamilo\Core\Admin', 'site_name');
     }
 
     /**
@@ -368,7 +372,7 @@ abstract class Application
      */
     public static function get_active_packages($type = Registration::TYPE_APPLICATION)
     {
-        $applications = \Chamilo\Configuration\Configuration::registrations_by_type($type);
+        $applications = Configuration::registrations_by_type($type);
 
         $active_applications = array();
 
@@ -563,7 +567,7 @@ abstract class Application
             {
                 $namespace = self::get_application_namespace(basename($directory));
 
-                if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
+                if (Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
@@ -580,7 +584,7 @@ abstract class Application
             {
                 $namespace = self::get_application_namespace(basename($directory));
 
-                if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
+                if (Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
@@ -755,7 +759,7 @@ abstract class Application
     {
         if (self::exists($context))
         {
-            if (\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($context))
+            if (Configuration::getInstance()->isRegisteredAndActive($context))
             {
                 return true;
             }

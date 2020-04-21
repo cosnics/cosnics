@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Service;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository;
+use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,7 +27,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
      */
     function getPublications(User $user, $fromDate, $toDate)
     {
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user)->as_array();
+        $courses = DataManager::retrieve_all_courses_from_user($user)->as_array();
         
         return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
     }
@@ -46,7 +48,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
      */
     function getCalendarContext()
     {
-        return \Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager::context();
+        return Manager::context();
     }
 
     /**

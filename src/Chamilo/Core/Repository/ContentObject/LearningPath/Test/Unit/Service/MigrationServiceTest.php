@@ -17,6 +17,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Exception;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
 /**
@@ -267,7 +268,7 @@ class MigrationServiceTest extends ChamiloTestCase
 
         $this->contentObjectRepositoryMock->expects($this->at(1))
             ->method('findById')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         for ($i = 2; $i <= 5; $i ++)
         {
@@ -313,7 +314,7 @@ class MigrationServiceTest extends ChamiloTestCase
 
         $this->contentObjectRepositoryMock->expects($this->at(4))
             ->method('findById')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new Exception()));
 
         $this->migrationService->migrateLearningPaths();
     }

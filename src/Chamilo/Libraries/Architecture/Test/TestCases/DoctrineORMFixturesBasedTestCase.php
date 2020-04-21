@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Exception;
 use Hogent\Elearning\Administration\Domain\Entity\Company;
 
 /**
@@ -105,7 +106,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         {
             $entityManager->flush();
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             var_dump($ex->getMessage());
         }
