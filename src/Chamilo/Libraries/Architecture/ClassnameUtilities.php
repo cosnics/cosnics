@@ -91,6 +91,7 @@ class ClassnameUtilities
      * @param boolean $convertToUnderscores
      *
      * @return string
+     * @throws \ReflectionException
      */
     public function getClassnameFromNamespace($fullyQualifiedClassname, $convertToUnderscores = false)
     {
@@ -120,6 +121,7 @@ class ClassnameUtilities
      * @param boolean $convertToUnderscores
      *
      * @return string
+     * @throws \ReflectionException
      */
     public function getClassnameFromObject($object, $convertToUnderscores = false)
     {
@@ -167,6 +169,7 @@ class ClassnameUtilities
      * @param string $fullyQualifiedClassname
      *
      * @return string
+     * @throws \ReflectionException
      */
     public function getNamespaceFromClassname($fullyQualifiedClassname)
     {
@@ -182,7 +185,7 @@ class ClassnameUtilities
     /**
      * Convert the namespace string to an id
      *
-     * @param string $namespace
+     * @param string $namespaceIdentifier
      *
      * @return string
      */

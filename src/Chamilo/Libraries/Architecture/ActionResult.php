@@ -51,6 +51,8 @@ class ActionResult
      * @param string $context
      * @param string $actionType
      * @param string $entityType
+     *
+     * @throws \Exception
      */
     public function __construct($totalActions, $failedActions, $context, $actionType, $entityType)
     {
@@ -64,60 +66,6 @@ class ActionResult
         {
             throw new Exception($this->getMessage());
         }
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getTotalActions()
-    {
-        return $this->totalActions;
-    }
-
-    /**
-     *
-     * @param integer $totalActions
-     */
-    public function setTotalActions($totalActions)
-    {
-        $this->totalActions = $totalActions;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getFailedActions()
-    {
-        return $this->failedActions;
-    }
-
-    /**
-     *
-     * @param integer $failedActions
-     */
-    public function setFailedActions($failedActions)
-    {
-        $this->failedActions = $failedActions;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
-     * @param string $context
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -142,6 +90,24 @@ class ActionResult
      *
      * @return string
      */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     *
+     * @param string $context
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getEntityType()
     {
         return $this->entityType;
@@ -158,19 +124,37 @@ class ActionResult
 
     /**
      *
+     * @return integer
+     */
+    public function getFailedActions()
+    {
+        return $this->failedActions;
+    }
+
+    /**
+     *
+     * @param integer $failedActions
+     */
+    public function setFailedActions($failedActions)
+    {
+        $this->failedActions = $failedActions;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getMessage()
     {
         $parameters = array();
-        $parameters['ACTION'] = Translation::get('ActionResultAction' . $this->getActionType(), array(), $this->getContext());
+        $parameters['ACTION'] =
+            Translation::get('ActionResultAction' . $this->getActionType(), array(), $this->getContext());
 
         if ($this->isSingleAction())
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultSingleEntity' . $this->getEntityType(),
-                array(),
-                $this->getContext());
+                'ActionResultSingleEntity' . $this->getEntityType(), array(), $this->getContext()
+            );
 
             if ($this->hasFailed())
             {
@@ -184,9 +168,8 @@ class ActionResult
         else
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultMultipleEntity' . $this->getEntityType(),
-                array(),
-                $this->getContext());
+                'ActionResultMultipleEntity' . $this->getEntityType(), array(), $this->getContext()
+            );
 
             if ($this->hasSucceeded())
             {
@@ -205,6 +188,24 @@ class ActionResult
 
     /**
      *
+     * @return integer
+     */
+    public function getTotalActions()
+    {
+        return $this->totalActions;
+    }
+
+    /**
+     *
+     * @param integer $totalActions
+     */
+    public function setTotalActions($totalActions)
+    {
+        $this->totalActions = $totalActions;
+    }
+
+    /**
+     *
      * @return boolean
      */
     public function hasFailed()
@@ -216,18 +217,18 @@ class ActionResult
      *
      * @return boolean
      */
-    public function hasSucceeded()
+    public function hasFailedCompletely()
     {
-        return ! $this->hasFailed();
+        return $this->hasFailed() && $this->getFailedActions() == $this->getTotalActions();
     }
 
     /**
      *
      * @return boolean
      */
-    public function hasFailedCompletely()
+    public function hasSucceeded()
     {
-        return $this->hasFailed() && $this->getFailedActions() == $this->getTotalActions();
+        return !$this->hasFailed();
     }
 
     /**

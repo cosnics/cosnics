@@ -161,7 +161,7 @@ class JsonAjaxResult
     /**
      *
      * @param integer $resultCode
-     * @param strning $resultMessage
+     * @param string $resultMessage
      */
     public static function error($resultCode = 404, $resultMessage = null)
     {
@@ -304,7 +304,7 @@ class JsonAjaxResult
 
     /**
      *
-     * @param string $result_message
+     * @param string $resultMessage
      */
     public static function success($resultMessage = null)
     {

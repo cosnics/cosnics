@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Ajax\Manager;
+use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\UUID;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -17,25 +16,23 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
+class UploadTemporaryFileComponent extends Manager
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     * @throws \Exception
      */
     public function run()
     {
         $file = $this->getFile();
 
-        if (! $file->isValid())
+        if (!$file->isValid())
         {
             JsonAjaxResult::bad_request(
-                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES));
+                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
+            );
         }
-
-        $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
-        $owner = $this->getPostDataValue(Manager::PARAM_USER_USER_ID);
+        $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
 
         Filesystem::create_dir($temporaryPath);
 
@@ -44,7 +41,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
 
-        if (! $result)
+        if (!$result)
         {
             JsonAjaxResult::general_error(Translation::get('FileNotUploaded'));
         }
@@ -58,8 +55,8 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 
     /**
      *
-     * @throws \Exception
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @throws \Exception
      */
     public function getFile()
     {
@@ -75,7 +72,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
             $errorMessage = "File with key " . $filePropertyName . "not found in request.";
 
             $availableKeys = $this->getRequest()->files->keys();
-            if (! empty($availableKeys))
+            if (!empty($availableKeys))
             {
                 $errorMessage .= " Available file keys: " . implode(', ', $availableKeys) . ".";
             }

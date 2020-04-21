@@ -24,9 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 abstract class GroupsFeedComponent extends Manager
 {
     const PARAM_FILTER = 'filter';
-
     const PARAM_OFFSET = 'offset';
-
     const PARAM_SEARCH_QUERY = 'query';
 
     const PROPERTY_ELEMENTS = 'elements';
@@ -148,16 +146,17 @@ abstract class GroupsFeedComponent extends Manager
     /**
      * Retrieves all the users for the selected group
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     private function retrieve_users()
     {
         $conditions = array();
 
         $user_ids = $this->get_user_ids();
+
         if (count($user_ids) == 0)
         {
-            return;
+            return array();
         }
 
         $conditions[] =

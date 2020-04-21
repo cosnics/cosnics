@@ -37,21 +37,21 @@ trait HashableTrait
 
     /**
      *
+     * @return string[]
+     */
+    abstract public function getHashParts();
+
+    /**
+     *
      * @return string
      */
     public function hash()
     {
-        if (! $this->getHash())
+        if (!$this->getHash())
         {
             $this->setHash(md5(json_encode($this->getHashParts())));
         }
 
         return $this->getHash();
     }
-
-    /**
-     *
-     * @return string[]
-     */
-    abstract public function getHashParts();
 }

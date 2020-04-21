@@ -10,13 +10,6 @@ trait ClassSubClass
     use ClassFile;
 
     /**
-     * Determines the package namespace depending on the namespace of the test class
-     *
-     * @return string
-     */
-    abstract protected function determine_package_namespace();
-
-    /**
      * Checks if the class in the given file is subclass of the given super classes
      *
      * @param string $file
@@ -43,4 +36,11 @@ trait ClassSubClass
 
         return false;
     }
+
+    /**
+     * Determines the package namespace depending on the namespace of the test class
+     *
+     * @return string
+     */
+    abstract protected function determine_package_namespace();
 }

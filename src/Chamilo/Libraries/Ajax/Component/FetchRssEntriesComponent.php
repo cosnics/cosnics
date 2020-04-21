@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\File\Rss\Parser\RssFeedParserFactory;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -37,8 +37,8 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
         $purifier_config->set('Cache.SerializerPermissions', 06770);
 
         $feed_parser = RssFeedParserFactory::create(
-            new HTMLPurifier($purifier_config),
-            RssFeedParserFactory::SIMPLE_PIE_FEED_PARSER);
+            new HTMLPurifier($purifier_config), RssFeedParserFactory::SIMPLE_PIE_FEED_PARSER
+        );
 
         $result = new JsonAjaxResult();
         $result->set_properties($feed_parser->parse($url, $number_entries));

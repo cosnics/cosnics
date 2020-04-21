@@ -21,15 +21,6 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 
     /**
      *
-     * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
-     */
-    public function getRequiredPostParameters()
-    {
-        return array(self::PARAM_FILE);
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::run()
      */
     public function run()
@@ -43,7 +34,7 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
 
         $result = Filesystem::remove($temporaryFilePath);
 
-        if (! $result)
+        if (!$result)
         {
             JsonAjaxResult::general_error(Translation::get('FileNotRemoved'));
         }
@@ -51,5 +42,14 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
         {
             JsonAjaxResult::success(Translation::get('FileRemoved'));
         }
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
+     */
+    public function getRequiredPostParameters()
+    {
+        return array(self::PARAM_FILE);
     }
 }

@@ -12,6 +12,7 @@ trait ClassFile
      * Returns the classname from the given php file
      *
      * @param string $file
+     *
      * @return string
      */
     protected function getClassNameFromPHPFile($file)
@@ -22,7 +23,7 @@ trait ClassFile
 
         $inNamespace = false;
 
-        while (! feof($fp))
+        while (!feof($fp))
         {
             $buffer .= fread($fp, 512);
             $tokens = @token_get_all($buffer);
@@ -72,6 +73,7 @@ trait ClassFile
                         {
                             fclose($fp);
                             $class .= $tokens[$i + 2][1];
+
                             return $class;
                         }
                     }

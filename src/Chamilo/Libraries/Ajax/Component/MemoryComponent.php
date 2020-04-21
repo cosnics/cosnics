@@ -29,12 +29,10 @@ class MemoryComponent extends Manager
             case 'set' :
                 $_SESSION[$variable] = $value;
                 break;
-            case 'get' :
-                echo $_SESSION[$variable];
-                break;
             case 'clear' :
                 unset($_SESSION[$variable]);
                 break;
+            case 'get' :
             default :
                 echo $_SESSION[$variable];
                 break;

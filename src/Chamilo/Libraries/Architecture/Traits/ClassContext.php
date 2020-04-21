@@ -16,13 +16,15 @@ trait ClassContext
      *
      * @param boolean $fullyQualified
      * @param boolean $camelCase
+     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function class_name($fullyQualified = true, $camelCase = true)
     {
-        if (! $fullyQualified)
+        if (!$fullyQualified)
         {
-            return ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), ! $camelCase);
+            return ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), !$camelCase);
         }
 
         if ($camelCase)
@@ -37,6 +39,7 @@ trait ClassContext
      * Get the namespace of the object instance
      *
      * @return string
+     * @throws \ReflectionException
      */
     public static function context()
     {

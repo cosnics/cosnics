@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -26,62 +25,69 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $translator = $this->getTranslator();
+
         $html = array();
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $DaysShort = array(
-            Translation::get("MondayShort", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("TuesdayShort", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("WednesdayShort", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("ThursdayShort", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("FridayShort", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("SaturdayShort", null, Utilities::COMMON_LIBRARIES));
+            $translator->trans("MondayShort", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("TuesdayShort", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("WednesdayShort", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("ThursdayShort", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("FridayShort", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("SaturdayShort", array(), Utilities::COMMON_LIBRARIES)
+        );
 
         // Defining the days of the week to allow translation of the days
         $DaysLong = array(
-            Translation::get("MondayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("TuesdayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("WednesdayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("ThursdayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("FridayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("SaturdayLong", null, Utilities::COMMON_LIBRARIES));
+            $translator->trans("MondayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("TuesdayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("WednesdayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("ThursdayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("FridayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("SaturdayLong", array(), Utilities::COMMON_LIBRARIES)
+        );
 
         $start_of_week = Configuration::getInstance()->get_setting(
-            array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+            array('Chamilo\Libraries\Calendar', 'first_day_of_week')
+        );
         if ($start_of_week == 'sunday')
         {
-            array_unshift($DaysShort, Translation::get("SundayShort", null, Utilities::COMMON_LIBRARIES));
-            array_unshift($DaysLong, Translation::get("SundayLong", null, Utilities::COMMON_LIBRARIES));
+            array_unshift($DaysShort, $translator->trans("SundayShort", array(), Utilities::COMMON_LIBRARIES));
+            array_unshift($DaysLong, $translator->trans("SundayLong", array(), Utilities::COMMON_LIBRARIES));
 
             $start_of_week_identifier = 1;
         }
         else
         {
-            $DaysShort[] = Translation::get("SundayShort", null, Utilities::COMMON_LIBRARIES);
-            $DaysLong[] = Translation::get("SundayLong", null, Utilities::COMMON_LIBRARIES);
+            $DaysShort[] = $translator->trans("SundayShort", array(), Utilities::COMMON_LIBRARIES);
+            $DaysLong[] = $translator->trans("SundayLong", array(), Utilities::COMMON_LIBRARIES);
 
             $start_of_week_identifier = 0;
         }
         // Defining the months of the year to allow translation of the months
         $MonthsLong = array(
-            Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("FebruaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MarchLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AprilLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JuneLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JulyLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AugustLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+            $translator->trans("JanuaryLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("FebruaryLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("MarchLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("AprilLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("MayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("JuneLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("JulyLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("AugustLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("SeptemberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("OctoberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("NovemberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->trans("DecemberLong", array(), Utilities::COMMON_LIBRARIES)
+        );
 
         $html[] = $this->render_header();
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js');
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
+        );
 
         $html[] = '<script>';
         $html[] = '/* <![CDATA[ */';

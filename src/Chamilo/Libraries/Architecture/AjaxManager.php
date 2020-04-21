@@ -33,49 +33,17 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Validate the AJAX call, if not validated, trigger an HTTP 400 (Bad request) error
-     */
-    public function validateRequest()
-    {
-        foreach ($this->getRequiredPostParameters() as $parameter)
-        {
-            $value = $this->getRequestedPostDataValue($parameter);
-            if (! is_null($value))
-            {
-                $this->setPostDataValue($parameter, $value);
-            }
-            else
-            {
-                JsonAjaxResult::bad_request('Invalid Post parameters');
-            }
-        }
-    }
-
-    /**
+     * Returns the value of the given parameter.
      *
-     * @param string $parameter
+     * @param string $name
+     *
      * @return string
      */
-    public function getRequestedPostDataValue($parameter)
+    public function getPostDataValue($name)
     {
-        $getValue = $this->getRequest()->query->get($parameter);
-
-        if (! isset($getValue))
+        if (array_key_exists($name, $this->postDataValues))
         {
-            $postValue = $this->getRequest()->request->get($parameter);
-
-            if (! isset($postValue))
-            {
-                return null;
-            }
-            else
-            {
-                return $postValue;
-            }
-        }
-        else
-        {
-            return $getValue;
+            return $this->postDataValues[$name];
         }
     }
 
@@ -100,17 +68,55 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Returns the value of the given parameter.
      *
-     * @param string $name
+     * @param string $parameter
+     *
      * @return string
      */
-    public function getPostDataValue($name)
+    public function getRequestedPostDataValue($parameter)
     {
-        if (array_key_exists($name, $this->postDataValues))
+        $getValue = $this->getRequest()->query->get($parameter);
+
+        if (!isset($getValue))
         {
-            return $this->postDataValues[$name];
+            $postValue = $this->getRequest()->request->get($parameter);
+
+            if (!isset($postValue))
+            {
+                return null;
+            }
+            else
+            {
+                return $postValue;
+            }
         }
+        else
+        {
+            return $getValue;
+        }
+    }
+
+    /**
+     * Get an array of parameters which should be set for this call to work
+     *
+     * @return string[]
+     */
+    public function getRequiredPostParameters()
+    {
+        return array();
+    }
+
+    /**
+     *
+     * @param $exception
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    protected function handleException($exception)
+    {
+        $this->getExceptionLogger()->logException($exception);
+
+        return new JsonResponse(null, 500);
     }
 
     /**
@@ -125,23 +131,21 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     *
-     * @param $exception
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * Validate the AJAX call, if not validated, trigger an HTTP 400 (Bad request) error
      */
-    protected function handleException($exception)
+    public function validateRequest()
     {
-        $this->getExceptionLogger()->logException($exception);
-        return new JsonResponse(null, 500);
-    }
-
-    /**
-     * Get an array of parameters which should be set for this call to work
-     *
-     * @return string[]
-     */
-    public function getRequiredPostParameters()
-    {
-        return array();
+        foreach ($this->getRequiredPostParameters() as $parameter)
+        {
+            $value = $this->getRequestedPostDataValue($parameter);
+            if (!is_null($value))
+            {
+                $this->setPostDataValue($parameter, $value);
+            }
+            else
+            {
+                JsonAjaxResult::bad_request('Invalid Post parameters');
+            }
+        }
     }
 }

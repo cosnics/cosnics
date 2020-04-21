@@ -20,24 +20,14 @@ use Exception;
  */
 class UtilitiesComponent extends Manager
 {
-    // Input parameters
     const PARAM_ACTION = 'action';
-
     const PARAM_CONTEXT = 'context';
-
     const PARAM_PARAMETERS = 'parameters';
-
     const PARAM_PATH = 'path';
-
     const PARAM_STRING = 'string';
-
     const PARAM_TYPE = 'type';
-
     const PARAM_VALUE = 'value';
-
     const PARAM_VARIABLE = 'variable';
-
-    // Result properties
 
     const PROPERTY_RESULT = 'result';
 
@@ -87,16 +77,10 @@ class UtilitiesComponent extends Manager
                     case 'set' :
                         Session::register(Request::post(self::PARAM_VARIABLE), Request::post(self::PARAM_VALUE));
                         break;
-
-                    case 'get' :
-
-                        $properties[self::PROPERTY_RESULT] = Session::retrieve(Request::post(self::PARAM_VARIABLE));
-                        break;
-
                     case 'clear' :
                         Session::unregister(Request::post(self::PARAM_VARIABLE));
                         break;
-
+                    case 'get' :
                     default :
                         $properties[self::PROPERTY_RESULT] = Session::retrieve(Request::post(self::PARAM_VARIABLE));
                         break;

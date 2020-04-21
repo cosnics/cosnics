@@ -16,7 +16,7 @@ interface Hashable
      *
      * @return string
      */
-    public function hash();
+    public function getHash();
 
     /**
      *
@@ -26,13 +26,13 @@ interface Hashable
 
     /**
      *
-     * @param string $hash
+     * @return string
      */
-    public function setHash($hash);
+    public function hash();
 
     /**
      *
-     * @return string
+     * @param string $hash
      */
-    public function getHash();
+    public function setHash($hash);
 }
