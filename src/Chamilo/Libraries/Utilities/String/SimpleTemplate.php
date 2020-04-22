@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Utilities\String;
 /**
  * Class used to process simple text templates.
  * Mostly used to replace {$variables} in strings.
- * 
+ *
  * @todo : remove that when we move to a templating system
  * @todo : could be more efficient to do an include or eval
  * @copyright (c) 2011 University of Geneva
@@ -16,6 +16,47 @@ class SimpleTemplate
 
     private static $instance = null;
 
+    private $template_callback_context = array();
+
+    private $glue;
+
+    public function __construct($glue = PHP_EOL)
+    {
+        $this->glue = $glue;
+    }
+
+    /**
+     * Process $template once for each entries in $vars.
+     * Join result with $glue.
+     *
+     * @param string|array $template
+     * @param array $vars
+     * @param string $glue
+     *
+     * @return string
+     */
+    public static function all($template, $vars, $glue = null)
+    {
+        $instance = self::getInstance();
+
+        return $instance->process_all($template, $vars, $glue);
+    }
+
+    /**
+     * Replaces $name=>$value pairs comming from $vars from $template.
+     *
+     * @param string|array $template
+     * @param array $vars
+     *
+     * @return string
+     */
+    public static function ex($template, $vars)
+    {
+        $instance = self::getInstance();
+
+        return $instance->process_one($template, $vars);
+    }
+
     /**
      *
      * @return SimpleTemplate
@@ -26,59 +67,8 @@ class SimpleTemplate
         {
             self::$instance = new self();
         }
+
         return self::$instance;
-    }
-
-    /**
-     * Replaces $name=>$value pairs comming from $vars from $template.
-     * 
-     * @param string|array $template
-     * @param array $vars
-     * @return string
-     */
-    public static function ex($template, $vars)
-    {
-        $instance = self::getInstance();
-        return $instance->process_one($template, $vars);
-    }
-
-    /**
-     * Process $template once for each entries in $vars.
-     * Join result with $glue.
-     * 
-     * @param string|array $template
-     * @param array $vars
-     * @param string $glue
-     * @return string
-     */
-    public static function all($template, $vars, $glue = null)
-    {
-        $instance = self::getInstance();
-        return $instance->process_all($template, $vars, $glue);
-    }
-
-    private $template_callback_context = array();
-
-    private $glue = PHP_EOL;
-
-    public function __construct($glue = PHP_EOL)
-    {
-        $this->glue = $glue;
-    }
-
-    public function process_one($template, $vars)
-    {
-        if (is_array($template))
-        {
-            $template = implode($this->glue, $template);
-        }
-        
-        $pattern = '/\{\$[a-zA-Z_][a-zA-Z0-9_]*\}/';
-        $this->template_callback_context = $vars;
-        $result = preg_replace_callback($pattern, array($this, 'process_template_callback'), $template);
-        $items = preg_split($pattern, $template);
-        $this->template_callback_context = array();
-        return $result;
     }
 
     public function process_all($template, $items, $glue = null)
@@ -89,7 +79,23 @@ class SimpleTemplate
             $result[] = $this->process_one($template, $item);
         }
         $glue = is_null($glue) ? $this->glue : $glue;
+
         return implode($glue, $result);
+    }
+
+    public function process_one($template, $vars)
+    {
+        if (is_array($template))
+        {
+            $template = implode($this->glue, $template);
+        }
+
+        $pattern = '/\{\$[a-zA-Z_][a-zA-Z0-9_]*\}/';
+        $this->template_callback_context = $vars;
+        $result = preg_replace_callback($pattern, array($this, 'process_template_callback'), $template);
+        $this->template_callback_context = array();
+
+        return $result;
     }
 
     private function process_template_callback($matches)
@@ -101,6 +107,7 @@ class SimpleTemplate
         {
             $result = implode($this->glue, $result);
         }
+
         return $result;
     }
 }

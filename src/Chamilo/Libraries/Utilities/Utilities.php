@@ -131,7 +131,7 @@ class Utilities
      * @param integer $height
      * @param integer[] $imageProperties
      *
-     * @return integer
+     * @return integer[]
      */
     public static function scaleDimensions($width, $height, $imageProperties)
     {
