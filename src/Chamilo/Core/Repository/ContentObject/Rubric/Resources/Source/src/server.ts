@@ -1,82 +1,120 @@
-import { Server, Model } from "miragejs"
-import Level from "./Domain/Level";
-import Rubric from "./Domain/Rubric";
-import Cluster from "./Domain/Cluster";
-import Category from "./Domain/Category";
-import Criterium from "./Domain/Criterium";
+import { Server } from 'miragejs';
+import Level from './Domain/Level';
+import Rubric from './Domain/Rubric';
+import Cluster from './Domain/Cluster';
+import Category from './Domain/Category';
+import Criterium from './Domain/Criterium';
 
-export function makeServer({ environment = "development" } = {}) {
-    const level1 = new Level("Overstijgt de verwachtingen", "", 10);
-    const level2 = new Level("Voldoet aan de verwachtingen", "", 7);
-    const level3 = new Level("Voldoet bijna aan de verwachtingen", "", 4);
-    const level4 = new Level("Voldoet niet aan de verwachtingen", "", 0);
+const d = {
+    title: 'Een rubric',
+    levels: [
+        { name: 'level1', params: ['Overstijgt de verwachtingen', '', 10] },
+        { name: 'level2', params: ['Voldoet aan de verwachtingen', '', 7] },
+        { name: 'level3', params: ['Voldoet bijna aan de verwachtingen', '', 4] },
+        { name: 'level4', params: ['Voldoet niet aan de verwachtingen', '', 0] }
+    ],
+    clusters: [
+        {
+            title: 'Een rubric',
+            categories: [
+                {
+                    title: 'Professioneel Communiceren',
+                    color: '#00943E',
+                    criteria: [
+                        {
+                            title: 'Volledigheid antwoorden',
+                            choices: [
+                                { level: 'level1', feedback: 'Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.' },
+                                { level: 'level2', feedback: 'Student geeft soms volledige en betrouwbare informatie. Niet alle informatie is opgenomen in de antwoorden.' },
+                                { level: 'level3', feedback: 'Student geeft zo goed als altijd onvolledige en twijfelachtige informatie die vragen oproept.' },
+                                { level: 'level4', feedback: 'Student geeft zijn mening onderbouwd en overtuigend.' }
+                            ]
+                        },
+                        {
+                            title: 'Onderbouwde mening',
+                            choices: [
+                                { level: 'level1', feedback: 'Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.' },
+                                { level: 'level2', feedback: 'Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: 'Categorie 2', color: '#0182ED',
+                    criteria: [
+                        { title: 'Volledigheid antwoorden', choices: [] },
+                        { title: 'Project stakeholders defined', choices: [] }
+                    ]
+                }
+            ]
+        },
+        {
+            title: 'Cluster 1',
+            categories: [
+                {
+                    title: 'Categorie 3', color: '#E76F01',
+                    criteria: [
+                        { title: 'Nog een laatste criterium', choices: [] }
+                    ]
+                }
+            ]
+        },
+        { title: 'Een tweede cluster', categories: [ { title: '', color: '', criteria: []}] },
+    ]
+};
 
-    let newRubric = new Rubric("Een rubric");
-    newRubric.addLevel(level1);
-    newRubric.addLevel(level2);
-    newRubric.addLevel(level3);
-    newRubric.addLevel(level4);
+function createDummyRubric(): Rubric {
+    const levels: any = {};
+    const rubric = new Rubric(d.title);
 
-    const cluster1 = new Cluster("Cluster 1");
-    cluster1.collapsed = true;
-    const category1 = new Category("Professioneel Communiceren");
-    cluster1.addCategory(category1);
-    category1.color = "#1FBC9C";
+    d.levels.forEach(({name, params}) => {
+        const [title, description, weight] = params;
+        levels[name] = new Level(title as string, description as string, weight as number);
+        rubric.addLevel(levels[name]);
+    });
 
-    const criterium1 = new Criterium("Volledigheid antwoorden");
-    const criterium2 = new Criterium("Onderbouwde mening");
-    //const criterium3 = new Criterium("Project stakeholders defined");
+    d.clusters.forEach(({title, categories}) => {
+        const cluster = new Cluster(title as string);
+        rubric.addCluster(cluster);
 
-    category1.addCriterium(criterium1);
-    category1.addCriterium(criterium2);
-    //category1.addCriterium(criterium3);
-    const category2 = new Category("Categorie 2");
-    category2.color = "#2980B9";
-    cluster1.addCategory(category2);
+        categories.forEach(({title, color, criteria}) => {
+            const category = new Category(title as string);
+            category.color = color;
+            cluster.addCategory(category);
 
-    const criteria21 = new Criterium("Volledigheid antwoorden");
-    //const criteria22 = new Criterium("Onderbouwde mening");
-    const criteria23 = new Criterium("Project stakeholders defined");
-    category2.addCriterium(criteria21);
-    //category2.addCriterium(criteria22);
-    category2.addCriterium(criteria23);
+            criteria.forEach(({title, choices}) => {
+                const criterium = new Criterium(title as string);
+                category.addCriterium(criterium);
 
-    const cluster2 = new Cluster('Een tweede cluster');
-    cluster2.collapsed = true;
-    const category3 = new Category('Categorie 3');
-    category3.color = '#F39C19';
+                choices.forEach(({level, feedback}) => {
+                    rubric.getChoice(criterium, levels[level])!.feedback = feedback;
+                });
+            });
+        });
+    });
+    return rubric;
+}
 
-    category3.addCriterium(new Criterium('Nog een laatste criterium'));
-
-    cluster2.addCategory(category3);
-
-    newRubric.addCluster(cluster1);
-    newRubric.addCluster(cluster2);
-
-    newRubric.getChoice(criterium1, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
-    newRubric.getChoice(criterium1, level2)!.feedback = "Student geeft soms volledige en betrouwbare informatie. Niet alle informatie is opgenomen in de antwoorden.";
-    newRubric.getChoice(criterium1, level3)!.feedback = "Student geeft zo goed als altijd onvolledige en twijfelachtige informatie die vragen oproept.";
-    newRubric.getChoice(criterium1, level4)!.feedback = "Student geeft zijn mening onderbouwd en overtuigend.";
-    newRubric.getChoice(criterium2, level1)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
-    newRubric.getChoice(criterium2, level2)!.feedback = "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.";
-
-    let server = new Server({
+export function makeServer({ environment = 'development' } = {}) {
+    const newRubric = createDummyRubric();
+    
+    const server = new Server({
         routes() {
-            this.namespace = "api";
+            this.namespace = 'api';
 
-            this.get("/rubrics", () => {
+            this.get('/rubrics', () => {
                 return {
                     data: newRubric,
                 }
             });
 
-            this.get("/save", () => {
+            this.get('/save', () => {
                 return {
-                    data: "ok!"
+                    data: 'ok!'
                 }
             }, { timing: 500 });
         }
     });
 
-    return server
+    return server;
 }

@@ -1,19 +1,19 @@
 <template>
-    <div class="name-input">
-		<span>
-			<input type="text" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
-            <i v-if="hasInput" class="fa fa-times-circle" @click="clearInput" />
-			<i v-else class="fa fa-times-circle muted" />
-		</span>
-        <div>
-            <button @click="ok" :disabled="!hasInput">{{ okTitle || 'OK' }}</button>
-            <button @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
+    <div class="name-input" @click.stop="">
+		<div class="name-input-title">
+			<input type="text" class="name-input-field" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">
+            <button v-if="hasInput" class="btn-clear fa fa-times-circle" @click="clearInput" />
+			<button v-else class="btn-clear fa fa-times-circle muted" />
+		</div>
+        <div class="name-input-actions">
+            <button class="btn-name-input btn-ok" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
+            <button class="btn-name-input btn-cancel" @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from "vue-property-decorator";
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({
         name: 'name-input',
@@ -35,10 +35,13 @@
         @Prop()
         cancelTitle!: string;
 
+        @Prop({ default: false })
+        allowEmpty!: boolean;
+
         hasInput: boolean = false;
 
         ok() {
-            if (!this.hasInput) { return; }
+            if (!(this.hasInput || this.allowEmpty)) { return; }
             this.$emit('ok');
         }
 
@@ -72,51 +75,32 @@
 </script>
 
 <style scoped>
-    .name-input {
-        display: flex;
-        flex-direction: column;
-    }
-    .name-input div {
-        margin-top: 5px;
-    }
-    span {
+    .name-input-title {
         position: relative;
     }
-    span i {
-        font-size: 16px;
+    .btn-clear {
         position: absolute;
-        right: 4px;
-        top: 8px;
-        padding: 2px;
+        background: none;
+        border: none;
+        font-size: 16px;
+        height: 100%;
+        top: 0;
+        right: 0;
         color: darkgrey;
         opacity: 1;
-        transition: opacity 200ms;
+        transition: opacity 200ms, color 200ms;
     }
-    span i.muted {
+    .btn-clear.muted {
         opacity: 0;
     }
-    span i:hover {
+    .btn-clear:hover {
         color: #666;
     }
-    input {
-        padding: 2px 20px 2px 4px;
-        min-height: 36px;
+    .name-input-field {
         width: 100%;
+        padding-right: 18px;
     }
-    input:focus {
-        outline-width: 1px;
-    }
-    input::placeholder {
-        color: #999;
-    }
-    button {
-        margin: 0 5px 0 0;
-        color: #444;
-    }
-    button:hover:nth-child(2) {
-        border-color: transparent;
-    }
-    button[disabled] {
-        background: #ccc!important;
+    .btn-ok {
+        margin-right: 5px;
     }
 </style>

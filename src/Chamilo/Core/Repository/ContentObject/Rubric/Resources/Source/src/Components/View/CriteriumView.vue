@@ -1,0 +1,64 @@
+<template>
+    <li :id="id" class="criterium-list-item handle criterium-handle">
+        <div class="criterium " :class="{ selected }">
+            <div class="item-header-bar">
+                <div @click="$emit('criterium-selected', criterium)" class="criterium-title">
+                    <h3 class="title">{{ criterium.title }}</h3>
+                </div>
+                <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+                <div class="action-menu" :class="{'show-menu': showMenuActions}">
+                    <ul class="action-menu-list">
+                        <li @click="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details"><i class="fa fa-search"></i><span>Details</span></li>
+                        <li @click.stop="startEditing" class="action-menu-list-item"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', criterium)" class="action-menu-list-item"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div v-if="isEditing" class="edit-title">
+                <div class="cover"></div>
+                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="criterium.title"/>
+            </div>
+        </div>
+    </li>
+</template>
+
+<script lang="ts">
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import Criterium from '../../Domain/Criterium';
+    import NameInput from './NameInput.vue';
+
+    @Component({
+        name: 'criterium-view',
+        components: { NameInput }
+    })
+    export default class CriteriumView extends Vue {
+        private isEditing: boolean = false;
+        private oldTitle: string = '';
+
+        @Prop({type: String, required: true}) readonly id!: string;
+        @Prop({type: String, required: true}) readonly menuActionsId!: string;
+        @Prop({type: Boolean, required: true}) readonly selected!: boolean;
+        @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
+
+        get showMenuActions() {
+            return this.menuActionsId === this.id;
+        }
+
+        startEditing() {
+            this.isEditing = true;
+            this.oldTitle = this.criterium.title;
+            this.$emit('start-edit');
+        }
+
+        finishEditing() {
+            this.isEditing = false;
+            this.oldTitle = '';
+            this.$emit('finish-edit');
+        }
+
+        cancel() {
+            this.criterium.title = this.oldTitle;
+            this.finishEditing();
+        }
+    }
+</script>
