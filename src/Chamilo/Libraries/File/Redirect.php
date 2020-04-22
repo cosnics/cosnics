@@ -196,7 +196,7 @@ class Redirect
      */
     public function getUrl()
     {
-        $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
+        $baseUrl = $this->getCurrentUrl(false) . $_SERVER['PHP_SELF'];
 
         return $this->getWebLink($baseUrl);
     }
@@ -204,11 +204,10 @@ class Redirect
     /**
      *
      * @param string $url
-     * @param string[] $parameters
      *
      * @return string
      */
-    private function getWebLink($url, $parameters = array())
+    private function getWebLink($url)
     {
         $parameters = $this->getFilteredParameters();
 
@@ -279,6 +278,7 @@ class Redirect
 
     /**
      * Redirect to the Url
+     * @throws \Exception
      */
     public function toUrl()
     {
@@ -288,6 +288,8 @@ class Redirect
     /**
      *
      * @param string $url
+     *
+     * @throws \Exception
      */
     public function writeHeader($url)
     {

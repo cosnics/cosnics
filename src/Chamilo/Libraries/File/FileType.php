@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\File;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 use InvalidArgumentException;
 
 /**
@@ -599,46 +600,48 @@ class FileType
      */
     public static function get_type_string($type)
     {
+        $translator = Translation::getInstance();
+
         switch ($type)
         {
             case self::TYPE_AUDIO :
-                return Translation::get('FileTypeAudio');
+                return $translator->getTranslation('FileTypeAudio', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_VIDEO :
-                return Translation::get('FileTypeVideo');
+                return $translator->getTranslation('FileTypeVideo', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_IMAGE :
-                return Translation::get('FileTypeImage');
+                return $translator->getTranslation('FileTypeImage', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_PDF :
-                return Translation::get('FileTypePdf');
+                return $translator->getTranslation('FileTypePdf', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_SPREADSHEET :
-                return Translation::get('FileTypeSpreadsheet');
+                return $translator->getTranslation('FileTypeSpreadsheet', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_TEXT :
-                return Translation::get('FileTypeText');
+                return $translator->getTranslation('FileTypeText', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_PRESENTATION :
-                return Translation::get('FileTypePresentation');
+                return $translator->getTranslation('FileTypePresentation', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_DATABASE :
-                return Translation::get('FileTypeDatabase');
+                return $translator->getTranslation('FileTypeDatabase', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_WEB :
-                return Translation::get('FileTypeWeb');
+                return $translator->getTranslation('FileTypeWeb', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_ARCHIVE :
-                return Translation::get('FileTypeArchive');
+                return $translator->getTranslation('FileTypeArchive', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_APPLICATION :
-                return Translation::get('FileTypeApplication');
+                return $translator->getTranslation('FileTypeApplication', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_FLASH :
-                return Translation::get('FileTypeFlash');
+                return $translator->getTranslation('FileTypeFlash', array(), Utilities::COMMON_LIBRARIES);
                 break;
             case self::TYPE_CODE :
-                return Translation::get('FileTypeCode');
+                return $translator->getTranslation('FileTypeCode', array(), Utilities::COMMON_LIBRARIES);
                 break;
         }
     }
@@ -649,20 +652,30 @@ class FileType
      */
     public static function get_types()
     {
+        $translator = Translation::getInstance();
+
         return array(
-            self::TYPE_AUDIO => Translation::get('FileTypeAudio'),
-            self::TYPE_VIDEO => Translation::get('FileTypeVideo'),
-            self::TYPE_IMAGE => Translation::get('FileTypeImage'),
-            self::TYPE_PDF => Translation::get('FileTypePdf'),
-            self::TYPE_SPREADSHEET => Translation::get('FileTypeSpreadsheet'),
-            self::TYPE_TEXT => Translation::get('FileTypeText'),
-            self::TYPE_PRESENTATION => Translation::get('FileTypePresentation'),
-            self::TYPE_DATABASE => Translation::get('FileTypeDatabase'),
-            self::TYPE_WEB => Translation::get('FileTypeWeb'),
-            self::TYPE_ARCHIVE => Translation::get('FileTypeArchive'),
-            self::TYPE_APPLICATION => Translation::get('FileTypeApplication'),
-            self::TYPE_FLASH => Translation::get('FileTypeFlash'),
-            self::TYPE_CODE => Translation::get('FileTypeCode')
+            self::TYPE_AUDIO => $translator->getTranslation('FileTypeAudio', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_VIDEO => $translator->getTranslation('FileTypeVideo', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_IMAGE => $translator->getTranslation('FileTypeImage', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_PDF => $translator->getTranslation('FileTypePdf', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_SPREADSHEET => $translator->getTranslation(
+                'FileTypeSpreadsheet', array(), Utilities::COMMON_LIBRARIES
+            ),
+            self::TYPE_TEXT => $translator->getTranslation('FileTypeText', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_PRESENTATION => $translator->getTranslation(
+                'FileTypePresentation', array(), Utilities::COMMON_LIBRARIES
+            ),
+            self::TYPE_DATABASE => $translator->getTranslation(
+                'FileTypeDatabase', array(), Utilities::COMMON_LIBRARIES
+            ),
+            self::TYPE_WEB => $translator->getTranslation('FileTypeWeb', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_ARCHIVE => $translator->getTranslation('FileTypeArchive', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_APPLICATION => $translator->getTranslation(
+                'FileTypeApplication', array(), Utilities::COMMON_LIBRARIES
+            ),
+            self::TYPE_FLASH => $translator->getTranslation('FileTypeFlash', array(), Utilities::COMMON_LIBRARIES),
+            self::TYPE_CODE => $translator->getTranslation('FileTypeCode', array(), Utilities::COMMON_LIBRARIES)
         );
     }
 

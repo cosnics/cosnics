@@ -19,6 +19,7 @@ class Import
      * 'Adam'; ...
      *
      * @param string $filename
+     *
      * @return string[]
      */
     public function csv_to_array($filename)
@@ -32,7 +33,7 @@ class Import
             $keys[$i] = (string) StringUtilities::getInstance()->createString($keys[$i])->underscored();
         }
 
-        while (($row_tmp = fgetcsv($handle, 1000, ";")) !== FALSE)
+        while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
         {
 
             $row = array();
@@ -53,6 +54,7 @@ class Import
      * This will happen without any use of key's
      *
      * @param string $filename
+     *
      * @return string[]
      */
     public function read_csv($filename)
@@ -60,9 +62,9 @@ class Import
         $result = array();
         $handle = fopen($filename, "r");
 
-        while (($row = fgetcsv($handle, 1000, ";")) !== FALSE)
+        while (($row = fgetcsv($handle, 1000, ";")) !== false)
         {
-            if (! empty($row[0]))
+            if (!empty($row[0]))
             {
                 $result[] = $row;
             }

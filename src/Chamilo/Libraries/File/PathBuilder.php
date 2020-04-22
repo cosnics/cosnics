@@ -15,39 +15,22 @@ use Exception;
 class PathBuilder
 {
     const ARCHIVE = 8;
-
     const BASE = 2;
-
     const CACHE = 6;
-
     const CONFIGURATION = 12;
-
     const FULL = 1;
-
     const I18N = 15;
-
     const JAVASCRIPT = 14;
-
     const LOG = 7;
-
     const PLUGIN = 11;
-
     const PROFILE_PICTURE = 10;
-
     const PUBLIC_STORAGE = 17;
-
     const RELATIVE = 3;
-
     const REPOSITORY = 9;
-
     const RESOURCE = 13;
-
     const STORAGE = 4;
-
     const TEMPLATES = 18;
-
     const TEMPORARY = 5;
-
     const VENDOR = 16;
 
     /**
@@ -238,7 +221,6 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
      *
      * @return string
      */
@@ -269,6 +251,7 @@ class PathBuilder
      * @param boolean $web
      *
      * @return string
+     * @throws \Exception
      */
     public function getVendorPath($web = false)
     {

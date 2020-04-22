@@ -9,10 +9,13 @@ namespace Chamilo\Libraries\File;
  */
 class FileErrorLogger
 {
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_FILE = 'file';
-    const PROPERTY_EXTENSION = 'extension';
     const PROPERTY_APPEND = 'append';
+
+    const PROPERTY_EXTENSION = 'extension';
+
+    const PROPERTY_FILE = 'file';
+
+    const PROPERTY_PATH = 'path';
 
     /**
      *
@@ -42,6 +45,59 @@ class FileErrorLogger
     }
 
     /**
+     * Closes the error log handle
+     */
+    public function closeErrorLogHandle()
+    {
+        fclose($this->errorLogHandle);
+    }
+
+    /**
+     * Closes the log handle
+     */
+    public function closeLogHandle()
+    {
+        fclose($this->logHandle);
+    }
+
+    /**
+     * Closes the log handles
+     */
+    public function closeLogHandles()
+    {
+        $this->closeLogHandle();
+        $this->closeErrorLogHandle();
+    }
+
+    protected function getAppend()
+    {
+        $configuration = $this->getLogConfiguration();
+
+        return $configuration[self::PROPERTY_APPEND] ? 'a+' : 'w+';
+    }
+
+    /**
+     * Gets the current timestamp
+     *
+     * @return string
+     */
+    public function getCurrentTimestamp()
+    {
+        return strftime("[%d/%m/%Y - %H:%M:%S] ", time());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getErrorLogFilePath()
+    {
+        $configuration = $this->getLogConfiguration();
+
+        return $configuration[self::PROPERTY_PATH] . $configuration[self::PROPERTY_FILE] . '.error.' .
+            $configuration[self::PROPERTY_EXTENSION];
+    }
+
+    /**
      * @return string[]
      */
     protected function getLogConfiguration()
@@ -61,26 +117,51 @@ class FileErrorLogger
     }
 
     /**
-     * @return string
+     * @param string $message
+     * @param boolean $includeTimestamp
      */
-    protected function getErrorLogFilePath()
+    public function log(string $message, bool $includeTimestamp = true)
     {
-        $configuration = $this->getLogConfiguration();
-
-        return $configuration[self::PROPERTY_PATH] . $configuration[self::PROPERTY_FILE] . '.error.' .
-            $configuration[self::PROPERTY_EXTENSION];
+        fwrite($this->logHandle, $this->prepareMessage($message, $includeTimestamp));
     }
 
-    protected function getAppend()
+    /**
+     * @param string $action
+     * @param string $message
+     * @param boolean $includeTimestamp
+     */
+    public function logAction(string $action, string $message = null, bool $includeTimestamp = true)
     {
-        $configuration = $this->getLogConfiguration();
-
-        return $configuration[self::PROPERTY_APPEND] ? 'a+' : 'w+';
+        fwrite($this->logHandle, $this->prepareActionMessage($action, $message, $includeTimestamp));
     }
 
-    public function openLogFile()
+    /**
+     * @param string $action
+     * @param string $errorMessage
+     * @param boolean $includeTimestamp
+     */
+    public function logActionError(string $action, string $errorMessage = null, bool $includeTimestamp = true)
     {
-        $this->logHandle = fopen($this->getLogFilePath(), $this->getAppend());
+        fwrite($this->errorLogHandle, $this->prepareActionMessage($action, $errorMessage, $includeTimestamp));
+    }
+
+    /**
+     * @param string $errorMessage
+     * @param boolean $includeTimestamp
+     */
+    public function logError(string $errorMessage, bool $includeTimestamp = true)
+    {
+        fwrite($this->errorLogHandle, $this->prepareMessage($errorMessage, $includeTimestamp));
+    }
+
+    /**
+     * @param string $message
+     * @param boolean $includeTimestamp
+     */
+    public function mark(string $message, bool $includeTimestamp = true)
+    {
+        $this->log($message, $includeTimestamp);
+        $this->logError($message, $includeTimestamp);
     }
 
     public function openErrorLogFile()
@@ -88,47 +169,9 @@ class FileErrorLogger
         $this->errorLogHandle = fopen($this->getErrorLogFilePath(), $this->getAppend());
     }
 
-    /**
-     * Closes the log handle
-     */
-    public function closeLogHandle()
+    public function openLogFile()
     {
-        fclose($this->logHandle);
-    }
-
-    /**
-     * Closes the error log handle
-     */
-    public function closeErrorLogHandle()
-    {
-        fclose($this->errorLogHandle);
-    }
-
-    /**
-     * Closes the log handles
-     */
-    public function closeLogHandles()
-    {
-        $this->closeLogHandle();
-        $this->closeErrorLogHandle();
-    }
-
-    /**
-     * @param string $message
-     * @param boolean $includeTimestamp
-     *
-     * @return string
-     */
-    protected function prepareMessage(string $message, bool $includeTimestamp = true)
-    {
-        $message = strip_tags($message);
-
-        if ($includeTimestamp)
-        {
-            $message = $this->getCurrentTimestamp() . $message;
-        }
-
-        return $message . PHP_EOL;
+        $this->logHandle = fopen($this->getLogFilePath(), $this->getAppend());
     }
 
     /**
@@ -165,58 +208,18 @@ class FileErrorLogger
     /**
      * @param string $message
      * @param boolean $includeTimestamp
-     */
-    public function mark(string $message, bool $includeTimestamp = true)
-    {
-        $this->log($message, $includeTimestamp);
-        $this->logError($message, $includeTimestamp);
-    }
-
-    /**
-     * @param string $message
-     * @param boolean $includeTimestamp
-     */
-    public function log(string $message, bool $includeTimestamp = true)
-    {
-        fwrite($this->logHandle, $this->prepareMessage($message, $includeTimestamp));
-    }
-
-    /**
-     * @param string $errorMessage
-     * @param boolean $includeTimestamp
-     */
-    public function logError(string $errorMessage, bool $includeTimestamp = true)
-    {
-        fwrite($this->errorLogHandle, $this->prepareMessage($errorMessage, $includeTimestamp));
-    }
-
-    /**
-     * @param string $action
-     * @param string $message
-     * @param boolean $includeTimestamp
-     */
-    public function logAction(string $action, string $message = null, bool $includeTimestamp = true)
-    {
-        fwrite($this->logHandle, $this->prepareActionMessage($action, $message, $includeTimestamp));
-    }
-
-    /**
-     * @param string $action
-     * @param string $errorMessage
-     * @param boolean $includeTimestamp
-     */
-    public function logActionError(string $action, string $errorMessage = null, bool $includeTimestamp = true)
-    {
-        fwrite($this->errorLogHandle, $this->prepareActionMessage($action, $errorMessage, $includeTimestamp));
-    }
-
-    /**
-     * Gets the current timestamp
      *
      * @return string
      */
-    public function getCurrentTimestamp()
+    protected function prepareMessage(string $message, bool $includeTimestamp = true)
     {
-        return strftime("[%d/%m/%Y - %H:%M:%S] ", time());
+        $message = strip_tags($message);
+
+        if ($includeTimestamp)
+        {
+            $message = $this->getCurrentTimestamp() . $message;
+        }
+
+        return $message . PHP_EOL;
     }
 }
