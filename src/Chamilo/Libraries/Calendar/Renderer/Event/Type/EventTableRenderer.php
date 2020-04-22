@@ -15,13 +15,31 @@ abstract class EventTableRenderer extends EventRenderer
     /**
      *
      * @return string
+     * @throws \Exception
+     */
+    public function render()
+    {
+        $html = array();
+
+        $html[] = $this->renderHeader();
+        $html[] = $this->renderLink();
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     * @throws \Exception
      */
     public function determineEventClasses()
     {
-        $eventClasses = $this->getEventClasses($this->getEvent()->getStartDate());
+        $eventClasses = $this->getEventClasses();
         $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses(
-            $this->getEvent()->getSource(),
-            $this->isFadedEvent());
+            $this->getEvent()->getSource(), $this->isFadedEvent()
+        );
+
         return implode(' ', array($eventClasses, $sourceClasses));
     }
 
@@ -29,32 +47,43 @@ abstract class EventTableRenderer extends EventRenderer
      *
      * @return string
      */
-    public function renderLink()
+    abstract public function getPostfixSymbol();
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function getPrefixSymbol();
+
+    /**
+     *
+     * @param string $glyph
+     *
+     * @return string
+     */
+    public function getSymbol($glyph)
+    {
+        $glyph = new FontAwesomeGlyph($glyph);
+
+        return $glyph->render();
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    abstract public function isFadedEvent();
+
+    /**
+     *
+     * @return string
+     */
+    public function renderFooter()
     {
         $html = array();
 
-        $fullTitle = $this->renderFullTitle();
-
-        if ($this->getEvent()->getUrl())
-        {
-            $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) .
-                 '">';
-        }
-        else
-        {
-            $html[] = '<span title="' . htmlentities(strip_tags($fullTitle)) . '">';
-        }
-
-        $html[] = $fullTitle;
-
-        if ($this->getEvent()->getUrl())
-        {
-            $html[] = '</a>';
-        }
-        else
-        {
-            $html[] = '</span>';
-        }
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -86,35 +115,15 @@ abstract class EventTableRenderer extends EventRenderer
 
     /**
      *
-     * @return boolean
-     */
-    abstract public function isFadedEvent();
-
-    /**
-     *
      * @return string
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = $this->renderHeader();
-        $html[] = $this->renderLink();
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
+     * @throws \Exception
      */
     public function renderHeader()
     {
         $html = array();
 
         $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
-             $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
+            $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);
@@ -124,40 +133,34 @@ abstract class EventTableRenderer extends EventRenderer
      *
      * @return string
      */
-    public function renderFooter()
+    public function renderLink()
     {
         $html = array();
 
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $fullTitle = $this->renderFullTitle();
+
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] =
+                '<a href="' . $this->getEvent()->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) . '">';
+        }
+        else
+        {
+            $html[] = '<span title="' . htmlentities(strip_tags($fullTitle)) . '">';
+        }
+
+        $html[] = $fullTitle;
+
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] = '</a>';
+        }
+        else
+        {
+            $html[] = '</span>';
+        }
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param integer $date
-     * @return string
-     */
-    public function renderTime($date)
-    {
-        return date('H:i', $date);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderPrefix()
-    {
-        if ($this->showPrefixDate())
-        {
-            return $this->renderTime($this->getEvent()->getStartDate());
-        }
-        elseif ($this->showPrefixSymbol())
-        {
-            return $this->getPrefixSymbol();
-        }
     }
 
     /**
@@ -174,36 +177,38 @@ abstract class EventTableRenderer extends EventRenderer
         {
             return $this->getPostfixSymbol();
         }
+
+        return '';
     }
 
     /**
      *
-     * @param string $glyph
      * @return string
      */
-    public function getSymbol($glyph)
+    public function renderPrefix()
     {
-        $glyph = new FontAwesomeGlyph($glyph);
-        return $glyph->render();
+        if ($this->showPrefixDate())
+        {
+            return $this->renderTime($this->getEvent()->getStartDate());
+        }
+        elseif ($this->showPrefixSymbol())
+        {
+            return $this->getPrefixSymbol();
+        }
+
+        return '';
     }
 
     /**
      *
-     * @return boolean
-     */
-    abstract public function showPrefixDate();
-
-    /**
-     *
-     * @return boolean
-     */
-    abstract public function showPrefixSymbol();
-
-    /**
+     * @param integer $date
      *
      * @return string
      */
-    abstract public function getPrefixSymbol();
+    public function renderTime($date)
+    {
+        return date('H:i', $date);
+    }
 
     /**
      *
@@ -219,7 +224,13 @@ abstract class EventTableRenderer extends EventRenderer
 
     /**
      *
-     * @return string
+     * @return boolean
      */
-    abstract public function getPostfixSymbol();
+    abstract public function showPrefixDate();
+
+    /**
+     *
+     * @return boolean
+     */
+    abstract public function showPrefixSymbol();
 }

@@ -46,42 +46,6 @@ class RecurrenceCalculator
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartTime()
-    {
-        return $this->startTime;
-    }
-
-    /**
-     *
-     * @param integer $startTime
-     */
-    public function setStartTime($startTime)
-    {
-        $this->startTime = $startTime;
-    }
-
-    /**
-     *
      * @return integer
      */
     public function getEndTime()
@@ -100,12 +64,32 @@ class RecurrenceCalculator
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Event\Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
     public function getEvents()
     {
         $event = $this->getEvent();
         $recurrenceRules = $event->getRecurrenceRules();
+        $events = array();
 
         if ($recurrenceRules->hasRecurrence())
         {
@@ -138,8 +122,6 @@ class RecurrenceCalculator
             $vCalendar->expand($fromDateTime, $toDateTime);
             $calculatedEvents = $vCalendar->VEVENT;
 
-            $events = array();
-
             foreach ($calculatedEvents as $calculatedEvent)
             {
                 $repeatEvent = clone $event;
@@ -164,15 +146,34 @@ class RecurrenceCalculator
 
     /**
      *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     *
+     * @param integer $startTime
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $fromTime
      * @param integer $endTime
+     *
      * @return boolean
      */
     private function isVisible(Event $event, $fromTime, $endTime)
     {
         return ($event->getStartDate() >= $fromTime && $event->getStartDate() <= $endTime) ||
-             ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
-             ($event->getStartDate() < $fromTime && $event->getEndDate() > $endTime);
+            ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
+            ($event->getStartDate() < $fromTime && $event->getEndDate() > $endTime);
     }
 }

@@ -11,8 +11,9 @@ class IcalRecurrenceRulesFormatter
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
-     * @return string[]
+     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules $recurrenceRules
+     *
+     * @return string[][]
      */
     public function format(RecurrenceRules $recurrenceRules)
     {
@@ -43,11 +44,12 @@ class IcalRecurrenceRulesFormatter
                     array('DAY' => 'TU'),
                     array('DAY' => 'WE'),
                     array('DAY' => 'TH'),
-                    array('DAY' => 'FR'));
+                    array('DAY' => 'FR')
+                );
                 break;
         }
 
-        if (! $recurrenceRules->isIndefinite())
+        if (!$recurrenceRules->isIndefinite())
         {
             $iCalRules['UNTIL'] = $this->getDateInIcalFormat($recurrenceRules->getUntil());
         }
@@ -88,6 +90,7 @@ class IcalRecurrenceRulesFormatter
     /**
      *
      * @param string[] $byDays
+     *
      * @return string[]
      */
     private function getByDayParts($byDays)
@@ -106,6 +109,7 @@ class IcalRecurrenceRulesFormatter
     /**
      *
      * @param integer $date
+     *
      * @return string
      */
     private function getDateInIcalFormat($date)

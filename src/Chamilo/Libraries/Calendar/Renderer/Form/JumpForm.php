@@ -47,24 +47,6 @@ class JumpForm
      *
      * @return string
      */
-    public function getNavigationUrl()
-    {
-        return $this->navigationUrl;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentTime()
-    {
-        return $this->currentTime;
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function render()
     {
         return $this->getButtonToolBarRenderer()->render();
@@ -80,7 +62,8 @@ class JumpForm
         $buttonGroup = new ButtonGroup();
 
         $buttonToolbar->addItem(
-            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
+            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link')
+        );
         $buttonToolbar->addItem($buttonGroup);
 
         $dateButton = new DropdownButton(date('j', $this->getCurrentTime()));
@@ -90,10 +73,13 @@ class JumpForm
             $dayUrl = str_replace(
                 Calendar::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
-                $this->getNavigationUrl());
+                $this->getNavigationUrl()
+            );
 
-            $isActive = date('j', $this->getCurrentTime()) == $day ? true:false;
-            $dateButton->addSubButton(new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
+            $isActive = date('j', $this->getCurrentTime()) == $day;
+            $dateButton->addSubButton(
+                new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+            );
         }
 
         $months = $this->getMonths();
@@ -102,13 +88,15 @@ class JumpForm
         foreach ($this->getMonths() as $month => $monthLabel)
         {
             $monthUrl = str_replace(
-                Calendar::TIME_PLACEHOLDER,
-                mktime(null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())),
-                $this->getNavigationUrl());
+                Calendar::TIME_PLACEHOLDER, mktime(
+                null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())
+            ), $this->getNavigationUrl()
+            );
 
-            $isActive = date('n', $this->getCurrentTime()) == $month ? true:false;
+            $isActive = date('n', $this->getCurrentTime()) == $month;
             $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+            );
         }
 
         $yearButton = new DropdownButton(date('Y', $this->getCurrentTime()));
@@ -118,18 +106,29 @@ class JumpForm
             $yearUrl = str_replace(
                 Calendar::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
-                $this->getNavigationUrl());
+                $this->getNavigationUrl()
+            );
 
-            $isActive = date('Y', $this->getCurrentTime()) == $year ? true:false;
-            $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive));
+            $isActive = date('Y', $this->getCurrentTime()) == $year;
+            $yearButton->addSubButton(
+                new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+            );
         }
 
         $buttonGroup->addButton($dateButton);
         $buttonGroup->addButton($monthButton);
         $buttonGroup->addButton($yearButton);
 
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        return $buttonToolbarRenderer;
+        return new ButtonToolBarRenderer($buttonToolbar);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getCurrentTime()
+    {
+        return $this->currentTime;
     }
 
     /**
@@ -155,19 +154,22 @@ class JumpForm
      */
     public function getMonths()
     {
+        $translator = Translation::getInstance();
+
         $monthNames = array(
-            Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("FebruaryLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MarchLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AprilLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("MayLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JuneLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("JulyLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("AugustLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
-            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
+            $translator->getTranslation("JanuaryLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("FebruaryLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("MarchLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("AprilLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("MayLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("JuneLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("JulyLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("AugustLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("SeptemberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("OctoberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("NovemberLong", array(), Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("DecemberLong", array(), Utilities::COMMON_LIBRARIES)
+        );
         $months = array();
 
         foreach ($monthNames as $key => $month)
@@ -176,6 +178,15 @@ class JumpForm
         }
 
         return $months;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getNavigationUrl()
+    {
+        return $this->navigationUrl;
     }
 
     /**

@@ -12,6 +12,7 @@ class VObjectRecurrenceRulesFormatter extends IcalRecurrenceRulesFormatter
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules $recurrenceRules
+     *
      * @return string[]
      */
     public function format(RecurrenceRules $recurrenceRules)

@@ -15,56 +15,8 @@ abstract class FullRenderer extends ViewRenderer
 {
 
     /**
-     *
      * @return string
-     */
-    public function renderMiniMonth()
-    {
-        $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            null,
-            null);
-
-        return $renderer->render();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Form\JumpForm
-     */
-    protected function getJumpForm()
-    {
-        if (! isset($this->form))
-        {
-            $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
-        }
-
-        return $this->form;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderNavigation();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderFullCalendar();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderTitle();
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @throws \Exception
      */
     public function render()
     {
@@ -104,8 +56,54 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
+        );
 
         return implode(PHP_EOL, $html);
     }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Form\JumpForm
+     */
+    protected function getJumpForm()
+    {
+        if (!isset($this->form))
+        {
+            $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
+        }
+
+        return $this->form;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function renderFullCalendar();
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function renderMiniMonth()
+    {
+        $renderer = new MiniMonthRenderer(
+            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime(), null, null
+        );
+
+        return $renderer->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function renderNavigation();
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function renderTitle();
 }

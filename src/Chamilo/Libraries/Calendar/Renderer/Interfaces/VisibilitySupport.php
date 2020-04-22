@@ -13,13 +13,12 @@ interface VisibilitySupport
 {
 
     /**
-     * Check whether the given source is visible for the user
+     * Return the executable application containing the VisibilityComponent which will be called when setting a source
+     * visible or invisible
      *
-     * @param string $source
-     * @param integer $userIdentifier
-     * @return boolean
+     * @return string
      */
-    public function isSourceVisible($source, $userIdentifier = null);
+    public function getVisibilityContext();
 
     /**
      * Return the additional Application data needed for the storage of the Visibility instance
@@ -29,10 +28,12 @@ interface VisibilitySupport
     public function getVisibilityData();
 
     /**
-     * Return the executable application containing the VisibilityComponent which will be called when setting a source
-     * visible or invisible
+     * Check whether the given source is visible for the user
      *
-     * @return string
+     * @param string $source
+     * @param integer $userIdentifier
+     *
+     * @return boolean
      */
-    public function getVisibilityContext();
+    public function isSourceVisible($source, $userIdentifier = null);
 }

@@ -11,25 +11,11 @@ class EventMonthRenderer extends EventTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
      */
-    public function showPrefixDate()
+    public function getPostfixSymbol()
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-
-        return ($startDate >= $configuration->getStartDate() &&
-             $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate != $configuration->getStartDate());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
-     */
-    public function showPrefixSymbol()
-    {
-        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+        return $this->getSymbol('chevron-right');
     }
 
     /**
@@ -43,6 +29,20 @@ class EventMonthRenderer extends EventTableRenderer
 
     /**
      *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
+     */
+    public function isFadedEvent()
+    {
+        $startDate = $this->getEvent()->getStartDate();
+
+        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
+        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
+
+        return $startDate < $fromDate || $startDate > $toDate;
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixDate()
      */
     public function showPostfixDate()
@@ -52,7 +52,7 @@ class EventMonthRenderer extends EventTableRenderer
         $endDate = $this->getEvent()->getEndDate();
 
         return ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate < $configuration->getStartDate());
+            $startDate < $configuration->getStartDate());
     }
 
     /**
@@ -70,25 +70,24 @@ class EventMonthRenderer extends EventTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
      */
-    public function getPostfixSymbol()
+    public function showPrefixDate()
     {
-        return $this->getSymbol('chevron-right');
+        $configuration = $this->getConfiguration();
+        $startDate = $this->getEvent()->getStartDate();
+
+        return ($startDate >= $configuration->getStartDate() &&
+            $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
+            $startDate != $configuration->getStartDate());
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
      */
-    public function isFadedEvent()
+    public function showPrefixSymbol()
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-
-        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
-        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
-
-        return (($startDate < $fromDate || $startDate > $toDate) ? true : false);
+        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
     }
 }

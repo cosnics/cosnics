@@ -286,7 +286,7 @@ class Configuration
      *
      * @param string $integration
      * @param string $root
-     * @return string[]
+     * @return string[][]
      */
     public function getIntegrationRegistrations($integration, $root = null)
     {

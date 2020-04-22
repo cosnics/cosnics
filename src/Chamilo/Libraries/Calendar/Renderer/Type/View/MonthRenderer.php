@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -15,6 +15,24 @@ use Chamilo\Libraries\File\Redirect;
  */
 class MonthRenderer extends FullTableRenderer
 {
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
+     */
+    public function getNextDisplayTime()
+    {
+        return strtotime('first day of next month', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
+     */
+    public function getPreviousDisplayTime()
+    {
+        return strtotime('first day of previous month', $this->getDisplayTime());
+    }
 
     /**
      *
@@ -54,8 +72,8 @@ class MonthRenderer extends FullTableRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                     $startDate <= $tableDate && $nextTableDate <= $endDate)
+                    $tableDate < $endDate && $endDate <= $nextTableDate ||
+                    $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $configuration = new Configuration();
                     $configuration->setStartDate($tableDate);
@@ -79,24 +97,6 @@ class MonthRenderer extends FullTableRenderer
     public function renderTitle()
     {
         return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('Y', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('first day of previous month', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('first day of next month', $this->getDisplayTime());
+            date('Y', $this->getDisplayTime());
     }
 }

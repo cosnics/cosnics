@@ -10,27 +10,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  */
 class Configuration extends ParameterBag
 {
-    const PROPERTY_START_DATE = 'startDate';
     const PROPERTY_END_DATE = 'endDate';
+
     const PROPERTY_HOUR_STEP = 'hourStep';
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartDate()
-    {
-        return $this->get(self::PROPERTY_START_DATE);
-    }
-
-    /**
-     *
-     * @param integer $startDate
-     */
-    public function setStartDate($startDate)
-    {
-        return $this->set(self::PROPERTY_START_DATE, $startDate);
-    }
+    const PROPERTY_START_DATE = 'startDate';
 
     /**
      *
@@ -39,15 +23,6 @@ class Configuration extends ParameterBag
     public function getEndDate()
     {
         return $this->get(self::PROPERTY_END_DATE);
-    }
-
-    /**
-     *
-     * @param integer $endDate
-     */
-    public function setEndDate($endDate)
-    {
-        return $this->set(self::PROPERTY_END_DATE, $endDate);
     }
 
     /**
@@ -61,10 +36,37 @@ class Configuration extends ParameterBag
 
     /**
      *
+     * @return integer
+     */
+    public function getStartDate()
+    {
+        return $this->get(self::PROPERTY_START_DATE);
+    }
+
+    /**
+     *
+     * @param integer $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->set(self::PROPERTY_END_DATE, $endDate);
+    }
+
+    /**
+     *
      * @param integer $hourStep
      */
     public function setHourStep($hourStep)
     {
-        return $this->set(self::PROPERTY_HOUR_STEP, $hourStep);
+        $this->set(self::PROPERTY_HOUR_STEP, $hourStep);
+    }
+
+    /**
+     *
+     * @param integer $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->set(self::PROPERTY_START_DATE, $startDate);
     }
 }

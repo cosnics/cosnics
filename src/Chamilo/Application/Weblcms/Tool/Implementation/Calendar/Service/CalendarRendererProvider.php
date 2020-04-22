@@ -140,13 +140,4 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
         return $redirect->getUrl();
     }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsActions()
-    {
-        return $this instanceof ActionSupport;
-    }
 }

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Calendar\Event\Ajax\Manager;
 use Chamilo\Libraries\Calendar\Event\Visibility;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,19 +20,9 @@ use Chamilo\Libraries\Utilities\Utilities;
 abstract class CalendarEventVisibilityComponent extends Manager
 {
     const PARAM_SOURCE = 'source';
-    const PARAM_DATA = 'data';
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters()
-    {
-        return array(self::PARAM_SOURCE);
-    }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     * @throws \ReflectionException
      */
     public function run()
     {
@@ -44,14 +33,17 @@ abstract class CalendarEventVisibilityComponent extends Manager
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->getUser()->getId())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_SOURCE),
-            new StaticConditionVariable($source));
+            new StaticConditionVariable($source)
+        );
         $condition = new AndCondition($conditions);
 
         // Retrieve the visibility object from storage
         $visibility = $this->retrieveVisibility($condition);
+        $translator = $this->getTranslator();
 
         $result = new JsonAjaxResult();
 
@@ -64,19 +56,18 @@ abstract class CalendarEventVisibilityComponent extends Manager
             else
             {
                 $result->error(
-                    500,
-                    Translation::get(
-                        'ObjectNotDeleted',
-                        array('OBJECT' => Translation::get('Visibility')),
-                        Utilities::COMMON_LIBRARIES));
+                    500, $translator->trans(
+                    'ObjectNotDeleted',
+                    array('OBJECT' => $translator->trans('Visibility', array(), 'Chamilo\Libraries\Calendar')),
+                    Utilities::COMMON_LIBRARIES
+                )
+                );
             }
         }
         else
         {
-            $data = $this->getPostDataValue(self::PARAM_DATA);
-
             $visibility = new $visibilityClass();
-            $visibility->setUserId($this->get_user_id());
+            $visibility->setUserId($this->getUser()->getId());
             $visibility->setSource($source);
 
             if ($visibility->create())
@@ -86,20 +77,27 @@ abstract class CalendarEventVisibilityComponent extends Manager
             else
             {
                 $result->error(
-                    500,
-                    Translation::get(
-                        'ObjectNotCreated',
-                        array('OBJECT' => Translation::get('Visibility')),
-                        Utilities::COMMON_LIBRARIES));
+                    500, $translator->trans(
+                    'ObjectNotCreated',
+                    array('OBJECT' => $translator->trans('Visibility', array(), 'Chamilo\Libraries\Calendar')),
+                    Utilities::COMMON_LIBRARIES
+                )
+                );
             }
         }
 
         $result->display();
     }
 
+    public function getRequiredPostParameters()
+    {
+        return array(self::PARAM_SOURCE);
+    }
+
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Visibility
      */
     abstract function retrieveVisibility(Condition $condition);

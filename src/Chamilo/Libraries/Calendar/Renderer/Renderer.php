@@ -25,25 +25,19 @@ abstract class Renderer
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     *
      * @throws \Exception
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
-        if (! $dataProvider instanceof CalendarRendererProviderInterface)
+        if (!$dataProvider instanceof CalendarRendererProviderInterface)
         {
-            throw new Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
+            throw new Exception(
+                'Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider)
+            );
         }
 
         $this->dataProvider = $dataProvider;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    public function getDataProvider()
-    {
-        return $this->dataProvider;
     }
 
     /**
@@ -55,7 +49,17 @@ abstract class Renderer
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+     */
+    public function getDataProvider()
+    {
+        return $this->dataProvider;
+    }
+
+    /**
+     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {

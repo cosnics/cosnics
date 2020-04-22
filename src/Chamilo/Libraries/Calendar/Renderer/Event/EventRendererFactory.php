@@ -48,20 +48,12 @@ class EventRendererFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
+     * @return string
+     * @throws \Exception
      */
-    public function getEvent()
+    public function render()
     {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent(Event $event)
-    {
-        $this->event = $event;
+        return $this->getEventRenderer()->render();
     }
 
     /**
@@ -84,6 +76,37 @@ class EventRendererFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Event\Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     */
+    public function setEvent(Event $event)
+    {
+        $this->event = $event;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @throws \Exception
+     */
+    public function getEventRenderer()
+    {
+        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
+            '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
+
+        return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
     public function getRenderer()
@@ -98,27 +121,5 @@ class EventRendererFactory
     public function setRenderer($renderer)
     {
         $this->renderer = $renderer;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
-    {
-        return $this->getEventRenderer()->render();
-    }
-
-    /**
-     *
-     * @throws \Exception
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    public function getEventRenderer()
-    {
-        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
-             '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
-
-        return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
     }
 }

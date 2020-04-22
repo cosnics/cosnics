@@ -13,6 +13,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
      * Gets an html representation of an event for the renderer
      *
      * @return string
+     * @throws \Exception
      */
     public function render()
     {
@@ -60,6 +61,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
     /**
      *
      * @param integer $date
+     *
      * @return string
      */
     public function renderTime($date)

@@ -44,70 +44,9 @@ class RecurrenceRulesIcalParser
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
-     */
-    public function getRules()
-    {
-        $icalRecurrenceRules = $this->getParts($this->getIcalRecurrenceRules());
-
-        $recurrenceRules = new RecurrenceRules();
-
-        if ($icalRecurrenceRules['FREQ'])
-        {
-            switch ($icalRecurrenceRules['FREQ'])
-            {
-                case 'DAILY' :
-                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_DAILY);
-                    break;
-                case 'WEEKLY' :
-                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_WEEKLY);
-                    break;
-                case 'MONTHLY' :
-                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_MONTHLY);
-                    break;
-                case 'YEARLY' :
-                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_YEARLY);
-                    break;
-            }
-
-            if ($icalRecurrenceRules['COUNT'])
-            {
-                $recurrenceRules->setCount($icalRecurrenceRules['COUNT']);
-            }
-
-            if ($icalRecurrenceRules['INTERVAL'])
-            {
-                $recurrenceRules->setCount($icalRecurrenceRules['INTERVAL']);
-            }
-
-            if ($icalRecurrenceRules['BYDAY'])
-            {
-                $recurrenceRules->setByDay($icalRecurrenceRules['BYDAY']);
-            }
-
-            if ($icalRecurrenceRules['BYMONTHDAY'])
-            {
-                $recurrenceRules->setByMonthDay($icalRecurrenceRules['BYMONTHDAY']);
-            }
-
-            if ($icalRecurrenceRules['BYMONTH'])
-            {
-                $recurrenceRules->setByMonth($icalRecurrenceRules['BYMONTH']);
-            }
-
-            if ($icalRecurrenceRules['BYWEEKNO'])
-            {
-                $recurrenceRules->setByWeekNumber($icalRecurrenceRules['BYWEEKNO']);
-            }
-        }
-
-        return $recurrenceRules;
-    }
-
-    /**
-     *
      * @param string $icalRecurrenceRules
-     * @return string[]
+     *
+     * @return string[][]
      */
     private function getParts($icalRecurrenceRules)
     {
@@ -138,5 +77,67 @@ class RecurrenceRulesIcalParser
         }
 
         return $parts;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
+     */
+    public function getRules()
+    {
+        $icalRecurrenceRules = $this->getParts($this->getIcalRecurrenceRules());
+
+        $recurrenceRules = new RecurrenceRules();
+
+        if ($icalRecurrenceRules['FREQ'])
+        {
+            switch ($icalRecurrenceRules['FREQ'])
+            {
+                case 'DAILY' :
+                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_DAILY);
+                    break;
+                case 'WEEKLY' :
+                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_WEEKLY);
+                    break;
+                case 'MONTHLY' :
+                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_MONTHLY);
+                    break;
+                case 'YEARLY' :
+                    $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_YEARLY);
+                    break;
+            }
+
+            if ($icalRecurrenceRules['COUNT'])
+            {
+                $recurrenceRules->setCount((int) $icalRecurrenceRules['COUNT']);
+            }
+
+            if ($icalRecurrenceRules['INTERVAL'])
+            {
+                $recurrenceRules->setCount((int) $icalRecurrenceRules['INTERVAL']);
+            }
+
+            if ($icalRecurrenceRules['BYDAY'])
+            {
+                $recurrenceRules->setByDay($icalRecurrenceRules['BYDAY']);
+            }
+
+            if ($icalRecurrenceRules['BYMONTHDAY'])
+            {
+                $recurrenceRules->setByMonthDay($icalRecurrenceRules['BYMONTHDAY']);
+            }
+
+            if ($icalRecurrenceRules['BYMONTH'])
+            {
+                $recurrenceRules->setByMonth($icalRecurrenceRules['BYMONTH']);
+            }
+
+            if ($icalRecurrenceRules['BYWEEKNO'])
+            {
+                $recurrenceRules->setByWeekNumber($icalRecurrenceRules['BYWEEKNO']);
+            }
+        }
+
+        return $recurrenceRules;
     }
 }

@@ -16,7 +16,7 @@ abstract class EventRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer
      */
     private $renderer;
 
@@ -46,21 +46,28 @@ abstract class EventRenderer
     }
 
     /**
+     * Gets an html representation of an event for the renderer
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @return string
      */
-    public function getRenderer()
+    abstract public function render();
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+     */
+    public function getConfiguration()
     {
-        return $this->renderer;
+        return $this->configuration;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
      */
-    public function setRenderer(Renderer $renderer)
+    public function setConfiguration(Configuration $configuration)
     {
-        $this->renderer = $renderer;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -83,31 +90,13 @@ abstract class EventRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
-     */
-    public function setConfiguration(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getEventClasses()
     {
         $eventClasses = 'event-container';
 
-        if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
+        if (!$this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
             $eventClasses .= ' event-container-hidden';
         }
@@ -116,9 +105,20 @@ abstract class EventRenderer
     }
 
     /**
-     * Gets an html representation of an event for the renderer
      *
-     * @return string
+     * @return \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer
      */
-    abstract public function render();
+    public function getRenderer()
+    {
+        return $this->renderer;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     */
+    public function setRenderer(Renderer $renderer)
+    {
+        $this->renderer = $renderer;
+    }
 }

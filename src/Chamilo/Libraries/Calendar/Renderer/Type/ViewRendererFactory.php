@@ -57,8 +57,10 @@ class ViewRendererFactory
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $actions
      * @param string $linkTarget
      */
-    public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend,
-        $displayTime, $actions = array(), $linkTarget = '')
+    public function __construct(
+        $rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+        $actions = array(), $linkTarget = ''
+    )
     {
         $this->rendererType = $rendererType;
         $this->dataProvider = $dataProvider;
@@ -69,75 +71,14 @@ class ViewRendererFactory
     }
 
     /**
+     * Constructs the renderer and runs it
      *
      * @return string
+     * @throws \Exception
      */
-    public function getRendererType()
+    public function render()
     {
-        return $this->rendererType;
-    }
-
-    /**
-     *
-     * @param string $rendererType
-     */
-    public function setRendererType($rendererType)
-    {
-        $this->rendererType = $rendererType;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    public function getDataProvider()
-    {
-        return $this->dataProvider;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     */
-    public function setDataProvider(CalendarRendererProviderInterface $dataProvider)
-    {
-        $this->dataProvider = $dataProvider;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
-     */
-    public function getLegend()
-    {
-        return $this->legend;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     */
-    public function setLegend(Legend $legend)
-    {
-        $this->legend = $legend;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplayTime()
-    {
-        return $this->displayTime;
-    }
-
-    /**
-     *
-     * @param integer $displayTime
-     */
-    public function setDisplayTime($displayTime)
-    {
-        $this->displayTime = $displayTime;
+        return $this->getRenderer()->render();
     }
 
     /**
@@ -160,6 +101,60 @@ class ViewRendererFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
+     */
+    public function getDataProvider()
+    {
+        return $this->dataProvider;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     */
+    public function setDataProvider(CalendarRendererProviderInterface $dataProvider)
+    {
+        $this->dataProvider = $dataProvider;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDisplayTime()
+    {
+        return $this->displayTime;
+    }
+
+    /**
+     *
+     * @param integer $displayTime
+     */
+    public function setDisplayTime($displayTime)
+    {
+        $this->displayTime = $displayTime;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
+     */
+    public function getLegend()
+    {
+        return $this->legend;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     */
+    public function setLegend(Legend $legend)
+    {
+        $this->legend = $legend;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getLinkTarget()
@@ -177,29 +172,35 @@ class ViewRendererFactory
     }
 
     /**
-     * Constructs the renderer and runs it
      *
-     * @return string
-     */
-    public function render()
-    {
-        return $this->getRenderer()->render();
-    }
-
-    /**
-     *
-     * @throws \Exception
      * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @throws \Exception
      */
     public function getRenderer()
     {
         $className = __NAMESPACE__ . '\View\\' . $this->getRendererType() . 'Renderer';
 
         return new $className(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            $this->getActions(),
-            $this->getLinkTarget());
+            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime(), $this->getActions(),
+            $this->getLinkTarget()
+        );
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getRendererType()
+    {
+        return $this->rendererType;
+    }
+
+    /**
+     *
+     * @param string $rendererType
+     */
+    public function setRendererType($rendererType)
+    {
+        $this->rendererType = $rendererType;
     }
 }

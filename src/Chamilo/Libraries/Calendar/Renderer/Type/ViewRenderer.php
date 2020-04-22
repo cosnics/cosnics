@@ -9,7 +9,6 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -26,16 +25,10 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class ViewRenderer extends Renderer
 {
-    // Parameters
     const MARKER_TYPE = '__TYPE__';
 
     const PARAM_TIME = 'time';
-
-    // Markers
-
     const PARAM_TYPE = 'type';
-
-    // Types
 
     const TYPE_DAY = 'Day';
     const TYPE_LIST = 'List';
@@ -116,12 +109,12 @@ abstract class ViewRenderer extends Renderer
      */
     public function getActions(Event $event)
     {
-        if (!$this->getDataProvider() instanceof ActionSupport)
+        if ($this->getDataProvider() instanceof ActionSupport)
         {
-            return array();
+            return $this->getDataProvider()->getEventActions($event);
         }
 
-        return $this->getDataProvider()->getEventActions($event);
+        return array();
     }
 
     /**
@@ -243,13 +236,17 @@ abstract class ViewRenderer extends Renderer
     public function renderTypeButton()
     {
         $rendererTypes = array(
-            ViewRenderer::TYPE_MONTH, ViewRenderer::TYPE_WEEK, ViewRenderer::TYPE_DAY, ViewRenderer::TYPE_LIST
+            ViewRenderer::TYPE_MONTH,
+            ViewRenderer::TYPE_WEEK,
+            ViewRenderer::TYPE_DAY,
+            ViewRenderer::TYPE_LIST
         );
 
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
 
-        $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'));
+        $button =
+            new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'));
         $button->setDropdownClasses('dropdown-menu-right');
 
         foreach ($rendererTypes as $rendererType)
@@ -259,8 +256,8 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,array(), null,
-                    $currentRendererType == $rendererType ? true:false
+                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,
+                    array(), null, $currentRendererType == $rendererType
                 )
             );
         }
@@ -275,7 +272,6 @@ abstract class ViewRenderer extends Renderer
     public function renderViewActions()
     {
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
 
         foreach ($this->getViewActions() as $viewAction)
         {

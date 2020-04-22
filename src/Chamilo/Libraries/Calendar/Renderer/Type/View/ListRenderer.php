@@ -21,7 +21,18 @@ class ListRenderer extends FullRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer::getEvents()
+     * @return integer
+     */
+    protected function getEndTime()
+    {
+        return strtotime('+6 Months', $this->getStartTime());
+    }
+
+    /**
+     * @param integer $startTime
+     * @param integer $endTime
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\Event[][]
      */
     public function getEvents($startTime, $endTime)
     {
@@ -34,7 +45,7 @@ class ListRenderer extends FullRenderer
             $startDate = $event->getStartDate();
             $dateKey = mktime(0, 0, 0, date('n', $startDate), date('j', $startDate), date('Y', $startDate));
 
-            if (! isset($structuredEvents[$dateKey]))
+            if (!isset($structuredEvents[$dateKey]))
             {
                 $structuredEvents[$dateKey] = array();
             }
@@ -54,17 +65,6 @@ class ListRenderer extends FullRenderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $eventLeft
-     * @param \Chamilo\Libraries\Calendar\Event\Event $eventRight
-     * @return integer
-     */
-    public function orderEvents($eventLeft, $eventRight)
-    {
-        return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
-    }
-
-    /**
-     *
      * @return integer
      */
     protected function getStartTime()
@@ -74,21 +74,22 @@ class ListRenderer extends FullRenderer
 
     /**
      *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $eventLeft
+     * @param \Chamilo\Libraries\Calendar\Event\Event $eventRight
+     *
      * @return integer
      */
-    protected function getEndTime()
+    public function orderEvents($eventLeft, $eventRight)
     {
-        return strtotime('+6 Months', $this->getStartTime());
+        return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
+     * @return string
      */
     public function renderFullCalendar()
     {
-        $startTime = $this->getDisplayTime();
-        $endTime = $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
+        $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
 
         $html = array();
 
@@ -102,7 +103,7 @@ class ListRenderer extends FullRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    if (! $this->isSourceVisible($dateEvent->getSource()))
+                    if (!$this->isSourceVisible($dateEvent->getSource()))
                     {
                         $hiddenEvents ++;
                     }
@@ -138,7 +139,7 @@ class ListRenderer extends FullRenderer
         }
         else
         {
-            $html[] = Display::normal_message(Translation::get('NoUpcomingEvents'), true);
+            $html[] = Display::normal_message(Translation::get('NoUpcomingEvents'));
         }
 
         return implode('', $html);
@@ -157,9 +158,11 @@ class ListRenderer extends FullRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON));
+            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON)
+        );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
         return $buttonToolbarRenderer->render();
     }
 

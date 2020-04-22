@@ -89,8 +89,10 @@ class Event
      * @param string $source
      * @param string $context
      */
-    public function __construct($id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
-        $title = null, $content = null, $location = null, $source = null, $context = null)
+    public function __construct(
+        $id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
+        $title = null, $content = null, $location = null, $source = null, $context = null
+    )
     {
         $this->id = $id;
         $this->startDate = $startDate;
@@ -106,11 +108,56 @@ class Event
 
     /**
      *
-     * @param integer $id
+     * @return string
      */
-    public function setId($id)
+    public function getContent()
     {
-        $this->id = $id;
+        return $this->content;
+    }
+
+    /**
+     *
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     *
+     * @param string $context
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     *
+     * @param integer $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
     }
 
     /**
@@ -124,20 +171,29 @@ class Event
 
     /**
      *
-     * @return integer
+     * @param integer $id
      */
-    public function getStartDate()
+    public function setId($id)
     {
-        return $this->startDate;
+        $this->id = $id;
     }
 
     /**
      *
-     * @return integer
+     * @return string
      */
-    public function getEndDate()
+    public function getLocation()
     {
-        return $this->endDate;
+        return $this->location;
+    }
+
+    /**
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 
     /**
@@ -162,108 +218,9 @@ class Event
      *
      * @return string
      */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function getSource()
     {
         return $this->source;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
-     * @param integer $startDate
-     */
-    public function setStartDate($startDate)
-    {
-        $this->startDate = $startDate;
-    }
-
-    /**
-     *
-     * @param integer $endDate
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-    }
-
-    /**
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     *
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     *
-     * @param string $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
     }
 
     /**
@@ -277,16 +234,61 @@ class Event
 
     /**
      *
-     * @param string $context
+     * @return integer
      */
-    public function setContext($context)
+    public function getStartDate()
     {
-        $this->context = $context;
+        return $this->startDate;
+    }
+
+    /**
+     *
+     * @param integer $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
     }
 
     /**
      *
      * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     *
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+    
+    /**
+     * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {

@@ -13,24 +13,11 @@ interface CalendarRendererProviderInterface
 {
 
     /**
-     * Get the internal events between $startTime and $endTime
+     * Get the events
      *
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
-
-    /**
-     * Get the external events between $startTime and $endTime
-     *
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     */
-    public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
+    public function getAllEvents();
 
     /**
      * Get the events between $startTime and $endTime
@@ -38,16 +25,22 @@ interface CalendarRendererProviderInterface
      * @param integer $startTime
      * @param integer $endTime
      * @param boolean $calculateRecurrence
+     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
-     * Get the internal events
      *
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function getInternalEvents();
+    public function getDataUser();
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getDisplayParameters();
 
     /**
      * Get the external events
@@ -57,29 +50,33 @@ interface CalendarRendererProviderInterface
     public function getExternalEvents();
 
     /**
-     * Get the events
+     * Get the external events between $startTime and $endTime
+     *
+     * @param integer $startTime
+     * @param integer $endTime
+     * @param boolean $calculateRecurrence
      *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEvents();
+    public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
+     * Get the internal events
      *
-     * @return string[]
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getDisplayParameters();
+    public function getInternalEvents();
 
     /**
+     * Get the internal events between $startTime and $endTime
      *
-     * @return boolean
-     */
-    public function supportsActions();
-
-    /**
+     * @param integer $startTime
+     * @param integer $endTime
+     * @param boolean $calculateRecurrence
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getDataUser();
+    public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
      *

@@ -51,9 +51,13 @@ class DayRenderer extends FullTableRenderer
      * @param integer $startHour
      * @param integer $endHour
      * @param boolean $hideOtherHours
+     *
+     * @throws \Exception
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct(
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false
+    )
     {
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
@@ -61,42 +65,6 @@ class DayRenderer extends FullTableRenderer
         $this->hideOtherHours = $hideOtherHours;
 
         parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getHourStep()
-    {
-        return $this->hourStep;
-    }
-
-    /**
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
-    {
-        $this->hourStep = $hourStep;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
     }
 
     /**
@@ -128,11 +96,65 @@ class DayRenderer extends FullTableRenderer
 
     /**
      *
-     * @param boolean $endHour
+     * @param boolean $hideOtherHours
      */
     public function setHideOtherHours($hideOtherHours)
     {
         $this->hideOtherHours = $hideOtherHours;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getHourStep()
+    {
+        return $this->hourStep;
+    }
+
+    /**
+     *
+     * @param integer $hourStep
+     */
+    public function setHourStep($hourStep)
+    {
+        $this->hourStep = $hourStep;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
+     */
+    public function getNextDisplayTime()
+    {
+        return strtotime('+1 Day', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
+     */
+    public function getPreviousDisplayTime()
+    {
+        return strtotime('-1 Day', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param integer $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
     }
 
     /**
@@ -142,12 +164,9 @@ class DayRenderer extends FullTableRenderer
     public function initializeCalendar()
     {
         return new DayCalendar(
-            $this->getDisplayTime(),
-            $this->getHourStep(),
-            $this->getStartHour(),
-            $this->getEndHour(),
-            $this->getHideOtherHours(),
-            array('table-calendar-day'));
+            $this->getDisplayTime(), $this->getHourStep(), $this->getStartHour(), $this->getEndHour(),
+            $this->getHideOtherHours(), array('table-calendar-day')
+        );
     }
 
     /**
@@ -177,8 +196,8 @@ class DayRenderer extends FullTableRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate < $nextTableDate ||
-                     $startDate <= $tableDate && $nextTableDate <= $endDate)
+                    $tableDate < $endDate && $endDate < $nextTableDate ||
+                    $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $configuration = new Configuration();
                     $configuration->setStartDate($tableDate);
@@ -203,23 +222,5 @@ class DayRenderer extends FullTableRenderer
     public function renderTitle()
     {
         return DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('-1 Day', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('+1 Day', $this->getDisplayTime());
     }
 }

@@ -32,11 +32,14 @@ class MiniMonthRenderer extends ViewRenderer
     private $markPeriod;
 
     /**
-     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param integer $displayTime
+     * @param array $viewActions
      * @param string $linkTarget
      * @param integer $markPeriod
+     *
+     * @throws \Exception
      */
     public function __construct(
         CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
@@ -99,6 +102,7 @@ class MiniMonthRenderer extends ViewRenderer
     /**
      *
      * @return string
+     * @throws \Exception
      */
     public function renderCalendar()
     {

@@ -60,10 +60,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     }
 
     /**
-     *
-     * @param int $sourceType
+     * @param integer $requestedSourceType
      * @param integer $startTime
      * @param integer $endTime
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function aggregateEvents($requestedSourceType, $startTime, $endTime)
     {
@@ -224,9 +225,10 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param integer $sourceType
+     * @param integer $requestedSourceType
      *
-     * @return string[]
+     * @return \Chamilo\Application\Calendar\Architecture\CalendarInterface[][]
+     * @throws \ReflectionException
      */
     public function getSources($requestedSourceType)
     {
@@ -319,14 +321,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function setCalendarRendererProviderRepository(CalendarRendererProviderRepository $dataProviderRepository)
     {
         $this->dataProviderRepository = $dataProviderRepository;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsActions()
-    {
-        return $this instanceof ActionSupport;
     }
 }

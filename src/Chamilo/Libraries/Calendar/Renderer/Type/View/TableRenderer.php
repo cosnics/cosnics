@@ -23,7 +23,7 @@ trait TableRenderer
      */
     public function getCalendar()
     {
-        if (! isset($this->calendar))
+        if (!isset($this->calendar))
         {
             $this->calendar = $this->initializeCalendar();
         }

@@ -14,10 +14,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Visibility extends DataClass
 {
-
-    // Properties
-    const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SOURCE = 'source';
+    const PROPERTY_USER_ID = 'user_id';
 
     /**
      *
@@ -26,9 +24,42 @@ abstract class Visibility extends DataClass
     private $user;
 
     /**
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getUser()
+    {
+        if (isset($this->user))
+        {
+            $this->user = DataManager::retrieve_by_id(User::class, (int) $this->getUserId());
+        }
+
+        return $this->user;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+    }
+
+    /**
      * Get the default properties of a Visibility DataClass
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[] The property names.
      */
     public static function get_default_property_names($extendedPropertyNames = array())
@@ -40,54 +71,22 @@ abstract class Visibility extends DataClass
     }
 
     /**
+     * @param $source
      *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return $this->get_default_property(self::PROPERTY_SOURCE);
-    }
-
-    /**
-     *
-     * @param integer $id
-     */
-    public function setUserId($id)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $id);
-    }
-
-    /**
-     *
-     * @param string $source
+     * @throws \Exception
      */
     public function setSource($source)
     {
-        $this->set_default_property(self::PROPERTY_SOURCE, $source);
+        $this->setDefaultProperty(self::PROPERTY_SOURCE, $source);
     }
 
     /**
+     * @param $id
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Exception
      */
-    public function getUser()
+    public function setUserId($id)
     {
-        if (isset($this->user))
-        {
-            $this->user = DataManager::retrieve_by_id(
-                User::class_name(),
-                (int) $this->getUserId());
-        }
-
-        return $this->user;
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $id);
     }
 }

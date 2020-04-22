@@ -17,42 +17,11 @@ class EventDayRenderer extends EventTableRenderer
 
     /**
      *
-     * @return integer
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
      */
-    public function getTableEndDate()
+    public function getPostfixSymbol()
     {
-        if (! isset($this->tableEndDate))
-        {
-            $configuration = $this->getConfiguration();
-            $this->tableEndDate = strtotime(
-                '+' . $configuration->getHourStep() . ' hours',
-                $configuration->getStartDate());
-        }
-
-        return $this->tableEndDate;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
-     */
-    public function showPrefixDate()
-    {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-
-        return ($startDate >= $configuration->getStartDate() && $startDate <= $this->getTableEndDate() &&
-             ($startDate != $configuration->getStartDate() || $endDate < $this->getTableEndDate()));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
-     */
-    public function showPrefixSymbol()
-    {
-        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+        return $this->getSymbol('chevron-down');
     }
 
     /**
@@ -66,7 +35,31 @@ class EventDayRenderer extends EventTableRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixDate()
+     * @return integer
+     */
+    public function getTableEndDate()
+    {
+        if (!isset($this->tableEndDate))
+        {
+            $configuration = $this->getConfiguration();
+            $this->tableEndDate = strtotime(
+                '+' . $configuration->getHourStep() . ' hours', $configuration->getStartDate()
+            );
+        }
+
+        return $this->tableEndDate;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFadedEvent()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
      */
     public function showPostfixDate()
     {
@@ -75,16 +68,14 @@ class EventDayRenderer extends EventTableRenderer
         $endDate = $this->getEvent()->getEndDate();
 
         return ($startDate != $endDate) &&
-             ($endDate < $this->getTableEndDate() && $startDate < $configuration->getStartDate());
+            ($endDate < $this->getTableEndDate() && $startDate < $configuration->getStartDate());
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixSymbol()
+     * @return boolean
      */
     public function showPostfixSymbol()
     {
-        $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
@@ -92,20 +83,23 @@ class EventDayRenderer extends EventTableRenderer
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
+     * @return boolean
      */
-    public function getPostfixSymbol()
+    public function showPrefixDate()
     {
-        return $this->getSymbol('chevron-down');
+        $configuration = $this->getConfiguration();
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
+
+        return ($startDate >= $configuration->getStartDate() && $startDate <= $this->getTableEndDate() &&
+            ($startDate != $configuration->getStartDate() || $endDate < $this->getTableEndDate()));
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
+     * @return boolean
      */
-    public function isFadedEvent()
+    public function showPrefixSymbol()
     {
-        return false;
+        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
     }
 }

@@ -20,9 +20,19 @@ abstract class FullTableRenderer extends FullRenderer
     use TableRenderer;
 
     /**
-     * Adds a navigation bar to the calendar
      *
-     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
+     * @return integer
+     */
+    abstract public function getNextDisplayTime();
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getPreviousDisplayTime();
+    
+    /**
+     * @return string
      */
     public function renderNavigation()
     {
@@ -39,32 +49,22 @@ abstract class FullTableRenderer extends FullRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON));
+            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON)
+        );
 
         $buttonToolBar->addItem($buttonGroup);
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('Previous'),
-                new FontAwesomeGlyph('caret-left'),
-                $previousUrl,
-                Button::DISPLAY_ICON));
+                Translation::get('Previous'), new FontAwesomeGlyph('caret-left'), $previousUrl, Button::DISPLAY_ICON
+            )
+        );
         $buttonGroup->addButton(
-            new Button(Translation::get('Next'), new FontAwesomeGlyph('caret-right'), $nextUrl, Button::DISPLAY_ICON));
+            new Button(Translation::get('Next'), new FontAwesomeGlyph('caret-right'), $nextUrl, Button::DISPLAY_ICON)
+        );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
         return $buttonToolbarRenderer->render();
     }
-
-    /**
-     *
-     * @return integer
-     */
-    abstract public function getPreviousDisplayTime();
-
-    /**
-     *
-     * @return integer
-     */
-    abstract public function getNextDisplayTime();
 }

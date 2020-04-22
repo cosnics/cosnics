@@ -6,10 +6,10 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -55,8 +55,10 @@ class WeekRenderer extends FullTableRenderer
      * @param integer $endHour
      * @param boolean $hideOtherHours
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $viewActions = array(), $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct(
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false
+    )
     {
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
@@ -64,42 +66,6 @@ class WeekRenderer extends FullTableRenderer
         $this->hideOtherHours = $hideOtherHours;
 
         parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getHourStep()
-    {
-        return $this->hourStep;
-    }
-
-    /**
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
-    {
-        $this->hourStep = $hourStep;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
     }
 
     /**
@@ -140,6 +106,60 @@ class WeekRenderer extends FullTableRenderer
 
     /**
      *
+     * @return integer
+     */
+    public function getHourStep()
+    {
+        return $this->hourStep;
+    }
+
+    /**
+     *
+     * @param integer $hourStep
+     */
+    public function setHourStep($hourStep)
+    {
+        $this->hourStep = $hourStep;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
+     */
+    public function getNextDisplayTime()
+    {
+        return strtotime('+1 Week', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
+     */
+    public function getPreviousDisplayTime()
+    {
+        return strtotime('-1 Week', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param integer $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
      */
     public function initializeCalendar()
@@ -150,13 +170,9 @@ class WeekRenderer extends FullTableRenderer
         $dayUrlTemplate = new Redirect($displayParameters);
 
         return new WeekCalendar(
-            $this->getDisplayTime(),
-            $dayUrlTemplate->getUrl(),
-            $this->getHourStep(),
-            $this->getStartHour(),
-            $this->getEndHour(),
-            $this->getHideOtherHours(),
-            array('table-calendar-week'));
+            $this->getDisplayTime(), $dayUrlTemplate->getUrl(), $this->getHourStep(), $this->getStartHour(),
+            $this->getEndHour(), $this->getHideOtherHours(), array('table-calendar-week')
+        );
     }
 
     /**
@@ -186,8 +202,8 @@ class WeekRenderer extends FullTableRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                     $startDate <= $tableDate && $nextTableDate <= $endDate)
+                    $tableDate < $endDate && $endDate <= $nextTableDate ||
+                    $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $configuration = new Configuration();
                     $configuration->setStartDate($tableDate);
@@ -213,26 +229,9 @@ class WeekRenderer extends FullTableRenderer
         $weekNumber = date('W', $this->getDisplayTime());
 
         return Translation::get('Week', null, Utilities::COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
-             DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getCalendar()->getStartTime()) . ' - ' . DatetimeUtilities::format_locale_date(
-                '%A %d %B %Y',
-                strtotime('+6 Days', $this->getCalendar()->getStartTime()));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
-    {
-        return strtotime('-1 Week', $this->getDisplayTime());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
-    {
-        return strtotime('+1 Week', $this->getDisplayTime());
+            DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getCalendar()->getStartTime()) . ' - ' .
+            DatetimeUtilities::format_locale_date(
+                '%A %d %B %Y', strtotime('+6 Days', $this->getCalendar()->getStartTime())
+            );
     }
 }

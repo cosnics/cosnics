@@ -11,15 +11,6 @@ class MiniListRenderer extends ListRenderer
 
     /**
      *
-     * @return integer
-     */
-    protected function getEndTime()
-    {
-        return strtotime('+3 Days', $this->getStartTime());
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::render()
      */
     public function render()
@@ -36,5 +27,14 @@ class MiniListRenderer extends ListRenderer
         $html[] = '<div class="clearfix"></div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    protected function getEndTime()
+    {
+        return strtotime('+3 Days', $this->getStartTime());
     }
 }

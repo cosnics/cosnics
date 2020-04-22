@@ -51,7 +51,7 @@ class RegistrationConsulter extends DataConsulter
 
     /**
      *
-     * @return string[][]
+     * @return string[][][]
      */
     public function getRegistrations()
     {
@@ -136,7 +136,7 @@ class RegistrationConsulter extends DataConsulter
      * @param string $integration
      * @param string $root
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getIntegrationRegistrations($integration, $root = null)
     {

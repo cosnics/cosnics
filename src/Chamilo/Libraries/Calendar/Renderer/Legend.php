@@ -77,6 +77,11 @@ class Legend
                 {
                     $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
                     $eventClasses = !$isSourceVisible ? ' event-container-source-faded' : '';
+
+                    if ($isSourceVisible)
+                    {
+                        $visibleSources ++;
+                    }
                 }
                 else
                 {
@@ -92,14 +97,6 @@ class Legend
                 $result[] = $source;
                 $result[] = '</div>';
                 $result[] = '</li>';
-
-                if ($this->getDataProvider() instanceof VisibilitySupport)
-                {
-                    if ($isSourceVisible)
-                    {
-                        $visibleSources ++;
-                    }
-                }
             }
 
             $result[] = '</ul>';
@@ -135,6 +132,9 @@ class Legend
     /**
      *
      * @param string $source
+     *
+     * @return integer
+     * @throws \Exception
      */
     public function addSource($source)
     {
@@ -165,7 +165,7 @@ class Legend
     }
 
     /**
-     * Return 'this' as singleton
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      *
      * @return \Chamilo\Libraries\Calendar\Renderer\Legend
      */
@@ -184,10 +184,11 @@ class Legend
     /**
      * Determine the classes for a specific source
      *
-     * @param string $key
+     * @param string $source
      * @param boolean $fade
      *
      * @return string
+     * @throws \Exception
      */
     public function getSourceClasses($source = null, $fade = false)
     {
