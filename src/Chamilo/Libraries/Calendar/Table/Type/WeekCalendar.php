@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Configuration;
 use Exception;
 
 /**
@@ -42,6 +42,11 @@ class WeekCalendar extends Calendar
     private $hideOtherHours;
 
     /**
+     * @var string
+     */
+    private $dayUrlTemplate;
+
+    /**
      * Creates a new week calendar
      *
      * @param integer $displayTime A time in the week to be displayed
@@ -52,8 +57,10 @@ class WeekCalendar extends Calendar
      * @param boolean $hideOtherHours
      * @param string[] $classes
      */
-    public function __construct($displayTime, $dayUrlTemplate = null, $hourStep = 2, $startHour = 0, $endHour = 24,
-        $hideOtherHours = false, $classes = array())
+    public function __construct(
+        $displayTime, $dayUrlTemplate = null, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false,
+        $classes = array()
+    )
     {
         $this->dayUrlTemplate = $dayUrlTemplate;
         $this->hourStep = $hourStep;
@@ -66,113 +73,63 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     * Gets the number of hours for one table cell.
      *
-     * @return integer
+     * @return string
      */
-    public function getHourStep()
+    public function render()
     {
-        return $this->hourStep;
+        $this->addEvents();
+
+        return $this->toHtml();
     }
 
     /**
-     * Sets the number of hours for one table cell.
-     *
-     * @return integer
+     * Adds the events to the calendar
      */
-    public function setHourStep($hourStep)
+    private function addEvents()
     {
-        $this->hourStep = $hourStep;
-    }
+        $events = $this->getEventsToShow();
+        $workingStart = $this->getStartHour();
+        $workingEnd = $this->getEndHour();
+        $hide = $this->getHideOtherHours();
+        $start = 0;
+        $end = 24;
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
-    {
-        return $this->startHour;
-    }
-
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
-    {
-        $this->startHour = $startHour;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getEndHour()
-    {
-        return $this->endHour;
-    }
-
-    /**
-     *
-     * @param integer $endHour
-     */
-    public function setEndHour($endHour)
-    {
-        $this->endHour = $endHour;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function getHideOtherHours()
-    {
-        return $this->hideOtherHours;
-    }
-
-    /**
-     *
-     * @param boolean $hideOtherHours
-     */
-    public function setHideOtherHours($hideOtherHours)
-    {
-        $this->hideOtherHours = $hideOtherHours;
-    }
-
-    /**
-     * Gets the first date which will be displayed by this calendar.
-     * This is always a monday.
-     *
-     * @return integer
-     */
-    public function getStartTime()
-    {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
-
-        if ($setting == 'sunday')
+        if ($hide)
         {
-            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+            $start = $workingStart;
+            $end = $workingEnd;
         }
 
-        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
-    }
-
-    /**
-     * Gets the end date which will be displayed by this calendar.
-     * This is always a sunday.
-     *
-     * @return integer
-     */
-    public function getEndTime()
-    {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
-
-        if ($setting == 'sunday')
+        foreach ($events as $time => $items)
         {
-            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
-        }
+            $row = (date('H', $time) / $this->hourStep) - $start;
 
-        return strtotime('Next Sunday', $this->getStartTime());
+            if ($row > $end - $start - 1)
+            {
+                continue;
+            }
+
+            $column = date('w', $time);
+
+            if ($column == 0)
+            {
+                $column = 7;
+            }
+
+            foreach ($items as $index => $item)
+            {
+                try
+                {
+                    $cellContent = $this->getCellContents($row, $column);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, $column, $cellContent);
+                }
+                catch (Exception $exception)
+                {
+                }
+            }
+        }
     }
 
     /**
@@ -246,33 +203,12 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $weekDayTime
-     * @return string
-     */
-    protected function getHeaderContent($weekDayTime)
-    {
-        $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
-             date('d/m', $weekDayTime);
-
-        $dayUrlTemplate = $this->getDayUrlTemplate();
-
-        if (is_null($dayUrlTemplate))
-        {
-            return $dayLabel;
-        }
-        else
-        {
-            return '<a href="' . $this->getDayUrl($weekDayTime) . '">' . $dayLabel . '</a>';
-        }
-    }
-
-    /**
-     *
      * @param integer $today
      * @param integer $week_day
      * @param integer $hour
      * @param integer $workingStart
      * @param integer $workingEnd
+     *
      * @return string[]
      */
     protected function determineCellClasses($today, $weekDay, $hour, $workingStart, $workingEnd)
@@ -306,62 +242,14 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     * Adds the events to the calendar
-     */
-    private function addEvents()
-    {
-        $events = $this->getEventsToShow();
-        $workingStart = $this->getStartHour();
-        $workingEnd = $this->getEndHour();
-        $hide = $this->getHideOtherHours();
-        $start = 0;
-        $end = 24;
-
-        if ($hide)
-        {
-            $start = $workingStart;
-            $end = $workingEnd;
-        }
-
-        foreach ($events as $time => $items)
-        {
-            $row = (date('H', $time) / $this->hourStep) - $start;
-
-            if ($row > $end - $start - 1)
-            {
-                continue;
-            }
-
-            $column = date('w', $time);
-
-            if ($column == 0)
-            {
-                $column = 7;
-            }
-
-            foreach ($items as $index => $item)
-            {
-                try
-                {
-                    $cellContent = $this->getCellContents($row, $column);
-                    $cellContent .= $item;
-                    $this->setCellContents($row, $column, $cellContent);
-                }
-                catch (Exception $exception)
-                {
-                }
-            }
-        }
-    }
-
-    /**
+     *
+     * @param integer $time
      *
      * @return string
      */
-    public function render()
+    public function getDayUrl($time)
     {
-        $this->addEvents();
-        return $this->toHtml();
+        return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 
     /**
@@ -384,11 +272,134 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $time
+     * @return integer
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     *
+     * @param integer $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday.
+     *
+     * @return integer
+     */
+    public function getEndTime()
+    {
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+
+        if ($setting == 'sunday')
+        {
+            return strtotime('Next Saterday', strtotime('-1 Week', $this->getDisplayTime()));
+        }
+
+        return strtotime('Next Sunday', $this->getStartTime());
+    }
+
+    /**
+     *
+     * @param integer $weekDayTime
+     *
      * @return string
      */
-    public function getDayUrl($time)
+    protected function getHeaderContent($weekDayTime)
     {
-        return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
+        $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
+            date('d/m', $weekDayTime);
+
+        $dayUrlTemplate = $this->getDayUrlTemplate();
+
+        if (is_null($dayUrlTemplate))
+        {
+            return $dayLabel;
+        }
+        else
+        {
+            return '<a href="' . $this->getDayUrl($weekDayTime) . '">' . $dayLabel . '</a>';
+        }
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getHideOtherHours()
+    {
+        return $this->hideOtherHours;
+    }
+
+    /**
+     *
+     * @param boolean $hideOtherHours
+     */
+    public function setHideOtherHours($hideOtherHours)
+    {
+        $this->hideOtherHours = $hideOtherHours;
+    }
+
+    /**
+     * Gets the number of hours for one table cell.
+     *
+     * @return integer
+     */
+    public function getHourStep()
+    {
+        return $this->hourStep;
+    }
+
+    /**
+     * Sets the number of hours for one table cell.
+     *
+     * @param integer $hourStep
+     */
+    public function setHourStep($hourStep)
+    {
+        $this->hourStep = $hourStep;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param integer $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday.
+     *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+
+        if ($setting == 'sunday')
+        {
+            return strtotime('Next Sunday', strtotime('-1 Week', $this->getDisplayTime()));
+        }
+
+        return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
     }
 }

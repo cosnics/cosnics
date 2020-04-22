@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-class PeerAssessmentGroupSubscription extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+
+class PeerAssessmentGroupSubscription extends SimpleTracker
 {
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_GROUP_ID = 'group_id';

@@ -26,11 +26,12 @@ class FilesystemCache extends \Doctrine\Common\Cache\FilesystemCache
     /**
      *
      * @param string $id
+     *
      * @return string
      */
     protected function getFilename($id)
     {
         return $this->getDirectory() . DIRECTORY_SEPARATOR . md5($id) . DIRECTORY_SEPARATOR .
-             preg_replace($this->disallowedCharacterPatterns, $this->replacementCharacters, $id) . $this->getExtension();
+            preg_replace($this->disallowedCharacterPatterns, $this->replacementCharacters, $id) . $this->getExtension();
     }
 }

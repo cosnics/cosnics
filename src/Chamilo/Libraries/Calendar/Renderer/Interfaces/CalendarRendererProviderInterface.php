@@ -73,12 +73,6 @@ interface CalendarRendererProviderInterface
      *
      * @return boolean
      */
-    public function supportsVisibility();
-
-    /**
-     *
-     * @return boolean
-     */
     public function supportsActions();
 
     /**

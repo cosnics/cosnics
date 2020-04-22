@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer;
+use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -232,7 +234,7 @@ class CourseListComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE))));
         }
 
-        if (\Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
+        if (Rights::getInstance()->request_is_allowed())
         {
             $buttonGroup->addButton(
                 new Button(
@@ -241,7 +243,7 @@ class CourseListComponent extends Manager implements DelegateComponent
                     $this->get_url(array(Application::PARAM_ACTION => self::ACTION_REQUEST))));
         }
 
-        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager::user_is_admin($this->get_user()))
+        if (DataManager::user_is_admin($this->get_user()))
         {
             $buttonGroup->addButton(
                 new Button(

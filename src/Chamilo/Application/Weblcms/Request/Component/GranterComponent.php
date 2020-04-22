@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Request\Manager;
+use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
@@ -14,13 +15,14 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class GranterComponent extends Manager
 {
 
     function run()
     {
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
+        if (! Rights::getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -39,7 +41,7 @@ class GranterComponent extends Manager
             {
                 $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
                 
-                if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
+                if (! Rights::getInstance()->is_target_user(
                     $this->get_user(), 
                     $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
                 {
@@ -184,7 +186,7 @@ class GranterComponent extends Manager
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }

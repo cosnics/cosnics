@@ -11,9 +11,7 @@ use Exception;
 class MiniMonthCalendar extends MonthCalendar
 {
     const PERIOD_DAY = 2;
-
     const PERIOD_MONTH = 0;
-
     const PERIOD_WEEK = 1;
 
     /**

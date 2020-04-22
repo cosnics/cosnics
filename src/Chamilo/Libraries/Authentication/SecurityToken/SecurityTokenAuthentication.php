@@ -22,6 +22,35 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     protected $disableAuthSourceCheck = false;
 
     /**
+     * Disables the check if the auth source is active or not (used to make sure that this can run for certain
+     * components only)
+     */
+    public function disableAuthSourceCheck()
+    {
+        $this->disableAuthSourceCheck = true;
+    }
+
+    /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'SecurityToken';
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 300;
+    }
+
+    /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      *
@@ -29,7 +58,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function login()
     {
-        if(!$this->disableAuthSourceCheck && !$this->isAuthSourceActive())
+        if (!$this->disableAuthSourceCheck && !$this->isAuthSourceActive())
         {
             return null;
         }
@@ -54,38 +83,10 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     }
 
     /**
-     * Disables the check if the auth source is active or not (used to make sure that this can run for certain components only)
-     */
-    public function disableAuthSourceCheck()
-    {
-        $this->disableAuthSourceCheck = true;
-    }
-
-    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function logout(User $user)
     {
 
-    }
-
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 300;
-    }
-
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
-    {
-        return 'SecurityToken';
     }
 }

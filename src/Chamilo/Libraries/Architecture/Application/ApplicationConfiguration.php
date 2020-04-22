@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -45,7 +45,9 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      * @param \Chamilo\Libraries\Architecture\Application\Application $parentApplication
      * @param string[] $configurationParameters
      */
-    public function __construct(ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array())
+    public function __construct(
+        ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array()
+    )
     {
         $this->request = $request;
         $this->user = $user;
@@ -55,11 +57,14 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     * @param string $key
+     * @param string $defaultValue
+     *
+     * @return string
      */
-    public function getRequest()
+    public function get($key, $defaultValue = null)
     {
-        return $this->request;
+        return isset($this->configurationParameters[$key]) ? $this->configurationParameters[$key] : $defaultValue;
     }
 
     /**
@@ -69,6 +74,15 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**
@@ -83,22 +97,10 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function setUser(User $user)
     {
         $this->user = $user;
-    }
-
-    /**
-     *
-     * @param string $key
-     * @param string $defaultValue
-     * @return string
-     */
-    public function get($key, $defaultValue = null)
-    {
-        return isset($this->configurationParameters[$key]) ? $this->configurationParameters[$key] : $defaultValue;
     }
 
     /**

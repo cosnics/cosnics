@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Interfaces\OpenCourseRepositoryInterface;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
@@ -97,7 +98,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
             $orderBy,
             $this->getOpenCoursesJoins());
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::records(
+        return DataManager::records(
             Course::class_name(),
             $recordsParameters);
     }
@@ -114,7 +115,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class_name(),
             new DataClassRetrievesParameters($this->getClosedCoursesCondition($condition), $count, $offset, $orderBy));
     }
@@ -155,7 +156,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     {
         $countParameters = new DataClassCountParameters($condition, $this->getOpenCoursesJoins());
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(Course::class_name(), $countParameters);
+        return DataManager::count(Course::class_name(), $countParameters);
     }
 
     /**
@@ -167,7 +168,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     public function countClosedCourses(Condition $condition = null)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
+        return DataManager::count(
             Course::class_name(),
             new DataClassCountParameters($this->getClosedCoursesCondition($condition)));
     }
@@ -230,7 +231,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
                         CourseEntityRelation::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE))));
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::deletes(
+        return DataManager::deletes(
             CourseEntityRelation::class_name(),
             $condition);
     }
@@ -329,7 +330,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
                 array(
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID))));
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
+        return DataManager::distinct(
             CourseEntityRelation::class_name(),
             $distinctParameters);
     }

@@ -17,6 +17,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -29,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Exception;
 
 /**
  * This class represents a course in the weblcms.
@@ -472,7 +474,7 @@ class Course extends DataClass
 
         if (! $course_rel_setting->create())
         {
-            throw new \Exception(Translation::get('CouldNotCreateCourseRelCourseSetting'));
+            throw new Exception(Translation::get('CouldNotCreateCourseRelCourseSetting'));
         }
 
         return $course_rel_setting;
@@ -688,8 +690,8 @@ class Course extends DataClass
         $courseValidator = CourseAdminValidator::getInstance();
 
         // fix for view as
-        $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
-        $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
+        $va_id = Session::get(Manager::PARAM_VIEW_AS_ID);
+        $course_id = Session::get(Manager::PARAM_VIEW_AS_COURSE_ID);
         $id = $user->get_id();
         if (isset($va_id) && isset($course_id))
         {

@@ -8,6 +8,7 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -112,7 +113,7 @@ class Rights extends RightsUtil
             $this->get_request_root_id());
     }
 
-    function get_target_users(\Chamilo\Core\User\Storage\DataClass\User $user)
+    function get_target_users(User $user)
     {
         if (! isset(self::$target_users[$user->get_id()]))
         {
@@ -171,17 +172,17 @@ class Rights extends RightsUtil
             
             self::$target_users[$user->get_id()] = array();
             
-            DataClassCache::truncate(\Chamilo\Core\Group\Storage\DataClass\Group::class_name());
+            DataClassCache::truncate(Group::class_name());
             
             if (count($allowed_groups) > 0)
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
-                        \Chamilo\Core\Group\Storage\DataClass\Group::PROPERTY_ID), 
+                        Group::class_name(),
+                        Group::PROPERTY_ID),
                     $allowed_groups);
-                $groups = \Chamilo\Core\Group\Storage\DataManager::retrieves(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class_name(), 
+                $groups = DataManager::retrieves(
+                    Group::class_name(),
                     new DataClassRetrievesParameters($condition));
                 
                 while ($group = $groups->next_result())
@@ -203,12 +204,12 @@ class Rights extends RightsUtil
         return self::$target_users[$user->get_id()];
     }
 
-    function is_target_user(\Chamilo\Core\User\Storage\DataClass\User $user, $target_user_id)
+    function is_target_user(User $user, $target_user_id)
     {
         return in_array($target_user_id, $this->get_target_users($user));
     }
 
-    function get_authorized_users(\Chamilo\Core\User\Storage\DataClass\User $user)
+    function get_authorized_users(User $user)
     {
         if (! isset(self::$authorized_users[$user->get_id()]))
         {
@@ -282,19 +283,19 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-                        \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID), 
+                        User::class_name(),
+                        User::PROPERTY_ID),
                     $user_ids);
                 $authorized_user_count = \Chamilo\Core\User\Storage\DataManager::count(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                    User::class_name(),
                     new DataClassCountParameters($condition));
                 
                 if ($authorized_user_count == 0)
                 {
                     $condition = new InCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-                            \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_PLATFORMADMIN), 
+                            User::class_name(),
+                            User::PROPERTY_PLATFORMADMIN),
                         1);
                 }
             }
@@ -302,12 +303,12 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-                        \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_PLATFORMADMIN), 
+                        User::class_name(),
+                        User::PROPERTY_PLATFORMADMIN),
                     1);
             }
             $authorized_users = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                User::class_name(),
                 new DataClassRetrievesParameters($condition));
             
             while ($authorized_user = $authorized_users->next_result())

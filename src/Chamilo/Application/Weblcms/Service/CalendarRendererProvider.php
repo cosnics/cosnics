@@ -160,13 +160,4 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         return $this instanceof ActionSupport;
     }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsVisibility()
-    {
-        return $this instanceof VisibilitySupport;
-    }
 }

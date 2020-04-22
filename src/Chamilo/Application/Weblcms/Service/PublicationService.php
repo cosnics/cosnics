@@ -265,7 +265,7 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool)
+    public function getPublicationsForUser(User $user, Course $course, $tool)
     {
         if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
@@ -305,7 +305,8 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, 
+    public function getPublicationsForUserInCategory(
+        User $user, Course $course,
         $tool, ContentObjectPublicationCategory $category = null)
     {
         if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
@@ -380,7 +381,8 @@ class PublicationService implements PublicationServiceInterface
      * @param $tool
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, 
+    public function getPublicationCategoriesForUser(
+        User $user, Course $course,
         $tool)
     {
         $contentObjectPublicationCategories = $this->getPublicationCategoriesForCourseAndTool($course, $tool);
@@ -400,7 +402,8 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user, 
+    public function getPublicationCategoriesForUserInCategory(
+        User $user,
         Course $course, $tool, ContentObjectPublicationCategory $category = null)
     {
         $categoryId = is_null($category) ? 0 : $category->get_id();
@@ -422,7 +425,8 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    protected function filterAccessibleCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, 
+    protected function filterAccessibleCategoriesForUser(
+        User $user, Course $course,
         array $contentObjectPublicationCategories)
     {
         $categoriesForUser = array();

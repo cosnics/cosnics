@@ -1,11 +1,14 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -18,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * 
  * @package handbook.block
  */
-class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block implements 
+class WeblcmsBookmarkDisplay extends Block implements
     ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
@@ -86,7 +89,7 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Bookmark::class_name(), Bookmark::PROPERTY_APPLICATION), 
-            new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager::package()));
+            new StaticConditionVariable(Manager::package()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
             new StaticConditionVariable(Session::get_user_id()));
@@ -94,7 +97,7 @@ class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Ch
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters($condition);
         
-        $bookmarks_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+        $bookmarks_resultset = DataManager::retrieve_active_content_objects(
             Bookmark::class_name(), 
             $parameters);
         

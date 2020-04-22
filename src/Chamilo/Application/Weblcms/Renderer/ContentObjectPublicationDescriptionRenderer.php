@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Renderer;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Common\ContentObjectDescriptionRenderer;
 
 /**
@@ -66,8 +67,8 @@ class ContentObjectPublicationDescriptionRenderer extends ContentObjectDescripti
     {
         return $this->parent->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW_ATTACHMENT, 
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_OBJECT_ID => $attachment->get_id(), 
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication[ContentObjectPublication::PROPERTY_ID]));
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
+                Manager::PARAM_OBJECT_ID => $attachment->get_id(),
+                Manager::PARAM_PUBLICATION_ID => $this->publication[ContentObjectPublication::PROPERTY_ID]));
     }
 }

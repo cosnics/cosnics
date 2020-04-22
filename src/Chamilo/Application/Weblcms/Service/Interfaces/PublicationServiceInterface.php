@@ -139,7 +139,7 @@ interface PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool);
+    public function getPublicationsForUser(User $user, Course $course, $tool);
 
     /**
      * Returns the publications for a given course, tool and category which are accessible by the given user.
@@ -152,7 +152,8 @@ interface PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, 
+    public function getPublicationsForUserInCategory(
+        User $user, Course $course,
         $tool, ContentObjectPublicationCategory $category = null);
 
     /**
@@ -187,7 +188,8 @@ interface PublicationServiceInterface
      * @param $tool
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, 
+    public function getPublicationCategoriesForUser(
+        User $user, Course $course,
         $tool);
 
     /**
@@ -202,7 +204,8 @@ interface PublicationServiceInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user, 
+    public function getPublicationCategoriesForUserInCategory(
+        User $user,
         Course $course, $tool, ContentObjectPublicationCategory $category = null);
 
     /**

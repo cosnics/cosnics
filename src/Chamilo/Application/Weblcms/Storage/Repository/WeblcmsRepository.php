@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryInterface;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -68,7 +69,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      */
     public function retrieveCourseByCode($courseCode)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_course_by_visual_code($courseCode);
+        return DataManager::retrieve_course_by_visual_code($courseCode);
     }
 
     /**
@@ -104,7 +105,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
+        return DataManager::retrieve(
             CourseEntityRelation::class_name(), new DataClassRetrieveParameters($condition)
         );
     }

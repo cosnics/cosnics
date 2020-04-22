@@ -22,7 +22,7 @@ class PackagesContainerExtensionFinder extends PackagesClassFinderAware implemen
     public function findContainerExtensions()
     {
         return $this->getPackagesClassFinder()->findClasses(
-            'DependencyInjection/DependencyInjectionExtension.php',
-            'DependencyInjection\\DependencyInjectionExtension');
+            'DependencyInjection/DependencyInjectionExtension.php', 'DependencyInjection\\DependencyInjectionExtension'
+        );
     }
 }

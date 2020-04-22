@@ -11,6 +11,7 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Exception;
 
 /**
  * Service to manage open courses
@@ -163,7 +164,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
                 if (! $this->openCourseRepository->create($courseEntityRelation))
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf('Could not attach the role with id %s to the course with id %s', $roleId, $courseId));
                 }
             }
@@ -200,7 +201,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
         if (! $this->openCourseRepository->removeCoursesAsOpenCourse($courseIds))
         {
-            throw new \Exception('Could not remove the courses as open course with ids ' . implode(', ', $courseIds));
+            throw new Exception('Could not remove the courses as open course with ids ' . implode(', ', $courseIds));
         }
     }
 

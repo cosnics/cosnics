@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\User;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
@@ -12,7 +14,7 @@ class Manager implements UserInterface
     /*
      * (non-PHPdoc) @see \core\user\UserInterface::get_additional_user_information()
      */
-    public static function get_additional_user_information(\Chamilo\Core\User\Storage\DataClass\User $user)
+    public static function get_additional_user_information(User $user)
     {
         $html = array();
         
@@ -24,7 +26,7 @@ class Manager implements UserInterface
         $table->setHeaderContents(1, 0, Translation::get('CourseCode'));
         $table->setHeaderContents(1, 1, Translation::get('CourseName'));
         
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user);
+        $courses = DataManager::retrieve_all_courses_from_user($user);
         
         if ($courses->size() == 0)
         {

@@ -25,28 +25,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 {
 
     /**
-     * Loads a specific configuration.
-     *
-     * @param string[] $configuration
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     */
-    public function load(array $configuration, ContainerBuilder $container)
-    {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-
-        $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator(
-                $pathBuilder->getConfigurationPath('Chamilo\Libraries\Authentication\SecurityToken') . 'DependencyInjection'
-            )
-        );
-
-        $xmlFileLoader->load('authentication.xml');
-    }
-
-    /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
      *
@@ -55,5 +33,28 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function getAlias()
     {
         return 'chamilo.libraries.authentication.security_token';
+    }
+
+    /**
+     * Loads a specific configuration.
+     *
+     * @param string[] $configuration
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \InvalidArgumentException When provided tag is not defined in this extensio
+     * @throws \Exception
+     */
+    public function load(array $configuration, ContainerBuilder $container)
+    {
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+        $xmlFileLoader = new XmlFileLoader(
+            $container, new FileLocator(
+                $pathBuilder->getConfigurationPath('Chamilo\Libraries\Authentication\SecurityToken') .
+                'DependencyInjection'
+            )
+        );
+
+        $xmlFileLoader->load('authentication.xml');
     }
 }

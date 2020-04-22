@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -30,7 +31,7 @@ class UpdateComponent extends CourseFormActionComponent
      */
     protected function checkComponentAuthorization(Course $course)
     {
-        if (!$this->isAuthorized(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses') &&
+        if (!$this->isAuthorized(Manager::context(), 'ManageCourses') &&
             !$course->is_course_admin($this->getUser())
         )
         {

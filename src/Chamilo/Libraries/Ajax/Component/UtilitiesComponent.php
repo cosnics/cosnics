@@ -1,14 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -32,12 +27,12 @@ class UtilitiesComponent extends Manager
     const PROPERTY_RESULT = 'result';
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     * @throws \Exception
      */
     public function run()
     {
         $type = $this->getPostDataValue(self::PARAM_TYPE);
+        $request = $this->getRequest();
 
         $properties = array();
 
@@ -45,9 +40,9 @@ class UtilitiesComponent extends Manager
         {
             // Retrieve platform paths
             case 'path' :
-                if (Request::post(self::PARAM_PATH) != 'WEB_PATH')
+                if ($request->request->get(self::PARAM_PATH) != 'WEB_PATH')
                 {
-                    throw new Exception('Invalid Path parameter: ' . Request::post(self::PARAM_PATH));
+                    throw new Exception('Invalid Path parameter: ' . $request->request->get(self::PARAM_PATH));
                 }
 
                 $properties[self::PROPERTY_RESULT] = Path::getInstance()->getBasePath(true);
@@ -60,35 +55,42 @@ class UtilitiesComponent extends Manager
 
             // Get a translation
             case 'translation' :
-                $context = Request::post(self::PARAM_CONTEXT);
-                $string = Request::post(self::PARAM_STRING);
-                $parameters = Request::post(self::PARAM_PARAMETERS);
+                $context = $request->request->get(self::PARAM_CONTEXT);
+                $string = $request->request->get(self::PARAM_STRING);
+                $parameters = (array) $request->request->get(self::PARAM_PARAMETERS);
 
-                $string = (string) StringUtilities::getInstance()->createString($string)->upperCamelize();
-                $properties[self::PROPERTY_RESULT] = Translation::get($string, $parameters, $context);
+                $string = (string) $this->getStringUtilities()->createString($string)->upperCamelize();
+                $properties[self::PROPERTY_RESULT] = $this->getTranslator()->trans($string, $parameters, $context);
                 break;
 
             // Get, set or clear a session variable
             case 'memory' :
-                $action = Request::post(self::PARAM_ACTION);
+                $action = $request->request->get(self::PARAM_ACTION);
+                $sessionUtilities = $this->getSessionUtilities();
 
                 switch ($action)
                 {
                     case 'set' :
-                        Session::register(Request::post(self::PARAM_VARIABLE), Request::post(self::PARAM_VALUE));
+                        $sessionUtilities->register(
+                            $request->request->get(self::PARAM_VARIABLE), $request->request->get(self::PARAM_VALUE)
+                        );
                         break;
                     case 'clear' :
-                        Session::unregister(Request::post(self::PARAM_VARIABLE));
+                        $sessionUtilities->unregister($request->request->get(self::PARAM_VARIABLE));
                         break;
                     case 'get' :
                     default :
-                        $properties[self::PROPERTY_RESULT] = Session::retrieve(Request::post(self::PARAM_VARIABLE));
+                        $properties[self::PROPERTY_RESULT] =
+                            $sessionUtilities->get($request->request->get(self::PARAM_VARIABLE));
                         break;
                 }
                 break;
             case 'platform_setting' :
-                $properties[self::PROPERTY_RESULT] = Configuration::get(
-                    Request::post(self::PARAM_CONTEXT), Request::post(self::PARAM_VARIABLE)
+                $properties[self::PROPERTY_RESULT] = $this->getConfigurationConsulter()->getSetting(
+                    array(
+                        $request->request->get(self::PARAM_CONTEXT),
+                        $request->request->get(self::PARAM_VARIABLE)
+                    )
                 );
                 break;
         }

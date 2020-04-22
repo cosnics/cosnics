@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 
 class CourseList extends Block
 {
@@ -27,7 +28,7 @@ class CourseList extends Block
 
     public function displayContent()
     {
-        $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer(
+        $renderer = new CourseListRenderer(
             $this, 
             $this->getLinkTarget());
         $renderer->show_new_publication_icons();

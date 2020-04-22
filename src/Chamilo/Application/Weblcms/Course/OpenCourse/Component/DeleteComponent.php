@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to remove open access to an existing course
@@ -27,7 +28,7 @@ class DeleteComponent extends Manager
             $success = true;
             $redirectMessageVariable = 'CoursesRemovedFromOpenCourseList';
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $redirectMessageVariable = 'CoursesNotRemovedFromOpenCourseList';

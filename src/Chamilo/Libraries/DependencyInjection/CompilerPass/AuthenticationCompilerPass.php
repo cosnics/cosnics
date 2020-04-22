@@ -20,6 +20,7 @@ class AuthenticationCompilerPass implements CompilerPassInterface
      * You can modify the container here before it is dumped to PHP code.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @throws \Exception
      */
     public function process(ContainerBuilder $container)

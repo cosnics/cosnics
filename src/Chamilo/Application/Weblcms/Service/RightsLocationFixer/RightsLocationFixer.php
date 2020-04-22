@@ -6,7 +6,12 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
+use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
+use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
+use Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 ini_set("memory_limit", "-1");
 set_time_limit(0);
@@ -71,9 +76,9 @@ class RightsLocationFixer
      * @param \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $publicationRepository
      */
     public function __construct(
-        \Chamilo\Application\Weblcms\Storage\Repository\RightsLocationRepository $rightsLocationRepository,
-        \Chamilo\Application\Weblcms\Storage\Repository\CourseRepository $courseRepository,
-        \Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository $publicationRepository
+        RightsLocationRepository $rightsLocationRepository,
+        CourseRepository $courseRepository,
+        PublicationRepository $publicationRepository
     )
     {
         $this->rightsLocationRepository = $rightsLocationRepository;
@@ -93,7 +98,7 @@ class RightsLocationFixer
 
         if (!$course instanceof Course)
         {
-            throw new \InvalidArgumentException('Could not find the course with id ' . $courseId);
+            throw new InvalidArgumentException('Could not find the course with id ' . $courseId);
         }
 
         $this->fixRightsLocations($course, $logger);
@@ -285,7 +290,7 @@ class RightsLocationFixer
 
         if (!$this->rightsLocationRepository->createRightsLocationDirectlyInDatabase($rightsLocation))
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Could not create the rights location for course %s, parentLocation %s, type %s and identifier %s',
                     $course->getId(), $parentId, $type, $identifier
@@ -343,7 +348,7 @@ class RightsLocationFixer
         {
             if (!$this->rightsLocationRepository->updateRightsLocationDirectlyInDatabase($targetLocation))
             {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'Could not change the parent location from location %s to parent location %s',
                         $targetLocation->getId(), $parentLocation->getId()

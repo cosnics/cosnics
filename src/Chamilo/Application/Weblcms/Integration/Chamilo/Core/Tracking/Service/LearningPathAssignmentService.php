@@ -3,6 +3,10 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -494,7 +498,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createEntryInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry(
+        return new Entry(
         );
     }
 
@@ -503,7 +507,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createEntryAttachmentInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment();
+        return new EntryAttachment();
     }
 
     /**
@@ -513,7 +517,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createScoreInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score(
+        return new Score(
         );
     }
 
@@ -524,7 +528,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createFeedbackInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback(
+        return new Feedback(
         );
     }
 
@@ -535,7 +539,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createNoteInstance()
     {
-        return new \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note(
+        return new Note(
         );
     }
 
@@ -544,7 +548,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -552,7 +556,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 
     /**
@@ -560,6 +564,6 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     public function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 }

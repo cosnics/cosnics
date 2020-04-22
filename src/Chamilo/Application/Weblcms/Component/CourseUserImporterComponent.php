@@ -14,6 +14,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 ini_set("max_execution_time", - 1);
@@ -62,7 +63,7 @@ class CourseUserImporterComponent extends Manager
                     ['importerResult' => $result]
                 );
             }
-            catch(\Exception $ex)
+            catch(Exception $ex)
             {
                 $html[] = $this->getTwig()->render(
                     'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',

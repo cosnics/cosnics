@@ -39,32 +39,16 @@ abstract class Application
     use DependencyInjectionContainerTrait;
 
     const PARAM_ACTION = 'go';
-
-    // Parameters
-
     const PARAM_CONTEXT = 'application';
-
     const PARAM_ERROR_MESSAGE = 'error_message';
-
     const PARAM_MESSAGE = 'message';
-
     const PARAM_MESSAGES = 'messages';
-
     const PARAM_MESSAGE_TYPE = 'message_type';
-
     const PARAM_WARNING_MESSAGE = 'warning_message';
-    // TODO: the value of this constant should eventually be changed to 'context', but an undefined number of hardcoded
-    // references still exists and needs to be fixed first to avoid breaking functionality of an undefined number of
-    // places
 
     const RESULT_TYPE_CREATED = 'Created';
-
-    // Result types
-
     const RESULT_TYPE_DELETED = 'Deleted';
-
     const RESULT_TYPE_MOVED = 'Moved';
-
     const RESULT_TYPE_UPDATED = 'Updated';
 
     /**
@@ -141,8 +125,6 @@ abstract class Application
 
         if (!is_dir($context_path))
         {
-            $original_context = $context;
-
             // Adding a fallback for old-style contexts which might still exis in certain applications, links, etc.
 
             $convertedContextParts = explode('\\', $context);
@@ -409,8 +391,8 @@ abstract class Application
     }
 
     /**
-     *
      * @return string
+     * @throws \ReflectionException
      */
     public function get_application_name()
     {
@@ -469,7 +451,7 @@ abstract class Application
      * @return string
      */
     public function get_general_result(
-        $failures, $count, $singleObject, $multipleObject, $type = Application :: RESULT_TYPE_CREATED
+        $failures, $count, $singleObject, $multipleObject, $type = Application::RESULT_TYPE_CREATED
     )
     {
         if ($count == 1)
@@ -524,7 +506,7 @@ abstract class Application
      *
      * @param string[] $parameters
      * @param string[] $filter
-     * @param boolean $encode_entities
+     * @param boolean $encodeEntities
      *
      * @return string
      */
@@ -712,7 +694,7 @@ abstract class Application
     {
         if ($this->getApplicationConfiguration()->getUser())
         {
-            return $this->get_user()->get_id();
+            return $this->getUser()->getId();
         }
 
         return 0;
@@ -788,7 +770,7 @@ abstract class Application
 
     /**
      *
-     * @param string $showLoginForm
+     * @param boolean $showLoginForm
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
@@ -798,8 +780,8 @@ abstract class Application
     }
 
     /**
-     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {
@@ -821,7 +803,7 @@ abstract class Application
      * on messages directly instead of using the parameters array
      *
      * @param string $message
-     * @param boolean $error_message
+     * @param boolean $errorMessage
      * @param string[] $parameters
      * @param string[] $filter
      * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
@@ -889,7 +871,7 @@ abstract class Application
             $html[] = '</div>';
         }
 
-        $html[] = $page->getFooter()->toHtml();
+        $html[] = $page->getFooter()->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -921,7 +903,7 @@ abstract class Application
 
         $html = array();
 
-        $html[] = $page->getHeader()->toHtml();
+        $html[] = $page->getHeader()->render();
 
         if ($page->isFullPage())
         {
@@ -988,7 +970,7 @@ abstract class Application
      */
     public function set_action($action)
     {
-        return $this->set_parameter(static::PARAM_ACTION, $action);
+        $this->set_parameter(static::PARAM_ACTION, $action);
     }
 
     /**

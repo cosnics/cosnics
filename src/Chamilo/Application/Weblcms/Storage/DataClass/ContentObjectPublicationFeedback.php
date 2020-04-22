@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -118,7 +119,7 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
 
     public function create()
     {
-        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
+        if (Request::get(Manager::PARAM_PUBLICATION_ID))
         {
             $this->update_parent_modified_date();
         }

@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-class ForumTopicView extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+
+class ForumTopicView extends SimpleTracker
 {
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_DATE = 'date';

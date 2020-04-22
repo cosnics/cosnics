@@ -33,9 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 class Kernel
 {
     const PARAM_CODE = 'code';
-
     const PARAM_SESSION_STATE = 'session_state';
-
     const PARAM_STATE = 'state';
 
     /**

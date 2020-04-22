@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\UUID;
 use Exception;
@@ -29,7 +28,7 @@ class UploadTemporaryFileComponent extends Manager
         if (!$file->isValid())
         {
             JsonAjaxResult::bad_request(
-                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('NoValidFileUploaded', array(), Utilities::COMMON_LIBRARIES)
             );
         }
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
@@ -43,7 +42,9 @@ class UploadTemporaryFileComponent extends Manager
 
         if (!$result)
         {
-            JsonAjaxResult::general_error(Translation::get('FileNotUploaded'));
+            JsonAjaxResult::general_error(
+                $this->getTranslator()->trans('FileNotUploaded', array(), Utilities::COMMON_LIBRARIES)
+            );
         }
         else
         {

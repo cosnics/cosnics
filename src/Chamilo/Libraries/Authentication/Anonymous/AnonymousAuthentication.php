@@ -51,11 +51,32 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Anonymous';
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 400;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User|null
+     * @throws \ReflectionException
      */
     public function login()
     {
-        if(!$this->isAuthSourceActive())
+        if (!$this->isAuthSourceActive())
         {
             return null;
         }
@@ -116,25 +137,5 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         }
 
         return $user;
-    }
-
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 400;
-    }
-
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
-    {
-        return 'Anonymous';
     }
 }

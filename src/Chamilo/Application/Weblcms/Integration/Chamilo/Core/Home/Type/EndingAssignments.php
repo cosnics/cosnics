@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -43,15 +45,15 @@ class EndingAssignments extends Block
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_COURSE_ID
             ),
             $course_ids
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_TOOL
             ),
             new StaticConditionVariable('assignment')
         );
@@ -72,7 +74,7 @@ class EndingAssignments extends Block
         );
         $condition = new AndCondition($conditions);
 
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $publications = DataManager::retrieves(
             ContentObjectPublication::class_name(),
             new DataClassRetrievesParameters(
                 $condition,
@@ -81,8 +83,8 @@ class EndingAssignments extends Block
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
-                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                            ContentObjectPublication::class_name(),
+                            ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                         )
                     )
                 )
@@ -101,7 +103,7 @@ class EndingAssignments extends Block
                     Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
+                    Manager::PARAM_PUBLICATION_ID => $publication->get_id()
                 );
 
                 $redirect = new Redirect($parameters);

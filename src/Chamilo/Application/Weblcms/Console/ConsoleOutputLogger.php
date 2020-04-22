@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Console;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConsoleOutputLogger implements LoggerInterface
 {
@@ -16,7 +17,7 @@ class ConsoleOutputLogger implements LoggerInterface
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $consoleOutput
      */
-    public function __construct(\Symfony\Component\Console\Output\OutputInterface $consoleOutput)
+    public function __construct(OutputInterface $consoleOutput)
     {
         $this->consoleOutput = $consoleOutput;
     }

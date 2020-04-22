@@ -11,14 +11,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 interface AuthenticationInterface
 {
     /**
-     * @return User
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
      */
-    public function login();
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function logout(User $user);
+    public function getAuthenticationType();
 
     /**
      * Returns the priority of the authentication, lower priorities come first
@@ -28,9 +25,12 @@ interface AuthenticationInterface
     public function getPriority();
 
     /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
+     * @return User
      */
-    public function getAuthenticationType();
+    public function login();
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function logout(User $user);
 }

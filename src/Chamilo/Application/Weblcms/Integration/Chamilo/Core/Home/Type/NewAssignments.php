@@ -5,8 +5,10 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -63,7 +65,7 @@ class NewAssignments extends NewBlock
             Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT,
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+            Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
         );
 
         return $this->getLink($parameters);
@@ -75,7 +77,7 @@ class NewAssignments extends NewBlock
      */
     public function getBadgeContent($publication)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $content_object = DataManager::retrieve_by_id(
             Assignment::class_name(),
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );

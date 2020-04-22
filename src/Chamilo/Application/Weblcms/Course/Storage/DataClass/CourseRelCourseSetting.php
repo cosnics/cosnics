@@ -93,7 +93,7 @@ class CourseRelCourseSetting extends CourseSettingRelation
      * 
      * @param $course \application\weblcms\course\Course
      */
-    public function set_course(\Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course)
+    public function set_course(Course $course)
     {
         $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE, $course);
     }

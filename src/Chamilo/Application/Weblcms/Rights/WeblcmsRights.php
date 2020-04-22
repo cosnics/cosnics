@@ -12,6 +12,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -203,7 +204,7 @@ class WeblcmsRights extends RightsUtil
                         foreach ($entity_ids as $user_id)
                         {
                             $target_list[] = '<option>' .
-                                 \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user($user_id) . '</option>';
+                                 DataManager::get_fullname_from_user($user_id) . '</option>';
                         }
                         break;
                     case CourseGroupEntity::ENTITY_TYPE :
@@ -282,7 +283,7 @@ class WeblcmsRights extends RightsUtil
 
         return $this->get_identifiers_with_right_granted(
             $right,
-            \Chamilo\Application\Weblcms\Manager::context(),
+            Manager::context(),
             $parent_location,
             WeblcmsRights::TYPE_PUBLICATION,
             $user->getId(),

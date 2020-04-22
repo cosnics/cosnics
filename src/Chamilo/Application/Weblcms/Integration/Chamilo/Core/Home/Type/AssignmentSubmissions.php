@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
@@ -32,15 +33,15 @@ class AssignmentSubmissions extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_PUBLISHER_ID
             ),
             new StaticConditionVariable($user_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_TOOL
             ),
             new StaticConditionVariable('Assignment')
         );
@@ -104,13 +105,13 @@ class AssignmentSubmissions extends Block
             $item['title'] = $object->get_title();
 
             $parameters = array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
-                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication->get_course_id(),
-                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
-                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Assignment',
-                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
+                Application::PARAM_CONTEXT => Manager::context(),
+                Manager::PARAM_COURSE => $publication->get_course_id(),
+                Application::PARAM_ACTION => Manager::ACTION_VIEW_COURSE,
+                Manager::PARAM_TOOL => 'Assignment',
+                Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
-                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id()
+                Manager::PARAM_CATEGORY => $publication->get_category_id()
             );
 
             $redirect = new Redirect($parameters);

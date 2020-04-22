@@ -47,6 +47,28 @@ abstract class Calendar extends HTML_Table
     }
 
     /**
+     * Add an event to the calendar
+     *
+     * @param integer $time A time in the day on which the event should be displayed
+     * @param string $content The html content to insert in the month calendar
+     */
+    public function addEvent($time, $content)
+    {
+        $this->eventsToShow[$time][] = $content;
+    }
+
+    /**
+     *
+     * @param integer $time
+     *
+     * @return boolean
+     */
+    public function containsEventsForTime($time)
+    {
+        return count($this->eventsToShow[$time]) > 0;
+    }
+
+    /**
      *
      * @return integer
      */
@@ -65,35 +87,22 @@ abstract class Calendar extends HTML_Table
     }
 
     /**
-     * Add an event to the calendar
+     * Gets the end date which will be displayed by this calendar.
      *
-     * @param integer $time A time in the day on which the event should be displayed
-     * @param string $content The html content to insert in the month calendar
+     * @return integer
      */
-    public function addEvent($time, $content)
-    {
-        $this->eventsToShow[$time][] = $content;
-    }
+    abstract public function getEndTime();
 
     /**
      * Gets the list of events to show sorted by their starting time
      *
-     * @return string[]
+     * @return string[][]
      */
     public function getEventsToShow()
     {
         ksort($this->eventsToShow);
-        return $this->eventsToShow;
-    }
 
-    /**
-     *
-     * @param integer $time
-     * @return boolean
-     */
-    public function containsEventsForTime($time)
-    {
-        return count($this->eventsToShow[$time]) > 0;
+        return $this->eventsToShow;
     }
 
     /**
@@ -102,11 +111,4 @@ abstract class Calendar extends HTML_Table
      * @return integer
      */
     abstract public function getStartTime();
-
-    /**
-     * Gets the end date which will be displayed by this calendar.
-     *
-     * @return integer
-     */
-    abstract public function getEndTime();
 }

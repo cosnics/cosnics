@@ -3,12 +3,15 @@ namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
+use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use RuntimeException;
 
 /**
  *
@@ -19,8 +22,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke
  */
-class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory implements
-    \Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported, DisplayOrderDataClassListenerSupport
+class ContentObjectPublicationCategory extends PlatformCategory implements
+    CategoryVisibilitySupported, DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_COURSE = 'course_id';
     const PROPERTY_TOOL = 'tool';
@@ -68,7 +71,7 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
 
         if (! $success)
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf('Could not create the location for the content object publication category %s', $this->getId()));
         }
 

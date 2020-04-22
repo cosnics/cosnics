@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Package;
 
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
@@ -53,7 +54,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
         
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->create_request_root())
+        if (! Rights::getInstance()->create_request_root())
         {
             return false;
         }

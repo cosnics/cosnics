@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+
+class PeerAssessmentFeedback extends SimpleTracker
 {
     const PROPERTY_ATTEMPT_STATUS_ID = 'attempt_status_id';
     const PROPERTY_USER_ID = 'user_id';

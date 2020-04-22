@@ -24,20 +24,10 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
     private $replacementCharacters = array('__', '-');
 
     /**
-     *
-     * @param string $id
-     * @return string
-     */
-    protected function getFilename($id)
-    {
-        return $this->getDirectory() . DIRECTORY_SEPARATOR . md5($id) . DIRECTORY_SEPARATOR .
-             preg_replace($this->disallowedCharacterPatterns, $this->replacementCharacters, $id) . $this->getExtension();
-    }
-
-    /**
      * Extension of the doDelete function to invalidate the opcache
      *
      * @param string $identifier
+     *
      * @return boolean
      */
     protected function doDelete($identifier)
@@ -49,5 +39,17 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
         }
 
         return parent::doDelete($identifier);
+    }
+
+    /**
+     *
+     * @param string $id
+     *
+     * @return string
+     */
+    protected function getFilename($id)
+    {
+        return $this->getDirectory() . DIRECTORY_SEPARATOR . md5($id) . DIRECTORY_SEPARATOR .
+            preg_replace($this->disallowedCharacterPatterns, $this->replacementCharacters, $id) . $this->getExtension();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Event;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LpiAttemptObjective;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 
 /**
@@ -20,6 +21,6 @@ class AttemptLearningPathItemObjective extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LpiAttemptObjective::class_name());
+            LpiAttemptObjective::class_name());
     }
 }

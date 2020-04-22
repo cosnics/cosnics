@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryI
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Domain\UserImporter\ImportDataResult;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Translator;
 
@@ -147,7 +148,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                         $this->translateMessage('ImportCourseEntityRelationFailedDatabaseExecution')
                     );
 
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf(
                             'Failed to handle the course entity relation with course %s, entityType %s and entityId %s',
                             $courseEntityRelation->get_course_id(),
@@ -161,7 +162,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
             $importDataResult->setSuccessful();
             $importerResult->addSuccessImportDataResult($importDataResult);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $importDataResult->setFailed();
             $importerResult->addFailedImportDataResult($importDataResult);
@@ -224,7 +225,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                 )
             );
 
-            throw new \Exception(
+            throw new Exception(
                 sprintf(
                     'The given course with code "%s" could not be found',
                     $importedCourseEntityRelation->getCourseCode()
@@ -259,7 +260,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                 )
             );
 
-            throw new \Exception(
+            throw new Exception(
                 sprintf(
                     'The given user with username "%s" could not be found',
                     $importedCourseEntityRelation->getUsername()
@@ -294,7 +295,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                 )
             );
 
-            throw new \Exception(
+            throw new Exception(
                 sprintf(
                     'The given group with code "%s" could not be found',
                     $importedCourseEntityRelation->getGroupCode()
@@ -345,7 +346,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                         )
                     );
 
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf(
                             'Could not find a valid relation object for course %s and user %s',
                             $course->get_visual_code(),
@@ -365,7 +366,7 @@ class CourseEntityImporter implements CourseEntityImporterInterface
                         )
                     );
 
-                    throw new \Exception(
+                    throw new Exception(
                         sprintf(
                             'Could not find a valid relation object for course %s and group %s',
                             $course->get_visual_code(),

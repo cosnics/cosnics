@@ -293,8 +293,10 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     }
 
     /**
+     * @param string $source
+     * @param integer $userIdentifier
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
+     * @return boolean
      */
     public function isSourceVisible($source, $userIdentifier = null)
     {
@@ -326,14 +328,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function supportsActions()
     {
         return $this instanceof ActionSupport;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function supportsVisibility()
-    {
-        return $this instanceof VisibilitySupport;
     }
 }

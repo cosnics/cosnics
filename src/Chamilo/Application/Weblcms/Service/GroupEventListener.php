@@ -3,6 +3,9 @@
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
+use Chamilo\Core\Group\Service\GroupEventListenerInterface;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -11,7 +14,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GroupEventListener implements \Chamilo\Core\Group\Service\GroupEventListenerInterface
+class GroupEventListener implements GroupEventListenerInterface
 {
     /**
      * @var \Chamilo\Core\Group\Service\GroupsTreeTraverser
@@ -42,10 +45,10 @@ class GroupEventListener implements \Chamilo\Core\Group\Service\GroupEventListen
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService $courseGroupService
      */
     public function __construct(
-        \Chamilo\Core\Group\Service\GroupsTreeTraverser $groupsTreeTraverser,
-        \Chamilo\Application\Weblcms\Service\CourseService $courseService,
-        \Chamilo\Application\Weblcms\Service\RightsService $rightsService,
-        \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService $courseGroupService
+        GroupsTreeTraverser $groupsTreeTraverser,
+        CourseService $courseService,
+        RightsService $rightsService,
+        CourseGroupService $courseGroupService
     )
     {
         $this->groupsTreeTraverser = $groupsTreeTraverser;

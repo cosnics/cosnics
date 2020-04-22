@@ -21,12 +21,38 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
      */
     public function __construct()
     {
-        if (! extension_loaded('newrelic'))
+        if (!extension_loaded('newrelic'))
         {
             throw new Exception('Can not use the NewRelicExceptionLogger when the newrelic extension is not loaded');
         }
 
         $this->configureChamiloParameters();
+    }
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header)
+    {
+    }
+
+    /**
+     * Configures additional chamilo parameters in New Relic
+     */
+    protected function configureChamiloParameters()
+    {
+        $prefix = 'chamilo_';
+
+        newrelic_add_custom_parameter($prefix . 'url', $_SERVER['REQUEST_URI']);
+        newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
+
+        $user_id = Session::get_user_id();
+        if (!empty($user_id))
+        {
+            newrelic_add_custom_parameter($prefix . 'user_id', Session::get_user_id());
+        }
     }
 
     /**
@@ -45,31 +71,5 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
         }
 
         newrelic_notice_error('chamilo_exception', $exception);
-    }
-
-    /**
-     * Configures additional chamilo parameters in New Relic
-     */
-    protected function configureChamiloParameters()
-    {
-        $prefix = 'chamilo_';
-
-        newrelic_add_custom_parameter($prefix . 'url', $_SERVER['REQUEST_URI']);
-        newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
-
-        $user_id = Session::get_user_id();
-        if (! empty($user_id))
-        {
-            newrelic_add_custom_parameter($prefix . 'user_id', Session::get_user_id());
-        }
-    }
-
-    /**
-     * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
-     */
-    public function addJavascriptExceptionLogger(BaseHeader $header)
-    {
     }
 }

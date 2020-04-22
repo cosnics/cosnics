@@ -10,12 +10,16 @@ use Chamilo\Libraries\Format\Structure\BaseHeader;
  */
 interface ExceptionLoggerInterface
 {
-    /**
-     * Exception types
-     */
-    const EXCEPTION_LEVEL_WARNING = 1;
     const EXCEPTION_LEVEL_ERROR = 2;
     const EXCEPTION_LEVEL_FATAL_ERROR = 3;
+    const EXCEPTION_LEVEL_WARNING = 1;
+
+    /**
+     * Adds an exception logger for javascript to the header
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
+     */
+    public function addJavascriptExceptionLogger(BaseHeader $header);
 
     /**
      * Logs an exception
@@ -26,11 +30,4 @@ interface ExceptionLoggerInterface
      * @param integer $line
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0);
-
-    /**
-     * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
-     */
-    public function addJavascriptExceptionLogger(BaseHeader $header);
 }

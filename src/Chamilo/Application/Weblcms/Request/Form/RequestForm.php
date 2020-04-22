@@ -4,6 +4,8 @@ namespace Chamilo\Application\Weblcms\Request\Form;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\User\UserDetails;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -36,7 +38,7 @@ class RequestForm extends FormValidator
     {
         if ($this->request->get_id())
         {
-            $user_details = new \Chamilo\Core\User\UserDetails($this->request->get_user());
+            $user_details = new UserDetails($this->request->get_user());
             $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
         }
 
@@ -170,7 +172,7 @@ class RequestForm extends FormValidator
             );
 
             $course_categories =
-                \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_categories_ordered_by_name(
+                DataManager::retrieve_course_categories_ordered_by_name(
                     $condition
                 );
 

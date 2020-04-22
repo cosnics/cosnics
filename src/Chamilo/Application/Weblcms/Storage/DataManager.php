@@ -30,8 +30,10 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -773,7 +775,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     protected static function create_publication_attributes_from_record($record)
     {
-        $attributes = new \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes();
+        $attributes = new Attributes();
 
         $attributes->set_id($record[ContentObjectPublication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[ContentObjectPublication::PROPERTY_PUBLISHER_ID]);
@@ -781,7 +783,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $attributes->set_application('Chamilo\Application\Weblcms');
 
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course::class_name(),
+            Course::class_name(),
             $record[ContentObjectPublication::PROPERTY_COURSE_ID]
         );
 
@@ -2106,7 +2108,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (!$publication)
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException(
+            throw new ObjectNotExistException(
                 Translation::get('ContentObjectPublication'),
                 $publication_id
             );
@@ -2251,7 +2253,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $user_condition = new AndCondition($conditions);
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            User::class_name(),
             new DataClassRetrievesParameters($user_condition, $count, $offset, $order_by)
         );
     }
@@ -2607,7 +2609,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
             );
 
-            $group_ids = \Chamilo\Application\Weblcms\Storage\DataManager::distinct(
+            $group_ids = DataManager::distinct(
                 CourseEntityRelation::class_name(),
                 new DataClassDistinctParameters(
                     new AndCondition($cgrConditions),

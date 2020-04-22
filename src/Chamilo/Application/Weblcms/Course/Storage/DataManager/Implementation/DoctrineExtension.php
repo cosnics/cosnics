@@ -4,8 +4,10 @@ namespace Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
@@ -24,6 +26,8 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PDO;
+use PDOException;
 
 /**
  * Doctrine implementation of the datamanager
@@ -46,7 +50,7 @@ class DoctrineExtension
      *
      * @param DoctrineDatabase $database
      */
-    public function __construct(\Chamilo\Libraries\Storage\DataManager\Doctrine\Database $database)
+    public function __construct(Database $database)
     {
         $this->database = $database;
     }
@@ -112,7 +116,7 @@ class DoctrineExtension
         {
             return new RecordResultSet($this->database->get_connection()->query($sql));
         }
-        catch (\PDOException $exception)
+        catch (PDOException $exception)
         {
             $this->database->error_handling($exception);
             throw new DataClassNoResultException(User::class_name(), null);
@@ -146,11 +150,11 @@ class DoctrineExtension
         try
         {
             $result = $this->database->get_connection()->query($sql);
-            $row = $result->fetch(\PDO::FETCH_ASSOC);
+            $row = $result->fetch(PDO::FETCH_ASSOC);
             
             return $row[self::PARAM_COUNT];
         }
-        catch (\PDOException $exception)
+        catch (PDOException $exception)
         {
             $this->database->error_handling($exception);
             throw new DataClassNoResultException(User::class_name(), null);
@@ -381,7 +385,7 @@ class DoctrineExtension
             
             $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
             
-            return \Chamilo\Core\Group\Storage\DataManager::getInstance()->build_records_sql(
+            return DataManager::getInstance()->build_records_sql(
                 Group::class_name(), 
                 $parameters);
         }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -39,7 +40,7 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
     public function as_html()
     {
         $this->get_tool_browser()->get_parent()->set_parameter(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID,
+            Manager::PARAM_PUBLICATION_ID,
             $this->get_tool_browser()->get_publication_id());
 
         return parent::as_html();

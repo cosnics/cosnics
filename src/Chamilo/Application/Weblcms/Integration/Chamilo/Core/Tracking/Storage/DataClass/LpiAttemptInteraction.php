@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-class LpiAttemptInteraction extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+
+class LpiAttemptInteraction extends SimpleTracker
 {
     const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
     const PROPERTY_INTERACTION_ID = 'interaction_id';

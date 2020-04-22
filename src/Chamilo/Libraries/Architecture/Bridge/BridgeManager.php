@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Architecture\Bridge;
 
 use RuntimeException;
+use stdClass;
 
 /**
  * @package Chamilo\Libraries\Architecture\Bridge
@@ -25,9 +26,9 @@ class BridgeManager
     }
 
     /**
-     * @param object $bridge
+     * @param \stdClass $bridge
      */
-    public function addBridge(object $bridge)
+    public function addBridge(stdClass $bridge)
     {
         $interfaces = class_implements($bridge);
 
@@ -51,7 +52,7 @@ class BridgeManager
      */
     public function getBridgeByInterface($bridgeInterface)
     {
-        if(!array_key_exists($bridgeInterface, $this->bridges))
+        if (!array_key_exists($bridgeInterface, $this->bridges))
         {
             throw new RuntimeException(
                 sprintf('A bridge for the interface %s could not be found', $bridgeInterface)

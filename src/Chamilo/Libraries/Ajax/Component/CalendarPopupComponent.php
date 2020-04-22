@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
@@ -50,9 +49,9 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
             $translator->trans("SaturdayLong", array(), Utilities::COMMON_LIBRARIES)
         );
 
-        $start_of_week = Configuration::getInstance()->get_setting(
-            array('Chamilo\Libraries\Calendar', 'first_day_of_week')
-        );
+        $start_of_week =
+            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        
         if ($start_of_week == 'sunday')
         {
             array_unshift($DaysShort, $translator->trans("SundayShort", array(), Utilities::COMMON_LIBRARIES));

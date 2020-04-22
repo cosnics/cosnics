@@ -9,10 +9,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -82,41 +80,21 @@ class AuthenticationValidator
     }
 
     /**
-     * @return boolean
+     * @param string $authenticationType
      *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @return \Chamilo\Libraries\Authentication\AuthenticationInterface|null
      */
-    public function validate()
+    public function getAuthenticationByType($authenticationType)
     {
-        if ($this->isAuthenticated())
-        {
-            return true;
-        }
-
-        $user = null;
-
         foreach ($this->authentications as $authentication)
         {
-            $user = $authentication->login();
-
-            if($user instanceof User)
+            if ($authenticationType == $authentication->getAuthenticationType())
             {
-                break;
+                return $authentication;
             }
         }
 
-
-        if (!$user instanceof User)
-        {
-            return false;
-        }
-
-        $this->validateUser($user);
-        $this->setAuthenticatedUser($user);
-        $this->trackLogin($user);
-        $this->redirectAfterLogin();
-
-        return true;
+        return null;
     }
 
     /**
@@ -130,40 +108,21 @@ class AuthenticationValidator
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    protected function setAuthenticatedUser(User $user)
-    {
-        $this->sessionUtilities->register('_uid', $user->getId());
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    protected function trackLogin(User $user)
-    {
-        Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \ReflectionException
      */
-    protected function validateUser(User $user)
+    public function logout(User $user)
     {
-        $userExpirationDate = $user->get_expiration_date();
-        $userActivationDate = $user->get_activation_date();
+        Event::trigger('Logout', Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        $this->sessionUtilities->destroy();
 
-        $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
-        $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
-
-        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
+        foreach ($this->authentications as $authentication)
         {
-            throw new AuthenticationException(Translation::get('AccountNotActive'));
+            if ($authentication->getAuthenticationType() == $user->getAuthenticationSource())
+            {
+                $authentication->logout($user);
+            }
         }
     }
 
@@ -189,37 +148,81 @@ class AuthenticationValidator
     }
 
     /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    public function logout(User $user)
+    protected function setAuthenticatedUser(User $user)
     {
-        Event::trigger('Logout', Manager::context(), array('server' => $_SERVER, 'user' => $user));
-        Session::destroy();
-
-        foreach($this->authentications as $authentication)
-        {
-            if($authentication->getAuthenticationType() == $user->getAuthenticationSource())
-            {
-                $authentication->logout($user);
-            }
-        }
+        $this->sessionUtilities->register('_uid', $user->getId());
     }
 
     /**
-     * @param string $authenticationType
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Authentication\AuthenticationInterface|null
+     * @throws \ReflectionException
      */
-    public function getAuthenticationByType($authenticationType)
+    protected function trackLogin(User $user)
     {
-        foreach($this->authentications as $authentication)
+        Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
+    }
+
+    /**
+     * @return boolean
+     *
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \ReflectionException
+     */
+    public function validate()
+    {
+        if ($this->isAuthenticated())
         {
-            if($authenticationType == $authentication->getAuthenticationType())
+            return true;
+        }
+
+        $user = null;
+
+        foreach ($this->authentications as $authentication)
+        {
+            $user = $authentication->login();
+
+            if ($user instanceof User)
             {
-                return $authentication;
+                break;
             }
         }
 
-        return null;
+        if (!$user instanceof User)
+        {
+            return false;
+        }
+
+        $this->validateUser($user);
+        $this->setAuthenticatedUser($user);
+        $this->trackLogin($user);
+        $this->redirectAfterLogin();
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     */
+    protected function validateUser(User $user)
+    {
+        $userExpirationDate = $user->get_expiration_date();
+        $userActivationDate = $user->get_activation_date();
+
+        $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
+        $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
+
+        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
+        {
+            throw new AuthenticationException(
+                $this->translator->trans('AccountNotActive', array(), Utilities::COMMON_LIBRARIES)
+            );
+        }
     }
 }

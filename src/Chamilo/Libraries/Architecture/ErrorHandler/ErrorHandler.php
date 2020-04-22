@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
@@ -26,7 +26,7 @@ class ErrorHandler
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Translation
+     * @var \Symfony\Component\Translation\Translator
      */
     protected $translator;
 
@@ -40,11 +40,11 @@ class ErrorHandler
      * ErrorHandler constructor.
      *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Chamilo\Libraries\Translation\Translation $translator
+     * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
     public function __construct(
-        ExceptionLoggerInterface $exceptionLogger, Translation $translator, ThemePathBuilder $themePathBuilder
+        ExceptionLoggerInterface $exceptionLogger, Translator $translator, ThemePathBuilder $themePathBuilder
     )
     {
         $this->exceptionLogger = $exceptionLogger;
@@ -123,12 +123,12 @@ class ErrorHandler
      */
     protected function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Configuration')
     {
-        return $this->getTranslator()->getTranslation($variable, $parameters, $context);
+        return $this->getTranslator()->trans($variable, $parameters, $context);
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator()
     {
@@ -136,10 +136,9 @@ class ErrorHandler
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\Translation $translator
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function setTranslator(Translation $translator)
+    public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;
     }

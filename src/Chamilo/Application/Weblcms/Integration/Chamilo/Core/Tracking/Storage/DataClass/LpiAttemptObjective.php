@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-class LpiAttemptObjective extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+
+class LpiAttemptObjective extends SimpleTracker
 {
     const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
     const PROPERTY_OBJECTIVE_ID = 'objective_id';

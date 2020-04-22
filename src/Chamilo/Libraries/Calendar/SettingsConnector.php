@@ -35,6 +35,7 @@ class SettingsConnector
     /**
      *
      * @return boolean
+     * @throws \ReflectionException
      */
     public static function is_allowed_to_change_platform_timezone()
     {

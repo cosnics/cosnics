@@ -7,12 +7,10 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -37,8 +35,7 @@ abstract class GroupsFeedComponent extends Manager
     protected $user_count = 0;
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     * @throws \ReflectionException
      */
     public function run()
     {
@@ -61,6 +58,7 @@ abstract class GroupsFeedComponent extends Manager
      * Returns all the elements for this feed
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
+     * @throws \ReflectionException
      */
     private function get_elements()
     {
@@ -71,9 +69,12 @@ abstract class GroupsFeedComponent extends Manager
         $groups = $this->retrieve_groups();
         if ($groups && $groups->size() > 0)
         {
+            $translator = $this->getTranslator();
             // Add group category
             $group_category = new AdvancedElementFinderElement(
-                'groups', $glyph->getClassNamesString(), Translation::get('Groups'), Translation::get('Groups')
+                'groups', $glyph->getClassNamesString(),
+                $translator->trans('Groups', array(), Utilities::COMMON_LIBRARIES),
+                $translator->trans('Groups', array(), Utilities::COMMON_LIBRARIES)
             );
             $elements->add_element($group_category);
 
@@ -84,6 +85,9 @@ abstract class GroupsFeedComponent extends Manager
         }
 
         // Add users
+        /**
+         * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $users
+         */
         $users = $this->retrieve_users();
         if ($users && $users->count() > 0)
         {
@@ -114,7 +118,7 @@ abstract class GroupsFeedComponent extends Manager
      */
     protected function get_offset()
     {
-        $offset = Request::post(self::PARAM_OFFSET);
+        $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
         if (!isset($offset) || is_null($offset))
         {
             $offset = 0;
@@ -144,9 +148,8 @@ abstract class GroupsFeedComponent extends Manager
     abstract public function retrieve_groups();
 
     /**
-     * Retrieves all the users for the selected group
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return array|\Chamilo\Core\User\Storage\DataClass\User[]
+     * @throws \ReflectionException
      */
     private function retrieve_users()
     {
@@ -162,7 +165,7 @@ abstract class GroupsFeedComponent extends Manager
         $conditions[] =
             new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids);
 
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
@@ -176,17 +179,7 @@ abstract class GroupsFeedComponent extends Manager
             );
         }
 
-        // Combine the conditions
-        $count = count($conditions);
-        if ($count > 1)
-        {
-            $condition = new AndCondition($conditions);
-        }
-
-        if ($count == 1)
-        {
-            $condition = $conditions[0];
-        }
+        $condition = new AndCondition($conditions);
 
         $this->user_count = $this->getUserService()->countUsers($condition);
 

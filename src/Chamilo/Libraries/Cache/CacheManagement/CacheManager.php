@@ -39,6 +39,21 @@ class CacheManager
     }
 
     /**
+     * Clears the cache
+     *
+     * @param string[] $cacheServiceAliases
+     */
+    public function clear($cacheServiceAliases = array())
+    {
+        $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
+
+        foreach ($cacheServices as $cacheService)
+        {
+            $cacheService->clear();
+        }
+    }
+
+    /**
      * Returns a list of cache service aliases
      *
      * @return string[]
@@ -56,39 +71,6 @@ class CacheManager
     public function getCacheServices()
     {
         return $this->cacheServices;
-    }
-
-    /**
-     * Clears the cache
-     *
-     * @param string[] $cacheServiceAliases
-     */
-    public function clear($cacheServiceAliases = array())
-    {
-        $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-
-        foreach ($cacheServices as $cacheService)
-        {
-            $cacheService->clear();
-        }
-    }
-
-    /**
-     * Warm up the cache
-     *
-     * @param string[] $cacheServiceAliases
-     */
-    public function warmUp($cacheServiceAliases = array())
-    {
-        $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-
-        foreach ($cacheServices as $cacheService)
-        {
-            if (!$cacheService instanceof UserBasedCacheInterface)
-            {
-                $cacheService->warmUp();
-            }
-        }
     }
 
     /**
@@ -121,5 +103,23 @@ class CacheManager
         }
 
         return $cacheServices;
+    }
+
+    /**
+     * Warm up the cache
+     *
+     * @param string[] $cacheServiceAliases
+     */
+    public function warmUp($cacheServiceAliases = array())
+    {
+        $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
+
+        foreach ($cacheServices as $cacheService)
+        {
+            if (!$cacheService instanceof UserBasedCacheInterface)
+            {
+                $cacheService->warmUp();
+            }
+        }
     }
 }

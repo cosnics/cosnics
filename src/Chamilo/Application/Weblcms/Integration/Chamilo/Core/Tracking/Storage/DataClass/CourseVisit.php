@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
 use Chamilo\Libraries\Format\Structure\Page;
+use Exception;
 
 /**
  * Tracks the visits of a user to a course
@@ -123,7 +124,7 @@ class CourseVisit extends Tracker
     {
         if (! $course_visit)
         {
-            throw new \Exception('The given course visit can not be empty when tracking the leave of a course');
+            throw new Exception('The given course visit can not be empty when tracking the leave of a course');
         }
         
         $time_spend_on_course = time() - $course_visit->get_last_access_date();

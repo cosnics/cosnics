@@ -12,6 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Exception;
 
 /**
  * This class describes the submanager for course management
@@ -61,7 +62,7 @@ abstract class Manager extends Application
     {
         if (! $applicationConfiguration->getApplication() instanceof CourseSubManagerSupport)
         {
-            throw new \Exception(
+            throw new Exception(
                 'Components that use the course submanager support need to implement the CourseSubManagerSupport');
         }
         

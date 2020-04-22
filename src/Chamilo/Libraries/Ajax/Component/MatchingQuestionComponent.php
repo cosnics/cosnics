@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
@@ -21,8 +20,9 @@ class MatchingQuestionComponent extends Manager
      */
     public function run()
     {
-        $value = Request::post('value');
-        $action = Request::post('action');
+        $request = $this->getRequest();
+        $value = $request->request->get('value');
+        $action = $request->request->get('action');
 
         switch ($action)
         {

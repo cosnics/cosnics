@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
@@ -22,15 +21,15 @@ class HtmlEditorInstanceComponent extends Manager
     public function run()
     {
 
-        // Getting some properties from the Ajax post
-        $name = Request::post('name');
-        $label = Request::post('label');
+        $request = $this->getRequest();
+        $name = $request->request->get('name');
+        $label = $request->request->get('label');
+        $options = $request->request->get('options');
+        $attributes = $request->request->get('attributes');
 
-        $options = Request::post('options');
         $options = str_replace('\"', '"', $options);
         $options = json_decode($options, true);
 
-        $attributes = Request::post('attributes');
         $attributes = str_replace('\"', '"', $attributes);
         $attributes = json_decode($attributes, true);
 

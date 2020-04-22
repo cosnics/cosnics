@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseSettingsServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\PublicationServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
 /**
  * Service factory for Weblcms services
@@ -13,7 +14,7 @@ use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
  */
 class ServiceFactory
 {
-    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+    use DependencyInjectionContainerTrait;
 
     const SERVICE_COURSE = 'course_service';
     const SERVICE_RIGHTS = 'rights_service';

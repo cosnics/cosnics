@@ -13,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Exception;
 
 /**
  * Tests the Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService class
@@ -240,7 +241,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     public function testAttachRolesToCoursesByIdsNoManager()
     {
         $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->will(
-            $this->throwException(new \Exception()));
+            $this->throwException(new Exception()));
 
         $this->openCourseService->attachRolesToCoursesByIds(new User(), array(2), array(1));
     }
@@ -272,7 +273,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     public function testRemoveCoursesAsOpenCourseNoManager()
     {
         $this->authorizationCheckerMock->expects($this->once())->method('checkAuthorization')->will(
-            $this->throwException(new \Exception()));
+            $this->throwException(new Exception()));
 
         $this->openCourseService->removeCoursesAsOpenCourse(new User(), array(2));
     }

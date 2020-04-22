@@ -27,18 +27,6 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
     }
 
     /**
-     * Generates the configuration tree builder.
-     *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
-     */
-    public function getConfigTreeBuilder()
-    {
-        $this->buildRootNode();
-
-        return $this->treeBuilder;
-    }
-
-    /**
      *
      * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
      */
@@ -48,15 +36,27 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
 
         $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()
             ->end()->end()->arrayNode(
-            'custom'
-        )->prototype('array')->children()->enumNode('type')->values(
-            array('annotation', 'xml', 'yaml', 'php', 'staticphp')
-        )->isRequired()->cannotBeEmpty()->end()->scalarNode(
-            'namespace'
-        )->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
-            'scalar'
-        )->cannotBeEmpty()->end()->isRequired()->end()->end()->end()->end();
+                'custom'
+            )->prototype('array')->children()->enumNode('type')->values(
+                array('annotation', 'xml', 'yaml', 'php', 'staticphp')
+            )->isRequired()->cannotBeEmpty()->end()->scalarNode(
+                'namespace'
+            )->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
+                'scalar'
+            )->cannotBeEmpty()->end()->isRequired()->end()->end()->end()->end();
 
         return $rootNode;
+    }
+
+    /**
+     * Generates the configuration tree builder.
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     */
+    public function getConfigTreeBuilder()
+    {
+        $this->buildRootNode();
+
+        return $this->treeBuilder;
     }
 }

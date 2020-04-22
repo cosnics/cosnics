@@ -6,6 +6,7 @@ namespace Chamilo\Libraries\Authentication\Ldap;
  * This class is an example used at hogent and must
  * be adapted for your company to work. Connection information can be added in the administrator settings of chamilo
  */
+
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
@@ -39,8 +40,9 @@ class LdapParser
      *
      * @param string[] $info
      * @param string $username
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     public function parse($info = array(), $username)
     {
@@ -52,6 +54,9 @@ class LdapParser
         $userProperties[User::PROPERTY_PASSWORD] = $this->getHashingUtilities()->hashString('PLACEHOLDER');
         $userProperties[User::PROPERTY_AUTH_SOURCE] = 'ldap';
         $userProperties[User::PROPERTY_EMAIL] = $info[0]['mail'][0];
+
+        $student = false;
+        $employee = false;
 
         for ($j = 0; $j < $info[0]['objectclass']['count']; $j ++)
         {
@@ -67,18 +72,15 @@ class LdapParser
 
         if ($student)
         {
-            $result['hgOfficialCode'] = $info[0]['hgstamnummer'][0];
-            $status = User::STATUS_STUDENT;
+            $userProperties[User::PROPERTY_OFFICIAL_CODE] = $info[0]['hgstamnummer'][0];
+            $userProperties[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
         }
 
         if ($employee)
         {
-            $result['hgOfficialCode'] = $info[0]['hgpersoneelsnummer'][0];
-            $status = User::STATUS_TEACHER;
+            $userProperties[User::PROPERTY_OFFICIAL_CODE] = $info[0]['hgpersoneelsnummer'][0];
+            $userProperties[User::PROPERTY_STATUS] = User::STATUS_TEACHER;
         }
-
-        $userProperties[User::PROPERTY_OFFICIAL_CODE] = $result["hgOfficialCode"];
-        $userProperties[User::PROPERTY_STATUS] = $status;
 
         $userProperties[User::PROPERTY_PLATFORMADMIN] = '0';
         $userProperties[User::PROPERTY_ACTIVE] = '1';
@@ -88,7 +90,7 @@ class LdapParser
 
         $user = new User($userProperties);
 
-        if (! $user->create())
+        if (!$user->create())
         {
             throw new AuthenticationException(Translation::get('UserAccountCreationFailed'));
         }

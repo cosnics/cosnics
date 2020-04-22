@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Event;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 
 /**
@@ -20,6 +21,6 @@ class AttemptAssessment extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name());
+            AssessmentAttempt::class_name());
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Rights\Entities;
 
 use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Translation\Translation;
@@ -158,7 +159,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     {
         if (is_null($this->platform_group_cache[$user_id]))
         {
-            $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+            $this->platform_group_cache[$user_id] = DataManager::retrieve_all_subscribed_groups_array(
                 $user_id, 
                 true);
         }

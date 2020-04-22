@@ -226,7 +226,7 @@ class Configuration
     /**
      *
      * @param string $type
-     * @return string[]
+     * @return string[][]
      */
     public function get_registrations_by_type($type)
     {
@@ -236,7 +236,7 @@ class Configuration
     /**
      *
      * @param string $type
-     * @return string[]
+     * @return string[][]
      */
     public static function registrations_by_type($type)
     {

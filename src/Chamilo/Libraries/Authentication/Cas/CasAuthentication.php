@@ -53,6 +53,51 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     }
 
     /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Cas';
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getConfiguration()
+    {
+        if (!isset($this->settings))
+        {
+            $this->settings = array();
+            $this->settings['host'] =
+                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_host'));
+            $this->settings['port'] =
+                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_port'));
+            $this->settings['uri'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_uri'));
+            $this->settings['certificate'] = $this->configurationConsulter->getSetting(
+                array('Chamilo\Core\Admin', 'cas_certificate')
+            );
+            $this->settings['log'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_log'));
+            $this->settings['enable_log'] = $this->configurationConsulter->getSetting(
+                array('Chamilo\Core\Admin', 'cas_enable_log')
+            );
+        }
+
+        return $this->settings;
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 500;
+    }
+
+    /**
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities(): SessionUtilities
@@ -69,8 +114,78 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Authentication\ExternalAuthentication::login()
+     * @throws \Exception
+     */
+    protected function initializeClient()
+    {
+        if (!$this->isConfigured())
+        {
+            throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
+        }
+        else
+        {
+            $settings = $this->getConfiguration();
+
+            // initialize phpCAS
+            if ($settings['enable_log'])
+            {
+                phpCAS::setDebug($settings['log']);
+            }
+
+            $casVersion = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_version'));
+
+            if ($casVersion == 'SAML_VERSION_1_1')
+            {
+                phpCAS::client(
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                );
+            }
+            else
+            {
+                phpCAS::client(
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                );
+            }
+
+            $casCheckCertificate = $this->configurationConsulter->getSetting(
+                array('Chamilo\Core\Admin', 'cas_check_certificate')
+            );
+
+            // SSL validation for the CAS server
+            if ($casCheckCertificate == '1')
+            {
+                phpCAS::setCasServerCACert($settings['certificate']);
+            }
+            else
+            {
+                phpCAS::setNoCasServerValidation();
+            }
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    protected function isConfigured()
+    {
+        $settings = $this->getConfiguration();
+
+        foreach ($settings as $setting => $value)
+        {
+            if ((empty($value) || !isset($value)) && !in_array(
+                    $setting, array('uri', 'certificate', 'log', 'enable_log')
+                ))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User|null
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     public function login()
     {
@@ -128,6 +243,14 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function logout(User $user)
+    {
+        phpCAS::logout();
+    }
+
+    /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
@@ -158,130 +281,5 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         {
             return $user;
         }
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function logout(User $user)
-    {
-        phpCAS::logout();
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getConfiguration()
-    {
-        if (!isset($this->settings))
-        {
-            $this->settings = array();
-            $this->settings['host'] =
-                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_host'));
-            $this->settings['port'] =
-                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_port'));
-            $this->settings['uri'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_uri'));
-            $this->settings['certificate'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'cas_certificate')
-            );
-            $this->settings['log'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_log'));
-            $this->settings['enable_log'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'cas_enable_log')
-            );
-        }
-
-        return $this->settings;
-    }
-
-    /**
-     * @return boolean
-     */
-    protected function isConfigured()
-    {
-        $settings = $this->getConfiguration();
-
-        foreach ($settings as $setting => $value)
-        {
-            if ((empty($value) || !isset($value)) && !in_array(
-                    $setting, array('uri', 'certificate', 'log', 'enable_log')
-                ))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function initializeClient()
-    {
-        if (!$this->isConfigured())
-        {
-            throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
-        }
-        else
-        {
-            $settings = $this->getConfiguration();
-
-            // initialize phpCAS
-            if ($settings['enable_log'])
-            {
-                phpCAS::setDebug($settings['log']);
-            }
-
-            $uri = ($settings['uri'] ? $settings['uri'] : '');
-
-            $casVersion = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_version'));
-
-            if ($casVersion == 'SAML_VERSION_1_1')
-            {
-                phpCAS::client(
-                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
-                );
-            }
-            else
-            {
-                phpCAS::client(
-                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
-                );
-            }
-
-            $casCheckCertificate = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'cas_check_certificate')
-            );
-
-            // SSL validation for the CAS server
-            if ($casCheckCertificate == '1')
-            {
-                phpCAS::setCasServerCACert($settings['certificate']);
-            }
-            else
-            {
-                phpCAS::setNoCasServerValidation();
-            }
-        }
-    }
-
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 500;
-    }
-
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
-    {
-        return 'Cas';
     }
 }

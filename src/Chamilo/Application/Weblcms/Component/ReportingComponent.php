@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -26,13 +27,13 @@ class ReportingComponent extends Manager implements DelegateComponent
         {
             $this->set_parameter(
                 self::PARAM_TEMPLATE_ID,
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate::class_name());
+                CourseDataTemplate::class_name());
 
             $application = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $application->set_template_by_name(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate::class_name());
+                CourseDataTemplate::class_name());
             return $application->run();
         }
         else

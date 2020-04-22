@@ -24,20 +24,11 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
-     */
-    public function warmUp()
-    {
-        return $this->warmUpForIdentifiers($this->getIdentifiers());
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface::clearAndWarmUp()
      */
     public function clearAndWarmUp()
     {
-        if (! $this->clear())
+        if (!$this->clear())
         {
             return false;
         }
@@ -48,79 +39,12 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
     /**
      *
      * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
-     * @return boolean
-     */
-    abstract public function warmUpForIdentifier($identifier);
-
-    /**
      *
-     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
-     * @return boolean
-     */
-    public function warmUpForIdentifiers($identifiers)
-    {
-        foreach ($identifiers as $identifier)
-        {
-            if (! $this->warmUpForIdentifier($identifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
-     * @return boolean
-     */
-    abstract public function clearForIdentifier($identifier);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
-     * @return boolean
-     */
-    public function clearForIdentifiers($identifiers)
-    {
-        foreach ($identifiers as $identifier)
-        {
-            if (! $this->clearForIdentifier($identifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
-     * @return boolean
-     */
-    public function clearAndWarmUpForIdentifiers($identifiers)
-    {
-        foreach ($identifiers as $identifier)
-        {
-            if (! $this->clearAndWarmUpForIdentifier($identifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      * @return boolean
      */
     public function clearAndWarmUpForIdentifier($identifier)
     {
-        if (! $this->clearForIdentifier($identifier))
+        if (!$this->clearForIdentifier($identifier))
         {
             return false;
         }
@@ -130,7 +54,54 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
+     *
+     * @return boolean
+     */
+    public function clearAndWarmUpForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->clearAndWarmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     *
+     * @return boolean
+     */
+    abstract public function clearForIdentifier($identifier);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
+     *
+     * @return boolean
+     */
+    public function clearForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->clearForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     *
      * @return mixed
      */
     abstract public function getForIdentifier($identifier);
@@ -140,4 +111,40 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
      * @return \Chamilo\Libraries\Cache\ParameterBag[]|string[]
      */
     abstract public function getIdentifiers();
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
+     */
+    public function warmUp()
+    {
+        return $this->warmUpForIdentifiers($this->getIdentifiers());
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     *
+     * @return boolean
+     */
+    abstract public function warmUpForIdentifier($identifier);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
+     *
+     * @return boolean
+     */
+    public function warmUpForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->warmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

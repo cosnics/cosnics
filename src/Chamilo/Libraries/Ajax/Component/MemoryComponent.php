@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
@@ -20,9 +19,10 @@ class MemoryComponent extends Manager
      */
     public function run()
     {
-        $variable = Request::post('variable');
-        $value = Request::post('value');
-        $action = Request::post('action');
+        $request = $this->getRequest();
+        $variable = $request->request->get('variable');
+        $value = $request->request->get('value');
+        $action = $request->request->get('action');
 
         switch ($action)
         {

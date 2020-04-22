@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Event;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeAttempt;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 
 /**
@@ -20,6 +21,6 @@ class AttemptLearningPathItem extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\TreeNodeAttempt::class_name());
+            TreeNodeAttempt::class_name());
     }
 }

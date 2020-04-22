@@ -15,32 +15,34 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * Base class for specific removal extensions of web applications
  *
- * @package Chamilo\Libraries\Architecture\Application$WebApplicationRemover
+ * @package Chamilo\Libraries\Architecture\Application
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WebApplicationRemover extends Remover
 {
 
     /**
-     *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
     public function extra()
     {
         $context = $this->context();
 
-        if (! Configuration::getInstance()->isRegisteredAndActive('Chamilo\Core\Menu'))
+        if (!Configuration::getInstance()->isRegisteredAndActive('Chamilo\Core\Menu'))
         {
             return true;
         }
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ApplicationItem::class_name(), ApplicationItem::PROPERTY_APPLICATION),
-            new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context)));
+            new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context))
+        );
 
         $menu_item = DataManager::retrieve(
-            ApplicationItem::class_name(),
-            new DataClassRetrieveParameters($condition));
+            ApplicationItem::class_name(), new DataClassRetrieveParameters($condition)
+        );
 
         if ($menu_item instanceof Item)
         {

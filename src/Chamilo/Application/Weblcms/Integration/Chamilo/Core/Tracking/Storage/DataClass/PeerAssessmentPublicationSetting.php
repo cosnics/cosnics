@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
-class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
+class PeerAssessmentPublicationSetting extends SimpleTracker
 {
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE = 'direct_subscribe_available';

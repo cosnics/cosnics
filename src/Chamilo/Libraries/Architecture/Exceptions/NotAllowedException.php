@@ -20,7 +20,7 @@ class NotAllowedException extends UserException
 
     /**
      *
-     * @param boolean $show_login_form
+     * @param boolean $showLoginForm
      */
     public function __construct($showLoginForm = false)
     {
@@ -29,11 +29,6 @@ class NotAllowedException extends UserException
         $html = array();
 
         $html[] = Translation::get('NotAllowed', null, Utilities::COMMON_LIBRARIES);
-
-        // if ($showLoginForm)
-        // {
-        // $html[] = $this->getLoginForm()->toHtml();
-        // }
 
         parent::__construct(implode(PHP_EOL, $html));
     }

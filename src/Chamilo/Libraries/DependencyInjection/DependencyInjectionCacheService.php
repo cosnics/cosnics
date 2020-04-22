@@ -32,6 +32,19 @@ class DependencyInjectionCacheService extends FileBasedCacheService
 
     /**
      *
+     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
+     */
+    function getCachePath()
+    {
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
+        );
+
+        return $configurablePathBuilder->getCachePath(__NAMESPACE__);
+    }
+
+    /**
+     *
      * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
     public function getFileConfigurationConsulter()
@@ -59,17 +72,5 @@ class DependencyInjectionCacheService extends FileBasedCacheService
         $dependencyInjectionContainerBuilder->createContainer();
 
         return $this;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
-     */
-    function getCachePath()
-    {
-        $configurablePathBuilder = new ConfigurablePathBuilder(
-            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage')));
-
-        return $configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 }

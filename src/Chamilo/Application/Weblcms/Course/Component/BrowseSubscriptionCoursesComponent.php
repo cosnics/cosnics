@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Component;
 
+use Chamilo\Application\Weblcms\Manager;
+
 /**
  * Abstract class that extends the browse component and is used for the subcribed / unsubscribed browser
  * 
@@ -24,7 +26,7 @@ abstract class BrowseSubscriptionCoursesComponent extends BrowseComponent
      */
     protected function checkComponentAuthorization()
     {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManagePersonalCourses');
+        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
     }
     
     // /**

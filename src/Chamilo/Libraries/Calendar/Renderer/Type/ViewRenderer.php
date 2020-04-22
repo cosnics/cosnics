@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
@@ -227,7 +228,7 @@ abstract class ViewRenderer extends Renderer
      */
     public function isSourceVisible($source, $userIdentifier = null)
     {
-        if ($this->getDataProvider()->supportsVisibility())
+        if ($this->getDataProvider() instanceof VisibilitySupport)
         {
             return $this->getDataProvider()->isSourceVisible($source, $userIdentifier);
         }

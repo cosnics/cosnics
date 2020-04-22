@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Form\OpenCourseForm;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to define existing courses as open by adding roles to them
@@ -35,7 +36,7 @@ class CreateComponent extends Manager
                 $success = true;
                 $messageVariable = 'OpenCoursesAdded';
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $messageVariable = 'OpenCoursesNotAdded';

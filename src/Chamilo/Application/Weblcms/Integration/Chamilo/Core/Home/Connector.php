@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -130,7 +131,7 @@ class Connector
             CourseTypeUserCategory::get_table_name(), 
             $subcondition);
         
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             CourseUserCategory::class_name(), 
             new DataClassRetrievesParameters($condition));
     }

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelatio
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseGroupRelation;
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\ImportedCourseUserRelation;
 use Chamilo\Libraries\File\Import;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -46,7 +47,7 @@ class Csv implements ImportFormatInterface
         $importedRows = $this->csvImporter->csv_to_array($file->getPathname());
         if (!is_array($importedRows))
         {
-            throw new \Exception('Could not parse the imported file, not a valid csv file.');
+            throw new Exception('Could not parse the imported file, not a valid csv file.');
         }
 
         $importedCourseEntityRelations = array();
@@ -69,7 +70,7 @@ class Csv implements ImportFormatInterface
         }
         else
         {
-            throw new \Exception('Could not determine whether it\'s a group or a user relation');
+            throw new Exception('Could not determine whether it\'s a group or a user relation');
         }
 
 

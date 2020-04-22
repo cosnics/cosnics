@@ -51,43 +51,6 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     *
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     */
-    public function login()
-    {
-        $user = $this->getUserFromCredentialsRequest();
-        if(!$user instanceof User)
-        {
-            return null;
-        }
-
-        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
-
-        $passwordHash = $this->hashingUtilities->hashString($password);
-
-        if ($user->get_password() == $passwordHash)
-        {
-            return $user;
-        }
-
-        throw new AuthenticationException(
-            $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function logout(User $user)
-    {
-        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
-        $redirect->toUrl();
-        exit();
-    }
-
-    /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $oldPassword
@@ -126,6 +89,16 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Platform';
+    }
+
+    /**
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword::getPasswordRequirements()
      */
@@ -145,12 +118,39 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
-     * Returns the short name of the authentication to check in the settings
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      *
-     * @return string
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function getAuthenticationType()
+    public function login()
     {
-        return 'Platform';
+        $user = $this->getUserFromCredentialsRequest();
+        if (!$user instanceof User)
+        {
+            return null;
+        }
+
+        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+
+        $passwordHash = $this->hashingUtilities->hashString($password);
+
+        if ($user->get_password() == $passwordHash)
+        {
+            return $user;
+        }
+
+        throw new AuthenticationException(
+            $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function logout(User $user)
+    {
+        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+        $redirect->toUrl();
+        exit();
     }
 }

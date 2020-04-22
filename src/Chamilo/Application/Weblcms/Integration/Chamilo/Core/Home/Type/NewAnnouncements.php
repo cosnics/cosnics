@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -57,8 +58,8 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course->get_id();
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = self::TOOL_ANNOUNCEMENT;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication::PROPERTY_ID];
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
+        $parameters[Manager::PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication::PROPERTY_ID];
         
         return $this->getLink($parameters);
     }

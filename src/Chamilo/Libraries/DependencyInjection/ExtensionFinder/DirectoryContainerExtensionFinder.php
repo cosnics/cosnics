@@ -32,6 +32,7 @@ class DirectoryContainerExtensionFinder implements ContainerExtensionFinderInter
      * Constructor
      *
      * @param string $rootDirectory
+     * @param \Symfony\Component\Finder\Finder $finder
      */
     public function __construct($rootDirectory, Finder $finder = null)
     {
@@ -53,7 +54,8 @@ class DirectoryContainerExtensionFinder implements ContainerExtensionFinderInter
     public function findContainerExtensions()
     {
         $this->finder->files()->in($this->rootDirectory)->notPath('Plugin')->notPath('Resources')->path(
-            '/DependencyInjection\//')->name('DependencyInjectionExtension.php');
+            '/DependencyInjection\//'
+        )->name('DependencyInjectionExtension.php');
 
         $containerExtensionClasses = array();
 

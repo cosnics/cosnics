@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Request\Component;
 
 use Chamilo\Application\Weblcms\Request\Form\RequestForm;
 use Chamilo\Application\Weblcms\Request\Manager;
+use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class CreatorComponent extends Manager
 {
@@ -43,7 +45,7 @@ class CreatorComponent extends Manager
             // If the request was successfully created, send an e-mail to the people who can actually grant or deny it.
             if ($success)
             {
-                $authorized_users = \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->get_authorized_users(
+                $authorized_users = Rights::getInstance()->get_authorized_users(
                     $this->get_user());
                 
                 set_time_limit(3600);
@@ -68,7 +70,7 @@ class CreatorComponent extends Manager
                     {
                         $mailer->sendMail($mail);
                     }
-                    catch (\Exception $ex)
+                    catch (Exception $ex)
                     {
                     }
                 }

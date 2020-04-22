@@ -29,11 +29,12 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * SentryExceptionLogger constructor.
      *
      * @param string $sentryConnectionString
+     *
      * @throws \Exception
      */
     public function __construct($sentryConnectionString = '')
     {
-        if (! class_exists('\Raven_Client'))
+        if (!class_exists('\Raven_Client'))
         {
             throw new Exception('Can not use the SentryExceptionLogger when sentry is not included');
         }
@@ -46,26 +47,8 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $this->sentryConnectionString = $sentryConnectionString;
 
         $this->sentryClient = new Raven_Client(
-            $sentryConnectionString,
-            array('install_default_breadcrumb_handlers' => false));
-    }
-
-    /**
-     * Logs an exception
-     *
-     * @param \Exception $exception
-     * @param integer $exceptionLevel
-     * @param string $file
-     * @param integer $line
-     */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
-    {
-        if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
-        {
-            return;
-        }
-
-        $this->sentryClient->captureException($exception);
+            $sentryConnectionString, array('install_default_breadcrumb_handlers' => false)
+        );
     }
 
     /**
@@ -87,14 +70,32 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $html[] = '})';
 
         $html[] = 'Raven.setExtraContext({';
-        $html[] = 'profile: \'' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
-            $_SERVER['SCRIPT_NAME'] .
+        $html[] =
+            'profile: \'' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
             '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . Session::getUserId() . '\'';
         $html[] = '})';
 
-        $html[]= '</script>';
+        $html[] = '</script>';
 
         $header->addJavascriptFile('https://cdn.ravenjs.com/3.26.1/raven.min.js');
         $header->addHtmlHeader(implode(PHP_EOL, $html));
+    }
+
+    /**
+     * Logs an exception
+     *
+     * @param \Exception $exception
+     * @param integer $exceptionLevel
+     * @param string $file
+     * @param integer $line
+     */
+    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
+    {
+        if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
+        {
+            return;
+        }
+
+        $this->sentryClient->captureException($exception);
     }
 }

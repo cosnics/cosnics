@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Request\Component;
 
 use Chamilo\Application\Weblcms\Request\Form\RequestForm;
 use Chamilo\Application\Weblcms\Request\Manager;
+use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
@@ -11,13 +12,14 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 class DenierComponent extends Manager
 {
 
     function run()
     {
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
+        if (! Rights::getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -48,7 +50,7 @@ class DenierComponent extends Manager
     {
         $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
         
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
+        if (! Rights::getInstance()->is_target_user(
             $this->get_user(), 
             $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
         {
@@ -105,7 +107,7 @@ class DenierComponent extends Manager
         {
             $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
             
-            if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
+            if (! Rights::getInstance()->is_target_user(
                 $this->get_user(), 
                 $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
             {
@@ -183,7 +185,7 @@ class DenierComponent extends Manager
         {
             $mailer->sendMail($mail);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
         }
     }

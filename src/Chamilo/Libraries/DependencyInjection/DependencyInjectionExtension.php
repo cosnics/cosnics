@@ -31,19 +31,32 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 {
 
     /**
+     * Returns the recommended alias to use in XML.
+     * This alias is also the mandatory prefix to use when using YAML.
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'chamilo.libraries';
+    }
+
+    /**
      * Loads a specific configuration.
      *
      * @param string[] $configuration
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
+     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     * @throws \Exception
      */
     public function load(array $configuration, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
 
         $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
+            $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection')
+        );
 
         $xmlFileLoader->load('architecture.xml');
         $xmlFileLoader->load('authentication.xml');
@@ -69,20 +82,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     }
 
     /**
-     * Registers the compiler passes in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function registerCompilerPasses(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new ConsoleCompilerPass());
-        $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
-        $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
-        $container->addCompilerPass(new FormTypeCompilerPass());
-        $container->addCompilerPass(new AuthenticationCompilerPass());
-    }
-
-    /**
      * Processes the configuration for chamilo.libraries
      *
      * @param string[] $configuration
@@ -105,41 +104,44 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             if (array_key_exists('resolve_target_entities', $ormConfig))
             {
                 $resolveTargetEntityListenerDef = $container->getDefinition(
-                    'Doctrine\ORM\Tools\ResolveTargetEntityListener');
+                    'Doctrine\ORM\Tools\ResolveTargetEntityListener'
+                );
 
                 foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
                 {
                     $resolveTargetEntityListenerDef->addMethodCall(
-                        'addResolveTargetEntity',
-                        array($name, $implementation, array()));
+                        'addResolveTargetEntity', array($name, $implementation, array())
+                    );
                 }
 
                 $resolveTargetEntityListenerDef->addTag(
-                    'doctrine.orm.event_listener',
-                    array('event' => 'loadClassMetadata'));
+                    'doctrine.orm.event_listener', array('event' => 'loadClassMetadata')
+                );
             }
         }
 
         $this->processPHPStanConfig($config, $container);
     }
 
-
     protected function processPHPStanConfig(array $configuration, ContainerBuilder $container)
     {
-        if(!array_key_exists('phpstan', $configuration))
+        if (!array_key_exists('phpstan', $configuration))
         {
             return;
         }
     }
 
     /**
-     * Returns the recommended alias to use in XML.
-     * This alias is also the mandatory prefix to use when using YAML.
+     * Registers the compiler passes in the container
      *
-     * @return string
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function getAlias()
+    public function registerCompilerPasses(ContainerBuilder $container)
     {
-        return 'chamilo.libraries';
+        $container->addCompilerPass(new ConsoleCompilerPass());
+        $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
+        $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
+        $container->addCompilerPass(new FormTypeCompilerPass());
+        $container->addCompilerPass(new AuthenticationCompilerPass());
     }
 }

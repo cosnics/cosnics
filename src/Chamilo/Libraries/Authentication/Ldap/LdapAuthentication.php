@@ -2,7 +2,6 @@
 
 namespace Chamilo\Libraries\Authentication\Ldap;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\Authentication;
@@ -10,7 +9,6 @@ use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
 use Exception;
-use Symfony\Component\Translation\Translator;
 
 /**
  * This authentication class uses LDAP to authenticate users.
@@ -30,6 +28,68 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
     private $ldapSettings;
 
     /**
+     * Returns the short name of the authentication to check in the settings
+     *
+     * @return string
+     */
+    public function getAuthenticationType()
+    {
+        return 'Ldap';
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    protected function getConfiguration()
+    {
+        if (!isset($this->ldapSettings))
+        {
+            $ldap = array();
+            $ldap['host'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_host'));
+            $ldap['port'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_port'));
+            $ldap['rdn'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_remote_dn'));
+            $ldap['password'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_password'));
+            $ldap['search_dn'] = $this->configurationConsulter->getSetting(
+                array('Chamilo\Core\Admin', 'ldap_search_dn')
+            );
+
+            $this->ldapSettings = $ldap;
+        }
+
+        return $this->ldapSettings;
+    }
+
+    /**
+     * Returns the priority of the authentication, lower priorities come first
+     *
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 100;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isConfigured()
+    {
+        $settings = $this->getConfiguration();
+
+        foreach ($settings as $setting => $value)
+        {
+            if (empty($value) || !isset($value))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return \Chamilo\Core\User\Storage\DataClass\User
      *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
@@ -38,7 +98,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
     public function login()
     {
         $user = $this->getUserFromCredentialsRequest();
-        if(!$user)
+        if (!$user)
         {
             return null;
         }
@@ -127,111 +187,5 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
-    }
-
-//    /**
-//     * Unused for now class should implement UserRegistrationSupport to support this
-//     *
-//     * @see \Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport::registerUser()
-//     * @return \Chamilo\Core\User\Storage\DataClass\User
-//     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-//     * @throws \Exception
-//     */
-//    public function registerUser()
-//    {
-//        if (!$this->isConfigured())
-//        {
-//            throw new \Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
-//        }
-//
-//
-//        $user = $this->getUserFromRequest();
-//        if(!$user)
-//        {
-//            return null;
-//        }
-//
-//        $settings = $this->getConfiguration();
-//
-//        $ldapConnect = ldap_connect($settings['host'], $settings['port']);
-//
-//        if ($ldapConnect)
-//        {
-//            ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
-//            $ldapBind = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
-//            $filter = '(uid=' . $user->get_username() . ')';
-//            $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
-//            $info = ldap_get_entries($ldapConnect, $search_result);
-//
-//            $parser = new LdapParser();
-//
-//            return $parser->parse($info, $user->get_username());
-//        }
-//
-//        ldap_close($ldapConnect);
-//
-//        return null;
-//    }
-
-    /**
-     *
-     * @return boolean
-     */
-    protected function isConfigured()
-    {
-        $settings = $this->getConfiguration();
-
-        foreach ($settings as $setting => $value)
-        {
-            if (empty($value) || !isset($value))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    protected function getConfiguration()
-    {
-        if (!isset($this->ldapSettings))
-        {
-            $ldap = array();
-            $ldap['host'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_host'));
-            $ldap['port'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_port'));
-            $ldap['rdn'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_remote_dn'));
-            $ldap['password'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_password'));
-            $ldap['search_dn'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'ldap_search_dn')
-            );
-
-            $this->ldapSettings = $ldap;
-        }
-
-        return $this->ldapSettings;
-    }
-
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
-    }
-
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
-    {
-        return 'Ldap';
     }
 }

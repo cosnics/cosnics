@@ -33,18 +33,6 @@ class ApplicationFactory
 
     /**
      *
-     * @var string
-     */
-    private $applicationAction;
-
-    /**
-     *
-     * @var string
-     */
-    private $applicationComponentClassName;
-
-    /**
-     *
      * @param string $context
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
@@ -55,53 +43,9 @@ class ApplicationFactory
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
-     */
-    public function getApplicationConfiguration()
-    {
-        return $this->applicationConfiguration;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest()
-    {
-        return $this->getApplicationConfiguration()->getRequest();
-    }
-
-    /**
-     *
      * @return string
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->getApplicationConfiguration()->getApplication();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser()
-    {
-        return $this->getApplicationConfiguration()->getUser();
-    }
-
-    /**
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
@@ -111,54 +55,39 @@ class ApplicationFactory
     /**
      *
      * @param string $action
-     * @param boolean $generateBreadcrumbs
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getComponent($action = null, $generateBreadcrumbs = true)
-    {
-        $component = $this->createComponent($action);
-
-        if ($generateBreadcrumbs)
-        {
-            $component->get_breadcrumb_generator()->generate_breadcrumbs();
-        }
-
-        return $component;
-    }
-
-    /**
-     *
-     * @throws \Exception
-     * @return string
-     */
-    private function getManagerClass()
-    {
-        $managerClass = $this->getContext() . '\Manager';
-
-        if (! class_exists($managerClass))
-        {
-            throw new UserException(
-                Translation::get('InvalidApplication', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
-        }
-
-        return $managerClass;
-    }
-
-    /**
      *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
-    private function getActionParameter()
+    private function buildClassName($action)
     {
-        $managerClass = $this->getManagerClass();
+        $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 
-        return $managerClass::PARAM_ACTION;
+        if (!class_exists($classname))
+        {
+            // TODO: Temporary fallback for backwards compatibility
+            $classname = $this->getContext() . '\Component\\' .
+                (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
+
+            if (!class_exists($classname))
+            {
+                $trail = BreadcrumbTrail::getInstance();
+                $trail->add(new Breadcrumb('#', Translation::get($classname)));
+
+                throw new ClassNotExistException($classname);
+            }
+        }
+
+        return $classname;
     }
 
     /**
      *
      * @param string $action
+     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     private function createComponent($action = null)
     {
@@ -173,7 +102,7 @@ class ApplicationFactory
 
         $component->set_parameter($this->getActionParameter(), $action);
 
-        if (! $this->getApplication() instanceof Application)
+        if (!$this->getApplication() instanceof Application)
         {
             $component->set_parameter(Application::PARAM_CONTEXT, $this->getContext());
         }
@@ -190,7 +119,27 @@ class ApplicationFactory
 
     /**
      *
+     * @return integer
+     */
+    private function determineLevel()
+    {
+        if ($this->getApplication() instanceof Application)
+        {
+            $level = $this->getApplication()->get_level();
+            $level ++;
+        }
+        else
+        {
+
+            $level = 0;
+        }
+
+        return $level;
+    }
+
+    /**
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     private function getAction()
     {
@@ -221,38 +170,124 @@ class ApplicationFactory
 
     /**
      *
-     * @return integer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    private function determineLevel()
+    private function getActionParameter()
     {
-        if ($this->getApplication() instanceof Application)
-        {
-            $level = $this->getApplication()->get_level();
-            $level ++;
-        }
-        else
-        {
+        $managerClass = $this->getManagerClass();
 
-            $level = 0;
+        return $managerClass::PARAM_ACTION;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
+    {
+        return $this->getApplicationConfiguration()->getApplication();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
+     */
+    public function getApplicationConfiguration()
+    {
+        return $this->applicationConfiguration;
+    }
+
+    /**
+     *
+     * @param string $action
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function getClassName($action = null)
+    {
+        if (is_null($action))
+        {
+            $action = $this->getAction();
         }
 
-        return $level;
+        return $this->buildClassName($action);
+    }
+
+    /**
+     *
+     * @param string $action
+     * @param boolean $generateBreadcrumbs
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function getComponent($action = null, $generateBreadcrumbs = true)
+    {
+        $component = $this->createComponent($action);
+
+        if ($generateBreadcrumbs)
+        {
+            $component->get_breadcrumb_generator()->generate_breadcrumbs();
+        }
+
+        return $component;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    private function getManagerClass()
+    {
+        $managerClass = $this->getContext() . '\Manager';
+
+        if (!class_exists($managerClass))
+        {
+            throw new UserException(
+                Translation::get('InvalidApplication', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries')
+            );
+        }
+
+        return $managerClass;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\ChamiloRequest
+     */
+    public function getRequest()
+    {
+        return $this->getApplicationConfiguration()->getRequest();
     }
 
     /**
      *
      * @param string $actionParameter
+     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     private function getRequestedAction($actionParameter)
     {
         $getAction = $this->getRequest()->query->get($actionParameter);
 
-        if (! $getAction)
+        if (!$getAction)
         {
             $postAction = $this->getRequest()->request->get($actionParameter);
 
-            if (! $postAction)
+            if (!$postAction)
             {
                 // TODO: Catch the fact that there might not be a default action
                 $managerClass = $this->getManagerClass();
@@ -272,44 +307,10 @@ class ApplicationFactory
 
     /**
      *
-     * @param string $action
-     * @return string
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function getClassName($action = null)
+    public function getUser()
     {
-        if (is_null($action))
-        {
-            $action = $this->getAction();
-        }
-
-        return $this->buildClassName($action);
-    }
-
-    /**
-     *
-     * @param string $action
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
-     * @return string
-     */
-    private function buildClassName($action)
-    {
-        $classname = $this->getContext() . '\Component\\' . $action . 'Component';
-
-        if (! class_exists($classname))
-        {
-            // TODO: Temporary fallback for backwards compatibility
-            $classname = $this->getContext() . '\Component\\' .
-                 (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
-
-            if (! class_exists($classname))
-            {
-                $trail = BreadcrumbTrail::getInstance();
-                $trail->add(new Breadcrumb('#', Translation::get($classname)));
-
-                throw new ClassNotExistException($classname);
-            }
-        }
-
-        return $classname;
+        return $this->getApplicationConfiguration()->getUser();
     }
 }

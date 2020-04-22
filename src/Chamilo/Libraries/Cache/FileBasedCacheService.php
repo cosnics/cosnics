@@ -23,6 +23,23 @@ abstract class FileBasedCacheService implements CacheResetterInterface
     }
 
     /**
+     * Clears the cache and warms it up again
+     *
+     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
+     */
+    public function clearAndWarmUp()
+    {
+        return $this->clear()->warmUp();
+    }
+
+    /**
+     * Returns the path to the cache directory or file
+     *
+     * @return string
+     */
+    abstract function getCachePath();
+
+    /**
      * Removes the cachePath
      *
      * @param string $cachePath
@@ -33,23 +50,13 @@ abstract class FileBasedCacheService implements CacheResetterInterface
     {
         if (file_exists($cachePath))
         {
-            if (! Filesystem::remove($cachePath))
+            if (!Filesystem::remove($cachePath))
             {
                 throw new RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
             }
         }
 
         return $this;
-    }
-
-    /**
-     * Clears the cache and warms it up again
-     *
-     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
-     */
-    public function clearAndWarmUp()
-    {
-        return $this->clear()->warmUp();
     }
 
     /**
@@ -61,11 +68,4 @@ abstract class FileBasedCacheService implements CacheResetterInterface
     {
         return $this;
     }
-
-    /**
-     * Returns the path to the cache directory or file
-     *
-     * @return string
-     */
-    abstract function getCachePath();
 }

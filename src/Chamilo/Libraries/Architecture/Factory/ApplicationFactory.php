@@ -6,8 +6,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -32,22 +32,22 @@ class ApplicationFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Translation
+     * @var \Symfony\Component\Translation\Translator
      */
-    private $translation;
+    private $translator;
 
     /**
      * ApplicationFactory constructor.
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Libraries\Translation\Translation $translation
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(ChamiloRequest $request, StringUtilities $stringUtilities, Translation $translation)
+    public function __construct(ChamiloRequest $request, StringUtilities $stringUtilities, Translator $translator)
     {
         $this->request = $request;
         $this->stringUtilities = $stringUtilities;
-        $this->translation = $translation;
+        $this->translator = $translator;
     }
 
     /**
@@ -257,7 +257,7 @@ class ApplicationFactory
         if (!class_exists($managerClass))
         {
             throw new UserException(
-                $this->getTranslation()->getTranslation(
+                $this->getTranslator()->trans(
                     'InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries'
                 )
             );
@@ -349,18 +349,18 @@ class ApplicationFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Translation\Translation
+     * @return \Symfony\Component\Translation\Translator
      */
-    public function getTranslation()
+    public function getTranslator()
     {
-        return $this->translation;
+        return $this->translator;
     }
 
     /**
-     * @param \Chamilo\Libraries\Translation\Translation $translation
+     * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function setTranslation(Translation $translation)
+    public function setTranslation(Translator $translator)
     {
-        $this->translation = $translation;
+        $this->translator = $translator;
     }
 }

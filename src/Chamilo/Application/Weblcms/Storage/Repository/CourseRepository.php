@@ -47,7 +47,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCourse($courseId)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(Course::class_name(), $courseId);
+        return DataManager::retrieve_by_id(Course::class_name(), $courseId);
     }
 
     /**
@@ -59,7 +59,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCourseByVisualCode($visualCode)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_course_by_visual_code($visualCode);
+        return DataManager::retrieve_course_by_visual_code($visualCode);
     }
 
     /**
@@ -76,7 +76,7 @@ class CourseRepository implements CourseRepositoryInterface
             $courseIds
         );
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        $courses = DataManager::retrieves(
             Course::class_name(),
             new DataClassRetrievesParameters($condition)
         );
@@ -101,7 +101,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        $courses = DataManager::retrieves(
             Course::class_name(),
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
@@ -141,7 +141,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        $courses = DataManager::retrieves(
             Course::class_name(),
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
@@ -181,7 +181,7 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        $courses = DataManager::retrieves(
             Course::class_name(),
             new DataClassRetrievesParameters($condition, null, null, array(), $joins)
         );
@@ -231,7 +231,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesByParameters(DataClassRetrievesParameters $retrievesParameters)
     {
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        $courses = DataManager::retrieves(
             Course::class_name(),
             $retrievesParameters
         );
@@ -250,7 +250,7 @@ class CourseRepository implements CourseRepositoryInterface
     {
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user(
+        return DataManager::retrieve_all_courses_from_user(
             $user, null, null, null, $orderBy
         )->as_array();
     }
@@ -264,7 +264,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesWhereUserIsTeacher(User $user)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_from_user_where_user_is_teacher(
+        return DataManager::retrieve_courses_from_user_where_user_is_teacher(
             $user
         )->as_array();
     }
@@ -278,7 +278,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesWhereUserIsStudent(User $user)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_from_user_where_user_is_student(
+        return DataManager::retrieve_courses_from_user_where_user_is_student(
             $user
         )->as_array();
     }
@@ -314,7 +314,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
+        return DataManager::retrieve(
             CourseEntityRelation::class_name(),
             new DataClassRetrieveParameters($condition)
         );
@@ -351,7 +351,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             CourseEntityRelation::class_name(),
             new DataClassRetrievesParameters($condition)
         )->as_array();
@@ -371,7 +371,7 @@ class CourseRepository implements CourseRepositoryInterface
             new StaticConditionVariable($toolName)
         );
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
+        return DataManager::retrieve(
             CourseTool::class_name(),
             new DataClassRetrieveParameters($condition)
         );
@@ -384,7 +384,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findToolRegistrations()
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(CourseTool::class_name())->as_array();
+        return DataManager::retrieves(CourseTool::class_name())->as_array();
     }
 
     /**
@@ -454,7 +454,7 @@ class CourseRepository implements CourseRepositoryInterface
         $recordRetrievesParameters =
             new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
 
-        $courseRecords = \Chamilo\Application\Weblcms\Course\Storage\DataManager::records(
+        $courseRecords = DataManager::records(
             Course::class_name(),
             $recordRetrievesParameters
         );
@@ -490,7 +490,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_users_directly_subscribed_to_course_by_status(
+        return DataManager::retrieve_users_directly_subscribed_to_course_by_status(
             $courseId,
             $status
         );
@@ -506,7 +506,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_groups_directly_subscribed_to_course_as_status(
+        return DataManager::retrieve_groups_directly_subscribed_to_course_as_status(
             $courseId,
             $status
         );
@@ -531,6 +531,6 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findAllUsersFromCourse(Course $course)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users($course->getId());
+        return DataManager::retrieve_all_course_users($course->getId());
     }
 }

@@ -26,6 +26,10 @@ class TimeZoneCalendarWrapper extends \kigkonsult\iCalcreator\vcalendar
         $this->vCalendar = $vCalendar;
     }
 
+    public function getProperty($property)
+    {
+    }
+
     /**
      *
      * @return \Sabre\VObject\Component\VCalendar
@@ -44,24 +48,22 @@ class TimeZoneCalendarWrapper extends \kigkonsult\iCalcreator\vcalendar
         $this->vCalendar = $vCalendar;
     }
 
-    public function getProperty($property)
-    {
-    }
-
-    public function newVtimezone()
-    {
-        return $this->newComponent('vtimezone');
-    }
-
     /**
      *
      * @param string $componentName
+     *
      * @return \Chamilo\Libraries\Calendar\TimeZone\TimeZoneComponentWrapper
      */
     public function newComponent($componentName)
     {
         $component = $this->getVCalendar()->createComponent($componentName);
         $this->getVCalendar()->add($component);
+
         return new TimeZoneComponentWrapper($this->getVCalendar(), $component);
+    }
+
+    public function newVtimezone()
+    {
+        return $this->newComponent('vtimezone');
     }
 }

@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\OpenCourse\Form\OpenCourseForm;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  * Component to update the roles that can access a course
@@ -42,7 +43,7 @@ class UpdateComponent extends Manager
                 $success = true;
                 $messageVariable = 'OpenCoursesUpdated';
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
                 $messageVariable = 'OpenCoursesUpdated';

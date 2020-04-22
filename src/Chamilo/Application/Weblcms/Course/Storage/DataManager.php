@@ -40,6 +40,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+use Exception;
 
 /**
  * This class represents the data manager for this package
@@ -252,7 +253,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         if (! $properties instanceof DataClassProperties || ! count($properties->get()) > 0)
         {
-            throw new \Exception('No valid properties selected to update the courses from a course type');
+            throw new Exception('No valid properties selected to update the courses from a course type');
         }
 
         $condition = new EqualityCondition(
@@ -389,7 +390,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 ContentObjectPublication::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_content_object_publications(
+        return DataManager::retrieve_content_object_publications(
             $condition,
             $order_by);
     }
@@ -515,30 +516,30 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $userConditions = array();
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_ENTITY_ID),
+                CourseEntityRelation::class_name(),
+                CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($user->getId()));
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+                CourseEntityRelation::class_name(),
+                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::ENTITY_TYPE_USER));
+                CourseEntityRelation::ENTITY_TYPE_USER));
 
         $entityConditions[] = new AndCondition($userConditions);
 
         $groupConditions = array();
         $groupConditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_ENTITY_ID),
+                CourseEntityRelation::class_name(),
+                CourseEntityRelation::PROPERTY_ENTITY_ID),
             $user->get_groups(true));
         $groupConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+                CourseEntityRelation::class_name(),
+                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::ENTITY_TYPE_GROUP));
+                CourseEntityRelation::ENTITY_TYPE_GROUP));
 
         $entityConditions[] = new AndCondition($groupConditions);
 
@@ -548,8 +549,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
-                    \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_STATUS),
+                    CourseEntityRelation::class_name(),
+                    CourseEntityRelation::PROPERTY_STATUS),
                 new StaticConditionVariable($userStatus));
         }
 
@@ -559,10 +560,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 array(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class,
-                        \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::PROPERTY_COURSE_ID))));
+                        CourseEntityRelation::PROPERTY_COURSE_ID))));
 
         return self::distinct(
-            \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation::class_name(),
+            CourseEntityRelation::class_name(),
             $parameters);
     }
 
@@ -752,7 +753,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             $order_property);
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            User::class_name(),
             $parameters);
     }
 
@@ -770,7 +771,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             self::get_users_not_subscribed_to_course_condition($course_id, $condition));
 
         return \Chamilo\Core\User\Storage\DataManager::count(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            User::class_name(),
             $parameters);
     }
 
@@ -1000,8 +1001,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $conditions[] = new NotCondition(
             new InCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                    \Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID),
+                    User::class_name(),
+                    User::PROPERTY_ID),
                 $user_ids));
 
         if ($condition)
@@ -1415,7 +1416,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             $course_id = $course->get_id();
         }
 
-        if (! $user instanceof \Chamilo\Core\User\Storage\DataClass\User)
+        if (! $user instanceof User)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user);
         }
@@ -1505,7 +1506,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 {
                     $course_setting_relation->add_course_setting_value($value);
                 }
-                catch (\Exception $e)
+                catch (Exception $e)
                 {
                     $succes = false;
                 }

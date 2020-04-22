@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Configuration\Configuration;
@@ -30,7 +32,7 @@ class CreateComponent extends CourseFormActionComponent
         $countDirect = $countRequest = 0;
 
         $courseManagementRights = CourseManagementRights::getInstance();
-        $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
+        $courseTypes = DataManager::retrieve_active_course_types();
 
         while ($courseType = $courseTypes->next_result())
         {
@@ -51,7 +53,7 @@ class CreateComponent extends CourseFormActionComponent
             $countDirect ++;
         }
 
-        if (!$this->isAuthorized(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses') &&
+        if (!$this->isAuthorized(Manager::context(), 'ManageCourses') &&
             $countDirect == 0
         )
         {

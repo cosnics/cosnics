@@ -33,49 +33,6 @@ class UrlGenerator
     }
 
     /**
-     *
-     * @param \Symfony\Component\HttpFoundation\ParameterBag $urlParameterBag
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setUrlParameterBag($urlParameterBag)
-    {
-        if (! $urlParameterBag instanceof ParameterBag)
-        {
-            throw new InvalidArgumentException(
-                'The given url parameter bag is not an instance of "\Symfony\Component\HttpFoundation\ParameterBag", ' .
-                     'instead "' . get_class($urlParameterBag) . '" was given.');
-        }
-
-        $this->urlParameterBag = $urlParameterBag;
-    }
-
-    /**
-     * Generates a url based on the current url from the request, with the given parameters and filters
-     *
-     * @param string[] $parameters - This array must be used to define new or update existing parameters
-     * @param string[] $filters - This array must be used to filter out parameters from the current url
-     * @return string
-     */
-    public function generateURL($parameters = array(), $filters = array())
-    {
-        $baseParameters = $this->urlParameterBag->all();
-        $this->urlParameterBag->add($parameters);
-
-        foreach ($filters as $filter)
-        {
-            $this->urlParameterBag->remove($filter);
-        }
-
-        $parameters = $this->urlParameterBag->all();
-        $parameters_url_string = count($parameters) ? '?' . urldecode(http_build_query($parameters)) : '';
-
-        $this->urlParameterBag->replace($baseParameters);
-
-        return 'index.php' . $parameters_url_string;
-    }
-
-    /**
      * Shortcut for the url generator to generate a url for a given context and component
      *
      * @param string $context
@@ -98,5 +55,50 @@ class UrlGenerator
         }
 
         return $this->generateURL($parameters, $filters);
+    }
+
+    /**
+     * Generates a url based on the current url from the request, with the given parameters and filters
+     *
+     * @param string[] $parameters - This array must be used to define new or update existing parameters
+     * @param string[] $filters - This array must be used to filter out parameters from the current url
+     *
+     * @return string
+     */
+    public function generateURL($parameters = array(), $filters = array())
+    {
+        $baseParameters = $this->urlParameterBag->all();
+        $this->urlParameterBag->add($parameters);
+
+        foreach ($filters as $filter)
+        {
+            $this->urlParameterBag->remove($filter);
+        }
+
+        $parameters = $this->urlParameterBag->all();
+        $parameters_url_string = count($parameters) ? '?' . urldecode(http_build_query($parameters)) : '';
+
+        $this->urlParameterBag->replace($baseParameters);
+
+        return 'index.php' . $parameters_url_string;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\ParameterBag $urlParameterBag
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setUrlParameterBag($urlParameterBag)
+    {
+        if (!$urlParameterBag instanceof ParameterBag)
+        {
+            throw new InvalidArgumentException(
+                'The given url parameter bag is not an instance of "\Symfony\Component\HttpFoundation\ParameterBag", ' .
+                'instead "' . get_class($urlParameterBag) . '" was given.'
+            );
+        }
+
+        $this->urlParameterBag = $urlParameterBag;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -47,7 +48,7 @@ class ImportFormatFactory
             }
         }
 
-        throw new \Exception(
+        throw new Exception(
             sprintf('Importing with the given format %s is not supported', $file->getClientMimeType())
         );
     }

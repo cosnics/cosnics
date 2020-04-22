@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Cache\Doctrine;
 
-use Chamilo\Libraries\Cache\IdentifiableCacheService;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Cache\IdentifiableCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
@@ -29,9 +29,22 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clear()
      */
-    abstract function getCachePathNamespace();
+    public function clear()
+    {
+        return $this->getCacheProvider()->flushAll();
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     *
+     * @return bool
+     */
+    public function clearForIdentifier($identifier)
+    {
+        return $this->getCacheProvider()->delete((string) $identifier);
+    }
 
     /**
      *
@@ -41,12 +54,21 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
     {
         $configurationConsulter = new ConfigurationConsulter(
             new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
+            )
+        );
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
+        );
 
         return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
     }
+
+    /**
+     *
+     * @return string
+     */
+    abstract function getCachePathNamespace();
 
     /**
      *
@@ -54,7 +76,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
      */
     public function getCacheProvider()
     {
-        if (! isset($this->cacheProvider))
+        if (!isset($this->cacheProvider))
         {
             $this->cacheProvider = $this->setupCacheProvider();
         }
@@ -72,38 +94,16 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
     }
 
     /**
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      *
-     * @return \Doctrine\Common\Cache\CacheProvider
-     */
-    abstract function setupCacheProvider();
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clear()
-     */
-    public function clear()
-    {
-        return $this->getCacheProvider()->flushAll();
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifier()
-     */
-    public function clearForIdentifier($identifier)
-    {
-        return $this->getCacheProvider()->delete((string) $identifier);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getForIdentifier()
+     * @return false|mixed
+     * @throws \Exception
      */
     public function getForIdentifier($identifier)
     {
-        if (! $this->getCacheProvider()->contains((string) $identifier))
+        if (!$this->getCacheProvider()->contains((string) $identifier))
         {
-            if (! $this->warmUpForIdentifier($identifier))
+            if (!$this->warmUpForIdentifier($identifier))
             {
                 throw new Exception('CacheError');
             }
@@ -111,4 +111,10 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
 
         return $this->getCacheProvider()->fetch((string) $identifier);
     }
+
+    /**
+     *
+     * @return \Doctrine\Common\Cache\CacheProvider
+     */
+    abstract function setupCacheProvider();
 }

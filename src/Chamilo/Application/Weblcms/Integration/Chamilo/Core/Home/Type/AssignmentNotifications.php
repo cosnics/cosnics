@@ -5,8 +5,11 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -65,9 +68,9 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
 
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Notification\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\Notification\Manager::ACTION_VIEW_NOTIFICATION,
-                \Chamilo\Core\Notification\Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_VIEW_NOTIFICATION,
+                Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
             ]
         );
 
@@ -146,8 +149,8 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         if ($user_course_category_id > 0)
         {
 
-            $course_user_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory::class_name(),
+            $course_user_category = DataManager::retrieve_by_id(
+                CourseUserCategory::class_name(),
                 $user_course_category_id);
 
             if ($course_user_category)

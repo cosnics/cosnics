@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * Describes a course type (templating and rights system for courses)
@@ -272,7 +273,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         if (! $course_type_rel_setting->create())
         {
-            throw new \Exception(Translation::get('CouldNotCreateCourseRelCourseTypeSetting'));
+            throw new Exception(Translation::get('CouldNotCreateCourseRelCourseTypeSetting'));
         }
         
         return $course_type_rel_setting;
@@ -297,7 +298,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
             $course_setting_relation->set_locked($locked);
             if (! $course_setting_relation->update())
             {
-                throw new \Exception(Translation::get('CouldNotUpdateCourseRelCourseTypeSetting'));
+                throw new Exception(Translation::get('CouldNotUpdateCourseRelCourseTypeSetting'));
             }
         }
         

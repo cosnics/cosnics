@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerS
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * This class defines a course section in which tools can be arranged
@@ -84,7 +85,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         
         if (! $type)
         {
-            throw new \Exception(Translation::get('CouldNotFindSectionTypeName', array('TYPE_NAME' => $type_name)));
+            throw new Exception(Translation::get('CouldNotFindSectionTypeName', array('TYPE_NAME' => $type_name)));
         }
         
         return $type;
@@ -101,7 +102,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     {
         if (! array_key_exists($type, self::$type_name_mapping))
         {
-            throw new \Exception(Translation::get('CouldNotFindSectionType', array('TYPE' => $type)));
+            throw new Exception(Translation::get('CouldNotFindSectionType', array('TYPE' => $type)));
         }
         
         return self::$type_name_mapping[$type];

@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
+class DeleteTemporaryFileComponent extends Manager
 {
     // Input parameters
     const PARAM_FILE = 'file';
@@ -26,21 +25,19 @@ class DeleteTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
     public function run()
     {
         $temporaryFileName = $this->getPostDataValue(self::PARAM_FILE);
-
-        $temporaryPath = Path::getInstance()->getTemporaryPath(__NAMESPACE__);
-        $owner = $this->getPostDataValue(Manager::PARAM_USER_USER_ID);
-
+        $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
         $temporaryFilePath = $temporaryPath . $temporaryFileName;
 
         $result = Filesystem::remove($temporaryFilePath);
+        $translator = $this->getTranslator();
 
         if (!$result)
         {
-            JsonAjaxResult::general_error(Translation::get('FileNotRemoved'));
+            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', array(), Utilities::COMMON_LIBRARIES));
         }
         else
         {
-            JsonAjaxResult::success(Translation::get('FileRemoved'));
+            JsonAjaxResult::success($translator->trans('FileRemoved', array(), Utilities::COMMON_LIBRARIES));
         }
     }
 

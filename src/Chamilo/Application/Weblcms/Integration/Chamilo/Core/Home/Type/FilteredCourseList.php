@@ -4,8 +4,13 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Application\Weblcms\Manager;
+use Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer;
+use Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -60,7 +65,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     {
         if (! isset($this->courseListRenderer))
         {
-            $this->courseListRenderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
+            $this->courseListRenderer = new FilteredCourseListRenderer(
                 $this, 
                 $this->getLinkTarget(), 
                 $this->getCourseTypeId(), 
@@ -97,8 +102,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
         {
             $courseTypeLink = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::package(), 
-                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
+                    Application::PARAM_CONTEXT => Manager::package(),
+                    CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
             
             $html[] = '<div class="panel-footer">';
             $html[] = Translation::get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
@@ -165,8 +170,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
         if ($user_course_category_id > 0)
         {
             
-            $course_user_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory::class_name(), 
+            $course_user_category = DataManager::retrieve_by_id(
+                CourseUserCategory::class_name(),
                 $user_course_category_id);
             
             if ($course_user_category)

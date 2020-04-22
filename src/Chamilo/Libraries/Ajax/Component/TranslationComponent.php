@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -20,10 +18,11 @@ class TranslationComponent extends Manager
      */
     public function run()
     {
-        $application = $_POST['application'];
-        $string = $_POST['string'];
+        $request = $this->getRequest();
+        $application = $request->request->get('application');
+        $string = $request->request->get('string');
 
-        $string = (string) StringUtilities::getInstance()->createString($string)->upperCamelize();
+        $string = (string) $this->getStringUtilities()->createString($string)->upperCamelize();
 
         if ($application && $application != 'undefined')
         {
@@ -34,6 +33,6 @@ class TranslationComponent extends Manager
             $namespace = Utilities::COMMON_LIBRARIES;
         }
 
-        echo Translation::get($string, null, $namespace);
+        echo $this->getTranslator()->trans($string, array(), $namespace);
     }
 }
