@@ -1,11 +1,11 @@
 <template>
     <div class="modal-bg" v-if="removeItem !== null" @click.stop="$emit('cancel')">
-        <div class="modal-level" @click.stop="">
-            <div class="title" v-if="removeItem.constructor.name === 'Category' && removeItem.color === ''">Criteria verwijderen?</div>
-            <div class="title" v-else>{{ removeItem.constructor.name }} '{{ removeItem.title }}' verwijderen?</div>
+        <div class="modal-content" @click.stop="">
+            <div class="modal-content-title" v-if="removeItem.constructor.name === 'Category' && removeItem.color === ''">Criteria verwijderen?</div>
+            <div class="modal-content-title" v-else>{{ removeItem.constructor.name }} '{{ removeItem.title }}' verwijderen?</div>
             <div>
-                <button ref="btn-remove" class="btn" @click.stop="$emit('remove')">Verwijder</button>
-                <button class="btn" @click.stop="$emit('cancel')">Annuleer</button>
+                <button class="btn-dialog-remove btn-ok" ref="btn-remove" @click.stop="$emit('remove')">Verwijder</button>
+                <button class="btn-dialog-remove btn-cancel" @click.stop="$emit('cancel')">Annuleer</button>
             </div>
         </div>
     </div>

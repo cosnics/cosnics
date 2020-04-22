@@ -1,14 +1,14 @@
 <template>
     <div v-if="inputFormShown">
-        <name-input ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+        <name-input ref="name-input" ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
     </div>
-    <div v-else :class="{criteriumDragging}">
-        <button :disabled="!actionsEnabled" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Voeg een criterium toe</button>
+    <div v-else class="actions" :class="{criteriumDragging}">
+        <button class="btn-criterium-add" :disabled="!actionsEnabled" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Nieuw criterium</button>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Category from '../../Domain/Category';
     import Criterium from '../../Domain/Criterium';
     import NameInput from './NameInput.vue';
@@ -40,6 +40,19 @@
         cancel() {
             this.newCriterium = null;
         }
-    }
 
+        @Watch('newCriterium')
+        newCriteriumChanged() {
+            this.$nextTick(()=> {
+                if (this.inputFormShown) {
+                    const nameInput = (this.$refs['name-input'] as Vue).$el as HTMLElement;
+                    if (HTMLElement.prototype.scrollIntoViewIfNeeded) {
+                        nameInput.scrollIntoViewIfNeeded();
+                    } else {
+                        nameInput.scrollIntoView();
+                    }
+                }
+            });
+        }
+    }
 </script>

@@ -1,33 +1,44 @@
 <template>
-    <div>
-        <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters` }">
-            <draggable :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
-                       :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
-                <cluster-view v-for="cluster in clusters"
-                       :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
-                       @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></cluster-view>
-            </draggable>
-            <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-selected="selectCluster"></new-cluster>
+    <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ open: showClusters, 'category-dragging': categoryDragging }">
+        <button class="btn-collapse" @click="showClusters = !showClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
+        <div class="clusters-collapse">
+            <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters` }">
+                <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
+                        :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
+                    <cluster-view v-for="cluster in clusters"
+                        :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
+                        @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></cluster-view>
+                </draggable>
+                <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-selected="selectCluster"></new-cluster>
+            </div>
         </div>
+        <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
         <div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
-            <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="div" group="categories" handle=".handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
+            <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="ul" class="categories" group="categories" handle=".category-handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
                        @start="startDrag($event, 'category')" @end="endDrag" @change="onChangeCategory">
-                <div v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}`, 'null-category': category.color === '' }">
+                <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
                     <category-view :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" :category="category" :menu-actions-id="menuActionsId" :edit-category-color-id="editCategoryColorId"
                                    @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></category-view>
-                    <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="div" group="criteria" handle=".criterium" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
-                               :move="onMoveCriterium" @start="startDrag($event,'criterium')"	@end="endDrag"	@change="onChangeCriterium($event, category)">
+                    <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
+                               :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="criteria">
                         <criterium-view v-for="criterium in category.criteria" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
                                         :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
                                         @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></criterium-view>
                     </draggable>
                     <new-criterium :category="category" :criterium-dragging="criteriumDragging"></new-criterium>
-                </div>
-                <div class="category null-category cluster" v-if="criteriumDragging">
-                    <div><h2 class="handle-area-category">Nieuwe lijst met criteria...</h2></div>
-                    <draggable tag="div" ghost-class="ghost" swapTreshold="0.75" :list="[]" group="criteria" @end="endDrag" @change="onChangeCriteriumInCluster"></draggable>
-                </div>
-                <div slot="footer" class="no-category"></div>
+                </li>
+                <li v-if="criteriumDragging" slot="footer" class="category null-category">
+                    <div class="category-header">
+                        <div class="item-header-bar">
+                            <div class="category-title">
+                                <h2 class="title">Nieuwe lijst met criteria...</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <draggable tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="[]" :forceFallback="true" :animation="250"
+                               @end="endDrag" @change="onChangeCriteriumInCluster" class="criteria"></draggable>
+                </li>
+                <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
             </draggable>
             <!-- todo: 'rubric' cluster, v-if="selectedCluster" can then be removed -->
             <new-category v-if="selectedCluster" :cluster="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)"></new-category>
@@ -64,8 +75,11 @@
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: String, required: true}) readonly editCategoryColorId!: string;
         @Prop({type: Boolean, required: true}) readonly draggableDisabled!: boolean;
+        @Prop({type: Boolean, required: true}) readonly isEditing!: boolean;
         @Prop({type: String, default: ''}) readonly dragItemType!: string;
         @Prop(Criterium) readonly selectedCriterium!: Criterium | null;
+
+        private showClusters: boolean = false;
 
         get store() {
             return this.$root.$data.store;
@@ -106,6 +120,22 @@
                 clusterContent.scrollTo(clusterContent.scrollWidth, 0);
             });
         }
+
+        /*@Watch('isEditing')
+        onEditStateChanged() {
+            if (this.isEditing) {
+                this.$nextTick(()=> {
+                    const nameInput = document.querySelector('.name-input') as HTMLElement;
+                    if (nameInput) {
+                        if (HTMLElement.prototype.scrollIntoViewIfNeeded) {
+                            nameInput.scrollIntoViewIfNeeded();
+                        } else {
+                            nameInput.scrollIntoView();
+                        }
+                    }
+                });
+            }
+        }*/
 
         // Menu Actions
 

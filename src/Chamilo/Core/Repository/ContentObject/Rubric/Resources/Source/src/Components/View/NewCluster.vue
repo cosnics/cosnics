@@ -1,9 +1,9 @@
 <template>
     <div class="actions">
         <div v-if="inputFormShown">
-            <name-input ok-title="Voeg Toe" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancel" placeholder="Titel voor nieuwe cluster" v-model="newCluster.title" />
+            <name-input ok-title="Voeg Toe" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancel" placeholder="Titel voor nieuwe onderverdeling" v-model="newCluster.title" />
         </div>
-        <button v-else :disabled="!actionsEnabled" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
+        <button v-else class="btn-cluster-add" :disabled="!actionsEnabled" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
     </div>
 </template>
 

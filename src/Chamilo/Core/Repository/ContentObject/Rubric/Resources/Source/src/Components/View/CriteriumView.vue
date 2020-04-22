@@ -1,18 +1,25 @@
 <template>
-    <div :id="id" @click="$emit('criterium-selected', criterium)" class="criterium" :class="{ selected }">
-        {{ criterium.title }}
-        <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
-        <div v-if="showMenuActions" class="action-menu">
-            <ul>
-                <li @click.stop="startEditing"><i class="fa fa-pencil" />Wijzig naam</li>
-                <li @click.stop="$emit('remove', criterium)"><i class="fa fa-remove" />Verwijder</li>
-            </ul>
+    <li :id="id" class="criterium-list-item handle criterium-handle">
+        <div class="criterium " :class="{ selected }">
+            <div class="item-header-bar">
+                <div @click="$emit('criterium-selected', criterium)" class="criterium-title">
+                    <h3 class="title">{{ criterium.title }}</h3>
+                </div>
+                <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+                <div class="action-menu" :class="{'show-menu': showMenuActions}">
+                    <ul class="action-menu-list">
+                        <li @click="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details"><i class="fa fa-search"></i><span>Details</span></li>
+                        <li @click.stop="startEditing" class="action-menu-list-item"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', criterium)" class="action-menu-list-item"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div v-if="isEditing" class="edit-title">
+                <div class="cover"></div>
+                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="criterium.title"/>
+            </div>
         </div>
-        <div v-if="isEditing" class="edit-title">
-            <div class="cover"></div>
-            <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="criterium.title"/>
-        </div>
-    </div>
+    </li>
 </template>
 
 <script lang="ts">

@@ -1,16 +1,23 @@
 <template>
-    <li :id="id" class="cluster" :class="{ selected }" @click="$emit('cluster-selected', cluster)">
-        <div class="title"><div><i :class="cluster.title === '' ? 'fa fa-institution' : 'fa fa-map-o'" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>
-        <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
-        <div v-if="showMenuActions" class="action-menu">
-            <ul>
-                <li @click.stop="startEditing"><i class="fa fa-pencil" />Wijzig naam</li>
-                <li @click.stop="$emit('remove', cluster)"><i class="fa fa-remove" />Verwijder</li>
-            </ul>
-        </div>
-        <div v-if="isEditing" class="edit-title">
-            <div class="cover" @click.stop=""></div>
-            <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor cluster" v-model="cluster.title" />
+    <li :id="id" class="cluster-list-item">
+        <div class="cluster handle cluster-handle" :class="{ selected, 'show-menu': showMenuActions }">
+            <div class="item-header-bar ">
+                <div class="cluster-title" @click.stop="$emit('cluster-selected', cluster)">
+                    <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
+                    {{cluster.title}}
+                </div>
+                <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.prevent.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+                <div class="action-menu" :class="{'show-menu': showMenuActions}">
+                    <ul class="action-menu-list">
+                        <li @click.stop="startEditing" class="action-menu-list-item"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', cluster)" class="action-menu-list-item"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div v-if="isEditing" class="edit-title">
+                <div class="cover" @click.stop=""></div>
+                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor onderverdeling" v-model="cluster.title" />
+            </div>
         </div>
     </li>
 </template>

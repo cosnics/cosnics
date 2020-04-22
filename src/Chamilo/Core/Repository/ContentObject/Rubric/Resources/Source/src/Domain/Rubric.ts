@@ -195,7 +195,7 @@ export default class Rubric extends TreeNode {
         if (choice.hasFixedScore)
             return choice.fixedScore;
 
-        return Math.round(criterium.weight * level.score) / 100;
+        return Math.round(criterium.weight * level.score / 10) / 10;
     }
 
     public getScore() {
