@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\Translation\Translator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -13,6 +13,19 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class Translation
 {
+
+    /**
+     * Instance of this class for the singleton pattern
+     *
+     * @var \Chamilo\Libraries\Translation\Translation
+     */
+    private static $instance;
+
+    /**
+     *
+     * @var string
+     */
+    private static $calledClass;
 
     /**
      *
@@ -27,19 +40,6 @@ class Translation
     private $translator;
 
     /**
-     * Instance of this class for the singleton pattern
-     *
-     * @var \Chamilo\Libraries\Platform\Translation
-     */
-    private static $instance;
-
-    /**
-     *
-     * @var string
-     */
-    private static $calledClass;
-
-    /**
      *
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\Translation\Translator $translator
@@ -50,90 +50,22 @@ class Translation
         $this->translator = $translator;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
+    protected function determineDefaultTranslationContext()
     {
-        return $this->classnameUtilities;
-    }
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $counter = 1;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities($classnameUtilities)
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
-    {
-        return $this->translator;
-    }
-
-    /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     *
-     * @return string
-     * @deprecated Use Translator->getLocale() now
-     */
-    public function getLanguageIsocode()
-    {
-        return $this->getTranslator()->getLocale();
-    }
-
-    /**
-     *
-     * @param string $languageIsoCode
-     */
-    public function setLanguageIsocode($languageIsoCode)
-    {
-        $this->getTranslator()->setLocale($languageIsoCode);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Translation\Translation
-     */
-    static public function getInstance()
-    {
-        if (is_null(static::$instance))
+        /**
+         * If called by deprecated method get, the actual class is deeper in the stack trace
+         */
+        do
         {
-            $classnameUtilities = ClassnameUtilities::getInstance();
-            $translator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                'Symfony\Component\Translation\Translator');
-
-            self::$instance = new self($classnameUtilities, $translator);
+            $class = $backtrace[$counter]['class'];
+            $counter ++;
         }
+        while ($class == __CLASS__);
 
-        return static::$instance;
-    }
-
-    /**
-     *
-     * @deprecated Use getTranslation() now
-     * @param string $variable
-     * @param string[] $parameters
-     * @return string
-     *
-     */
-    public static function get($variable, $parameters = array(), $context = null, $isocode = null)
-    {
-        return self::getInstance()->getTranslation($variable, (array) $parameters, $context, $isocode);
+        self::$calledClass = $class;
     }
 
     /**
@@ -142,36 +74,7 @@ class Translation
      * @param string[] $parameters
      * @param string $context
      * @param string $isocode
-     * @return string
-     */
-    public function getTranslation($variable, $parameters = array(), $context = null, $isocode = null)
-    {
-        $this->determineDefaultTranslationContext();
-
-        if (! $context)
-        {
-            if (count(explode('\\', self::$calledClass)) > 1)
-            {
-                $context = $this->getClassnameUtilities()->getNamespaceFromClassname(self::$calledClass);
-            }
-        }
-
-        $parsedParameters = array();
-
-        foreach ($parameters as $key => $value)
-        {
-            $parsedParameters['{' . $key . '}'] = $value;
-        }
-
-        return $this->doTranslation($variable, $parsedParameters, $context, $isocode);
-    }
-
-    /**
      *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     * @param string $isocode
      * @return string
      */
     protected function doTranslation($variable, $parameters = array(), $context = null, $isocode = null)
@@ -195,21 +98,127 @@ class Translation
         return $translation;
     }
 
-    protected function determineDefaultTranslationContext()
+    /**
+     *
+     * @param string $variable
+     * @param string[] $parameters
+     *
+     * @return string
+     *
+     * @deprecated Use getTranslation() now
+     */
+    public static function get($variable, $parameters = array(), $context = null, $isocode = null)
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $counter = 1;
+        return self::getInstance()->getTranslation($variable, (array) $parameters, $context, $isocode);
+    }
 
-        /**
-         * If called by deprecated method get, the actual class is deeper in the stack trace
-         */
-        do
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->classnameUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities($classnameUtilities)
+    {
+        $this->classnameUtilities = $classnameUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Translation\Translation
+     * @throws \Exception
+     */
+    static public function getInstance()
+    {
+        if (is_null(static::$instance))
         {
-            $class = $backtrace[$counter]['class'];
-            $counter ++;
-        }
-        while ($class == __CLASS__);
+            $classnameUtilities = ClassnameUtilities::getInstance();
+            /**
+             * @var \Symfony\Component\Translation\Translator $translator
+             */
+            $translator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                'Symfony\Component\Translation\Translator'
+            );
 
-        self::$calledClass = $class;
+            self::$instance = new self($classnameUtilities, $translator);
+        }
+
+        return static::$instance;
+    }
+
+    /**
+     *
+     * @return string
+     * @deprecated Use Translator->getLocale() now
+     */
+    public function getLanguageIsocode()
+    {
+        return $this->getTranslator()->getLocale();
+    }
+
+    /**
+     *
+     * @param string $variable
+     * @param string[] $parameters
+     * @param string $context
+     * @param string $isocode
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getTranslation($variable, $parameters = array(), $context = null, $isocode = null)
+    {
+        $this->determineDefaultTranslationContext();
+
+        if (!$context)
+        {
+            if (count(explode('\\', self::$calledClass)) > 1)
+            {
+                $context = $this->getClassnameUtilities()->getNamespaceFromClassname(self::$calledClass);
+            }
+        }
+
+        $parsedParameters = array();
+
+        foreach ($parameters as $key => $value)
+        {
+            $parsedParameters['{' . $key . '}'] = $value;
+        }
+
+        return $this->doTranslation($variable, $parsedParameters, $context, $isocode);
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @param string $languageIsoCode
+     */
+    public function setLanguageIsocode($languageIsoCode)
+    {
+        $this->getTranslator()->setLocale($languageIsoCode);
     }
 }

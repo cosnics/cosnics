@@ -112,8 +112,10 @@ class Mail
      * @param \Chamilo\Libraries\Mail\ValueObject\MailFile[] $embeddedImages
      * @param \Chamilo\Libraries\Mail\ValueObject\MailFile[] $attachments
      */
-    public function __construct($subject, $message, $to = array(), $sendIndividually = true, $cc = array(), $bcc = array(), $fromName = null,
-        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = array(), $attachments = array())
+    public function __construct(
+        $subject, $message, $to = array(), $sendIndividually = true, $cc = array(), $bcc = array(), $fromName = null,
+        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = array(), $attachments = array()
+    )
     {
         $this->subject = $subject;
         $this->message = $message;
@@ -129,79 +131,12 @@ class Mail
     }
 
     /**
-     * Validates and sets the recipients
      *
-     * @param boolean $sendIndividually
-     * @param string[] $to
-     * @param string[] $cc
-     * @param string[] $bcc
+     * @return \Chamilo\Libraries\Mail\ValueObject\MailFile[]
      */
-    protected function setRecipients($sendIndividually = false, $to = array(), $cc = array(), $bcc = array())
+    public function getAttachments()
     {
-        if ($sendIndividually && (! empty($cc) || ! empty($bcc)))
-        {
-            throw new InvalidArgumentException(
-                'A mail that is set to send individually to the target users should not include cc or bcc recipients');
-        }
-
-        $this->to = is_array($to) ? $to : array($to);
-        $this->cc = is_array($cc) ? $cc : array($cc);
-        $this->bcc = is_array($bcc) ? $bcc : array($bcc);
-        $this->sendIndividually = $sendIndividually;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFromName()
-    {
-        return $this->fromName;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFromEmail()
-    {
-        return $this->fromEmail;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getReplyName()
-    {
-        return $this->replyName;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getReplyEmail()
-    {
-        return $this->replyEmail;
-    }
-
-    /**
-     *
-     * @return \string[]
-     */
-    public function getTo()
-    {
-        return $this->to;
-    }
-
-    /**
-     *
-     * @return \string[]
-     */
-    public function getCc()
-    {
-        return $this->cc;
+        return $this->attachments;
     }
 
     /**
@@ -217,18 +152,9 @@ class Mail
      *
      * @return \string[]
      */
-    public function getSubject()
+    public function getCc()
     {
-        return $this->subject;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
+        return $this->cc;
     }
 
     /**
@@ -242,11 +168,47 @@ class Mail
 
     /**
      *
-     * @return \Chamilo\Libraries\Mail\ValueObject\MailFile[]
+     * @return string
      */
-    public function getAttachments()
+    public function getFromEmail()
     {
-        return $this->attachments;
+        return $this->fromEmail;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getFromName()
+    {
+        return $this->fromName;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getReplyEmail()
+    {
+        return $this->replyEmail;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getReplyName()
+    {
+        return $this->replyName;
     }
 
     /**
@@ -256,5 +218,46 @@ class Mail
     public function getSendIndividually()
     {
         return $this->sendIndividually;
+    }
+
+    /**
+     *
+     * @return \string[]
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     *
+     * @return \string[]
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * Validates and sets the recipients
+     *
+     * @param boolean $sendIndividually
+     * @param string[] $to
+     * @param string[] $cc
+     * @param string[] $bcc
+     */
+    protected function setRecipients($sendIndividually = false, $to = array(), $cc = array(), $bcc = array())
+    {
+        if ($sendIndividually && (!empty($cc) || !empty($bcc)))
+        {
+            throw new InvalidArgumentException(
+                'A mail that is set to send individually to the target users should not include cc or bcc recipients'
+            );
+        }
+
+        $this->to = is_array($to) ? $to : array($to);
+        $this->cc = is_array($cc) ? $cc : array($cc);
+        $this->bcc = is_array($bcc) ? $bcc : array($bcc);
+        $this->sendIndividually = $sendIndividually;
     }
 }

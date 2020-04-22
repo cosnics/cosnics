@@ -14,6 +14,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -55,7 +56,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             }
             else
             {
-                $response = new \Symfony\Component\HttpFoundation\Response();
+                $response = new Response();
                 $response->setStatusCode(401);
                 return $response;
 
@@ -65,7 +66,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         {
             if(!$this->getUser() instanceof User)
             {
-                $response = new \Symfony\Component\HttpFoundation\Response();
+                $response = new Response();
                 $response->setStatusCode(401);
                 return $response;
             }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -43,7 +44,7 @@ class PublicationAttributesGenerator
         $attributes->setId($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
+        $attributes->set_application(Manager::context());
 
         $attributes->set_location(
             $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Calendar\Manager::context())
@@ -51,9 +52,9 @@ class PublicationAttributesGenerator
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $record[Publication::PROPERTY_ID]
+                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                Manager::PARAM_PUBLICATION_ID => $record[Publication::PROPERTY_ID]
             )
         );
 

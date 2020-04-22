@@ -45,9 +45,25 @@ abstract class Export
     }
 
     /**
+     * Factory function __construct( create an instance of an export class
+     *
+     * @param string $type One of the supported file types returned by the get_supported_filetypes function.
+     * @param string[] $data
+     *
+     * @return \Chamilo\Libraries\File\Export\Export
+     */
+    public static function factory($type, $data)
+    {
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
+            (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Export';
+
+        return new $class($data);
+    }
+
+    /**
      * Gets the data
      *
-     * @return string[]
+     * @return mixed
      */
     protected function get_data()
     {
@@ -98,27 +114,41 @@ abstract class Export
     }
 
     /**
+     * Gets the supported filetypes for export
+     *
+     * @param string[] $exclude
+     *
+     * @return string[] Array containig all supported filetypes (keys and values are the same)
+     */
+    public static function get_supported_filetypes($exclude = array())
+    {
+        $directories = Filesystem::get_directory_content(__DIR__, Filesystem::LIST_DIRECTORIES, false);
+        $types = array();
+
+        foreach ($directories as $index => $directory)
+        {
+            $type = basename($directory);
+
+            if (!in_array($type, $exclude))
+            {
+                $types[$type] = $type;
+            }
+        }
+
+        return $types;
+    }
+
+    /**
      *
      * @return string
      */
     abstract public function get_type();
 
     /**
-     * Writes the given data to a file
      *
-     * @param string[] $data
+     * @return string
      */
-    public function write_to_file()
-    {
-        $file = $this->get_path() . Filesystem::create_unique_name($this->get_path(), $this->get_filename());
-        $handle = fopen($file, 'a+');
-        if (! fwrite($handle, $this->render_data()))
-        {
-            return false;
-        }
-        fclose($handle);
-        return $file;
-    }
+    abstract public function render_data();
 
     /**
      * Writes the given data to a file and send it to the browser
@@ -134,48 +164,18 @@ abstract class Export
     }
 
     /**
-     *
-     * @return string
+     * Writes the given data to a file
      */
-    abstract public function render_data();
-
-    /**
-     * Gets the supported filetypes for export
-     *
-     * @return string[] Array containig all supported filetypes (keys and values are the same)
-     */
-    public static function get_supported_filetypes($exclude = array())
+    public function write_to_file()
     {
-        $directories = Filesystem::get_directory_content(__DIR__, Filesystem::LIST_DIRECTORIES, false);
-
-        foreach ($directories as $index => $directory)
+        $file = $this->get_path() . Filesystem::create_unique_name($this->get_path(), $this->get_filename());
+        $handle = fopen($file, 'a+');
+        if (!fwrite($handle, $this->render_data()))
         {
-            $type = basename($directory);
-
-            if (! in_array($type, $exclude))
-            {
-                $types[$type] = $type;
-            }
+            return false;
         }
+        fclose($handle);
 
-        return $types;
-    }
-
-    /**
-     * Factory function __construct( create an instance of an export class
-     *
-     * @param string $type One of the supported file types returned by the get_supported_filetypes function.
-     * @param string[] $data
-     * @return \Chamilo\Libraries\File\Export
-     */
-    public static function factory($type, $data)
-    {
-        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
-             (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Export';
-
-        if (class_exists($class))
-        {
-            return new $class($data);
-        }
+        return $file;
     }
 }

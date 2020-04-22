@@ -35,6 +35,75 @@ class StringUtilities
     }
 
     /**
+     * Create a \Stringy\Stringy instance with the given string and return it
+     *
+     * @param string $string
+     *
+     * @return \Stringy\Stringy
+     */
+    public function createString($string)
+    {
+        return Stringy::create($string, $this->encoding);
+    }
+
+    /**
+     *
+     * @param string $email
+     * @param string $clickableText
+     * @param string $styleClass
+     *
+     * @return string
+     */
+    public function encryptMailLink($email, $clickableText = null, $styleClass = '')
+    {
+        if (is_null($clickableText))
+        {
+            $clickableText = $email;
+        }
+        // mailto already present?
+        if (substr($email, 0, 7) != 'mailto:')
+        {
+            $email = 'mailto:' . $email;
+        }
+
+        // class (stylesheet) defined?
+        if ($styleClass != '')
+        {
+            $styleClass = ' class="full_url_print ' . $styleClass . '"';
+        }
+        else
+        {
+            $styleClass = ' class="full_url_print"';
+        }
+
+        // encrypt email
+        $hmail = '';
+
+        for ($i = 0; $i < strlen($email); $i ++)
+        {
+            $hmail .= '&#' . ord($email[$i]) . ';';
+        }
+
+        // encrypt clickable text if @ is present
+        $hclickable_text = '';
+
+        if (strpos($clickableText, '@'))
+        {
+            for ($i = 0; $i < strlen($clickableText); $i ++)
+            {
+                $hclickable_text .= '&#' . ord($clickableText[$i]) . ';';
+            }
+        }
+        else
+        {
+            $hclickable_text = htmlspecialchars($clickableText);
+        }
+
+        // return encrypted mailto hyperlink
+        return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickable_text . '</a>';
+    }
+
+    /**
      *
      * @return string
      */
@@ -50,18 +119,6 @@ class StringUtilities
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
-    }
-
-    /**
-     * Create a \Stringy\Stringy instance with the given string and return it
-     *
-     * @param string $string
-     *
-     * @return \Stringy\Stringy
-     */
-    public function createString($string)
-    {
-        return Stringy::create($string, $this->encoding);
     }
 
     /**
@@ -121,63 +178,6 @@ class StringUtilities
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @param string $email
-     * @param string $clickableText
-     * @param string $styleClass
-     *
-     * @return string
-     */
-    public function encryptMailLink($email, $clickableText = null, $styleClass = '')
-    {
-        if (is_null($clickableText))
-        {
-            $clickableText = $email;
-        }
-        // mailto already present?
-        if (substr($email, 0, 7) != 'mailto:')
-        {
-            $email = 'mailto:' . $email;
-        }
-
-        // class (stylesheet) defined?
-        if ($styleClass != '')
-        {
-            $styleClass = ' class="full_url_print ' . $styleClass . '"';
-        }
-        else
-        {
-            $styleClass = ' class="full_url_print"';
-        }
-
-        // encrypt email
-        $hmail = '';
-
-        for ($i = 0; $i < strlen($email); $i ++)
-        {
-            $hmail .= '&#' . ord($email[$i]) . ';';
-        }
-
-        // encrypt clickable text if @ is present
-        $hclickable_text = '';
-
-        if (strpos($clickableText, '@'))
-        {
-            for ($i = 0; $i < strlen($clickableText); $i ++)
-            {
-                $hclickable_text .= '&#' . ord($clickableText[$i]) . ';';
-            }
-        }
-        else
-        {
-            $hclickable_text = htmlspecialchars($clickableText);
-        }
-
-        // return encrypted mailto hyperlink
-        return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickable_text . '</a>';
     }
 
     /**

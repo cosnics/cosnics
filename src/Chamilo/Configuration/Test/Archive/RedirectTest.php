@@ -2,8 +2,11 @@
 namespace Chamilo\Configuration\Test\Archive;
 
 use Chamilo\Libraries\File\Redirect;
+use PHPUnit_Framework_TestCase;
+use function Chamilo\HtmlEntityDecode;
+use function Chamilo\ParseUrl;
 
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends PHPUnit_Framework_TestCase
 {
     const URL = 'http://hostname:12345/path/to/script.php/path/info?arg=value&arg2=value2#anchor';
 
@@ -16,7 +19,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->parsed_url = \Chamilo\ParseUrl(self::URL);
+        $this->parsed_url = ParseUrl(self::URL);
         
         $_SERVER['PHP_SELF'] = $this->parsed_url['path'];
         $_SERVER['QUERY_STRING'] = $this->parsed_url['query'];
@@ -96,7 +99,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $encoded_return_value = $redirect->getUrl();
         
         $this->assertEquals($url, $unencoded_return_value);
-        $this->assertEquals($url, \Chamilo\HtmlEntityDecode($encoded_return_value));
+        $this->assertEquals($url, HtmlEntityDecode($encoded_return_value));
     }
 
     private function assertURLQueryContains(array $expected, $url)

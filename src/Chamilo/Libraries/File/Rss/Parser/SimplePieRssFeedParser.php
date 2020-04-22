@@ -37,7 +37,7 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
     public function __construct(SimplePie $simplePie, HTMLPurifier $purifier)
     {
         $cachePath = Path::getInstance()->getCachePath() . 'rss';
-        if (! is_dir($cachePath))
+        if (!is_dir($cachePath))
         {
             Filesystem::create_dir($cachePath);
         }
@@ -49,15 +49,18 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
     }
 
     /**
+     * @param string $url
+     * @param integer $numberOfEntries
      *
-     * @see \Chamilo\Libraries\File\Rss\Parser\RssFeedParserInterface::parse()
+     * @return string[][]
      */
     public function parse($url, $numberOfEntries = 5)
     {
-        if (! $url || empty($url) || ! $numberOfEntries || $numberOfEntries < 1)
+        if (!$url || empty($url) || !$numberOfEntries || $numberOfEntries < 1)
         {
             throw new InvalidArgumentException(
-                sprintf('URL %s or number of entries %s invalid', $url, $numberOfEntries));
+                sprintf('URL %s or number of entries %s invalid', $url, $numberOfEntries)
+            );
         }
 
         $this->simplePie->set_feed_url($url);

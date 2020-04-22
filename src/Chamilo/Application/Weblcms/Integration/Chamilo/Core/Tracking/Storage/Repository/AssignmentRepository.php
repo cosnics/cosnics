@@ -3,6 +3,10 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Note;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -662,7 +666,7 @@ class AssignmentRepository
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -670,7 +674,7 @@ class AssignmentRepository
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment::class;
+        return EntryAttachment::class;
     }
 
     /**
@@ -678,7 +682,7 @@ class AssignmentRepository
      */
     protected function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 
     /**
@@ -686,7 +690,7 @@ class AssignmentRepository
      */
     protected function getNoteClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Note::class;
+        return Note::class;
     }
 
     /**
@@ -694,6 +698,6 @@ class AssignmentRepository
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 }

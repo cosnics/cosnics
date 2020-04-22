@@ -13,20 +13,22 @@ class Md5Utilities extends HashingUtilities
 {
 
     /**
+     * @param string $filePath
      *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashString()
-     */
-    public function hashString($string)
-    {
-        return md5($string);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashFile()
+     * @return false|string
      */
     public function hashFile($filePath)
     {
         return md5_file($$filePath);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function hashString($string)
+    {
+        return md5($string);
     }
 }

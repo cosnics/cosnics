@@ -16,20 +16,23 @@ abstract class ImageManipulation
      * the image
      */
     const CROP_CENTER = - 1;
+
+    const DIMENSION_HEIGHT = 1;
+    const DIMENSION_WIDTH = 0;
+
     /**
      * Final dimensions will be less than or equal to the entered width and
      * height.
      * Useful for ensuring a maximum height and/or width.
      */
     const SCALE_INSIDE = 0;
+
     /**
      * Final dimensions will be greater than or equal to the entered width and
      * height.
      * Ideal for cropping the result to a square.
      */
     const SCALE_OUTSIDE = 1;
-    const DIMENSION_WIDTH = 0;
-    const DIMENSION_HEIGHT = 1;
 
     /**
      * The file on which the manipulations will be done
@@ -64,19 +67,70 @@ abstract class ImageManipulation
     }
 
     /**
-     * Resize an image maintaining the original aspect-ratio.
-     * Images which are
-     * allready smaller than the given width and height won't be scaled.
+     * Creates a thumbnail from by rescaling the image to the given width &
+     * height (using the SCALE_OUTSIDE parameter).
+     * After this, the resulting
+     * image will be cropped. The result is an image which the exact given with
+     * and height.
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $type
+     * @param integer $width With of the resulting image
+     * @param integer $height Height of the resulting image (if null, the height will be the same as the width,
+     *        resulting in a square image)
+     *
      * @return boolean
      */
-    public function scale($width, $height, $type = self :: SCALE_INSIDE)
+    public function create_thumbnail($width, $height = null)
     {
-        $new_dimensions = $this->rescale($this->width, $this->height, $width, $height, $type);
-        return $this->resize($new_dimensions[self::DIMENSION_WIDTH], $new_dimensions[self::DIMENSION_HEIGHT]);
+        if (is_null($height))
+        {
+            $height = $width;
+        }
+        if ($this->scale($width, $height, self::SCALE_OUTSIDE))
+        {
+            return $this->crop($width, $height);
+        }
+
+        return false;
+    }
+
+    /**
+     * Crop an image to the rectangle specified by the given offsets and
+     * dimensions.
+     *
+     * @param integer $width The width of the image after cropping
+     * @param integer $height The height of the image after cropping
+     * @param integer $offsetX
+     * @param integer $offsetY
+     *
+     * @return boolean
+     */
+    abstract public function crop($width, $height, $offsetX = self::CROP_CENTER, $offsetY = self::CROP_CENTER);
+
+    /**
+     * Create an imagemanipulation instance
+     *
+     * @param string $sourceFile Full path of the image file on which the manipulations should be done
+     *
+     * @return \Chamilo\Libraries\File\ImageManipulation\Gd\GdImageManipulation
+     * @throws \Exception
+     */
+    public static function factory($sourceFile)
+    {
+        return new GdImageManipulation($sourceFile);
+    }
+
+    /**
+     * Gets the image extension from the source file.
+     *
+     * @return string
+     */
+    protected function get_image_extension()
+    {
+        $info = getimagesize($this->sourceFile);
+        $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
+        $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : '';
+
+        return $extension;
     }
 
     /**
@@ -87,9 +141,10 @@ abstract class ImageManipulation
      * @param integer $width
      * @param integer $height
      * @param integer $type
-     * @return string[]
+     *
+     * @return string[]|boolean
      */
-    public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self :: SCALE_INSIDE)
+    public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self::SCALE_INSIDE)
     {
         $aspect = $originalHeight / $originalWidth;
 
@@ -123,81 +178,40 @@ abstract class ImageManipulation
     }
 
     /**
-     * Creates a thumbnail from by rescaling the image to the given width &
-     * height (using the SCALE_OUTSIDE parameter).
-     * After this, the resulting
-     * image will be cropped. The result is an image which the exact given with
-     * and height.
-     *
-     * @param integer $width With of the resulting image
-     * @param integer $height Height of the resulting image (if null, the height will be the same as the width,
-     *        resulting in a square image)
-     * @return boolean
-     */
-    public function create_thumbnail($width, $height = null)
-    {
-        if (is_null($height))
-        {
-            $height = $width;
-        }
-        if ($this->scale($width, $height, self::SCALE_OUTSIDE))
-        {
-            return $this->crop($width, $height);
-        }
-        return false;
-    }
-
-    /**
-     * Crop an image to the rectangle specified by the given offsets and
-     * dimensions.
-     *
-     * @param integer $width The width of the image after cropping
-     * @param integer $height The height of the image after cropping
-     * @param integer $offsetX
-     * @param integer $offsetY
-     * @return boolean
-     */
-    abstract public function crop($width, $height, $offsetX = self :: CROP_CENTER, $offsetY = self :: CROP_CENTER);
-
-    /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.
      *
      * @param integer $width The width of the image after resizing
      * @param integer $height The height of the image after resizing
+     *
      * @return boolean True if successfull, false if not
      */
     abstract public function resize($width, $height);
+
+    /**
+     * Resize an image maintaining the original aspect-ratio.
+     * Images which are
+     * allready smaller than the given width and height won't be scaled.
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param integer $type
+     *
+     * @return boolean
+     */
+    public function scale($width, $height, $type = self::SCALE_INSIDE)
+    {
+        $new_dimensions = $this->rescale($this->width, $this->height, $width, $height, $type);
+
+        return $this->resize($new_dimensions[self::DIMENSION_WIDTH], $new_dimensions[self::DIMENSION_HEIGHT]);
+    }
 
     /**
      * Write the resulting image (after some manipulations to a file)
      *
      * @param string $sourceFile Full path of the file to which the image should be written. If null, the original image
      *        will be overwritten.
+     *
      * @return boolean
      */
     abstract public function write_to_file($sourceFile = null);
-
-    /**
-     * Create an imagemanipulation instance
-     *
-     * @param string $sourceFile Full path of the image file on which the manipulations should be done
-     * @return \Chamilo\Libraries\File\ImageManipulation\Gd\GdImageManipulation
-     */
-    public static function factory($sourceFile)
-    {
-        return new GdImageManipulation($sourceFile);
-    }
-
-    /**
-     * Gets the image extension from the source file.
-     *
-     * @return string
-     */
-    protected function get_image_extension()
-    {
-        $info = getimagesize($this->sourceFile);
-        $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
-        $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : '';
-        return $extension;
-    }
 }

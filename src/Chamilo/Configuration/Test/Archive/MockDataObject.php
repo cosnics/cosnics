@@ -5,6 +5,7 @@ use Chamilo\Libraries\Mdb2Database;
 use Chamilo\Libraries\ObjectTableOrder;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use PHPUnit_Framework_TestCase;
 
 class MockDataObject
 {
@@ -36,7 +37,7 @@ class MockDataObject
         $this->props['id'] = $id;
     }
 }
-class Mdb2DatabaseTest extends \PHPUnit_Framework_TestCase
+class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
 {
 
     public $db;

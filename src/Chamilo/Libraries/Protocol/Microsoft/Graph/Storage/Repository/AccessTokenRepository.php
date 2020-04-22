@@ -34,8 +34,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
     public function __construct(
-        LocalSetting $localSetting,
-        SessionUtilities $sessionUtilities)
+        LocalSetting $localSetting, SessionUtilities $sessionUtilities
+    )
     {
         $this->localSetting = $localSetting;
         $this->sessionUtilities = $sessionUtilities;
@@ -59,19 +59,6 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     }
 
     /**
-     * Stores the application access token
-     *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
-     */
-    public function storeApplicationAccessToken(AccessToken $accessToken)
-    {
-        $this->localSetting->create(
-            'access_token',
-            json_encode($accessToken->jsonSerialize()),
-            'Chamilo\Libraries\Protocol\Microsoft\Graph');
-    }
-
-    /**
      * Returns the delegated access token
      *
      * @return AccessToken
@@ -86,6 +73,18 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         }
 
         return new AccessToken(json_decode($accessTokenData, true));
+    }
+
+    /**
+     * Stores the application access token
+     *
+     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
+     */
+    public function storeApplicationAccessToken(AccessToken $accessToken)
+    {
+        $this->localSetting->create(
+            'access_token', json_encode($accessToken->jsonSerialize()), 'Chamilo\Libraries\Protocol\Microsoft\Graph'
+        );
     }
 
     /**

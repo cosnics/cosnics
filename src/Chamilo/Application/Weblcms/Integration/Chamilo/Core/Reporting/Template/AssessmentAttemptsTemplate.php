@@ -6,7 +6,9 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessm
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentQuestionsBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentQuestionsUsersBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentUsersBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -33,16 +35,16 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $this->course_id = Request::get(Manager::PARAM_COURSE);
         if ($this->course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
+            $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
         }
 
-        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->publication_id = Request::get(Manager::PARAM_PUBLICATION);
         if ($this->publication_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publication_id);
+            $this->set_parameter(Manager::PARAM_PUBLICATION, $this->publication_id);
         }
 
         $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
@@ -52,7 +54,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
         }
 
         // Retrieve the questions of the assessment
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $this->publication_id
         );
@@ -97,7 +99,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
      */
     protected function add_breadcrumbs()
     {
-        $assessment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $assessment = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $this->publication_id
         )->get_content_object();
@@ -108,7 +110,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
             new Breadcrumb(
                 $this->get_url(
                     array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2),
-                    array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)
+                    array(Manager::PARAM_TEMPLATE_ID)
                 ),
                 Translation::get('Assessments')
             )

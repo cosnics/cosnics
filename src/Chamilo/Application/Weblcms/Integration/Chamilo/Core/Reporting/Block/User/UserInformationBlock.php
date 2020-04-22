@@ -4,7 +4,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\U
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -17,8 +19,8 @@ class UserInformationBlock extends ToolBlock
 
         $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $user = DataManager::retrieve_by_id(
+            User::class_name(),
             $user_id);
 
         $userFullName = $userEmail = $userName = Translation::getInstance()->getTranslation(
@@ -72,6 +74,6 @@ class UserInformationBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

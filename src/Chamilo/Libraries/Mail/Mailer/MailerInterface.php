@@ -15,14 +15,14 @@ interface MailerInterface
 
     /**
      * Sends a single mail
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
     public function sendMail(Mail $mail);
 
     /**
      * Sends multiple mails
-     * 
+     *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
     public function sendMails($mails = array());

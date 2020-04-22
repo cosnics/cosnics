@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -104,7 +105,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     /**

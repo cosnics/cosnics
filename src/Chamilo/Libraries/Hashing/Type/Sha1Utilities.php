@@ -13,20 +13,22 @@ class Sha1Utilities extends HashingUtilities
 {
 
     /**
+     * @param string $filePath
      *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashString()
-     */
-    public function hashString($string)
-    {
-        return sha1($string);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashFile()
+     * @return false|string
      */
     public function hashFile($filePath)
     {
         return sha1_file($filePath);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function hashString($string)
+    {
+        return sha1($string);
     }
 }

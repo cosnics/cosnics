@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -29,9 +30,9 @@ class EventListRenderer extends \Chamilo\Core\Repository\Integration\Chamilo\Lib
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $event->getCourseId(), 
                 \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
-                    \Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager::context()), 
-                \Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager::ACTION_VIEW_ATTACHMENT, 
-                \Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager::PARAM_PUBLICATION_ID => $event->getId(), 
+                    Manager::context()),
+                Manager::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
+                Manager::PARAM_PUBLICATION_ID => $event->getId(),
                 'object_id' => $attachment->get_id()));
         return $redirect->getUrl();
     }

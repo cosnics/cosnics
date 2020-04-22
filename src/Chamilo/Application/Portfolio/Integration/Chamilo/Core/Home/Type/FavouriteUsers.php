@@ -3,6 +3,8 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
+use Chamilo\Application\Portfolio\Manager;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
@@ -12,7 +14,7 @@ use Chamilo\Libraries\File\Redirect;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FavouriteUsers extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
+class FavouriteUsers extends BlockRenderer
 {
 
     public function displayContent()
@@ -28,9 +30,9 @@ class FavouriteUsers extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRendere
             {
                 $redirect = new Redirect(
                     array(
-                        \Chamilo\Application\Portfolio\Manager::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::context(),
-                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
-                        \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]));
+                        Manager::PARAM_CONTEXT => Manager::context(),
+                        Manager::PARAM_ACTION => Manager::ACTION_HOME,
+                        Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]));
 
                 $portfolioURL = $redirect->getUrl();
 

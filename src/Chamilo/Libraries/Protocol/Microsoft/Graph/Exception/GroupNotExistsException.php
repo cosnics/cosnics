@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Exception;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Exception;
 
 /**
@@ -12,6 +11,7 @@ class GroupNotExistsException extends Exception
 
     /**
      * AzureUserNotExistsException constructor.
+     *
      * @param string $groupId
      */
     public function __construct(string $groupId)

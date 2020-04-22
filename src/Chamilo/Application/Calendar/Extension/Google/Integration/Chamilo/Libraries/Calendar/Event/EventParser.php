@@ -2,8 +2,13 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
+use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRulesIcalParser;
 use Chamilo\Libraries\Translation\Translation;
+use DateTime;
+use DateTimeZone;
+use Google_Service_Calendar_Event;
+use Google_Service_Calendar_EventDateTime;
 
 /**
  *
@@ -48,7 +53,7 @@ class EventParser
      * @param integer $toDate
      */
     public function __construct(CalendarProperties $calendarProperties, 
-        \Google_Service_Calendar_Event $googleCalendarEvent, $fromDate, $toDate)
+        Google_Service_Calendar_Event $googleCalendarEvent, $fromDate, $toDate)
     {
         $this->calendarProperties = $calendarProperties;
         $this->googleCalendarEvent = $googleCalendarEvent;
@@ -87,7 +92,7 @@ class EventParser
      *
      * @param \Google_Service_Calendar_Event $googleCalendarEvent
      */
-    public function setGoogleCalendarEvent(\Google_Service_Calendar_Event $googleCalendarEvent)
+    public function setGoogleCalendarEvent(Google_Service_Calendar_Event $googleCalendarEvent)
     {
         $this->googleCalendarEvent = $googleCalendarEvent;
     }
@@ -154,7 +159,7 @@ class EventParser
             $googleCalendarEvent->getDescription(), 
             $googleCalendarEvent->getLocation(), 
             $this->getSource($this->getCalendarProperties()), 
-            \Chamilo\Application\Calendar\Extension\Google\Manager::context());
+            Manager::context());
         
         $event->setCalendarProperties($this->getCalendarProperties());
         $event->setGoogleCalendarEvent($googleCalendarEvent);
@@ -167,9 +172,9 @@ class EventParser
      * @param \Google_Service_Calendar_EventDateTime $eventDateTime
      * @param string $calendarTimeZone
      */
-    private function getTimestamp(\Google_Service_Calendar_EventDateTime $eventDateTime, $calendarTimeZone)
+    private function getTimestamp(Google_Service_Calendar_EventDateTime $eventDateTime, $calendarTimeZone)
     {
-        $dateTime = new \DateTime(
+        $dateTime = new DateTime(
             $this->determineTime($eventDateTime), 
             $this->determineTimeZone($eventDateTime->getTimeZone(), $calendarTimeZone));
         
@@ -182,7 +187,7 @@ class EventParser
      *
      * @return string
      */
-    private function determineTime(\Google_Service_Calendar_EventDateTime $eventDateTime)
+    private function determineTime(Google_Service_Calendar_EventDateTime $eventDateTime)
     {
         if ($eventDateTime->getDateTime())
         {
@@ -205,7 +210,7 @@ class EventParser
     {
         if ($eventTimeZone || $calendarTimeZone)
         {
-            return new \DateTimeZone($eventTimeZone ?: $calendarTimeZone);
+            return new DateTimeZone($eventTimeZone ?: $calendarTimeZone);
         }
         else
         {
@@ -224,7 +229,7 @@ class EventParser
         return Translation::get(
             'SourceName', 
             array('CALENDAR' => $calendarProperties->getSummary()), 
-            \Chamilo\Application\Calendar\Extension\Google\Manager::context());
+            Manager::context());
     }
 
     /**

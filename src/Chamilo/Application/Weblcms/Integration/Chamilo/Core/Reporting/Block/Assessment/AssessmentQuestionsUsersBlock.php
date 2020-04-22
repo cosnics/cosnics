@@ -3,9 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -62,7 +65,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         }
         $this->reporting_data = new ReportingData();
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->getPublicationId());
         
@@ -97,7 +100,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         // Defines the row categories in the reporting block.
         $this->reporting_data->set_rows($question_headers);
         
-        $users = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
+        $users = DataManager::retrieve_publication_target_users(
             $this->getPublicationId(),
             $this->getCourseId())->as_array();
         
@@ -195,18 +198,18 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         // Retrieve all the question attempts trackers of a single user ordered by the question id.
         $condition = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID), 
+                QuestionAttempt::class_name(),
+                QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempts_tracker_ids);
         
         $order_by = array();
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
+                QuestionAttempt::class_name(),
+                QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
         
-        $question_attempts_trackers = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(), 
+        $question_attempts_trackers = DataManager::retrieves(
+            QuestionAttempt::class_name(),
             new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
         
         $user_question_statistics = array();
@@ -244,13 +247,12 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     private function get_score($attempts)
     {
         $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
-        ;
         $score = null;
         
         switch ($score_type)

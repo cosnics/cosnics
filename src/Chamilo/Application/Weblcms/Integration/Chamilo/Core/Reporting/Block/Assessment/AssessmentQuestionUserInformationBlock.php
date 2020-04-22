@@ -2,9 +2,12 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,7 +22,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
     public function count_data()
     {
         $question_cid = Request::get(
-            \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
+            Manager::PARAM_QUESTION);
         $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $question_cid);
@@ -46,7 +49,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
             $this->get_question_information($complex_question->get_ref_object()), 
             $reporting_data);
         
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        $user = DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
         $user_attempts = $this->get_question_attempts_from_publication_and_question(
             $this->getPublicationId(),
             $question_cid, 
@@ -69,6 +72,6 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

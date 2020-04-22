@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignm
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\LearningPath\LearningPathBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\LastAccessToToolsBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\User\UsersTrackingBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -38,10 +39,10 @@ class CourseStudentTrackerTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $course_id = Request::get(Manager::PARAM_COURSE);
         if ($course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
+            $this->set_parameter(Manager::PARAM_COURSE, $course_id);
         }
     }
 }

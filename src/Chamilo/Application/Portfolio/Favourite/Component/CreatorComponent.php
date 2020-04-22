@@ -3,6 +3,7 @@ namespace Chamilo\Application\Portfolio\Favourite\Component;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
 
 /**
  * Creates a new favourite
@@ -32,7 +33,7 @@ class CreatorComponent extends Manager
                 array('OBJECT' => $objectTranslation),
                 Utilities::COMMON_LIBRARIES);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();

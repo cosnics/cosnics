@@ -78,17 +78,6 @@ class ForumPostForm extends FormValidator
      */
     protected function add_footer()
     {
-        if ($this->form_type == self::TYPE_EDIT)
-        {
-
-            $attached_objects = $this->forumpost->get_attached_content_objects();
-            $attachments = Utilities::content_objects_for_element_finder($attached_objects);
-        }
-        else
-        {
-            $attachments = array();
-        }
-
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
                 User::class_name(), Session::get_user_id()

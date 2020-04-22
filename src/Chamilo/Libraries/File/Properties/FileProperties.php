@@ -10,11 +10,11 @@ use finfo;
  */
 class FileProperties
 {
-    const PROPERTY_NAME = 'name';
     const PROPERTY_EXTENSION = 'extension';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_SIZE = 'size';
+    const PROPERTY_NAME = 'name';
     const PROPERTY_PATH = 'path';
+    const PROPERTY_SIZE = 'size';
+    const PROPERTY_TYPE = 'type';
 
     /**
      *
@@ -24,144 +24,46 @@ class FileProperties
 
     /**
      *
-     * @return string[]
-     */
-    public function get_properties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     *
-     * @param string[] $properties
-     */
-    public function set_properties($properties)
-    {
-        $this->properties = $properties;
-    }
-
-    /**
-     *
-     * @param string $property
-     * @param string $value
-     */
-    public function set_property($property, $value)
-    {
-        $this->properties[$property] = $value;
-    }
-
-    /**
-     *
-     * @param string $property
-     * @return string
-     */
-    public function get_property($property)
-    {
-        return $this->properties[$property];
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->get_property(self::PROPERTY_NAME);
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->set_property(self::PROPERTY_NAME, $name);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_extension()
-    {
-        return $this->get_property(self::PROPERTY_EXTENSION);
-    }
-
-    /**
-     *
-     * @param string $extension
-     */
-    public function set_extension($extension)
-    {
-        $this->set_property(self::PROPERTY_EXTENSION, $extension);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_name_extension()
-    {
-        return $this->get_name() . '.' . $this->get_extension();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_type()
-    {
-        return $this->get_property(self::PROPERTY_TYPE);
-    }
-
-    /**
-     *
-     * @param string $type
-     */
-    public function set_type($type)
-    {
-        $this->set_property(self::PROPERTY_TYPE, $type);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_size()
-    {
-        return $this->get_property(self::PROPERTY_SIZE);
-    }
-
-    /**
-     *
-     * @param integer $size
-     */
-    public function set_size($size)
-    {
-        $this->set_property(self::PROPERTY_SIZE, $size);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_path()
-    {
-        return $this->get_property(self::PROPERTY_PATH);
-    }
-
-    /**
-     *
      * @param string $path
+     *
+     * @return \Chamilo\Libraries\File\Properties\FileProperties
      */
-    public function set_path($path)
+    public static function from_path($path)
     {
-        $this->set_property(self::PROPERTY_PATH, $path);
+        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        $fileName = array_pop($pathParts);
+        $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+
+        $properties = new self();
+
+        $fileNameParts = explode('.', $fileName);
+
+        if (count($fileNameParts) >= 2)
+        {
+            $properties->set_extension(array_pop($fileNameParts));
+        }
+
+        $properties->set_name(implode('.', $fileNameParts));
+
+        if (!$fileInfo)
+        {
+            $properties->set_type('application/octet-stream');
+        }
+        else
+        {
+            $properties->set_type($fileInfo->file($path));
+        }
+
+        $properties->set_size(filesize($path));
+        $properties->set_path($path);
+
+        return $properties;
     }
 
     /**
      *
      * @param string[] $fileDescription
+     *
      * @return \Chamilo\Libraries\File\Properties\FileProperties
      */
     public static function from_upload($fileDescription)
@@ -180,7 +82,7 @@ class FileProperties
 
         $properties->set_name(implode('.', $fileNameParts));
 
-        if (! $fileInfo)
+        if (!$fileInfo)
         {
             $properties->set_type($fileDescription['type']);
         }
@@ -197,43 +99,8 @@ class FileProperties
 
     /**
      *
-     * @param string $path
-     * @return \Chamilo\Libraries\File\Properties\FileProperties
-     */
-    public static function from_path($path)
-    {
-        $fileName = array_pop(explode(DIRECTORY_SEPARATOR, $path));
-        $fileInfo = new finfo(FILEINFO_MIME_TYPE);
-
-        $properties = new self();
-
-        $fileNameParts = explode('.', $fileName);
-
-        if (count($fileNameParts) >= 2)
-        {
-            $properties->set_extension(array_pop($fileNameParts));
-        }
-
-        $properties->set_name(implode('.', $fileNameParts));
-
-        if (! $fileInfo)
-        {
-            $properties->set_type('application/octet-stream');
-        }
-        else
-        {
-            $properties->set_type($fileInfo->file($path));
-        }
-
-        $properties->set_size(filesize($path));
-        $properties->set_path($path);
-
-        return $properties;
-    }
-
-    /**
-     *
      * @param string $url
+     *
      * @return \Chamilo\Libraries\File\Properties\FileProperties
      */
     public static function from_url($url)
@@ -244,7 +111,8 @@ class FileProperties
 
         if (in_array($urlInfo['scheme'], array('http', 'ftp', 'https')))
         {
-            $fileName = array_pop(explode('/', $url));
+            $pathParts = explode('/', $url);
+            $fileName = array_pop($pathParts);
             $fileNameParts = explode('.', $fileName);
 
             if (count($fileNameParts) >= 1)
@@ -273,7 +141,7 @@ class FileProperties
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-            $header = curl_exec($curl);
+            curl_exec($curl);
             $info = curl_getinfo($curl);
             curl_close($curl);
 
@@ -283,7 +151,7 @@ class FileProperties
 
             if ($validHttp || $validFtp || $validHttps)
             {
-                if (! is_null($info['content_type']))
+                if (!is_null($info['content_type']))
                 {
                     $properties->set_type($info['content_type']);
                 }
@@ -298,5 +166,143 @@ class FileProperties
         }
 
         return $properties;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_extension()
+    {
+        return $this->get_property(self::PROPERTY_EXTENSION);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return $this->get_property(self::PROPERTY_NAME);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_name_extension()
+    {
+        return $this->get_name() . '.' . $this->get_extension();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_path()
+    {
+        return $this->get_property(self::PROPERTY_PATH);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_properties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     *
+     * @param string[] $properties
+     */
+    public function set_properties($properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     *
+     * @param string $property
+     *
+     * @return string
+     */
+    public function get_property($property)
+    {
+        return $this->properties[$property];
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_size()
+    {
+        return $this->get_property(self::PROPERTY_SIZE);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_type()
+    {
+        return $this->get_property(self::PROPERTY_TYPE);
+    }
+
+    /**
+     *
+     * @param string $extension
+     */
+    public function set_extension($extension)
+    {
+        $this->set_property(self::PROPERTY_EXTENSION, $extension);
+    }
+
+    /**
+     *
+     * @param string $name
+     */
+    public function set_name($name)
+    {
+        $this->set_property(self::PROPERTY_NAME, $name);
+    }
+
+    /**
+     *
+     * @param string $path
+     */
+    public function set_path($path)
+    {
+        $this->set_property(self::PROPERTY_PATH, $path);
+    }
+
+    /**
+     *
+     * @param string $property
+     * @param string $value
+     */
+    public function set_property($property, $value)
+    {
+        $this->properties[$property] = $value;
+    }
+
+    /**
+     *
+     * @param integer $size
+     */
+    public function set_size($size)
+    {
+        $this->set_property(self::PROPERTY_SIZE, $size);
+    }
+
+    /**
+     *
+     * @param string $type
+     */
+    public function set_type($type)
+    {
+        $this->set_property(self::PROPERTY_TYPE, $type);
     }
 }

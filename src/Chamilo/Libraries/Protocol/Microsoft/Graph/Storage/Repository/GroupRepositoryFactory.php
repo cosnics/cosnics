@@ -30,8 +30,7 @@ class GroupRepositoryFactory
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
-        GraphRepository $graphRepository,
-        ConfigurationConsulter $configurationConsulter
+        GraphRepository $graphRepository, ConfigurationConsulter $configurationConsulter
     )
     {
         $this->graphRepository = $graphRepository;

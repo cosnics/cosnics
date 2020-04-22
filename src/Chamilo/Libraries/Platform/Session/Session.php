@@ -14,42 +14,56 @@ use Chamilo\Configuration\Configuration;
 class Session
 {
 
-    public static function start()
+    public static function clear()
     {
-        /**
-         * Disables PHP automatically provided cache headers
-         */
-        session_cache_limiter('');
+        // session_regenerate_id();
+        session_unset();
+        $_SESSION = array();
+    }
 
-        $configuration = Configuration::getInstance();
+    public static function destroy()
+    {
+        session_unset();
+        $_SESSION = array();
+        session_destroy();
+    }
 
-        if ($configuration->is_available() && $configuration->is_connectable())
+    /**
+     * @param string $variable
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public static function get($variable, $default = null)
+    {
+        if (is_array($_SESSION) && array_key_exists($variable, $_SESSION))
         {
-            if ($configuration->get_setting(array('Chamilo\Configuration', 'session', 'session_handler')) == 'chamilo')
-            {
-                $session_handler = new SessionHandler();
-                session_set_save_handler(
-                    array($session_handler, 'open'),
-                    array($session_handler, 'close'),
-                    array($session_handler, 'read'),
-                    array($session_handler, 'write'),
-                    array($session_handler, 'destroy'),
-                    array($session_handler, 'garbage'));
-            }
-
-            $session_key = Configuration::get('Chamilo\Configuration', 'general', 'security_key');
-            if (is_null($session_key))
-            {
-                $session_key = 'dk_sid';
-            }
-
-            session_name($session_key);
-            session_start();
+            return $_SESSION[$variable];
         }
         else
         {
-            session_start();
+            return $default;
         }
+    }
+
+    /**
+     * @return int
+     */
+    public static function getUserId()
+    {
+        return self::retrieve('_uid');
+    }
+
+    /**
+     * @return int
+     *
+     * @deprecated
+     *
+     * @see getUserId
+     */
+    public static function get_user_id()
+    {
+        return self::getUserId();
     }
 
     /**
@@ -77,32 +91,6 @@ class Session
 
     /**
      * @param string $variable
-     */
-    public static function unregister($variable)
-    {
-        if (array_key_exists($variable, $_SESSION))
-        {
-            $_SESSION[$variable] = null;
-            unset($GLOBALS[$variable]);
-        }
-    }
-
-    public static function clear()
-    {
-        // session_regenerate_id();
-        session_unset();
-        $_SESSION = array();
-    }
-
-    public static function destroy()
-    {
-        session_unset();
-        $_SESSION = array();
-        session_destroy();
-    }
-
-    /**
-     * @param string $variable
      *
      * @return mixed
      */
@@ -116,41 +104,51 @@ class Session
         return null;
     }
 
-    /**
-     * @param string $variable
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public static function get($variable, $default = null)
+    public static function start()
     {
-        if (is_array($_SESSION) && array_key_exists($variable, $_SESSION))
+        /**
+         * Disables PHP automatically provided cache headers
+         */
+        session_cache_limiter('');
+
+        $configuration = Configuration::getInstance();
+
+        if ($configuration->is_available() && $configuration->is_connectable())
         {
-            return $_SESSION[$variable];
+            if ($configuration->get_setting(array('Chamilo\Configuration', 'session', 'session_handler')) == 'chamilo')
+            {
+                $session_handler = new SessionHandler();
+                session_set_save_handler(
+                    array($session_handler, 'open'), array($session_handler, 'close'), array($session_handler, 'read'),
+                    array($session_handler, 'write'), array($session_handler, 'destroy'),
+                    array($session_handler, 'garbage')
+                );
+            }
+
+            $session_key = Configuration::get('Chamilo\Configuration', 'general', 'security_key');
+            if (is_null($session_key))
+            {
+                $session_key = 'dk_sid';
+            }
+
+            session_name($session_key);
+            session_start();
         }
         else
         {
-            return $default;
+            session_start();
         }
     }
 
     /**
-     * @return int
-     *
-     * @deprecated
-     *
-     * @see getUserId
+     * @param string $variable
      */
-    public static function get_user_id()
+    public static function unregister($variable)
     {
-        return self::getUserId();
-    }
-
-    /**
-     * @return int
-     */
-    public static function getUserId()
-    {
-        return self::retrieve('_uid');
+        if (array_key_exists($variable, $_SESSION))
+        {
+            $_SESSION[$variable] = null;
+            unset($GLOBALS[$variable]);
+        }
     }
 }

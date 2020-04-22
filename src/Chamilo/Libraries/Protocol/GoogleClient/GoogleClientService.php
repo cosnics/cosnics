@@ -32,11 +32,14 @@ class GoogleClientService
      *
      * @param \Chamilo\Libraries\Protocol\GoogleClient\GoogleClientSettingsProviderInterface $googleClientSettingsProvider
      * @param \Google_Client $googleClient
+     *
+     * @throws \Exception
      */
-    public function __construct(GoogleClientSettingsProviderInterface $googleClientSettingsProvider,
-        Google_Client $googleClient = null)
+    public function __construct(
+        GoogleClientSettingsProviderInterface $googleClientSettingsProvider, Google_Client $googleClient = null
+    )
     {
-        if (! $googleClient)
+        if (!$googleClient)
         {
             $googleClient = new Google_Client();
         }
@@ -48,7 +51,19 @@ class GoogleClientService
     }
 
     /**
+     * Returns the google client
+     *
+     * @return \Google_Client
+     */
+    public function getGoogleClient()
+    {
+        return $this->googleClient;
+    }
+
+    /**
      * Initializes the google client
+     *
+     * @throws \Exception
      */
     protected function initializeGoogleClient()
     {
@@ -89,28 +104,6 @@ class GoogleClientService
     }
 
     /**
-     * Removes the access token
-     */
-    protected function removeUserTokens()
-    {
-        $this->googleClientSettingsProvider->removeAccessToken();
-        $this->googleClientSettingsProvider->removeRefreshToken();
-
-        $redirect = new Redirect();
-        $redirect->writeHeader($redirect->getCurrentUrl());
-    }
-
-    /**
-     * Returns the google client
-     *
-     * @return \Google_Client
-     */
-    public function getGoogleClient()
-    {
-        return $this->googleClient;
-    }
-
-    /**
      * Authenticate in the google client
      *
      * @param string $redirectUri
@@ -122,7 +115,7 @@ class GoogleClientService
     {
         $this->googleClient->setRedirectUri($redirectUri);
 
-        if (! is_null($loginCode))
+        if (!is_null($loginCode))
         {
             $this->googleClient->authenticate($loginCode);
             $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
@@ -138,5 +131,19 @@ class GoogleClientService
 
             exit();
         }
+    }
+
+    /**
+     * Removes the access token
+     *
+     * @throws \Exception
+     */
+    protected function removeUserTokens()
+    {
+        $this->googleClientSettingsProvider->removeAccessToken();
+        $this->googleClientSettingsProvider->removeRefreshToken();
+
+        $redirect = new Redirect();
+        $redirect->writeHeader($redirect->getCurrentUrl());
     }
 }

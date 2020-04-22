@@ -39,20 +39,54 @@ class TranslatorFactory
     }
 
     /**
+     * Adds the optimized translation resources to the translator
+     *
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    protected function addOptimizedTranslationResources(Translator $translator)
+    {
+        $translationCachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
+
+        if (!is_dir($translationCachePath))
+        {
+            Filesystem::create_dir($translationCachePath);
+        }
+
+        $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
+        $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
+
+        $translationResourcesOptimizer = new TranslationResourcesOptimizer(
+            array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
+            new PackagesTranslationResourcesFinder(
+                new PackagesFilesFinder(new PathBuilder(ClassnameUtilities::getInstance()), $packageNamespaces)
+            ), $translationCachePath
+        );
+
+        $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
+
+        foreach ($resources as $locale => $resource)
+        {
+            $translator->addResource('optimized', $resource, $locale);
+        }
+    }
+
+    /**
      * Builds and returns the Symfony Translator
      *
      * @param string $locale
+     *
      * @return \Symfony\Component\Translation\Translator
      */
     public function createTranslator($locale = null)
     {
-        if (! $locale)
+        if (!$locale)
         {
             // TODO: Do we still need this if the default is already passed on via the DI definition?
             $classnameUtilities = ClassnameUtilities::getInstance();
             $pathBuilder = new PathBuilder($classnameUtilities);
             $fileConfigurationConsulter = new ConfigurationConsulter(
-                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
+                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder))
+            );
 
             $locale = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language'));
         }
@@ -65,36 +99,5 @@ class TranslatorFactory
         $translator->setFallbackLocales(array('en', 'nl'));
 
         return $translator;
-    }
-
-    /**
-     * Adds the optimized translation resources to the translator
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    protected function addOptimizedTranslationResources(Translator $translator)
-    {
-        $translationCachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
-
-        if (! is_dir($translationCachePath))
-        {
-            Filesystem::create_dir($translationCachePath);
-        }
-
-        $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
-        $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
-
-        $translationResourcesOptimizer = new TranslationResourcesOptimizer(
-            array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
-            new PackagesTranslationResourcesFinder(
-                new PackagesFilesFinder(new PathBuilder(ClassnameUtilities::getInstance()), $packageNamespaces)),
-            $translationCachePath);
-
-        $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
-
-        foreach ($resources as $locale => $resource)
-        {
-            $translator->addResource('optimized', $resource, $locale);
-        }
     }
 }

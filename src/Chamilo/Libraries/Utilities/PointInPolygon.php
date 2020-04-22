@@ -12,17 +12,11 @@ namespace Chamilo\Libraries\Utilities;
  */
 class PointInPolygon
 {
-    /**
-     * The different types of polygon points
-     */
-    const POINT_VERTEX = 1;
     const POINT_BOUNDARY = 2;
     const POINT_INSIDE = 3;
     const POINT_OUTSIDE = 4;
+    const POINT_VERTEX = 1;
 
-    /**
-     * The Array-indexes to use for X- and Y-coordinates
-     */
     const POLYGON_X_INDEX = 0;
     const POLYGON_Y_INDEX = 1;
 
@@ -32,13 +26,6 @@ class PointInPolygon
      * @var string[][]
      */
     private $vertices;
-
-    /**
-     * Check whether the point is a vertex or not
-     *
-     * @var boolean
-     */
-    private $vertex_check = true;
 
     /**
      * PointInPolygon constructor
@@ -55,15 +42,15 @@ class PointInPolygon
      *
      * @param string[] $point The point to check.
      * @param boolean $vertex_check Check whether the point is a vertex or not
+     *
      * @return int The point type.
      */
     function is_inside($point, $vertex_check = true)
     {
-        $this->vertex_check = $vertex_check;
         $vertices = $this->vertices;
 
         // Check if the point sits exactly on a vertex
-        if ($this->vertex_check === true && $this->point_is_on_vertex($point, $vertices) === true)
+        if ($vertex_check === true && $this->point_is_on_vertex($point) === true)
         {
             return self::POINT_VERTEX;
         }
@@ -79,63 +66,67 @@ class PointInPolygon
 
             // Check if point is on an horizontal polygon boundary
             if ($vertex1[self::POLYGON_Y_INDEX] == $vertex2[self::POLYGON_Y_INDEX] &&
-                 $vertex1[self::POLYGON_Y_INDEX] == $point[self::POLYGON_Y_INDEX] &&
-                 $point[self::POLYGON_X_INDEX] > min($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) && $point[self::POLYGON_X_INDEX] <
-                 max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]))
+                $vertex1[self::POLYGON_Y_INDEX] == $point[self::POLYGON_Y_INDEX] &&
+                $point[self::POLYGON_X_INDEX] > min($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) &&
+                $point[self::POLYGON_X_INDEX] < max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]))
             {
                 return self::POINT_BOUNDARY;
             }
             if ($point[self::POLYGON_Y_INDEX] > min($vertex1[self::POLYGON_Y_INDEX], $vertex2[self::POLYGON_Y_INDEX]) &&
-                 $point[self::POLYGON_Y_INDEX] <= max($vertex1[self::POLYGON_Y_INDEX], $vertex2[self::POLYGON_Y_INDEX]) && $point[self::POLYGON_X_INDEX] <=
-                 max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) &&
-                 $vertex1[self::POLYGON_Y_INDEX] != $vertex2[self::POLYGON_Y_INDEX])
+                $point[self::POLYGON_Y_INDEX] <=
+                max($vertex1[self::POLYGON_Y_INDEX], $vertex2[self::POLYGON_Y_INDEX]) &&
+                $point[self::POLYGON_X_INDEX] <=
+                max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) &&
+                $vertex1[self::POLYGON_Y_INDEX] != $vertex2[self::POLYGON_Y_INDEX])
             {
                 $xinters = ($point[self::POLYGON_Y_INDEX] - $vertex1[self::POLYGON_Y_INDEX]) *
-                 ($vertex2[self::POLYGON_X_INDEX] - $vertex1[self::POLYGON_X_INDEX]) /
-                 ($vertex2[self::POLYGON_Y_INDEX] - $vertex1[self::POLYGON_Y_INDEX]) + $vertex1[self::POLYGON_X_INDEX];
+                    ($vertex2[self::POLYGON_X_INDEX] - $vertex1[self::POLYGON_X_INDEX]) /
+                    ($vertex2[self::POLYGON_Y_INDEX] - $vertex1[self::POLYGON_Y_INDEX]) +
+                    $vertex1[self::POLYGON_X_INDEX];
 
-            // Check if point is on the polygon boundary (other than horizontal)
-            if ($xinters == $point[self::POLYGON_X_INDEX])
-            {
-                return self::POINT_BOUNDARY;
-            }
+                // Check if point is on the polygon boundary (other than horizontal)
+                if ($xinters == $point[self::POLYGON_X_INDEX])
+                {
+                    return self::POINT_BOUNDARY;
+                }
 
-            if ($vertex1[self::POLYGON_X_INDEX] == $vertex2[self::POLYGON_X_INDEX] ||
-                 $point[self::POLYGON_X_INDEX] <= $xinters)
-            {
-                $intersections ++;
+                if ($vertex1[self::POLYGON_X_INDEX] == $vertex2[self::POLYGON_X_INDEX] ||
+                    $point[self::POLYGON_X_INDEX] <= $xinters)
+                {
+                    $intersections ++;
+                }
             }
         }
-    }
-    // If the number of edges we passed through is even, then it's in the polygon.
-    if ($intersections % 2 != 0)
-    {
-        return self::POINT_INSIDE;
-    }
-    else
-    {
-        return self::POINT_OUTSIDE;
-    }
-}
-
-/**
- * Check if the point sits exactly on one of the vertices
- *
- * @param strng[] $point The point to check.
- * @return boolean True if the point is a vertex, false otherwise.
- */
-function point_is_on_vertex($point)
-{
-    $vertices = $this->vertices;
-
-    foreach ($vertices as $vertex)
-    {
-        if ($point === $vertex)
+        // If the number of edges we passed through is even, then it's in the polygon.
+        if ($intersections % 2 != 0)
         {
-            return true;
+            return self::POINT_INSIDE;
+        }
+        else
+        {
+            return self::POINT_OUTSIDE;
         }
     }
 
-    return false;
-}
+    /**
+     * Check if the point sits exactly on one of the vertices
+     *
+     * @param string[] $point The point to check.
+     *
+     * @return boolean True if the point is a vertex, false otherwise.
+     */
+    function point_is_on_vertex($point)
+    {
+        $vertices = $this->vertices;
+
+        foreach ($vertices as $vertex)
+        {
+            if ($point === $vertex)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

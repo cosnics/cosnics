@@ -16,7 +16,7 @@ interface TranslationResourcesFinderInterface
      * Locates the translation resources and returns them per locale, per resource type and per domain
      *
      * @example $resource['nl']['ini']['domain'] = '/path/to/resource'
-     * @return string[]
+     * @return string[][][]
      */
     public function findTranslationResources();
 }

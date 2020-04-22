@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -34,7 +35,7 @@ class AssessmentAttemptsBlock extends AssessmentAttemptsUserBlock
      */
     protected function add_additional_information_for_attempt($assessment_attempt, $counter, $reporting_data)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+        $user = DataManager::retrieve_by_id(
             User::class_name(), 
             $assessment_attempt->get_user_id());
         

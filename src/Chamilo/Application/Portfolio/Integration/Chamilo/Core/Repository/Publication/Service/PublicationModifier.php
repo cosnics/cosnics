@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service;
 
+use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
@@ -14,6 +16,7 @@ use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -228,14 +231,14 @@ class PublicationModifier implements PublicationModifierInterface
             else
             {
                 $wrapper =
-                    new \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem();
+                    new ComplexPortfolioItem();
             }
 
             $wrapper->set_ref($newObject->getId());
             $wrapper->set_parent($portfolioContentObject->getId());
             $wrapper->set_user_id($publicationTarget->getUserIdentifier());
             $wrapper->set_display_order(
-                \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
+                DataManager::select_next_display_order(
                     $portfolioContentObject->getId()
                 )
             );
@@ -273,7 +276,7 @@ class PublicationModifier implements PublicationModifierInterface
 
                 $publicationUrl = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::package(),
+                        Application::PARAM_CONTEXT => Manager::package(),
                         PortfolioDisplayManager::PARAM_STEP => $portfolioNode->get_id()
                     )
                 );

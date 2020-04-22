@@ -29,12 +29,13 @@ class AuthenticationComponent extends Manager
         $this->getGraphService()->authorizeUserByAuthorizationCode($authorizationCode);
 
         $decodedState = json_decode(base64_decode($state), true);
-        if (! is_array($decodedState) || ! array_key_exists('currentUrlParameters', $decodedState))
+        if (!is_array($decodedState) || !array_key_exists('currentUrlParameters', $decodedState))
         {
             throw new NotAllowedException();
         }
 
         $redirect = new Redirect($decodedState['currentUrlParameters']);
+
         return new RedirectResponse($redirect->getUrl());
     }
 }

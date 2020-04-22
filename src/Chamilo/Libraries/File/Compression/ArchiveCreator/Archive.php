@@ -10,17 +10,6 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 class Archive extends ArchiveFolder
 {
     /**
-     * Merges another archive as a folder into this archive
-     *
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
-     */
-    public function mergeArchive(Archive $archive)
-    {
-        $archiveFolder = $this->createFolderFromArchive($archive);
-        $this->addItem($archiveFolder);
-    }
-
-    /**
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
      *
      * @return \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder
@@ -33,5 +22,16 @@ class Archive extends ArchiveFolder
         $archiveFolder->setArchiveItems($archive->getArchiveItems());
 
         return $archiveFolder;
+    }
+
+    /**
+     * Merges another archive as a folder into this archive
+     *
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
+     */
+    public function mergeArchive(Archive $archive)
+    {
+        $archiveFolder = $this->createFolderFromArchive($archive);
+        $this->addItem($archiveFolder);
     }
 }

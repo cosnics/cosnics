@@ -4,7 +4,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -19,7 +21,7 @@ class CoursesPerCategoryBlock extends CourseBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(array(Translation::get('count')));
 
-        $categories = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_categories_ordered_by_name();
+        $categories = DataManager::retrieve_course_categories_ordered_by_name();
 
         while ($category = $categories->next_result())
         {
@@ -45,7 +47,7 @@ class CoursesPerCategoryBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
+            Html::VIEW_TABLE,
+            Html::VIEW_PIE);
     }
 }

@@ -8,6 +8,9 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -64,8 +67,8 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
             )
         );
 
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+        $user = DataManager::retrieve_by_id(
+            User::class_name(),
             (int) $this->entityId
         );
 
@@ -136,7 +139,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
     public function getEntityType()
     {
         return $this->getRequest()->getFromUrl(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE,
+            Manager::PARAM_ENTITY_TYPE,
             Entry::ENTITY_TYPE_USER
         );
     }
@@ -149,7 +152,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
     public function getEntityId()
     {
         return $this->getRequest()->getFromUrl(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID
+            Manager::PARAM_ENTITY_ID
         );
     }
 
@@ -159,11 +162,11 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
     protected function registerParameters()
     {
         $this->set_parameter(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE, $this->entityType
+            Manager::PARAM_ENTITY_TYPE, $this->entityType
         );
 
         $this->set_parameter(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID, $this->entityId
+            Manager::PARAM_ENTITY_ID, $this->entityId
         );
     }
 }

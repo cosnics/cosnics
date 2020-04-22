@@ -5,7 +5,9 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -41,7 +43,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
                 new PropertyConditionVariable(
                     ContentObjectPublication::class_name(), 
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE));
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+            $publications = DataManager::retrieve_content_object_publications(
                 $condition, 
                 $order_by, 
                 0, 
@@ -136,7 +138,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
+            Html::VIEW_TABLE,
+            Html::VIEW_PIE);
     }
 }

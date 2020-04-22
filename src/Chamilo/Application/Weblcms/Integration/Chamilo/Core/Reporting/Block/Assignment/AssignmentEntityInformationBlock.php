@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\Repository\AssignmentRepository;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -140,6 +141,6 @@ class AssignmentEntityInformationBlock extends AssignmentReportingManager
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\QuestionOptions;
 
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -35,7 +36,7 @@ class AssessmentOpenQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
             $reporting_data->add_data_category_row(
                 $row_count, 
                 Translation::get('User'), 
-                \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+                DataManager::get_fullname_from_user(
                     $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT)->get_user_id()));
             
             $answers = unserialize($question_attempt->get_answer());

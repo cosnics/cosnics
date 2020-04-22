@@ -30,6 +30,43 @@ class CalendarRepository
 
     /**
      *
+     * @param string $calendarIdentifier
+     * @param string $azureUserIdentifier
+     * @param integer $fromDate
+     * @param integer $toDate
+     *
+     * @return \Microsoft\Graph\Model\Event[] | \Microsoft\Graph\Model\Entity[]
+     */
+    public function findEventsForCalendarIdentifierAndBetweenDates(
+        $calendarIdentifier, $azureUserIdentifier, $fromDate, $toDate
+    )
+    {
+        $queryParameters = http_build_query(
+            ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
+        );
+
+        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' .
+            $queryParameters, Event::class, true
+        );
+    }
+
+    /**
+     *
+     * @param string $calendarIdentifier
+     * @param string $azureUserIdentifier
+     *
+     * @return \Microsoft\Graph\Model\Calendar | \Microsoft\Graph\Model\Entity[]
+     */
+    public function getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier)
+    {
+        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier, Calendar::class
+        );
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
      */
     protected function getGraphRepository()
@@ -55,43 +92,7 @@ class CalendarRepository
     public function listOwnedCalendars($azureUserIdentifier)
     {
         return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars',
-            Calendar::class,
-            true);
-    }
-
-    /**
-     *
-     * @param string $calendarIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Calendar | \Microsoft\Graph\Model\Entity[]
-     */
-    public function getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier)
-    {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier,
-            Calendar::class);
-    }
-
-    /**
-     *
-     * @param string $calendarIdentifier
-     * @param string $azureUserIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
-     *
-     * @return \Microsoft\Graph\Model\Event[] | \Microsoft\Graph\Model\Entity[]
-     */
-    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $azureUserIdentifier, $fromDate,
-        $toDate)
-    {
-        $queryParameters = http_build_query(
-            ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]);
-
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' . $queryParameters,
-            Event::class,
-            true);
+            '/users/' . $azureUserIdentifier . '/calendars', Calendar::class, true
+        );
     }
 }

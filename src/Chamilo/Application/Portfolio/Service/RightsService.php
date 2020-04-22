@@ -526,7 +526,7 @@ class RightsService
                     $location->set_inherit($record[RightsLocation::PROPERTY_INHERIT]);
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $location->set_inherit(1);
             }

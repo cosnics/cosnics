@@ -5,9 +5,13 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -55,14 +59,14 @@ class AssessmentUserScoresBlock extends ToolBlock
                     ContentObjectPublication::class_name(), 
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE)));
         
-        $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $publication_resultset = DataManager::retrieves(
             ContentObjectPublication::class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order_by));
         
         $publications = array();
         $headings = array();
         $headings[] = Translation::get('Name');
-        $headings[] = Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context());
+        $headings[] = Translation::get('OfficialCode', null, Manager::context());
         while ($publication = $publication_resultset->next_result())
         {
             $publications[] = $publication;
@@ -90,14 +94,14 @@ class AssessmentUserScoresBlock extends ToolBlock
             $reporting_data->add_data_category_row(
                 $key, 
                 Translation::get('Name'), 
-                \Chamilo\Core\User\Storage\DataClass\User::fullname(
-                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME], 
-                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]));
+                User::fullname(
+                    $user[User::PROPERTY_FIRSTNAME],
+                    $user[User::PROPERTY_LASTNAME]));
             
             $reporting_data->add_data_category_row(
                 $key, 
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()), 
-                $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_OFFICIAL_CODE]);
+                Translation::get('OfficialCode', null, Manager::context()),
+                $user[User::PROPERTY_OFFICIAL_CODE]);
             
             foreach ($publications as $publication)
             {
@@ -117,14 +121,14 @@ class AssessmentUserScoresBlock extends ToolBlock
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         AssessmentAttempt::class_name(), 
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
+                        AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
                     new StaticConditionVariable($publication->get_id()));
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(), 
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_USER_ID), 
-                    new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID]));
+                        AssessmentAttempt::class_name(),
+                        AssessmentAttempt::PROPERTY_USER_ID),
+                    new StaticConditionVariable($user[User::PROPERTY_ID]));
                 $condition = new AndCondition($conditions);
                 
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
@@ -133,8 +137,8 @@ class AssessmentUserScoresBlock extends ToolBlock
                 
                 if ($attempts_by_user->size() == 0)
                 {
-                    if (\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
-                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID], 
+                    if (DataManager::is_publication_target_user(
+                        $user[User::PROPERTY_ID],
                         $publication->get_id(), 
                         $course_id))
                     {
@@ -235,6 +239,6 @@ class AssessmentUserScoresBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

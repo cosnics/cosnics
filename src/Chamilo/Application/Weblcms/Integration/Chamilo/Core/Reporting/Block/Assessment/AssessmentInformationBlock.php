@@ -2,7 +2,9 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -25,7 +27,7 @@ class AssessmentInformationBlock extends AssessmentsBlock
         $reporting_data->set_categories($categories);
         
         $publication_id = $this->getPublicationId();
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $publication_id);
         
@@ -52,6 +54,6 @@ class AssessmentInformationBlock extends AssessmentsBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

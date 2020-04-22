@@ -2,8 +2,11 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -24,9 +27,9 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
         $reporting_data->set_rows($this->get_reporting_data_rows());
         
         $question_id = Request::get(
-            \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
+            Manager::PARAM_QUESTION);
         
-        $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $question = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $question_id);
         $weight = $question->get_weight();
@@ -85,7 +88,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     /**

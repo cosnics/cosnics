@@ -7,8 +7,10 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -201,7 +203,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getContentObjectPublication()
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), $this->getPublicationId()
         );
     }
@@ -340,7 +342,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getPublicationId()
     {
-        return $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return $this->getRequest()->getFromUrl(Manager::PARAM_PUBLICATION_ID);
     }
 
     /**
@@ -386,7 +388,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             )
         );
 
-        $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+        $publication_resultset = DataManager::retrieve_content_object_publications(
             $condition, $order_by
         );
 

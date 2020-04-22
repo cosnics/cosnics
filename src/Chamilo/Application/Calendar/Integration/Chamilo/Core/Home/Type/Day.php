@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -16,7 +18,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface, 
+class Day extends BlockRenderer implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
     const CONFIGURATION_HOUR_STEP = 'hour_step';
@@ -77,7 +79,7 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
                 $this->getUser(), 
                 $this->getUser(), 
                 array(), 
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                Manager::context());
             
             $calendarLegend = new Legend($dataProvider);
             $time = Request::get('time') ? intval(Request::get('time')) : time();

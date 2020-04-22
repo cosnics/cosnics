@@ -62,8 +62,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 abstract class ContentObjectForm extends FormValidator
 {
-    use DependencyInjectionContainerTrait;
-
     const NEW_CATEGORY = 'new_category';
     const PROPERTY_ATTACHMENTS = 'attachments';
 
@@ -152,8 +150,6 @@ abstract class ContentObjectForm extends FormValidator
         $this->extra = $extra;
         $this->additional_elements = $additional_elements;
         $this->allow_new_version = $allow_new_version;
-
-        $this->initializeContainer();
 
         if ($form_type == self::TYPE_EDIT &&
             !$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->getId()))

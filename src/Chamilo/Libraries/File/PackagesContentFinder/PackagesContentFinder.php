@@ -54,19 +54,20 @@ abstract class PackagesContentFinder
     /**
      * Locates the content, either from the given cache or by searching through the given set of packages
      *
+     * @return string[][]
      * @throws \Exception
-     * @return string[]
      */
     protected function findContent()
     {
         if (isset($this->cacheFile) && file_exists($this->cacheFile))
         {
-            $content = require ($this->cacheFile);
+            $content = require($this->cacheFile);
 
-            if (! empty($content) && ! is_array($content))
+            if (!empty($content) && !is_array($content))
             {
                 throw new Exception(
-                    'The given cache file ' . $this->cacheFile . ' contains invalid data, should be an array');
+                    'The given cache file ' . $this->cacheFile . ' contains invalid data, should be an array'
+                );
             }
         }
         else
@@ -91,6 +92,7 @@ abstract class PackagesContentFinder
      * Returns the full path to the given package
      *
      * @param string $package
+     *
      * @return string
      */
     protected function getPackagePath($package)
@@ -102,6 +104,7 @@ abstract class PackagesContentFinder
      * Handles a single package
      *
      * @param string $package
+     *
      * @return string[]
      */
     abstract function handlePackage($package);

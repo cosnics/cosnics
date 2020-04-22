@@ -13,8 +13,7 @@ class CsvExport extends Export
     const EXPORT_TYPE = 'csv';
 
     /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     * @return string
      */
     public function get_type()
     {
@@ -22,8 +21,7 @@ class CsvExport extends Export
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     * @return string
      */
     public function render_data()
     {

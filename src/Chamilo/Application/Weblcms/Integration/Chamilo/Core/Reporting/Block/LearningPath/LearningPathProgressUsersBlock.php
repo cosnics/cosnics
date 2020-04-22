@@ -6,11 +6,13 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -69,7 +71,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         while ($publication = $publication_resultset->next_result())
         {
             $publications[] = $publication;
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
@@ -89,16 +91,16 @@ class LearningPathProgressUsersBlock extends ToolBlock
         {
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
-                $key, Translation::get('Name'), \Chamilo\Core\User\Storage\DataClass\User::fullname(
-                $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME],
-                $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]
+                $key, Translation::get('Name'), User::fullname(
+                $user[User::PROPERTY_FIRSTNAME],
+                $user[User::PROPERTY_LASTNAME]
             )
             );
 
             foreach ($publications as $publication)
             {
                 /** @var LearningPath $content_object */
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $content_object = DataManager::retrieve_by_id(
                     ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
                 );
 
@@ -142,7 +144,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     /**

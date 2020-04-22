@@ -46,6 +46,88 @@ class SessionHandler implements SessionHandlerInterface
 
     /**
      *
+     * @return boolean
+     */
+    public function close()
+    {
+        return true;
+    }
+
+    /**
+     *
+     * @param string $session_id
+     *
+     * @return boolean
+     */
+    public function destroy($session_id)
+    {
+        return DataManager::deletes(
+            \Chamilo\Core\User\Storage\DataClass\Session::class, $this->getCondition($session_id)
+        );
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function garbage()
+    {
+        $border = time() - $this->lifetime;
+        $condition = new ComparisonCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session::class,
+                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_MODIFIED
+            ), ComparisonCondition::LESS_THAN, new StaticConditionVariable($border)
+        );
+
+        return DataManager::deletes(
+            \Chamilo\Core\User\Storage\DataClass\Session::class, $condition
+        );
+    }
+
+    /**
+     * @param int $maxlifetime
+     *
+     * @return bool|void
+     */
+    public function gc($maxlifetime)
+    {
+        $this->garbage();
+    }
+
+    /**
+     *
+     * @param integer $sessionId
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    public function getCondition($sessionId)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session::class,
+                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_SESSION_ID
+            ), new StaticConditionVariable($sessionId)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session::class,
+                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_NAME
+            ), new StaticConditionVariable($this->name)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session::class,
+                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_SAVE_PATH
+            ), new StaticConditionVariable($this->savePath)
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     *
      * @param string $save_path
      * @param string $name
      *
@@ -61,24 +143,18 @@ class SessionHandler implements SessionHandlerInterface
 
     /**
      *
-     * @return boolean
-     */
-    public function close()
-    {
-        return true;
-    }
-
-    /**
-     *
      * @param string $session_id
+     *
      * @return boolean|string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function read($session_id)
     {
-        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class_name());
+        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
         $session = DataManager::retrieve(
-            \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-            new DataClassRetrieveParameters($this->getCondition($session_id)));
+            \Chamilo\Core\User\Storage\DataClass\Session::class,
+            new DataClassRetrieveParameters($this->getCondition($session_id))
+        );
 
         if ($session instanceof \Chamilo\Core\User\Storage\DataClass\Session)
         {
@@ -99,17 +175,21 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @param string $session_id
      * @param string $data
+     *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Exception
      */
     public function write($session_id, $data)
     {
         $data = base64_encode($data);
 
-        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class_name());
+        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
 
         $session = DataManager::retrieve(
-            \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-            new DataClassRetrieveParameters($this->getCondition($session_id)));
+            \Chamilo\Core\User\Storage\DataClass\Session::class,
+            new DataClassRetrieveParameters($this->getCondition($session_id))
+        );
 
         if ($session instanceof \Chamilo\Core\User\Storage\DataClass\Session)
         {
@@ -130,72 +210,5 @@ class SessionHandler implements SessionHandlerInterface
 
             return $session->create();
         }
-    }
-
-    /**
-     *
-     * @param string $session_id
-     * @return boolean
-     */
-    public function destroy($session_id)
-    {
-        return DataManager::deletes(
-            \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-            $this->getCondition($session_id));
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function garbage()
-    {
-        $border = time() - $this->lifetime;
-        $condition = new ComparisonCondition(
-            new PropertyConditionVariable(
-                \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_MODIFIED),
-            ComparisonCondition::LESS_THAN,
-            new StaticConditionVariable($border));
-
-        return DataManager::deletes(
-            \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-            $condition);
-    }
-
-    /**
-     *
-     * @param integer $sessionId
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    public function getCondition($sessionId)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_SESSION_ID),
-            new StaticConditionVariable($sessionId));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_NAME),
-            new StaticConditionVariable($this->name));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
-                \Chamilo\Core\User\Storage\DataClass\Session::PROPERTY_SAVE_PATH),
-            new StaticConditionVariable($this->savePath));
-
-        return new AndCondition($conditions);
-    }
-
-    /**
-     *
-     * @see SessionHandlerInterface::gc()
-     */
-    public function gc($maxlifetime)
-    {
-        $this->garbage();
     }
 }

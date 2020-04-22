@@ -18,8 +18,6 @@ class PdfExport extends Export
     /**
      * convert the HTML of a real page, to a code adapted to HTML2PDF
      *
-     * @access public
-     *
      * @param string HTML of a real page
      *
      * @return string HTML adapted to HTML2PDF

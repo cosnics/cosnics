@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal;
 
+use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Actions implements \Chamilo\Application\Calendar\ActionsInterface
+class Actions implements ActionsInterface
 {
 
     /**

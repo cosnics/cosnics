@@ -24,23 +24,24 @@ class OptimizedTranslationsPhpFileLoader implements LoaderInterface
      * @param mixed $resource A resource
      * @param string $locale A locale
      * @param string $domain The domain
+     *
      * @return \Symfony\Component\Translation\MessageCatalogue A MessageCatalogue instance
      * @throws \Symfony\Component\Translation\Exception\NotFoundResourceException when the resource cannot be found
      * @throws \Symfony\Component\Translation\Exception\InvalidResourceException when the resource cannot be loaded
      */
     public function load($resource, $locale, $domain = 'messages')
     {
-        if (! stream_is_local($resource))
+        if (!stream_is_local($resource))
         {
             throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
 
-        if (! file_exists($resource))
+        if (!file_exists($resource))
         {
             throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
 
-        $messages = require ($resource);
+        $messages = require($resource);
 
         return new MessageCatalogue($locale, $messages);
     }

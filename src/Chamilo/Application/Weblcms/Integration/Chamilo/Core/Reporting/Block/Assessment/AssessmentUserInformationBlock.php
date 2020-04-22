@@ -3,7 +3,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -34,7 +36,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $user_id = Request::get('users');
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user_id);
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->getPublicationId());
         
@@ -60,7 +62,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     protected function get_assessment_attempts_condition()

@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block;
 
+use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
+
 abstract class ToolBlock extends CourseBlock
 {
 
@@ -23,12 +26,12 @@ abstract class ToolBlock extends CourseBlock
             $tool = $this->get_tool();
         }
         
-        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name($tool);
+        return DataManager::retrieve_course_tool_by_name($tool);
     }
 
     public function getPublicationId()
     {
-        return $this->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return $this->get_parent()->get_parameter(Manager::PARAM_PUBLICATION_ID);
     }
 
     public function get_category_id()
@@ -46,6 +49,6 @@ abstract class ToolBlock extends CourseBlock
         $this->params['course_id'] = $course_id;
         $this->params['user_id'] = $user_id;
         $this->params['tool'] = $tool;
-        $this->params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $pid;
+        $this->params[Manager::PARAM_PUBLICATION_ID] = $pid;
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Templat
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AverageExerciseScoreBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\LastAccessToToolsBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -28,15 +29,15 @@ class CourseTrackerTemplate extends ReportingTemplate
     public function get_last_access_to_tool()
     {
         $course_weblcms_block = new LastAccessToToolsBlock($this);
-        $course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        $user_id = request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $course_id = Request::get(Manager::PARAM_COURSE);
+        $user_id = request::get(Manager::PARAM_USERS);
         if ($course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
+            $this->set_parameter(Manager::PARAM_COURSE, $course_id);
         }
         if ($user_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $user_id);
+            $this->set_parameter(Manager::PARAM_USERS, $user_id);
         }
         return $course_weblcms_block;
     }
@@ -44,10 +45,10 @@ class CourseTrackerTemplate extends ReportingTemplate
     public function get_average_exercise_score()
     {
         $course_weblcms_block = new AverageExerciseScoreBlock($this);
-        $course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $course_id = Request::get(Manager::PARAM_COURSE);
         if ($course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
+            $this->set_parameter(Manager::PARAM_COURSE, $course_id);
         }
         return $course_weblcms_block;
     }

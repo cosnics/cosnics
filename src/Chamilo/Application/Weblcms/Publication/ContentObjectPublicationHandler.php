@@ -3,12 +3,15 @@ namespace Chamilo\Application\Weblcms\Publication;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Exception;
+use RuntimeException;
 
 /**
  * Content Object Publication Handler for the Weblcms Application
@@ -105,7 +108,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
             Utilities::COMMON_LIBRARIES);
         
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE);
+            Manager::PARAM_ACTION => Manager::ACTION_BROWSE);
         
         if ($this->is_publish_and_build_submit())
         {
@@ -138,7 +141,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
                 $publication = $this->createPublicationForContentObject($contentObject);
                 $this->createdPublications[] = $publication;
             }
-            catch (\Exception $ex)
+            catch (Exception $ex)
             {
                 $success = false;
             }
@@ -173,7 +176,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
         
         if (! $publication->create())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Could not create the publication for content object with id ' . $contentObject->getId());
         }
         
@@ -227,10 +230,10 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
     protected function getBuilderParameters()
     {
         $parameters = array();
-        
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
-        
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
+
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
+
+        $parameters[Manager::PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
         
         return $parameters;
     }
@@ -243,10 +246,10 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
     protected function getDisplayParameters()
     {
         $parameters = array();
-        
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
-        
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
+
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+
+        $parameters[Manager::PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
         
         return $parameters;
     }

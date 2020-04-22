@@ -3,7 +3,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\Reporting\ReportingData;
@@ -25,7 +27,7 @@ abstract class CourseBlock extends ReportingBlock
 
     public function getCourseId()
     {
-        return $this->get_parent()->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        return $this->get_parent()->get_parent()->get_parameter(Manager::PARAM_COURSE);
     }
 
     public function get_score_bar($score)
@@ -118,7 +120,7 @@ abstract class CourseBlock extends ReportingBlock
         
         $publication_condition = new AndCondition($publication_conditions);
         
-        return \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications(
+        return DataManager::count_content_object_publications(
             $publication_condition);
     }
 

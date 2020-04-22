@@ -28,28 +28,15 @@ class Timer
     }
 
     /**
-     * Reset the start and stop time
+     * function to get the microtime
+     *
+     * @return float
      */
-    public function reset()
+    private function get_microtime()
     {
-        $this->start_time = 0;
-        $this->stop_time = 0;
-    }
+        list($usec, $sec) = explode(" ", microtime());
 
-    /**
-     * Starts the timer by setting the start time to the current microtime
-     */
-    public function start()
-    {
-        $this->start_time = $this->get_microtime();
-    }
-
-    /**
-     * Stops the timer by setting the stop time to the current microtime
-     */
-    public function stop()
-    {
-        $this->stop_time = $this->get_microtime();
+        return ((float) $usec + (float) $sec);
     }
 
     /**
@@ -73,13 +60,27 @@ class Timer
     }
 
     /**
-     * function to get the microtime
-     *
-     * @return float
+     * Reset the start and stop time
      */
-    private function get_microtime()
+    public function reset()
     {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float) $usec + (float) $sec);
+        $this->start_time = 0;
+        $this->stop_time = 0;
+    }
+
+    /**
+     * Starts the timer by setting the start time to the current microtime
+     */
+    public function start()
+    {
+        $this->start_time = $this->get_microtime();
+    }
+
+    /**
+     * Stops the timer by setting the stop time to the current microtime
+     */
+    public function stop()
+    {
+        $this->stop_time = $this->get_microtime();
     }
 }

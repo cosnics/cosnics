@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Test\Archive;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+class FilesystemTest extends PHPUnit_Framework_TestCase
 {
 
     private $work_dir;

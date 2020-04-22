@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\UserExporter;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
+use InvalidArgumentException;
 
 /**
  * Class to export users
@@ -55,7 +56,7 @@ class UserExporter
         {
             if (!$user_export_extender instanceof UserExportExtender)
             {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'The given user export extenders must be an instance of UserExportExtender'
                 );
             }
@@ -74,7 +75,7 @@ class UserExporter
     {
         if (!$user_export_renderer instanceof UserExportRenderer)
         {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The given user export renderer must be an instance of UserExportRenderer'
             );
         }
@@ -139,7 +140,7 @@ class UserExporter
         {
             if (!$user instanceof User)
             {
-                throw new \InvalidArgumentException('The given user must be an instance of User');
+                throw new InvalidArgumentException('The given user must be an instance of User');
             }
 
             $user_export_data = array();

@@ -28,11 +28,11 @@ class Configuration
     private $params;
 
     /**
-     * Constructor.
+     * @throws \Exception
      */
     private function __construct()
     {
-        $this->load_file(Path::getInstance()->getStoragePath() . 'configuration/configuration.ini');
+        $this->loadFile(Path::getInstance()->getStoragePath() . 'configuration/configuration.ini');
     }
 
     /**
@@ -42,11 +42,34 @@ class Configuration
      */
     public static function getInstance()
     {
-        if (! isset(self::$instance))
+        if (!isset(self::$instance))
         {
             self::$instance = new self();
         }
+
         return self::$instance;
+    }
+
+    /**
+     * Gets a parameter from the configuration.
+     *
+     * @param string $section The name of the section in which the parameter is located.
+     * @param string $name The parameter name.
+     *
+     * @return string The parameter value.
+     */
+    public function getParameter($section, $name)
+    {
+        if (!isset($this->params[$section]))
+        {
+            return null;
+        }
+        if (!isset($this->params[$section][$name]))
+        {
+            return null;
+        }
+
+        return $this->params[$section][$name];
     }
 
     /**
@@ -67,40 +90,6 @@ class Configuration
     }
 
     /**
-     * Gets a parameter from the configuration.
-     *
-     * @param string $section The name of the section in which the parameter is located.
-     * @param string $name The parameter name.
-     *
-     * @return string The parameter value.
-     */
-    public function getParameter($section, $name)
-    {
-        if (! isset($this->params[$section]))
-            return null;
-        if (! isset($this->params[$section][$name]))
-            return null;
-
-        return $this->params[$section][$name];
-    }
-
-    /**
-     * Load the config from a given file.
-     *
-     * @param string $file the php file which must be loaded.
-     *
-     * @throws \Exception
-     *
-     * @deprecated
-     *
-     * @see loadFile
-     */
-    public function load_file($file)
-    {
-        $this->load_file($file);
-    }
-
-    /**
      * Load the config from a given file.
      *
      * @param string $file the php file which must be loaded.
@@ -109,12 +98,12 @@ class Configuration
      */
     public function loadFile($file)
     {
-        if (! is_file($file))
+        if (!is_file($file))
         {
             throw new Exception("Config file {$file} not found");
         }
 
-        if (! is_readable($file))
+        if (!is_readable($file))
         {
             throw new Exception("Config file {$file} not readable");
         }

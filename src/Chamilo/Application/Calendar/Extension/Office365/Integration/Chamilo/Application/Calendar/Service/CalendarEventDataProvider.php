@@ -7,9 +7,12 @@ use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
+use Exception;
 
 /**
  *
@@ -22,7 +25,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 {
     const CALENDAR_EVENT_DATA_PROVIDER_TYPE = 'Chamilo\Application\Calendar\Extension\Office365';
 
-    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -40,7 +43,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         try
@@ -79,7 +82,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 
             return $filesystemCache->fetch($identifierString);
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return [];
         }
@@ -100,7 +103,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @return string[]
      */
     protected function getCalendarIdentifiers(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+        CalendarRendererProvider $calendarRendererProvider)
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
             $calendarRendererProvider->getDataUser(),
@@ -170,7 +173,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             $availableCalendar->setIdentifier($calendarIdentifier);
             $availableCalendar->setName('NOT FOUND');
@@ -212,7 +215,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                     $availableCalendars[] = $availableCalendar;
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $availableCalendars = [];
             }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google;
 
+use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Actions implements \Chamilo\Application\Calendar\ActionsInterface
+class Actions implements ActionsInterface
 {
 
     /**
@@ -39,7 +40,7 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
         );
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
-        $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager::context();
+        $configurationContext = Manager::context();
         $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
 
         if (!$accessToken)

@@ -13,11 +13,11 @@ use DOMXPath;
  */
 class WebpageProperties
 {
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_CONTENT_TYPE = 'content_type';
+    const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_ENCODING = 'encoding';
     const PROPERTY_FILE_PROPERTIES = 'file_properties';
+    const PROPERTY_TITLE = 'title';
 
     /**
      *
@@ -27,155 +27,8 @@ class WebpageProperties
 
     /**
      *
-     * @return string[]
-     */
-    public function get_properties()
-    {
-        return $this->properties;
-    }
-
-    /**
-     *
-     * @param string[] $properties
-     */
-    public function set_properties($properties)
-    {
-        $this->properties = $properties;
-    }
-
-    /**
-     *
-     * @param string $property
-     * @param string $value
-     */
-    public function set_property($property, $value)
-    {
-        $this->properties[$property] = $value;
-    }
-
-    /**
-     *
-     * @param string $property
-     * @return string
-     */
-    public function get_property($property)
-    {
-        return $this->properties[$property];
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_title()
-    {
-        return $this->get_property(self::PROPERTY_TITLE);
-    }
-
-    /**
-     *
-     * @param string $title
-     */
-    public function set_title($title)
-    {
-        $this->set_property(self::PROPERTY_TITLE, $title);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_description()
-    {
-        return $this->get_property(self::PROPERTY_DESCRIPTION);
-    }
-
-    /**
-     *
-     * @param string $description
-     */
-    public function set_description($description)
-    {
-        $this->set_property(self::PROPERTY_DESCRIPTION, $description);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_content_type()
-    {
-        return $this->get_property(self::PROPERTY_CONTENT_TYPE);
-    }
-
-    /**
-     *
-     * @param string $contentType
-     */
-    public function set_content_type($contentType)
-    {
-        $this->set_property(self::PROPERTY_CONTENT_TYPE, $contentType);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_encoding()
-    {
-        return $this->get_property(self::PROPERTY_ENCODING);
-    }
-
-    /**
-     *
-     * @param string $encoding
-     */
-    public function set_encoding($encoding)
-    {
-        $this->set_property(self::PROPERTY_ENCODING, $encoding);
-    }
-
-    /**
-     *
-     * @return \libraries\file\FileProperties
-     */
-    public function get_file_properties()
-    {
-        return $this->get_property(self::PROPERTY_FILE_PROPERTIES);
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\File\Properties\FileProperties $fileProperties
-     */
-    public function set_file_properties($fileProperties)
-    {
-        $this->set_property(self::PROPERTY_FILE_PROPERTIES, $fileProperties);
-    }
-
-    /**
      *
-     * @param string[] $fileDescription
-     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
-     */
-    public static function from_upload($fileDescription)
-    {
-        return self::determine_properties(FileProperties::from_upload($fileDescription));
-    }
-
-    /**
-     *
-     * @param string $path
-     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
-     */
-    public static function from_path($path)
-    {
-        return self::determine_properties(FileProperties::from_path($path));
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\File\Properties\FileProperties $fileProperties
      * @return \Chamilo\Libraries\File\Properties\WebpageProperties
      */
     public static function determine_properties($fileProperties)
@@ -230,5 +83,156 @@ class WebpageProperties
         }
 
         return $properties;
+    }
+
+    /**
+     *
+     * @param string $path
+     *
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
+     */
+    public static function from_path($path)
+    {
+        return self::determine_properties(FileProperties::from_path($path));
+    }
+
+    /**
+     *
+     * @param string[] $fileDescription
+     *
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
+     */
+    public static function from_upload($fileDescription)
+    {
+        return self::determine_properties(FileProperties::from_upload($fileDescription));
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_content_type()
+    {
+        return $this->get_property(self::PROPERTY_CONTENT_TYPE);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_description()
+    {
+        return $this->get_property(self::PROPERTY_DESCRIPTION);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_encoding()
+    {
+        return $this->get_property(self::PROPERTY_ENCODING);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\Properties\WebpageProperties
+     */
+    public function get_file_properties()
+    {
+        return $this->get_property(self::PROPERTY_FILE_PROPERTIES);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_properties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     *
+     * @param string[] $properties
+     */
+    public function set_properties($properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     *
+     * @param string $property
+     *
+     * @return string
+     */
+    public function get_property($property)
+    {
+        return $this->properties[$property];
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_title()
+    {
+        return $this->get_property(self::PROPERTY_TITLE);
+    }
+
+    /**
+     *
+     * @param string $contentType
+     */
+    public function set_content_type($contentType)
+    {
+        $this->set_property(self::PROPERTY_CONTENT_TYPE, $contentType);
+    }
+
+    /**
+     *
+     * @param string $description
+     */
+    public function set_description($description)
+    {
+        $this->set_property(self::PROPERTY_DESCRIPTION, $description);
+    }
+
+    /**
+     *
+     * @param string $encoding
+     */
+    public function set_encoding($encoding)
+    {
+        $this->set_property(self::PROPERTY_ENCODING, $encoding);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\File\Properties\WebpageProperties
+     */
+    public function set_file_properties($fileProperties)
+    {
+        $this->set_property(self::PROPERTY_FILE_PROPERTIES, $fileProperties);
+    }
+
+    /**
+     *
+     * @param string $property
+     * @param string $value
+     */
+    public function set_property($property, $value)
+    {
+        $this->properties[$property] = $value;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function set_title($title)
+    {
+        $this->set_property(self::PROPERTY_TITLE, $title);
     }
 }

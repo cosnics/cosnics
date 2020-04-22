@@ -3,6 +3,10 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
@@ -366,7 +370,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getEntryClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class;
+        return Entry::class;
     }
 
     /**
@@ -374,7 +378,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getFeedbackClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback::class;
+        return Feedback::class;
     }
 
     /**
@@ -382,7 +386,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getNoteClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Note::class;
+        return Note::class;
     }
 
     /**
@@ -390,7 +394,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getScoreClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class;
+        return Score::class;
     }
 
     /**
@@ -398,7 +402,7 @@ class LearningPathAssignmentRepository extends
      */
     protected function getEntryAttachmentClassName()
     {
-        return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment::class;
+        return EntryAttachment::class;
     }
 
     /**

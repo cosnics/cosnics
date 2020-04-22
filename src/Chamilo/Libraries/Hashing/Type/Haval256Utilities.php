@@ -13,20 +13,22 @@ class Haval256Utilities extends HashingUtilities
 {
 
     /**
+     * @param string $filePath
      *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashString()
-     */
-    public function hashString($string)
-    {
-        return hash('haval256,5', $string);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashFile()
+     * @return string
      */
     public function hashFile($filePath)
     {
         return hash_file('haval256,5', $$filePath);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function hashString($string)
+    {
+        return hash('haval256,5', $string);
     }
 }

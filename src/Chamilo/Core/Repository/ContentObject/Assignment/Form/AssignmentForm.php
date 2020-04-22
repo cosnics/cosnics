@@ -310,23 +310,6 @@ class AssignmentForm extends ContentObjectForm
             }
 
             $defaults[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] = $object->get_automatic_feedback_text();
-            $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = array();
-
-            $co_ids = explode(',', $object->get_automatic_feedback_co_ids());
-
-            if ($co_ids)
-            {
-                $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $co_ids,
-                    ContentObject::get_table_name()
-                );
-                $attached_objects = DataManager::retrieve_active_content_objects(
-                    ContentObject::class_name(), new DataClassRetrievesParameters($condition)
-                )->as_array();
-                $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = Utilities::content_objects_for_element_finder(
-                    $attached_objects
-                );
-            }
 
             $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
 
@@ -355,7 +338,7 @@ class AssignmentForm extends ContentObjectForm
                     );
                 }
 
-                $element = $this->getElement(self::PROPERTY_ATTACHMENTS);
+                $element = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
                 $element->setDefaultValues($defaultAttachments);
             }
         }

@@ -39,21 +39,45 @@ class UserService
     }
 
     /**
+     * Authorizes a user by a given authorization code
      *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
+     * @param string $authorizationCode
      */
-    protected function getUserRepository()
+    public function authorizeUserByAuthorizationCode($authorizationCode)
     {
-        return $this->userRepository;
+        $this->getUserRepository()->authorizeUserByAuthorizationCode($authorizationCode);
     }
 
     /**
+     * Returns the identifier in azure active directory for a given user
      *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository $userRepository
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function setUserRepository(UserRepository $userRepository)
+    public function getAzureUserIdentifier(User $user)
     {
-        $this->userRepository = $userRepository;
+        $azureActiveDirectoryUserIdentifier = $this->getLocalSetting()->get(
+            'external_user_id', 'Chamilo\Libraries\Protocol\Microsoft\Graph', $user
+        );
+
+        if (empty($azureActiveDirectoryUserIdentifier))
+        {
+            $azureUser = $this->getUserRepository()->getAzureUser($user);
+
+            if ($azureUser instanceof \Microsoft\Graph\Model\User)
+            {
+                $azureActiveDirectoryUserIdentifier = $azureUser->getId();
+            }
+
+            $this->getLocalSetting()->create(
+                'external_user_id', $azureActiveDirectoryUserIdentifier, 'Chamilo\Libraries\Protocol\Microsoft\Graph',
+                $user
+            );
+        }
+
+        return $azureActiveDirectoryUserIdentifier;
     }
 
     /**
@@ -75,45 +99,20 @@ class UserService
     }
 
     /**
-     * Returns the identifier in azure active directory for a given user
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
      */
-    public function getAzureUserIdentifier(User $user)
+    protected function getUserRepository()
     {
-        $azureActiveDirectoryUserIdentifier = $this->getLocalSetting()->get(
-            'external_user_id',
-            'Chamilo\Libraries\Protocol\Microsoft\Graph',
-            $user);
-
-        if (empty($azureActiveDirectoryUserIdentifier))
-        {
-            $azureUser = $this->getUserRepository()->getAzureUser($user);
-
-            if ($azureUser instanceof \Microsoft\Graph\Model\User)
-            {
-                $azureActiveDirectoryUserIdentifier = $azureUser->getId();
-            }
-
-            $this->getLocalSetting()->create(
-                'external_user_id',
-                $azureActiveDirectoryUserIdentifier,
-                'Chamilo\Libraries\Protocol\Microsoft\Graph',
-                $user);
-        }
-
-        return $azureActiveDirectoryUserIdentifier;
+        return $this->userRepository;
     }
 
     /**
-     * Authorizes a user by a given authorization code
      *
-     * @param string $authorizationCode
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository $userRepository
      */
-    public function authorizeUserByAuthorizationCode($authorizationCode)
+    protected function setUserRepository(UserRepository $userRepository)
     {
-        $this->getUserRepository()->authorizeUserByAuthorizationCode($authorizationCode);
+        $this->userRepository = $userRepository;
     }
 }

@@ -5,7 +5,10 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,8 +23,8 @@ class PublicationAccessBlock extends ToolBlock
 
         $reporting_data->set_rows(
             array(
-                Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context())
+                Translation::get('User', null, Manager::context()),
+                Translation::get('OfficialCode', null, Manager::context())
             )
         );
 
@@ -51,13 +54,13 @@ class PublicationAccessBlock extends ToolBlock
 
             $reporting_data->add_data_category_row(
                 $counter,
-                Translation::get('User', null, \Chamilo\Core\User\Manager::context()),
+                Translation::get('User', null, Manager::context()),
                 $name
             );
 
             $reporting_data->add_data_category_row(
                 $counter,
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()),
+                Translation::get('OfficialCode', null, Manager::context()),
                 $officialCode
             );
 
@@ -84,7 +87,7 @@ class PublicationAccessBlock extends ToolBlock
     public function retrieve_course_visits()
     {
         $content_object_publication_id = $this->getPublicationId();
-        $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $content_object_publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $content_object_publication_id
         );
@@ -119,6 +122,6 @@ class PublicationAccessBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

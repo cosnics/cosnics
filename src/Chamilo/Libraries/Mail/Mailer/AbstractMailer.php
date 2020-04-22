@@ -26,7 +26,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     public function __construct(Configuration $configuration = null)
     {
-        if (! $configuration instanceof Configuration)
+        if (!$configuration instanceof Configuration)
         {
             $configuration = Configuration::getInstance();
         }
@@ -35,33 +35,19 @@ abstract class AbstractMailer implements MailerInterface
     }
 
     /**
-     * Sends multiple mails
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
-     */
-    public function sendMails($mails = array())
-    {
-        foreach ($mails as $mail)
-        {
-            $this->sendMail($mail);
-        }
-    }
-
-    /**
-     * Determines the sender name for the given mail
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     * Determines the default e-mail address when no valid e-mail is given
      *
      * @return string
      */
-    protected function determineFromName(Mail $mail)
+    protected function determineDefaultEmail()
     {
-        if (! is_null($mail->getFromName()))
+        $noReplyEmail = $this->configuration->get_setting(array('Chamilo\Core\Admin', 'no_reply_email'));
+        if (!empty($noReplyEmail))
         {
-            return $mail->getFromName();
+            return $noReplyEmail;
         }
 
-        return $this->getAdministratorName();
+        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_email'));
     }
 
     /**
@@ -73,7 +59,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineFromEmail(Mail $mail)
     {
-        if (! is_null($mail->getFromEmail()))
+        if (!is_null($mail->getFromEmail()))
         {
             return $mail->getFromEmail();
         }
@@ -82,17 +68,17 @@ abstract class AbstractMailer implements MailerInterface
     }
 
     /**
-     * Determines the reply name for the given mail
+     * Determines the sender name for the given mail
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
-    protected function determineReplyName(Mail $mail)
+    protected function determineFromName(Mail $mail)
     {
-        if (! is_null($mail->getReplyName()))
+        if (!is_null($mail->getFromName()))
         {
-            return $mail->getReplyName();
+            return $mail->getFromName();
         }
 
         return $this->getAdministratorName();
@@ -107,7 +93,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineReplyEmail(Mail $mail)
     {
-        if (! is_null($mail->getReplyEmail()))
+        if (!is_null($mail->getReplyEmail()))
         {
             return $mail->getReplyEmail();
         }
@@ -116,19 +102,31 @@ abstract class AbstractMailer implements MailerInterface
     }
 
     /**
-     * Determines the default e-mail address when no valid e-mail is given
+     * Determines the reply name for the given mail
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      *
      * @return string
      */
-    protected function determineDefaultEmail()
+    protected function determineReplyName(Mail $mail)
     {
-        $noReplyEmail = $this->configuration->get_setting(array('Chamilo\Core\Admin', 'no_reply_email'));
-        if (! empty($noReplyEmail))
+        if (!is_null($mail->getReplyName()))
         {
-            return $noReplyEmail;
+            return $mail->getReplyName();
         }
 
-        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_email'));
+        return $this->getAdministratorName();
+    }
+
+    /**
+     * Returns the name of the administrator from the platform settings
+     *
+     * @return string
+     */
+    protected function getAdministratorName()
+    {
+        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_firstname')) .
+            $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_surname'));
     }
 
     /**
@@ -158,13 +156,15 @@ abstract class AbstractMailer implements MailerInterface
     }
 
     /**
-     * Returns the name of the administrator from the platform settings
+     * Sends multiple mails
      *
-     * @return string
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
-    protected function getAdministratorName()
+    public function sendMails($mails = array())
     {
-        return $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_firstname')) .
-        $this->configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_surname'));
+        foreach ($mails as $mail)
+        {
+            $this->sendMail($mail);
+        }
     }
 }

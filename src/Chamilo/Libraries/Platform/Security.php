@@ -1,12 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -15,6 +11,11 @@ use Chamilo\Libraries\Platform\Session\Session;
 class Security
 {
     use DependencyInjectionContainerTrait;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
 
     /**
      * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
@@ -26,12 +27,15 @@ class Security
      */
     public function checkToken($array = 'post')
     {
-        $session_token = Session::retrieve('sec_token');
+        $sessionUtilities = $this->getSessionUtilities();
+        $request = $this->getRequest();
+
+        $session_token = $sessionUtilities->retrieve('sec_token');
 
         switch ($array)
         {
             case 'get' :
-                $get_token = Request::get('sec_token');
+                $get_token = $request->query->get('sec_token');
                 if (isset($session_token) && isset($get_token) && $session_token === $get_token)
                 {
                     return true;
@@ -39,7 +43,7 @@ class Security
 
                 return false;
             case 'post' :
-                $post_token = Request::post('sec_token');
+                $post_token = $request->request->get('sec_token');
                 if (isset($session_token) && isset($post_token) && $session_token === $post_token)
                 {
                     return true;
@@ -63,8 +67,11 @@ class Security
      */
     public function checkUa()
     {
-        $session_agent = Session::retrieve('sec_ua');
-        $current_agent = Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed');
+        $sessionUtilities = $this->getSessionUtilities();
+        $request = $this->getRequest();
+
+        $session_agent = $sessionUtilities->retrieve('sec_ua');
+        $current_agent = $request->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed');
 
         if (isset($session_agent) and $session_agent === $current_agent)
         {
@@ -110,8 +117,6 @@ class Security
      */
     public function getHashingUtilities()
     {
-        $this->initializeContainer();
-
         return $this->getService(HashingUtilities::class);
     }
 
@@ -127,7 +132,7 @@ class Security
     public function getToken()
     {
         $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
-        Session::register('sec_token', $token);
+        $this->getSessionUtilities()->register('sec_token', $token);
 
         return $token;
     }
@@ -137,8 +142,11 @@ class Security
      */
     public function getUa()
     {
-        Session::register('sec_ua_seed', uniqid(rand(), true));
-        Session::register('sec_ua', Request::server('HTTP_USER_AGENT') . Session::retrieve('sec_ua_seed'));
+        $sessionUtilities = $this->getSessionUtilities();
+        $sessionUtilities->register('sec_ua_seed', uniqid(rand(), true));
+        $sessionUtilities->register(
+            'sec_ua', $this->getRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed')
+        );
     }
 
     /**
@@ -172,27 +180,6 @@ class Security
     }
 
     /**
-     * Checks whether or not the logged in user is a platform admin or a teacher
-     *
-     * @return boolean
-     */
-    protected function isPlatformAdminOrTeacher()
-    {
-        $user_id = Session::getUserId();
-
-        if (!empty($user_id))
-        {
-            $user = DataManager::retrieve_by_id(
-                User::class_name(), $user_id
-            );
-
-            return $user->is_platform_admin() || $user->is_teacher();
-        }
-
-        return false;
-    }
-
-    /**
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities()
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
@@ -202,68 +189,57 @@ class Security
      *
      * @return string string
      */
-    public function removeXSS($variable, $isAdmin = null)
+    public function removeXSS($variable)
     {
-        if (is_null($isAdmin))
+        if (is_array($variable))
         {
-            $isAdmin = self::isPlatformAdminOrTeacher();
+            return self::removeXSSRecursive($variable);
         }
 
-        if (!$isAdmin)
-        { // don't question the actions of platform admins, they know what they are doing
+        // from: http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
+        // from: https://gist.github.com/mbijon/1098477
 
-            if (is_array($variable))
-            {
-                return self::removeXSSRecursive($variable, $isAdmin);
-            }
+        // Remove any attribute starting with "on" or xmlns
+        $variable = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+[>\b]?#iu', '$1>', $variable);
 
-            // from: http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
-            // from: https://gist.github.com/mbijon/1098477
+        // Remove javascript: and vbscript: protocols
+        $variable = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
+            '$1=$2nojavascript...', $variable
+        );
+        $variable = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
+            '$1=$2novbscript...', $variable
+        );
+        $variable = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $variable
+        );
 
-            // Remove any attribute starting with "on" or xmlns
-            $variable = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+[>\b]?#iu', '$1>', $variable);
+        // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
+        $variable = preg_replace(
+            '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
+        );
+        $variable = preg_replace(
+            '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
+        );
+        $variable = preg_replace(
+            '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu',
+            '$1>', $variable
+        );
 
-            // Remove javascript: and vbscript: protocols
+        // Remove namespaced elements (we do not need them)
+        $variable = preg_replace('#</*\w+:\w[^>]*+>#i', '', $variable);
+
+        do
+        {
+            // Remove really unwanted tags, but allow object|embed (for html editor)
+            $old_data = $variable;
             $variable = preg_replace(
-                '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
-                '$1=$2nojavascript...', $variable
+                '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
+                '', $variable
             );
-            $variable = preg_replace(
-                '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu',
-                '$1=$2novbscript...', $variable
-            );
-            $variable = preg_replace(
-                '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...',
-                $variable
-            );
-
-            // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
-            $variable = preg_replace(
-                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
-            );
-            $variable = preg_replace(
-                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $variable
-            );
-            $variable = preg_replace(
-                '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu',
-                '$1>', $variable
-            );
-
-            // Remove namespaced elements (we do not need them)
-            $variable = preg_replace('#</*\w+:\w[^>]*+>#i', '', $variable);
-
-            do
-            {
-                // Remove really unwanted tags, but allow object|embed (for html editor)
-                $old_data = $variable;
-                $variable = preg_replace(
-                    '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
-                    '', $variable
-                );
-            }
-            while ($old_data !== $variable);
-            // we are done...
         }
+        while ($old_data !== $variable);
 
         return $variable;
     }
@@ -271,17 +247,16 @@ class Security
     /**
      *
      * @param string[] $array
-     * @param boolean $isAdmin
      *
      * @return string[]
      */
-    public function removeXSSRecursive($array, $isAdmin = null)
+    public function removeXSSRecursive($array)
     {
         foreach ($array as $key => $value)
         {
-            $key2 = self::removeXSS($key, $isAdmin);
-            $value2 = (is_array($value)) ? self::removeXSSRecursive($value, $isAdmin) : self::remove_XSS(
-                $value, $isAdmin
+            $key2 = self::removeXSS($key);
+            $value2 = (is_array($value)) ? self::removeXSSRecursive($value) : self::removeXSS(
+                $value
             );
 
             unset($array[$key]);
@@ -297,22 +272,20 @@ class Security
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
      *
      * @param string $variable
-     * @param boolean $isAdmin
      *
      * @return string string
      * @deprecated
      *
      * @see removeXSS
      */
-    public function remove_XSS($variable, $isAdmin = null)
+    public function remove_XSS($variable)
     {
-        return self::removeXSS($variable, $isAdmin);
+        return self::removeXSS($variable);
     }
 
     /**
      *
      * @param string[] $array
-     * @param boolean $isAdmin
      *
      * @return string[]
      *
@@ -320,8 +293,8 @@ class Security
      *
      * @see removeXSSRecursive
      */
-    public function remove_XSS_recursive($array, $isAdmin = null)
+    public function remove_XSS_recursive($array)
     {
-        return self::removeXSSRecursive($array, $isAdmin);
+        return self::removeXSSRecursive($array);
     }
 }

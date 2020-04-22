@@ -1,8 +1,14 @@
 <?php
 namespace Chamilo\Configuration\Test\Php\Php\Acceptance;
 
+use Chamilo\RecursiveDirectoryIterator;
+use Chamilo\RecursiveIteratorIterator;
+use Chamilo\RecursiveRegexIterator;
+use Chamilo\RegexIterator;
+use PHPUnit_Framework_TestSuite;
+
 require_once __DIR__ . '/__files/RequirerTestCase.php';
-class TheCodeIsLoadableTest extends \PHPUnit_Framework_TestSuite
+class TheCodeIsLoadableTest extends PHPUnit_Framework_TestSuite
 {
 
     public static function suite()
@@ -18,12 +24,12 @@ class TheCodeIsLoadableTest extends \PHPUnit_Framework_TestSuite
 
     private function addTestForAllClassesInside($path)
     {
-        $directory = new \Chamilo\RecursiveDirectoryIterator($path);
-        $iterator = new \Chamilo\RecursiveIteratorIterator($directory);
-        $regex = new \Chamilo\RegexIterator(
+        $directory = new RecursiveDirectoryIterator($path);
+        $iterator = new RecursiveIteratorIterator($directory);
+        $regex = new RegexIterator(
             $iterator, 
             '/^.+\.class\.php$/i', 
-            \Chamilo\RecursiveRegexIterator::GET_MATCH);
+            RecursiveRegexIterator::GET_MATCH);
         
         foreach ($regex as $matches)
         {

@@ -3,10 +3,12 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\LearningPath\LearningPathProgressUsersBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -31,8 +33,8 @@ class LearningPathProgressTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
+        $this->course_id = Request::get(Manager::PARAM_COURSE);
+        $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
 
         $custom_breadcrumbs = array();
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation::get('LearningPathProgress'));
@@ -70,7 +72,7 @@ class LearningPathProgressTemplate extends ReportingTemplate
         );
         while ($publication = $publications->next_result())
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object = DataManager::retrieve_by_id(
                 ContentObject::class_name(),
                 $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );

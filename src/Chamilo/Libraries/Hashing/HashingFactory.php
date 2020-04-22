@@ -50,6 +50,27 @@ class HashingFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     * @throws \Exception
+     */
+    public function getHashingUtilities()
+    {
+        $className = __NAMESPACE__ . '\Type\\' .
+            $this->getStringUtilities()->createString($this->getConfiguredHashingAlgorithm())->upperCamelize() .
+            'Utilities';
+
+        if (class_exists($className))
+        {
+            return new $className();
+        }
+        else
+        {
+            throw new Exception('Hashing algorithm "' . $this->getConfiguredHashingAlgorithm() . '" doesn\'t exist');
+        }
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities()
@@ -64,26 +85,5 @@ class HashingFactory
     public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     *
-     * @throws \Exception
-     * @return \Chamilo\Libraries\Hashing\Hashing
-     */
-    public function getHashingUtilities()
-    {
-        $className = __NAMESPACE__ . '\Type\\' .
-             $this->getStringUtilities()->createString($this->getConfiguredHashingAlgorithm())->upperCamelize() .
-             'Utilities';
-        
-        if (class_exists($className))
-        {
-            return new $className();
-        }
-        else
-        {
-            throw new Exception('Hashing algorithm "' . $this->getConfiguredHashingAlgorithm() . '" doesn\'t exist');
-        }
     }
 }

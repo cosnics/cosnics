@@ -2,7 +2,9 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
@@ -108,7 +110,7 @@ class EventParser
      */
     public function getEvents()
     {
-        $course = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $course = DataManager::retrieve_by_id(
             Course::class_name(), 
             $this->getPublication()->get_course_id());
         
@@ -122,22 +124,22 @@ class EventParser
         foreach ($events as &$parsedEvent)
         {
             $parameters = array();
-            $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-            $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getPublication()->get_course_id();
-            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $this->getPublication()->get_tool();
-            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublication()->get_id();
+            $parameters[Application::PARAM_CONTEXT] = Manager::context();
+            $parameters[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
+            $parameters[Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+            $parameters[Manager::PARAM_COURSE] = $this->getPublication()->get_course_id();
+            $parameters[Manager::PARAM_TOOL] = $this->getPublication()->get_tool();
+            $parameters[Manager::PARAM_PUBLICATION] = $this->getPublication()->get_id();
             
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
             
             $parsedEvent->setUrl($link);
             $parsedEvent->setSource(
-                Translation::get('Course', null, \Chamilo\Application\Weblcms\Manager::context()) . ' - ' .
+                Translation::get('Course', null, Manager::context()) . ' - ' .
                      $course->get_title());
             $parsedEvent->setId($this->getPublication()->get_id());
-            $parsedEvent->setContext(\Chamilo\Application\Weblcms\Manager::context());
+            $parsedEvent->setContext(Manager::context());
             $parsedEvent->setCourseId($this->getPublication()->get_course_id());
             
             $result[] = $parsedEvent;

@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 
@@ -49,7 +51,7 @@ class EventParser
      * @param integer $toDate
      */
     public function __construct(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        CalendarRendererProvider $calendarRendererProvider,
         Publication $publication, $fromDate, $toDate
     )
     {
@@ -73,7 +75,7 @@ class EventParser
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      */
     public function setCalendarRendererProvider(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+        CalendarRendererProvider $calendarRendererProvider
     )
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
@@ -158,14 +160,14 @@ class EventParser
             }
 
             $parsedEvent->setId($this->getPublication()->get_id());
-            $parsedEvent->setContext(\Chamilo\Application\Calendar\Extension\Personal\Manager::context());
+            $parsedEvent->setContext(Manager::context());
 
             $parameters = array();
             $parameters[Application::PARAM_CONTEXT] =
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::context();
-            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION] =
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW;
-            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID] =
+                Manager::context();
+            $parameters[Manager::PARAM_ACTION] =
+                Manager::ACTION_VIEW;
+            $parameters[Manager::PARAM_PUBLICATION_ID] =
                 $this->getPublication()->getId();
 
             $redirect = new Redirect($parameters);

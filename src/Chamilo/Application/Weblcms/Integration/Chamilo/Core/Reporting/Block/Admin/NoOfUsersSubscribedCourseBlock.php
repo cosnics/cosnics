@@ -3,7 +3,10 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -19,9 +22,9 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
 
-        $users = \Chamilo\Core\User\Storage\DataManager::count(\Chamilo\Core\User\Storage\DataClass\User::class_name());
+        $users = \Chamilo\Core\User\Storage\DataManager::count(User::class_name());
 
-        $courses = \Chamilo\Application\Weblcms\Storage\DataManager::count(
+        $courses = DataManager::count(
             CourseEntityRelation::class_name(),
             new DataClassCountParameters(
                 new EqualityCondition(
@@ -61,10 +64,10 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_BAR,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_LINE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_STACKED_AREA);
+            Html::VIEW_TABLE,
+            Html::VIEW_PIE,
+            Html::VIEW_BAR,
+            Html::VIEW_LINE,
+            Html::VIEW_STACKED_AREA);
     }
 }

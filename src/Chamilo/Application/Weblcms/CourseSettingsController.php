@@ -6,11 +6,15 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use DOMDocument;
+use DOMXPath;
+use Exception;
 
 /**
  * Controller for the course settings With this class you can - Install course settings for a given installer by parsing
@@ -176,7 +180,7 @@ class CourseSettingsController
                 {
                     $course_setting_relation = $base_object->update_course_setting_relation($available_setting, $locked);
                 }
-                catch (\Exception $e)
+                catch (Exception $e)
                 {
                     $succes = false;
                 }
@@ -188,7 +192,7 @@ class CourseSettingsController
                 {
                     $course_setting_relation = $base_object->create_course_setting_relation($available_setting, $locked);
                 }
-                catch (\Exception $e)
+                catch (Exception $e)
                 {
                     $succes = false;
                 }
@@ -204,7 +208,7 @@ class CourseSettingsController
                     {
                         $course_setting_relation->add_course_setting_value($course_setting_value);
                     }
-                    catch (\Exception $e)
+                    catch (Exception $e)
                     {
                         $succes = false;
                     }
@@ -547,7 +551,8 @@ class CourseSettingsController
      * @param $tool_registration_id int - OPTIONAL - The tool registration id
      * @return boolean
      */
-    public function install_course_settings(\Chamilo\Configuration\Package\Action\Installer $installer, 
+    public function install_course_settings(
+        Installer $installer,
         $tool_registration_id = null)
     {
         $settings_file = Path::getInstance()->getResourcesPath($installer->package()) . 'Settings' . DIRECTORY_SEPARATOR .
@@ -556,13 +561,13 @@ class CourseSettingsController
         if (self::create_course_settings_from_xml($settings_file, $tool_registration_id))
         {
             $installer->add_message(
-                \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, 
+                Installer::TYPE_NORMAL,
                 Translation::get('RegisteredCourseSettings'));
             return true;
         }
         
         return $installer->failed(
-            \Chamilo\Configuration\Package\Action\Installer::TYPE_NORMAL, 
+            Installer::TYPE_NORMAL,
             Translation::get('CouldNotRegisterCourseSettings'));
     }
 
@@ -583,9 +588,9 @@ class CourseSettingsController
     {
         if (file_exists($settings_file))
         {
-            $doc = new \DOMDocument();
+            $doc = new DOMDocument();
             $doc->load($settings_file);
-            $xpath = new \DOMXPath($doc);
+            $xpath = new DOMXPath($doc);
             
             $course_setting_elements = $xpath->query('//setting');
             

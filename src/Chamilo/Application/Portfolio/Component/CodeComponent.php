@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Application\Portfolio\Component;
 
+use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 /**
  *
@@ -13,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CodeComponent extends \Chamilo\Application\Portfolio\Manager
+class CodeComponent extends Manager
 {
 
     public function run()
@@ -37,17 +39,17 @@ class CodeComponent extends \Chamilo\Application\Portfolio\Manager
                 }
                 else
                 {
-                    throw new \Exception(Translation::get('NoSuchUser'));
+                    throw new Exception(Translation::get('NoSuchUser'));
                 }
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
-                throw new \Exception(Translation::get('NoSuchUser'));
+                throw new Exception(Translation::get('NoSuchUser'));
             }
         }
         else
         {
-            throw new \Exception(Translation::get('NoSuchUser'));
+            throw new Exception(Translation::get('NoSuchUser'));
         }
     }
 }

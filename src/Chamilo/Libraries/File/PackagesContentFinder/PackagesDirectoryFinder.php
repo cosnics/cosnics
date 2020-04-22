@@ -23,7 +23,9 @@ class PackagesDirectoryFinder extends PackagesContentFinder
      * Checks for each package if the path exists.
      *
      * @param string $relativeFilePath - The path relative to the package root
+     *
      * @return string[]
+     * @throws \Exception
      */
     public function findDirectories($relativeFilePath)
     {
@@ -36,6 +38,7 @@ class PackagesDirectoryFinder extends PackagesContentFinder
      * Handles a single package
      *
      * @param string $package
+     *
      * @return string[]
      */
     function handlePackage($package)

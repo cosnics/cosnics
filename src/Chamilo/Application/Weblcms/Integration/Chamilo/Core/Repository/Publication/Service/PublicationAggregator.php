@@ -189,7 +189,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
                     if ($type == Introduction::class_name() && (!$course_settings_controller->get_course_setting(
                                 $course, CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
                             ) || !empty(
-                            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
+                            DataManager::retrieve_introduction_publication_by_course_and_tool(
                                 $course->getId(), $tool_names[$tool_id]
                             )
                             )))

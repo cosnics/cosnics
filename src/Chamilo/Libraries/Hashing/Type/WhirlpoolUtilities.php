@@ -13,20 +13,22 @@ class WhirlpoolUtilities extends HashingUtilities
 {
 
     /**
+     * @param string $filePath
      *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashString()
-     */
-    public function hashString($string)
-    {
-        return hash('whirlpool', $string);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Hashing\HashingUtilities::hashFile()
+     * @return string
      */
     public function hashFile($filePath)
     {
         return hash_file('whirlpool', $filePath);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function hashString($string)
+    {
+        return hash('whirlpool', $string);
     }
 }

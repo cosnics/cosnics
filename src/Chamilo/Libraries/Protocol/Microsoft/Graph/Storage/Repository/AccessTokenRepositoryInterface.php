@@ -21,18 +21,18 @@ interface AccessTokenRepositoryInterface
     public function getApplicationAccessToken();
 
     /**
-     * Stores the application access token
-     *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
-     */
-    public function storeApplicationAccessToken(AccessToken $accessToken);
-
-    /**
      * Returns the delegated access token
      *
      * @return AccessToken
      */
     public function getDelegatedAccessToken();
+
+    /**
+     * Stores the application access token
+     *
+     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
+     */
+    public function storeApplicationAccessToken(AccessToken $accessToken);
 
     /**
      * Stores the delegated access token

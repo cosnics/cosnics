@@ -5,6 +5,8 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessm
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentUserInformationBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Core\Reporting\Viewer\Manager;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -80,7 +82,7 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2),
+                    array(Manager::PARAM_BLOCK_ID => 2),
                     array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)
                 ),
                 Translation::get('Assessments')
@@ -95,14 +97,14 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
 
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $assessment->get_title()));
 
-        $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
+        $params[Manager::PARAM_BLOCK_ID] = 1;
 
         $trail->add(new Breadcrumb($this->get_url($params, $filters), Translation::get('Users')));
 
         $trail->add(
             new Breadcrumb(
                 $this->get_url(),
-                \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user($this->user_id)
+                DataManager::get_fullname_from_user($this->user_id)
             )
         );
     }

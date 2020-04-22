@@ -8,6 +8,8 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 
 /**
  *
@@ -18,7 +20,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class CalendarEventDataProvider extends ExternalCalendar
 {
-    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+    use DependencyInjectionContainerTrait;
 
     public function __construct()
     {
@@ -30,7 +32,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
@@ -66,7 +68,7 @@ class CalendarEventDataProvider extends ExternalCalendar
      * @return string[]
      */
     private function getCalendarIdentifiers(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+        CalendarRendererProvider $calendarRendererProvider)
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
 

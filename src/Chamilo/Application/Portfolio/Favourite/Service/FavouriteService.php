@@ -10,6 +10,8 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -88,12 +90,12 @@ class FavouriteService
     {
         if (! $sourceUser instanceof User)
         {
-            throw new \InvalidArgumentException($this->translator->trans('InvalidSourceUser', [], Manager::context()));
+            throw new InvalidArgumentException($this->translator->trans('InvalidSourceUser', [], Manager::context()));
         }
 
         if (! $favouriteUser instanceof User)
         {
-            throw new \InvalidArgumentException($this->translator->trans('InvalidFavouriteUser', [], Manager::context()));
+            throw new InvalidArgumentException($this->translator->trans('InvalidFavouriteUser', [], Manager::context()));
         }
 
         $userFavourite = new UserFavourite();
@@ -104,7 +106,7 @@ class FavouriteService
         {
             $objectTranslation = $this->getObjectTranslation();
 
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),
@@ -153,7 +155,7 @@ class FavouriteService
 
         if (! $userFavourite->delete())
         {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),

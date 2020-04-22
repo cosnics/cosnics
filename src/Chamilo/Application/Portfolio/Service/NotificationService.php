@@ -69,7 +69,7 @@ class NotificationService
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Notification[]
      */
     public function findPortfolioNotificationsForPublicationAndNode(Publication $publication,
-        \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
+        ComplexContentObjectPathNode $node)
     {
         return $this->findPortfolioNotificationsForPublicationIdentifierAndComplexContentObjectIdentifier(
             $publication->getId(),

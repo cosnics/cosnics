@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -113,7 +114,7 @@ class Manager implements PublicationInterface
      */
     protected static function create_publication_attributes_from_record($record)
     {
-        $attributes = new \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes();
+        $attributes = new Attributes();
 
         $attributes->set_id($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Portfolio\Service;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
+use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -139,7 +140,7 @@ class PublicationService
      */
     public function createRootPortfolioForUser(User $user)
     {
-        $templateRegistration = \Chamilo\Core\Repository\Configuration::registration_default_by_type(
+        $templateRegistration = Configuration::registration_default_by_type(
             Portfolio::package()
         );
 

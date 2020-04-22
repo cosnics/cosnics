@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -29,9 +30,9 @@ class AssignmentUserScoresBlock extends AssignmentScoresBlock
      */
     protected function renderEntityName($entity)
     {
-        return \Chamilo\Core\User\Storage\DataClass\User::fullname(
-            $entity[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME],
-            $entity[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]
+        return User::fullname(
+            $entity[User::PROPERTY_FIRSTNAME],
+            $entity[User::PROPERTY_LASTNAME]
         );
     }
 

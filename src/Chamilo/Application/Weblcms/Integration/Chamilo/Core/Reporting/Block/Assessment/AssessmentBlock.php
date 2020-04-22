@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use const;
 
 /**
  * Abstract class that defines common functionality for blocks of the assessment
@@ -172,7 +173,7 @@ abstract class AssessmentBlock extends ToolBlock
         $redirect = new Redirect($params);
         $link = $redirect->getUrl();
 
-        return ' . $link . '\')">' . $glyph->render() . '</a>';
+        return ' . $link . '')">' . $glyph->render() . '</a>';
     }
 
     /**

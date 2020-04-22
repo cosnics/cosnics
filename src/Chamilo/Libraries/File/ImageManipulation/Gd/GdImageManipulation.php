@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File\ImageManipulation\Gd;
 
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
+use Exception;
 
 /**
  * This class provide image manipulation using php's GD-extension
@@ -11,11 +12,16 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 class GdImageManipulation extends ImageManipulation
 {
 
+    /**
+     * @var resource
+     */
     private $gdImage = null;
 
     /**
      *
      * @param string $sourceFile
+     *
+     * @throws \Exception
      */
     public function __construct($sourceFile)
     {
@@ -24,14 +30,20 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
+     * @param integer $width
+     * @param integer $height
+     * @param integer $offsetX
+     * @param integer $offsetY
      *
-     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::crop()
+     * @return boolean
      */
-    public function crop($width, $height, $offsetX = ImageManipulation::CROP_CENTER, $offsetY = ImageManipulation::CROP_CENTER)
+    public function crop(
+        $width, $height, $offsetX = ImageManipulation::CROP_CENTER, $offsetY = ImageManipulation::CROP_CENTER
+    )
     {
-        if (! function_exists('imagecopy'))
+        if (!function_exists('imagecopy'))
         {
-            return FALSE;
+            return false;
         }
 
         if ($offsetX == ImageManipulation::CROP_CENTER)
@@ -51,6 +63,7 @@ class GdImageManipulation extends ImageManipulation
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
+
             return true;
         }
 
@@ -58,14 +71,38 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
+     * Loads the image file in memory using the imagecreatefromXXX functions.
      *
-     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::resize()
+     * @throws \Exception
+     */
+    private function load_gd_image()
+    {
+        $extension = $this->get_image_extension();
+        $extension = str_replace('jpg', 'jpeg', $extension);
+        $createFunction = 'imagecreatefrom' . $extension;
+
+        if (!function_exists($createFunction))
+        {
+            throw new Exception($createFunction . ' not found');
+        }
+
+        $this->gdImage = $createFunction($this->sourceFile);
+    }
+
+    /**
+     * Resize an image to an exact set of dimensions, ignoring aspect ratio.
+     *
+     * @param integer $width The width of the image after resizing
+     * @param integer $height The height of the image after resizing
+     *
+     * @return boolean True if successfull, false if not
+     * @throws \Exception
      */
     public function resize($width, $height)
     {
-        if (! function_exists('imagecopyresampled'))
+        if (!function_exists('imagecopyresampled'))
         {
-            return FALSE;
+            throw new Exception('imagecopyresampled not found');
         }
 
         $result = imagecreatetruecolor($width, $height);
@@ -75,6 +112,7 @@ class GdImageManipulation extends ImageManipulation
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
+
             return true;
         }
 
@@ -82,8 +120,13 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
+     * Write the resulting image (after some manipulations to a file)
      *
-     * @see \Chamilo\Libraries\File\ImageManipulation\ImageManipulation::write_to_file()
+     * @param string $file Full path of the file to which the image should be written. If null, the original image will
+     *     be overwritten.
+     *
+     * @return boolean
+     * @throws \Exception
      */
     public function write_to_file($file = null)
     {
@@ -96,28 +139,11 @@ class GdImageManipulation extends ImageManipulation
         $extension = str_replace('jpg', 'jpeg', $extension);
         $createFunction = 'image' . $extension;
 
-        if (! function_exists($createFunction))
+        if (!function_exists($createFunction))
         {
-            return FALSE;
+            throw new Exception($createFunction . ' not found');
         }
 
         return $createFunction($this->gdImage, $file);
-    }
-
-    /**
-     * Loads the image file in memory using the imagecreatefromXXX functions.
-     */
-    private function load_gd_image()
-    {
-        $extension = $this->get_image_extension();
-        $extension = str_replace('jpg', 'jpeg', $extension);
-        $createFunction = 'imagecreatefrom' . $extension;
-
-        if (! function_exists($createFunction))
-        {
-            return false;
-        }
-
-        $this->gdImage = $createFunction($this->sourceFile);
     }
 }

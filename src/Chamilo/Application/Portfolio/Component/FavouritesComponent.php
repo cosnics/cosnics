@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Portfolio\Component;
 
+use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
@@ -18,7 +19,7 @@ class FavouritesComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Portfolio\Favourite\Manager::context(),
+            Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 }

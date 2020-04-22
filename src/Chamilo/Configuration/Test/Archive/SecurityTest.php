@@ -4,7 +4,10 @@ namespace Chamilo\Configuration\Test\Archive;
 /*
  * @author: Parcifal Aertssen (Howest)
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+
+use PHPUnit_Framework_TestCase;
+
+class SecurityTest extends PHPUnit_Framework_TestCase
 {
 
     public function test_xss()

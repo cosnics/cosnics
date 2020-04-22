@@ -16,6 +16,24 @@ class Mailer extends AbstractMailer
 {
 
     /**
+     * Sends the actual mail to the given recipients
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     * @param string $recipients
+     * @param string[] $headers
+     */
+    protected function send(Mail $mail, $recipients, $headers = array())
+    {
+        if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
+        {
+            $this->logMail($mail, MailLog::STATE_FAILED);
+            throw new RuntimeException('Could not send e-mail');
+        }
+
+        $this->logMail($mail);
+    }
+
+    /**
      * Sends a single mail
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
@@ -27,13 +45,13 @@ class Mailer extends AbstractMailer
         $headers = array();
 
         $cc = $mail->getCc();
-        if (! empty($cc))
+        if (!empty($cc))
         {
             $headers[] = 'Cc: ' . implode(', ', $cc);
         }
 
         $bcc = $mail->getBcc();
-        if (! empty($bcc))
+        if (!empty($bcc))
         {
             $headers[] = 'Bcc: ' . implode(', ', $bcc);
         }
@@ -55,23 +73,5 @@ class Mailer extends AbstractMailer
         {
             $this->send($mail, implode(',', $mail->getTo()), $headers);
         }
-    }
-
-    /**
-     * Sends the actual mail to the given recipients
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     * @param string $recipients
-     * @param string[] $headers
-     */
-    protected function send(Mail $mail, $recipients, $headers = array())
-    {
-        if (! mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
-        {
-            $this->logMail($mail, MailLog::STATE_FAILED);
-            throw new RuntimeException('Could not send e-mail');
-        }
-
-        $this->logMail($mail);
     }
 }

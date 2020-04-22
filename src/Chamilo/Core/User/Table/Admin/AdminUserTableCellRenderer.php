@@ -137,6 +137,9 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
 
     public function render_cell($column, $user)
     {
+        $trueGlyph = new FontAwesomeGlyph('circle', array('text-success'));
+        $falseGlyph = new FontAwesomeGlyph('circle', array('text-danger'));
+
         // Add special features here
         switch ($column->get_name())
         {
@@ -151,9 +154,9 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                     return Translation::get('Student');
                 }
             case User::PROPERTY_PLATFORMADMIN :
-                return Utilities::display_true_false_icon($user->get_platformadmin());
+                return $user->get_platformadmin() ? $trueGlyph->render() : $falseGlyph->render();
             case User::PROPERTY_ACTIVE :
-                return Utilities::display_true_false_icon($user->get_active());
+                return $user->get_active() ? $trueGlyph->render() : $falseGlyph->render();
         }
 
         return parent::render_cell($column, $user);

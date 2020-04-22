@@ -2,7 +2,10 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,7 +23,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
     public function count_data()
     {
         $question_cid = Request::get(
-            \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
+            Manager::PARAM_QUESTION);
         $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $question_cid);
@@ -33,7 +36,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
         
         $reporting_data->set_categories($categories);
         
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
             $this->getPublicationId());
         
@@ -64,6 +67,6 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

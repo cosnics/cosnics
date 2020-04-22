@@ -32,8 +32,9 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
     /**
      * Locates the translation resources and returns them per locale, per resource type and per domain
      *
-     * @example $resource['nl']['ini']['domain'] = '/path/to/resource'
      * @return string[]
+     * @throws \Exception
+     * @example $resource['nl']['ini']['domain'] = '/path/to/resource'
      */
     public function findTranslationResources()
     {

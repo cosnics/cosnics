@@ -15,45 +15,26 @@ class ExcelExport extends Export
     const EXPORT_TYPE = 'xlsx';
 
     /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     * @return string
+     */
+    public function get_type()
+    {
+        return self::EXPORT_TYPE;
+    }
+
+    /**
+     * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function render_data()
     {
         $excel = new Spreadsheet();
 
         $data = $this->get_data();
-        $letters = array(
-            0 => 'A',
-            1 => 'B',
-            2 => 'C',
-            3 => 'D',
-            4 => 'E',
-            5 => 'F',
-            6 => 'G',
-            7 => 'H',
-            8 => 'I',
-            9 => 'J',
-            10 => 'K',
-            11 => 'L',
-            12 => 'M',
-            13 => 'N',
-            14 => 'O',
-            15 => 'P',
-            16 => 'Q',
-            17 => 'R',
-            18 => 'S',
-            19 => 'T',
-            20 => 'U',
-            21 => 'V',
-            22 => 'W',
-            23 => 'X',
-            24 => 'Y',
-            25 => 'Z'
-        );
+        $letters = range('A', 'Z');
 
         $i = 0;
-        $cell_letter = 0;
         $cell_number = 1;
 
         $excel->setActiveSheetIndex(0);
@@ -67,15 +48,13 @@ class ExcelExport extends Export
             $cell_letter = 0;
             $cell_number = $cell_number + 2;
             $excel->getActiveSheet()->setCellValue(
-                $letters[$cell_letter] . $cell_number,
-                strip_tags(html_entity_decode($block_title))
+                $letters[$cell_letter] . $cell_number, strip_tags(html_entity_decode($block_title))
             );
             $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(60);
             $this->wrap_text($excel, $letters[$cell_letter] . $cell_number);
             ++ $cell_number;
             $excel->getActiveSheet()->setCellValue(
-                $letters[$cell_letter] . $cell_number,
-                $this->transcode_string($block_description)
+                $letters[$cell_letter] . $cell_number, $this->transcode_string($block_description)
             );
 
             if ($block_description != "")
@@ -91,8 +70,7 @@ class ExcelExport extends Export
                 $cell_letter ++;
                 $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(15);
                 $excel->getActiveSheet()->setCellValue(
-                    $letters[$cell_letter] . $cell_number,
-                    $this->transcode_string($row_name)
+                    $letters[$cell_letter] . $cell_number, $this->transcode_string($row_name)
                 );
             }
             foreach ($block_content_data->get_categories() as $category_id => $category_name)
@@ -101,8 +79,7 @@ class ExcelExport extends Export
                 ++ $cell_number;
                 $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(50);
                 $excel->getActiveSheet()->setCellValue(
-                    $letters[$cell_letter] . $cell_number,
-                    $this->transcode_string($category_name)
+                    $letters[$cell_letter] . $cell_number, $this->transcode_string($category_name)
                 );
 
                 $this->wrap_text($excel, $letters[$cell_letter] . $cell_number);
@@ -128,19 +105,8 @@ class ExcelExport extends Export
 
     /**
      *
-     * @param Spreadsheet $excel
-     * @param string $cell
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
-    public function wrap_text($excel, $cell)
-    {
-        $excel->getActiveSheet()->getStyle($cell)->getAlignment()->setWrapText(true);
-    }
-
-    /**
-     *
      * @param string $string
+     *
      * @return string
      */
     static public function transcode_string($string)
@@ -154,10 +120,13 @@ class ExcelExport extends Export
 
     /**
      *
-     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     * @param Spreadsheet $excel
+     * @param string $cell
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function get_type()
+    public function wrap_text($excel, $cell)
     {
-        return self::EXPORT_TYPE;
+        $excel->getActiveSheet()->getStyle($cell)->getAlignment()->setWrapText(true);
     }
 }

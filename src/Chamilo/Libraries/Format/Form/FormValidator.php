@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
@@ -71,6 +70,8 @@ class FormValidator extends HTML_QuickForm
         $this->registerAdditionalElements();
         $this->registerAdditionalRules();
 
+        $this->initializeContainer();
+
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'
@@ -81,8 +82,6 @@ class FormValidator extends HTML_QuickForm
         {
             $value = Security::removeXSS($value);
         }
-
-        $this->initializeContainer();
 
         $this->setDefaultTemplates();
     }
@@ -820,14 +819,6 @@ EOT;
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
-     */
-    public function getResourceManager(): ResourceManager
-    {
-        return ResourceManager::getInstance();
     }
 
     /**

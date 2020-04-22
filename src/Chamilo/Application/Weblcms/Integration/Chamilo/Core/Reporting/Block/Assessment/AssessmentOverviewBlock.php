@@ -4,8 +4,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -30,7 +34,7 @@ class AssessmentOverviewBlock extends ToolBlock
         $reporting_data->set_rows(
             array(
                 Translation::get('Name'), 
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()), 
+                Translation::get('OfficialCode', null, Manager::context()),
                 Translation::get('Title'), 
                 Translation::get('Date'), 
                 Translation::get('Score')));
@@ -39,8 +43,8 @@ class AssessmentOverviewBlock extends ToolBlock
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_COURSE_ID), 
+                AssessmentAttempt::class_name(),
+                AssessmentAttempt::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         
         $attempts_result_set = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
@@ -57,11 +61,11 @@ class AssessmentOverviewBlock extends ToolBlock
         foreach ($attempts as $key => $user_attempts)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+                User::class_name(),
                 (int) $key);
             foreach ($user_attempts as $key => $pub_attempts)
             {
-                $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                $pub = DataManager::retrieve_by_id(
                     ContentObjectPublication::class_name(), 
                     $key);
                 
@@ -95,7 +99,7 @@ class AssessmentOverviewBlock extends ToolBlock
                 
                 $reporting_data->add_data_category_row(
                     $count, 
-                    Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()), 
+                    Translation::get('OfficialCode', null, Manager::context()),
                     $user->get_official_code());
                 
                 $reporting_data->add_data_category_row(
@@ -186,6 +190,6 @@ class AssessmentOverviewBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

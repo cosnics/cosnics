@@ -3,7 +3,6 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Model\Team;
-use Microsoft\Graph\Model\Group;
 
 /**
  * Class TeamRepository
@@ -19,6 +18,7 @@ class TeamRepository
 
     /**
      * GroupRepository constructor.
+     *
      * @param GraphRepository $graphRepository
      */
     public function __construct(GraphRepository $graphRepository)
@@ -26,22 +26,19 @@ class TeamRepository
         $this->graphRepository = $graphRepository;
     }
 
-
     /**
      * @param $groupId
+     *
      * @return \Microsoft\Graph\Model\Entity
      */
     public function createTeam($groupId)
     {
         return $this->graphRepository->executePutWithAccessTokenExpirationRetry(
-            '/groups/' . $groupId . '/team',
-            [
-                "memberSettings" =>
-                    [
-                        "allowCreateUpdateChannels" => true
-                    ]
-            ],
-            Team::class
+            '/groups/' . $groupId . '/team', [
+                "memberSettings" => [
+                    "allowCreateUpdateChannels" => true
+                ]
+            ], Team::class
         );
     }
 
@@ -51,13 +48,13 @@ class TeamRepository
     public function getTeam(string $groupId)
     {
         return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-            '/teams/' . $groupId,
-            Team::class
+            '/teams/' . $groupId, Team::class
         );
     }
 
     /**
      * @param string $groupId
+     *
      * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\Entity[]
      */
     public function getUrl(string $groupId)

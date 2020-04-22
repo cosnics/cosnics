@@ -12,9 +12,11 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
  */
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = 'GraphAction';
     const ACTION_AUTHENTICATE = 'Authentication';
+
     const DEFAULT_ACTION = self::ACTION_AUTHENTICATE;
+
+    const PARAM_ACTION = 'GraphAction';
 
     /**
      *

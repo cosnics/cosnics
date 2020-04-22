@@ -6,9 +6,7 @@ use Chamilo\Libraries\Platform\Security;
 /**
  * @package Chamilo\Libraries\Platform\Session
  *
- * @deprecated
- *
- * @see \Chamilo\Libraries\Platform\ChamiloRequest (use service)
+ * @deprecated Use \Chamilo\Libraries\Platform\ChamiloRequest service now
  */
 class Request
 {
@@ -19,15 +17,25 @@ class Request
     public static $security;
 
     /**
-     * @return \Chamilo\Libraries\Platform\Security
+     * @param string $variable
+     *
+     * @return mixed
      */
-    public static function get_security()
+    public static function environment($variable)
     {
-        if (self::$security === null)
-        {
-            self::$security = new Security();
-        }
-        return self::$security;
+        // TODO: Add the necessary security filters if and where necessary
+        return $_ENV[$variable];
+    }
+
+    /**
+     * @param string $variable
+     *
+     * @return mixed
+     */
+    public static function file($variable)
+    {
+        // TODO: Add the necessary security filters if and where necessary
+        return $_FILES[$variable];
     }
 
     /**
@@ -41,19 +49,23 @@ class Request
         if (isset($_GET[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self::get_security()->remove_XSS($_GET[$variable]);
+            return self::get_security()->removeXSS($_GET[$variable]);
         }
 
         return $default;
     }
 
     /**
-     * @param string $variable
-     * @param mixed $value
+     * @return \Chamilo\Libraries\Platform\Security
      */
-    public static function set_get($variable, $value)
+    public static function get_security()
     {
-        $_GET[$variable] = $value;
+        if (self::$security === null)
+        {
+            self::$security = new Security();
+        }
+
+        return self::$security;
     }
 
     /**
@@ -66,7 +78,7 @@ class Request
         if (isset($_POST[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self::get_security()->remove_XSS($_POST[$variable]);
+            return self::get_security()->removeXSS($_POST[$variable]);
         }
 
         return null;
@@ -91,25 +103,10 @@ class Request
 
     /**
      * @param string $variable
-     *
-     * @return mixed
+     * @param mixed $value
      */
-    public static function file($variable)
+    public static function set_get($variable, $value)
     {
-        $value = $_FILES[$variable];
-        // TODO: Add the necessary security filters if and where necessary
-        return $value;
-    }
-
-    /**
-     * @param string $variable
-     *
-     * @return mixed
-     */
-    public static function environment($variable)
-    {
-        $value = $_ENV[$variable];
-        // TODO: Add the necessary security filters if and where necessary
-        return $value;
+        $_GET[$variable] = $value;
     }
 }

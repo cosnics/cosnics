@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -98,8 +100,8 @@ class Publication extends DataClass
     {
         if (! isset($this->publisher))
         {
-            $this->publisher = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            $this->publisher = DataManager::retrieve_by_id(
+                User::class_name(),
                 $this->get_publisher_id());
         }
 

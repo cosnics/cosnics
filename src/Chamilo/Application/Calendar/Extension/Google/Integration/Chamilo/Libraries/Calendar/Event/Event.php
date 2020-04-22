@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
+use Google_Service_Calendar_Event;
 
 /**
  *
@@ -56,7 +57,7 @@ class Event extends \Chamilo\Libraries\Calendar\Event\Event
      *
      * @param \Google_Service_Calendar_Event $googleCalendarEvent
      */
-    public function setGoogleCalendarEvent(\Google_Service_Calendar_Event $googleCalendarEvent)
+    public function setGoogleCalendarEvent(Google_Service_Calendar_Event $googleCalendarEvent)
     {
         $this->googleCalendarEvent = $googleCalendarEvent;
     }

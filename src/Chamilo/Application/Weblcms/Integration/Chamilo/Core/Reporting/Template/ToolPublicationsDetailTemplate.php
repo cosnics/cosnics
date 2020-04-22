@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Publication\ToolPublicationsBlock;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -53,6 +54,6 @@ class ToolPublicationsDetailTemplate extends ReportingTemplate
                 Translation::get(
                     'TypeName',
                     null,
-                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($this->tool))));
+                    Manager::get_tool_type_namespace($this->tool))));
     }
 }

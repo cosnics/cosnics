@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -118,7 +119,7 @@ abstract class Manager extends Application
     public function get_user_info($user_id)
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            User::class_name(),
             (int) $user_id);
     }
 

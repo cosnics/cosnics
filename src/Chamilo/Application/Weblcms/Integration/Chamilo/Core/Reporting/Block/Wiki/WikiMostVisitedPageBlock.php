@@ -3,7 +3,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\W
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
@@ -52,26 +54,26 @@ class WikiMostVisitedPageBlock extends ToolBlock
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::class_name(), 
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION), 
+                        Visit::class_name(),
+                        Visit::PROPERTY_LOCATION),
                     '*publication=' . $this->getPublicationId() . '*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::class_name(), 
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION), 
+                        Visit::class_name(),
+                        Visit::PROPERTY_LOCATION),
                     '*display_action=view_item*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::class_name(), 
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION), 
+                        Visit::class_name(),
+                        Visit::PROPERTY_LOCATION),
                     '*application=weblcms*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::class_name(), 
-                        \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION), 
+                        Visit::class_name(),
+                        Visit::PROPERTY_LOCATION),
                     '*selected_cloi=' . $complex_content_object_item->get_id() . '*');
                 
                 $condition = new AndCondition($conditions);
@@ -88,8 +90,8 @@ class WikiMostVisitedPageBlock extends ToolBlock
         
         $url = 'index.php?go=' . \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE . '&course=' .
              $this->getCourseId() . '&tool=' . $this->get_tool() . '&application=weblcms&' .
-             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID . '=' . $this->getPublicationId() .
-             '&tool_action=' . \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW .
+             Manager::PARAM_PUBLICATION_ID . '=' . $this->getPublicationId() .
+             '&tool_action=' . Manager::ACTION_VIEW .
              '&display_action=view_item&selected_cloi=' . $most_visited_page->get_id();
         
         $reporting_data->add_category(0);
@@ -113,6 +115,6 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

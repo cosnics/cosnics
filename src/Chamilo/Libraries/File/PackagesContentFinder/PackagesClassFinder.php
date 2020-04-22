@@ -31,7 +31,9 @@ class PackagesClassFinder extends PackagesContentFinder
      *
      * @param string $relativeFilePath - The path relative to the package root
      * @param string $className - The classname relative to the package namespace (not the fully qualified one)
+     *
      * @return string[]
+     * @throws \Exception
      */
     public function findClasses($relativeFilePath, $className)
     {
@@ -45,6 +47,7 @@ class PackagesClassFinder extends PackagesContentFinder
      * Handles a single package
      *
      * @param string $package
+     *
      * @return string[]
      */
     function handlePackage($package)

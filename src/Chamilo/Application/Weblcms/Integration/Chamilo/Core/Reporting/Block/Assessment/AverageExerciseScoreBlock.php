@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
 class AverageExerciseScoreBlock extends CourseBlock
 {
@@ -22,7 +23,7 @@ class AverageExerciseScoreBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
+            Html::VIEW_TABLE,
+            Html::VIEW_PIE);
     }
 }

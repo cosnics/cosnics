@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Architecture;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 
 /**
  *
@@ -23,7 +24,7 @@ interface CalendarInterface
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents(
-        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate);
 
     /**

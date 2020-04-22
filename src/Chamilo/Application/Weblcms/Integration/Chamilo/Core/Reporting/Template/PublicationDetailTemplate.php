@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Templat
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Publication\PublicationAccessBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -92,10 +94,10 @@ class PublicationDetailTemplate extends ReportingTemplate
                 Translation::get(
                     'TypeName',
                     null,
-                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace(
+                    Manager::get_tool_type_namespace(
                         $this->tool ? $this->tool : Request::get('tool')))));
 
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $this->pid);
 

@@ -7,7 +7,9 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessm
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\QuestionOptions\AssessmentQuestionOptionsBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -70,7 +72,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
             ContentObjectPublication::class_name(), 
             $this->publication_id)->get_content_object();
         
-        $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $question = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
             $this->question_id);
         
@@ -79,7 +81,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2), 
+                    array(Manager::PARAM_BLOCK_ID => 2),
                     array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)), 
                 Translation::get('Assessments')));
         
@@ -88,8 +90,8 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params), $assessment->get_title()));
-        
-        $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 2;
+
+        $params[Manager::PARAM_BLOCK_ID] = 2;
         
         $trail->add(new Breadcrumb($this->get_url($params), Translation::get('Questions')));
         

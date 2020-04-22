@@ -3,9 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\T
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
@@ -51,10 +54,10 @@ abstract class ToolAccessBlock extends ToolBlock
             
             $params = array();
             
-            $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-            $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getCourseId();
-            $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $tool_name;
+            $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
+            $params[Application::PARAM_CONTEXT] = Manager::context();
+            $params[Manager::PARAM_COURSE] = $this->getCourseId();
+            $params[Manager::PARAM_TOOL] = $tool_name;
             
             $redirect = new Redirect($params);
             $url = $redirect->getUrl();
@@ -104,7 +107,7 @@ abstract class ToolAccessBlock extends ToolBlock
      */
     public function count_tool_publications($tool_name)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications(
+        return DataManager::count_content_object_publications(
             $this->get_tool_publications_condition($tool_name));
     }
 
@@ -131,7 +134,7 @@ abstract class ToolAccessBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 
     /**

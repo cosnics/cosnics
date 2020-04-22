@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -16,7 +18,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements StaticBlockTitleInterface
+class Month extends BlockRenderer implements StaticBlockTitleInterface
 {
 
     private $calendarRenderer;
@@ -70,7 +72,7 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                     MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY),
-                \Chamilo\Application\Calendar\Ajax\Manager::context());
+                Manager::context());
 
             $calendarLegend = new Legend($dataProvider);
 

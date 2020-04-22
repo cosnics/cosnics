@@ -3,8 +3,11 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\P
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -20,7 +23,7 @@ class PublicationDetailBlock extends ToolBlock
         
         $course_id = $this->getCourseId();
         $tool = Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $pid = Request::get(Manager::PARAM_PUBLICATION_ID);
         
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(), 
@@ -28,7 +31,7 @@ class PublicationDetailBlock extends ToolBlock
         
         if (empty($content_object_publication))
         {
-            $content_object_publication = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $content_object_publication = DataManager::retrieve_by_id(
                 ContentObject::class_name(), 
                 $pid);
             $title = $content_object_publication->get_title();
@@ -48,7 +51,7 @@ class PublicationDetailBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $tool;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $id;
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = Manager::ACTION_VIEW;
         
         $redirect = new Redirect($params);
         $url = $redirect->getUrl();
@@ -86,6 +89,6 @@ class PublicationDetailBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

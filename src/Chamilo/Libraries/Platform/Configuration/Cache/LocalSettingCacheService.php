@@ -6,6 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -13,8 +15,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
  *
@@ -27,41 +27,14 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
 {
 
     /**
+     * @param string $identifier
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier)
-    {
-        $localSettings = array();
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
-            new StaticConditionVariable($identifier));
-        $userSettings = \Chamilo\Core\User\Storage\DataManager::retrieves(
-            UserSetting::class_name(),
-            new DataClassRetrievesParameters($condition));
-
-        while ($userSetting = $userSettings->next_result())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_ID),
-                new StaticConditionVariable($userSetting->get_setting_id()));
-            $setting = \Chamilo\Configuration\Storage\DataManager::retrieve(
-                Setting::class_name(),
-                new DataClassRetrieveParameters($condition));
-            $localSettings[$setting->get_application()][$setting->get_variable()] = $userSetting->get_value();
-        }
-
-        return $this->getCacheProvider()->save($identifier, $localSettings);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifier()
+     * @return bool
      */
     public function clearForIdentifier($identifier)
     {
-        DataClassCache::truncate(UserSetting::class_name());
+        DataClassCache::truncate(UserSetting::class);
+
         return parent::clearForIdentifier($identifier);
     }
 
@@ -76,24 +49,61 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
-    {
-        return DataManager::distinct(
-            User::class_name(),
-            new DataClassDistinctParameters(
-                null,
-                new DataClassProperties(array(new PropertyConditionVariable(User::class, User::PROPERTY_ID)))));
-    }
-
-    /**
-     *
      * @param integer $userIdentifier
+     *
      * @return boolean[]
      */
     public function getForUserIdentifier($userIdentifier)
     {
         return $this->getForIdentifier($userIdentifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     */
+    public function getIdentifiers()
+    {
+        return DataManager::distinct(
+            User::class, new DataClassDistinctParameters(
+                null, new DataClassProperties(array(new PropertyConditionVariable(User::class, User::PROPERTY_ID)))
+            )
+        );
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function warmUpForIdentifier($identifier)
+    {
+        $localSettings = array();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
+            new StaticConditionVariable($identifier)
+        );
+        $userSettings = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            UserSetting::class, new DataClassRetrievesParameters($condition)
+        );
+
+        while ($userSetting = $userSettings->next_result())
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),
+                new StaticConditionVariable($userSetting->get_setting_id())
+            );
+            /**
+             * @var \Chamilo\Configuration\Storage\DataClass\Setting $setting
+             */
+            $setting = \Chamilo\Configuration\Storage\DataManager::retrieve(
+                Setting::class, new DataClassRetrieveParameters($condition)
+            );
+            $localSettings[$setting->get_context()][$setting->get_variable()] = $userSetting->get_value();
+        }
+
+        return $this->getCacheProvider()->save($identifier, $localSettings);
     }
 }

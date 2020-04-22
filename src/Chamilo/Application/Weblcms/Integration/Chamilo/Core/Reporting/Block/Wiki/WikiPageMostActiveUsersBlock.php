@@ -3,8 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\W
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Core\Repository\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,7 +23,7 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
         
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class_name(), 
-            Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+            Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         
         $wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(), 
@@ -33,8 +37,8 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
         }
         arsort($users);
         $keys = array_keys($users);
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+        $user = DataManager::retrieve_by_id(
+            User::class_name(),
             (int) $keys[0]);
         
         $reporting_data->add_category(0);
@@ -55,6 +59,6 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

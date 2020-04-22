@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignm
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentPlatformGroupScoresBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentUserScoresBlock;
 use Chamilo\Core\Reporting\ReportingTemplate;
+use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -39,7 +40,7 @@ class AssignmentScoresTemplate extends ReportingTemplate
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
             CourseStudentTrackerTemplate::class_name();
-        $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 4;
+        $params[Manager::PARAM_BLOCK_ID] = 4;
 
         $breadcrumbTrail->add(
             new Breadcrumb(
@@ -49,7 +50,7 @@ class AssignmentScoresTemplate extends ReportingTemplate
 
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url([], [\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID]),
+                $this->get_url([], [Manager::PARAM_BLOCK_ID]),
                 Translation::get('AssignmentScores')
             )
         );

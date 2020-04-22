@@ -1,9 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 use Chamilo\Libraries\Translation\Translation;
+use DateTime;
+use DateTimeZone;
+use Exception;
+use Microsoft\Graph\Model\PatternedRecurrence;
 
 /**
  *
@@ -69,7 +74,7 @@ class EventParser
      * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
      */
     public function setAvailableCalendar(
-        \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar)
+        AvailableCalendar $availableCalendar)
     {
         $this->availableCalendar = $availableCalendar;
     }
@@ -154,7 +159,7 @@ class EventParser
             $office365CalendarEvent->getBody()->getContent(),
             $office365CalendarEvent->getLocation()->getDisplayName(),
             $this->getSource($this->getAvailableCalendar()->getName()),
-            \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
+            Manager::context());
 
         $event->setOffice365CalendarEvent($office365CalendarEvent);
         return array($event);
@@ -167,7 +172,7 @@ class EventParser
      */
     private function getTimestamp($eventDateTime, $eventTimeZone, $isAllDay)
     {
-        $dateTime = new \DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone, $isAllDay));
+        $dateTime = new DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone, $isAllDay));
 
         if ($isAllDay)
         {
@@ -189,9 +194,9 @@ class EventParser
         {
             try
             {
-                return new \DateTimeZone($eventTimeZone);
+                return new DateTimeZone($eventTimeZone);
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 return null;
             }
@@ -212,7 +217,7 @@ class EventParser
         return Translation::get(
             'SourceName',
             array('CALENDAR' => $calendarName),
-            \Chamilo\Application\Calendar\Extension\Office365\Manager::context());
+            Manager::context());
     }
 
     /**
@@ -220,11 +225,11 @@ class EventParser
      * @param \Microsoft\Graph\Model\PatternedRecurrence $recurrence
      * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
      */
-    private function getRecurrence(\Microsoft\Graph\Model\PatternedRecurrence $recurrence = null)
+    private function getRecurrence(PatternedRecurrence $recurrence = null)
     {
         $recurrenceRules = new RecurrenceRules();
 
-        if ($recurrence instanceof \Microsoft\Graph\Model\PatternedRecurrence)
+        if ($recurrence instanceof PatternedRecurrence)
         {
             // $recurrenceRules->setFrequency($this->getFrequency($recurrence->getPattern()->getType()));
 

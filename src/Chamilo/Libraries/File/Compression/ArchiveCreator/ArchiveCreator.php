@@ -48,6 +48,20 @@ class ArchiveCreator
     }
 
     /**
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function createAndDownloadArchive(Archive $archive, Request $request)
+    {
+        $downloadResponse = $this->createArchiveWithDownloadResponse($archive);
+        $downloadResponse->prepare($request);
+
+        $downloadResponse->send();
+
+        $this->removeArchiveAfterDownload($downloadResponse);
+    }
+
+    /**
      * Makes an actual zipped file from a given archive and returns the path to the archive
      *
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
@@ -56,8 +70,8 @@ class ArchiveCreator
      */
     public function createArchive(Archive $archive)
     {
-        $temporaryFolder = $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__) .
-            DIRECTORY_SEPARATOR . uniqid();
+        $temporaryFolder =
+            $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__) . DIRECTORY_SEPARATOR . uniqid();
 
         foreach ($archive->getArchiveItems() as $archiveItem)
         {
@@ -92,38 +106,38 @@ class ArchiveCreator
     }
 
     /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile $archiveFile
+     * @param string $temporaryPath
      */
-    public function createAndDownloadArchive(Archive $archive, Request $request)
+    protected function handleArchiveFile(ArchiveFile $archiveFile, $temporaryPath)
     {
-        $downloadResponse = $this->createArchiveWithDownloadResponse($archive);
-        $downloadResponse->prepare($request);
+        $fileName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFile->getName());
+        $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
+        $originalPath = $archiveFile->getOriginalPath();
 
-        $downloadResponse->send();
-
-        $this->removeArchiveAfterDownload($downloadResponse);
-    }
-
-    /**
-     * Removes the archive path after downloading the
-     * @param \Symfony\Component\HttpFoundation\BinaryFileResponse $binaryFileResponse
-     */
-    public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse)
-    {
-        $archivePath = $binaryFileResponse->getFile()->getPathname();
-        $this->fileSystem->remove([$archivePath]);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
-     * @param string $temporaryFolder
-     */
-    protected function handleArchiveItems($archiveItems = [], $temporaryFolder)
-    {
-        foreach ($archiveItems as $archiveItem)
+        if (is_dir($originalPath))
         {
-            $this->handleArchiveItem($archiveItem, $temporaryFolder);
+            $this->fileSystem->mirror($originalPath, $filePath);
+        }
+        else
+        {
+            $this->fileSystem->copy($originalPath, $filePath);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder $archiveFolder
+     * @param string $temporaryPath
+     */
+    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, $temporaryPath)
+    {
+        $folderName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFolder->getName());
+        $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
+        $this->fileSystem->mkdir($folderPath);
+
+        foreach ($archiveFolder->getArchiveItems() as $archiveItem)
+        {
+            $this->handleArchiveItem($archiveItem, $folderPath);
         }
     }
 
@@ -145,38 +159,25 @@ class ArchiveCreator
     }
 
     /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder $archiveFolder
-     * @param string $temporaryPath
+     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
+     * @param string $temporaryFolder
      */
-    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, $temporaryPath)
+    protected function handleArchiveItems($archiveItems = [], $temporaryFolder)
     {
-        $folderName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFolder->getName());
-        $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
-        $this->fileSystem->mkdir($folderPath);
-
-        foreach ($archiveFolder->getArchiveItems() as $archiveItem)
+        foreach ($archiveItems as $archiveItem)
         {
-            $this->handleArchiveItem($archiveItem, $folderPath);
+            $this->handleArchiveItem($archiveItem, $temporaryFolder);
         }
     }
 
     /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile $archiveFile
-     * @param string $temporaryPath
+     * Removes the archive path after downloading the
+     *
+     * @param \Symfony\Component\HttpFoundation\BinaryFileResponse $binaryFileResponse
      */
-    protected function handleArchiveFile(ArchiveFile $archiveFile, $temporaryPath)
+    public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse)
     {
-        $fileName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFile->getName());
-        $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
-        $originalPath = $archiveFile->getOriginalPath();
-
-        if (is_dir($originalPath))
-        {
-            $this->fileSystem->mirror($originalPath, $filePath);
-        }
-        else
-        {
-            $this->fileSystem->copy($originalPath, $filePath);
-        }
+        $archivePath = $binaryFileResponse->getFile()->getPathname();
+        $this->fileSystem->remove([$archivePath]);
     }
 }

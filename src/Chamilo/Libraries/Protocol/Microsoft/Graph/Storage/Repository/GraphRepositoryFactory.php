@@ -45,8 +45,8 @@ class GraphRepositoryFactory
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct(
-        ConfigurationConsulter $configurationConsulter,
-        AccessTokenRepositoryInterface $accessTokenRepository, ChamiloRequest $request
+        ConfigurationConsulter $configurationConsulter, AccessTokenRepositoryInterface $accessTokenRepository,
+        ChamiloRequest $request
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -102,9 +102,7 @@ class GraphRepositoryFactory
         );
 
         return new GraphRepository(
-            $oauthClient,
-            new Graph(),
-            $this->accessTokenRepository
+            $oauthClient, new Graph(), $this->accessTokenRepository
         );
     }
 }

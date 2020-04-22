@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365;
 
+use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Actions implements \Chamilo\Application\Calendar\ActionsInterface
+class Actions implements ActionsInterface
 {
 
     /**

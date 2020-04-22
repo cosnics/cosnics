@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
+use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -24,9 +25,9 @@ class EventListRenderer extends \Chamilo\Core\Repository\Integration\Chamilo\Lib
     {
         $parameters = array(
             Application::PARAM_CONTEXT => $event->getContext(), 
-            Application::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_VIEW_ATTACHMENT, 
-            \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $event->getId(), 
-            \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_OBJECT => $attachment->get_id());
+            Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
+            Manager::PARAM_PUBLICATION_ID => $event->getId(),
+            Manager::PARAM_OBJECT => $attachment->get_id());
         
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();

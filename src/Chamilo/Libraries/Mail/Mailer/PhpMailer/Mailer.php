@@ -46,80 +46,6 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Sends a single mail
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     */
-    public function sendMail(Mail $mail)
-    {
-        $this->addSenderInformation($mail);
-        $this->addReplyInformation($mail);
-        $this->addEmbeddedImages($mail);
-        $this->addAttachments($mail);
-        $this->addContent($mail);
-
-        if (! $mail->getSendIndividually())
-        {
-            $this->addRecipients($mail);
-            $this->send($mail);
-        }
-        else
-        {
-            $this->sendIndividually($mail);
-        }
-
-        $this->resetMailer();
-    }
-
-    /**
-     * Adds the information about the sender
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     */
-    protected function addSenderInformation(Mail $mail)
-    {
-        $this->phpMailer->From = $this->determineFromEmail($mail);
-        $this->phpMailer->Sender = $this->phpMailer->From;
-        $this->phpMailer->FromName = $this->determineFromName($mail);
-    }
-
-    /**
-     * Adds optionally reply information
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     */
-    protected function addReplyInformation(Mail $mail)
-    {
-        if (! is_null($mail->getReplyEmail()))
-        {
-            $this->phpMailer->addReplyTo($this->determineReplyEmail($mail), $this->determineReplyName($mail));
-            $this->phpMailer->addCustomHeader('Return-Path: <' . $this->determineReplyEmail($mail) . '>');
-        }
-        else
-        {
-            $this->phpMailer->addCustomHeader('Return-Path: <' . $this->phpMailer->From . '>');
-        }
-    }
-
-    /**
-     * Adds the embedded images
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     */
-    protected function addEmbeddedImages(Mail $mail)
-    {
-        foreach ($mail->getEmbeddedImages() as $index => $mailFile)
-        {
-            $this->phpMailer->addEmbeddedImage(
-                $mailFile->getPath(),
-                $index,
-                $mailFile->getFilename(),
-                'base64',
-                $mailFile->getMimeType());
-        }
-    }
-
-    /**
      * Adds the attachments
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
@@ -146,6 +72,21 @@ class Mailer extends AbstractMailer
     }
 
     /**
+     * Adds the embedded images
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     */
+    protected function addEmbeddedImages(Mail $mail)
+    {
+        foreach ($mail->getEmbeddedImages() as $index => $mailFile)
+        {
+            $this->phpMailer->addEmbeddedImage(
+                $mailFile->getPath(), $index, $mailFile->getFilename(), 'base64', $mailFile->getMimeType()
+            );
+        }
+    }
+
+    /**
      * Adds the recipients
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
@@ -169,6 +110,47 @@ class Mailer extends AbstractMailer
     }
 
     /**
+     * Adds optionally reply information
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     */
+    protected function addReplyInformation(Mail $mail)
+    {
+        if (!is_null($mail->getReplyEmail()))
+        {
+            $this->phpMailer->addReplyTo($this->determineReplyEmail($mail), $this->determineReplyName($mail));
+            $this->phpMailer->addCustomHeader('Return-Path: <' . $this->determineReplyEmail($mail) . '>');
+        }
+        else
+        {
+            $this->phpMailer->addCustomHeader('Return-Path: <' . $this->phpMailer->From . '>');
+        }
+    }
+
+    /**
+     * Adds the information about the sender
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     */
+    protected function addSenderInformation(Mail $mail)
+    {
+        $this->phpMailer->From = $this->determineFromEmail($mail);
+        $this->phpMailer->Sender = $this->phpMailer->From;
+        $this->phpMailer->FromName = $this->determineFromName($mail);
+    }
+
+    /**
+     * Resets the mailer after sending each mail
+     */
+    protected function resetMailer()
+    {
+        $this->phpMailer->clearAllRecipients();
+        $this->phpMailer->clearAttachments();
+        $this->phpMailer->clearCustomHeaders();
+        $this->phpMailer->clearReplyTos();
+    }
+
+    /**
      * Sends the actual mail
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
@@ -177,7 +159,7 @@ class Mailer extends AbstractMailer
      */
     protected function send(Mail $mail)
     {
-        if (! $this->phpMailer->send())
+        if (!$this->phpMailer->send())
         {
             $this->logMail($mail, MailLog::STATE_FAILED, $this->phpMailer->ErrorInfo);
             throw new RuntimeException('Could not send e-mail');
@@ -222,14 +204,32 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Resets the mailer after sending each mail
+     * Sends a single mail
+     *
+     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     *
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \Exception
      */
-    protected function resetMailer()
+    public function sendMail(Mail $mail)
     {
-        $this->phpMailer->clearAllRecipients();
-        $this->phpMailer->clearAttachments();
-        $this->phpMailer->clearCustomHeaders();
-        $this->phpMailer->clearReplyTos();
+        $this->addSenderInformation($mail);
+        $this->addReplyInformation($mail);
+        $this->addEmbeddedImages($mail);
+        $this->addAttachments($mail);
+        $this->addContent($mail);
+
+        if (!$mail->getSendIndividually())
+        {
+            $this->addRecipients($mail);
+            $this->send($mail);
+        }
+        else
+        {
+            $this->sendIndividually($mail);
+        }
+
+        $this->resetMailer();
     }
 
     /**
@@ -239,11 +239,10 @@ class Mailer extends AbstractMailer
      */
     protected function setPHPMailer(PHPMailer $phpMailer = null)
     {
-        if (! isset($phpMailer) || ! $phpMailer instanceof PHPMailer)
+        if (!isset($phpMailer) || !$phpMailer instanceof PHPMailer)
         {
             global $phpMailerConfiguration;
-            require_once (Path::getInstance()->getStoragePath() .
-                 'configuration/phpmailer.conf.php');
+            require_once(Path::getInstance()->getStoragePath() . 'configuration/phpmailer.conf.php');
 
             $phpMailer = new PHPMailer();
 

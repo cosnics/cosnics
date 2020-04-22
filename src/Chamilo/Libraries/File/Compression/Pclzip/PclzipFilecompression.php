@@ -17,7 +17,7 @@ class PclzipFilecompression extends Filecompression
     {
         $tmpDir = sys_get_temp_dir() . '/zip/';
 
-        if (! file_exists($tmpDir))
+        if (!file_exists($tmpDir))
         {
             mkdir($tmpDir);
         }
@@ -26,61 +26,16 @@ class PclzipFilecompression extends Filecompression
     }
 
     /**
+     * @param string $path
      *
-     * @see \Chamilo\Libraries\File\Compression\Filecompression::get_supported_mimetypes()
-     */
-    public function get_supported_mimetypes()
-    {
-        return array(
-            'application/x-zip-compressed',
-            'application/zip',
-            'multipart/x-zip',
-            'application/x-gzip',
-            'multipart/x-gzip');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\File\Compression\Filecompression::is_supported_mimetype()
-     */
-    public function is_supported_mimetype($mimetype)
-    {
-        return in_array($mimetype, $this->get_supported_mimetypes());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\File\Compression\Filecompression::extract_file()
-     */
-    public function extract_file($file, $withSafeNames = true)
-    {
-        $dir = $this->create_temporary_directory();
-        $pclzip = new PclZip($file);
-
-        if ($pclzip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_ADD_TEMP_FILE_ON) == 0)
-        {
-            print_r($pclzip->errorInfo());
-            return false;
-        }
-
-        if ($withSafeNames)
-        {
-            Filesystem::create_safe_names($dir);
-        }
-
-        return $dir;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\File\Compression\Filecompression::create_archive()
+     * @return string
      */
     public function create_archive($path)
     {
         $fileName = $this->get_filename();
         $temporaryPath = $this->create_temporary_directory();
 
-        if (! isset($fileName))
+        if (!isset($fileName))
         {
             $fileName = Filesystem::create_unique_name($temporaryPath, uniqid() . '.zip');
         }
@@ -97,5 +52,55 @@ class PclzipFilecompression extends Filecompression
         $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path, PCLZIP_OPT_ADD_TEMP_FILE_ON);
 
         return $archiveFile;
+    }
+
+    /**
+     * @param string $file
+     * @param boolean $withSafeNames
+     *
+     * @return boolean|string
+     */
+    public function extract_file($file, $withSafeNames = true)
+    {
+        $dir = $this->create_temporary_directory();
+        $pclzip = new PclZip($file);
+
+        if ($pclzip->extract(PCLZIP_OPT_PATH, $dir, PCLZIP_OPT_ADD_TEMP_FILE_ON) == 0)
+        {
+            print_r($pclzip->errorInfo());
+
+            return false;
+        }
+
+        if ($withSafeNames)
+        {
+            Filesystem::create_safe_names($dir);
+        }
+
+        return $dir;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function get_supported_mimetypes()
+    {
+        return array(
+            'application/x-zip-compressed',
+            'application/zip',
+            'multipart/x-zip',
+            'application/x-gzip',
+            'multipart/x-gzip'
+        );
+    }
+
+    /**
+     * @param string $mimetype
+     *
+     * @return boolean
+     */
+    public function is_supported_mimetype($mimetype)
+    {
+        return in_array($mimetype, $this->get_supported_mimetypes());
     }
 }

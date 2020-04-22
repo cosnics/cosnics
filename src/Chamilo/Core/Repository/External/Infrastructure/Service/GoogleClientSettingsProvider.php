@@ -8,23 +8,23 @@ use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientSettingsProviderInterfac
 
 /**
  * Settings provider to support the google client service
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider implements 
-    GoogleClientSettingsProviderInterface
+class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider
+    implements GoogleClientSettingsProviderInterface
 {
 
     /**
      * Scopes that enable access to particular resources
-     * 
+     *
      * @var string
      */
     protected $scopes;
 
     /**
      * Constructor
-     * 
+     *
      * @param Instance $externalRepositoryInstance
      * @param User $user
      * @param string $scopes
@@ -32,33 +32,13 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
     public function __construct(Instance $externalRepositoryInstance, User $user, $scopes)
     {
         parent::__construct($externalRepositoryInstance, $user);
-        
+
         $this->scopes = $scopes;
     }
 
     /**
-     * Returns the developer key for the google client
-     * 
-     * @return string
-     */
-    public function getDeveloperKey()
-    {
-        return Setting::get('developer_key', $this->externalRepositoryInstance->getId());
-    }
-
-    /**
-     * Scopes enable access to particular resources
-     * 
-     * @return string
-     */
-    public function getScopes()
-    {
-        return $this->scopes;
-    }
-
-    /**
      * Returns the security access token for the google client
-     * 
+     *
      * @return string
      */
     public function getAccessToken()
@@ -67,8 +47,18 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
     }
 
     /**
+     * Returns the developer key for the google client
+     *
+     * @return string
+     */
+    public function getDeveloperKey()
+    {
+        return Setting::get('developer_key', $this->externalRepositoryInstance->getId());
+    }
+
+    /**
      * Returns the security refresh token for the google client
-     * 
+     *
      * @return string
      */
     public function getRefreshToken()
@@ -77,8 +67,38 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
     }
 
     /**
+     * Scopes enable access to particular resources
+     *
+     * @return string
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
+    }
+
+    /**
+     * Removes the access token
+     *
+     * @return bool
+     */
+    public function removeAccessToken()
+    {
+        return $this->removeUserSetting('session_token');
+    }
+
+    /**
+     * Removes the refresh token
+     *
+     * @return bool
+     */
+    public function removeRefreshToken()
+    {
+        return $this->removeUserSetting('refresh_token');
+    }
+
+    /**
      * Stores the access token from the google client into chamilo
-     * 
+     *
      * @param string $accessToken
      *
      * @return bool
@@ -90,32 +110,13 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
 
     /**
      * Stores the refresh token
-     * 
+     *
      * @param $refreshToken
+     *
      * @return bool
      */
     public function saveRefreshToken($refreshToken)
     {
         return $this->saveUserSetting('refresh_token', $refreshToken);
-    }
-
-    /**
-     * Removes the access token
-     * 
-     * @return bool
-     */
-    public function removeAccessToken()
-    {
-        return $this->removeUserSetting('session_token');
-    }
-
-    /**
-     * Removes the refresh token
-     * 
-     * @return bool
-     */
-    public function removeRefreshToken()
-    {
-        return $this->removeUserSetting('refresh_token');
     }
 }

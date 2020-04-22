@@ -6,7 +6,9 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -32,7 +34,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
                     ContentObjectPublication::class_name(), 
                     ContentObjectPublication::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($course->get_id()));
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+            $publications = DataManager::retrieve_content_object_publications(
                 $condition);
             
             while ($publication = $publications->next_result())
@@ -62,6 +64,6 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

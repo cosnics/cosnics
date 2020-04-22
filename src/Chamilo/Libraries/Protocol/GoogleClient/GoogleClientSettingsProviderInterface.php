@@ -11,11 +11,11 @@ interface GoogleClientSettingsProviderInterface
 {
 
     /**
-     * Returns the developer key for the google client
+     * Returns the security access token for the google client
      *
      * @return string
      */
-    public function getDeveloperKey();
+    public function getAccessToken();
 
     /**
      * Returns the client id for the google client
@@ -32,18 +32,11 @@ interface GoogleClientSettingsProviderInterface
     public function getClientSecret();
 
     /**
-     * Returns the scopes for the google client
+     * Returns the developer key for the google client
      *
      * @return string
      */
-    public function getScopes();
-
-    /**
-     * Returns the security access token for the google client
-     *
-     * @return string
-     */
-    public function getAccessToken();
+    public function getDeveloperKey();
 
     /**
      * Returns the security refresh token for the google client
@@ -53,20 +46,11 @@ interface GoogleClientSettingsProviderInterface
     public function getRefreshToken();
 
     /**
-     * Stores the access token from the google client into chamilo
+     * Returns the scopes for the google client
      *
-     * @param string $accessToken
-     * @return boolean
+     * @return string[]
      */
-    public function saveAccessToken($accessToken);
-
-    /**
-     * Stores the refresh token
-     *
-     * @param string $refreshToken
-     * @return boolean
-     */
-    public function saveRefreshToken($refreshToken);
+    public function getScopes();
 
     /**
      * Removes the access token
@@ -81,4 +65,22 @@ interface GoogleClientSettingsProviderInterface
      * @return boolean
      */
     public function removeRefreshToken();
+
+    /**
+     * Stores the access token from the google client into chamilo
+     *
+     * @param string $accessToken
+     *
+     * @return boolean
+     */
+    public function saveAccessToken($accessToken);
+
+    /**
+     * Stores the refresh token
+     *
+     * @param string $refreshToken
+     *
+     * @return boolean
+     */
+    public function saveRefreshToken($refreshToken);
 }

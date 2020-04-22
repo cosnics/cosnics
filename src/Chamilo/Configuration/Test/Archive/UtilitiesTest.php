@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Test\Archive;
 
-class UtilitiesTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+class UtilitiesTest extends PHPUnit_Framework_TestCase
 {
     
     // normal unit test cases

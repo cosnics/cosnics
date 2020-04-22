@@ -43,8 +43,10 @@ class TranslationResourcesOptimizer
      * @param \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface $translationResourcesFinder
      * @param string $optimizedTranslationsCachePath
      */
-    public function __construct(array $translationLoaders,
-        TranslationResourcesFinderInterface $translationResourcesFinder, $optimizedTranslationsCachePath = '')
+    public function __construct(
+        array $translationLoaders, TranslationResourcesFinderInterface $translationResourcesFinder,
+        $optimizedTranslationsCachePath = ''
+    )
     {
         $this->setTranslationLoaders($translationLoaders);
         $this->setTranslationResourcesFinder($translationResourcesFinder);
@@ -52,53 +54,25 @@ class TranslationResourcesOptimizer
     }
 
     /**
+     * Determines a loader by a given type
      *
-     * @param \Symfony\Component\Translation\Loader\LoaderInterface[] $translationLoaders
+     * @param string $type
+     *
+     * @return \Symfony\Component\Translation\Loader\LoaderInterface
      * @throws \InvalidArgumentException
      */
-    public function setTranslationLoaders($translationLoaders)
+    protected function determineLoaderByType($type)
     {
-        if (empty($translationLoaders))
+        if (!array_key_exists($type, $this->translationLoaders))
         {
-            throw new InvalidArgumentException('You must provide at least one valid translation loader');
+            throw new InvalidArgumentException(
+                'The given type "' . $type . '" is not supported by the current loaders. ' .
+                'Please add the loader for this type or choose between "' .
+                implode(', ', array_keys($this->translationLoaders))
+            );
         }
 
-        foreach ($translationLoaders as $translationLoader)
-        {
-            if (! $translationLoader instanceof LoaderInterface)
-            {
-                throw new InvalidArgumentException(
-                    'The translation loader "' . get_class($translationLoader) .
-                         '" must be an instance of \Symfony\Component\Translation\Loader\LoaderInterface');
-            }
-        }
-
-        $this->translationLoaders = $translationLoaders;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface $translationResourcesFinder
-     * @throws \InvalidArgumentException
-     */
-    public function setTranslationResourcesFinder($translationResourcesFinder)
-    {
-        $this->translationResourcesFinder = $translationResourcesFinder;
-    }
-
-    /**
-     *
-     * @param string $optimizedTranslationsCachePath
-     * @throws \InvalidArgumentException
-     */
-    public function setOptimizedTranslationsCachePath($optimizedTranslationsCachePath)
-    {
-        if (empty($optimizedTranslationsCachePath))
-        {
-            throw new InvalidArgumentException('You must provide a valid cache path');
-        }
-
-        $this->optimizedTranslationsCachePath = $optimizedTranslationsCachePath;
+        return $this->translationLoaders[$type];
     }
 
     /**
@@ -109,7 +83,7 @@ class TranslationResourcesOptimizer
         $cachePath = $this->optimizedTranslationsCachePath;
         $optimizedTranslationsCache = $cachePath . '/locale.php';
 
-        if (! file_exists($optimizedTranslationsCache))
+        if (!file_exists($optimizedTranslationsCache))
         {
             return $this->optimizeResources($cachePath, $optimizedTranslationsCache);
         }
@@ -124,6 +98,7 @@ class TranslationResourcesOptimizer
      *
      * @param string $cachePath
      * @param string $optimizedTranslationsCache
+     *
      * @return string[]
      */
     protected function optimizeResources($cachePath, $optimizedTranslationsCache)
@@ -152,8 +127,8 @@ class TranslationResourcesOptimizer
         }
 
         file_put_contents(
-            $optimizedTranslationsCache,
-            "<?php\n\nreturn " . var_export(array_keys($resources), true) . ";\n");
+            $optimizedTranslationsCache, "<?php\n\nreturn " . var_export(array_keys($resources), true) . ";\n"
+        );
 
         return $resources;
     }
@@ -163,13 +138,14 @@ class TranslationResourcesOptimizer
      *
      * @param string $cachePath
      * @param string $optimizedTranslationsCache
+     *
      * @return string[]
      */
     protected function retrieveOptimizedResources($cachePath, $optimizedTranslationsCache)
     {
         $resources = array();
 
-        $locales = require ($optimizedTranslationsCache);
+        $locales = require($optimizedTranslationsCache);
         foreach ($locales as $locale)
         {
             $resources[$locale] = $cachePath . '/' . $locale . '.php';
@@ -179,22 +155,56 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     * Determines a loader by a given type
      *
-     * @param string $type
+     * @param string $optimizedTranslationsCachePath
+     *
      * @throws \InvalidArgumentException
-     * @return \Symfony\Component\Translation\Loader\LoaderInterface
      */
-    protected function determineLoaderByType($type)
+    public function setOptimizedTranslationsCachePath($optimizedTranslationsCachePath)
     {
-        if (! array_key_exists($type, $this->translationLoaders))
+        if (empty($optimizedTranslationsCachePath))
         {
-            throw new InvalidArgumentException(
-                'The given type "' . $type . '" is not supported by the current loaders. ' .
-                     'Please add the loader for this type or choose between "' .
-                     implode(', ', array_keys($this->translationLoaders)));
+            throw new InvalidArgumentException('You must provide a valid cache path');
         }
 
-        return $this->translationLoaders[$type];
+        $this->optimizedTranslationsCachePath = $optimizedTranslationsCachePath;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\Translation\Loader\LoaderInterface[] $translationLoaders
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setTranslationLoaders($translationLoaders)
+    {
+        if (empty($translationLoaders))
+        {
+            throw new InvalidArgumentException('You must provide at least one valid translation loader');
+        }
+
+        foreach ($translationLoaders as $translationLoader)
+        {
+            if (!$translationLoader instanceof LoaderInterface)
+            {
+                throw new InvalidArgumentException(
+                    'The translation loader "' . get_class($translationLoader) .
+                    '" must be an instance of \Symfony\Component\Translation\Loader\LoaderInterface'
+                );
+            }
+        }
+
+        $this->translationLoaders = $translationLoaders;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface $translationResourcesFinder
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setTranslationResourcesFinder($translationResourcesFinder)
+    {
+        $this->translationResourcesFinder = $translationResourcesFinder;
     }
 }

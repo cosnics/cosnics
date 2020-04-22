@@ -3,7 +3,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Templat
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentOverviewBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\AssessmentUserScoresBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -53,7 +55,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
                 ContentObjectPublication::class_name(), 
                 ContentObjectPublication::PROPERTY_MODIFIED_DATE));
         
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+        $publications = DataManager::retrieve_content_object_publications(
             $condition, 
             $order_by);
         
@@ -70,10 +72,10 @@ class AssessmentScoresTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $this->course_id = Request::get(Manager::PARAM_COURSE);
         if ($this->course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
+            $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
         }
         $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
         if ($sel)
@@ -93,7 +95,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
             new Breadcrumb(
                 $this->get_url(
                     array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4), 
-                    array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)), 
+                    array(Manager::PARAM_TEMPLATE_ID)),
                 Translation::get('LastAccessToToolsBlock')));
         
         $trail->add(new Breadcrumb($this->get_url(), Translation::get('AssessmentScores')));

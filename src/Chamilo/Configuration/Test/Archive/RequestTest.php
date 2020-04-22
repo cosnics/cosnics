@@ -2,8 +2,9 @@
 namespace Chamilo\Configuration\Test\Archive;
 
 use Chamilo\Libraries\Platform\Session\Request;
+use PHPUnit_Framework_TestCase;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends PHPUnit_Framework_TestCase
 {
 
     public function test_get_should_return_existing_value()

@@ -4,7 +4,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Templat
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentInformationBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntitiesBlock;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -31,9 +33,9 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->publicationId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->publicationId = Request::get(Manager::PARAM_PUBLICATION);
 
-        $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+        $assignment = DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
             $this->publicationId
         )->get_content_object();
@@ -45,7 +47,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
 
         $params = [];
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
+        $params[Manager::PARAM_TEMPLATE_ID] =
             CourseStudentTrackerTemplate::class_name();
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
@@ -68,7 +70,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
     {
         if ($this->publicationId)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publicationId);
+            $this->set_parameter(Manager::PARAM_PUBLICATION, $this->publicationId);
         }
     }
 }

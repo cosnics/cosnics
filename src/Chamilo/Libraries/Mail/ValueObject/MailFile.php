@@ -13,28 +13,28 @@ class MailFile
 
     /**
      * The filename of the embedded object
-     * 
+     *
      * @var string
      */
     private $filename;
 
     /**
      * The system path of the embedded object
-     * 
+     *
      * @var string
      */
     private $path;
 
     /**
      * The mime type of the embedded object
-     * 
+     *
      * @var string
      */
     private $mimeType;
 
     /**
      * Constructor
-     * 
+     *
      * @param string $filename
      * @param string $mimeType
      * @param string $path

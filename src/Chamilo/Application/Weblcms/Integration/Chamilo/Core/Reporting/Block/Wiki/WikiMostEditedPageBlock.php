@@ -3,9 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\W
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Reporting\ReportingData;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -25,7 +28,7 @@ class WikiMostEditedPageBlock extends ToolBlock
             $this->getPublicationId());
         
         $wiki = $publication->get_content_object();
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+        $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(), 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
@@ -45,7 +48,7 @@ class WikiMostEditedPageBlock extends ToolBlock
             
             foreach ($complex_content_object_items as $complex_content_object_item)
             {
-                $page_edits = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                $page_edits = DataManager::retrieve_by_id(
                     ContentObject::class_name(), 
                     $complex_content_object_item->get_ref())->get_version_count();
                 
@@ -58,8 +61,8 @@ class WikiMostEditedPageBlock extends ToolBlock
             
             $url = 'index.php?go=' . \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE . '&course=' .
                  $this->getCourseId() . '&tool=' . $this->get_tool() . '&application=weblcms&' .
-                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID . '=' . $this->getPublicationId() .
-                 '&tool_action=' . \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW .
+                 Manager::PARAM_PUBLICATION_ID . '=' . $this->getPublicationId() .
+                 '&tool_action=' . Manager::ACTION_VIEW .
                  '&display_action=view_item&selected_cloi=' . $most_edited_page->get_id();
             
             $reporting_data->add_category(0);
@@ -81,6 +84,6 @@ class WikiMostEditedPageBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
+        return array(Html::VIEW_TABLE);
     }
 }

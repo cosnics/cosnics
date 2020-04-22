@@ -31,24 +31,6 @@ class ChamiloRequest extends Request
     }
 
     /**
-     * Returns a parameter from the url (query) or fallback to the default value
-     *
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function getFromUrl($key, $default = null)
-    {
-        if ($this !== $result = $this->query->get($key, $this))
-        {
-            return $result;
-        }
-
-        return $default;
-    }
-
-    /**
      * Returns a parameter from the post body (request) or fallback to the default value
      *
      * @param string $key
@@ -82,6 +64,24 @@ class ChamiloRequest extends Request
         }
 
         if (null != $result = $this->getFromURL($key))
+        {
+            return $result;
+        }
+
+        return $default;
+    }
+
+    /**
+     * Returns a parameter from the url (query) or fallback to the default value
+     *
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function getFromUrl($key, $default = null)
+    {
+        if ($this !== $result = $this->query->get($key, $this))
         {
             return $result;
         }
