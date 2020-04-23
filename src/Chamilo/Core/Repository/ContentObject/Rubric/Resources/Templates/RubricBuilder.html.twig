@@ -9,7 +9,7 @@
     <div id="builder">
 {#        <score-rubric-tree-builder class="w-100" v-if="!viewFullRubric"></score-rubric-tree-builder>#}
 {#        <score-rubric-builder class="w-100" v-if="viewFullRubric"></score-rubric-builder>#}
-        <score-rubric-view></score-rubric-view>
+        <rubric-builder apiConfig="config" rubric="myRubric" version="currentVersion"></rubric-builder>
 {#        <button class="btn btn-default pull-left full-rubric-btn" @click="viewFullRubric=!viewFullRubric">Bekijk#}
 {#            Volledige Rubric#}
 {#        </button>#}
@@ -22,6 +22,9 @@
         var app = new Vue({
             el: '#builder',
             data: {
+                "apiConfig": {
+                    'createTreeNodeUrl':
+                }
                 "viewFullRubric": false,
                 "store": {
                     rubric: Vue.prototype.$getRubricFromJSON({

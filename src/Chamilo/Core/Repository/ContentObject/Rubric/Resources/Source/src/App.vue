@@ -1,5 +1,7 @@
 <template>
     <div id="app">
+        <rubric-builder apiConfig="config" rubric="myRubric" version="currentVersion"></rubric-builder>
+
         <div class="app-header">
             <ul class="app-header-menu">
                 <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
@@ -40,6 +42,7 @@
     import ScoreRubricStore from './ScoreRubricStore';
     import Criterium from './Domain/Criterium';
     import LevelsView from './Components/View/LevelsView.vue';
+    import APIConfiguration from "./Connector/APIConfiguration";
 
     @Component({
         components: {
@@ -50,6 +53,11 @@
         private selectedCriterium: Criterium|null = null;
         private showSplitView: boolean = false;
         private content: string = 'rubric';
+        private apiConfiguration: APIConfiguration|null = null;
+
+        private config: any = {
+            'addLevelURL': 'https://test',
+        };
 
         get store(): ScoreRubricStore {
             return this.$root.$data.store;
@@ -57,6 +65,10 @@
 
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
+        }
+
+        async mounted() {
+            this.apiConfiguration = APIConfiguration.fromJSON(config);
         }
 
         async created() {
