@@ -122,7 +122,7 @@ class PlatformGroupTeamService
 
         $this->validateUserCount();
 
-        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        $team = $this->getTeam($platformGroupTeam);
         if(!$team instanceof Team)
         {
             return;
