@@ -4,10 +4,10 @@ namespace Chamilo\Libraries\Storage\Parameters;
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
+use Chamilo\Libraries\Storage\Query\Joins;
 
 /**
  *
@@ -91,9 +91,11 @@ abstract class DataClassParameters implements Hashable
      * @param integer $offset
      * @param boolean $distinct
      */
-    public function __construct(Condition $condition = null, Joins $joins = null,
-        DataClassProperties $dataClassProperties = null, $orderBy = array(), GroupBy $groupBy = null, Condition $havingCondition = null,
-        $count = null, $offset = null, $distinct = false)
+    public function __construct(
+        Condition $condition = null, Joins $joins = null, DataClassProperties $dataClassProperties = null,
+        $orderBy = array(), GroupBy $groupBy = null, Condition $havingCondition = null, $count = null, $offset = null,
+        $distinct = false
+    )
     {
         $this->setCondition($condition);
         $this->setJoins($joins);
@@ -108,16 +110,6 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     * @deprecated User getCondition() now
-     */
-    public function get_condition()
-    {
-        return $this->condition;
-    }
-
-    /**
      * Get the condition to be applied to the action
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
@@ -129,7 +121,18 @@ abstract class DataClassParameters implements Hashable
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @deprecated User getCondition() now
+     */
+    public function get_condition()
+    {
+        return $this->condition;
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @deprecated User setCondition() now
      */
     public function set_condition($condition)
@@ -148,43 +151,23 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
+     * Get the number of results to return
      *
-     * @return \Chamilo\Libraries\Storage\Query\Joins
-     * @deprecated Use getJoins() now
+     * @return integer
      */
-    public function get_joins()
+    public function getCount()
     {
-        return $this->joins;
+        return $this->count;
     }
 
     /**
-     * Get the join data classes to be applied to the action
+     * Set the number of results to return
      *
-     * @return \Chamilo\Libraries\Storage\Query\Joins
+     * @param integer $count
      */
-    public function getJoins()
+    public function setCount($count)
     {
-        return $this->joins;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @deprecated Use setJoins() now
-     */
-    public function set_joins($joins)
-    {
-        $this->joins = $joins;
-    }
-
-    /**
-     * Set the join data classes to be applied to the action
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     */
-    public function setJoins(Joins $joins = null)
-    {
-        $this->joins = $joins;
+        $this->count = (int) $count;
     }
 
     /**
@@ -198,7 +181,7 @@ abstract class DataClassParameters implements Hashable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
      */
     public function setDataClassProperties($dataClassProperties = null)
     {
@@ -206,23 +189,21 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
-     * Get the ordering of the DataClass objects to be applied to the result set
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return boolean
      */
-    public function getOrderBy()
+    public function getDistinct()
     {
-        return $this->orderBy;
+        return $this->distinct;
     }
 
     /**
-     * Set the ordering of the DataClass objects to be applied to the result set
      *
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param boolean $distinct
      */
-    public function setOrderBy($orderBy = array())
+    public function setDistinct($distinct)
     {
-        $this->orderBy = $orderBy;
+        $this->distinct = (boolean) $distinct;
     }
 
     /**
@@ -247,6 +228,30 @@ abstract class DataClassParameters implements Hashable
 
     /**
      *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = array();
+
+        $hashParts[] = static::class;
+        $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
+        $hashParts[] = ($this->getJoins() instanceof Joins ? $this->getJoins()->getHashParts() : null);
+        $hashParts[] = ($this->getDataClassProperties() instanceof DataClassProperties ?
+            $this->getDataClassProperties()->getHashParts() : null);
+        $hashParts[] = $this->getOrderByHashParts();
+        $hashParts[] = ($this->getGroupBy() instanceof GroupBy ? $this->getGroupBy()->getHashParts() : null);
+        $hashParts[] =
+            ($this->getHavingCondition() instanceof Condition ? $this->getHavingCondition()->getHashParts() : null);
+        $hashParts[] = $this->getCount();
+        $hashParts[] = $this->getOffset();
+        $hashParts[] = $this->getDistinct();
+
+        return $hashParts;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function getHavingCondition()
@@ -264,23 +269,44 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
-     * Get the number of results to return
+     * Get the join data classes to be applied to the action
      *
-     * @return integer
+     * @return \Chamilo\Libraries\Storage\Query\Joins
      */
-    public function getCount()
+    public function getJoins()
     {
-        return $this->count;
+        return $this->joins;
     }
 
     /**
-     * Set the number of results to return
      *
-     * @param integer $count
+     * @return \Chamilo\Libraries\Storage\Query\Joins
+     * @deprecated Use getJoins() now
      */
-    public function setCount($count)
+    public function get_joins()
     {
-        $this->count = (int) $count;
+        return $this->joins;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     *
+     * @deprecated Use setJoins() now
+     */
+    public function set_joins($joins)
+    {
+        $this->joins = $joins;
+    }
+
+    /**
+     * Set the join data classes to be applied to the action
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     */
+    public function setJoins(Joins $joins = null)
+    {
+        $this->joins = $joins;
     }
 
     /**
@@ -304,43 +330,23 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
+     * Get the ordering of the DataClass objects to be applied to the result set
      *
-     * @return boolean
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
      */
-    public function getDistinct()
+    public function getOrderBy()
     {
-        return $this->distinct;
+        return $this->orderBy;
     }
 
     /**
+     * Set the ordering of the DataClass objects to be applied to the result set
      *
-     * @param boolean $distinct
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      */
-    public function setDistinct($distinct)
+    public function setOrderBy($orderBy = array())
     {
-        $this->distinct = (boolean) $distinct;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = array();
-
-        $hashParts[] = static::class_name();
-        $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
-        $hashParts[] = ($this->getJoins() instanceof Joins ? $this->getJoins()->getHashParts() : null);
-        $hashParts[] = ($this->getDataClassProperties() instanceof DataClassProperties ? $this->getDataClassProperties()->getHashParts() : null);
-        $hashParts[] = $this->getOrderByHashParts();
-        $hashParts[] = ($this->getGroupBy() instanceof GroupBy ? $this->getGroupBy()->getHashParts() : null);
-        $hashParts[] = ($this->getHavingCondition() instanceof Condition ? $this->getHavingCondition()->getHashParts() : null);
-        $hashParts[] = $this->getCount();
-        $hashParts[] = $this->getOffset();
-        $hashParts[] = $this->getDistinct();
-
-        return $hashParts;
+        $this->orderBy = $orderBy;
     }
 
     /**
@@ -362,6 +368,7 @@ abstract class DataClassParameters implements Hashable
     /**
      *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {

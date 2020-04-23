@@ -9,30 +9,21 @@ namespace Chamilo\Libraries\Storage\DataClass\Listeners;
  */
 abstract class DataClassListener
 {
-    const BEFORE_CREATE = 'on_before_create';
-    const BEFORE_UPDATE = 'on_before_update';
-    const BEFORE_DELETE = 'on_before_delete';
     const AFTER_CREATE = 'on_after_create';
-    const AFTER_UPDATE = 'on_after_update';
     const AFTER_DELETE = 'on_after_delete';
-    const BEFORE_SET_PROPERTY = 'on_before_set_property';
     const AFTER_SET_PROPERTY = 'on_after_set_property';
+    const AFTER_UPDATE = 'on_after_update';
+    const BEFORE_CREATE = 'on_before_create';
+    const BEFORE_DELETE = 'on_before_delete';
+    const BEFORE_SET_PROPERTY = 'on_before_set_property';
+    const BEFORE_UPDATE = 'on_before_update';
     const GET_DEPENDENCIES = 'on_get_dependencies';
-
-    /**
-     * Calls this function before the creation of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_create()
-    {
-        return true;
-    }
 
     /**
      * Calls this function after the creation of a dataclass in the database
      *
      * @param boolean $success
+     *
      * @return boolean
      */
     public function on_after_create($success)
@@ -41,11 +32,26 @@ abstract class DataClassListener
     }
 
     /**
-     * Calls this function before the update of a dataclass in the database
+     * Calls this function after the deletion of a dataclass in the database
+     *
+     * @param boolean $success
      *
      * @return boolean
      */
-    public function on_before_update()
+    public function on_after_delete($success)
+    {
+        return true;
+    }
+
+    /**
+     * Calls this function after a property is set
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return boolean
+     */
+    public function on_after_set_property($name, $value)
     {
         return true;
     }
@@ -54,9 +60,20 @@ abstract class DataClassListener
      * Calls this function after the update of a dataclass in the database
      *
      * @param boolean $success
+     *
      * @return boolean
      */
     public function on_after_update($success)
+    {
+        return true;
+    }
+
+    /**
+     * Calls this function before the creation of a dataclass in the database
+     *
+     * @return boolean
+     */
+    public function on_before_create()
     {
         return true;
     }
@@ -72,21 +89,11 @@ abstract class DataClassListener
     }
 
     /**
-     * Calls this function after the deletion of a dataclass in the database
-     *
-     * @param boolean $success
-     * @return boolean
-     */
-    public function on_after_delete($success)
-    {
-        return true;
-    }
-
-    /**
      * Calls this function before a property is set
      *
      * @param string $name
      * @param string $value
+     *
      * @return boolean
      */
     public function on_before_set_property($name, $value)
@@ -95,13 +102,11 @@ abstract class DataClassListener
     }
 
     /**
-     * Calls this function after a property is set
+     * Calls this function before the update of a dataclass in the database
      *
-     * @param string $name
-     * @param string $value
      * @return boolean
      */
-    public function on_after_set_property($name, $value)
+    public function on_before_update()
     {
         return true;
     }
@@ -110,6 +115,7 @@ abstract class DataClassListener
      * Calls this function to return the dependencies of this class
      *
      * @param string[] $dependencies
+     *
      * @return boolean
      */
     public function on_get_dependencies(&$dependencies = array())

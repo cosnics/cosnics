@@ -15,18 +15,11 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class ComparisonCondition extends Condition
 {
     /**
-     * Constant defining "<"
+     * Constant defining "="
      *
      * @var int
      */
-    const LESS_THAN = 1;
-
-    /**
-     * Constant defining "<="
-     *
-     * @var int
-     */
-    const LESS_THAN_OR_EQUAL = 2;
+    const EQUAL = 5;
 
     /**
      * Constant defining ">"
@@ -43,11 +36,18 @@ class ComparisonCondition extends Condition
     const GREATER_THAN_OR_EQUAL = 4;
 
     /**
-     * Constant defining "="
+     * Constant defining "<"
      *
      * @var int
      */
-    const EQUAL = 5;
+    const LESS_THAN = 1;
+
+    /**
+     * Constant defining "<="
+     *
+     * @var int
+     */
+    const LESS_THAN_OR_EQUAL = 2;
 
     /**
      * Gets the DataClass property
@@ -103,56 +103,6 @@ class ComparisonCondition extends Condition
     }
 
     /**
-     * Gets the DataClass property
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Gets the operator
-     *
-     * @return int
-     */
-    public function get_operator()
-    {
-        return $this->operator;
-    }
-
-    /**
-     * Gets the value against which we're comparing
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_value()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit()
-    {
-        return $this->storage_unit;
-    }
-
-    /**
-     * Is the storage unit already an alias?
-     *
-     * @return boolean
-     */
-    public function is_alias()
-    {
-        return $this->is_alias;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
@@ -165,11 +115,6 @@ class ComparisonCondition extends Condition
         switch ($this->get_operator())
         {
             case self::LESS_THAN :
-                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
-                    $this->get_value();
-                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
-                    $this->get_name();
-                break;
             case self::LESS_THAN_OR_EQUAL :
                 $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :
                     $this->get_value();
@@ -203,5 +148,55 @@ class ComparisonCondition extends Condition
         $hashParts[] = $this->is_alias();
 
         return $hashParts;
+    }
+
+    /**
+     * Gets the DataClass property
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function get_name()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Gets the operator
+     *
+     * @return int
+     */
+    public function get_operator()
+    {
+        return $this->operator;
+    }
+
+    /**
+     * Gets the storage unit of the DataClass
+     *
+     * @return string
+     */
+    public function get_storage_unit()
+    {
+        return $this->storage_unit;
+    }
+
+    /**
+     * Gets the value against which we're comparing
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function get_value()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Is the storage unit already an alias?
+     *
+     * @return boolean
+     */
+    public function is_alias()
+    {
+        return $this->is_alias;
     }
 }

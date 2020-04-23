@@ -137,7 +137,7 @@ class FileForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
 
         $this->addRule(
-            'file', Translation:: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES), 'disk_quota'
+            'file', Translation:: get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota'
         );
 
         $calculator->addUploadWarningToForm($this);

@@ -72,7 +72,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                         $object->calculate_security_code()
                     );
 
-                $html[] = '<div><a href="' . Utilities::htmlentities($url) . '">' . Utilities::htmlentities($name) .
+                $html[] = '<div><a href="' . htmlentities($url) . '">' . htmlentities($name) .
                     '</a> (' . Filesystem::format_file_size($object->get_filesize()) . ')</div>';
             }
 

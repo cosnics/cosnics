@@ -29,16 +29,6 @@ class NotCondition extends AggregateCondition
     }
 
     /**
-     * Gets the condition to negate
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
-    {
-        return $this->condition;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
@@ -49,5 +39,15 @@ class NotCondition extends AggregateCondition
         $hashParts[] = $this->get_condition()->getHashParts();
 
         return $hashParts;
+    }
+
+    /**
+     * Gets the condition to negate
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     */
+    public function get_condition()
+    {
+        return $this->condition;
     }
 }

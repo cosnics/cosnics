@@ -27,33 +27,15 @@ class PropertiesConditionVariable extends ConditionVariable
      * Constructor
      *
      * @param string $class
+     *
+     * @throws \Exception
      */
     public function __construct($class)
     {
-        if (! class_exists($class))
+        if (!class_exists($class))
         {
             throw new Exception($class . ' does not exist');
         }
-        $this->class = $class;
-    }
-
-    /**
-     * Get the fully qualified class name of the DataClass object the property belongs to
-     *
-     * @return string
-     */
-    public function get_class()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Set the fully qualified class name of the DataClass object the property belongs to
-     *
-     * @param string $class
-     */
-    public function set_class($class)
-    {
         $this->class = $class;
     }
 
@@ -74,11 +56,36 @@ class PropertiesConditionVariable extends ConditionVariable
      * Determines the alias of the dataclass
      *
      * @return string
+     * @throws \ReflectionException
      * @deprecated DO NOT use this anymore!
      */
     public function get_alias()
     {
+        /**
+         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $class_name
+         */
         $class_name = $this->get_class();
+
         return DataManager::get_alias($class_name::get_table_name());
+    }
+
+    /**
+     * Get the fully qualified class name of the DataClass object the property belongs to
+     *
+     * @return string
+     */
+    public function get_class()
+    {
+        return $this->class;
+    }
+
+    /**
+     * Set the fully qualified class name of the DataClass object the property belongs to
+     *
+     * @param string $class
+     */
+    public function set_class($class)
+    {
+        $this->class = $class;
     }
 }

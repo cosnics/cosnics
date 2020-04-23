@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * CellRenderer for ephorus requests browser table.
@@ -82,7 +81,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
+                return htmlentities(
                     StringUtilities::getInstance()->truncate(
                         $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION), 50
                     )

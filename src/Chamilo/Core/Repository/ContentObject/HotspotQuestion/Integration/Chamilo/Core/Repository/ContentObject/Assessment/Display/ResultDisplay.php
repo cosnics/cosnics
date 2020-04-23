@@ -5,12 +5,12 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -35,16 +35,16 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
 
-        $scaledDimensions = Utilities::scaleDimensions(
-            600, 450, array('width' => $dimensions[0], 'height' => $dimensions[1])
-        );
+        $scaledDimensions = ImageManipulation::rescale($dimensions[0], $dimensions[1], 600, 450);
 
         $html[] = '<div style="border: 1px solid #B5CAE7; border-top: none; padding: 10px;">';
         $html[] = '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
-            $question_id . '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] .
-            'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
-            $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
-            'px;background-image: url(' . Manager::get_document_downloader_url(
+            $question_id . '" class="hotspot_image" style="width: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px; height: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px; background-size: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px;background-image: url(' .
+            Manager::get_document_downloader_url(
                 $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
         $html[] = '<script src="' . htmlspecialchars(
@@ -59,8 +59,17 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         $user_answers = $this->get_answers();
         $colors = array(
-            '#ff0000', '#f2ef00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#0080ff', '#ff0080', '#00ff80',
-            '#ff8000', '#8000ff'
+            '#ff0000',
+            '#f2ef00',
+            '#00ff00',
+            '#00ffff',
+            '#0000ff',
+            '#ff00ff',
+            '#0080ff',
+            '#ff0080',
+            '#00ff80',
+            '#ff8000',
+            '#8000ff'
         );
 
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';

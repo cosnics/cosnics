@@ -13,8 +13,9 @@ class OneToOneForeignObjectsParameters extends ForeignObjectsParameters
 {
 
     /**
+     * Sets the foreign key property
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\ForeignObject\ForeignObjectsParameters::set_foreign_key()
+     * @param string $foreignKey
      */
     public function set_foreign_key($foreignKey)
     {

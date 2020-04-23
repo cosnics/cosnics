@@ -50,6 +50,11 @@ interface RightsEntityProvider
     public function getEntityElementFinderType();
 
     /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    public function getEntityGlyph();
+
+    /**
      * @param integer $userIdentifier
      *
      * @return integer[]
@@ -61,11 +66,6 @@ interface RightsEntityProvider
      * @todo Not used much, might not be necessary
      */
     public function getEntityName();
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function getEntityGlyph();
 
     /**
      * @param integer $entityIdentifier

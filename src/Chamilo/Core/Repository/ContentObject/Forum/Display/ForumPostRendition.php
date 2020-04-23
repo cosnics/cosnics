@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -122,7 +121,13 @@ class ForumPostRendition
             $html[] =
                 '<div class="panel-heading">' . $glyph->render() . ' ' . htmlentities(Translation::get('Attachments')) .
                 '</div>';
-            Utilities::order_content_objects_by_title($attachments);
+
+            usort(
+                $attachments, function ($contentObjectOne, $contentObjectTwo) {
+                return strcasecmp($contentObjectOne->get_title(), $contentObjectTwo->get_title());
+            }
+            );
+
             $html[] = '<ul class="list-group">';
 
             /**

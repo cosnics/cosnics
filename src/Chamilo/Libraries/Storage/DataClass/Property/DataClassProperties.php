@@ -24,12 +24,20 @@ class DataClassProperties implements Hashable
     /**
      * Constructor
      *
-     * @param
-     *            \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $properties
      */
     public function __construct($properties = array())
     {
         $this->properties = (is_array($properties) ? $properties : func_get_args());
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     */
+    public function add($property)
+    {
+        $this->properties[] = $property;
     }
 
     /**
@@ -40,15 +48,6 @@ class DataClassProperties implements Hashable
     public function get()
     {
         return $this->properties;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     */
-    public function add($property)
-    {
-        $this->properties[] = $property;
     }
 
     /**
@@ -78,7 +77,7 @@ class DataClassProperties implements Hashable
      */
     public function merge(DataClassProperties $dataClassPropertiesToMerge = null)
     {
-        if (! $dataClassPropertiesToMerge instanceof DataClassProperties)
+        if (!$dataClassPropertiesToMerge instanceof DataClassProperties)
         {
             return;
         }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Exception;
 
 /**
  *
@@ -18,8 +19,9 @@ abstract class DataClassPropertyParameters extends DataClassParameters
      * Generate an instance based on the input or throw an exception if no compatible input was found
      *
      * @param mixed $parameter
+     *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassPropertyParameters
-     * @throws Exception
+     * @throws \Exception
      */
     public static function generate($parameter)
     {
@@ -39,7 +41,7 @@ abstract class DataClassPropertyParameters extends DataClassParameters
         }
         elseif (is_object($parameter) && $parameter instanceof Joins)
         {
-            return new self(null, null, $parameter);
+            return new $class(null, null, $parameter);
         }
         // If it's a string, generate a new DataClassPropertyParameters instance using the property
         // provided by the context
@@ -49,7 +51,9 @@ abstract class DataClassPropertyParameters extends DataClassParameters
         }
         else
         {
-            static::invalid();
+            throw new Exception(
+                'Illegal parameter passed to the DataManager method requiring DataClassPropertyParameters.'
+            );
         }
     }
 }

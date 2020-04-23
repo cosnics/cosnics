@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Exception;
 
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Exception;
-use Throwable;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception

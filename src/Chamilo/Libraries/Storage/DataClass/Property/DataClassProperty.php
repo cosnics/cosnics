@@ -45,6 +45,15 @@ class DataClassProperty implements Hashable
 
     /**
      *
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        return array(__CLASS__, $this->get_property(), $this->get_value());
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_property()
@@ -77,14 +86,5 @@ class DataClassProperty implements Hashable
     public function set_value(ConditionVariable $value)
     {
         $this->value = $value;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
-    public function getHashParts()
-    {
-        return array(__CLASS__, $this->get_property(), $this->get_value());
     }
 }

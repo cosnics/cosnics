@@ -20,11 +20,16 @@ class EmptyResultSet extends ResultSet
      * Retrieves next item from this result set
      *
      * @param boolean $mapToObject
+     *
      * @return mixed
      */
     public function next_result($mapToObject = true)
     {
         return null;
+    }
+
+    public function reset()
+    {
     }
 
     /**
@@ -35,9 +40,5 @@ class EmptyResultSet extends ResultSet
     public function size()
     {
         return 0;
-    }
-
-    public function reset()
-    {
     }
 }

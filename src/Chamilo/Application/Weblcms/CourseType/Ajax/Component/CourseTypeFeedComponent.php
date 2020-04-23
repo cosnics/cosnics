@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 class CourseTypeFeedComponent extends Manager
 {
@@ -58,7 +58,7 @@ class CourseTypeFeedComponent extends Manager
 
         if (!empty($searchQuery))
         {
-            $conditions[] = Utilities::query_to_condition(
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, array(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))
             );
         }
@@ -137,6 +137,14 @@ class CourseTypeFeedComponent extends Manager
     protected function getSearchQuery()
     {
         return $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**

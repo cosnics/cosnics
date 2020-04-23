@@ -20,25 +20,27 @@ class DataClassResultSetCache extends DataClassCache
      *
      * @param \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet $resultSet
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @throws \Exception
+     *
      * @return boolean
+     * @throws \Exception
      */
     public static function add(DataClassResultSet $resultSet, DataClassRetrievesParameters $parameters)
     {
-        if (! $parameters instanceof DataClassRetrievesParameters)
+        if (!$parameters instanceof DataClassRetrievesParameters)
         {
             throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
 
-        if (! $resultSet instanceof DataClassResultSet)
+        if (!$resultSet instanceof DataClassResultSet)
         {
             $type = is_object($resultSet) ? get_class($resultSet) : gettype($resultSet);
             throw new Exception(
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
-                     $type . '.');
+                $type . '.'
+            );
         }
 
-        if (! DataClassCache::get($resultSet->getCacheClassName(), $parameters))
+        if (!DataClassCache::get($resultSet->getCacheClassName(), $parameters))
         {
             DataClassCache::set_cache($resultSet->getCacheClassName(), $parameters->hash(), $resultSet);
         }

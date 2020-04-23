@@ -17,19 +17,21 @@ class RecordResultCache extends RecordCache
 {
 
     /**
-     *
+     * @param string $className
      * @param string[] $record
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     * @throws \Exception
+     *
      * @return boolean
+     * @throws \Exception
      */
     public static function add($className, $record, RecordRetrieveParameters $parameters = null)
     {
-        if (! is_array($record))
+        if (!is_array($record))
         {
             throw new Exception(
-                'The RecordResultCache only allows for caching of records. Currently trying to add: ' . gettype($record) .
-                     '.');
+                'The RecordResultCache only allows for caching of records. Currently trying to add: ' .
+                gettype($record) . '.'
+            );
         }
 
         if ($parameters instanceof RecordRetrieveParameters)
@@ -45,11 +47,13 @@ class RecordResultCache extends RecordCache
      * empty results
      *
      * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
+     *
      * @return boolean
      */
     public static function no_result(DataClassNoResultException $exception)
     {
         self::set_cache($exception->get_class_name(), $exception->get_parameters()->hash(), false);
+
         return true;
     }
 }

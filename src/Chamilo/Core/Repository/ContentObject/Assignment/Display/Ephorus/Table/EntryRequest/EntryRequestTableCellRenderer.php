@@ -115,7 +115,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
+                return htmlentities(
                     StringUtilities::getInstance()->truncate(
                         $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION), 50
                     )

@@ -22,6 +22,7 @@ abstract class NestedTreeNode extends NestedSet
      *
      * @return integer
      * @done Migrated to NestedSetDataClassRepository::countDescendants()
+     * @throws \ReflectionException
      */
     public function count_children($recursive = true, $condition = null)
     {
@@ -44,6 +45,7 @@ abstract class NestedTreeNode extends NestedSet
      *
      * @return integer
      * @done Migrated to NestedSetDataClassRepository::countAncestors()
+     * @throws \ReflectionException
      */
     public function count_parents($includeSelf = true, $condition = null)
     {
@@ -82,6 +84,7 @@ abstract class NestedTreeNode extends NestedSet
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      * @done Migrated to NestedSetDataClassRepository::findDescendants()
+     * @throws \ReflectionException
      */
     public function get_children($recursive = true, $condition = null)
     {
@@ -104,6 +107,7 @@ abstract class NestedTreeNode extends NestedSet
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      * @done Migrated to NestedSetDataClassRepository::findAncestors()
+     * @throws \ReflectionException
      */
     public function get_parents($includeSelf = true, $condition = null)
     {
@@ -116,6 +120,9 @@ abstract class NestedTreeNode extends NestedSet
      * @param \Chamilo\Libraries\Storage\DataClass\NestedTreeNode $node The possible parent node
      *
      * @return boolean
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      * @deprecated Use NestedSet::isDescendantOf() now
      */
     public function is_child_of($node)
@@ -129,6 +136,8 @@ abstract class NestedTreeNode extends NestedSet
      * @param \Chamilo\Libraries\Storage\DataClass\NestedTreeNode $node The possible child node
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      * @deprecated Use NestedSet::isAncestorOf() now
      */
     public function is_parent_of($node)
@@ -155,7 +164,7 @@ abstract class NestedTreeNode extends NestedSet
         {
             if ($newParentId == 0)
             {
-                $newParentId = $this->get_parent_id();
+                $newParentId = $this->getParentId();
             }
 
             return parent::move(self::AS_LAST_CHILD_OF, $newParentId);

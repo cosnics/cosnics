@@ -34,24 +34,29 @@ class ConditionVariableCache
     }
 
     /**
-     * Get an instance of the ConditionVariableCache
+     * Returns whether a ConditionVariable object exists in the cache
      *
-     * @return \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
+     * @return boolean
      */
-    public static function getInstance()
+    public function exists(ConditionVariable $conditionVariable)
     {
-        if (! isset(self::$instance))
+        if (isset($this->cache[$conditionVariable->hash()]))
         {
-            self::$instance = new self();
+            return true;
         }
-
-        return self::$instance;
+        else
+        {
+            return false;
+        }
     }
 
     /**
      * Get a translated condition_variable from the cache
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
      * @return string
      */
     public function get(ConditionVariable $conditionVariable)
@@ -68,21 +73,24 @@ class ConditionVariableCache
     }
 
     /**
-     * Returns whether a ConditionVariable object exists in the cache
+     * Get an instance of the ConditionVariableCache
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     * @return boolean
+     * @return \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
      */
-    public function exists(ConditionVariable $conditionVariable)
+    public static function getInstance()
     {
-        if (isset($this->cache[$conditionVariable->hash()]))
+        if (!isset(self::$instance))
         {
-            return true;
+            self::$instance = new self();
         }
-        else
-        {
-            return false;
-        }
+
+        return self::$instance;
+    }
+
+    public static function reset()
+    {
+        $instance = self::getInstance();
+        $instance->cache = array();
     }
 
     /**
@@ -94,11 +102,5 @@ class ConditionVariableCache
     public function set($conditionVariable, $value)
     {
         $this->cache[$conditionVariable->hash()] = $value;
-    }
-
-    public static function reset()
-    {
-        $instance = self::getInstance();
-        $instance->cache = array();
     }
 }

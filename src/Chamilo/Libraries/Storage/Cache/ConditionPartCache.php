@@ -27,16 +27,17 @@ class ConditionPartCache
     }
 
     /**
-     * Get a translated condition from the cache
+     * Returns whether a Condition object exists in the cache
      *
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @return string
+     *
+     * @return boolean
      */
-    public function get(ConditionPart $conditionPart)
+    public function exists(ConditionPart $conditionPart)
     {
-        if ($this->exists($conditionPart))
+        if (isset($this->cache[$conditionPart->hash()]))
         {
-            return $this->cache[$conditionPart->hash()];
+            return true;
         }
         else
         {
@@ -45,16 +46,17 @@ class ConditionPartCache
     }
 
     /**
-     * Returns whether a Condition object exists in the cache
+     * Get a translated condition from the cache
      *
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @return boolean
+     *
+     * @return string
      */
-    public function exists(ConditionPart $conditionPart)
+    public function get(ConditionPart $conditionPart)
     {
-        if (isset($this->cache[$conditionPart->hash()]))
+        if ($this->exists($conditionPart))
         {
-            return true;
+            return $this->cache[$conditionPart->hash()];
         }
         else
         {

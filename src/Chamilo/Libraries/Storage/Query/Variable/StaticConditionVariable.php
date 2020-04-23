@@ -38,21 +38,16 @@ class StaticConditionVariable extends ConditionVariable
     }
 
     /**
-     *
-     * @return string
+     * @return string[]
      */
-    public function get_value()
+    public function getHashParts()
     {
-        return $this->value;
-    }
+        $hashParts = ConditionVariable::getHashParts();
 
-    /**
-     *
-     * @param string $value
-     */
-    public function set_value($value)
-    {
-        $this->value = $value;
+        $hashParts[] = $this->get_value();
+        $hashParts[] = $this->get_quote();
+
+        return $hashParts;
     }
 
     /**
@@ -75,15 +70,19 @@ class StaticConditionVariable extends ConditionVariable
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @return string
      */
-    public function getHashParts()
+    public function get_value()
     {
-        $hashParts = ConditionVariable::getHashParts();
+        return $this->value;
+    }
 
-        $hashParts[] = $this->get_value();
-        $hashParts[] = $this->get_quote();
-
-        return $hashParts;
+    /**
+     *
+     * @param string $value
+     */
+    public function set_value($value)
+    {
+        $this->value = $value;
     }
 }

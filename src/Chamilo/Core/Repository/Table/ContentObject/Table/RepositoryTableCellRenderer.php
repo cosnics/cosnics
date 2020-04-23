@@ -35,7 +35,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     IdentGlyph::SIZE_MINI, true, array('fa-fw')
                 );
 
-                return '<a href="' . Utilities::htmlentities(
+                return '<a href="' . htmlentities(
                         $this->get_component()->get_type_filter_url($content_object->get_template_registration_id())
                     ) . '" title="' . htmlentities($content_object->get_type_string()) . '">' . $image . '</a>';
             case ContentObject::PROPERTY_TITLE :
@@ -43,7 +43,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 $title_short = StringUtilities::getInstance()->truncate($title, 50, true);
 
                 return '<a href="' .
-                    Utilities::htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
+                    htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                     '" title="' . htmlentities($title) . '">' . $title_short . '</a>';
             case ContentObject::PROPERTY_DESCRIPTION :
                 return StringUtilities::getInstance()->truncate(

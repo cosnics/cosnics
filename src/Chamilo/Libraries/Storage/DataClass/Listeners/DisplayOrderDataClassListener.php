@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -82,7 +82,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable($property->get_class(), $property->get_property()),
-                new StaticConditionVariable($data_class->get_default_property($property->get_property()))
+                new StaticConditionVariable($data_class->getDefaultProperty($property->get_property()))
             );
         }
 
@@ -90,20 +90,26 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
+     * @param boolean $success
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener::on_after_delete()
+     * @return boolean
+     * @throws \ReflectionException
      */
     public function on_after_delete($success)
     {
         $data_class = $this->data_class;
         $display_order_property = $data_class->get_display_order_property()->get_property();
+
+        /**
+         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
+         */
         $data_manager = $data_class->package() . '\Storage\DataManager';
 
         if ($success)
         {
             $success = $data_manager::move_display_orders(
                 $data_class->get_display_order_property()->get_class(), $display_order_property,
-                $data_class->get_default_property($display_order_property), null, $this->get_display_order_condition()
+                $data_class->getDefaultProperty($display_order_property), null, $this->get_display_order_condition()
             );
         }
 
@@ -111,8 +117,10 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
+     * @param string $name
+     * @param string $value
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener::on_after_set_property()
+     * @return boolean
      */
     public function on_after_set_property($name, $value)
     {
@@ -129,15 +137,21 @@ class DisplayOrderDataClassListener extends DataClassListener
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener::on_before_create()
+     * @return boolean
+     * @throws \ReflectionException
+     * @throws \Exception
      * @done See DisplayOrderHandler::prepareCreate();
      */
     public function on_before_create()
     {
         $data_class = $this->data_class;
+
+        /**
+         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
+         */
         $data_manager = $data_class->package() . '\Storage\DataManager';
 
-        $data_class->set_default_property(
+        $data_class->setDefaultProperty(
             $data_class->get_display_order_property()->get_property(), $data_manager::retrieve_next_value(
             $data_class->get_display_order_property()->get_class(),
             $data_class->get_display_order_property()->get_property(), $this->get_display_order_condition()
@@ -148,12 +162,14 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
+     * @param string $name
+     * @param string $value
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener::on_before_set_property()
+     * @return boolean
      */
     public function on_before_set_property($name, $value)
     {
-        $initial_value = $this->data_class->get_default_property($name);
+        $initial_value = $this->data_class->getDefaultProperty($name);
         if (is_null($initial_value) || ($initial_value == $value && !isset($this->old_display_order_condition)))
         {
             return true;
@@ -198,14 +214,19 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener::on_before_update()
+     * @return boolean
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function on_before_update()
     {
         $data_class = $this->data_class;
         $display_order_property = $data_class->get_display_order_property()->get_property();
-        $display_order_value = $data_class->get_default_property($display_order_property);
+        $display_order_value = $data_class->getDefaultProperty($display_order_property);
+
+        /**
+         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
+         */
         $data_manager = $data_class->package() . '\Storage\DataManager';
 
         if (isset($this->old_display_order_condition))
@@ -227,7 +248,7 @@ class DisplayOrderDataClassListener extends DataClassListener
 
             if (!isset($this->old_display_order) || is_null($display_order_value))
             {
-                $data_class->set_default_property($display_order_property, $next_display_order);
+                $data_class->setDefaultProperty($display_order_property, $next_display_order);
             }
             else
             {

@@ -55,7 +55,8 @@ class BrowserComponent extends Manager implements DelegateComponent
     private $buttonToolbarRenderer;
 
     /**
-     * Runs this component and displays its output.
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {

@@ -12,10 +12,8 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 abstract class ConditionVariableTranslator extends ConditionPartTranslator
 {
-
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
      */
     public function getConditionVariable()
     {

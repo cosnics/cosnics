@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -111,15 +112,14 @@ class HotspotQuestionForm extends ContentObjectForm
             $imageObject = $contentObject->get_image_object();
 
             $dimensions = getimagesize($imageObject->get_full_path());
-            $scaledDimensions = Utilities::scaleDimensions(
-                600, 450, array('width' => $dimensions[0], 'height' => $dimensions[1])
-            );
+
+            $scaledDimensions = ImageManipulation::rescale($dimensions[0], $dimensions[1], 600, 450);
 
             $styleProperties = array();
-            $styleProperties['width'] = $scaledDimensions['thumbnailWidth'] . 'px';
-            $styleProperties['height'] = $scaledDimensions['thumbnailHeight'] . 'px';
-            $styleProperties['background-size'] =
-                $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] . 'px';
+            $styleProperties['width'] = $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px';
+            $styleProperties['height'] = $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px';
+            $styleProperties['background-size'] = $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px ' .
+                $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px';
             $styleProperties['background-image'] =
                 'url(' . Manager::get_document_downloader_url($imageObject->get_id()) . ')';
 

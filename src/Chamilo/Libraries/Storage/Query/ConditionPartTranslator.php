@@ -50,6 +50,24 @@ abstract class ConditionPartTranslator
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
+     */
+    public function getConditionPart()
+    {
+        return $this->conditionPart;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
+     */
+    public function setConditionPart(ConditionPart $conditionPart)
+    {
+        $this->conditionPart = $conditionPart;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface
      */
     public function getConditionPartTranslatorService()
@@ -84,24 +102,6 @@ abstract class ConditionPartTranslator
     public function setDataClassDatabase(DataClassDatabaseInterface $dataClassDatabase)
     {
         $this->dataClassDatabase = $dataClassDatabase;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
-     */
-    public function getConditionPart()
-    {
-        return $this->conditionPart;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     */
-    public function setConditionPart(ConditionPart $conditionPart)
-    {
-        $this->conditionPart = $conditionPart;
     }
 
     /**

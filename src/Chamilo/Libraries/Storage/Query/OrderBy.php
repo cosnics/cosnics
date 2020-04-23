@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
+use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 
 /**
  * Describes the order by functionality of a query.
@@ -45,26 +45,6 @@ class OrderBy implements Hashable
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     * @deprecated Use getConditionVariable() now
-     */
-    public function get_property()
-    {
-        return $this->getConditionVariable();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     * @deprecated Use getConditionVariable() now
-     */
-    public function set_property(ConditionVariable $conditionVariable)
-    {
-        $this->setConditionVariable($conditionVariable);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function getConditionVariable()
     {
@@ -73,11 +53,20 @@ class OrderBy implements Hashable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      */
     public function setConditionVariable(ConditionVariable $conditionVariable)
     {
         $this->conditionVariable = $conditionVariable;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDirection()
+    {
+        return $this->direction;
     }
 
     /**
@@ -92,25 +81,6 @@ class OrderBy implements Hashable
 
     /**
      *
-     * @return integer
-     */
-    public function getDirection()
-    {
-        return $this->direction;
-    }
-
-    /**
-     *
-     * @param integer $direction
-     * @deprecated User setDirection() now
-     */
-    public function set_direction($direction)
-    {
-        $this->setDirection($direction);
-    }
-
-    /**
-     *
      * @param integer $direction
      */
     public function setDirection($direction)
@@ -120,10 +90,42 @@ class OrderBy implements Hashable
 
     /**
      *
+     * @param integer $direction
+     *
+     * @deprecated User setDirection() now
+     */
+    public function set_direction($direction)
+    {
+        $this->setDirection($direction);
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
     public function getHashParts()
     {
-        return array($this->getConditionVariable()->getHashParts(), $this->get_direction());
+        return array($this->getConditionVariable()->getHashParts(), $this->getDirection());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @deprecated Use getConditionVariable() now
+     */
+    public function get_property()
+    {
+        return $this->getConditionVariable();
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
+     * @deprecated Use getConditionVariable() now
+     */
+    public function set_property(ConditionVariable $conditionVariable)
+    {
+        $this->setConditionVariable($conditionVariable);
     }
 }

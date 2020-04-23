@@ -44,7 +44,9 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
     private $template_id;
 
     /**
-     * Runs this component and displays its output.
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \ReflectionException
      */
     public function run()
     {

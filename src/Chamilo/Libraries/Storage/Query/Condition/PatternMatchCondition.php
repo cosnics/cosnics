@@ -62,46 +62,6 @@ class PatternMatchCondition extends Condition
     }
 
     /**
-     * Gets the DataClass property
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit()
-    {
-        return $this->storage_unit;
-    }
-
-    /**
-     * Gets the pattern to apply to the Dataclass property value
-     *
-     * @return string
-     */
-    public function get_pattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
-     * Is the storage unit already an alias?
-     *
-     * @return boolean
-     */
-    public function is_alias()
-    {
-        return $this->is_alias;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
@@ -116,5 +76,45 @@ class PatternMatchCondition extends Condition
         $hashParts[] = $this->is_alias();
 
         return $hashParts;
+    }
+
+    /**
+     * Gets the DataClass property
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function get_name()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Gets the pattern to apply to the Dataclass property value
+     *
+     * @return string
+     */
+    public function get_pattern()
+    {
+        return $this->pattern;
+    }
+
+    /**
+     * Gets the storage unit of the DataClass
+     *
+     * @return string
+     */
+    public function get_storage_unit()
+    {
+        return $this->storage_unit;
+    }
+
+    /**
+     * Is the storage unit already an alias?
+     *
+     * @return boolean
+     */
+    public function is_alias()
+    {
+        return $this->is_alias;
     }
 }

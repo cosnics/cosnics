@@ -29,41 +29,32 @@ class QueryCache
     private $cache;
 
     /**
-     * Get an instance of the QueryCache
      *
-     * @return \Chamilo\Libraries\Storage\Cache\QueryCache
-     */
-    public static function getInstance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    /**
-     *
+     * @param mixed $result
      * @param string $hash
+     *
      * @return boolean
+     * @throws \Exception
      */
-    public static function get($hash)
+    public static function add($result, $hash)
     {
-        $instance = self::getInstance();
+        if (!is_string($hash) && strlen($hash) != 32)
+        {
+            throw new Exception('Illegal hash passed to the QueryCache');
+        }
 
-        if (self::exists($hash))
+        if (!self::get($hash))
         {
-            return $instance->cache[$hash];
+            self::set_cache($hash, $result);
         }
-        else
-        {
-            return false;
-        }
+
+        return true;
     }
 
     /**
      *
      * @param string $hash
+     *
      * @return boolean
      */
     public static function exists($hash)
@@ -82,57 +73,37 @@ class QueryCache
 
     /**
      *
-     * @return boolean
+     * @param string $hash
+     *
+     * @return mixed[]|boolean
      */
-    public static function truncate()
+    public static function get($hash)
     {
         $instance = self::getInstance();
 
-        if (isset($instance->cache))
+        if (self::exists($hash))
         {
-            unset($instance->cache);
+            return $instance->cache[$hash];
         }
-
-        return true;
+        else
+        {
+            return false;
+        }
     }
 
     /**
+     * Get an instance of the QueryCache
      *
-     * @param string $hash
-     * @param mixed $value
+     * @return \Chamilo\Libraries\Storage\Cache\QueryCache
      */
-    public static function set_cache($hash, $value)
+    public static function getInstance()
     {
-        $instance = self::getInstance();
-        $instance->cache[$hash] = $value;
-    }
-
-    public static function reset()
-    {
-        $instance = self::getInstance();
-        $instance->cache = array();
-    }
-
-    /**
-     *
-     * @param mixed $result
-     * @param string $hash
-     * @throws \Exception
-     * @return boolean
-     */
-    public static function add($result, $hash)
-    {
-        if (! is_string($hash) && strlen($hash) != 32)
+        if (!isset(self::$instance))
         {
-            throw new Exception('Illegal hash passed to the QueryCache');
+            self::$instance = new self();
         }
 
-        if (! self::get($hash))
-        {
-            self::set_cache($hash, $result);
-        }
-
-        return true;
+        return self::$instance;
     }
 
     /**
@@ -155,5 +126,38 @@ class QueryCache
         }
 
         return md5(serialize($parts));
+    }
+
+    public static function reset()
+    {
+        $instance = self::getInstance();
+        $instance->cache = array();
+    }
+
+    /**
+     *
+     * @param string $hash
+     * @param mixed $value
+     */
+    public static function set_cache($hash, $value)
+    {
+        $instance = self::getInstance();
+        $instance->cache[$hash] = $value;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public static function truncate()
+    {
+        $instance = self::getInstance();
+
+        if (isset($instance->cache))
+        {
+            unset($instance->cache);
+        }
+
+        return true;
     }
 }

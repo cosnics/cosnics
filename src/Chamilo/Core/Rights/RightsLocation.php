@@ -3,7 +3,6 @@ namespace Chamilo\Core\Rights;
 
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -21,27 +21,24 @@ use Exception;
  */
 class RightsLocation extends NestedTreeNode
 {
-    // Keep track of the context so we know which table to call
     const PROPERTY_IDENTIFIER = 'identifier';
-
     const PROPERTY_INHERIT = 'inherit';
-
     const PROPERTY_LOCKED = 'locked';
-
     const PROPERTY_TREE_IDENTIFIER = 'tree_identifier';
-
     const PROPERTY_TREE_TYPE = 'tree_type';
-
     const PROPERTY_TYPE = 'type';
 
+    /**
+     * @var string
+     */
     private $context;
 
     /**
      * @param integer $right_id
      *
+     * @return mixed
      * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocationAndParameters() now
      *
-     * @return mixed
      */
     public function clear_right($right_id)
     {
@@ -66,11 +63,25 @@ class RightsLocation extends NestedTreeNode
         return $this->clear_rights();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function disinherit()
     {
         $this->set_inherit(0);
     }
 
+    /**
+     * @return string[]
+     */
+    public function getSubTreePropertyNames()
+    {
+        return array(self::PROPERTY_TREE_TYPE, self::PROPERTY_TREE_IDENTIFIER);
+    }
+
+    /**
+     * @return string
+     */
     public function get_context()
     {
         if (!isset($this->context))
@@ -81,6 +92,9 @@ class RightsLocation extends NestedTreeNode
         return $this->context;
     }
 
+    /**
+     * @param string $context
+     */
     public function set_context($context)
     {
         $this->context = $context;
@@ -89,36 +103,51 @@ class RightsLocation extends NestedTreeNode
     /**
      * Get the default properties of all users.
      *
+     * @param string[] $extendedPropertyNames
+     *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_TYPE, self::PROPERTY_IDENTIFIER, self::PROPERTY_TREE_IDENTIFIER,
-                self::PROPERTY_TREE_TYPE, self::PROPERTY_INHERIT, self::PROPERTY_LOCKED
+                self::PROPERTY_TYPE,
+                self::PROPERTY_IDENTIFIER,
+                self::PROPERTY_TREE_IDENTIFIER,
+                self::PROPERTY_TREE_TYPE,
+                self::PROPERTY_INHERIT,
+                self::PROPERTY_LOCKED
             )
         );
     }
 
+    /**
+     * @return integer
+     */
     public function get_identifier()
     {
-        return $this->get_default_property(self::PROPERTY_IDENTIFIER);
-    }
-
-    public function get_inherit()
-    {
-        return $this->get_default_property(self::PROPERTY_INHERIT);
-    }
-
-    public function get_locked()
-    {
-        return $this->get_default_property(self::PROPERTY_LOCKED);
+        return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
     /**
-     * @deprecated No longer used
+     * @return boolean
+     */
+    public function get_inherit()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_INHERIT);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function get_locked()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_LOCKED);
+    }
+
+    /**
      * @return mixed
+     * @deprecated No longer used
      */
     public function get_locked_parent()
     {
@@ -149,14 +178,6 @@ class RightsLocation extends NestedTreeNode
     }
 
     /**
-     * @return string[]
-     */
-    public function getSubTreePropertyNames()
-    {
-        return array(self::PROPERTY_TREE_TYPE, self::PROPERTY_TREE_IDENTIFIER);
-    }
-
-    /**
      * Inherited method which specifies how to identify the tree this location is situated in.
      * Should be used as the
      * basic set of condition whenever one makes a query.
@@ -184,6 +205,7 @@ class RightsLocation extends NestedTreeNode
      * @param int $right_id - [OPTIONAL] default null
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @throws \Exception
      * @deprecated Use RightsService::findRightsLocationRightsEntitiesForLocationAndRight() now
      */
     public function get_rights_entities($right_id = null)
@@ -218,36 +240,57 @@ class RightsLocation extends NestedTreeNode
         }
     }
 
+    /**
+     * @return integer
+     */
     public function get_tree_identifier()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_IDENTIFIER);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_IDENTIFIER);
     }
 
+    /**
+     * @return integer
+     */
     public function get_tree_type()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_TYPE);
     }
 
+    /**
+     * @return integer
+     */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function inherit()
     {
         $this->set_inherit(1);
     }
 
+    /**
+     * @return boolean
+     */
     public function inherits()
     {
         return $this->get_inherit();
     }
 
+    /**
+     * @return boolean
+     */
     public function is_locked()
     {
         return $this->get_locked();
     }
 
+    /**
+     * @return bool
+     */
     public function is_root()
     {
         $parent = $this->get_parent();
@@ -255,41 +298,80 @@ class RightsLocation extends NestedTreeNode
         return ($parent == 0);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function lock()
     {
         $this->set_locked(true);
     }
 
+    /**
+     * @param integer $identifier
+     *
+     * @throws \Exception
+     */
     public function set_identifier($identifier)
     {
-        $this->set_default_property(self::PROPERTY_IDENTIFIER, $identifier);
+        $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
     }
 
+    /**
+     * @param integer $inherit
+     *
+     * @throws \Exception
+     */
     public function set_inherit($inherit)
     {
-        $this->set_default_property(self::PROPERTY_INHERIT, $inherit);
+        $this->setDefaultProperty(self::PROPERTY_INHERIT, $inherit);
     }
 
+    /**
+     * @param integer $locked
+     *
+     * @throws \Exception
+     */
     public function set_locked($locked)
     {
-        $this->set_default_property(self::PROPERTY_LOCKED, $locked);
+        $this->setDefaultProperty(self::PROPERTY_LOCKED, $locked);
     }
 
+    /**
+     * @param integer $tree_identifier
+     *
+     * @throws \Exception
+     */
     public function set_tree_identifier($tree_identifier)
     {
-        $this->set_default_property(self::PROPERTY_TREE_IDENTIFIER, $tree_identifier);
+        $this->setDefaultProperty(self::PROPERTY_TREE_IDENTIFIER, $tree_identifier);
     }
 
+    /**
+     * @param integer $tree_type
+     *
+     * @throws \Exception
+     */
     public function set_tree_type($tree_type)
     {
-        $this->set_default_property(self::PROPERTY_TREE_TYPE, $tree_type);
+        $this->setDefaultProperty(self::PROPERTY_TREE_TYPE, $tree_type);
     }
 
+    /**
+     * @param string $type
+     *
+     * @throws \Exception
+     */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
+    /**
+     * @param $object
+     *
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function set_type_from_object($object)
     {
         $this->set_type(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));

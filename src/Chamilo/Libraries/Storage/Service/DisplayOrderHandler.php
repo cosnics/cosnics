@@ -114,6 +114,27 @@ class DisplayOrderHandler
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     *
+     * @return string
+     */
+    protected function getDisplayOrderContextAsString(DataClassDisplayOrderSupport $dataClass)
+    {
+        $displayOrderContextProperties = array_intersect_key(
+            $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
+        );
+
+        $displayOrderContext = array();
+
+        foreach ($displayOrderContextProperties as $displayOrderContextProperty => $displayOrderContextPropertyValue)
+        {
+            $displayOrderContext[] = $displayOrderContextProperty . ' = ' . $displayOrderContextPropertyValue;
+        }
+
+        return implode(', ', $displayOrderContext);
+    }
+
+    /**
      * @return \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository
      */
     public function getDisplayOrderRepository(): DisplayOrderRepository
@@ -309,27 +330,6 @@ class DisplayOrderHandler
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
-     * @return string
-     */
-    protected function getDisplayOrderContextAsString(DataClassDisplayOrderSupport $dataClass)
-    {
-        $displayOrderContextProperties = array_intersect_key(
-            $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
-        );
-
-        $displayOrderContext = array();
-
-        foreach ($displayOrderContextProperties as $displayOrderContextProperty => $displayOrderContextPropertyValue)
-        {
-            $displayOrderContext[] = $displayOrderContextProperty . ' = ' . $displayOrderContextPropertyValue;
-        }
-
-        return implode(', ', $displayOrderContext);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     protected function validateDisplayOrder(DataClassDisplayOrderSupport $dataClass)
@@ -346,9 +346,11 @@ class DisplayOrderHandler
             throw new DisplayOrderException(
                 $this->getTranslator()->trans(
                     'InvalidDisplayOrderExceptionMessage', [
-                    '{TYPE}' => get_class($dataClass), '{ID}' => $dataClass->getId(),
+                    '{TYPE}' => get_class($dataClass),
+                    '{ID}' => $dataClass->getId(),
                     '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass),
-                    '{DISPLAY_ORDER}' => $displayOrder, '{COUNT}' => $numberOfOtherDisplayOrdersInContext
+                    '{DISPLAY_ORDER}' => $displayOrder,
+                    '{COUNT}' => $numberOfOtherDisplayOrdersInContext
                 ], Utilities::COMMON_LIBRARIES
                 )
             );

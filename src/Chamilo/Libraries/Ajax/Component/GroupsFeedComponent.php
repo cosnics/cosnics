@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -52,6 +53,14 @@ abstract class GroupsFeedComponent extends Manager
         }
 
         $result->display();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
@@ -149,7 +158,6 @@ abstract class GroupsFeedComponent extends Manager
 
     /**
      * @return array|\Chamilo\Core\User\Storage\DataClass\User[]
-     * @throws \ReflectionException
      */
     private function retrieve_users()
     {
@@ -162,19 +170,18 @@ abstract class GroupsFeedComponent extends Manager
             return array();
         }
 
-        $conditions[] =
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids);
+        $conditions[] = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids);
 
         $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
-            $conditions[] = Utilities::query_to_condition(
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $search_query, array(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
                 )
             );
         }
@@ -185,8 +192,8 @@ abstract class GroupsFeedComponent extends Manager
 
         return $this->getUserService()->findUsers(
             $condition, $this->get_offset(), 100, array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         );
     }

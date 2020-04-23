@@ -59,46 +59,6 @@ class InCondition extends Condition
     }
 
     /**
-     * Gets the DataClass property
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Gets the list of values that defines the selection
-     *
-     * @return string[]
-     */
-    public function get_values()
-    {
-        return $this->values;
-    }
-
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit()
-    {
-        return $this->storage_unit;
-    }
-
-    /**
-     * Is the storage unit already an alias?
-     *
-     * @return boolean
-     */
-    public function is_alias()
-    {
-        return $this->is_alias;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
@@ -117,5 +77,45 @@ class InCondition extends Condition
         $hashParts[] = $this->is_alias();
 
         return $hashParts;
+    }
+
+    /**
+     * Gets the DataClass property
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function get_name()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Gets the storage unit of the DataClass
+     *
+     * @return string
+     */
+    public function get_storage_unit()
+    {
+        return $this->storage_unit;
+    }
+
+    /**
+     * Gets the list of values that defines the selection
+     *
+     * @return string[]
+     */
+    public function get_values()
+    {
+        return $this->values;
+    }
+
+    /**
+     * Is the storage unit already an alias?
+     *
+     * @return boolean
+     */
+    public function is_alias()
+    {
+        return $this->is_alias;
     }
 }

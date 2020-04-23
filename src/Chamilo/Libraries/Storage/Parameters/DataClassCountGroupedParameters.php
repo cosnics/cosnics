@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\GroupBy;
+use Chamilo\Libraries\Storage\Query\Joins;
 
 /**
  *
@@ -22,9 +22,12 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      */
-    public function __construct(Condition $condition = null, DataClassProperties $dataClassProperties = null,
-        $havingCondition = null, Joins $joins = null, GroupBy $groupBy = null)
+    public function __construct(
+        Condition $condition = null, DataClassProperties $dataClassProperties = null, $havingCondition = null,
+        Joins $joins = null, GroupBy $groupBy = null
+    )
     {
         if (is_null($groupBy))
         {
@@ -46,16 +49,6 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
-     * @deprecated Use setHavingCondition() now
-     */
-    public function set_having(Condition $havingCondition = null)
-    {
-        $this->setHavingCondition($havingCondition);
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
      * @deprecated Use getDataClassProperties() now
      */
@@ -66,7 +59,19 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
+     *
+     * @deprecated Use setHavingCondition() now
+     */
+    public function set_having(Condition $havingCondition = null)
+    {
+        $this->setHavingCondition($havingCondition);
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     *
      * @deprecated Use setDataClassProperties() now
      */
     public function set_properties(DataClassProperties $dataClassProperties = null)

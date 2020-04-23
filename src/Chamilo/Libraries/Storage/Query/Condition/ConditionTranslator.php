@@ -31,6 +31,40 @@ abstract class ConditionTranslator
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return string
+     */
+    public static function render(Condition $condition)
+    {
+        $conditionCache = ConditionCache::getInstance();
+
+        if (!$conditionCache->exists($condition))
+        {
+            $conditionCache->set($condition, static::runTranslator($condition));
+        }
+
+        return $conditionCache->get($condition);
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator
+     * @throws \ReflectionException
+     */
+    public static function factory($type, Condition $condition)
+    {
+        $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Condition\\' .
+            ClassnameUtilities::getInstance()->getClassnameFromObject($condition) . 'Translator';
+
+        return new $class($condition);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition()
@@ -40,38 +74,7 @@ abstract class ConditionTranslator
 
     /**
      *
-     * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator
-     */
-    public static function factory($type, Condition $condition)
-    {
-        $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Condition\\' .
-             ClassnameUtilities::getInstance()->getClassnameFromObject($condition) . 'Translator';
-
-        return new $class($condition);
-    }
-
-    /**
-     *
      * @return string
      */
     abstract public function translate();
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return string
-     */
-    public static function render(Condition $condition)
-    {
-        $conditionCache = ConditionCache::getInstance();
-
-        if (! $conditionCache->exists($condition))
-        {
-            $conditionCache->set($condition, static::runTranslator($condition));
-        }
-
-        return $conditionCache->get($condition);
-    }
 }

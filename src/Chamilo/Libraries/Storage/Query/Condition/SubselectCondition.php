@@ -79,43 +79,31 @@ class SubselectCondition extends Condition
     }
 
     /**
-     * Gets the DataClass property
      *
-     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
-    public function get_name()
+    public function getHashParts()
     {
-        return $this->name;
-    }
+        $hashParts = parent::getHashParts();
 
-    /**
-     * Gets the DataClass property of the object used in the subselect
-     *
-     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_value()
-    {
-        return $this->value;
-    }
+        $hashParts[] =
+            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] =
+            $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+        $hashParts[] = $this->get_storage_unit_value();
+        $hashParts[] = $this->get_storage_unit_name();
+        $hashParts[] = ($this->get_data_manager() ? get_class($this->get_data_manager()) : null);
 
-    /**
-     * Gets the storage unit of the DataClass used in the subselect
-     *
-     * @return string
-     */
-    public function get_storage_unit_value()
-    {
-        return $this->storage_unit_value;
-    }
+        if ($this->get_condition() instanceof Condition)
+        {
+            $hashParts[] = $this->get_condition()->getHashParts();
+        }
+        else
+        {
+            $hashParts[] = null;
+        }
 
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit_name()
-    {
-        return $this->storage_unit_name;
+        return $hashParts;
     }
 
     /**
@@ -137,30 +125,42 @@ class SubselectCondition extends Condition
     }
 
     /**
+     * Gets the DataClass property
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
-    public function getHashParts()
+    public function get_name()
     {
-        $hashParts = parent::getHashParts();
+        return $this->name;
+    }
 
-        $hashParts[] =
-            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-        $hashParts[] =
-            $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
-        $hashParts[] = $this->get_storage_unit_value();
-        $hashParts[] = $this->get_storage_unit_name();
-        $hashParts[] = ($this->get_data_manager() ? $this->get_data_manager()->class_name() : null);
+    /**
+     * Gets the storage unit of the DataClass
+     *
+     * @return string
+     */
+    public function get_storage_unit_name()
+    {
+        return $this->storage_unit_name;
+    }
 
-        if ($this->get_condition() instanceof Condition)
-        {
-            $hashParts[] = $this->get_condition()->getHashParts();
-        }
-        else
-        {
-            $hashParts[] = null;
-        }
+    /**
+     * Gets the storage unit of the DataClass used in the subselect
+     *
+     * @return string
+     */
+    public function get_storage_unit_value()
+    {
+        return $this->storage_unit_value;
+    }
 
-        return $hashParts;
+    /**
+     * Gets the DataClass property of the object used in the subselect
+     *
+     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     */
+    public function get_value()
+    {
+        return $this->value;
     }
 }

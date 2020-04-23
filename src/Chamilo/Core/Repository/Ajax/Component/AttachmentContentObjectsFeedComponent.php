@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Utilities\Utilities;
 use stdClass;
 
@@ -270,7 +271,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
 
         if (!empty($searchQuery))
         {
-            $conditions[] = Utilities::query_to_condition(
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE))
             );
         }
@@ -387,6 +388,14 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function getSearchQuery()
     {
         return $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**

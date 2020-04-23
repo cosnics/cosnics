@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Component;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -15,8 +16,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Feed to return course categories
@@ -53,6 +54,14 @@ class CourseFeedComponent extends AjaxManager
         $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
 
         $result->display();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
@@ -139,8 +148,11 @@ class CourseFeedComponent extends AjaxManager
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
-            $conditions[] = Utilities::query_to_condition(
-                $search_query, array(Course::PROPERTY_TITLE, Course::PROPERTY_VISUAL_CODE)
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+                $search_query, array(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
+                )
             );
         }
 

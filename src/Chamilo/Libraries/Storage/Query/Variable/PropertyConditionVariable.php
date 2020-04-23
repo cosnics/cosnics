@@ -25,12 +25,28 @@ class PropertyConditionVariable extends PropertiesConditionVariable
      *
      * @param string $class
      * @param string $property
+     *
+     * @throws \Exception
      */
     public function __construct($class, $property)
     {
         parent::__construct($class);
 
         $this->property = $property;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        $hashParts[] = $this->get_class();
+        $hashParts[] = $this->get_property();
+
+        return $hashParts;
     }
 
     /**
@@ -51,19 +67,5 @@ class PropertyConditionVariable extends PropertiesConditionVariable
     public function set_property($property)
     {
         $this->property = $property;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->get_class();
-        $hashParts[] = $this->get_property();
-
-        return $hashParts;
     }
 }

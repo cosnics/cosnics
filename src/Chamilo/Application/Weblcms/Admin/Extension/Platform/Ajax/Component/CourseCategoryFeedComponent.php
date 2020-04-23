@@ -21,8 +21,8 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Feed to return course categories
@@ -70,6 +70,14 @@ class CourseCategoryFeedComponent extends AjaxManager
         }
 
         $result->display();
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
@@ -195,10 +203,10 @@ class CourseCategoryFeedComponent extends AjaxManager
         {
             $q = '*' . $search_query . '*';
             $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME), $q
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME), $q
             );
             $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_CODE), $q
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_CODE), $q
             );
             $conditions[] = new OrCondition($name_conditions);
         }
@@ -208,14 +216,14 @@ class CourseCategoryFeedComponent extends AjaxManager
         if ($filter_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_PARENT),
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_PARENT),
                 new StaticConditionVariable($filter_id)
             );
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_PARENT),
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_PARENT),
                 new StaticConditionVariable(0)
             );
         }
@@ -233,10 +241,10 @@ class CourseCategoryFeedComponent extends AjaxManager
         }
 
         return DataManager::retrieves(
-            CourseCategory::class_name(), new DataClassRetrievesParameters(
+            CourseCategory::class, new DataClassRetrievesParameters(
                 $condition, null, null, array(
                     new OrderBy(
-                        new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME)
+                        new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
                     )
                 )
             )
@@ -258,7 +266,7 @@ class CourseCategoryFeedComponent extends AjaxManager
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
             new StaticConditionVariable($filter_id)
         );
 
@@ -267,8 +275,11 @@ class CourseCategoryFeedComponent extends AjaxManager
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
-            $conditions[] = Utilities::query_to_condition(
-                $search_query, array(Course::PROPERTY_TITLE, Course::PROPERTY_VISUAL_CODE)
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+                $search_query, array(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
+                )
             );
         }
 
@@ -285,13 +296,13 @@ class CourseCategoryFeedComponent extends AjaxManager
         }
 
         $this->course_count = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class_name(), new DataClassCountParameters($condition)
+            Course::class, new DataClassCountParameters($condition)
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Course::class_name(), new DataClassRetrievesParameters(
+            Course::class, new DataClassRetrievesParameters(
                 $condition, 100, $this->get_offset(),
-                array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE)))
+                array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
             )
         );
     }

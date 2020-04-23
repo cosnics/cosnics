@@ -36,38 +36,14 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
      * @param string $relationClass
      * @param integer $baseKey
      * @param integer $foreignKey
+     *
+     * @throws \ReflectionException
      */
     public function __construct($baseObject, $foreignClass, $relationClass, $baseKey = null, $foreignKey = null)
     {
-        $this->set_base_object($baseObject);
-        $this->set_foreign_class($foreignClass);
+        parent::__construct($baseObject, $foreignClass, $foreignKey);
         $this->set_relation_class($relationClass);
         $this->set_base_key($baseKey);
-        $this->set_foreign_key($foreignKey);
-    }
-
-    /**
-     * Returns the condition for the foreign objects retrieval
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
-    {
-        $relation_class = $this->get_relation_class();
-
-        return new EqualityCondition(
-            new PropertyConditionVariable($relation_class, $this->get_base_key()),
-            new StaticConditionVariable($this->get_base_object()->get_default_property(DataClass::PROPERTY_ID)));
-    }
-
-    /**
-     * Returns the class name of the foreign object
-     *
-     * @return string
-     */
-    public function get_relation_class()
-    {
-        return $this->relation_class;
     }
 
     /**
@@ -81,19 +57,11 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
     }
 
     /**
-     * Sets the class name of the foreign object
-     *
-     * @param string $relationClass
-     */
-    public function set_relation_class($relationClass)
-    {
-        $this->relation_class = $relationClass;
-    }
-
-    /**
      * Sets the foreign key If no foreign key is given, the foreign key is generated using the base class table name
      *
      * @param integer $baseKey
+     *
+     * @throws \ReflectionException
      */
     public function set_base_key($baseKey)
     {
@@ -103,5 +71,40 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
         }
 
         $this->base_key = $baseKey;
+    }
+
+    /**
+     * Returns the condition for the foreign objects retrieval
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     */
+    public function get_condition()
+    {
+        $relation_class = $this->get_relation_class();
+
+        return new EqualityCondition(
+            new PropertyConditionVariable($relation_class, $this->get_base_key()),
+            new StaticConditionVariable($this->get_base_object()->getDefaultProperty(DataClass::PROPERTY_ID))
+        );
+    }
+
+    /**
+     * Returns the class name of the foreign object
+     *
+     * @return string
+     */
+    public function get_relation_class()
+    {
+        return $this->relation_class;
+    }
+
+    /**
+     * Sets the class name of the foreign object
+     *
+     * @param string $relationClass
+     */
+    public function set_relation_class($relationClass)
+    {
+        $this->relation_class = $relationClass;
     }
 }

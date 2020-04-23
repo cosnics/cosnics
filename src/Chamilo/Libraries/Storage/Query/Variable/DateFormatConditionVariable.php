@@ -46,6 +46,39 @@ class DateFormatConditionVariable extends ConditionVariable
     }
 
     /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        $hashParts[] = $this->get_condition_variable()->getHashParts();
+        $hashParts[] = $this->get_format();
+        $hashParts[] = $this->get_alias();
+
+        return $hashParts;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_alias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     *
+     * @param string $alias
+     */
+    public function set_alias($alias)
+    {
+        $this->alias = $alias;
+    }
+
+    /**
      * Get the ConditionVariable on the condition_variable side of the operation
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
@@ -81,38 +114,5 @@ class DateFormatConditionVariable extends ConditionVariable
     public function set_format($format)
     {
         $this->format = $format;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_alias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     *
-     * @param string $alias
-     */
-    public function set_alias($alias)
-    {
-        $this->alias = $alias;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->get_condition_variable()->getHashParts();
-        $hashParts[] = $this->get_format();
-        $hashParts[] = $this->get_alias();
-
-        return $hashParts;
     }
 }

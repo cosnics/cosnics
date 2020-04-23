@@ -43,6 +43,24 @@ class CaseElementConditionVariable extends ConditionVariable
     }
 
     /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        if ($this->get_condition() instanceof Condition)
+        {
+            $hashParts[] = $this->get_condition()->hash();
+        }
+
+        $hashParts[] = $this->get_statement();
+
+        return $hashParts;
+    }
+
+    /**
      * Get the condition
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -80,23 +98,5 @@ class CaseElementConditionVariable extends ConditionVariable
     public function set_statement($statement)
     {
         $this->statement = $statement;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        if ($this->get_condition() instanceof Condition)
-        {
-            $hashParts[] = $this->get_condition()->hash();
-        }
-
-        $hashParts[] = $this->get_statement();
-
-        return $hashParts;
     }
 }

@@ -11,12 +11,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
  */
 class FunctionConditionVariable extends ConditionVariable
 {
-    /**
-     * A constant defining a sum
-     *
-     * @var integer
-     */
-    const SUM = 1;
+    const AVERAGE = 6;
 
     /**
      * A constant defining a count
@@ -26,11 +21,11 @@ class FunctionConditionVariable extends ConditionVariable
     const COUNT = 2;
 
     /**
-     * A constant defining a minimum
+     * A constant defining a distinct
      *
      * @var integer
      */
-    const MIN = 3;
+    const DISTINCT = 5;
 
     /**
      * A constant defining a maximum
@@ -40,12 +35,18 @@ class FunctionConditionVariable extends ConditionVariable
     const MAX = 4;
 
     /**
-     * A constant defining a distinct
+     * A constant defining a minimum
      *
      * @var integer
      */
-    const DISTINCT = 5;
-    const AVERAGE = 6;
+    const MIN = 3;
+
+    /**
+     * A constant defining a sum
+     *
+     * @var integer
+     */
+    const SUM = 1;
 
     /**
      * The ConditionVariable
@@ -72,11 +73,45 @@ class FunctionConditionVariable extends ConditionVariable
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param integer $function
+     * @param string $alias
      */
     public function __construct($function, $conditionVariable, $alias = null)
     {
         $this->condition_variable = $conditionVariable;
         $this->function = $function;
+        $this->alias = $alias;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        $hashParts[] = $this->get_condition_variable()->getHashParts();
+        $hashParts[] = $this->get_function();
+        $hashParts[] = $this->get_alias();
+
+        return $hashParts;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_alias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     *
+     * @param string $alias
+     */
+    public function set_alias($alias)
+    {
         $this->alias = $alias;
     }
 
@@ -101,9 +136,7 @@ class FunctionConditionVariable extends ConditionVariable
     }
 
     /**
-     * Get the ConditionVariable on the function side of the operation
-     *
-     * @return \libraries\storage\ConditionVariable
+     * @return integer
      */
     public function get_function()
     {
@@ -117,38 +150,5 @@ class FunctionConditionVariable extends ConditionVariable
     public function set_function($function)
     {
         $this->function = $function;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_alias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     *
-     * @param string $alias
-     */
-    public function set_alias($alias)
-    {
-        $this->alias = $alias;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->get_condition_variable()->getHashParts();
-        $hashParts[] = $this->get_function();
-        $hashParts[] = $this->get_alias();
-
-        return $hashParts;
     }
 }

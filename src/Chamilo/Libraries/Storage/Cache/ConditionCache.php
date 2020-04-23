@@ -34,25 +34,29 @@ class ConditionCache
     }
 
     /**
-     * Get an instance of the ConditionCache
+     * Returns whether a Condition object exists in the cache
      *
-     * @return \Chamilo\Libraries\Storage\Cache\ConditionCache
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return boolean
      */
-    public static function getInstance()
+    public function exists(Condition $condition)
     {
-        if (! isset(self::$instance))
+        if (isset($this->cache[$condition->hash()]))
         {
-
-            self::$instance = new self();
+            return true;
         }
-
-        return self::$instance;
+        else
+        {
+            return false;
+        }
     }
 
     /**
      * Get a translated condition from the cache
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return string
      */
     public function get(Condition $condition)
@@ -69,21 +73,25 @@ class ConditionCache
     }
 
     /**
-     * Returns whether a Condition object exists in the cache
+     * Get an instance of the ConditionCache
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return boolean
+     * @return \Chamilo\Libraries\Storage\Cache\ConditionCache
      */
-    public function exists(Condition $condition)
+    public static function getInstance()
     {
-        if (isset($this->cache[$condition->hash()]))
+        if (!isset(self::$instance))
         {
-            return true;
+
+            self::$instance = new self();
         }
-        else
-        {
-            return false;
-        }
+
+        return self::$instance;
+    }
+
+    public static function reset()
+    {
+        $instance = self::getInstance();
+        $instance->cache = array();
     }
 
     /**
@@ -95,11 +103,5 @@ class ConditionCache
     public function set($condition, $value)
     {
         $this->cache[$condition->hash()] = $value;
-    }
-
-    public static function reset()
-    {
-        $instance = self::getInstance();
-        $instance->cache = array();
     }
 }

@@ -26,7 +26,7 @@ class DochyUserResultReportingBlock extends UserResultReportingBlock
         $processor->retrieve_scores($this->get_parent()->get_parent(), $this->user->get_id(), $this->attempt->get_id());
         $scores = $processor->get_scores();
 
-        // $rows[] = Translation :: get('User', null, Utilities :: COMMON_LIBRARIES);
+        // $rows[] = Translation :: get('User', null, Utilities::COMMON_LIBRARIES);
 
         foreach ($indicators as $indicator)
         {

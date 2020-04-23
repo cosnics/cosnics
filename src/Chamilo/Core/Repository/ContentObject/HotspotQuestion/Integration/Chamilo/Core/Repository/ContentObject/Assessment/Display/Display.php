@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Cham
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
@@ -67,17 +67,17 @@ class Display extends QuestionDisplay
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
 
-        $scaledDimensions = Utilities::scaleDimensions(
-            600, 450, array('width' => $dimensions[0], 'height' => $dimensions[1])
-        );
+        $scaledDimensions = ImageManipulation::rescale($dimensions[0], $dimensions[1], 600, 450);
 
         $image_html[] = '<div class="description_hotspot">';
         $image_html[] =
             '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
-            $question_id . '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] .
-            'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
-            $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
-            'px;background-image: url(' . Manager::get_document_downloader_url(
+            $question_id . '" class="hotspot_image" style="width: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px; height: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px; background-size: ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px ' .
+            $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px;background-image: url(' .
+            Manager::get_document_downloader_url(
                 $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
         $image_html[] = '<div class="clearfix"></div>';

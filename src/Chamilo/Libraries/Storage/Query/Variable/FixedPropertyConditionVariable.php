@@ -22,6 +22,8 @@ class FixedPropertyConditionVariable extends PropertyConditionVariable
      * @param string $class
      * @param string $property
      * @param string $alias
+     *
+     * @throws \Exception
      */
     public function __construct($class, $property, $alias)
     {

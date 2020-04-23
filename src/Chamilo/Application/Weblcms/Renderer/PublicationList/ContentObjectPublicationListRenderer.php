@@ -654,7 +654,13 @@ abstract class ContentObjectPublicationListRenderer
             if (count($attachments) > 0)
             {
                 $html[] = '<h4>Attachments</h4>';
-                Utilities::order_content_objects_by_title($attachments);
+
+                usort(
+                    $attachments, function ($contentObjectOne, $contentObjectTwo) {
+                    return strcasecmp($contentObjectOne->get_title(), $contentObjectTwo->get_title());
+                }
+                );
+
                 $html[] = '<ul>';
 
                 /**

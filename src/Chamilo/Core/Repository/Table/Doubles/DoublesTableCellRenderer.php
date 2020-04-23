@@ -74,7 +74,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
 
             case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
+                return htmlentities(
                     StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
                 );
         }

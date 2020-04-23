@@ -16,11 +16,13 @@ abstract class ConditionTranslator extends \Chamilo\Libraries\Storage\Query\Cond
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return string
+     * @throws \ReflectionException
      */
-    public static function runTranslator($conditionVariable)
+    public static function runTranslator($condition)
     {
-        return parent::factory(DataManager::TYPE_DOCTRINE, $conditionVariable)->translate();
+        return parent::factory(DataManager::TYPE_DOCTRINE, $condition)->translate();
     }
 }

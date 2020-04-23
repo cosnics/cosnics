@@ -17,28 +17,30 @@ class RecordResultSetCache extends RecordCache
 {
 
     /**
-     *
+     * @param string $className
      * @param \Chamilo\Libraries\Storage\ResultSet\RecordResultSet $resultSet
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @throws \Exception
+     *
      * @return boolean
+     * @throws \Exception
      */
     public static function add($className, RecordResultSet $resultSet, RecordRetrievesParameters $parameters)
     {
-        if (! $parameters instanceof RecordRetrievesParameters)
+        if (!$parameters instanceof RecordRetrievesParameters)
         {
             throw new Exception('Illegal parameters passed to the RecordResultSetCache');
         }
 
-        if (! $resultSet instanceof RecordResultSet)
+        if (!$resultSet instanceof RecordResultSet)
         {
             $type = is_object($resultSet) ? get_class($resultSet) : gettype($resultSet);
             throw new Exception(
                 'The RecordResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
-                     $type . '.');
+                $type . '.'
+            );
         }
 
-        if (! self::get($className, $parameters))
+        if (!self::get($className, $parameters))
         {
             self::set_cache($className, $parameters->hash(), $resultSet);
         }

@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
 {
@@ -48,7 +47,13 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                 $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
                 $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' .
                     htmlentities(Translation::get('Attachments')) . '</div>';
-                Utilities::order_content_objects_by_title($attachments);
+
+                usort(
+                    $attachments, function ($contentObjectOne, $contentObjectTwo) {
+                    return strcasecmp($contentObjectOne->get_title(), $contentObjectTwo->get_title());
+                }
+                );
+
                 $html[] = '<ul class="list-group">';
 
                 /**

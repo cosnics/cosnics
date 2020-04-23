@@ -43,8 +43,8 @@ class DataClassNoResultException extends Exception
         $this->parameters = $parameters;
 
         $message = Translation::get(
-            'DataClassNoResultException',
-            array('CLASS_NAME' => $className, 'MESSAGE' => $message));
+            'DataClassNoResultException', array('CLASS_NAME' => $className, 'MESSAGE' => $message)
+        );
 
         parent::__construct($message, $code, $previous);
     }

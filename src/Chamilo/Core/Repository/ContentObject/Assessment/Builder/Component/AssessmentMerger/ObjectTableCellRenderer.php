@@ -39,7 +39,7 @@ class ObjectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
             case ContentObject::PROPERTY_TITLE :
                 return StringUtilities::getInstance()->truncate($content_object->get_title(), 50);
             case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
+                return htmlentities(
                     StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
                 );
         }

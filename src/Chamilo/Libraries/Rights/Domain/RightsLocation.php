@@ -25,6 +25,9 @@ class RightsLocation extends NestedSet
     const PROPERTY_TREE_TYPE = 'tree_type';
     const PROPERTY_TYPE = 'type';
 
+    /**
+     * @throws \Exception
+     */
     public function disinherit()
     {
         $this->set_inherit(0);
@@ -39,8 +42,12 @@ class RightsLocation extends NestedSet
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_TYPE, self::PROPERTY_IDENTIFIER, self::PROPERTY_TREE_IDENTIFIER,
-                self::PROPERTY_TREE_TYPE, self::PROPERTY_INHERIT, self::PROPERTY_LOCKED
+                self::PROPERTY_TYPE,
+                self::PROPERTY_IDENTIFIER,
+                self::PROPERTY_TREE_IDENTIFIER,
+                self::PROPERTY_TREE_TYPE,
+                self::PROPERTY_INHERIT,
+                self::PROPERTY_LOCKED
             )
         );
     }
@@ -70,10 +77,13 @@ class RightsLocation extends NestedSet
     }
 
     /**
-     * @param int $right_id
+     * Retrieves the rights entities linked to this location
      *
-     * @return mixed
+     * @param int $right_id - [OPTIONAL] default null
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      * @throws \Exception
+     * @deprecated Use RightsService::findRightsLocationRightsEntitiesForLocationAndRight() now
      */
     public function get_rights_entities($right_id = null)
     {
@@ -131,6 +141,9 @@ class RightsLocation extends NestedSet
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function inherit()
     {
         $this->set_inherit(1);
@@ -162,6 +175,9 @@ class RightsLocation extends NestedSet
         return ($parent == 0);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function lock()
     {
         $this->set_locked(true);
@@ -227,11 +243,20 @@ class RightsLocation extends NestedSet
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
+    /**
+     * @param $object
+     *
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function set_type_from_object($object)
     {
         $this->set_type(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function switch_inherit()
     {
         if ($this->inherits())
@@ -244,6 +269,9 @@ class RightsLocation extends NestedSet
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function switch_lock()
     {
         if ($this->is_locked())
@@ -256,6 +284,9 @@ class RightsLocation extends NestedSet
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function unlock()
     {
         $this->set_locked(false);

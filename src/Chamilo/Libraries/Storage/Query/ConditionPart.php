@@ -17,17 +17,16 @@ abstract class ConditionPart implements Hashable
     use HashableTrait;
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
+     * @return string[]
      */
     public function getHashParts()
     {
-        return array(static::class_name());
+        return array(static::class);
     }
 
     /**
-     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {

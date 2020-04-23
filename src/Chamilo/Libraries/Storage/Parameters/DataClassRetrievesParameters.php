@@ -2,9 +2,9 @@
 
 namespace Chamilo\Libraries\Storage\Parameters;
 
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Exception;
 
@@ -37,69 +37,6 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
         DataClassParameters::__construct(
             $condition, $joins, null, $orderBy, $groupBy, $havingCondition, $count, $offset, $distinct
         );
-    }
-
-    /**
-     *
-     * @return integer
-     * @deprecated Use getCount() now
-     */
-    public function get_count()
-    {
-        return $this->getCount();
-    }
-
-    /**
-     *
-     * @param integer $count
-     *
-     * @deprecated Use getCount() now
-     */
-    public function set_count($count)
-    {
-        $this->setCount($count);
-    }
-
-    /**
-     *
-     * @return integer
-     * @deprecated Use getOffset() now
-     */
-    public function get_offset()
-    {
-        return $this->getOffset();
-    }
-
-    /**
-     *
-     * @param integer $offset
-     *
-     * @deprecated Use setOffset() now
-     */
-    public function set_offset($offset)
-    {
-        $this->setOffset($offset);
-    }
-
-    /**
-     *
-     * @return boolean
-     * @deprecated Use getDistinct() now
-     */
-    public function get_distinct()
-    {
-        return $this->getDistinct();
-    }
-
-    /**
-     *
-     * @param boolean $distinct
-     *
-     * @deprecated Use setDistinct() now
-     */
-    public function set_distinct($distinct)
-    {
-        $this->setDistinct($distinct);
     }
 
     /**
@@ -148,5 +85,68 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
         {
             throw new Exception('Illegal parameter passed to the DataManager :: retrieves() method.');
         }
+    }
+
+    /**
+     *
+     * @return integer
+     * @deprecated Use getCount() now
+     */
+    public function get_count()
+    {
+        return $this->getCount();
+    }
+
+    /**
+     *
+     * @return boolean
+     * @deprecated Use getDistinct() now
+     */
+    public function get_distinct()
+    {
+        return $this->getDistinct();
+    }
+
+    /**
+     *
+     * @return integer
+     * @deprecated Use getOffset() now
+     */
+    public function get_offset()
+    {
+        return $this->getOffset();
+    }
+
+    /**
+     *
+     * @param integer $count
+     *
+     * @deprecated Use getCount() now
+     */
+    public function set_count($count)
+    {
+        $this->setCount($count);
+    }
+
+    /**
+     *
+     * @param boolean $distinct
+     *
+     * @deprecated Use setDistinct() now
+     */
+    public function set_distinct($distinct)
+    {
+        $this->setDistinct($distinct);
+    }
+
+    /**
+     *
+     * @param integer $offset
+     *
+     * @deprecated Use setOffset() now
+     */
+    public function set_offset($offset)
+    {
+        $this->setOffset($offset);
     }
 }

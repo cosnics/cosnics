@@ -13,10 +13,10 @@ use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 class DataClassIterator extends ArrayIterator
 {
     const POSITION_FIRST = 1;
-    const POSITION_LAST = 2;
-    const POSITION_SINGLE = 3;
-    const POSITION_MIDDLE = 4;
     const POSITION_INVALID = 5;
+    const POSITION_LAST = 2;
+    const POSITION_MIDDLE = 4;
+    const POSITION_SINGLE = 3;
 
     /**
      *
@@ -40,27 +40,9 @@ class DataClassIterator extends ArrayIterator
      *
      * @return string
      */
-    protected function getDataClassName()
-    {
-        return $this->dataClassName;
-    }
-
-    /**
-     *
-     * @param string $dataClassName
-     */
-    protected function setDataClassName($dataClassName)
-    {
-        $this->dataClassName = $dataClassName;
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function getCacheClassName()
     {
-        $compositeDataClassName = CompositeDataClass::class_name();
+        $compositeDataClassName = CompositeDataClass::class;
         $className = $this->getDataClassName();
 
         $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
@@ -68,7 +50,8 @@ class DataClassIterator extends ArrayIterator
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-            return $className::parent_class_name();
+
+            return get_parent_class($className);
         }
         else
         {
@@ -82,11 +65,7 @@ class DataClassIterator extends ArrayIterator
      */
     public function getCurrentEntryPositionType()
     {
-        if ($this->count() == 0)
-        {
-            return self::POSITION_EMPTY;
-        }
-        elseif ($this->count() == 1)
+        if ($this->count() == 1)
         {
             return self::POSITION_SINGLE;
         }
@@ -110,12 +89,29 @@ class DataClassIterator extends ArrayIterator
 
     /**
      *
-     * @param integer $position
+     * @return string
+     */
+    protected function getDataClassName()
+    {
+        return $this->dataClassName;
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     */
+    protected function setDataClassName($dataClassName)
+    {
+        $this->dataClassName = $dataClassName;
+    }
+
+    /**
+     *
      * @return boolean
      */
-    public function isCurrentEntryOnPosition($position)
+    public function hasOnlyOneEntry()
     {
-        return ($this->getCurrentEntryPositionType() === $position || $this->hasOnlyOneEntry());
+        return $this->count() == 1;
     }
 
     /**
@@ -131,15 +127,6 @@ class DataClassIterator extends ArrayIterator
      *
      * @return boolean
      */
-    public function isCurrentEntryLast()
-    {
-        return $this->isCurrentEntryOnPosition(self::POSITION_LAST);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
     public function isCurrentEntryInTheMiddle()
     {
         return $this->isCurrentEntryOnPosition(self::POSITION_MIDDLE);
@@ -149,8 +136,19 @@ class DataClassIterator extends ArrayIterator
      *
      * @return boolean
      */
-    public function hasOnlyOneEntry()
+    public function isCurrentEntryLast()
     {
-        return $this->count() == 1;
+        return $this->isCurrentEntryOnPosition(self::POSITION_LAST);
+    }
+
+    /**
+     *
+     * @param integer $position
+     *
+     * @return boolean
+     */
+    public function isCurrentEntryOnPosition($position)
+    {
+        return ($this->getCurrentEntryPositionType() === $position || $this->hasOnlyOneEntry());
     }
 }

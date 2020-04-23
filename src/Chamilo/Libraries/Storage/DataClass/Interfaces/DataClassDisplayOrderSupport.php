@@ -9,14 +9,9 @@ interface DataClassDisplayOrderSupport
 {
 
     /**
-     * @return string
-     */
-    public function getDisplayOrderPropertyName();
-
-    /**
      * @return string[]
      */
-    public function getDisplayOrderContextPropertyNames();
+    public function getDefaultProperties();
 
     /**
      * @param string $propertyName
@@ -26,15 +21,14 @@ interface DataClassDisplayOrderSupport
     public function getDefaultProperty($propertyName);
 
     /**
-     * @param string $propertyName
-     * @param string $propertyvalue
-     */
-    public function setDefaultProperty($propertyName, $propertyvalue);
-
-    /**
      * @return string[]
      */
-    public function getDefaultProperties();
+    public function getDisplayOrderContextPropertyNames();
+
+    /**
+     * @return string
+     */
+    public function getDisplayOrderPropertyName();
 
     /**
      * @return integer
@@ -45,4 +39,10 @@ interface DataClassDisplayOrderSupport
      * @return boolean
      */
     public function isIdentified();
+
+    /**
+     * @param string $propertyName
+     * @param string $propertyvalue
+     */
+    public function setDefaultProperty($propertyName, $propertyvalue);
 }

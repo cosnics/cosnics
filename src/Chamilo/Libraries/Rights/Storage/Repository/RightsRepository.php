@@ -117,6 +117,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return boolean
+     * @throws \Exception
      */
     public function createRightsLocation(RightsLocation $location)
     {
@@ -131,7 +132,6 @@ abstract class RightsRepository
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
     {
-        // Correct version
         $this->getDataClassRepositoryCache()->truncate($this->getRightsLocationEntityRightClassName());
 
         return $this->getDataClassRepository()->create($rightsLocationEntityRight);
@@ -141,6 +141,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $rightsLocation
      *
      * @return boolean
+     * @throws \Exception
      */
     public function deleteRightsLocation(RightsLocation $rightsLocation)
     {
@@ -391,6 +392,7 @@ abstract class RightsRepository
      * @param integer[] $locationIdentifiers
      *
      * @return string[][]
+     * @throws \Exception
      */
     public function findLocationParentIdentifierRecordsForLocationIdentifiers(array $locationIdentifiers)
 
@@ -505,9 +507,9 @@ abstract class RightsRepository
      * @param integer $right
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
-     * @return string[]
-     * @see DataManager:: retrieve_target_entities_array()
+     * @return string[][]
      * @throws \Exception
+     * @see DataManager:: retrieve_target_entities_array()
      */
     public function findRightsEntityRecordsForRightAndLocation(int $right, RightsLocation $location)
     {
@@ -687,6 +689,25 @@ abstract class RightsRepository
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     *
+     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
+     */
+    public function findRightsLocationEntityRights(
+        Condition $condition = null, int $offset = null, int $count = null, array $orderBy = null
+    )
+    {
+        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
+
+        return $this->getDataClassRepository()->retrieves(
+            $rightsLocationEntityRightClassName, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+        );
+    }
+
+    /**
      * @param integer $right
      * @param integer[] $entityIdentifiers
      * @param integer $entityType
@@ -728,25 +749,6 @@ abstract class RightsRepository
 
         return $this->getDataClassRepository()->retrieves(
             $rightsLocationEntityRightClassName, new DataClassRetrievesParameters(new AndCondition($conditions))
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
-     */
-    public function findRightsLocationEntityRights(
-        Condition $condition = null, int $offset = null, int $count = null, array $orderBy = null
-    )
-    {
-        $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
-
-        return $this->getDataClassRepository()->retrieves(
-            $rightsLocationEntityRightClassName, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 
@@ -954,23 +956,6 @@ abstract class RightsRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
-     *
-     * @return string
-     */
-    private function getEntitiesHash(array $entities)
-    {
-        $entitiesIdentifiers = array();
-
-        foreach ($entities as $entityType => $entityProvider)
-        {
-            $entitiesIdentifiers[] = array($entityType, get_class($entityProvider));
-        }
-
-        return md5(serialize($entitiesIdentifiers));
-    }
-
-    /**
      * @param integer $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
@@ -1033,6 +1018,23 @@ abstract class RightsRepository
         }
 
         return null;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
+     *
+     * @return string
+     */
+    private function getEntitiesHash(array $entities)
+    {
+        $entitiesIdentifiers = array();
+
+        foreach ($entities as $entityType => $entityProvider)
+        {
+            $entitiesIdentifiers[] = array($entityType, get_class($entityProvider));
+        }
+
+        return md5(serialize($entitiesIdentifiers));
     }
 
     /**
@@ -1161,7 +1163,7 @@ abstract class RightsRepository
         );
 
         return new Joins(
-            array(new Join($rightsLocationEntityRightClassName, new AndCondition(array($joinConditions))))
+            array(new Join($rightsLocationEntityRightClassName, new AndCondition($joinConditions)))
         );
     }
 
@@ -1216,6 +1218,7 @@ abstract class RightsRepository
      * @param integer $parentLocationIdentifier
      *
      * @return boolean
+     * @throws \Exception
      */
     public function moveRightsLocation(RightsLocation $location, $parentLocationIdentifier)
     {

@@ -31,6 +31,40 @@ abstract class ConditionVariableTranslator
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
+     * @return string
+     */
+    public static function render(ConditionVariable $conditionVariable)
+    {
+        $conditionVariableCache = ConditionVariableCache::getInstance();
+
+        if (!$conditionVariableCache->exists($conditionVariable))
+        {
+            $conditionVariableCache->set($conditionVariable, static::runTranslator($conditionVariable));
+        }
+
+        return $conditionVariableCache->get($conditionVariable);
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
+     * @throws \ReflectionException
+     */
+    public static function factory($type, ConditionVariable $conditionVariable)
+    {
+        $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Variable\\' .
+            ClassnameUtilities::getInstance()->getClassnameFromObject($conditionVariable) . 'Translator';
+
+        return new $class($conditionVariable);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_condition_variable()
@@ -43,35 +77,4 @@ abstract class ConditionVariableTranslator
      * @return string
      */
     abstract public function translate();
-
-    /**
-     *
-     * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
-     */
-    public static function factory($type, ConditionVariable $conditionVariable)
-    {
-        $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Variable\\' .
-            ClassnameUtilities::getInstance()->getClassnameFromObject($conditionVariable) . 'Translator';
-
-            return new $class($conditionVariable);
-    }
-
-    /**
-     *
-     * @param ConditionVariable $condition_variable
-     * @return string
-     */
-    public static function render(ConditionVariable $conditionVariable)
-    {
-        $conditionVariableCache = ConditionVariableCache::getInstance();
-
-        if (! $conditionVariableCache->exists($conditionVariable))
-        {
-            $conditionVariableCache->set($conditionVariable, static::runTranslator($conditionVariable));
-        }
-
-        return $conditionVariableCache->get($conditionVariable);
-    }
 }

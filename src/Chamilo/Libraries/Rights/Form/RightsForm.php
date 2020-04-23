@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Rights\Form;
 
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -20,25 +20,17 @@ use Symfony\Component\Translation\Translator;
 class RightsForm extends FormValidator
 {
     const INHERIT_FALSE = 1;
-
     const INHERIT_TRUE = 0;
 
     const PROPERTY_BUTTONS = 'buttons';
-
     const PROPERTY_INHERIT = 'inherit';
-
     const PROPERTY_RESET = 'reset';
-
     const PROPERTY_RIGHT_OPTION = 'right_option';
-
     const PROPERTY_SUBMIT = 'submit';
-
     const PROPERTY_TARGETS = 'targets';
 
     const RIGHT_OPTION_ALL = 0;
-
     const RIGHT_OPTION_ME = 1;
-
     const RIGHT_OPTION_SELECT = 2;
 
     /**
@@ -294,10 +286,15 @@ class RightsForm extends FormValidator
         }
         else
         {
-            $hasUserTargets = key_exists(UserEntity::ENTITY_TYPE, $targetEntities);
+            $hasUserTargets = key_exists(
+                UserEntityProvider::ENTITY_TYPE,
+                $targetEntities
+            );
             $hasOnlyOneTargetEntityType = count($targetEntities) == 1;
-            $hasOnlyOneTargetUserEntity = count($targetEntities[UserEntity::ENTITY_TYPE]) == 1;
-            $currentUserIsOnlyTargetUserEntity = $targetEntities[UserEntity::ENTITY_TYPE][0] == $user->getId();
+            $hasOnlyOneTargetUserEntity = count(
+                    $targetEntities[UserEntityProvider::ENTITY_TYPE]
+                ) == 1;
+            $currentUserIsOnlyTargetUserEntity = $targetEntities[UserEntityProvider::ENTITY_TYPE][0] == $user->getId();
 
             if ($hasUserTargets && $hasOnlyOneTargetEntityType && $hasOnlyOneTargetUserEntity &&
                 $currentUserIsOnlyTargetUserEntity)

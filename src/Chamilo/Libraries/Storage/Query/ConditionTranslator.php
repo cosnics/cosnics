@@ -14,8 +14,7 @@ abstract class ConditionTranslator extends ConditionPartTranslator
 {
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
      */
     public function getCondition()
     {

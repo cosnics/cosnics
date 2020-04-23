@@ -33,16 +33,6 @@ class Joins implements Countable, Hashable
     }
 
     /**
-     * Gets the joins
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Join[]
-     */
-    public function get()
-    {
-        return $this->joins;
-    }
-
-    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Join $join
      */
@@ -53,11 +43,21 @@ class Joins implements Countable, Hashable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Join $join
+     * @see \Countable::count()
      */
-    public function prepend($join)
+    public function count()
     {
-        array_unshift($this->joins, $join);
+        return count($this->joins);
+    }
+
+    /**
+     * Gets the joins
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Join[]
+     */
+    public function get()
+    {
+        return $this->joins;
     }
 
     /**
@@ -79,22 +79,13 @@ class Joins implements Countable, Hashable
     }
 
     /**
-     *
-     * @see \Countable::count()
-     */
-    public function count()
-    {
-        return count($this->joins);
-    }
-
-    /**
      * Merges the given dataclass properties into this one
      *
      * @param \Chamilo\Libraries\Storage\Query\Joins $joinsToMerge
      */
     public function merge(Joins $joinsToMerge = null)
     {
-        if (! $joinsToMerge instanceof Joins)
+        if (!$joinsToMerge instanceof Joins)
         {
             return;
         }
@@ -103,5 +94,14 @@ class Joins implements Countable, Hashable
         {
             $this->add($join);
         }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Join $join
+     */
+    public function prepend($join)
+    {
+        array_unshift($this->joins, $join);
     }
 }

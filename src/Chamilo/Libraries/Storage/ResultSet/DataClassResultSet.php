@@ -36,6 +36,28 @@ class DataClassResultSet extends ArrayResultSet
     }
 
     /**
+     *
+     * @return string
+     */
+    public function getCacheClassName()
+    {
+        $compositeDataClassName = CompositeDataClass::class;
+        $className = $this->get_class_name();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            return get_parent_class($className);
+        }
+        else
+        {
+            return $className;
+        }
+    }
+
+    /**
      * Get the DataClass class name
      *
      * @return string
@@ -46,38 +68,25 @@ class DataClassResultSet extends ArrayResultSet
     }
 
     /**
-     *
-     * @return string
-     */
-    public function getCacheClassName()
-    {
-        $compositeDataClassName = CompositeDataClass::class_name();
-        $className = $this->get_class_name();
-
-        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            return $className::parent_class_name();
-        }
-        else
-        {
-            return $className;
-        }
-    }
-
-    /**
      * Convert the record to a DataClass object
      *
      * @param string $className
      * @param string[] $record
+     *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \Exception
      */
     public function get_object($className, $record)
     {
-        $baseClassName = (is_subclass_of($className, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() : DataClass::class_name());
-        $className = (is_subclass_of($className, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $className);
+        /**
+         * @var \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass $baseClassName
+         */
+        $baseClassName =
+            (is_subclass_of($className, CompositeDataClass::class) ? CompositeDataClass::class : DataClass::class);
+        $className =
+            (is_subclass_of($className, CompositeDataClass::class) ? $record[CompositeDataClass::PROPERTY_TYPE] :
+                $className);
+
         return $baseClassName::factory($className, $record);
     }
 }

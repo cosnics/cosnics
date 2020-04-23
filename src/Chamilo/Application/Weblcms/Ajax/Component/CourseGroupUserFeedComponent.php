@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 class CourseGroupUserFeedComponent extends Manager
 {
@@ -236,6 +236,14 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
+    }
+
+    /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @throws \Exception
      */
@@ -247,7 +255,7 @@ class CourseGroupUserFeedComponent extends Manager
 
         if (!empty($searchQuery))
         {
-            $conditions[] = Utilities::query_to_condition(
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, array(
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),

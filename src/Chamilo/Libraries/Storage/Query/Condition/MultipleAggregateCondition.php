@@ -31,16 +31,6 @@ abstract class MultipleAggregateCondition extends AggregateCondition
     }
 
     /**
-     * Gets the aggregated conditions
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
-     */
-    public function get_conditions()
-    {
-        return $this->conditions;
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
@@ -62,6 +52,16 @@ abstract class MultipleAggregateCondition extends AggregateCondition
         $hashParts[] = $aggregateParts;
 
         return $hashParts;
+    }
+
+    /**
+     * Gets the aggregated conditions
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
+     */
+    public function get_conditions()
+    {
+        return $this->conditions;
     }
 
     /**

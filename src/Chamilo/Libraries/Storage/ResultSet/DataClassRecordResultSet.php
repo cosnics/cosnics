@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\ResultSet;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
 /**
  * Wrapper class for the RecordResultSet that maps the records from the resultset to dataclasses (without caching)
@@ -20,6 +18,8 @@ class DataClassRecordResultSet extends ArrayResultSet
      *
      * @param string $class
      * @param RecordResultSet $baseResultSet
+     *
+     * @throws \Exception
      */
     public function __construct($class, RecordResultSet $baseResultSet)
     {
@@ -40,11 +40,16 @@ class DataClassRecordResultSet extends ArrayResultSet
      * @param string[] $record
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \Exception
      */
     protected function record_to_data_class($class, $record = array())
     {
-        $base = is_subclass_of($class, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() : DataClass::class_name();
-        $class = is_subclass_of($class, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $class;
+        /**
+         * @var \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass $base
+         */
+        $base = is_subclass_of($class, CompositeDataClass::class) ? CompositeDataClass::class : DataClass::class;
+        $class =
+            is_subclass_of($class, CompositeDataClass::class) ? $record[CompositeDataClass::PROPERTY_TYPE] : $class;
 
         return $base::factory($class, $record);
     }

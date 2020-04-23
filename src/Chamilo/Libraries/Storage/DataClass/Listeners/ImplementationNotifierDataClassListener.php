@@ -64,9 +64,184 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     }
 
     /**
+     * Determines the implementation packages based on the given context
+     *
+     * @return string[]
+     */
+    protected function get_implementation_packages()
+    {
+        if (!isset($this->implementation_packages))
+        {
+            $pattern = '*\\\Integration\\' . $this->context;
+
+            $condition = new PatternMatchCondition(
+                new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT), $pattern
+            );
+
+            $packages = array();
+
+            $package_registrations = DataManager::retrieves(
+                Registration::class, new DataClassRetrievesParameters($condition)
+            );
+            while ($package_registration = $package_registrations->next_result())
+            {
+                $packages[] = $package_registration->get_context();
+            }
+
+            $this->implementation_packages = $packages;
+        }
+
+        return $this->implementation_packages;
+    }
+
+    /**
+     * Notifies the implementation packages for the given data class listener method
+     *
+     * @param string $dataClassListenerMethod
+     * @param string[] $parameters
+     *
+     * @return boolean
+     */
+    protected function notify_implementation_packages($dataClassListenerMethod, array $parameters = array())
+    {
+        if (!array_key_exists($dataClassListenerMethod, $this->method_mapping))
+        {
+            return true;
+        }
+
+        array_unshift($parameters, $this->data_class);
+
+        $method = $this->method_mapping[$dataClassListenerMethod];
+
+        $packages = $this->get_implementation_packages();
+
+        foreach ($packages as $package)
+        {
+            $className = $package . '\DataManager';
+
+            if (!method_exists($className, $method))
+            {
+                continue;
+            }
+
+            if (!call_user_func_array(array($className, $method), $parameters))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Calls this function after the creation of a dataclass in the database
+     *
+     * @param boolean $success
+     *
+     * @return boolean
+     */
+    public function on_after_create($success)
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function after the deletion of a dataclass in the database
+     *
+     * @param boolean $success
+     *
+     * @return boolean
+     */
+    public function on_after_delete($success)
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function after a property is set
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return boolean
+     */
+    public function on_after_set_property($name, $value)
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function after the update of a dataclass in the database
+     *
+     * @param boolean $success
+     *
+     * @return boolean
+     */
+    public function on_after_update($success)
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function before the creation of a dataclass in the database
+     *
+     * @return boolean
+     */
+    public function on_before_create()
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function before the deletion of a dataclass in the database
+     *
+     * @return boolean
+     */
+    public function on_before_delete()
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function before a property is set
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return boolean
+     */
+    public function on_before_set_property($name, $value)
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function before the update of a dataclass in the database
+     *
+     * @return boolean
+     */
+    public function on_before_update()
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Calls this function to return the dependencies of this class
+     *
+     * @param string[] $dependencies
+     *
+     * @return boolean
+     */
+    public function on_get_dependencies(&$dependencies = array())
+    {
+        return $this->notify_implementation_packages(__FUNCTION__, array(&$dependencies));
+    }
+
+    /**
      * Sets the context
      *
      * @param string $context
+     *
      * @throws \InvalidArgumentException
      */
     public function set_context($context)
@@ -83,11 +258,12 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      * Sets the data class
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $data_class
+     *
      * @throws \InvalidArgumentException
      */
     public function set_data_class($data_class)
     {
-        if (! $data_class instanceof DataClass)
+        if (!$data_class instanceof DataClass)
         {
             throw new InvalidArgumentException('The data class should be an instance of DataClass');
         }
@@ -99,191 +275,26 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      * Sets the method mapping
      *
      * @param string[] $methodMapping
+     *
      * @throws \InvalidArgumentException
      */
     public function set_method_mapping($methodMapping)
     {
-        if (! is_array($methodMapping) || count($methodMapping) == 0)
+        if (!is_array($methodMapping) || count($methodMapping) == 0)
         {
             throw new InvalidArgumentException('The method mapping should at least contain 1 method');
         }
 
         foreach ($methodMapping as $method => $data_manager_method)
         {
-            if (! method_exists($this, $method))
+            if (!method_exists($this, $method))
             {
                 throw new InvalidArgumentException(
-                    'The method ' . $method . ' does not exist in the data class listener');
+                    'The method ' . $method . ' does not exist in the data class listener'
+                );
             }
         }
 
         $this->method_mapping = $methodMapping;
-    }
-
-    /**
-     * Notifies the implementation packages for the given data class listener method
-     *
-     * @param string $dataClassListenerMethod
-     * @param string[] $parameters
-     * @return boolean
-     */
-    protected function notify_implementation_packages($dataClassListenerMethod, array $parameters = array())
-    {
-        if (! array_key_exists($dataClassListenerMethod, $this->method_mapping))
-        {
-            return true;
-        }
-
-        array_unshift($parameters, $this->data_class);
-
-        $method = $this->method_mapping[$dataClassListenerMethod];
-
-        $packages = $this->get_implementation_packages();
-
-        foreach ($packages as $package)
-        {
-            $className = $package . '\DataManager';
-
-            if (! method_exists($className, $method))
-            {
-                continue;
-            }
-
-            if (! call_user_func_array(array($className, $method), $parameters))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Determines the implementation packages based on the given context
-     *
-     * @return string[]
-     */
-    protected function get_implementation_packages()
-    {
-        if (! isset($this->implementation_packages))
-        {
-            $pattern = '*\\\Integration\\' . $this->context;
-
-            $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT),
-                $pattern);
-
-            $packages = array();
-
-            $package_registrations = DataManager::retrieves(
-                Registration::class_name(),
-                new DataClassRetrievesParameters($condition));
-            while ($package_registration = $package_registrations->next_result())
-            {
-                $packages[] = $package_registration->get_context();
-            }
-
-            $this->implementation_packages = $packages;
-        }
-
-        return $this->implementation_packages;
-    }
-
-    /**
-     * Calls this function before the creation of a dataclass in the database
-     *
-     * @return boolaean
-     */
-    public function on_before_create()
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function after the creation of a dataclass in the database
-     *
-     * @param boolean $success
-     * @return boolean
-     */
-    public function on_after_create($success)
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function before the update of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_update()
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function after the update of a dataclass in the database
-     *
-     * @param boolean $success
-     * @return boolean
-     */
-    public function on_after_update($success)
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function before the deletion of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_delete()
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function after the deletion of a dataclass in the database
-     *
-     * @param boolean $success
-     * @return boolean
-     */
-    public function on_after_delete($success)
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function before a property is set
-     *
-     * @param string $name
-     * @param string $value
-     * @return boolean
-     */
-    public function on_before_set_property($name, $value)
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function after a property is set
-     *
-     * @param string $name
-     * @param string $value
-     * @return boolean
-     */
-    public function on_after_set_property($name, $value)
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Calls this function to return the dependencies of this class
-     *
-     * @param string[] $dependencies
-     * @return boolean
-     */
-    public function on_get_dependencies(&$dependencies = array())
-    {
-        return $this->notify_implementation_packages(__FUNCTION__, array(&$dependencies));
     }
 }

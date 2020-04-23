@@ -21,45 +21,23 @@ class DataClassCountParameters extends DataClassParameters
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable|Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $property
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
      */
-    public function __construct($condition = null, Joins $joins = null, $dataclassProperties = null)
+    public function __construct($condition = null, Joins $joins = null, $dataClassProperties = null)
     {
-        if ($dataclassProperties instanceof ConditionVariable)
+        if ($dataClassProperties instanceof ConditionVariable)
         {
-            $dataclassProperties = new DataClassProperties(array($dataclassProperties));
+            $dataClassProperties = new DataClassProperties(array($dataClassProperties));
         }
 
-        DataClassParameters::__construct($condition, $joins, $dataclassProperties);
-    }
-
-    /**
-     * Get the property of the DataClass object to be used as a parameter
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     * @deprecated Use DataClassProperties and getDataClassProperties() now
-     */
-    public function get_property()
-    {
-        $dataClassProperties = $this->getDataClassProperties()->get();
-        return array_shift($dataClassProperties);
-    }
-
-    /**
-     * Set the property of the DataClass object to be used as a parameter
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     * @deprecated Use DataClassProperties and setDataClassProperties() now
-     */
-    public function set_property($property)
-    {
-        $this->getDataClassProperties()->add($property);
+        DataClassParameters::__construct($condition, $joins, $dataClassProperties);
     }
 
     /**
      * Generate an instance based on the input or throw an exception if no compatible input was found
      *
      * @param mixed $parameter
+     *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters
      * @throws Exception
      */
@@ -90,5 +68,30 @@ class DataClassCountParameters extends DataClassParameters
         {
             throw new Exception('Illegal parameter passed to the DataManager :: count() method.');
         }
+    }
+
+    /**
+     * Get the property of the DataClass object to be used as a parameter
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @deprecated Use DataClassProperties and getDataClassProperties() now
+     */
+    public function get_property()
+    {
+        $dataClassProperties = $this->getDataClassProperties()->get();
+
+        return array_shift($dataClassProperties);
+    }
+
+    /**
+     * Set the property of the DataClass object to be used as a parameter
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     *
+     * @deprecated Use DataClassProperties and setDataClassProperties() now
+     */
+    public function set_property($property)
+    {
+        $this->getDataClassProperties()->add($property);
     }
 }

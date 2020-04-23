@@ -40,26 +40,6 @@ class CaseConditionVariable extends ConditionVariable
     }
 
     /**
-     * Get the case_elements
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
-     */
-    public function get_case_elements()
-    {
-        return $this->caseElements;
-    }
-
-    /**
-     * Set the case_elements
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElements
-     */
-    public function set_case_elements($caseElements)
-    {
-        $this->caseElements = $caseElements;
-    }
-
-    /**
      * Adds a case element to the case elements
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable $case_element
@@ -67,6 +47,26 @@ class CaseConditionVariable extends ConditionVariable
     public function add(CaseElementConditionVariable $case_element)
     {
         $this->caseElements[] = $case_element;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     */
+    public function getHashParts()
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        foreach ($this->get_case_elements() as $case_element)
+        {
+            $hashParts[] = $case_element->getHashParts();
+        }
+
+        sort($hashParts);
+
+        $hashParts[] = $this->get_alias();
+
+        return $hashParts;
     }
 
     /**
@@ -90,22 +90,22 @@ class CaseConditionVariable extends ConditionVariable
     }
 
     /**
+     * Get the case_elements
      *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
      */
-    public function getHashParts()
+    public function get_case_elements()
     {
-        $hashParts = ConditionVariable::getHashParts();
+        return $this->caseElements;
+    }
 
-        foreach ($this->get_case_elements() as $case_element)
-        {
-            $hashParts[] = $case_element->getHashParts();
-        }
-
-        sort($hashParts);
-
-        $hashParts[] = $this->get_alias();
-
-        return $hashParts;
+    /**
+     * Set the case_elements
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElements
+     */
+    public function set_case_elements($caseElements)
+    {
+        $this->caseElements = $caseElements;
     }
 }

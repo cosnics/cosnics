@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 /**
  * Feed to return users of this course
@@ -64,6 +64,14 @@ class CourseUsersFeedComponent extends Manager
     public function getRequiredPostParameters()
     {
         return array(self::PARAM_COURSE_ID);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
@@ -123,12 +131,12 @@ class CourseUsersFeedComponent extends Manager
         // Retrieve the users directly subscribed to the course
         $userConditions = array();
         $userConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
         );
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
         );
 
@@ -141,29 +149,29 @@ class CourseUsersFeedComponent extends Manager
         );
 
         $user_ids = DataManager::distinct(
-            CourseEntityRelation::class_name(), $parameters
+            CourseEntityRelation::class, $parameters
         );
 
         // Retrieve the users subscribed through platform groups
         $groupConditions = array();
         $groupConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
         );
         $groupConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 new AndCondition($groupConditions), null, null, array(), new Joins(
                     new Join(
-                        CourseEntityRelation::class_name(), new EqualityCondition(
-                            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
+                        CourseEntityRelation::class, new EqualityCondition(
+                            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                             new PropertyConditionVariable(
-                                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID
+                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                             )
                         )
                     )
@@ -177,10 +185,6 @@ class CourseUsersFeedComponent extends Manager
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
                 )
             )
-        );
-
-        $groupIdentifiers = DataManager::distinct(
-            CourseEntityRelation::class_name(), $parameters
         );
 
         $group_users = array();
@@ -204,17 +208,16 @@ class CourseUsersFeedComponent extends Manager
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
-            $conditions[] = Utilities::query_to_condition(
+            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $search_query, array(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
                 )
             );
         }
 
-        $conditions[] =
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids);
+        $conditions[] = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids);
 
         // Combine the conditions
         $count = count($conditions);
@@ -227,17 +230,16 @@ class CourseUsersFeedComponent extends Manager
         {
             $condition = $conditions[0];
         }
-        $this->user_count = \Chamilo\Core\User\Storage\DataManager::count(
-            User::class_name(), new DataClassCountParameters($condition)
-        );
+        $this->user_count =
+            \Chamilo\Core\User\Storage\DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(), array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(User::class_name(), $parameters);
+        return \Chamilo\Core\User\Storage\DataManager::retrieves(User::class, $parameters);
     }
 }

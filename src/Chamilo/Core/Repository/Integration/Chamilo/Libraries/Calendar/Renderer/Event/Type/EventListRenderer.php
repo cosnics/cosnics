@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -56,7 +55,12 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
 
                 if (count($attachments) > 0)
                 {
-                    Utilities::order_content_objects_by_title($attachments);
+                    usort(
+                        $attachments, function ($contentObjectOne, $contentObjectTwo) {
+                        return strcasecmp($contentObjectOne->get_title(), $contentObjectTwo->get_title());
+                    }
+                    );
+
                     $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
 
                     $html[] = '<div class="panel panel-default panel-attachments">';

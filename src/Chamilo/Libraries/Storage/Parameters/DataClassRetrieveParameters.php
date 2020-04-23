@@ -38,6 +38,7 @@ class DataClassRetrieveParameters extends DataClassParameters
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     *
      * @deprecated Use setOrderBy() now
      */
     public function set_order_by($orderBy = array())

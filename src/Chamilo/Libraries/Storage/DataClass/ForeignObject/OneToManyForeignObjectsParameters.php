@@ -23,12 +23,16 @@ class OneToManyForeignObjectsParameters extends ForeignObjectsParameters
     {
         return new EqualityCondition(
             new PropertyConditionVariable($this->get_foreign_class(), $this->get_foreign_key()),
-            new StaticConditionVariable($this->get_base_object()->get_default_property(DataClass::PROPERTY_ID)));
+            new StaticConditionVariable($this->get_base_object()->getDefaultProperty(DataClass::PROPERTY_ID))
+        );
     }
 
     /**
+     * Sets the foreign key property
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\ForeignObject\ForeignObjectsParameters::set_foreign_key()
+     * @param string $foreignKey
+     *
+     * @throws \ReflectionException
      */
     public function set_foreign_key($foreignKey)
     {

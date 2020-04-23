@@ -151,7 +151,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 // $this->addGroupRule('match_' . $match_number, array(
                 // 'match[' . $match_number . ']' => array(
                 // array(
-                // Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+                // Translation :: get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                 // 'required'))));
             }
 

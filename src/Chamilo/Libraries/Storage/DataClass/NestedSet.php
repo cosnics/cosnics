@@ -46,6 +46,7 @@ abstract class NestedSet extends DataClass
      *        query
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getAncestorsCondition()
      */
     public function build_ancestry_condition($include_object = false, $condition = null)
@@ -94,6 +95,7 @@ abstract class NestedSet extends DataClass
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      * @deprecated Migrated to NestedSetDataClassRepository::getDescendantsCondition()
+     * @throws \ReflectionException
      */
     public function build_offspring_condition($recursive = false, $include_self = false, $condition = null)
     {
@@ -122,10 +124,11 @@ abstract class NestedSet extends DataClass
                         new EqualityCondition(
                             new PropertyConditionVariable(self::class_name(), self::PROPERTY_ID),
                             new StaticConditionVariable($this->get_id())
-                        ), new EqualityCondition(
-                        new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable($this->get_id())
-                    )
+                        ),
+                        new EqualityCondition(
+                            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_ID),
+                            new StaticConditionVariable($this->get_id())
+                        )
                     )
                 );
             }
@@ -156,6 +159,7 @@ abstract class NestedSet extends DataClass
      * @param integer $sort_order
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPostOrderBy()
      */
     public function build_post_order_ordering($sort_order = SORT_ASC)
@@ -174,6 +178,7 @@ abstract class NestedSet extends DataClass
      * @param integer $sort_order
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPreOrderBy()
      */
     public function build_pre_order_ordering($sort_order = SORT_ASC)
@@ -191,6 +196,7 @@ abstract class NestedSet extends DataClass
      *        query
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getSiblingsCondition()
      */
     public function build_sibling_condition($include_object = false, $condition = null)
@@ -226,6 +232,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::countAncestors()
      */
     public function count_ancestors($include_self = true, $condition = null)
@@ -240,6 +247,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::countDescendants()
      */
     public function count_children($condition = null)
@@ -254,6 +262,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::countDescendants()
      */
     public function count_descendants($condition = null)
@@ -269,6 +278,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::countSiblings()
      */
     public function count_siblings($include_self = true, $condition = null)
@@ -279,9 +289,12 @@ abstract class NestedSet extends DataClass
     }
 
     /**
+     * @param integer $position
+     * @param mixed $reference_node
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::create()
+     * @return boolean
      * @deprecated Migrated to NestedSetDataClassRepository::create()
+     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::create()
      */
     public function create($position = self::AS_LAST_CHILD_OF, $reference_node = null)
     {
@@ -353,9 +366,11 @@ abstract class NestedSet extends DataClass
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::delete()
+     * @return boolean
      * @deprecated Migrated to NestedSetDataClassRepository::delete()
+     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::delete()
      */
     public function delete($condition = null)
     {
@@ -424,9 +439,11 @@ abstract class NestedSet extends DataClass
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|integer
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet
      * @done Not migrated since the inclusion of the identifier makes this a standard
      *     DataClassRepository::retrieveById()
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
     public function find_by_id($object_or_id)
     {
@@ -453,6 +470,7 @@ abstract class NestedSet extends DataClass
      *
      * @return string[][]
      * @done No longer used and this should not be here to begin with
+     * @throws \ReflectionException
      */
     private function find_values_to_fix($parent_id = 0, &$traversal_data = array('count' => 1, 'updates' => array()))
     {
@@ -474,7 +492,7 @@ abstract class NestedSet extends DataClass
 
             $traversal_data['count'] ++;
 
-            self::fix_nested_values_batch($group->get_id(), $traversal_data);
+            self::fix_nested_values_batch($group->get_id());
 
             if ($group->get_right_value() != $traversal_data['count'])
             {
@@ -485,7 +503,8 @@ abstract class NestedSet extends DataClass
             if ($update)
             {
                 $traversal_data['updates'][$group->get_id()] = array(
-                    $group->get_left_value(), $group->get_right_value()
+                    $group->get_left_value(),
+                    $group->get_right_value()
                 );
             }
 
@@ -499,6 +518,8 @@ abstract class NestedSet extends DataClass
      * @done No longer used and this should not be here to begin with
      *
      * @param integer $parent_id
+     *
+     * @throws \ReflectionException
      */
     public function fix_nested_values_batch($parent_id = 0)
     {
@@ -555,11 +576,20 @@ abstract class NestedSet extends DataClass
     }
 
     /**
+     * @return string[]
+     */
+    public function getSubTreePropertyNames()
+    {
+        return array();
+    }
+
+    /**
      *
      * @param boolean $include_self
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findAncestors()
      */
     public function get_ancestors($include_self = true, $condition = null)
@@ -577,6 +607,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_children($condition = null)
@@ -608,6 +639,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_descendants($condition = null)
@@ -635,7 +667,7 @@ abstract class NestedSet extends DataClass
      * empty array. When representing multiple trees within a single table, one should return conditions that identify
      * the correct tree (root).
      *
-     * @return string[]
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      * @deprecated Migrated to NestedSetDataClassRepository::getSubTreeCondition()
      */
     public function get_nested_set_condition_array()
@@ -646,11 +678,13 @@ abstract class NestedSet extends DataClass
     /**
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getParent()
      */
     public function get_parent()
     {
-        return $this->find_by_id($this->get_parent_id());
+        return $this->find_by_id($this->getParentId());
     }
 
     /**
@@ -681,6 +715,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findSiblings()
      */
     public function get_siblings($include_self = true, $condition = null)
@@ -717,6 +752,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::hasSiblings()
      */
     public function has_siblings($condition = null)
@@ -772,6 +808,8 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $node_or_id
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      * @deprecated Use NestedSet::isAncestorOf() now
      */
     public function is_ancestor_of($node_or_id)
@@ -784,6 +822,8 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $node_or_id
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      * @deprecated Use NestedSet::isDescendantOf() now
      */
     public function is_descendant_of($node_or_id)
@@ -803,7 +843,7 @@ abstract class NestedSet extends DataClass
 
     /**
      * @param integer $position
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $reference_node
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $reference_node
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean
@@ -975,6 +1015,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition additional condition
      *
      * @return boolean
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::postDelete()
      */
     public function post_delete($condition = null)
@@ -1078,6 +1119,7 @@ abstract class NestedSet extends DataClass
      *        only be used when supporting multiple roots in a single database table)
      *
      * @return boolean
+     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::preInsert()
      */
     public function pre_insert($insert_after, $number_of_elements = 1, $condition = null)
@@ -1166,10 +1208,12 @@ abstract class NestedSet extends DataClass
      * @param integer $leftValue
      *
      * @done Domain method
+     *
+     * @throws \Exception
      */
     public function setLeftValue($leftValue)
     {
-        $this->set_default_property(self::PROPERTY_LEFT_VALUE, $leftValue);
+        $this->setDefaultProperty(self::PROPERTY_LEFT_VALUE, $leftValue);
     }
 
     /**
@@ -1180,10 +1224,11 @@ abstract class NestedSet extends DataClass
      * @param integer $parentId
      *
      * @done Domain method
+     * @throws \Exception
      */
     public function setParentId($parentId)
     {
-        $this->set_default_property(self::PROPERTY_PARENT_ID, $parentId);
+        $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
     }
 
     /**
@@ -1194,10 +1239,12 @@ abstract class NestedSet extends DataClass
      * @param integer $rightValue
      *
      * @done Domain method
+     *
+     * @throws \Exception
      */
     public function setRightValue($rightValue)
     {
-        $this->set_default_property(self::PROPERTY_RIGHT_VALUE, $rightValue);
+        $this->setDefaultProperty(self::PROPERTY_RIGHT_VALUE, $rightValue);
     }
 
     /**
@@ -1207,6 +1254,7 @@ abstract class NestedSet extends DataClass
      *
      * @param integer $leftValue
      *
+     * @throws \Exception
      * @deprecated Use NestedSet::setLeftValue() now
      */
     public function set_left_value($leftValue)
@@ -1221,7 +1269,9 @@ abstract class NestedSet extends DataClass
      *
      * @param integer $parentId
      *
+     * @throws \Exception
      * @deprecated Use NestedSet::setParentId() now
+     *
      */
     public function set_parent_id($parentId)
     {
@@ -1235,6 +1285,7 @@ abstract class NestedSet extends DataClass
      *
      * @param integer $rightValue
      *
+     * @throws \Exception
      * @deprecated Use NestedSet::setRightValue() now
      */
     public function set_right_value($rightValue)
@@ -1251,6 +1302,9 @@ abstract class NestedSet extends DataClass
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet the node that identifies the position where to insert a
      *         new/moved node
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::validatePosition()
      */
     public function validate_position($position = self::AS_LAST_CHILD_OF, &$reference_node = null)
@@ -1275,16 +1329,16 @@ abstract class NestedSet extends DataClass
                 }
             }
 
-            if ($this->get_id() === $reference_node->get_id())
+            if ($this->getId() === $reference_node->getId())
             {
                 // TODO Report an error when attempting to create a node as its own sibling
                 return null;
             }
 
-            if ($this->get_parent_id() == 0 || $this->get_parent_id() != $reference_node->get_parent_id())
+            if ($this->getParentId() == 0 || $this->getParentId() != $reference_node->getParentId())
             {
                 // To be a sibling of the reference node, the parent should be the same
-                $this->set_parent_id($reference_node->get_parent_id());
+                $this->setParentId($reference_node->getParentId());
             }
         }
 
@@ -1293,7 +1347,7 @@ abstract class NestedSet extends DataClass
             if ($reference_node === null)
             {
                 // Use the parent of the node as a reference
-                $reference_node = $this->find_by_id($this->get_parent_id());
+                $reference_node = $this->find_by_id($this->getParentId());
 
                 // TODO Report an error if no such node can be found
                 if (!is_object($reference_node))
@@ -1314,27 +1368,19 @@ abstract class NestedSet extends DataClass
                 }
             }
 
-            if ($this->get_id() === $reference_node->get_id())
+            if ($this->getId() === $reference_node->getId())
             {
                 // TODO Report an error when attempting to create a node as its own child
                 return null;
             }
 
-            if ($this->get_parent_id() == 0 || $this->get_parent_id() != $reference_node->get_id())
+            if ($this->getParentId() == 0 || $this->getParentId() != $reference_node->getId())
             {
                 // To be a child of the reference node, the parent should be set correctly
-                $this->set_parent_id($reference_node->get_id());
+                $this->setParentId($reference_node->getId());
             }
         }
 
         return $reference_node;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSubTreePropertyNames()
-    {
-        return array();
     }
 }

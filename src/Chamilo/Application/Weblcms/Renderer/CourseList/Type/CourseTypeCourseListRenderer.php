@@ -20,7 +20,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 
 /**
@@ -245,7 +244,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         if (isset($course_type_user_category))
         {
-            $title = Utilities::htmlentities($course_type_user_category[CourseUserCategory::PROPERTY_TITLE]);
+            $title = htmlentities($course_type_user_category[CourseUserCategory::PROPERTY_TITLE]);
             $course_type_user_category_id = $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID];
         }
         else

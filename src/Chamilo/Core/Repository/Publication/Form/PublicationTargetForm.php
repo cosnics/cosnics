@@ -144,7 +144,11 @@ class PublicationTargetForm extends FormValidator
 
         $this->addElement('category', $category_title, 'publication-location');
 
-        Utilities::order_content_objects_by_title($this->content_objects);
+        usort(
+            $this->content_objects, function ($contentObjectOne, $contentObjectTwo) {
+            return strcasecmp($contentObjectOne->get_title(), $contentObjectTwo->get_title());
+        }
+        );
 
         $table_data = array();
 
@@ -201,9 +205,9 @@ class PublicationTargetForm extends FormValidator
         );
 
         $this->addElement(
-            'html', '<script src="' .
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
-            '"></script>'
+            'html',
+            '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) .
+            'Visibility.js' . '"></script>'
         );
     }
 

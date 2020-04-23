@@ -24,7 +24,9 @@ class RightsLocationEntityRight extends DataClass
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_RIGHT_ID, self::PROPERTY_ENTITY_ID, self::PROPERTY_ENTITY_TYPE,
+                self::PROPERTY_RIGHT_ID,
+                self::PROPERTY_ENTITY_ID,
+                self::PROPERTY_ENTITY_TYPE,
                 self::PROPERTY_LOCATION_ID
             )
         );
@@ -64,6 +66,8 @@ class RightsLocationEntityRight extends DataClass
 
     /**
      * @param integer $entityIdentifier
+     *
+     * @throws \Exception
      */
     public function set_entity_id($entityIdentifier)
     {
@@ -72,6 +76,8 @@ class RightsLocationEntityRight extends DataClass
 
     /**
      * @param integer $entityType
+     *
+     * @throws \Exception
      */
     public function set_entity_type($entityType)
     {
@@ -80,6 +86,8 @@ class RightsLocationEntityRight extends DataClass
 
     /**
      * @param integer $locationIdentifier
+     *
+     * @throws \Exception
      */
     public function set_location_id($locationIdentifier)
     {
@@ -88,6 +96,8 @@ class RightsLocationEntityRight extends DataClass
 
     /**
      * @param integer $rightIdentifier
+     *
+     * @throws \Exception
      */
     public function set_right_id($rightIdentifier)
     {

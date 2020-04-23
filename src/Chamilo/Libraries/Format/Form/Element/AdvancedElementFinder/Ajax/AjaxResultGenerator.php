@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax;
 
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 /**
  * Helper class to build an ajax result for an advanced element finder ajax feed
@@ -41,7 +41,9 @@ class AjaxResultGenerator
      * @param string $searchQuery
      * @param integer $offset
      */
-    public function __construct(AjaxResultDataProviderInterface $ajaxResultDataProvider, $searchQuery = null, $offset = 0)
+    public function __construct(
+        AjaxResultDataProviderInterface $ajaxResultDataProvider, $searchQuery = null, $offset = 0
+    )
     {
         $this->setSearchQuery($searchQuery)->setOffset($offset)->setAjaxResultDataProvider($ajaxResultDataProvider);
     }
@@ -66,24 +68,35 @@ class AjaxResultGenerator
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $searchProperties
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface
      */
-    public function getSearchCondition($searchProperties = array())
+    public function getAjaxResultDataProvider()
     {
-        $condition = null;
+        return $this->ajaxResultDataProvider;
+    }
 
-        if (! empty($this->searchQuery))
-        {
-            $condition = Utilities::query_to_condition($this->searchQuery, $searchProperties);
-        }
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface $ajaxResultDataProvider
+     */
+    public function setAjaxResultDataProvider($ajaxResultDataProvider)
+    {
+        $this->ajaxResultDataProvider = $ajaxResultDataProvider;
+    }
 
-        return $condition;
+    /**
+     *
+     * @return integer
+     */
+    public function getOffset()
+    {
+        return $this->offset;
     }
 
     /**
      *
      * @param integer $offset
+     *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator
      */
     public function setOffset($offset = 0)
@@ -100,23 +113,21 @@ class AjaxResultGenerator
 
     /**
      *
-     * @return integer
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
+     * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $searchProperties
      *
-     * @param string $searchQuery
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
-    public function setSearchQuery($searchQuery)
+    public function getSearchCondition($searchProperties = array())
     {
-        $this->searchQuery = $searchQuery;
+        $condition = null;
 
-        return $this;
+        if (!empty($this->searchQuery))
+        {
+            $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
+            $condition = $searchQueryConditionGenerator->getSearchConditions($this->searchQuery, $searchProperties);
+        }
+
+        return $condition;
     }
 
     /**
@@ -130,19 +141,14 @@ class AjaxResultGenerator
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface
-     */
-    public function getAjaxResultDataProvider()
-    {
-        return $this->ajaxResultDataProvider;
-    }
-
-    /**
+     * @param string $searchQuery
      *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface $ajaxResultDataProvider
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator
      */
-    public function setAjaxResultDataProvider($ajaxResultDataProvider)
+    public function setSearchQuery($searchQuery)
     {
-        $this->ajaxResultDataProvider = $ajaxResultDataProvider;
+        $this->searchQuery = $searchQuery;
+
+        return $this;
     }
 }

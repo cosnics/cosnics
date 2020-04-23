@@ -27,56 +27,19 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      */
-    public function __construct(DataClassProperties $dataClassProperties, Condition $condition = null, $orderBy = array(),
-        Joins $joins = null, GroupBy $groupBy = null)
+    public function __construct(
+        DataClassProperties $dataClassProperties, Condition $condition = null, $orderBy = array(), Joins $joins = null,
+        GroupBy $groupBy = null
+    )
     {
         DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy, $groupBy);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     * @deprecated Use getDataClassProperties() now
-     */
-    public function get_properties()
-    {
-        return $this->getDataClassProperties();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     * @deprecated Use setDataClassProperties() now
-     */
-    public function set_properties(DataClassProperties $dataClassProperties = null)
-    {
-        $this->setDataClassProperties($dataClassProperties);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\GroupBy
-     * @deprecated Use getGroupBy() now
-     */
-    public function get_group_by()
-    {
-        return $this->getGroupBy();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
-     * @deprecated Use setGroupBy() now
-     */
-    public function set_group_by(GroupBy $groupBy)
-    {
-        $this->setGroupBy($groupBy);
     }
 
     /**
      * Generate an instance based on the input or throw an exception if no compatible input was found
      *
      * @param mixed $parameter
+     *
      * @return \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters
      * @throws Exception
      */
@@ -114,13 +77,51 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
         {
             return new self($parameter);
         }
-        elseif (is_null($parameter))
-        {
-            return new self();
-        }
         else
         {
             throw new Exception('Illegal parameter passed to the DataManager :: retrieves() method.');
         }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\GroupBy
+     * @deprecated Use getGroupBy() now
+     */
+    public function get_group_by()
+    {
+        return $this->getGroupBy();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @deprecated Use getDataClassProperties() now
+     */
+    public function get_properties()
+    {
+        return $this->getDataClassProperties();
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
+     *
+     * @deprecated Use setGroupBy() now
+     */
+    public function set_group_by(GroupBy $groupBy)
+    {
+        $this->setGroupBy($groupBy);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     *
+     * @deprecated Use setDataClassProperties() now
+     */
+    public function set_properties(DataClassProperties $dataClassProperties = null)
+    {
+        $this->setDataClassProperties($dataClassProperties);
     }
 }

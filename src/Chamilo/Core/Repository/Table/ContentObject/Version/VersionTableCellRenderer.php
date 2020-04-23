@@ -89,7 +89,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case VersionTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
             case ContentObject::PROPERTY_DESCRIPTION :
-                return Utilities::htmlentities(
+                return htmlentities(
                     StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
                 );
             case ContentObject::PROPERTY_MODIFICATION_DATE :

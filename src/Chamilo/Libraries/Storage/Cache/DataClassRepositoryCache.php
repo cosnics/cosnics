@@ -43,23 +43,253 @@ class DataClassRepositoryCache
     }
 
     /**
-     * Get a DataClass object from the cache
      *
-     * @param string $class
+     * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @param mixed $value
+     *
+     * @return boolean
      */
-    public function get($class, DataClassParameters $parameters)
+    private function add($className, DataClassParameters $parameters = null, $value)
     {
-        if ($this->exists($class, $parameters))
+        if (!$this->exists($className, $parameters))
         {
-            return $this->cache[$class][$parameters->hash()];
+            $this->set($className, $parameters->hash(), $value);
         }
-        else
 
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters = null)
+    {
+        if (!$parameters instanceof DataClassRetrieveParameters && $parameters != null)
         {
-            return false;
+            throw new Exception('Illegal parameters passed to the DataClassServiceCache');
         }
+
+        if (!$object instanceof DataClass)
+        {
+            $type = is_object($object) ? get_class($object) : gettype($object);
+            throw new Exception(
+                'The DataClassServiceCache only allows for caching of DataClass objects. Currently trying to add: ' .
+                $type . '.'
+            );
+        }
+
+        $className = $this->getDataClassCacheClassName($object);
+
+        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
+        {
+            $value = $object->getDefaultProperty($cacheableProperty);
+            if (isset($value) && !is_null($value))
+            {
+                $cacheablePropertyParameters = new DataClassRetrieveParameters(
+                    new EqualityCondition(
+                        new PropertyConditionVariable($className, $cacheableProperty),
+                        new StaticConditionVariable($value)
+                    )
+                );
+                $this->set($className, $cacheablePropertyParameters->hash(), $object);
+            }
+        }
+
+        if ($parameters instanceof DataClassRetrieveParameters)
+        {
+            $this->set($className, $parameters->hash(), $object);
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     * @param integer $count
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClassCount($className, $parameters, $count)
+    {
+        if (!$parameters instanceof DataClassCountParameters)
+        {
+            throw new Exception('Illegal parameters passed to the DataClassCountCache');
+        }
+
+        if (!is_integer($count))
+        {
+            $type = is_object($count) ? get_class($count) : gettype($count);
+            throw new Exception(
+                'The DataClassCountCache cache only allows for caching of integers. Currently trying to add: ' . $type .
+                '.'
+            );
+        }
+
+        return $this->add($className, $parameters, $count);
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
+     * @param integer[] $counts
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClassCountGrouped($className, $parameters, $counts)
+    {
+        if (!$parameters instanceof DataClassCountGroupedParameters)
+        {
+            throw new Exception('Illegal parameters passed to the DataClassCountGroupedCache');
+        }
+
+        if (!is_array($counts))
+        {
+            $type = is_object($counts) ? get_class($counts) : gettype($counts);
+            throw new Exception(
+                'The DataClassCountGroupedCache cache only allows for caching of integer arrays. Currently trying to add: ' .
+                $type . '.'
+            );
+        }
+
+        return $this->add($className, $parameters, $counts);
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
+     * @param string[] $propertyValues
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClassDistinct($className, $parameters, $propertyValues)
+    {
+        if (!$parameters instanceof DataClassDistinctParameters)
+        {
+            throw new Exception('Illegal parameters passed to the DataClassDistinctCache');
+        }
+
+        if (!is_array($propertyValues))
+        {
+            $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
+            throw new Exception(
+                'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
+                $type . '.'
+            );
+        }
+
+        return $this->add($className, $parameters, $propertyValues);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $dataClassIterator
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClassIterator(
+        DataClassIterator $dataClassIterator, DataClassRetrievesParameters $parameters
+    )
+    {
+        if (!$parameters instanceof DataClassRetrievesParameters)
+        {
+            throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
+        }
+
+        if (!$dataClassIterator instanceof DataClassIterator)
+        {
+            $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
+            throw new Exception(
+                'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
+                $type . '.'
+            );
+        }
+
+        return $this->add($dataClassIterator->getCacheClassName(), $parameters, $dataClassIterator);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
+     *
+     * @return boolean
+     */
+    public function addForNoResult(DataClassNoResultException $exception)
+    {
+        $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), false);
+
+        return true;
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param string[] $record
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForRecord($className, $record, RecordRetrieveParameters $parameters = null)
+    {
+        if (!is_array($record))
+        {
+            throw new Exception(
+                'The RecordResultCache only allows for caching of records. Currently trying to add: ' .
+                gettype($record) . '.'
+            );
+        }
+
+        if ($parameters instanceof RecordRetrieveParameters)
+        {
+            $this->set($className, $parameters->hash(), $record);
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function deleteForDataClass(DataClass $object)
+    {
+        if (!$object instanceof DataClass)
+        {
+            throw new Exception('Not a DataClass');
+        }
+
+        $className = $this->getDataClassCacheClassName($object);
+
+        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
+        {
+            $cacheablePropertyParameters = new DataClassRetrieveParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable($className, $cacheableProperty),
+                    new StaticConditionVariable($object->get_default_property($cacheableProperty))
+                )
+            );
+            $this->set($className, $cacheablePropertyParameters->hash(), null);
+        }
+
+        return true;
     }
 
     /**
@@ -67,6 +297,7 @@ class DataClassRepositoryCache
      *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     *
      * @return boolean
      */
     public function exists($class, DataClassParameters $parameters)
@@ -84,123 +315,32 @@ class DataClassRepositoryCache
     }
 
     /**
-     * Clear the cache for a specific DataClass type
-     *
-     * @param string $class
-     * @return boolean
-     */
-    public function truncate($class)
-    {
-        if (isset($this->cache[$class]))
-        {
-            unset($this->cache[$class]);
-        }
-
-        return true;
-    }
-
-    /**
-     * Clear the cache for a set of specific DataClass types
-     *
-     * @param string[] $classes
-     * @return boolean
-     */
-    public function truncates($classes = array())
-    {
-        foreach ($classes as $class)
-        {
-            if (! $this->truncate($class))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Set the cache value for a specific DataClass object type, hash
-     *
-     * @param string $class
-     * @param string $hash
-     * @param mixed $value
-     */
-    private function set($class, $hash, $value)
-    {
-        $this->cache[$class][$hash] = $value;
-    }
-
-    /**
+     * Get a DataClass object from the cache
      *
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @param mixed $value
-     * @return boolean
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean
      */
-    private function add($className, DataClassParameters $parameters = null, $value)
+    public function get($class, DataClassParameters $parameters)
     {
-        if (! $this->exists($className, $parameters))
+        if ($this->exists($class, $parameters))
         {
-            $this->set($className, $parameters->hash(), $value);
+            return $this->cache[$class][$parameters->hash()];
         }
+        else
 
-        return true;
-    }
-
-    public function reset()
-    {
-        $this->cache = array();
+        {
+            return false;
+        }
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters = null)
-    {
-        if (! $parameters instanceof DataClassRetrieveParameters && $parameters != null)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassServiceCache');
-        }
-
-        if (! $object instanceof DataClass)
-        {
-            $type = is_object($object) ? get_class($object) : gettype($object);
-            throw new Exception(
-                'The DataClassServiceCache only allows for caching of DataClass objects. Currently trying to add: ' .
-                     $type . '.');
-        }
-
-        $className = $this->getDataClassCacheClassName($object);
-
-        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
-        {
-            $value = $object->get_default_property($cacheableProperty);
-            if (isset($value) && ! is_null($value))
-            {
-                $cacheablePropertyParameters = new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($className, $cacheableProperty),
-                        new StaticConditionVariable($value)));
-                $this->set($className, $cacheablePropertyParameters->hash(), $object);
-            }
-        }
-
-        if ($parameters instanceof DataClassRetrieveParameters)
-        {
-            $this->set($className, $parameters->hash(), $object);
-        }
-
-        return true;
-    }
-
-    /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
      * @return string
+     * @throws \ReflectionException
      */
     private function getDataClassCacheClassName(DataClass $object)
     {
@@ -219,168 +359,55 @@ class DataClassRepositoryCache
         }
     }
 
+    public function reset()
+    {
+        $this->cache = array();
+    }
+
     /**
+     * Set the cache value for a specific DataClass object type, hash
      *
-     * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
+     * @param string $class
+     * @param string $hash
+     * @param mixed $value
+     */
+    private function set($class, $hash, $value)
+    {
+        $this->cache[$class][$hash] = $value;
+    }
+
+    /**
+     * Clear the cache for a specific DataClass type
+     *
+     * @param string $class
+     *
      * @return boolean
      */
-    public function addForNoResult(DataClassNoResultException $exception)
+    public function truncate($class)
     {
-        $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), false);
+        if (isset($this->cache[$class]))
+        {
+            unset($this->cache[$class]);
+        }
+
         return true;
     }
 
     /**
+     * Clear the cache for a set of specific DataClass types
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     * @throws \Exception
+     * @param string[] $classes
+     *
      * @return boolean
      */
-    public function deleteForDataClass(DataClass $object)
+    public function truncates($classes = array())
     {
-        if (! $object instanceof DataClass)
+        foreach ($classes as $class)
         {
-            throw new Exception('Not a DataClass');
-        }
-
-        $className = $this->getDataClassCacheClassName($object);
-
-        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
-        {
-            $cacheablePropertyParameters = new DataClassRetrieveParameters(
-                new EqualityCondition(
-                    new PropertyConditionVariable($className, $cacheableProperty),
-                    new StaticConditionVariable($object->get_default_property($cacheableProperty))));
-            $this->set($className, $cacheablePropertyParameters->hash(), null);
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $dataClassIterator
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForDataClassIterator(DataClassIterator $dataClassIterator,
-        DataClassRetrievesParameters $parameters)
-    {
-        if (! $parameters instanceof DataClassRetrievesParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassResultSetCache');
-        }
-
-        if (! $dataClassIterator instanceof DataClassIterator)
-        {
-            $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
-            throw new Exception(
-                'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
-                     $type . '.');
-        }
-
-        return $this->add($dataClassIterator->getCacheClassName(), $parameters, $dataClassIterator);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     * @param integer $count
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForDataClassCount($className, $parameters, $count)
-    {
-        if (! $parameters instanceof DataClassCountParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassCountCache');
-        }
-
-        if (! is_integer($count))
-        {
-            $type = is_object($count) ? get_class($count) : gettype($count);
-            throw new Exception(
-                'The DataClassCountCache cache only allows for caching of integers. Currently trying to add: ' . $type .
-                     '.');
-        }
-
-        return $this->add($className, $parameters, $count);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     * @param string[] $propertyValues
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForDataClassDistinct($className, $parameters, $propertyValues)
-    {
-        if (! $parameters instanceof DataClassDistinctParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassDistinctCache');
-        }
-
-        if (! is_array($propertyValues))
-        {
-            $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
-            throw new Exception(
-                'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
-                     $type . '.');
-        }
-
-        return $this->add($className, $parameters, $propertyValues);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     * @param integer[] $counts
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForDataClassCountGrouped($className, $parameters, $counts)
-    {
-        if (! $parameters instanceof DataClassCountGroupedParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassCountGroupedCache');
-        }
-
-        if (! is_array($counts))
-        {
-            $type = is_object($counts) ? get_class($counts) : gettype($counts);
-            throw new Exception(
-                'The DataClassCountGroupedCache cache only allows for caching of integer arrays. Currently trying to add: ' .
-                     $type . '.');
-        }
-
-        return $this->add($className, $parameters, $counts);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param string[] $record
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     * @throws \Exception
-     * @return boolean
-     */
-    public function addForRecord($className, $record, RecordRetrieveParameters $parameters = null)
-    {
-        if (! is_array($record))
-        {
-            throw new Exception(
-                'The RecordResultCache only allows for caching of records. Currently trying to add: ' . gettype($record) .
-                     '.');
-        }
-
-        if ($parameters instanceof RecordRetrieveParameters)
-        {
-            $this->set($className, $parameters->hash(), $record);
+            if (!$this->truncate($class))
+            {
+                return false;
+            }
         }
 
         return true;

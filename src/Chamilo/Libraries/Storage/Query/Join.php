@@ -18,9 +18,8 @@ class Join implements Hashable
 {
     use HashableTrait;
 
-    // Constants
-    const TYPE_NORMAL = 1;
     const TYPE_LEFT = 2;
+    const TYPE_NORMAL = 1;
     const TYPE_RIGHT = 3;
 
     /**
@@ -50,7 +49,7 @@ class Join implements Hashable
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $type
      */
-    public function __construct($dataClass, Condition $condition = null, $type = self :: TYPE_NORMAL)
+    public function __construct($dataClass, Condition $condition = null, $type = self::TYPE_NORMAL)
     {
         $this->set_data_class($dataClass);
         $this->set_condition($condition);
@@ -58,23 +57,18 @@ class Join implements Hashable
     }
 
     /**
-     * Returns the data class name
      *
-     * @return string
+     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
-    public function get_data_class()
+    public function getHashParts()
     {
-        return $this->data_class;
-    }
+        $hashParts = array();
 
-    /**
-     * Sets the data class name
-     *
-     * @param string $dataClass
-     */
-    public function set_data_class($dataClass)
-    {
-        $this->data_class = $dataClass;
+        $hashParts[] = $this->get_data_class();
+        $hashParts[] = $this->get_condition()->getHashParts();
+        $hashParts[] = $this->get_type();
+
+        return $hashParts;
     }
 
     /**
@@ -98,6 +92,26 @@ class Join implements Hashable
     }
 
     /**
+     * Returns the data class name
+     *
+     * @return string
+     */
+    public function get_data_class()
+    {
+        return $this->data_class;
+    }
+
+    /**
+     * Sets the data class name
+     *
+     * @param string $dataClass
+     */
+    public function set_data_class($dataClass)
+    {
+        $this->data_class = $dataClass;
+    }
+
+    /**
      * Returns the type
      *
      * @return integer
@@ -115,20 +129,5 @@ class Join implements Hashable
     public function set_type($type)
     {
         $this->type = $type;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
-    public function getHashParts()
-    {
-        $hashParts = array();
-
-        $hashParts[] = $this->get_data_class();
-        $hashParts[] = $this->get_condition()->getHashParts();
-        $hashParts[] = $this->get_type();
-
-        return $hashParts;
     }
 }
