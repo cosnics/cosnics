@@ -12,18 +12,11 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::render_cell()
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_prefix()
      */
-    public function render_cell($default_property, $data)
+    public function get_prefix()
     {
-        $data = $data[$default_property];
-
-        if (is_null($data))
-        {
-            $data = '-';
-        }
-
-        return $data;
+        return '';
     }
 
     /**
@@ -36,11 +29,20 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
     }
 
     /**
+     * @param string $default_property
+     * @param string[] $data
      *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_prefix()
+     * @return string
      */
-    public function get_prefix()
+    public function render_cell($default_property, $data)
     {
-        return '';
+        $data = $data[$default_property];
+
+        if (is_null($data))
+        {
+            $data = '-';
+        }
+
+        return $data;
     }
 }

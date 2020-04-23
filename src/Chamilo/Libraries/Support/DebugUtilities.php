@@ -15,6 +15,7 @@ class DebugUtilities
      * @param object $object
      * @param string $title
      * @param integer $backtrace_index
+     *
      * @return string
      */
     public static function show($object, $title = null, $backtrace_index = 0)

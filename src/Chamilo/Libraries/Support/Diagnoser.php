@@ -22,14 +22,8 @@ class Diagnoser
 {
 
     const STATUS_ERROR = 3;
-
     const STATUS_INFORMATION = 4;
-
-    /**
-     * The status's
-     */
     const STATUS_OK = 1;
-
     const STATUS_WARNING = 2;
 
     /**
@@ -124,9 +118,10 @@ class Diagnoser
      */
     public function format_on_off($value)
     {
-        return $value ? Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES) : Translation::get(
-            'ConfirmOff', null, Utilities::COMMON_LIBRARIES
-        );
+        return $value ? $this->getTranslation('ConfirmOn', array(), Utilities::COMMON_LIBRARIES) :
+            $this->getTranslation(
+                'ConfirmOff', array(), Utilities::COMMON_LIBRARIES
+            );
     }
 
     /**
@@ -137,15 +132,29 @@ class Diagnoser
      */
     public function format_yes_no($value)
     {
-        return $value ? Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES) : Translation::get(
-            'ConfirmNo', null, Utilities::COMMON_LIBRARIES
-        );
+        return $value ? $this->getTranslation('ConfirmYes', array(), Utilities::COMMON_LIBRARIES) :
+            $this->getTranslation(
+                'ConfirmNo', array(), Utilities::COMMON_LIBRARIES
+            );
+    }
+
+    /**
+     * @param string $variable
+     * @param string[] $parameters
+     * @param string $context
+     *
+     * @return string
+     */
+    public function getTranslation($variable, $parameters = array(), $context = Utilities::COMMON_LIBRARIES)
+    {
+        return Translation::get($variable, array(), Utilities::COMMON_LIBRARIES);
     }
 
     /**
      * Functions to get the data for the chamilo diagnostics
      *
      * @return string[]
+     * @throws \ReflectionException
      */
     public function get_chamilo_data()
     {
@@ -163,9 +172,9 @@ class Diagnoser
             $writable = is_writable($folder);
             $status = $writable ? self::STATUS_OK : self::STATUS_ERROR;
             $array[] = $this->build_setting(
-                $status, '[FILES]', Translation::get('IsWritable') . ': ' . $folder,
+                $status, '[FILES]', $this->getTranslation('IsWritable') . ': ' . $folder,
                 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no',
-                Translation::get('DirectoryMustBeWritable')
+                $this->getTranslation('DirectoryMustBeWritable')
             );
         }
 
@@ -174,18 +183,18 @@ class Diagnoser
         $exists = !file_exists($installationPath);
         $status = $exists ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
-            $status, '[FILES]', Translation::get('DirectoryExists') . ': ' . $installationPath,
-            'http://be2.php.net/file_exists', $writable, 0, 'yes_no', Translation::get('DirectoryShouldBeRemoved')
+            $status, '[FILES]', $this->getTranslation('DirectoryExists') . ': ' . $installationPath,
+            'http://be2.php.net/file_exists', $writable, 0, 'yes_no', $this->getTranslation('DirectoryShouldBeRemoved')
         );
 
         $date = Configuration::get('Chamilo\Configuration', 'general', 'install_date');
         $date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-            Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $date
+            $this->getTranslation('DateFormatShort', array(), Utilities::COMMON_LIBRARIES) . ', ' .
+            $this->getTranslation('TimeNoSecFormat', array(), Utilities::COMMON_LIBRARIES), $date
         );
         $array[] = $this->build_setting(
-            1, '[INFORMATION]', Translation::get('InstallDate'), '', $date, '', null,
-            Translation::get('InstallDateInfo')
+            1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
+            $this->getTranslation('InstallDateInfo')
         );
 
         return $array;
@@ -217,25 +226,25 @@ class Diagnoser
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[Database]', 'host_info',
             'http://www.php.net/manual/en/function.mysql-get-host-info.php', $host_info, null, null,
-            Translation::get('HostInfo')
+            $this->getTranslation('HostInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[Database]', 'server_info',
             'http://www.php.net/manual/en/function.mysql-get-server-info.php', $server_info, null, null,
-            Translation::get('ServerInfo')
+            $this->getTranslation('ServerInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[Database]', 'client_info',
             'http://www.php.net/manual/en/function.mysql-get-client-info.php', $client_info, null, null,
-            Translation::get('ClientInfo')
+            $this->getTranslation('ClientInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[Database]', 'protocol_version',
             'http://www.php.net/manual/en/function.mysql-get-proto-info.php', $proto_info, null, null,
-            Translation::get('ProtoInfo')
+            $this->getTranslation('ProtoInfo')
         );
 
         return $array;
@@ -269,7 +278,7 @@ class Diagnoser
         $status = $version > '5.2' ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(),
-            '>= 5.2', null, Translation::get('PHPVersionInfo')
+            '>= 5.2', null, $this->getTranslation('PHPVersionInfo')
         );
 
         $setting = ini_get('output_buffering');
@@ -278,7 +287,7 @@ class Diagnoser
         $array[] = $this->build_setting(
             $status, '[INI]', 'output_buffering',
             'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting,
-            'on_off', Translation::get('OutputBufferingInfo')
+            'on_off', $this->getTranslation('OutputBufferingInfo')
         );
 
         $setting = ini_get('file_uploads');
@@ -286,7 +295,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'file_uploads', 'http://www.php.net/manual/en/ini.core.php#ini.file-uploads', $setting,
-            $req_setting, 'on_off', Translation::get('FileUploadsInfo')
+            $req_setting, 'on_off', $this->getTranslation('FileUploadsInfo')
         );
 
         $setting = ini_get('magic_quotes_runtime');
@@ -295,7 +304,7 @@ class Diagnoser
         $array[] = $this->build_setting(
             $status, '[INI]', 'magic_quotes_runtime',
             'http://www.php.net/manual/en/ini.core.php#ini.magic-quotes-runtime', $setting, $req_setting, 'on_off',
-            Translation::get('MagicQuotesRuntimeInfo')
+            $this->getTranslation('MagicQuotesRuntimeInfo')
         );
 
         $setting = ini_get('safe_mode');
@@ -303,7 +312,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'safe_mode', 'http://www.php.net/manual/en/ini.core.php#ini.safe-mode', $setting,
-            $req_setting, 'on_off', Translation::get('SafeModeInfo')
+            $req_setting, 'on_off', $this->getTranslation('SafeModeInfo')
         );
 
         $setting = ini_get('register_globals');
@@ -311,7 +320,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'register_globals', 'http://www.php.net/manual/en/ini.core.php#ini.register-globals',
-            $setting, $req_setting, 'on_off', Translation::get('RegisterGlobalsInfo')
+            $setting, $req_setting, 'on_off', $this->getTranslation('RegisterGlobalsInfo')
         );
 
         $setting = ini_get('short_open_tag');
@@ -319,7 +328,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'short_open_tag', 'http://www.php.net/manual/en/ini.core.php#ini.short-open-tag',
-            $setting, $req_setting, 'on_off', Translation::get('ShortOpenTagInfo')
+            $setting, $req_setting, 'on_off', $this->getTranslation('ShortOpenTagInfo')
         );
 
         $setting = ini_get('magic_quotes_gpc');
@@ -327,7 +336,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'magic_quotes_gpc', 'http://www.php.net/manual/en/ini.core.php#ini.magic_quotes_gpc',
-            $setting, $req_setting, 'on_off', Translation::get('MagicQuotesGpcInfo')
+            $setting, $req_setting, 'on_off', $this->getTranslation('MagicQuotesGpcInfo')
         );
 
         $setting = ini_get('display_errors');
@@ -335,7 +344,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'display_errors', 'http://www.php.net/manual/en/ini.core.php#ini.display_errors',
-            $setting, $req_setting, 'on_off', Translation::get('DisplayErrorsInfo')
+            $setting, $req_setting, 'on_off', $this->getTranslation('DisplayErrorsInfo')
         );
 
         $setting = ini_get('upload_max_filesize');
@@ -355,7 +364,7 @@ class Diagnoser
         $array[] = $this->build_setting(
             $status, '[INI]', 'upload_max_filesize',
             'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null,
-            Translation::get('UploadMaxFilesizeInfo')
+            $this->getTranslation('UploadMaxFilesizeInfo')
         );
 
         $setting = ini_get('default_charset');
@@ -367,23 +376,23 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'default_charset', 'http://www.php.net/manual/en/ini.core.php#ini.default-charset',
-            $setting, $req_setting, null, Translation::get('DefaultCharsetInfo')
+            $setting, $req_setting, null, $this->getTranslation('DefaultCharsetInfo')
         );
 
         $setting = ini_get('max_execution_time');
-        $req_setting = '300 (' . Translation::get('Minimum') . ')';
+        $req_setting = '300 (' . $this->getTranslation('Minimum') . ')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'max_execution_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-execution-time',
-            $setting, $req_setting, null, Translation::get('MaxExecutionTimeInfo')
+            $setting, $req_setting, null, $this->getTranslation('MaxExecutionTimeInfo')
         );
 
         $setting = ini_get('max_input_time');
-        $req_setting = '300 (' . Translation::get('Minimum') . ')';
+        $req_setting = '300 (' . $this->getTranslation('Minimum') . ')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'max_input_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-input-time',
-            $setting, $req_setting, null, Translation::get('MaxInputTimeInfo')
+            $setting, $req_setting, null, $this->getTranslation('MaxInputTimeInfo')
         );
 
         $setting = ini_get('memory_limit');
@@ -402,7 +411,7 @@ class Diagnoser
         }
         $array[] = $this->build_setting(
             $status, '[INI]', 'memory_limit', 'http://www.php.net/manual/en/ini.core.php#ini.memory-limit', $setting,
-            $req_setting, null, Translation::get('MemoryLimitInfo')
+            $req_setting, null, $this->getTranslation('MemoryLimitInfo')
         );
 
         $setting = ini_get('post_max_size');
@@ -421,7 +430,7 @@ class Diagnoser
         }
         $array[] = $this->build_setting(
             $status, '[INI]', 'post_max_size', 'http://www.php.net/manual/en/ini.core.php#ini.post-max-size', $setting,
-            $req_setting, null, Translation::get('PostMaxSizeInfo')
+            $req_setting, null, $this->getTranslation('PostMaxSizeInfo')
         );
 
         $setting = ini_get('variables_order');
@@ -429,7 +438,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'variables_order', 'http://www.php.net/manual/en/ini.core.php#ini.variables-order',
-            $setting, $req_setting, null, Translation::get('VariablesOrderInfo')
+            $setting, $req_setting, null, $this->getTranslation('VariablesOrderInfo')
         );
 
         $setting = ini_get('session.gc_maxlifetime');
@@ -438,7 +447,7 @@ class Diagnoser
         $array[] = $this->build_setting(
             $status, '[SESSION]', 'session.gc_maxlifetime',
             'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null,
-            Translation::get('SessionGCMaxLifetimeInfo')
+            $this->getTranslation('SessionGCMaxLifetimeInfo')
         );
 
         // Extensions
@@ -457,8 +466,8 @@ class Diagnoser
             $loaded = extension_loaded($extension);
             $status = $loaded ? self::STATUS_OK : self::STATUS_ERROR;
             $array[] = $this->build_setting(
-                $status, '[EXTENSION]', Translation::get('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1,
-                'yes_no', Translation::get('ExtensionMustBeLoaded')
+                $status, '[EXTENSION]', $this->getTranslation('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1,
+                'yes_no', $this->getTranslation('ExtensionMustBeLoaded')
             );
         }
 
@@ -477,25 +486,25 @@ class Diagnoser
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]',
             'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null,
-            Translation::get('ServerIPInfo')
+            $this->getTranslation('ServerIPInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_SOFTWARE"]',
             'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_SOFTWARE"], null, null,
-            Translation::get('ServerSoftwareInfo')
+            $this->getTranslation('ServerSoftwareInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["REMOTE_ADDR"]',
             'http://be.php.net/reserved.variables.server', $_SERVER["REMOTE_ADDR"], null, null,
-            Translation::get('ServerRemoteInfo')
+            $this->getTranslation('ServerRemoteInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_USER_AGENT"]',
             'http://be.php.net/reserved.variables.server', $_SERVER["HTTP_USER_AGENT"], null, null,
-            Translation::get('ServerRemoteInfo')
+            $this->getTranslation('ServerRemoteInfo')
         );
 
         $path = $this->manager->get_url(array('section' => Request::get('section')));
@@ -503,18 +512,18 @@ class Diagnoser
         $status = $request != $path ? self::STATUS_ERROR : self::STATUS_OK;
         $array[] = $this->build_setting(
             $status, '[SERVER]', '$_SERVER["REQUEST_URI"]', 'http://be.php.net/reserved.variables.server', $request,
-            $path, null, Translation::get('RequestURIInfo')
+            $path, null, $this->getTranslation('RequestURIInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PROTOCOL"]',
             'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PROTOCOL"], null, null,
-            Translation::get('ServerProtocolInfo')
+            $this->getTranslation('ServerProtocolInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', 'php_uname()', 'http://be2.php.net/php_uname', php_uname(), null,
-            null, Translation::get('UnameInfo')
+            null, $this->getTranslation('UnameInfo')
         );
 
         return $array;
@@ -540,8 +549,9 @@ class Diagnoser
 
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    $section, Translation::get(ucfirst($section) . 'Title'), null, $this->manager->get_url($params),
-                    $current_section == $section, false, DynamicVisualTab::POSITION_LEFT, DynamicVisualTab::DISPLAY_TEXT
+                    $section, $this->getTranslation(ucfirst($section) . 'Title'), null,
+                    $this->manager->get_url($params), $current_section == $section, false,
+                    DynamicVisualTab::POSITION_LEFT, DynamicVisualTab::DISPLAY_TEXT
                 )
             );
         }
