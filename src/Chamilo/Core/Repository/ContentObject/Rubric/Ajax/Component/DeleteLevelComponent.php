@@ -20,7 +20,7 @@ class DeleteLevelComponent extends Manager
      */
     function runAjaxComponent()
     {
-        return $this->getRubricAjaxService()->deleteLevel(
+        return $this->getRubricAjaxService()->removeLevel(
             $this->getRubricDataId(), $this->getVersion(), $this->getLevelData()
         );
     }

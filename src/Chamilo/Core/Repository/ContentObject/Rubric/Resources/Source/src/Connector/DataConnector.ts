@@ -27,7 +27,9 @@ export default class DataConnector {
             'levelData': JSON.stringify(level)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters, function(data) {
+            level.id = data.level.id;
+        });
     }
 
     async addTreeNode(treeNode: TreeNode, parentTreeNode: TreeNode, index: number) {
@@ -99,7 +101,7 @@ export default class DataConnector {
         await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters);
     }
 
-    protected async executeAPIRequest(apiURL: string, parameters: any) {
+    protected async executeAPIRequest(apiURL: string, parameters: any, successCallback: (data: any) => void) {
         this.isSaving = true;
 
         await (async () => {
@@ -116,6 +118,7 @@ export default class DataConnector {
                     (value) => {
                         this.rubricDataId = value.data.rubric.id;
                         this.currentVersion = value.data.rubric.version;
+                        successCallback(value.data);
                     },
                     (reason: any) => {
 
