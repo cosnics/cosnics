@@ -56,7 +56,7 @@ class DataClassCache
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return boolean
+     * @return boolean|mixed
      */
     public static function get($class, DataClassParameters $parameters)
     {

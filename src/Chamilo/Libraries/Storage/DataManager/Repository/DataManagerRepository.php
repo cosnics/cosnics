@@ -15,28 +15,37 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::create()
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return boolean
+     * @throws \Exception
      */
-    public function create(DataClass $object)
+    public function create(DataClass $dataClass)
     {
-        return $object->create();
+        return $dataClass->create();
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::update()
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return boolean
+     * @throws \Exception
      */
-    public function update(DataClass $object)
+    public function delete(DataClass $dataClass)
     {
-        return $object->update();
+        return $dataClass->delete();
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface::delete()
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return boolean
+     * @throws \Exception
      */
-    public function delete(DataClass $object)
+    public function update(DataClass $dataClass)
     {
-        return $object->delete();
+        return $dataClass->update();
     }
 }

@@ -40,6 +40,7 @@ class DisplayOrderRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return boolean
+     * @throws \Exception
      */
     public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass)
     {
@@ -66,10 +67,53 @@ class DisplayOrderRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    {
+        $conditions = array();
+
+        $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
+
+        if ($displayOrderCondition instanceof AndCondition)
+        {
+            $conditions[] = $displayOrderCondition;
+        }
+
+        if ($dataClass->isIdentified())
+        {
+            $conditions[] = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        $this->determinePropertyDataClassName($dataClass), DataClass::PROPERTY_ID
+                    ), new StaticConditionVariable($dataClass->getId())
+                )
+            );
+        }
+
+        if (count($conditions))
+        {
+            $condition = new AndCondition($conditions);
+        }
+        else
+        {
+            $condition = null;
+        }
+
+        return $this->getDataClassRepository()->count(
+            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      * @param string[] $contextProperties
      * @param integer $displayOrder
      *
      * @return boolean
+     * @throws \Exception
      */
     public function deleteDisplayOrderFromContext(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties, int $displayOrder
@@ -136,53 +180,13 @@ class DisplayOrderRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return integer
+     * @throws \Exception
      */
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
     {
         return $this->getDataClassRepository()->retrieveNextValue(
             $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName(),
             $this->getDisplayOrderCondition($dataClass)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return integer
-     */
-    public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
-    {
-        $conditions = array();
-
-        $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
-
-        if ($displayOrderCondition instanceof AndCondition)
-        {
-            $conditions[] = $displayOrderCondition;
-        }
-
-        if ($dataClass->isIdentified())
-        {
-            $conditions[] = new NotCondition(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        $this->determinePropertyDataClassName($dataClass), DataClass::PROPERTY_ID
-                    ), new StaticConditionVariable($dataClass->getId())
-                )
-            );
-        }
-
-        if (count($conditions))
-        {
-            $condition = new AndCondition($conditions);
-        }
-        else
-        {
-            $condition = null;
-        }
-
-        return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($condition)
         );
     }
 
@@ -208,6 +212,7 @@ class DisplayOrderRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \Exception
      */
     protected function getDisplayOrderCondition(DataClassDisplayOrderSupport $dataClass)
     {
@@ -225,6 +230,7 @@ class DisplayOrderRepository
      * @param string[] $contextProperties
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \Exception
      */
     protected function getDisplayOrderConditionForContextProperties(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties
@@ -248,6 +254,7 @@ class DisplayOrderRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @throws \Exception
      */
     protected function getDisplayOrderDataClassProperties(DataClassDisplayOrderSupport $dataClass)
     {
@@ -271,6 +278,7 @@ class DisplayOrderRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     * @throws \Exception
      */
     protected function getDisplayOrderPropertyConditionVariable(DataClassDisplayOrderSupport $dataClass)
     {
@@ -285,6 +293,7 @@ class DisplayOrderRepository
      * @param integer $displayOrder
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition
+     * @throws \Exception
      */
     protected function getDisplayOrderUpdateComparisonCondition(
         DataClassDisplayOrderSupport $dataClass, int $operator, int $displayOrder
@@ -301,6 +310,7 @@ class DisplayOrderRepository
      * @param integer $additionValue
      *
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @throws \Exception
      */
     protected function getDisplayOrderUpdateDataClassProperties(
         DataClassDisplayOrderSupport $dataClass, int $additionValue

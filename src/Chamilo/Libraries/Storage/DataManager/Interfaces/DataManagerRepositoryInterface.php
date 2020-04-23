@@ -16,23 +16,26 @@ interface DataManagerRepositoryInterface
      * Wrapper for the creation of an object
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return boolean
      */
     public function create(DataClass $dataClass);
 
     /**
-     * Wrapper for the update of an object
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @return boolean
-     */
-    public function update(DataClass $dataClass);
-
-    /**
      * Wrapper for the deletion of an object
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return boolean
      */
     public function delete(DataClass $dataClass);
+
+    /**
+     * Wrapper for the update of an object
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
+     * @return boolean
+     */
+    public function update(DataClass $dataClass);
 }
