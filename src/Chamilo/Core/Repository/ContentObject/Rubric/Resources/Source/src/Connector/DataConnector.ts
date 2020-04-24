@@ -39,7 +39,9 @@ export default class DataConnector {
             'newSort': index + 1
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters, function(data) {
+
+        });
     }
 
     async deleteLevel(level: Level) {
@@ -47,7 +49,9 @@ export default class DataConnector {
             'levelData': JSON.stringify(level)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.deleteLevelURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.deleteLevelURL, parameters, function(data) {
+
+        });
     }
 
     async deleteTreeNode(treeNode: TreeNode) {
@@ -55,7 +59,9 @@ export default class DataConnector {
             'treeNodeData': JSON.stringify(treeNode)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.deleteTreeNodeURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.deleteTreeNodeURL, parameters, function(data) {
+
+        });
     }
 
     async moveLevel(level: Level, newIndex: number) {
@@ -64,7 +70,9 @@ export default class DataConnector {
             'newSort': newIndex + 1
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.moveLevelURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.moveLevelURL, parameters, function(data) {
+
+        });
     }
 
     async moveTreeNode(treeNode: TreeNode, newParentNode: TreeNode, newIndex: number) {
@@ -74,7 +82,9 @@ export default class DataConnector {
             'newSort': newIndex + 1
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.moveTreeNodeURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.moveTreeNodeURL, parameters, function(data) {
+
+        });
     }
 
     async updateChoice(choice: Choice) {
@@ -82,7 +92,9 @@ export default class DataConnector {
             'choiceData': JSON.stringify(choice),
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters, function(data) {
+
+        });
     }
 
     async updateLevel(level: Level) {
@@ -90,7 +102,9 @@ export default class DataConnector {
             'levelData': JSON.stringify(level),
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters, function(data) {
+
+        });
     }
 
     async updateTreeNode(treeNode: TreeNode) {
@@ -98,7 +112,9 @@ export default class DataConnector {
             'treeNodeData': JSON.stringify(treeNode),
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters);
+        await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters, function(data) {
+
+        });
     }
 
     protected async executeAPIRequest(apiURL: string, parameters: any, successCallback: (data: any) => void) {
