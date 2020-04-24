@@ -35,8 +35,8 @@ interface StorageUnitDatabaseInterface
     /**
      *
      * @param string $storageUnitName
-     * @param string[] $properties
-     * @param string[] $indexes
+     * @param string[][] $properties
+     * @param string[][][] $indexes
      *
      * @return boolean
      */

@@ -17,8 +17,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
@@ -26,7 +25,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
 
         // if the operator is an equality operator and no value is given, translate to 'is null' equality condition
         if ($this->get_condition()->get_operator() == ComparisonCondition::EQUAL &&
-             is_null($this->get_condition()->get_value()))
+            is_null($this->get_condition()->get_value()))
         {
             return $this->translate_equality_condition_with_empty_value($this->get_condition());
         }
@@ -37,9 +36,36 @@ class ComparisonConditionTranslator extends ConditionTranslator
     }
 
     /**
+     * Translates the (in)equalitycondition with the given operator_string
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string $operator_string
+     *
+     * @return string
+     */
+    private function translate_condition($condition, $operator_string)
+    {
+        return ConditionVariableTranslator::render($condition->get_name()) . ' ' . $operator_string . ' ' .
+            ConditionVariableTranslator::render($condition->get_value());
+    }
+
+    /**
+     * Translates an equality condition with an empty value
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return string
+     */
+    private function translate_equality_condition_with_empty_value($condition)
+    {
+        return ConditionVariableTranslator::render($condition->get_name()) . ' IS NULL';
+    }
+
+    /**
      * Translates the operator to the correct string
      *
      * @param integer $conditionOperator
+     *
      * @return string
      */
     private function translate_operator($conditionOperator)
@@ -66,29 +92,5 @@ class ComparisonConditionTranslator extends ConditionTranslator
         }
 
         return $translated_operator;
-    }
-
-    /**
-     * Translates an equality condition with an empty value
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return string
-     */
-    private function translate_equality_condition_with_empty_value($condition)
-    {
-        return ConditionVariableTranslator::render($condition->get_name()) . ' IS NULL';
-    }
-
-    /**
-     * Translates the (in)equalitycondition with the given operator_string
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param string $operator_string
-     * @return string
-     */
-    private function translate_condition($condition, $operator_string)
-    {
-        return ConditionVariableTranslator::render($condition->get_name()) . ' ' . $operator_string . ' ' .
-             ConditionVariableTranslator::render($condition->get_value());
     }
 }

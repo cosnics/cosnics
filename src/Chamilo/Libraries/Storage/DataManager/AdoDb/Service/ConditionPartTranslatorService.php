@@ -5,9 +5,7 @@ use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *
@@ -40,7 +38,7 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
      *
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
      * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
-     * @param boolean $isQueryCacheEnabled
+     * @param boolean $queryCacheEnabled
      */
     public function __construct(
         ConditionPartTranslatorFactory $conditionPartTranslatorFactory, ConditionPartCache $conditionPartCache,
@@ -72,6 +70,22 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
+     *
+     * @return \Chamilo\Libraries\Storage\Query\ConditionPartTranslator
+     */
+    protected function getConditionPartTranslator(
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
+    )
+    {
+        return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator(
+            $this, $dataClassDatabase, $conditionPart
+        );
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory
      */
     public function getConditionPartTranslatorFactory()
@@ -80,8 +94,7 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory $conditionTranslatorFactory
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
      */
     public function setConditionPartTranslatorFactory(ConditionPartTranslatorFactory $conditionPartTranslatorFactory)
     {
@@ -99,15 +112,6 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
 
     /**
      *
-     * @param boolean $queryCacheEnabled
-     */
-    public function setQueryCacheEnabled($queryCacheEnabled)
-    {
-        $this->queryCacheEnabled = $queryCacheEnabled;
-    }
-
-    /**
-     *
      * @return boolean
      */
     protected function isQueryCacheEnabled()
@@ -117,18 +121,11 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     *
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPartTranslator
+     * @param boolean $queryCacheEnabled
      */
-    protected function getConditionPartTranslator(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
-    )
+    public function setQueryCacheEnabled($queryCacheEnabled)
     {
-        return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator(
-            $this, $dataClassDatabase, $conditionPart
-        );
+        $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
     /**

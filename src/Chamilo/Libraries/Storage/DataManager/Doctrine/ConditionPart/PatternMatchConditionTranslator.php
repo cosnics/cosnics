@@ -13,16 +13,11 @@ class PatternMatchConditionTranslator extends ConditionTranslator
 {
 
     /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition
      */
-    public function translate(bool $enableAliasing = true)
+    public function getCondition()
     {
-        return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
-            ) . ' LIKE ' .
-            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
+        return parent::getCondition();
     }
 
     /**
@@ -49,10 +44,15 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition
+     * @param boolean $enableAliasing
+     *
+     * @return string
      */
-    public function getCondition()
+    public function translate(bool $enableAliasing = true)
     {
-        return parent::getCondition();
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            ) . ' LIKE ' .
+            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
     }
 }

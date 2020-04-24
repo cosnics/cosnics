@@ -5,6 +5,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
 use Doctrine\DBAL\Platforms\SQLServer2008Platform;
 use Doctrine\DBAL\Schema\SQLServerSchemaManager;
+use Exception;
 
 /**
  *
@@ -17,24 +18,12 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
 {
 
     /**
-     * Attempts to establish a connection with the underlying driver.
-     *
-     * @param string[] $parameters
-     * @param string $username
-     * @param string $password
-     * @param string[] $driverOptions
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrinePdoConnection
-     */
-    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = array())
-    {
-        return new MsSqlDoctrinePdoConnection($this->_constructPdoDsn($parameters), $username, $password, $driverOptions);
-    }
-
-    /**
      * Constructs the MsSql PDO DSN.
      *
      * @param string[] $parameters
+     *
      * @return string The DSN.
+     * @throws \Exception
      */
     private function _constructPdoDsn(array $parameters)
     {
@@ -61,26 +50,50 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
         {
             $dsn = 'sqlsrv:Server=' . $parameters['host'] . ';Database=' . $parameters['dbname'];
         }
+        else
+        {
+            throw new Exception('No valid MsSQL extension available, please configure pdo_dblib or pdo_sqlsrv.');
+        }
 
         return $dsn;
     }
 
     /**
+     * Attempts to establish a connection with the underlying driver.
      *
-     * @see \Doctrine\DBAL\Driver::getDatabasePlatform()
+     * @param string[] $parameters
+     * @param string $username
+     * @param string $password
+     * @param string[] $driverOptions
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrinePdoConnection
+     * @throws \Exception
+     */
+    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = array())
+    {
+        return new MsSqlDoctrinePdoConnection(
+            $this->_constructPdoDsn($parameters), $username, $password, $driverOptions
+        );
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Connection $conn
+     *
+     * @return string
+     */
+    public function getDatabase(Connection $conn)
+    {
+        $params = $conn->getParams();
+
+        return $params['dbname'];
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Platforms\SQLServer2008Platform
      */
     public function getDatabasePlatform()
     {
         return new SQLServer2008Platform();
-    }
-
-    /**
-     *
-     * @see \Doctrine\DBAL\Driver::getSchemaManager()
-     */
-    public function getSchemaManager(Connection $conn)
-    {
-        return new SQLServerSchemaManager($conn);
     }
 
     /**
@@ -93,12 +106,12 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
     }
 
     /**
+     * @param \Doctrine\DBAL\Connection $conn
      *
-     * @see \Doctrine\DBAL\Driver::getDatabase()
+     * @return \Doctrine\DBAL\Schema\SQLServerSchemaManager
      */
-    public function getDatabase(Connection $conn)
+    public function getSchemaManager(Connection $conn)
     {
-        $params = $conn->getParams();
-        return $params['dbname'];
+        return new SQLServerSchemaManager($conn);
     }
 }

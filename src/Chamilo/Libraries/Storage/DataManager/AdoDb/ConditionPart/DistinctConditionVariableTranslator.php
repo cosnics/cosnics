@@ -13,6 +13,15 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -43,14 +52,5 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = implode(', ', $distinctStrings);
 
         return implode(' ', $strings);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

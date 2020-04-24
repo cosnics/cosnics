@@ -32,6 +32,43 @@ class ConnectionFactory
 
     /**
      *
+     * @return \ADOConnection
+     */
+    protected function getAdoConnection()
+    {
+        return adoNewConnection('pdo');
+    }
+
+    /**
+     *
+     * @return \ADOConnection
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
+    public function getConnection()
+    {
+        $dataSourceName = $this->getDataSourceName();
+        $connection = $this->getAdoConnection();
+
+        $connection->pConnect(
+            $dataSourceName->getConnectionString(), $dataSourceName->getUsername(), $dataSourceName->getPassword()
+        );
+
+        $connection->SetFetchMode(ADODB_FETCH_ASSOC);
+
+        try
+        {
+            return $connection;
+        }
+        catch (Exception $exception)
+        {
+            throw new ConnectionException(
+                'Could not connect to the database. Please contact your system administrator.'
+            );
+        }
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName
      */
     public function getDataSourceName()
@@ -46,41 +83,5 @@ class ConnectionFactory
     public function setDataSourceName($dataSourceName)
     {
         $this->dataSourceName = $dataSourceName;
-    }
-
-    /**
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @return \ADOConnection
-     */
-    public function getConnection()
-    {
-        $dataSourceName = $this->getDataSourceName();
-        $connection = $this->getAdoConnection();
-
-        $connection->pConnect(
-            $dataSourceName->getConnectionString(),
-            $dataSourceName->get_username(),
-            $dataSourceName->get_password());
-
-        $connection->SetFetchMode(ADODB_FETCH_ASSOC);
-
-        try
-        {
-            return $connection;
-        }
-        catch (Exception $exception)
-        {
-            throw new ConnectionException('Could not connect to the database. Please contact your system administrator.');
-        }
-    }
-
-    /**
-     *
-     * @return \ADOConnection
-     */
-    protected function getAdoConnection()
-    {
-        return adoNewConnection('pdo');
     }
 }

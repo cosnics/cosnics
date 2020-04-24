@@ -14,6 +14,14 @@ class InConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -66,13 +74,5 @@ class InConditionTranslator extends ConditionTranslator
         }
 
         return $value;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }

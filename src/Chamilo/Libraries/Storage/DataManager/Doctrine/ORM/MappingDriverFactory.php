@@ -58,7 +58,33 @@ class MappingDriverFactory
     public function __construct(Configuration $doctrineConfiguration, $chamiloRootPath = null)
     {
         $this->doctrineConfiguration = $doctrineConfiguration;
-        $this->chamiloRootPath = ! is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
+        $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
+    }
+
+    /**
+     * Helper function to create absolute mapping paths based on given relative mapping paths
+     *
+     * @param string $type
+     * @param string[] $mappingPaths
+     *
+     * @return string[]
+     */
+    protected function createAbsoluteMappingPaths($type, $mappingPaths)
+    {
+        foreach ($mappingPaths as $index => $mappingPath)
+        {
+            $absoluteMappingPath = realpath($this->chamiloRootPath . $mappingPath);
+            $mappingPaths[$index] = $absoluteMappingPath;
+
+            if (!is_dir($absoluteMappingPath))
+            {
+                throw new InvalidArgumentException(
+                    'The given ' . $type . ' mapping path "' . $mappingPath . '" must be an existing directory'
+                );
+            }
+        }
+
+        return $mappingPaths;
     }
 
     /**
@@ -67,7 +93,8 @@ class MappingDriverFactory
      * processed and validated with the configuration processor
      *
      * @param string[] $mappingConfiguration
-     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
+     *
+     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain
      */
     public function createMappingDriver(array $mappingConfiguration = array())
     {
@@ -75,14 +102,14 @@ class MappingDriverFactory
 
         $defaultDriver = new MappingDriverChain();
 
-        if (array_key_exists('default', $mappingConfiguration) && ! empty($mappingConfiguration['default']))
+        if (array_key_exists('default', $mappingConfiguration) && !empty($mappingConfiguration['default']))
         {
             $annotationPaths = $this->createAbsoluteMappingPaths('annotation', $mappingConfiguration['default']);
 
             $defaultDriver = $this->doctrineConfiguration->newDefaultAnnotationDriver($annotationPaths, false);
         }
 
-        if (array_key_exists('custom', $mappingConfiguration) && ! empty($mappingConfiguration['custom']))
+        if (array_key_exists('custom', $mappingConfiguration) && !empty($mappingConfiguration['custom']))
         {
             $mappingDriverChain = new MappingDriverChain();
             $mappingDriverChain->setDefaultDriver($defaultDriver);
@@ -126,36 +153,14 @@ class MappingDriverFactory
      * Processes the given configuration
      *
      * @param string[] $mappingConfiguration
-     * @return string[]
+     *
+     * @return string[][][]
      */
     protected function processConfiguration(array $mappingConfiguration = array())
     {
         $doctrineORMMappingsConfiguration = new DoctrineORMMappingsConfiguration();
         $treeNode = $doctrineORMMappingsConfiguration->getConfigTreeBuilder()->buildTree();
+
         return $treeNode->finalize($mappingConfiguration);
-    }
-
-    /**
-     * Helper function to create absolute mapping paths based on given relative mapping paths
-     *
-     * @param string $type
-     * @param string[] $mappingPaths
-     * @return string[]
-     */
-    protected function createAbsoluteMappingPaths($type, $mappingPaths)
-    {
-        foreach ($mappingPaths as $index => $mappingPath)
-        {
-            $absoluteMappingPath = realpath($this->chamiloRootPath . $mappingPath);
-            $mappingPaths[$index] = $absoluteMappingPath;
-
-            if (! is_dir($absoluteMappingPath))
-            {
-                throw new InvalidArgumentException(
-                    'The given ' . $type . ' mapping path "' . $mappingPath . '" must be an existing directory');
-            }
-        }
-
-        return $mappingPaths;
     }
 }

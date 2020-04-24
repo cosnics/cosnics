@@ -17,8 +17,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     * @return string
      */
     public function translate()
     {

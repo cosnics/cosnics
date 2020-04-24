@@ -11,25 +11,10 @@ class RecordProcessor
 {
 
     /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param string[] $record
-     * @return string[]
-     */
-    public function processRecord($record, $typeMap = array())
-    {
-        foreach ($record as $key => &$field)
-        {
-            $field = $this->processField($field, $this->determineFieldTypeFromMap($key, $typeMap));
-        }
-
-        return $record;
-    }
-
-    /**
      *
      * @param string $key
      * @param string[] $typeMap
+     *
      * @return NULL|string
      */
     protected function determineFieldTypeFromMap($key, $typeMap = array())
@@ -40,6 +25,8 @@ class RecordProcessor
     /**
      *
      * @param mixed $field
+     * @param string $fieldType
+     *
      * @return mixed
      */
     protected function processField($field, $fieldType = null)
@@ -55,8 +42,27 @@ class RecordProcessor
     }
 
     /**
+     * Processes a given record by transforming to the correct type
+     *
+     * @param string[] $record
+     * @param string[] $typeMap
+     *
+     * @return string[]
+     */
+    public function processRecord($record, $typeMap = array())
+    {
+        foreach ($record as $key => &$field)
+        {
+            $field = $this->processField($field, $this->determineFieldTypeFromMap($key, $typeMap));
+        }
+
+        return $record;
+    }
+
+    /**
      *
      * @param mixed $field
+     *
      * @return string
      */
     protected function processResource($field)
@@ -65,7 +71,7 @@ class RecordProcessor
         {
             $data = '';
 
-            while (! feof($field))
+            while (!feof($field))
             {
                 $data .= fread($field, 1024);
             }

@@ -13,6 +13,14 @@ class AggregateConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -43,13 +51,5 @@ class AggregateConditionTranslator extends ConditionTranslator
         }
 
         return $string;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }

@@ -16,8 +16,7 @@ class SubselectConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
@@ -45,7 +44,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         if ($this->get_condition()->get_condition())
         {
             $string[] = 'WHERE ';
-            $string[] = ConditionTranslator::render($this->get_condition()->get_condition(), $alias);
+            $string[] = ConditionTranslator::render($this->get_condition()->get_condition());
         }
 
         $string[] = ')';

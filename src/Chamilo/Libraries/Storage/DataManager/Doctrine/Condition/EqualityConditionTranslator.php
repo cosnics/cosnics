@@ -15,8 +15,7 @@ class EqualityConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
@@ -25,7 +24,9 @@ class EqualityConditionTranslator extends ConditionTranslator
             return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' IS NULL';
         }
 
-        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator::render(
-            $this->get_condition()->get_value());
+        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' = ' .
+            ConditionVariableTranslator::render(
+                $this->get_condition()->get_value()
+            );
     }
 }

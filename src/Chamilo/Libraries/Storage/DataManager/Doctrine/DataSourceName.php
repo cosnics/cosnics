@@ -49,7 +49,7 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
             case self::DRIVER_OCI :
             default :
                 throw new Exception(
-                    'The requested driver (' . $this->get_driver() .
+                    'The requested driver (' . $this->getDriver() .
                     ') is not available in Doctrine. Please provide a driver for Doctrine or choose another implementation'
                 );
                 break;

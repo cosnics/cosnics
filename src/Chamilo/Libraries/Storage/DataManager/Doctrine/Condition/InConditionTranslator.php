@@ -17,14 +17,13 @@ class InConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
         $values = $this->get_condition()->get_values();
 
-        if (! is_array($values))
+        if (!is_array($values))
         {
             if (is_scalar($values))
             {
@@ -37,7 +36,8 @@ class InConditionTranslator extends ConditionTranslator
             else
             {
                 throw new InvalidArgumentException(
-                    'An InCondition only accepts an array or a scalar as input for the values');
+                    'An InCondition only accepts an array or a scalar as input for the values'
+                );
             }
         }
 

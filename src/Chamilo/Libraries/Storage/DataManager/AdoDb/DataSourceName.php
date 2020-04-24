@@ -13,39 +13,6 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_implemented_driver()
-     */
-    public function getImplementedDriver()
-    {
-        switch ($this->getDriver())
-        {
-            case self::DRIVER_PGSQL :
-                return self::DRIVER_PGSQL;
-                break;
-            case self::DRIVER_SQLITE :
-                return self::DRIVER_SQLITE;
-                break;
-            case self::DRIVER_MYSQL :
-            // Deprecated option for backwards compatibility with older configuration files
-            case 'mysqli' :
-                return self::DRIVER_MYSQL;
-                break;
-            case self::DRIVER_MSSQL :
-                return 'sqlsrv';
-                break;
-            case self::DRIVER_OCI :
-                return self::DRIVER_OCI;
-                break;
-            default :
-                throw new Exception(
-                    'The requested driver (' . $this->get_driver() .
-                         ') is not available in ADOdb. Please provide a driver for ADOdb or choose another implementation');
-                break;
-        }
-    }
-
-    /**
-     *
      * @return string
      */
     public function getConnectionString()
@@ -66,5 +33,39 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
         $string[] = 'charset=' . $this->getCharset();
 
         return implode('', $string);
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getImplementedDriver()
+    {
+        switch ($this->getDriver())
+        {
+            case self::DRIVER_PGSQL :
+                return self::DRIVER_PGSQL;
+                break;
+            case self::DRIVER_SQLITE :
+                return self::DRIVER_SQLITE;
+                break;
+            case self::DRIVER_MYSQL :
+                // Deprecated option for backwards compatibility with older configuration files
+            case 'mysqli' :
+                return self::DRIVER_MYSQL;
+                break;
+            case self::DRIVER_MSSQL :
+                return 'sqlsrv';
+                break;
+            case self::DRIVER_OCI :
+                return self::DRIVER_OCI;
+                break;
+            default :
+                throw new Exception(
+                    'The requested driver (' . $this->getDriver() .
+                    ') is not available in ADOdb. Please provide a driver for ADOdb or choose another implementation'
+                );
+                break;
+        }
     }
 }

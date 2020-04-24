@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
 /**
  *
@@ -13,6 +13,14 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  */
 class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
 
     /**
      * @param boolean $enableAliasing
@@ -56,13 +64,5 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = ')';
 
         return implode(' ', $strings);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

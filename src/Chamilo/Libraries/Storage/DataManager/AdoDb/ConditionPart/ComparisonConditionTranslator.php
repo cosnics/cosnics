@@ -14,6 +14,14 @@ class ComparisonConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -31,6 +39,39 @@ class ComparisonConditionTranslator extends ConditionTranslator
 
             return $this->translateCondition($this->getCondition(), $operatorString, $enableAliasing);
         }
+    }
+
+    /**
+     * Translates the (in)equalitycondition with the given operator_string
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition $condition
+     * @param string $operatorString
+     *
+     * @return string
+     */
+    private function translateCondition(ComparisonCondition $condition, $operatorString, bool $enableAliasing = true)
+    {
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $condition->get_name(), $enableAliasing
+            ) . ' ' . $operatorString . ' ' . $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $condition->get_value(), $enableAliasing
+            );
+    }
+
+    /**
+     * Translates an equality condition with an empty value
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition $condition
+     *
+     * @return string
+     */
+    private function translateEqualityConditionWithEmptyValue(
+        ComparisonCondition $condition, bool $enableAliasing = true
+    )
+    {
+        return $this->getConditionPartTranslatorService()->translate(
+                $this->getDataClassDatabase(), $condition->get_name(), $enableAliasing
+            ) . ' IS NULL';
     }
 
     /**
@@ -64,46 +105,5 @@ class ComparisonConditionTranslator extends ConditionTranslator
         }
 
         return $translatedOperator;
-    }
-
-    /**
-     * Translates an equality condition with an empty value
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition $condition
-     *
-     * @return string
-     */
-    private function translateEqualityConditionWithEmptyValue(
-        ComparisonCondition $condition, bool $enableAliasing = true
-    )
-    {
-        return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $condition->get_name(), $enableAliasing
-            ) . ' IS NULL';
-    }
-
-    /**
-     * Translates the (in)equalitycondition with the given operator_string
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition $condition
-     * @param string $operatorString
-     *
-     * @return string
-     */
-    private function translateCondition(ComparisonCondition $condition, $operatorString, bool $enableAliasing = true)
-    {
-        return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $condition->get_name(), $enableAliasing
-            ) . ' ' . $operatorString . ' ' . $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $condition->get_value(), $enableAliasing
-            );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }

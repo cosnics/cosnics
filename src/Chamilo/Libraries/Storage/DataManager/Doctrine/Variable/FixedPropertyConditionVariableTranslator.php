@@ -16,17 +16,15 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\PropertyConditionVariableTranslator::translate()
+     * @return string
      */
     public function translate()
     {
         $class_name = $this->get_condition_variable()->get_class();
 
-        $table_alias = DataManager::getInstance()->get_alias(
-            $class_name::get_table_name());
+        $table_alias = DataManager::getInstance()->get_alias($class_name::get_table_name());
 
         return Database::escape_column_name($this->get_condition_variable()->get_property(), $table_alias) . ' AS ' .
-             $this->get_condition_variable()->get_alias();
+            $this->get_condition_variable()->get_alias();
     }
 }

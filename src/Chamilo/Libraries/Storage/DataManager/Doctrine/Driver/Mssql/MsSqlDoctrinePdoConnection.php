@@ -15,9 +15,13 @@ use PDO;
 class MsSqlDoctrinePdoConnection extends PDOConnection implements Connection
 {
 
+    public function getServerVersion()
+    {
+        return null;
+    }
+
     /**
-     *
-     * @see \Doctrine\DBAL\Driver\PDOConnection::query()
+     * @return \Doctrine\DBAL\Driver\Statement
      */
     public function query()
     {
@@ -26,16 +30,11 @@ class MsSqlDoctrinePdoConnection extends PDOConnection implements Connection
         $stmt = $this->prepare($sql);
         $stmt->execute();
 
-        if (! extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
+        if (!extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
         {
             $stmt->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
         }
 
         return $stmt;
-    }
-
-    public function getServerVersion()
-    {
-        return null;
     }
 }

@@ -86,7 +86,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function __construct(
         ADOConnection $connection, StorageAliasGenerator $storageAliasGenerator,
         ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
-        ParametersProcessor $parametersProcessor, RecordProcessor $recordProcessor = null)
+        ParametersProcessor $parametersProcessor, RecordProcessor $recordProcessor = null
+    )
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
@@ -98,125 +99,147 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @return \ADOConnection
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return string
+     * @throws \ReflectionException
      */
-    public function getConnection()
+    protected function buildBasicRecordsSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
-        return $this->connection;
+        $queryBuilder = new QueryBuilder();
+
+        $queryBuilder->from(
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+        );
+
+        $queryBuilder = $this->getParametersProcessor()->processParameters(
+            $this, $queryBuilder, $parameters, $dataClassName
+        );
+
+        return $queryBuilder->getSQL();
     }
 
     /**
      *
-     * @param \ADOConnection $connection
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function setConnection(ADOConnection $connection)
+    protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
     {
-        $this->connection = $connection;
+        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        {
+            return $this->buildRetrievesSql($dataClassName, $parameters);
+        }
+        else
+        {
+            return $this->buildBasicRecordsSql($dataClassName, $parameters);
+        }
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return string
+     * @throws \Exception
      */
-    public function getStorageAliasGenerator()
+    protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
-        return $this->storageAliasGenerator;
+        return $this->buildBasicRecordsSql(
+            $dataClassName,
+            $this->getParametersProcessor()->handleDataClassRetrievesParameters($dataClassName, $parameters)
+        );
     }
 
     /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     * @return boolean|integer
+     * @throws \ReflectionException
      */
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
+    public function count($dataClassName, DataClassCountParameters $parameters)
     {
-        $this->storageAliasGenerator = $storageAliasGenerator;
+        $queryBuilder = new QueryBuilder();
+
+        $queryBuilder->from(
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+        );
+
+        $queryBuilder = $this->getParametersProcessor()->processParameters(
+            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountParameters($parameters),
+            $dataClassName
+        );
+
+        $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
+
+        if ($statement instanceof ADORecordSet)
+        {
+            $record = $statement->FetchRow();
+
+            return (int) array_shift($record);
+        }
+        else
+        {
+            $this->handleError(new Exception('Count Failed. Query: ' . $queryBuilder->getSQL()));
+
+            return false;
+        }
     }
 
     /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     * @return boolean|integer[]
+     * @throws \ReflectionException
      */
-    public function getExceptionLogger()
+    public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
     {
-        return $this->exceptionLogger;
+        $queryBuilder = new QueryBuilder();
+
+        $queryBuilder->from(
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+        );
+
+        $queryBuilder = $this->getParametersProcessor()->processParameters(
+            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountGroupedParameters($parameters),
+            $dataClassName
+        );
+
+        $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
+
+        if ($statement instanceof ADORecordSet)
+        {
+            $counts = array();
+            while ($record = $statement->FetchRow())
+            {
+                $counts[array_shift($record)] = array_pop($record);
+            }
+
+            $record = $statement->FetchRow();
+
+            return $counts;
+        }
+        else
+        {
+            $this->handleError(new Exception('Count Grouped Failed. Query: ' . $queryBuilder->getSQL()));
+
+            return false;
+        }
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @param boolean $autoAssignIdentifier
      *
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     */
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
-    {
-        $this->exceptionLogger = $exceptionLogger;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService
-     */
-    public function getConditionPartTranslatorService()
-    {
-        return $this->conditionPartTranslatorService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService $conditionPartTranslatorService
-     */
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
-    {
-        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor
-     */
-    public function getRecordProcessor()
-    {
-        return $this->recordProcessor;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor $recordProcessor
-     */
-    public function setRecordProcessor(RecordProcessor $recordProcessor)
-    {
-        $this->recordProcessor = $recordProcessor;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor
-     */
-    public function getParametersProcessor()
-    {
-        return $this->parametersProcessor;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor $parametersProcessor
-     */
-    public function setParametersProcessor(ParametersProcessor $parametersProcessor)
-    {
-        $this->parametersProcessor = $parametersProcessor;
-    }
-
-    /**
-     *
-     * @param \Exception $exception
-     */
-    protected function handleError(Exception $exception)
-    {
-        $this->getExceptionLogger()->logException(
-            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::create()
+     * @return boolean
+     * @throws \ReflectionException
      */
     public function create(DataClass $dataClass, $autoAssignIdentifier = true)
     {
@@ -230,7 +253,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $objectTableName = $dataClass->get_table_name();
         }
 
-        $objectProperties = $dataClass->get_default_properties();
+        $objectProperties = $dataClass->getDefaultProperties();
 
         if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
         {
@@ -257,7 +280,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $objectProperties = $dataClass->get_additional_properties();
                 $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-                $insertSql = $this->getConnection()->GetInsertSQL($dataClass->get_table_name(), $objectProperties);
+                $tableName = $dataClass->get_table_name();
+                $insertSql = $this->getConnection()->GetInsertSQL($tableName, $objectProperties);
                 $result = $this->getConnection()->Execute($insertSql);
 
                 if ($result === false)
@@ -277,8 +301,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
+     * @param string $dataClassName
+     * @param string[] $record
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::createRecord()
+     * @return boolean
      */
     public function createRecord($dataClassName, $record)
     {
@@ -303,146 +329,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieve()
-     */
-    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
-    {
-        return $this->fetchRecord(
-            $dataClassName,
-            $this->getParametersProcessor()->handleDataClassRetrieveParameters($dataClassName, $parameters));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::record()
-     */
-    public function record($dataClassName, RecordRetrieveParameters $parameters)
-    {
-        if (! $parameters->getDataClassProperties() instanceof DataClassProperties)
-        {
-            return $this->retrieve($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->fetchRecord($dataClassName, $parameters);
-        }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieves()
-     */
-    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
-    {
-        $statement = $this->getRecordsResult(
-            $this->buildRetrievesSql($dataClassName, $parameters),
-            $dataClassName,
-            $parameters);
-
-        return $this->fetchRecords($statement);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::records()
-     */
-    public function records($dataClassName, RecordRetrievesParameters $parameters)
-    {
-        $statement = $this->getRecordsResult(
-            $this->buildRecordsSql($dataClassName, $parameters),
-            $dataClassName,
-            $parameters);
-
-        return $this->fetchRecords($statement);
-    }
-
-    /**
-     * @param string $dataClassStorageUnitName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param string[] $propertiesToUpdate
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return boolean
-     * @throws \Exception
-     */
-    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
-    {
-        $queryBuilder = new QueryBuilder();
-        $queryBuilder->update($dataClassStorageUnitName, $this->getAlias($dataClassStorageUnitName));
-
-        foreach ($propertiesToUpdate as $key => $value)
-        {
-            $queryBuilder->set($key, $this->escape($value));
-        }
-
-        if ($condition instanceof Condition)
-        {
-            $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
-        }
-        else
-        {
-            throw new Exception('Cannot update records without a condition');
-        }
-
-        $result = $this->getConnection()->Execute($queryBuilder->getSQL());
-
-        if ($result === false)
-        {
-            $this->handleError(new Exception('Update Failed. Query: ' . $queryBuilder->getSQL()));
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::updates()
-     */
-    public function updates($dataClassName, DataClassProperties $properties, Condition $condition = null)
-    {
-        if (count($properties->get()) > 0)
-        {
-            $queryBuilder = new QueryBuilder();
-            $queryBuilder->update($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
-
-            foreach ($properties->get() as $dataClassProperty)
-            {
-                $queryBuilder->set(
-                    $this->getConditionPartTranslatorService()->translateConditionVariable(
-                        $this,
-                        $dataClassProperty->get_property()),
-                    $this->getConditionPartTranslatorService()->translateConditionVariable(
-                        $this,
-                        $dataClassProperty->get_value()));
-            }
-
-            if ($condition)
-            {
-                $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
-            }
-            else
-            {
-                throw new Exception('Cannot update records without a condition');
-            }
-
-            $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
-
-            if ($statement === false)
-            {
-                $this->handleError(new Exception('Insert Failed. Query: ' . $queryBuilder->getSQL()));
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::delete()
      */
     public function delete($dataClassName, Condition $condition = null)
     {
@@ -451,7 +341,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if (isset($condition))
         {
-            $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
+            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
         }
 
         $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
@@ -467,96 +357,24 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::count()
-     */
-    public function count($dataClassName, DataClassCountParameters $parameters)
-    {
-        $queryBuilder = new QueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName)));
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this,
-            $queryBuilder,
-            $this->getParametersProcessor()->handleDataClassCountParameters($parameters),
-            $dataClassName);
-
-        $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
-
-        if ($statement instanceof ADORecordSet)
-        {
-            $record = $statement->FetchRow();
-
-            return (int) array_shift($record);
-        }
-        else
-        {
-            $this->handleError(new Exception('Count Failed. Query: ' . $queryBuilder->getSQL()));
-
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::countGrouped()
-     */
-    public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
-    {
-        $queryBuilder = new QueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName)));
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this,
-            $queryBuilder,
-            $this->getParametersProcessor()->handleDataClassCountGroupedParameters($parameters),
-            $dataClassName);
-
-        $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
-
-        if ($statement instanceof ADORecordSet)
-        {
-            $counts = array();
-            while ($record = $statement->FetchRow())
-            {
-                $counts[array_shift($record)] = array_pop($record);
-            }
-
-            $record = $statement->FetchRow();
-
-            return $counts;
-        }
-        else
-        {
-            $this->handleError(new Exception('Count Grouped Failed. Query: ' . $queryBuilder->getSQL()));
-
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::distinct()
+     * @return string[]|boolean
+     * @throws \ReflectionException
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
         $queryBuilder = new QueryBuilder();
 
         $queryBuilder->from(
-            $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName)));
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+        );
 
         $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this,
-            $queryBuilder,
-            $this->getParametersProcessor()->handleDataClassDistinctParameters($parameters),
-            $dataClassName);
+            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassDistinctParameters($parameters),
+            $dataClassName
+        );
 
         $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
@@ -588,14 +406,414 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::transactional()
+     * @param string $text
+     * @param boolean $escapeWildcards
+     *
+     * @return string
+     */
+    protected function escape($text, $escapeWildcards = false)
+    {
+        if (!is_null($text))
+        {
+            return $this->quote($text);
+        }
+        else
+        {
+            return 'NULL';
+        }
+    }
+
+    /**
+     * @param string $columnName
+     * @param string $storageUnitAlias
+     *
+     * @return string
+     */
+    public function escapeColumnName($columnName, $storageUnitAlias = null)
+    {
+        if (!empty($storageUnitAlias))
+        {
+            return $storageUnitAlias . '.' . $columnName;
+        }
+        else
+        {
+            return $columnName;
+        }
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     */
+    protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
+    {
+        $queryBuilder = new QueryBuilder();
+
+        $queryBuilder->from(
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+        );
+
+        $queryBuilder = $this->getParametersProcessor()->processParameters(
+            $this, $queryBuilder, $parameters, $dataClassName
+        );
+
+        $sqlQuery = $queryBuilder->getSQL();
+
+        /**
+         *
+         * @var \ADORecordSet $statement
+         */
+        $statement = $this->getConnection()->SelectLimit($sqlQuery, $parameters->getCount(), $parameters->getOffset());
+
+        if ($statement instanceof ADORecordSet)
+        {
+            $record = $statement->FetchRow();
+        }
+        else
+        {
+            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
+            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+        }
+
+        if ($record === false)
+        {
+            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
+            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+        }
+
+        if (is_null($record) || !is_array($record) || empty($record))
+        {
+            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+        }
+
+        return $this->processRecord($record);
+    }
+
+    /**
+     *
+     * @param \ADORecordSet $statement
+     *
+     * @return string[][]
+     */
+    protected function fetchRecords(ADORecordSet $statement)
+    {
+        $records = array();
+
+        while ($record = $statement->FetchRow())
+        {
+            $records[] = $this->processRecord($record);
+        }
+
+        return $records;
+    }
+
+    /**
+     * @param string $dataClassStorageUnitName
+     *
+     * @return string
+     */
+    public function getAlias($dataClassStorageUnitName)
+    {
+        return $this->getStorageAliasGenerator()->getTableAlias($dataClassStorageUnitName);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService
+     */
+    public function getConditionPartTranslatorService()
+    {
+        return $this->conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     */
+    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
+    {
+        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @return \ADOConnection
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     *
+     * @param \ADOConnection $connection
+     */
+    public function setConnection(ADOConnection $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    public function getExceptionLogger()
+    {
+        return $this->exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     */
+    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor
+     */
+    public function getParametersProcessor()
+    {
+        return $this->parametersProcessor;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor $parametersProcessor
+     */
+    public function setParametersProcessor(ParametersProcessor $parametersProcessor)
+    {
+        $this->parametersProcessor = $parametersProcessor;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor
+     */
+    public function getRecordProcessor()
+    {
+        return $this->recordProcessor;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor $recordProcessor
+     */
+    public function setRecordProcessor(RecordProcessor $recordProcessor)
+    {
+        $this->recordProcessor = $recordProcessor;
+    }
+
+    /**
+     *
+     * @param string $sql
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     *
+     * @return \ADORecordSet
+     * @throws DataClassNoResultException
+     */
+    protected function getRecordsResult($sql, $dataClassName, $parameters)
+    {
+        $recordSet = $this->getConnection()->SelectLimit($sql, $parameters->getCount(), $parameters->getOffset());
+
+        if ($recordSet === false)
+        {
+            $this->handleError(new Exception('No Records Found. Query: ' . $sql));
+            throw new DataClassNoResultException($dataClassName, $parameters, $sql);
+        }
+        else
+        {
+            return $recordSet;
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    public function getStorageAliasGenerator()
+    {
+        return $this->storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     */
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
+    {
+        $this->storageAliasGenerator = $storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @param \Exception $exception
+     */
+    protected function handleError(Exception $exception)
+    {
+        $this->getExceptionLogger()->logException(
+            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
+        );
+    }
+
+    /**
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    public static function package()
+    {
+        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    protected function prepareTableName($dataClassName)
+    {
+        if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
+            get_parent_class($dataClassName) == CompositeDataClass::class)
+        {
+            $tableName = $dataClassName::get_table_name();
+        }
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::is_extended())
+        {
+            $tableName = $dataClassName::get_table_name();
+        }
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
+        {
+            $parent = $dataClassName::parent_class_name();
+            $tableName = $parent::get_table_name();
+        }
+        else
+        {
+            $tableName = $dataClassName::get_table_name();
+        }
+
+        return $tableName;
+    }
+
+    /**
+     * Processes a given record by transforming to the correct type
+     *
+     * @param mixed[] $record
+     *
+     * @return mixed[]
+     */
+    protected function processRecord($record)
+    {
+        if ($this->getRecordProcessor() instanceof RecordProcessor)
+        {
+            return $this->getRecordProcessor()->processRecord($record);
+        }
+
+        return $record;
+    }
+
+    /**
+     * @param string $value
+     * @param string $type
+     *
+     * @return string
+     */
+    public function quote($value, $type = null)
+    {
+        return $this->getConnection()->Quote($value);
+    }
+
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     */
+    public function record($dataClassName, RecordRetrieveParameters $parameters)
+    {
+        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        {
+            return $this->retrieve($dataClassName, $parameters);
+        }
+        else
+        {
+            return $this->fetchRecord($dataClassName, $parameters);
+        }
+    }
+
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
+     * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
+     */
+    public function records($dataClassName, RecordRetrievesParameters $parameters)
+    {
+        $statement = $this->getRecordsResult(
+            $this->buildRecordsSql($dataClassName, $parameters), $dataClassName, $parameters
+        );
+
+        return $this->fetchRecords($statement);
+    }
+
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
+     */
+    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
+    {
+        return $this->fetchRecord(
+            $dataClassName,
+            $this->getParametersProcessor()->handleDataClassRetrieveParameters($dataClassName, $parameters)
+        );
+    }
+
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return string[]|\string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
+     */
+    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
+    {
+        $statement = $this->getRecordsResult(
+            $this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters
+        );
+
+        return $this->fetchRecords($statement);
+    }
+
+    /**
+     * @param mixed $function
+     *
+     * @return mixed
      */
     public function transactional($function)
     {
-        $throwOnFalse = function ($connection) use ($function)
-        {
+        $throwOnFalse = function ($connection) use ($function) {
             $result = call_user_func($function, $connection);
-            if (! $result)
+            if (!$result)
             {
                 throw new Exception();
             }
@@ -629,264 +847,100 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param boolean $enableAliasing
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::getAlias()
-     */
-    public function getAlias($dataClassStorageUnitName)
-    {
-        return $this->getStorageAliasGenerator()->getTableAlias($dataClassStorageUnitName);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::translateCondition()
+     * @return string
      */
     public function translateCondition(Condition $condition, bool $enableAliasing = true)
     {
-        return $this->getConditionPartTranslatorService()->translateCondition($this, $condition, $enableAliasing);
+        return $this->getConditionPartTranslatorService()->translate($this, $condition, $enableAliasing);
     }
 
     /**
+     * @param string $dataClassStorageUnitName
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string[] $propertiesToUpdate
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::quote()
+     * @return boolean
+     * @throws \Exception
      */
-    public function quote($value, $type = null, $quote = true, $escapeWildcards = false)
-    {
-        return $this->getConnection()->Quote($value, $type, $quote, $escapeWildcards);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::escapeColumnName()
-     */
-    public function escapeColumnName($columnName, $storageUnitAlias = null)
-    {
-        if (! empty($storageUnitAlias))
-        {
-            return $storageUnitAlias . '.' . $columnName;
-        }
-        else
-        {
-            return $columnName;
-        }
-    }
-
-    /**
-     *
-     * @param string $sql
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @throws DataClassNoResultException
-     * @return \ADORecordSet
-     */
-    protected function getRecordsResult($sql, $dataClassName, $parameters)
-    {
-        $recordSet = $this->getConnection()->SelectLimit($sql, $parameters->getCount(), $parameters->getOffset());
-
-        if ($recordSet === false)
-        {
-            $this->handleError(new Exception('No Records Found. Query: ' . $sql));
-            throw new DataClassNoResultException($dataClassName, $parameters, $sql);
-        }
-        else
-        {
-            return $recordSet;
-        }
-    }
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @return string
-     */
-    protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
-    {
-        return $this->buildBasicRecordsSql(
-            $dataClassName,
-            $this->getParametersProcessor()->handleDataClassRetrievesParameters($dataClassName, $parameters));
-    }
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return string
-     */
-    protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
-    {
-        if (! $parameters->getDataClassProperties() instanceof DataClassProperties)
-        {
-            return $this->buildRetrievesSql($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->buildBasicRecordsSql($dataClassName, $parameters);
-        }
-    }
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @return string
-     */
-    protected function buildBasicRecordsSql($dataClassName, DataClassRetrievesParameters $parameters)
+    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
     {
         $queryBuilder = new QueryBuilder();
+        $queryBuilder->update($dataClassStorageUnitName, $this->getAlias($dataClassStorageUnitName));
 
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName)));
+        foreach ($propertiesToUpdate as $key => $value)
+        {
+            $queryBuilder->set($key, $this->escape($value));
+        }
 
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this,
-            $queryBuilder,
-            $parameters,
-            $dataClassName);
+        if ($condition instanceof Condition)
+        {
+            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
+        }
+        else
+        {
+            throw new Exception('Cannot update records without a condition');
+        }
 
-        return $queryBuilder->getSQL();
+        $result = $this->getConnection()->Execute($queryBuilder->getSQL());
+
+        if ($result === false)
+        {
+            $this->handleError(new Exception('Update Failed. Query: ' . $queryBuilder->getSQL()));
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     *
      * @param string $dataClassName
-     * @return string
-     */
-    protected function prepareTableName($dataClassName)
-    {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class_name()) &&
-             get_parent_class($dataClassName) == CompositeDataClass::class_name())
-        {
-            $tableName = $dataClassName::get_table_name();
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && $dataClassName::is_extended())
-        {
-            $tableName = $dataClassName::get_table_name();
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && ! $dataClassName::is_extended())
-        {
-            $parent = $dataClassName::parent_class_name();
-            $tableName = $parent::get_table_name();
-        }
-        else
-        {
-            $tableName = $dataClassName::get_table_name();
-        }
-
-        return $tableName;
-    }
-
-    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @return string[]
+     * @return boolean
+     * @throws \Exception
      */
-    protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
+    public function updates($dataClassName, DataClassProperties $properties, Condition $condition = null)
     {
-        $queryBuilder = new QueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName),
-            $this->getAlias($this->prepareTableName($dataClassName)));
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this,
-            $queryBuilder,
-            $parameters,
-            $dataClassName);
-
-        $sqlQuery = $queryBuilder->getSQL();
-
-        /**
-         *
-         * @var \ADORecordSet $statement
-         */
-        $statement = $this->getConnection()->SelectLimit($sqlQuery, $parameters->getCount(), $parameters->getOffset());
-
-        if ($statement instanceof ADORecordSet)
+        if (count($properties->get()) > 0)
         {
-            $record = $statement->FetchRow();
-        }
-        else
-        {
-            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-        }
+            $queryBuilder = new QueryBuilder();
+            $queryBuilder->update($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
 
-        if ($record === false)
-        {
-            $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-        }
+            foreach ($properties->get() as $dataClassProperty)
+            {
+                $queryBuilder->set(
+                    $this->getConditionPartTranslatorService()->translate(
+                        $this, $dataClassProperty->get_property()
+                    ), $this->getConditionPartTranslatorService()->translate(
+                    $this, $dataClassProperty->get_value()
+                )
+                );
+            }
 
-        if (is_null($record) || ! is_array($record) || empty($record))
-        {
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            if ($condition)
+            {
+                $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
+            }
+            else
+            {
+                throw new Exception('Cannot update records without a condition');
+            }
+
+            $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
+
+            if ($statement === false)
+            {
+                $this->handleError(new Exception('Insert Failed. Query: ' . $queryBuilder->getSQL()));
+
+                return false;
+            }
         }
 
-        return $this->processRecord($record);
-    }
-
-    /**
-     *
-     * @param \ADORecordSet $statement
-     * @return string[]
-     */
-    protected function fetchRecords(ADORecordSet $statement)
-    {
-        $records = array();
-
-        while ($record = $statement->FetchRow())
-        {
-            $records[] = $this->processRecord($record);
-        }
-
-        return $records;
-    }
-
-    /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param mixed[] $record
-     * @return mixed[]
-     */
-    protected function processRecord($record)
-    {
-        if ($this->getRecordProcessor() instanceof RecordProcessor)
-        {
-            return $this->getRecordProcessor()->processRecord($record);
-        }
-
-        return $record;
-    }
-
-    /**
-     *
-     * @param string $text
-     * @param boolean $escapeWildcards
-     * @return string
-     */
-    protected function escape($text, $escapeWildcards = false)
-    {
-        if (! is_null($text))
-        {
-            return $this->quote($text);
-        }
-        else
-        {
-            return 'NULL';
-        }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
+        return true;
     }
 }

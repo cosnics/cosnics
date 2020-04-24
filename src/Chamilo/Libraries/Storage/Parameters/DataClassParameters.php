@@ -126,7 +126,7 @@ abstract class DataClassParameters implements Hashable
      */
     public function get_condition()
     {
-        return $this->condition;
+        return $this->getCondition();
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class DataClassParameters implements Hashable
      */
     public function set_condition($condition)
     {
-        $this->condition = $condition;
+        $this->setCondition($condition);
     }
 
     /**

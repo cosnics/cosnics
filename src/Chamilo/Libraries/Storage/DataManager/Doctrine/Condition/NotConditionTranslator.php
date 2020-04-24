@@ -13,8 +13,7 @@ class NotConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {

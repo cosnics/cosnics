@@ -16,8 +16,7 @@ class InequalityConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
@@ -39,7 +38,9 @@ class InequalityConditionTranslator extends ConditionTranslator
                 die('Unknown operator for inequality condition');
         }
 
-        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' ' . $operator . ' ' . ConditionVariableTranslator::render(
-            $this->get_condition()->get_value());
+        return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' ' . $operator . ' ' .
+            ConditionVariableTranslator::render(
+                $this->get_condition()->get_value()
+            );
     }
 }

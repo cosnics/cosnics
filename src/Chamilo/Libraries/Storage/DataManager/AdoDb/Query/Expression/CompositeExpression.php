@@ -54,7 +54,38 @@ class CompositeExpression implements Countable
 
     /**
      *
+     * @return string
+     */
+    public function __toString()
+    {
+        if (count($this->parts) === 1)
+        {
+            return (string) $this->parts[0];
+        }
+
+        return '(' . implode(') ' . $this->type . ' (', $this->parts) . ')';
+    }
+
+    /**
+     *
+     * @param mixed $part
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
+     */
+    public function add($part)
+    {
+        if (!empty($part) || ($part instanceof self && $part->count() > 0))
+        {
+            $this->parts[] = $part;
+        }
+
+        return $this;
+    }
+
+    /**
+     *
      * @param array $parts
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
      */
     public function addMultiple(array $parts = array())
@@ -69,40 +100,11 @@ class CompositeExpression implements Countable
 
     /**
      *
-     * @param mixed $part
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
-     */
-    public function add($part)
-    {
-        if (! empty($part) || ($part instanceof self && $part->count() > 0))
-        {
-            $this->parts[] = $part;
-        }
-
-        return $this;
-    }
-
-    /**
-     *
      * @return integer
      */
     public function count()
     {
         return count($this->parts);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if (count($this->parts) === 1)
-        {
-            return (string) $this->parts[0];
-        }
-
-        return '(' . implode(') ' . $this->type . ' (', $this->parts) . ')';
     }
 
     /**

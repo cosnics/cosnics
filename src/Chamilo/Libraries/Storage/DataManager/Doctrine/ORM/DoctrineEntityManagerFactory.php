@@ -68,6 +68,7 @@ class DoctrineEntityManagerFactory
      * Creates and returns the entity manager
      *
      * @return \Doctrine\ORM\EntityManager
+     * @throws \Doctrine\ORM\ORMException
      */
     public function createEntityManager()
     {

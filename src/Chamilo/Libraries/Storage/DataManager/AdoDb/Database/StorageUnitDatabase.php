@@ -21,6 +21,7 @@ use PDOException;
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @todo Not adapted to AdoDb yet
  */
 class StorageUnitDatabase implements StorageUnitDatabaseInterface
 {
@@ -45,86 +46,188 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     protected $exceptionLogger;
 
     /**
-     *
      * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function __construct(
-        Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger)
-    {
-        $this->connection = $connection;
-        $this->storageAliasGenerator = $storageAliasGenerator;
-        $this->exceptionLogger = $exceptionLogger;
-    }
-
-    /**
-     *
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-    /**
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function setConnection($connection)
-    {
-        $this->connection = $connection;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    public function getStorageAliasGenerator()
-    {
-        return $this->storageAliasGenerator;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     */
-    public function setStorageAliasGenerator($storageAliasGenerator)
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
-     */
-    public function getExceptionLogger()
-    {
-        return $this->exceptionLogger;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      */
-    public function setExceptionLogger($exceptionLogger)
+    public function __construct(
+        Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger
+    )
     {
+        $this->connection = $connection;
+        $this->storageAliasGenerator = $storageAliasGenerator;
         $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
+     * @param integer $type
+     * @param string $storageUnitName
+     * @param string $property
+     * @param string[] $attributes
      *
-     * @param \Exception $exception
+     * @return boolean
      */
-    public function handleError(Exception $exception)
+    public function alter($type, $storageUnitName, $property, $attributes = array())
     {
-        $this->getExceptionLogger()->logException(
-            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'),
-            ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+        try
+        {
+            if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
+            {
+                $column = new Column($property);
+                $query = 'ALTER TABLE ' . $storageUnitName . ' DROP COLUMN ' .
+                    $column->getQuotedName($this->getConnection()->getDatabasePlatform());
+            }
+            else
+            {
+                $column = new Column(
+                    $property, Type::getType($this->parsePropertyType($attributes)), $this->parseAttributes($attributes)
+                );
+
+                // Column declaration translation-code more or less directly from Doctrine since it doesn't support
+                // altering tables (yet)
+                $columns = array();
+                $columnData = array();
+
+                if (isset($attributes['name']) && $type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE)
+                {
+                    $oldName = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
+                    $columnData['name'] = $oldName . ' ' . $attributes['name'];
+                }
+                elseif ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE)
+                {
+                    $name = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
+                    $columnData['name'] = $name . ' ' . $name;
+                }
+                elseif ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_ADD)
+                {
+                    $name = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
+                    $columnData['name'] = $name;
+                }
+
+                $columnData['type'] = $column->getType();
+                $columnData['length'] = $column->getLength();
+                $columnData['notnull'] = $column->getNotNull();
+                $columnData['fixed'] = $column->getFixed();
+                $columnData['unique'] = false;
+                $columnData['version'] =
+                    ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
+
+                if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)
+                {
+                    $columnData['length'] = 255;
+                }
+
+                $columnData['unsigned'] = $column->getUnsigned();
+                $columnData['precision'] = $column->getPrecision();
+                $columnData['scale'] = $column->getScale();
+                $columnData['default'] = $column->getDefault();
+                $columnData['columnDefinition'] = $column->getColumnDefinition();
+                $columnData['autoincrement'] = $column->getAutoincrement();
+
+                $columnData['comment'] = $column->getComment();
+                if ($this->getConnection()->getDatabasePlatform()->isCommentedDoctrineType($column->getType()))
+                {
+                    $columnData['comment'] .= $this->getConnection()->getDatabasePlatform()->getDoctrineTypeComment(
+                        $column->getType()
+                    );
+                }
+
+                $columns = array($columnData['name'] => $columnData);
+
+                $fieldsQuery = $this->getConnection()->getDatabasePlatform()->getColumnDeclarationListSQL($columns);
+
+                $action = $type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE ? 'CHANGE' : 'ADD';
+                $query = 'ALTER TABLE ' . $storageUnitName . ' ' . $action . ' COLUMN ' . $fieldsQuery;
+
+                if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_ADD && $columnData['autoincrement'])
+                {
+                    $query .= ', ADD PRIMARY KEY(' . $columnData['name'] . ')';
+                }
+            }
+
+            $statement = $this->getConnection()->query($query);
+
+            if (!$statement instanceof PDOException)
+            {
+                return true;
+            }
+            else
+            {
+                $this->handleError($statement);
+
+                return false;
+            }
+        }
+        catch (Exception $exception)
+        {
+            $this->handleError($exception);
+
+            return false;
+        }
     }
 
     /**
+     * @param integer $type
+     * @param string $storageUnitName
+     * @param string $name
+     * @param string[] $columns
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::create()
+     * @return boolean
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function alterIndex($type, $storageUnitName, $name = null, $columns = array())
+    {
+        $query = 'ALTER TABLE ' . $storageUnitName . ' ';
+
+        switch ($type)
+        {
+            case StorageUnitRepository::ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY :
+                $query .= 'DROP PRIMARY KEY';
+                break;
+            case StorageUnitRepository::ALTER_STORAGE_UNIT_DROP_INDEX :
+
+                if (is_null($name))
+                {
+                    return false;
+                }
+
+                $query .= 'DROP INDEX ' . $name;
+                break;
+            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY :
+                $query .= 'ADD PRIMARY KEY(' . implode(', ', array_unique($columns)) . ')';
+                break;
+            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_INDEX :
+                $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
+                        $name, new Index($name, $columns, false, false)
+                    );
+                break;
+            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_UNIQUE :
+                $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
+                        $name, new Index($name, $columns, true, false)
+                    );
+                break;
+        }
+
+        $statement = $this->getConnection()->query($query);
+
+        if (!$statement instanceof PDOException)
+        {
+            return true;
+        }
+        else
+        {
+            $this->handleError($statement);
+
+            return false;
+        }
+    }
+
+    /**
+     * @param string $storageUnitName
+     * @param string[][] $properties
+     * @param string[][][] $indexes
+     *
+     * @return boolean
      */
     public function create($storageUnitName, $properties, $indexes)
     {
@@ -157,10 +260,8 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 if ($options['autoincrement'] == true)
                 {
-                    $primaryKeyName = $this->getStorageAliasGenerator()->getConstraintName(
-                        $storageUnitName,
-                        $storageUnitName,
-                        StorageAliasGenerator::TYPE_CONSTRAINT);
+                    $primaryKeyName =
+                        $this->getStorageAliasGenerator()->getConstraintName($storageUnitName, $storageUnitName);
 
                     $table->setPrimaryKey(array($property), $primaryKeyName);
                 }
@@ -168,10 +269,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             foreach ($indexes as $index => $attributes)
             {
-                $indexName = $this->getStorageAliasGenerator()->getConstraintName(
-                    $storageUnitName,
-                    $index,
-                    StorageAliasGenerator::TYPE_CONSTRAINT);
+                $indexName = $this->getStorageAliasGenerator()->getConstraintName($storageUnitName, $index);
 
                 switch ($attributes['type'])
                 {
@@ -210,17 +308,10 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
+     * @param string $storageUnitName
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::exists()
-     */
-    public function exists($storageUnitName)
-    {
-        return $this->getConnection()->getSchemaManager()->tablesExist(array($storageUnitName));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::drop()
+     * @return boolean
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function drop($storageUnitName)
     {
@@ -247,213 +338,85 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
+     * @param string $storageUnitName
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::rename()
+     * @return boolean
      */
-    public function rename($oldStorageUnitName, $newStorageUnitName)
+    public function exists($storageUnitName)
     {
-        $query = 'ALTER TABLE ' . $oldStorageUnitName . ' RENAME TO ' . $newStorageUnitName;
-
-        $statement = $this->getConnection()->query($query);
-
-        if (! $statement instanceof PDOException)
-        {
-            return true;
-        }
-        else
-        {
-            $this->handleError($statement);
-
-            return false;
-        }
+        return $this->getConnection()->getSchemaManager()->tablesExist(array($storageUnitName));
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::alter()
+     * @return \Doctrine\DBAL\Connection
      */
-    public function alter($type, $storageUnitName, $property, $attributes = array())
+    public function getConnection()
     {
-        try
-        {
-            if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
-            {
-                $column = new Column($property);
-                $query = 'ALTER TABLE ' . handleError . ' DROP COLUMN ' .
-                     $column->getQuotedName($this->getConnection()->getDatabasePlatform());
-            }
-            else
-            {
-                $column = new Column(
-                    $property,
-                    Type::getType($this->parsePropertyType($attributes)),
-                    $this->parseAttributes($attributes));
-
-                // Column declaration translation-code more or less directly from Doctrine since it doesn't support
-                // altering tables (yet)
-                $columns = array();
-                $columnData = array();
-
-                if (isset($attributes['name']) && $type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE)
-                {
-                    $oldName = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
-                    $columnData['name'] = $oldName . ' ' . $attributes['name'];
-                }
-                elseif ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE)
-                {
-                    $name = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
-                    $columnData['name'] = $name . ' ' . $name;
-                }
-                elseif ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_ADD)
-                {
-                    $name = $column->getQuotedName($this->getConnection()->getDatabasePlatform());
-                    $columnData['name'] = $name;
-                }
-
-                $columnData['type'] = $column->getType();
-                $columnData['length'] = $column->getLength();
-                $columnData['notnull'] = $column->getNotNull();
-                $columnData['fixed'] = $column->getFixed();
-                $columnData['unique'] = false;
-                $columnData['version'] = ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
-
-                if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)
-                {
-                    $columnData['length'] = 255;
-                }
-
-                $columnData['unsigned'] = $column->getUnsigned();
-                $columnData['precision'] = $column->getPrecision();
-                $columnData['scale'] = $column->getScale();
-                $columnData['default'] = $column->getDefault();
-                $columnData['columnDefinition'] = $column->getColumnDefinition();
-                $columnData['autoincrement'] = $column->getAutoincrement();
-
-                $columnData['comment'] = $column->getComment();
-                if ($this->getConnection()->getDatabasePlatform()->isCommentedDoctrineType($column->getType()))
-                {
-                    $columnData['comment'] .= $this->getConnection()->getDatabasePlatform()->getDoctrineTypeComment(
-                        $column->getType());
-                }
-
-                $columns = array($columnData['name'] => $columnData);
-
-                $fieldsQuery = $this->getConnection()->getDatabasePlatform()->getColumnDeclarationListSQL($columns);
-
-                $action = $type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE ? 'CHANGE' : 'ADD';
-                $query = 'ALTER TABLE ' . handleError . ' ' . $action . ' COLUMN ' . $fieldsQuery;
-
-                if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_ADD && $columnData['autoincrement'])
-                {
-                    $query .= ', ADD PRIMARY KEY(' . $columnData['name'] . ')';
-                }
-            }
-
-            $statement = $this->getConnection()->query($query);
-
-            if (! $statement instanceof PDOException)
-            {
-                return true;
-            }
-            else
-            {
-                $this->handleError($statement);
-
-                return false;
-            }
-        }
-        catch (Exception $exception)
-        {
-            $this->handleError($exception);
-
-            return false;
-        }
+        return $this->connection;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::alterIndex()
+     * @param \Doctrine\DBAL\Connection $connection
      */
-    public function alterIndex($type, $storageUnitName, $name = null, $columns = array())
+    public function setConnection($connection)
     {
-        $query = 'ALTER TABLE ' . $storageUnitName . ' ';
-
-        switch ($type)
-        {
-            case StorageUnitRepository::ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY :
-                $query .= 'DROP PRIMARY KEY';
-                break;
-            case StorageUnitRepository::ALTER_STORAGE_UNIT_DROP_INDEX :
-
-                if (is_null($name))
-                {
-                    return false;
-                }
-
-                $query .= 'DROP INDEX ' . $name;
-                break;
-            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY :
-                $query .= 'ADD PRIMARY KEY(' . implode(', ', array_unique($columns)) . ')';
-                break;
-            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_INDEX :
-                $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                    $name,
-                    new Index($name, $columns, false, false));
-                break;
-            case StorageUnitRepository::ALTER_STORAGE_UNIT_ADD_UNIQUE :
-                $query .= 'ADD ' . $this->getConnection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                    $name,
-                    new Index($name, $columns, true, false));
-                break;
-        }
-
-        $statement = $this->getConnection()->query($query);
-
-        if (! $statement instanceof PDOException)
-        {
-            return true;
-        }
-        else
-        {
-            $this->handleError($statement);
-
-            return false;
-        }
+        $this->connection = $connection;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::truncate()
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    public function truncate($tableName, $optimize = true)
+    public function getExceptionLogger()
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-        $queryBuilder->delete($tableName);
-
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
-
-        if (! $statement instanceof PDOException)
-        {
-            if ($optimize)
-            {
-                return $this->optimize($tableName);
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            $this->handleError($statement);
-
-            return false;
-        }
+        return $this->exceptionLogger;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface::optimize()
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     */
+    public function setExceptionLogger($exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    public function getStorageAliasGenerator()
+    {
+        return $this->storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     */
+    public function setStorageAliasGenerator($storageAliasGenerator)
+    {
+        $this->storageAliasGenerator = $storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @param \Exception $exception
+     */
+    public function handleError(Exception $exception)
+    {
+        $this->getExceptionLogger()->logException(
+            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'),
+            ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+        );
+    }
+
+    /**
+     * @param string $storageUnitName
+     *
+     * @return boolean
      */
     public function optimize($storageUnitName)
     {
@@ -461,12 +424,56 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
-     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
+    }
+
+    /**
+     *
+     * @param string[] $attributes
+     *
+     * @return string[]
+     */
+    public static function parseAttributes($attributes)
+    {
+        $options = array();
+
+        foreach ($attributes as $attribute => $value)
+        {
+            switch ($attribute)
+            {
+                case 'length' :
+                    $options[$attribute] = (is_numeric($value) ? (int) $value : null);
+                    break;
+                case 'fixed' :
+                    if ($attributes['type'] != 'string')
+                    {
+                        $options[$attribute] = $value == 1;
+                    }
+                    break;
+                case 'unsigned' :
+                case 'notnull' :
+                    $options[$attribute] = $value == 1;
+                    break;
+                case 'default' :
+                    $options[$attribute] = (!is_numeric($value) && empty($value) ? null : $value);
+                    break;
+                case 'autoincrement' :
+                    $options[$attribute] = $value == 'true';
+                    break;
+            }
+        }
+
+        if (!isset($options['notnull']))
+        {
+            $options['notnull'] = false;
+        }
+
+        return $options;
     }
 
     /**
@@ -513,48 +520,60 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
+     * @param string $oldStorageUnitName
+     * @param string $newStorageUnitName
      *
-     * @param string[] $attributes
-     *
-     * @return string[]
+     * @return boolean
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public static function parseAttributes($attributes)
+    public function rename($oldStorageUnitName, $newStorageUnitName)
     {
-        $options = array();
+        $query = 'ALTER TABLE ' . $oldStorageUnitName . ' RENAME TO ' . $newStorageUnitName;
 
-        foreach ($attributes as $attribute => $value)
+        $statement = $this->getConnection()->query($query);
+
+        if (!$statement instanceof PDOException)
         {
-            switch ($attribute)
+            return true;
+        }
+        else
+        {
+            $this->handleError($statement);
+
+            return false;
+        }
+    }
+
+    /**
+     * @param string $tableName
+     * @param boolean $optimize
+     *
+     * @return boolean
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function truncate($tableName, $optimize = true)
+    {
+        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder->delete($tableName);
+
+        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+
+        if (!$statement instanceof PDOException)
+        {
+            if ($optimize)
             {
-                case 'length' :
-                    $options[$attribute] = (is_numeric($value) ? (int) $value : null);
-                    break;
-                case 'unsigned' :
-                    $options[$attribute] = ($value == 1 ? true : false);
-                    break;
-                case 'fixed' :
-                    if ($attributes['type'] != 'string')
-                    {
-                        $options[$attribute] = ($value == 1 ? true : false);
-                    }
-                    break;
-                case 'notnull' :
-                    $options[$attribute] = ($value == 1 ? true : false);
-                    break;
-                case 'default' :
-                    $options[$attribute] = (! is_numeric($value) && empty($value) ? null : $value);
-                    break;
-                case 'autoincrement' :
-                    $options[$attribute] = ($value == 'true' ? true : false);
-                    break;
+                return $this->optimize($tableName);
+            }
+            else
+            {
+                return true;
             }
         }
-
-        if (! isset($options['notnull']))
+        else
         {
-            $options['notnull'] = false;
-        }
+            $this->handleError($statement);
 
-        return $options;
+            return false;
+        }
     }
 }

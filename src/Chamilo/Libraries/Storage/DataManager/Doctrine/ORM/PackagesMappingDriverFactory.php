@@ -58,12 +58,13 @@ class PackagesMappingDriverFactory
      * The packages are defined with the namespace and the location
      * of the config file.
      *
+     * @param string[] $packages
+     *
+     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      * @example $packages = array(
      *          'application/weblcms' => Path::getInstance()->getBasePath() .
      *          'application/weblcms/resources/configuration/config.yml'
      *          )
-     * @param string[] $packages
-     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
     public function createMappingDriverForPackages($packages = array())
     {
@@ -76,13 +77,14 @@ class PackagesMappingDriverFactory
 
         foreach ($packages as $package => $packageConfigFile)
         {
-            if (! file_exists($packageConfigFile))
+            if (!file_exists($packageConfigFile))
             {
                 throw new InvalidArgumentException(
                     sprintf(
-                        'There is no valid configuration for the package %s at location %s',
-                        $package,
-                        $packageConfigFile));
+                        'There is no valid configuration for the package %s at location %s', $package,
+                        $packageConfigFile
+                    )
+                );
             }
 
             $packageConfiguration = $this->yamlParser->parse(file_get_contents($packageConfigFile));
@@ -101,16 +103,15 @@ class PackagesMappingDriverFactory
         $librariesConfiguration = new LibrariesConfiguration();
         $packageConfiguration = $this->processor->processConfiguration($librariesConfiguration, $configurations);
 
-        if (! array_key_exists('doctrine', $packageConfiguration) ||
-             ! array_key_exists('orm', $packageConfiguration['doctrine']) ||
-             ! array_key_exists('mappings', $packageConfiguration['doctrine']['orm']))
+        if (!array_key_exists('doctrine', $packageConfiguration) ||
+            !array_key_exists('orm', $packageConfiguration['doctrine']) ||
+            !array_key_exists('mappings', $packageConfiguration['doctrine']['orm']))
         {
             throw new RuntimeException('There is no mapping driver configuration available in the given packages 2');
         }
 
-        $mappingDriver = $this->mappingDriverFactory->createMappingDriver(
-            $packageConfiguration['doctrine']['orm']['mappings']);
-
-        return $mappingDriver;
+        return $this->mappingDriverFactory->createMappingDriver(
+            $packageConfiguration['doctrine']['orm']['mappings']
+        );
     }
 }

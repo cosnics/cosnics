@@ -15,6 +15,15 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -31,14 +40,5 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
         {
             return '*';
         }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

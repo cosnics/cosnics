@@ -19,6 +19,8 @@ class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassR
      *
      * @param \Doctrine\DBAL\Driver\PDOStatement $handle
      * @param string $className
+     *
+     * @throws \Exception
      */
     public function __construct($handle, $className)
     {

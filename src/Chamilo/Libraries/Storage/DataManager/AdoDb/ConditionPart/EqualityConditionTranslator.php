@@ -13,6 +13,14 @@ class EqualityConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -31,13 +39,5 @@ class EqualityConditionTranslator extends ConditionTranslator
             ) . ' = ' . $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
             );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }

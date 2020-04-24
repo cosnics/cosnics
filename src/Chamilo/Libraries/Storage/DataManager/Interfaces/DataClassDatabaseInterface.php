@@ -96,12 +96,10 @@ interface DataClassDatabaseInterface
      *
      * @param string $value
      * @param string $type
-     * @param boolean $quote
-     * @param boolean $escapeWildcards
      *
      * @return string
      */
-    public function quote($value, $type = null, $quote = true, $escapeWildcards = false);
+    public function quote($value, $type = null);
 
     /**
      *

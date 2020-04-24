@@ -20,6 +20,7 @@
         "ext-fileinfo": "*",
         "ext-curl": "*",
         "ext-gd": "*",
+        "ext-pdo": "*",
         "adodb/adodb-php": "5.*",
         "chamilo/pear-libraries": "*",
         "doctrine/cache": "1.10.*",

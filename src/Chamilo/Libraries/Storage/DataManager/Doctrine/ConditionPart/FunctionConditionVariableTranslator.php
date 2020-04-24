@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 
 /**
  *
@@ -13,6 +13,14 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  */
 class FunctionConditionVariableTranslator extends ConditionVariableTranslator
 {
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
 
     /**
      * @param boolean $enableAliasing
@@ -72,13 +80,5 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

@@ -15,6 +15,14 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -44,13 +52,5 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

@@ -16,14 +16,17 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
 {
 
     /**
+     * @param string $className
      *
-     * @see \Doctrine\ORM\Mapping\DefaultNamingStrategy::classToTableName()
+     * @return string
+     * @throws \ReflectionException
      */
     public function classToTableName($className)
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
         $classNameString = StringUtilities::getInstance()->createString(
-            $classNameUtilities->getClassnameFromNamespace($className));
+            $classNameUtilities->getClassnameFromNamespace($className)
+        );
 
         $tableName = $classNameString->underscored();
 
@@ -43,16 +46,19 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
             }
         }
 
-        if (! $prefix)
+        if (!$prefix)
         {
             $namespace = $classNameUtilities->getNamespaceFromClassname($className);
 
             $context = strpos('Domain\Entity', $namespace) === false ? $classNameUtilities->getNamespaceParent(
-                $namespace) : $classNameUtilities->getNamespaceParent(
-                $classNameUtilities->getNamespaceParent($namespace));
+                $namespace
+            ) : $classNameUtilities->getNamespaceParent(
+                $classNameUtilities->getNamespaceParent($namespace)
+            );
 
             $prefix = StringUtilities::getInstance()->createString(
-                $classNameUtilities->getPackageNameFromNamespace($context))->underscored();
+                $classNameUtilities->getPackageNameFromNamespace($context)
+            )->underscored();
         }
 
         return $prefix . '_' . $tableName;

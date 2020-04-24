@@ -17,7 +17,9 @@ abstract class ConditionVariableTranslator extends \Chamilo\Libraries\Storage\Qu
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     *
      * @return string
+     * @throws \ReflectionException
      */
     public static function runTranslator($conditionVariable)
     {

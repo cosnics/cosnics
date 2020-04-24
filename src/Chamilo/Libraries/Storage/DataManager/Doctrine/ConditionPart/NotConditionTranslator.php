@@ -13,6 +13,14 @@ class NotConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\NotCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -28,13 +36,5 @@ class NotConditionTranslator extends ConditionTranslator
         $string[] = ')';
 
         return implode('', $string);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\NotCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }

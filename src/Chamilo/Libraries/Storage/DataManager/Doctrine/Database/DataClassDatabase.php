@@ -88,9 +88,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
      */
     public function __construct(
-        Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
-        ParametersProcessor $parametersProcessor, RecordProcessor $recordProcessor = null
+        Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
+        ConditionPartTranslatorService $conditionPartTranslatorService, ParametersProcessor $parametersProcessor,
+        RecordProcessor $recordProcessor = null
     )
     {
         $this->connection = $connection;
@@ -103,11 +103,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return string
+     * @throws \ReflectionException
      */
     protected function buildBasicRecordsSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -130,6 +130,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
      * @return string
+     * @throws \ReflectionException
      */
     protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
     {
@@ -149,6 +150,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return string
+     * @throws \ReflectionException
      */
     protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -160,7 +162,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::count()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
+     *
+     * @return integer
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function count($dataClassName, DataClassCountParameters $parameters)
     {
@@ -193,7 +200,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::countGrouped()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
+     *
+     * @return integer[]|false
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
     {
@@ -231,7 +243,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::create()
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @param boolean $autoAssignIdentifier
+     *
+     * @return boolean
+     * @throws \ReflectionException
      */
     public function create(DataClass $dataClass, $autoAssignIdentifier = true)
     {
@@ -282,7 +298,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::createRecord()
+     * @param string $dataClassName
+     * @param string[] $record
+     *
+     * @return boolean
      */
     public function createRecord($dataClassName, $record)
     {
@@ -302,10 +321,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean
      * @throws \Doctrine\DBAL\DBALException
+     * @throws \Exception
      */
     public function delete($dataClassName, Condition $condition = null)
     {
@@ -333,7 +353,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::distinct()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
+     *
+     * @return string[]|false
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
@@ -379,11 +404,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $text
-     * @param boolean $escapeWildcards
      *
      * @return string
      */
-    protected function escape($text, $escapeWildcards = false)
+    protected function escape($text)
     {
         if (!is_null($text))
         {
@@ -397,7 +421,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::escapeColumnName()
+     * @param string $columnName
+     * @param string $storageUnitAlias
+     *
+     * @return string
      */
     public function escapeColumnName($columnName, $storageUnitAlias = null)
     {
@@ -418,6 +445,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -463,7 +492,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Doctrine\DBAL\Driver\Statement $statement
      *
-     * @return string[]
+     * @return string[][]
      */
     protected function fetchRecords(Statement $statement)
     {
@@ -478,8 +507,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
+     * @param string $dataClassStorageUnitName
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::getAlias()
+     * @return string
      */
     public function getAlias($dataClassStorageUnitName)
     {
@@ -583,7 +613,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return \Doctrine\DBAL\Driver\Statement
-     * @throws DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
      */
     protected function getRecordsResult($sql, $dataClassName, $parameters)
     {
@@ -630,6 +661,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @return string
+     * @throws \ReflectionException
      */
     public static function package()
     {
@@ -641,19 +673,20 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string $dataClassName
      *
      * @return string
+     * @throws \ReflectionException
      */
     protected function prepareTableName($dataClassName)
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class_name()) &&
-            get_parent_class($dataClassName) == CompositeDataClass::class_name())
+        if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
+            get_parent_class($dataClassName) == CompositeDataClass::class)
         {
             $tableName = $dataClassName::get_table_name();
         }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && $dataClassName::is_extended())
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::is_extended())
         {
             $tableName = $dataClassName::get_table_name();
         }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class_name()) && !$dataClassName::is_extended())
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
         {
             $parent = $dataClassName::parent_class_name();
             $tableName = $parent::get_table_name();
@@ -685,16 +718,25 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::quote()
+     * @param string $value
+     * @param string $type
+     *
+     * @return string
      */
-    public function quote($value, $type = null, $quote = true, $escapeWildcards = false)
+    public function quote($value, $type = null)
     {
-        return $this->getConnection()->quote($value, $type, $quote, $escapeWildcards);
+        return $this->getConnection()->quote($value, $type);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::record()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function record($dataClassName, RecordRetrieveParameters $parameters)
     {
@@ -710,7 +752,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::records()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
+     * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters)
     {
@@ -723,7 +771,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieve()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -735,7 +789,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::retrieves()
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -748,7 +808,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface::transactional()
+     * @param mixed $function
+     *
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function transactional($function)
     {

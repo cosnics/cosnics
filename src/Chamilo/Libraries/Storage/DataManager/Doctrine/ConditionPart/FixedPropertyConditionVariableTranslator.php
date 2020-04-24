@@ -12,6 +12,14 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -32,13 +40,5 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
         return $this->getDataClassDatabase()->escapeColumnName(
                 $this->getConditionVariable()->get_property(), $tableAlias
             ) . ' AS ' . $this->getConditionVariable()->get_alias();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

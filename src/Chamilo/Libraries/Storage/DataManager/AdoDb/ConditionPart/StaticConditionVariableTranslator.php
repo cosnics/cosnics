@@ -14,6 +14,14 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
+     */
+    public function getConditionVariable()
+    {
+        return parent::getConditionVariable();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -28,13 +36,5 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         return $value;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
     }
 }

@@ -13,8 +13,7 @@ class AggregateConditionTranslator extends ConditionTranslator
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @return string
      */
     public function translate()
     {
@@ -28,7 +27,7 @@ class AggregateConditionTranslator extends ConditionTranslator
             $count ++;
             $translation = ConditionTranslator::render($condition);
 
-            if (! empty($translation))
+            if (!empty($translation))
             {
                 $condition_translations[] = $translation;
             }

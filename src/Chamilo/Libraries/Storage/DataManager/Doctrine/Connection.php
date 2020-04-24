@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
+use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Exception;
 
 /**
@@ -35,24 +35,25 @@ class Connection
      * @param \Doctrine\DBAL\Connection $connection
      *
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function __construct($connection = null)
     {
         if (is_null($connection))
         {
-            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName::getFromConfiguration('Doctrine');
+            $dataSourceName = \Chamilo\Libraries\Storage\DataManager\DataSourceName::getFromConfiguration('Doctrine');
             $configuration = new Configuration();
-            $connection_parameters = array(
-                'dbname' => $data_source_name->getDatabase(), 'user' => $data_source_name->getUsername(),
-                'password' => $data_source_name->getPassword(), 'host' => $data_source_name->getHost(),
-                'driverClass' => $data_source_name->getDriver(true), 'charset' => 'UTF8'
+            $connectionParameters = array(
+                'dbname' => $dataSourceName->getDatabase(),
+                'user' => $dataSourceName->getUsername(),
+                'password' => $dataSourceName->getPassword(),
+                'host' => $dataSourceName->getHost(),
+                'driverClass' => $dataSourceName->getDriver(true),
+                'charset' => 'UTF8'
             );
 
             try
             {
-                $this->connection = DriverManager::getConnection($connection_parameters, $configuration);
-
+                $this->connection = DriverManager::getConnection($connectionParameters, $configuration);
                 $this->connection->connect();
             }
             catch (Exception $ex)
@@ -72,9 +73,6 @@ class Connection
      * Returns the instance of this class.
      *
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
      */
     public static function getInstance()
     {
@@ -91,7 +89,6 @@ class Connection
      * @param \Doctrine\DBAL\Connection $connection
      *
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
      */
     public static function set_instance($connection)
     {
@@ -115,15 +112,5 @@ class Connection
     public function set_connection($connection)
     {
         $this->connection = $connection;
-    }
-
-    /**
-     *
-     * @param string $option
-     * @param string $value
-     */
-    public function set_option($option, $value)
-    {
-        $this->connection->setOption($option, $value);
     }
 }

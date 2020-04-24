@@ -13,6 +13,14 @@ class SubselectConditionTranslator extends ConditionTranslator
 {
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Condition\SubselectCondition
+     */
+    public function getCondition()
+    {
+        return parent::getCondition();
+    }
+
+    /**
      * @param boolean $enableAliasing
      *
      * @return string
@@ -55,13 +63,5 @@ class SubselectConditionTranslator extends ConditionTranslator
         $string[] = ')';
 
         return implode(' ', $string);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\SubselectCondition
-     */
-    public function getCondition()
-    {
-        return parent::getCondition();
     }
 }
