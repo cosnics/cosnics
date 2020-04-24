@@ -1535,11 +1535,6 @@
 
     /** Levels Editor **/
 
-    .rubrics-wrapper-levels {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-
     .levels-container {
         flex: 1;
         display: flex;
@@ -1979,7 +1974,13 @@
         height: 100%;
     }
 
-    @media only screen and (max-width: 900px) {
+    @media only screen and (min-width: 900px) {
+        .rubrics-wrapper-levels {
+            overflow-y: auto;
+        }
+    }
+
+    @media only screen and (max-width: 899px) {
         .levels-container {
             margin-left: 0;
 
