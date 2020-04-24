@@ -9,11 +9,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import ScoreRubricStore from './ScoreRubricStore';
-import { makeServer } from './server';
+/*import { makeServer } from './server';
 
 if (process.env.NODE_ENV === "development") {
   makeServer();
-}
+}*/
 
 Vue.config.productionTip = false;
 Vue.use(ScoreRubric);

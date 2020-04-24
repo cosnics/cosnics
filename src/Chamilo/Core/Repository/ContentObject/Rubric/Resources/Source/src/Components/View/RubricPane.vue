@@ -9,7 +9,7 @@
                         :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
                         @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></cluster-view>
                 </draggable>
-                <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-selected="selectCluster"></new-cluster>
+                <new-cluster :view-id="id" :rubric="rubric" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-selected="selectCluster"></new-cluster>
             </div>
         </div>
         <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
@@ -49,6 +49,7 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import draggable from 'vuedraggable';
+    import Rubric from '../../Domain/Rubric';
     import Cluster from '../../Domain/Cluster';
     import Category from '../../Domain/Category';
     import Criterium from '../../Domain/Criterium';
@@ -67,6 +68,7 @@
     export default class RubricPane extends Vue {
 
         @Prop({type: String, required: true}) readonly id!: string;
+        @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop({type: Cluster, default: null}) readonly selectedCluster!: Cluster|null;
         @Prop({type: Cluster, default: null}) readonly otherSelectedCluster!: Cluster|null;
         @Prop({type: String, default: ''}) readonly bannedForDrop!: string;
@@ -81,12 +83,8 @@
 
         private showClusters: boolean = false;
 
-        get store() {
-            return this.$root.$data.store;
-        }
-
         get clusters() : Cluster[] {
-            return [...this.store.rubric.clusters];
+            return [...this.rubric.clusters];
         }
 
         get categories() : Category[] {
@@ -195,12 +193,12 @@
 
         onChangeCluster(event: any) {
             if (event.added && event.added.element) {
-                const oldIndex = this.store.rubric.clusters.indexOf(event.added.element);
-                this.store.rubric.moveChild(event.added.element, event.added.newIndex, oldIndex);
-                this.store.moveChild(event.added.element, this.store.rubric, event.added.newIndex);
+                const oldIndex = this.rubric.clusters.indexOf(event.added.element);
+                this.rubric.moveChild(event.added.element, event.added.newIndex, oldIndex);
+                // Todo! // this.store.moveChild(event.added.element, this.rubric, event.added.newIndex);
             } else if (event.moved) {
-                this.store.rubric.moveChild(event.moved.element, event.moved.newIndex, event.moved.oldIndex);
-                this.store.moveChild(event.moved.element, this.store.rubric, event.moved.newIndex);
+                this.rubric.moveChild(event.moved.element, event.moved.newIndex, event.moved.oldIndex);
+                // Todo! // this.store.moveChild(event.moved.element, this.rubric, event.moved.newIndex);
             }
         }
 
@@ -212,12 +210,12 @@
                 const { element, newIndex } = event.added;
                 this.otherSelectedCluster!.removeChild(element);
                 this.selectedCluster!.addChild(element, newIndex);
-                this.store.moveChild(element, this.selectedCluster, newIndex);
+                // Todo! // this.store.moveChild(element, this.selectedCluster, newIndex);
             } else if (event.moved) {
                 const category: Category = event.moved.element;
                 const cluster = category.parent as Cluster;
                 cluster.moveChild(category, event.moved.newIndex, event.moved.oldIndex);
-                this.store.moveChild(category, cluster, event.moved.newIndex);
+                // Todo! // this.store.moveChild(category, cluster, event.moved.newIndex);
             }
         }
 
@@ -227,12 +225,12 @@
                 const oldCategory = criterium.parent as Category;
                 oldCategory.removeChild(criterium);
                 category.addChild(criterium, event.added.newIndex);
-                this.store.moveChild(criterium, category, event.added.newIndex);
+                // Todo! // this.store.moveChild(criterium, category, event.added.newIndex);
             } else if (event.moved) {
                 const criterium: Criterium = event.moved.element;
                 const category = criterium.parent as Category;
                 category.moveChild(criterium, event.moved.newIndex, event.moved.oldIndex);
-                this.store.moveChild(criterium, category, event.moved.newIndex);
+                // Todo! // this.store.moveChild(criterium, category, event.moved.newIndex);
             }
         }
 
@@ -245,7 +243,7 @@
                 category.color = '';
                 this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
                 category.addChild(criterium, event.added.newIndex);
-                this.store.moveChild(criterium, category, event.added.newIndex);
+                // Todo! // this.store.moveChild(criterium, category, event.added.newIndex);
             }
         }
     }

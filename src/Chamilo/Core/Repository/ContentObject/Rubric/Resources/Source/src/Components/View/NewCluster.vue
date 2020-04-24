@@ -9,6 +9,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
+    import Rubric from '../../Domain/Rubric';
     import Cluster from '../../Domain/Cluster';
     import NameInput from './NameInput.vue';
 
@@ -21,10 +22,7 @@
 
         @Prop({type: String, default: null}) readonly viewId!: string|null;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
-
-        get store() {
-            return this.$root.$data.store;
-        }
+        @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 
         get inputFormShown() {
             return this.newCluster !== null;
@@ -36,7 +34,7 @@
         }
 
         addNewCluster() {
-            this.store.rubric.addChild(this.newCluster, this.store.rubric.clusters.length);
+            this.rubric.addChild(this.newCluster!, this.rubric.clusters.length);
             this.$emit('cluster-selected', this.newCluster);
             this.cancel();
         }

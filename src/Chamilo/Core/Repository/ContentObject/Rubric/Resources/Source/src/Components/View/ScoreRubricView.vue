@@ -3,6 +3,7 @@
 		<div class="rubric-panes-wrapper">
 			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu">
 				<rubric-pane id="view1"
+							 :rubric="rubric"
 							 :selected-cluster="selectedClusterView1"
 							 :other-selected-cluster="selectedClusterView2"
 							 :selected-criterium="selectedCriterium"
@@ -28,6 +29,7 @@
 							 @over-element="dragOverElement"
 				></rubric-pane>
 				<rubric-pane id="view2" v-if="split"
+							 :rubric="rubric"
 							 :selected-cluster="selectedClusterView2"
 							 :other-selected-cluster="selectedClusterView1"
 							 :selected-criterium="selectedCriterium"
@@ -54,7 +56,7 @@
 				></rubric-pane>
 			</div>
 		</div>
-        <criterium-details-view v-if="selectedCriterium" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
+        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
 		<remove-dialog :remove-item="removeItem" @remove="onRemoveItem" @cancel="hideRemoveDialog"></remove-dialog>
 	</div>
 </template>
@@ -62,6 +64,7 @@
 <script lang="ts">
 	import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
 	import TreeNode from '../../Domain/TreeNode';
+	import Rubric from '../../Domain/Rubric';
 	import Cluster from '../../Domain/Cluster';
 	import Category from '../../Domain/Category';
 	import Criterium from '../../Domain/Criterium';
@@ -75,8 +78,8 @@
 	})
 	export default class ScoreRubricView extends Vue {
 
-		private selectedClusterView1: Cluster|null = this.store.rubric.clusters.length && this.store.rubric.clusters[0] || null;
-		private selectedClusterView2: Cluster|null = this.store.rubric.clusters.length && this.store.rubric.clusters[0] || null;
+		private selectedClusterView1: Cluster|null = this.clusters.length && this.clusters[0] || null;
+		private selectedClusterView2: Cluster|null = this.clusters.length && this.clusters[0] || null;
 		private menuActionsId: string = '';
 		private newClusterDialogView: string = '';
 		private newCategoryDialogView: string = '';
@@ -89,19 +92,12 @@
 		private bannedForDrop: string = '';
 		private innerWidth: number = window.innerWidth;
 
+		@Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 		@Prop(Boolean) readonly split!: boolean;
 
-		get store() {
-			return this.$root.$data.store;
-		}
-
-		get rubric() {
-			return this.store.rubric;
-		}
-
 		get clusters() {
-			return [...this.store.rubric.clusters];
+			return [...this.rubric.clusters];
 		}
 
 		get console() {
@@ -182,7 +178,7 @@
 				}
 			}
 			item!.parent!.removeChild(item);
-			this.store.removeChild(item, item!.parent!);
+			// Todo! // this.store.removeChild(item, item!.parent!);
 			this.hideRemoveDialog();
 		}
 
@@ -246,7 +242,7 @@
 			};
 		}
 
-		@Watch('store.rubric')
+		@Watch('rubric')
 		onRubricChanged(){
 			// console.log('change');
 		}

@@ -99,8 +99,8 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
+    import Rubric from '../../Domain/Rubric';
     import Level from '../../Domain/Level';
-    import ScoreRubricStore from '../../ScoreRubricStore';
 
     @Component({
         name: 'levels-view'
@@ -109,6 +109,8 @@
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
         private editMode: boolean = false;
+
+        @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 
         isLabelHidden(level: Level) : boolean {
             const index = this.rubric.levels.indexOf(level);
@@ -122,14 +124,6 @@
         selectLevel(level: Level|null) {
             this.selectedLevel = level;
             return false;
-        }
-
-        get store(): ScoreRubricStore {
-            return this.$root.$data.store;
-        }
-
-        get rubric() {
-            return this.store.rubric;
         }
 
         editLevel(level: Level) {
@@ -162,7 +156,7 @@
         }
 
         setDefault(defaultLevel: Level) {
-            this.store.rubric.levels.forEach(level => {
+            this.rubric.levels.forEach(level => {
                 level.isDefault = (defaultLevel === level) ? !level.isDefault : false;
             });
         }

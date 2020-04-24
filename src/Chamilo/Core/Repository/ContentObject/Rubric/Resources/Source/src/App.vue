@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <rubric-builder apiConfig="config" rubric="myRubric" version="currentVersion"></rubric-builder>
+        <!--<rubric-builder apiConfig="config" rubric="myRubric" version="currentVersion"></rubric-builder>-->
 
         <div class="app-header">
             <ul class="app-header-menu">
@@ -11,21 +11,20 @@
                 <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>
             </ul>
             <div class="save-state">
-                <div v-if="store.isSaving" class="saving">
+                <!--<div v-if="store.isSaving" class="saving">
                     Processing {{store.queue.pending + store.queue.size}} saves...
                 </div>
                 <div v-else class="saved" role="alert">
                     All changes saved
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="rubrics">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div v-if="!store.isLoading" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
-                <levels-view v-if="content === 'levels'"></levels-view>
-                <score-rubric-view v-if="content === 'rubric'" :split="showSplitView" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
-                <!--<criterium-details-view v-if="content === 'rubric'" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>-->
+            <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
+                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
+                <levels-view v-else-if="content === 'levels'" :rubric="rubric"></levels-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
@@ -36,13 +35,15 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
     import ScoreRubricView from './Components/View/ScoreRubricView.vue';
     import CriteriumDetailsView from './Components/View/CriteriumDetailsView.vue';
     import ScoreRubricStore from './ScoreRubricStore';
     import Criterium from './Domain/Criterium';
     import LevelsView from './Components/View/LevelsView.vue';
-    import APIConfiguration from "./Connector/APIConfiguration";
+    import APIConfiguration from './Connector/APIConfiguration';
+    import Rubric, {RubricJsonObject} from './Domain/Rubric';
+    import Cluster from "./Domain/Cluster";
 
     @Component({
         components: {
@@ -54,25 +55,23 @@
         private showSplitView: boolean = false;
         private content: string = 'rubric';
         private apiConfiguration: APIConfiguration|null = null;
+        private rubric: Rubric|null = null;
+
+        @Prop({type: Object, default: null}) readonly rubricData!: Object|null;
 
         private config: any = {
-            'addLevelURL': 'https://test',
+            'addLevelURL': 'https://test'
         };
-
-        get store(): ScoreRubricStore {
-            return this.$root.$data.store;
-        }
 
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
         }
 
-        async mounted() {
-            this.apiConfiguration = APIConfiguration.fromJSON(config);
-        }
-
-        async created() {
-            await this.store.fetchData();
+        mounted() {
+            if (this.rubricData) {
+                this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
+                this.apiConfiguration = APIConfiguration.fromJSON(this.config);
+            }
         }
     }
 </script>
@@ -171,6 +170,14 @@
         display: flex;
         flex-direction: column;
         margin: 0 auto;
+
+        p {
+            margin: 1.5em 1.5em 0;
+        }
+
+        .lds-ellipsis {
+            margin-left: .9em;
+        }
     }
 
     .lds-ellipsis {
@@ -827,12 +834,12 @@
         padding: 0;
     }
 
-    .criterium-level { 
+    .criterium-level {
         margin-bottom: 1.5em;
     }
 
-    .criterium-level-title { 
-        font-weight: 700; 
+    .criterium-level-title {
+        font-weight: 700;
     }
 
     .criterium-level-description {
@@ -845,7 +852,7 @@
         }
     }
 
-    .criterium-level-input { 
+    .criterium-level-input {
         display: flex;
     }
 
