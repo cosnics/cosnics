@@ -9,11 +9,11 @@ export default class APIConfiguration {
     public readonly updateLevelURL = '';
     public readonly updateTreeNodeURL = '';
 
-    private constructor(config: Object) {
+    private constructor(config: object) {
         Object.assign(this, config);
     }
 
-    public static fromJSON(config: Object) : APIConfiguration {
+    public static fromJSON(config: object) : APIConfiguration {
         return new APIConfiguration(config);
     }
 };
