@@ -45,8 +45,8 @@
         newCriteriumChanged() {
             this.$nextTick(()=> {
                 if (this.inputFormShown) {
-                    const nameInput = (this.$refs['name-input'] as Vue).$el as HTMLElement;
-                    if (HTMLElement.prototype.scrollIntoViewIfNeeded) {
+                    const nameInput = (this.$refs['name-input'] as Vue).$el as any;
+                    if (nameInput.scrollIntoViewIfNeeded) {
                         nameInput.scrollIntoViewIfNeeded();
                     } else {
                         nameInput.scrollIntoView();
