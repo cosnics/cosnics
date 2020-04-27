@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -575,5 +576,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $course_groups_recursive;
+    }
+
+    public static function clear_course_group_users_cache()
+    {
+        return DataClassCache::truncate(CourseGroupUserRelation::class);
     }
 }

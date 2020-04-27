@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\SubscriptionRandomizer;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -1026,6 +1027,8 @@ class CourseGroupForm extends FormValidator
         }
         if (sizeof($groups) > 0)
         {
+            $randomizer = new SubscriptionRandomizer($this->courseGroupDecoratorsManager);
+
             foreach ($groups as $course_group)
             {
                 if (!$this->course_group_name_exists($course_group))
@@ -1033,6 +1036,12 @@ class CourseGroupForm extends FormValidator
                     if ($course_group->create())
                     {
                         $this->courseGroupDecoratorsManager->createGroup($course_group, $this->currentUser, $values);
+
+                        if (isset($values, $values[CourseGroup::PROPERTY_RANDOM_REG]))
+                        {
+                            $randomizer->subscribeRandomUsersInCourseGroup($course_group, $parent_group);
+                            DataManager::clear_course_group_users_cache();
+                        }
                     }
                     else
                     {
@@ -1051,21 +1060,6 @@ class CourseGroupForm extends FormValidator
                         )
                     );
                 }
-            }
-        }
-
-        if (isset($values, $values[CourseGroup::PROPERTY_RANDOM_REG]))
-        {
-            switch ($parent_group_select)
-            {
-                case self::OPTION_PARENT_GROUP_NONE :
-                    break;
-                case self::OPTION_PARENT_GROUP_EXISTING :
-                    $this->random_user_subscription_to_course_groups($parent_group);
-                    break;
-                case self::OPTION_PARENT_GROUP_NEW :
-                    $this->random_user_subscription_to_course_groups($parent_group);
-                    break;
             }
         }
 
@@ -1204,162 +1198,6 @@ class CourseGroupForm extends FormValidator
         // $this->addGroup($group, CourseGroup::PROPERTY_NAME . $option_number,
         // Translation :: get('Title') . $numbering, '', false);
         // }
-    }
-
-    /**
-     * randomly selects the users from the course users and subscribes to course group takes into the account the max
-     * number of members
-     *
-     * @param CourseGroup $course_group
-     */
-    public function random_user_subscription_to_course_group($course_group)
-    {
-        $course_code = $course_group->get_course_code();
-        $max_num_members = $course_group->get_max_number_of_members();
-
-        // randomize course_users
-        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $course_users_data_set */
-        $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code, null, null, null);
-        $course_users = array();
-        while ($course_user = $course_users_data_set->next_result())
-        {
-            $course_users[] = $course_user;
-        }
-        shuffle($course_users);
-
-        $members_to_add = array();
-        $qty_course_users = sizeof($course_users);
-
-        if ($max_num_members < $qty_course_users && $max_num_members > 0)
-        {
-            // if course_users > max number of subscriptions allowed =>
-            // subscribe all the users to the course_group
-            $qty_members_to_add = $max_num_members;
-        }
-        else
-        {
-            $qty_members_to_add = $qty_course_users;
-        }
-
-        $count = 0;
-        while (sizeof($members_to_add) < $qty_members_to_add && $count < count($course_users))
-        {
-            $member = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
-                $course_users[$count]->get_username()
-            );
-            $members_to_add[] = $member->getId();
-
-            $count ++;
-        }
-        $course_group->subscribe_users($members_to_add);
-    }
-
-    /**
-     * Randomly selects the users from the course users and subscribes them in the course groups directly under the
-     * given parent course group. It takes into the account the max number of members and the maximum number of
-     * subscriptions allowed for a course user. This method front-loads (it will fill up spaces as soon as it gets them.
-     * If there are no more users with unused subscriptions, all remaining groups will remain empty).
-     *
-     * @param CourseGroup $parent_course_group The parent of the course groups to which the random subscription applies.
-     *
-     * @return bool True if all the available spaces are filled. False otherwise.
-     */
-    public function random_user_subscription_to_course_groups($parent_course_group)
-    {
-        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $course_users_drs */
-        $course_users_drs = CourseDataManager::retrieve_all_course_users(
-            $parent_course_group->get_course_code(),
-            null,
-            null,
-            null
-        );
-        $course_users = array();
-        if ($course_users_drs)
-        {
-            while ($course_user = $course_users_drs->next_result())
-            {
-                $course_users[$course_user[User::PROPERTY_ID]] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(),
-                    $course_user[User::PROPERTY_ID]
-                );
-            }
-        }
-
-        /** @var CourseGroup[] $course_groups */
-        $course_groups = $parent_course_group->get_children(false)->as_array();
-
-        $max_number_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
-        $user_number_subscriptions = array();
-
-        foreach ($course_groups as $course_group)
-        {
-            /** @var int[] $subscribed_users */
-            $subscribed_users = $course_group->get_members(true, true);
-            if ($subscribed_users)
-            {
-                foreach ($subscribed_users as $user_id)
-                {
-                    $user_number_subscriptions[$user_id] = $user_number_subscriptions[$user_id] + 1;
-                }
-            }
-        }
-
-        foreach ($user_number_subscriptions as $user_id => $number_subscriptions)
-        {
-            if ($number_subscriptions >= $max_number_subscriptions)
-            {
-                unset($course_users[$user_id]);
-            }
-        }
-
-        shuffle($course_users);
-        $all_groups_filled = true;
-        foreach ($course_groups as $course_group)
-        {
-            if (!$all_groups_filled)
-            {
-                break;
-            }
-            /** @var int[] $subscribed_users_drs */
-            $subscribed_users_drs = $course_group->get_members(true, true);
-            $subscribed_users = array();
-            if ($subscribed_users_drs)
-            {
-                foreach ($subscribed_users_drs as $user_id)
-                {
-                    $subscribed_users[$user_id] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
-                        $user_id
-                    );
-                }
-            }
-            $max_subscribed_users = $course_group->get_max_number_of_members();
-            $new_users = array();
-            while (count($new_users) < $max_subscribed_users - count($subscribed_users) && count($course_users) > 0)
-            {
-                $random_int = mt_rand(0, count($course_users) - 1);
-                if (!array_key_exists($course_users[$random_int]->getId(), $new_users) &&
-                    !array_key_exists($course_users[$random_int]->getId(), $subscribed_users))
-                {
-                    $new_users[$course_users[$random_int]->getId()] = $course_users[$random_int];
-                    $user_number_subscriptions[$course_users[$random_int]->getId()] =
-                        $user_number_subscriptions[$course_users[$random_int]->getId()] +
-                        1;
-
-                    if ($user_number_subscriptions[$course_users[$random_int]->getId()] >= $max_number_subscriptions)
-                    {
-                        unset($course_users[$random_int]);
-                        $course_users = array_values($course_users);
-                    }
-                }
-            }
-            if (count($new_users) > 0)
-            {
-                $course_group->subscribe_users($new_users);
-            }
-        }
-
-        return $all_groups_filled;
     }
 
     /**
