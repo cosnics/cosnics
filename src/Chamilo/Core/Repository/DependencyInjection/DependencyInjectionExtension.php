@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\DependencyInjection;
 
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\IncludeParserCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationAggregatorCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 /**
  * Extension on the dependency injection container.
  * Loads local services and parameters for this package.
- * 
+ *
  * @see http://symfony.com/doc/current/components/dependency_injection/compilation.html
  *
  * @package Chamilo\Libraries\DependencyInjection
@@ -25,6 +26,17 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  */
 class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
 {
+
+    /**
+     * Returns the recommended alias to use in XML.
+     * This alias is also the mandatory prefix to use when using YAML.
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'chamilo.core.repository';
+    }
 
     /**
      * Loads a specific configuration.
@@ -36,10 +48,11 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function load(array $configuration, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-        
+
         $xmlFileLoader = new XmlFileLoader(
-            $container, 
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Repository') . 'DependencyInjection'));
+            $container,
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Repository') . 'DependencyInjection')
+        );
 
         $xmlFileLoader->load('instance.xml');
         $xmlFileLoader->load('console.xml');
@@ -47,27 +60,20 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('services.xml');
 
         $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Feedback') . 'DependencyInjection'));
+            $container, new FileLocator(
+                $pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Feedback') . 'DependencyInjection'
+            )
+        );
 
         $xmlFileLoader->load('services.xml');
 
         $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Workspace') . 'DependencyInjection'));
+            $container, new FileLocator(
+                $pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Workspace') . 'DependencyInjection'
+            )
+        );
 
         $xmlFileLoader->load('services.xml');
-    }
-
-    /**
-     * Returns the recommended alias to use in XML.
-     * This alias is also the mandatory prefix to use when using YAML.
-     * 
-     * @return string
-     */
-    public function getAlias()
-    {
-        return 'chamilo.core.repository';
     }
 
     /**
@@ -79,5 +85,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     {
         $container->addCompilerPass(new PublicationAggregatorCompilerPass());
         $container->addCompilerPass(new WorkspaceExtensionCompilerPass());
+        $container->addCompilerPass(new IncludeParserCompilerPass());
     }
 }

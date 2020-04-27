@@ -142,7 +142,7 @@ class ContentObject extends CompositeDataClass
 
     /**
      *
-     * @var ObjectResultSet
+     * @var \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
      */
     private $synchronization_data;
 
@@ -183,7 +183,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $id int The ID of the object to attach.
      */
-    public function attach_content_object($id, $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
         if ($this->is_attached_to($id, $type))
         {
@@ -200,7 +200,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function attach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
     {
         if (is_null($ids))
         {
@@ -689,7 +689,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return boolean True if the attachment was removed, false if it did not exist.
      */
-    public function detach_content_object($id, $type = self :: ATTACHMENT_NORMAL)
+    public function detach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -723,7 +723,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function detach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
+    public function detach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {
@@ -931,7 +931,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return array The objects.
      */
-    public function get_attached_content_object_ids($type = self :: ATTACHMENT_NORMAL)
+    public function get_attached_content_object_ids($type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($this->attachment_ids[$type]))
         {
@@ -1080,7 +1080,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Returns the edition of this object
      *
-     * @return an int; the number of the version.
+     * @return int the number of the version.
      */
     public function get_content_object_edition()
     {
@@ -1172,7 +1172,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $id int The ID of the object to compare with.
      *
-     * @return Array The difference.
+     * @return array The difference.
      */
     public function get_difference($id)
     {
@@ -1195,7 +1195,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
      *
-     * @return multitype:string
+     * @return string[]
      */
     static public function get_html_editors($html_editors = array())
 
@@ -1453,7 +1453,7 @@ class ContentObject extends CompositeDataClass
 
     /**
      *
-     * @return ExternalSync false
+     * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
      */
     public function get_synchronization_data()
     {
@@ -1685,7 +1685,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return boolean
      */
-    public function is_attached_to($object_id, $type = ContentObject ::ATTACHMENT_NORMAL)
+    public function is_attached_to($object_id, $type = ContentObject::ATTACHMENT_NORMAL)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -1995,13 +1995,13 @@ class ContentObject extends CompositeDataClass
      *
      * @param $type String
      */
-    public function truncate_attachment_cache($type = self :: ATTACHMENT_NORMAL)
+    public function truncate_attachment_cache($type = self::ATTACHMENT_NORMAL)
     {
         unset($this->attachment_ids[$type]);
         unset($this->attachments[$type]);
     }
 
-    public function truncate_attachments($type = self :: ATTACHMENT_NORMAL)
+    public function truncate_attachments($type = self::ATTACHMENT_NORMAL)
     {
         // Reset the cache
         $this->truncate_attachment_cache($type);

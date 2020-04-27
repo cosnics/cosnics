@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
@@ -14,21 +15,22 @@ use Chamilo\Libraries\Utilities\String\Text;
  */
 class IncludeEmbedParser extends ContentObjectIncludeParser
 {
-
-    public function parse_editor()
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     */
+    public function parseHtmlEditorField()
     {
-        $form = $this->get_form();
-        $form_type = $form->get_form_type();
-        $values = $form->exportValues();
-        $content_object = $form->get_content_object();
+        $values = $this->getValues();
+        $contentObject = $this->getContentObject();
 
-        $html_editors = $form->get_html_editors();
+        $htmlEditors = $values[FormValidator::PROPERTY_HTML_EDITORS];
 
-        foreach ($html_editors as $html_editor)
+        foreach ($htmlEditors as $htmlEditor)
         {
-            if (isset($values[$html_editor]))
+            if (isset($values[$htmlEditor]))
             {
-                $tags = Text::parse_html_file($values[$html_editor], 'embed');
+                $tags = Text::parse_html_file($values[$htmlEditor], 'embed');
 
                 foreach ($tags as $tag)
                 {
@@ -39,18 +41,21 @@ class IncludeEmbedParser extends ContentObjectIncludeParser
                     {
                         $source_components = parse_url($source);
                         $source_query_components = Text::parse_query_string($source_components['query']);
-                        $content_object_id = $source_query_components[Manager::PARAM_CONTENT_OBJECT_ID];
+                        $contentObjectIdentifier = $source_query_components[Manager::PARAM_CONTENT_OBJECT_ID];
 
-                        if ($content_object_id)
+                        if ($contentObjectIdentifier)
                         {
-                            $included_object = DataManager::retrieve_by_id(
-                                ContentObject::class_name(),
-                                $content_object_id);
+                            /**
+                             * @var \Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File $includedObject
+                             */
+                            $includedObject = DataManager::retrieve_by_id(
+                                ContentObject::class, $contentObjectIdentifier
+                            );
 
-                            if ($included_object->is_flash() || $included_object->is_video() ||
-                                 $included_object->is_audio())
+                            if ($includedObject->is_flash() || $includedObject->is_video() ||
+                                $includedObject->is_audio())
                             {
-                                $content_object->include_content_object($included_object->get_id());
+                                $contentObject->include_content_object($includedObject->getId());
                             }
                         }
                     }

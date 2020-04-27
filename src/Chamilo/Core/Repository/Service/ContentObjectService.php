@@ -61,6 +61,30 @@ class ContentObjectService
     }
 
     /**
+     * @param boolean $alsoReturnInactiveTypes
+     *
+     * @return string[]
+     */
+    public function getContentObjectTypes(bool $alsoReturnInactiveTypes = true)
+    {
+        $contentObjectRegistrations =
+            $this->getRegistrationConsulter()->getContentObjectRegistrations($alsoReturnInactiveTypes);
+        $contentObjectTypes = array();
+
+        foreach ($contentObjectRegistrations as $contentObjectRegistration)
+        {
+            $contentObjectContext = $contentObjectRegistration[Registration::PROPERTY_CONTEXT];
+            $contentObjectName = $this->getStringUtilities()->createString(
+                $contentObjectRegistration[Registration::PROPERTY_NAME]
+            )->upperCamelize()->__toString();
+
+            $contentObjectTypes[] = $contentObjectContext . '\Storage\DataClass\\' . $contentObjectName;
+        }
+
+        return $contentObjectTypes;
+    }
+
+    /**
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
@@ -93,30 +117,6 @@ class ContentObjectService
     }
 
     /**
-     * @param boolean $alsoReturnInactiveTypes
-     *
-     * @return string[]
-     */
-    public function getContentObjectTypes(bool $alsoReturnInactiveTypes = true)
-    {
-        $contentObjectRegistrations =
-            $this->getRegistrationConsulter()->getContentObjectRegistrations($alsoReturnInactiveTypes);
-        $contentObjectTypes = array();
-
-        foreach ($contentObjectRegistrations as $contentObjectRegistration)
-        {
-            $contentObjectContext = $contentObjectRegistration[Registration::PROPERTY_CONTEXT];
-            $contentObjectName = $this->getStringUtilities()->createString(
-                $contentObjectRegistration[Registration::PROPERTY_NAME]
-            )->upperCamelize()->__toString();
-
-            $contentObjectTypes[] = $contentObjectContext . '\Storage\DataClass\\' . $contentObjectName;
-        }
-
-        return $contentObjectTypes;
-    }
-
-    /**
      * @return integer
      * @throws \Exception
      * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
@@ -132,6 +132,33 @@ class ContentObjectService
         }
 
         return $usedStorageSpace;
+    }
+
+    /**
+     * @param string $contentObjectType
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
+    {
+        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectType(
+            $contentObjectType
+        );
+    }
+
+    /**
+     * @param string $contentObjectType
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
+    {
+        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectTypeAndUser(
+            $contentObjectType, $user
+        );
     }
 
     /**
@@ -152,33 +179,6 @@ class ContentObjectService
         }
 
         return $usedStorageSpace;
-    }
-
-    /**
-     * @param string $contentObjectType
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
-    {
-        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectTypeAndUser(
-            $contentObjectType, $user
-        );
-    }
-
-    /**
-     * @param string $contentObjectType
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
-    {
-        return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectType(
-            $contentObjectType
-        );
     }
 
 }

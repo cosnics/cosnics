@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Includes;
 
-use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -12,62 +12,105 @@ abstract class ContentObjectIncludeParser
 {
 
     /**
-     * The form
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    private $form;
+    private $contentObject;
 
-    public function __construct($form)
+    /**
+     * @var string[][]
+     */
+    private $values;
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string[][] $values
+     */
+    public function __construct(ContentObject $contentObject, array $values)
     {
-        $this->form = $form;
+        $this->contentObject = $contentObject;
+        $this->values = $values;
     }
 
-    public function get_form()
+    /**
+     * @param string $type
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string[][] $values
+     *
+     * @return \Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser
+     */
+    public static function factory($type, ContentObject $contentObject, array $values)
     {
-        return $this->form;
+        $class =
+            __NAMESPACE__ . '\Type\Include' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
+            'Parser';
+
+        return new $class($contentObject, $values);
     }
 
-    public function set_form($form)
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
+    public function getContentObject(): ContentObject
     {
-        $this->form = $form;
+        return $this->contentObject;
     }
 
-    abstract public function parse_editor();
-
-    public static function factory($type, $form)
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     */
+    public function setContentObject(ContentObject $contentObject): void
     {
-        $class = __NAMESPACE__ . '\Type\Include' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
-             'Parser';
-        return new $class($form);
+        $this->contentObject = $contentObject;
     }
 
+    /**
+     * @return string[][]
+     */
+    public function getValues(): array
+    {
+        return $this->values;
+    }
+
+    /**
+     * @param string[][] $values
+     */
+    public function setValues(array $values): void
+    {
+        $this->values = $values;
+    }
+
+    /**
+     * @return string[]
+     */
     public static function get_include_types()
     {
         return array('image', 'embed', 'youtube', 'chamilo');
     }
 
-    public function parse_includes($form)
+    abstract public function parseHtmlEditorField();
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string[][] $values
+     */
+    public static function parse_includes(ContentObject $contentObject, array $values)
     {
-        $content_object = $form->get_content_object();
-
-        $form_type = $form->get_form_type();
-
-        if ($form_type == ContentObjectForm::TYPE_EDIT)
+        if ($contentObject->isIdentified())
         {
             /*
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need
              * to be added, and attaches and detaches accordingly.
              */
-            foreach ($content_object->get_includes() as $included_object)
+            foreach ($contentObject->get_includes() as $included_object)
             {
-                $content_object->exclude_content_object($included_object->get_id());
+                $contentObject->exclude_content_object($included_object->getId());
             }
         }
 
-        $include_types = self::get_include_types();
-        foreach ($include_types as $include_type)
+        foreach (self::get_include_types() as $include_type)
         {
-            $parser = self::factory($include_type, $form);
-            $parser->parse_editor();
+            $parser = self::factory($include_type, $contentObject, $values);
+            $parser->parseHtmlEditorField();
         }
     }
 }

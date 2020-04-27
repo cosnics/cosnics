@@ -38,12 +38,28 @@ class Template
      * @param ContentObject $content_object
      * @param TemplateTranslation $translation
      */
-    public function __construct(TemplateConfiguration $configuration, ContentObject $content_object,
-        TemplateTranslation $translation)
+    public function __construct(
+        TemplateConfiguration $configuration, ContentObject $content_object, TemplateTranslation $translation
+    )
     {
         $this->set_configuration($configuration);
         $this->set_content_object($content_object);
         $this->set_translation($translation);
+    }
+
+    /**
+     *
+     * @param string $content_object_type
+     * @param string $template_name
+     *
+     * @return Template
+     * @throws \Exception
+     */
+    public static function get($content_object_type, $template_name)
+    {
+        $contentObjectTemplateLoader = new ContentObjectTemplateLoader(PathBuilder::getInstance());
+
+        return $contentObjectTemplateLoader->loadTemplate($content_object_type, $template_name);
     }
 
     /**
@@ -100,22 +116,16 @@ class Template
         $this->translation = $translation;
     }
 
+    /**
+     * @param $variable
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function translate($variable)
     {
         $language = Translation::getInstance()->getLanguageIsocode();
-        return $this->get_translation()->translate($language, $variable);
-    }
 
-    /**
-     *
-     * @param string $content_object_type
-     * @param string $template_name
-     * @return Template
-     * @throws \Exception
-     */
-    public static function get($content_object_type, $template_name)
-    {
-        $contentObjectTemplateLoader = new ContentObjectTemplateLoader(PathBuilder::getInstance());
-        return $contentObjectTemplateLoader->loadTemplate($content_object_type, $template_name);
+        return $this->get_translation()->translate($language, $variable);
     }
 }

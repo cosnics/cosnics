@@ -42,5 +42,21 @@
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationTargetProcessor"/>
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer"/>
 
+        <service id="Chamilo\Core\Repository\Service\RepositoryCategoryService"/>
+        <service id="Chamilo\Core\Repository\Service\ContentObjectSaver"/>
+        
+        <service id="Chamilo\Core\Repository\Service\IncludeParserManager"/>
+        <service id="Chamilo\Core\Repository\Service\IncludeParser\IncludeChamiloParser">
+            <tag name="Chamilo\Core\Repository\Service\IncludeParser\ChamiloIncludeParser"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Service\IncludeParser\IncludeEmbedParser">
+            <tag name="Chamilo\Core\Repository\Service\IncludeParser\ChamiloIncludeParser"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Service\IncludeParser\IncludeImageParser">
+            <tag name="Chamilo\Core\Repository\Service\IncludeParser\ChamiloIncludeParser"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Service\IncludeParser\IncludeYoutubeParser">
+            <tag name="Chamilo\Core\Repository\Service\IncludeParser\ChamiloIncludeParser"/>
+        </service>
     </services>
 </container>

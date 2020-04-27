@@ -9,19 +9,17 @@ use Exception;
 
 /**
  * The registration of a template for a specific content object type
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TemplateRegistration extends DataClass
 {
-    
-    // Default properties
     const PROPERTY_CONTENT_OBJECT_TYPE = 'content_object_type';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_CREATOR_ID = 'creator_id';
     const PROPERTY_DEFAULT = 'is_default';
+    const PROPERTY_NAME = 'name';
     const PROPERTY_TEMPLATE = 'template';
+    const PROPERTY_USER_ID = 'user_id';
 
     /**
      *
@@ -31,81 +29,29 @@ class TemplateRegistration extends DataClass
 
     /**
      *
-     * @param string $content_object_type
-     */
-    public function set_content_object_type($content_object_type)
-    {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_TYPE, $content_object_type);
-    }
-
-    /**
-     *
      * @return string
      */
     public function get_content_object_type()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_TYPE);
     }
 
     /**
      *
-     * @param string $name
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
-    public function set_name($name)
+    public function get_creator()
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->get_default_property(self::PROPERTY_NAME);
-    }
-
-    /**
-     *
-     * @param int $user_id
-     */
-    public function set_user_id($user_id)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_user_id()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @return \core\user\User
-     */
-    public function get_user()
-    {
-        if (! isset($this->user))
+        if (!isset($this->creator))
         {
-            $this->user = DataManager::retrieve_by_id(
-                User::class_name(),
-                $this->get_user_id());
+            $this->creator = DataManager::retrieve_by_id(
+                User::class, $this->get_creator_id()
+            );
         }
-        
-        return $this->user;
-    }
 
-    /**
-     *
-     * @param int $creator_id
-     */
-    public function set_creator_id($creator_id)
-    {
-        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creator_id);
+        return $this->creator;
     }
 
     /**
@@ -114,32 +60,7 @@ class TemplateRegistration extends DataClass
      */
     public function get_creator_id()
     {
-        return $this->get_default_property(self::PROPERTY_CREATOR_ID);
-    }
-
-    /**
-     *
-     * @return \core\user\User
-     */
-    public function get_creator()
-    {
-        if (! isset($this->creator))
-        {
-            $this->creator = DataManager::retrieve_by_id(
-                User::class_name(),
-                $this->get_creator_id());
-        }
-        
-        return $this->creator;
-    }
-
-    /**
-     *
-     * @param boolean $default
-     */
-    public function set_default($default)
-    {
-        $this->set_default_property(self::PROPERTY_DEFAULT, $default);
+        return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
     }
 
     /**
@@ -148,31 +69,14 @@ class TemplateRegistration extends DataClass
      */
     public function get_default()
     {
-        return $this->get_default_property(self::PROPERTY_DEFAULT);
+        return $this->getDefaultProperty(self::PROPERTY_DEFAULT);
     }
 
     /**
      *
-     * @return Template
-     */
-    public function get_template()
-    {
-        return unserialize($this->get_default_property(self::PROPERTY_TEMPLATE));
-    }
-
-    /**
+     * @param string[] $extended_property_names
      *
-     * @param Template $template
-     */
-    public function set_template($template)
-    {
-        $this->set_default_property(self::PROPERTY_TEMPLATE, serialize($template));
-    }
-
-    /**
-     *
-     * @param multitype:string $extended_property_names
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_default_property_names($extended_property_names = array())
     {
@@ -182,8 +86,120 @@ class TemplateRegistration extends DataClass
         $extended_property_names[] = self::PROPERTY_CREATOR_ID;
         $extended_property_names[] = self::PROPERTY_DEFAULT;
         $extended_property_names[] = self::PROPERTY_TEMPLATE;
-        
+
         return parent::get_default_property_names($extended_property_names);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
+    }
+
+    /**
+     *
+     * @return Template
+     */
+    public function get_template()
+    {
+        return unserialize($this->getDefaultProperty(self::PROPERTY_TEMPLATE));
+    }
+
+    /**
+     *
+     * @param Template $template
+     *
+     * @throws \Exception
+     */
+    public function set_template($template)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TEMPLATE, serialize($template));
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     */
+    public function get_user()
+    {
+        if (!isset($this->user))
+        {
+            $this->user = DataManager::retrieve_by_id(
+                User::class, $this->get_user_id()
+            );
+        }
+
+        return $this->user;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_user_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     *
+     * @param string $content_object_type
+     *
+     * @throws \Exception
+     */
+    public function set_content_object_type($content_object_type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_TYPE, $content_object_type);
+    }
+
+    /**
+     *
+     * @param int $creator_id
+     *
+     * @throws \Exception
+     */
+    public function set_creator_id($creator_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CREATOR_ID, $creator_id);
+    }
+
+    /**
+     *
+     * @param boolean $default
+     *
+     * @throws \Exception
+     */
+    public function set_default($default)
+    {
+        $this->setDefaultProperty(self::PROPERTY_DEFAULT, $default);
+    }
+
+    /**
+     *
+     * @param string $name
+     *
+     * @throws \Exception
+     *
+     */
+    public function set_name($name)
+    {
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
+    }
+
+    /**
+     *
+     * @param int $user_id
+     *
+     * @throws \Exception
+     */
+    public function set_user_id($user_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function synchronize()
@@ -191,6 +207,7 @@ class TemplateRegistration extends DataClass
         try
         {
             $this->set_template(Template::get($this->get_content_object_type(), $this->get_name()));
+
             return $this->update();
         }
         catch (Exception $exception)

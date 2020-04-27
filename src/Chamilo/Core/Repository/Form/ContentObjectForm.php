@@ -33,7 +33,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -606,7 +605,7 @@ abstract class ContentObjectForm extends FormValidator
         $values = $this->exportValues();
 
         // Process includes
-        ContentObjectIncludeParser::parse_includes($this);
+        ContentObjectIncludeParser::parse_includes($this->get_content_object(), $this->get_html_editors());
 
         // Process attachments
         if ($object instanceof AttachmentSupport)
@@ -1048,7 +1047,7 @@ abstract class ContentObjectForm extends FormValidator
         }
 
         // Process includes
-        ContentObjectIncludeParser::parse_includes($this);
+        ContentObjectIncludeParser::parse_includes($this->get_content_object(), $this->get_html_editors());
 
         // $include_parser->parse_editors();
 

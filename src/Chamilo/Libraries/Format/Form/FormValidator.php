@@ -24,8 +24,12 @@ class FormValidator extends HTML_QuickForm
     const PARAM_RESET = 'reset';
     const PARAM_SUBMIT = 'submit';
 
+    const PROPERTY_HTML_EDITORS = 'html_editors';
+
     const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
+
     const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
+
     const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
@@ -761,6 +765,14 @@ EOT;
         $javascriptHtml[] = '</script>';
 
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+    }
+
+    function exportValues($elementList = null)
+    {
+        $values = parent::exportValues($elementList);
+        $values[self::PROPERTY_HTML_EDITORS] = $this->get_html_editors();
+
+        return $values;
     }
 
     protected function getDatePickerTemplate()
