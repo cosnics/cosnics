@@ -80,19 +80,7 @@ class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     protected function getDirectlySubscribedPlatformGroups()
     {
-        $groups = $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course())
-            ->getArrayCopy();
-
-        foreach ($groups as $index => $group)
-        {
-            $leftValue = $group[Group::PROPERTY_LEFT_VALUE];
-            $rightValue = $group[Group::PROPERTY_RIGHT_VALUE];
-
-            $hasChildren = $leftValue != ($rightValue - 1);
-            $groups[$index]['has_children'] = $hasChildren;
-        }
-
-        return $groups;
+        return $this->getCourseSubscriptionService()->findGroupsDirectlySubscribedToCourse($this->get_course());
     }
 
     /**

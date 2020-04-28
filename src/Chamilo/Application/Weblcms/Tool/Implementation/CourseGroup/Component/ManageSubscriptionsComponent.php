@@ -4,7 +4,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupSubscriptionsForm;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -50,6 +56,39 @@ class ManageSubscriptionsComponent extends TabComponent
             $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
 
-        return $form->toHtml();
+        $html = [];
+
+        $html[] = '<div class="pull-right">' . $this->getGroupButtonToolbarRenderer()->render() . '</div>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = $form->toHtml();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Builds the group button toolbar for the management of a single group
+     */
+    protected function getGroupButtonToolbarRenderer()
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $buttonToolbar->addItem(
+                new Button(
+                    $this->getTranslator()->trans('SubscribePlatformGroupUsers', [], Manager::context()),
+                    new FontAwesomeGlyph('group'),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_PLATFORM_GROUP_USERS,
+                            self::PARAM_COURSE_GROUP => $this->getCurrentCourseGroup()->getId()
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+        return new ButtonToolBarRenderer($buttonToolbar);
     }
 }

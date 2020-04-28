@@ -170,11 +170,23 @@ class CourseSubscriptionService
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param int|null $status
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return array
      */
     public function findGroupsDirectlySubscribedToCourse(Course $course, int $status = null)
     {
-        return $this->courseSubscriptionRepository->findGroupsDirectlySubscribedToCourse($course, $status);
+        $groups = $this->courseSubscriptionRepository->findGroupsDirectlySubscribedToCourse($course, $status)
+            ->getArrayCopy();
+
+        foreach ($groups as $index => $group)
+        {
+            $leftValue = $group[Group::PROPERTY_LEFT_VALUE];
+            $rightValue = $group[Group::PROPERTY_RIGHT_VALUE];
+
+            $hasChildren = $leftValue != ($rightValue - 1);
+            $groups[$index]['has_children'] = $hasChildren;
+        }
+
+        return $groups;
     }
 
 }

@@ -22,7 +22,7 @@ class VisitTeamComponent extends Manager
     function run()
     {
         $parentComponent = $this->getIntegrationLauncherComponent();
-        $courseGroup = $parentComponent->get_course_group();
+        $courseGroup = $parentComponent->getCourseGroupFromRequest();
 
         if (!$this->getUser()->is_platform_admin() &&
             !$parentComponent->get_course()->is_course_admin($this->getUser()) &&

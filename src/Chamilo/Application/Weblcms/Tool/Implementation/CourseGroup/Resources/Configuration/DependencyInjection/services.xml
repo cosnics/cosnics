@@ -18,5 +18,14 @@
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository">
             <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
         </service>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Type\SubscribePlatformGroupUsersFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Handler\SubscribePlatformGroupUsersFormHandler" autowire="true" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository" autowire="true" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService" autowire="true" />
+
     </services>
 </container>

@@ -16,7 +16,7 @@ class SelfSubscriberComponent extends Manager
 
     public function run()
     {
-        $course_group = $this->get_course_group();
+        $course_group = $this->getCourseGroupFromRequest();
 
         if(empty($course_group)) {
             throw new ObjectNotExistException(

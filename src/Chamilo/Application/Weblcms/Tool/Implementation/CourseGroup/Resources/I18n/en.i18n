@@ -118,3 +118,9 @@ RemoveSelectedCourseGroups = "Remove selected course groups"
 
 SubscriptionTimeFormat = "%B %d, %Y at %I:%M:%S %p"
 Integrations = "Integrations with other tools"
+
+PlatformGroupUsersSubscribed = "Subscribe all users from selected platform groups"
+PlatformGroupUsersNotSubscribed = "The users could not be subscribed"
+SubscribePlatformGroupUsersComponent = "Subscribe platformgroup users"
+SubscribePlatformGroupUsers = "Subscribe platformgroup users"
+PlatformGroups = "Select platform groups"

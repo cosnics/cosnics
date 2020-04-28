@@ -300,7 +300,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         }
     }
 
-    public function get_course_group()
+    public function getCourseGroupFromRequest()
     {
         return $this->course_group;
     }

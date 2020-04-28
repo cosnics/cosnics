@@ -30,7 +30,7 @@ class SyncCourseGroupComponent extends Manager
         try
         {
             $this->getCourseGroupOffice365Connector()->syncCourseGroupSubscriptions(
-                $this->getIntegrationLauncherComponent()->get_course_group()
+                $this->getIntegrationLauncherComponent()->getCourseGroupFromRequest()
             );
 
             $success = true;

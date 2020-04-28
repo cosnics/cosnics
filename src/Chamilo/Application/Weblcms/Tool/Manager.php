@@ -104,6 +104,7 @@ abstract class Manager extends Application
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
+    const ACTION_SUBSCRIBE_PLATFORM_GROUP_USERS = 'SubscribePlatformGroupUsers';
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
@@ -444,9 +445,9 @@ abstract class Manager extends Application
         return $this->get_parent()->get_course_groups();
     }
 
-    public function get_course_group()
+    public function getCourseGroupFromRequest()
     {
-        return $this->get_parent()->get_course_group();
+        return $this->get_parent()->getCourseGroupFromRequest();
     }
 
     /**

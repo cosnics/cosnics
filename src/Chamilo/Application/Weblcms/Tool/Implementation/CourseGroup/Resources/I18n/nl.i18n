@@ -120,3 +120,9 @@ RemoveSelectedCourseGroups = "Verwijder geselecteerde cursusgroepen"
 
 SubscriptionTimeFormat = "%d/%m/%Y om %H:%M:%S"
 Integrations = "Integraties met andere modules"
+
+PlatformGroupUsersSubscribed = "Alle gebruikers van de geselecteerde groepen zijn ingeschreven"
+PlatformGroupUsersNotSubscribed = "De gebruikers konden niet ingeschreven worden"
+SubscribePlatformGroupUsersComponent = "Platformgroep gebruikers inschrijven"
+SubscribePlatformGroupUsers = "Platformgroep gebruikers inschrijven"
+PlatformGroups = "Selecteer platformgroepen"
