@@ -22,45 +22,42 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-        
+
         $relationInstance = new RelationInstance();
-        
+
         $form = new RelationInstanceForm(
-            $relationInstance, 
-            $this->getSourceEntities(), 
-            $this->getRelations(), 
-            $this->getTargetEntities(), 
-            $this->get_url());
-        
+            $relationInstance, $this->getSourceEntities(), $this->getRelations(), $this->getTargetEntities(),
+            $this->get_url()
+        );
+
         if ($form->validate())
         {
             $submittedValues = $form->exportValues();
-            $relationInstanceService = new RelationInstanceService();
+            $relationInstanceService = $this->getService(RelationInstanceService::class);
             $success = $relationInstanceService->createRelationInstancesFromSubmittedValues(
-                $this->get_user(), 
-                $submittedValues);
-            
+                $this->get_user(), $submittedValues
+            );
+
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-            
+
             $message = Translation::get(
-                $translation, 
-                array('OBJECT' => Translation::get('RelationInstance')), 
-                Utilities::COMMON_LIBRARIES);
-            
-            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+                $translation, array('OBJECT' => Translation::get('RelationInstance')), Utilities::COMMON_LIBRARIES
+            );
+
+            $this->redirect($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }

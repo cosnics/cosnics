@@ -23,109 +23,82 @@ class EntityTranslationService
     const PROPERTY_TRANSLATION = 'translation';
 
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Entity\DataClassEntity
-     */
-    private $entity;
-
-    /**
-     *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     */
-    public function __construct(DataClassEntity $entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     */
-    public function setEntity(DataClassEntity $entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation[]
-     */
-    public function getEntityTranslationsIndexedByIsocode()
-    {
-        $conditions = array();
-        $translationsIndexedByIsocode = array();
-        
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(EntityTranslation::class_name(), EntityTranslation::PROPERTY_ENTITY_TYPE), 
-            ComparisonCondition::EQUAL, 
-            new StaticConditionVariable($this->getEntity()->getDataClassName()));
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(EntityTranslation::class_name(), EntityTranslation::PROPERTY_ENTITY_ID), 
-            ComparisonCondition::EQUAL, 
-            new StaticConditionVariable($this->getEntity()->getDataClassIdentifier()));
-        
-        $translations = DataManager::retrieves(
-            EntityTranslation::class_name(), 
-            new DataClassRetrievesParameters(new AndCondition($conditions)));
-        
-        while ($translation = $translations->next_result())
-        {
-            $translationsIndexedByIsocode[$translation->get_isocode()] = $translation;
-        }
-        
-        return $translationsIndexedByIsocode;
-    }
-
-    /**
-     *
      * @param string[] $entityTranslations
+     *
      * @return boolean
+     * @throws \Exception
      */
-    public function createEntityTranslations($entityTranslations)
+    public function createEntityTranslations(DataClassEntity $entity, $entityTranslations)
     {
         foreach ($entityTranslations[self::PROPERTY_TRANSLATION] as $isocode => $value)
         {
             $translation = new EntityTranslation();
-            $translation->set_entity_type($this->getEntity()->getDataClassName());
-            $translation->set_entity_id($this->getEntity()->getDataClassIdentifier());
+            $translation->set_entity_type($entity->getDataClassName());
+            $translation->set_entity_id($entity->getDataClassIdentifier());
             $translation->set_isocode($isocode);
             $translation->set_value($value);
-            
-            if (! $translation->create())
+
+            if (!$translation->create())
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @param string[] $entityTranslations
-     * @return boolean
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation[]
+     * @throws \Exception
      */
-    public function updateEntityTranslations($entityTranslations)
+    public function getEntityTranslationsIndexedByIsocode(DataClassEntity $entity)
     {
-        $translations = $this->getEntity()->getDataClass()->getTranslations();
-        
+        $conditions = array();
+        $translationsIndexedByIsocode = array();
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE),
+            ComparisonCondition::EQUAL, new StaticConditionVariable($entity->getDataClassName())
+        );
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID),
+            ComparisonCondition::EQUAL, new StaticConditionVariable($entity->getDataClassIdentifier())
+        );
+
+        $translations = DataManager::retrieves(
+            EntityTranslation::class, new DataClassRetrievesParameters(new AndCondition($conditions))
+        );
+
+        while ($translation = $translations->next_result())
+        {
+            $translationsIndexedByIsocode[$translation->get_isocode()] = $translation;
+        }
+
+        return $translationsIndexedByIsocode;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param string[] $entityTranslations
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function updateEntityTranslations(DataClassEntity $entity, $entityTranslations)
+    {
+        $translations = $entity->getDataClass()->getTranslations();
+
         foreach ($entityTranslations as $isocode => $value)
         {
             if ($translations[$isocode] instanceof EntityTranslation)
             {
                 $translation = $translations[$isocode];
                 $translation->set_value($value);
-                
-                if (! $translation->update())
+
+                if (!$translation->update())
                 {
                     return false;
                 }
@@ -133,18 +106,18 @@ class EntityTranslationService
             else
             {
                 $translation = new EntityTranslation();
-                $translation->set_entity_type($this->getEntity()->getDataClassName());
-                $translation->set_entity_id($this->getEntity()->getDataClassIdentifier());
+                $translation->set_entity_type($entity->getDataClassName());
+                $translation->set_entity_id($entity->getDataClassIdentifier());
                 $translation->set_isocode($isocode);
                 $translation->set_value($value);
-                
-                if (! $translation->create())
+
+                if (!$translation->create())
                 {
                     return false;
                 }
             }
         }
-        
+
         return true;
     }
 }

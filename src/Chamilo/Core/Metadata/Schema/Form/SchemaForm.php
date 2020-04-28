@@ -21,29 +21,23 @@ class SchemaForm extends FormValidator
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
      */
     private $schema;
 
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Service\EntityTranslationFormService
-     */
-    private $entityTranslationFormService;
-
-    /**
      * Constructor
      *
-     * @param string $form_url
-     * @param \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema $schema
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     * @param string $formUrl
+     *
+     * @throws \Exception
      */
-    public function __construct(Schema $schema, EntityTranslationFormService $entityTranslationFormService, $formUrl)
+    public function __construct(Schema $schema, $formUrl)
     {
         parent::__construct('schema', self::FORM_METHOD_POST, $formUrl);
 
         $this->schema = $schema;
-        $this->entityTranslationFormService = $entityTranslationFormService;
-        $this->entityTranslationFormService->setFormValidator($this);
 
         $this->buildForm();
         $this->setFormDefaults();
@@ -51,6 +45,8 @@ class SchemaForm extends FormValidator
 
     /**
      * Builds this form
+     *
+     * @throws \Exception
      */
     protected function buildForm()
     {
@@ -75,14 +71,21 @@ class SchemaForm extends FormValidator
             Schema::PROPERTY_URL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
 
-        $this->entityTranslationFormService->addFieldsToForm();
+        $this->getEntityTranslationFormService()->addFieldsToForm($this);
         $this->addSaveResetButtons();
     }
 
     /**
+     * @return \Chamilo\Core\Metadata\Service\EntityTranslationFormService
+     */
+    protected function getEntityTranslationFormService()
+    {
+        return $this->getService(EntityTranslationFormService::class);
+    }
+
+    /**
      * Sets the default values
-     *
-     * @param \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema $schema
+     * @throws \Exception
      */
     protected function setFormDefaults()
     {
@@ -94,6 +97,6 @@ class SchemaForm extends FormValidator
 
         $this->setDefaults($defaults);
 
-        $this->entityTranslationFormService->setFormDefaults();
+        $this->getEntityTranslationFormService()->setFormDefaults($this, $this->schema);
     }
 }

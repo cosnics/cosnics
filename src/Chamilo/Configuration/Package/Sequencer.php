@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Package;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Exception;
 
 class Sequencer
 {
@@ -53,7 +54,7 @@ class Sequencer
             {
                 $this->packages[$package_context] = Package::get($package_context);
             }
-            catch (\Exception $exception)
+            catch (Exception $exception)
             {
                 $this->packages[$package_context] = false;
             }

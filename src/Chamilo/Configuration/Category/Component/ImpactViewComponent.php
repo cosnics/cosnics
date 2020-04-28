@@ -9,6 +9,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  * Component to view the impact of a delete command
@@ -31,7 +32,7 @@ class ImpactViewComponent extends Manager
     {
         if (! $this->supports_impact_view())
         {
-            throw new \Exception(Translation::get('ImpactViewNotSupported'));
+            throw new Exception(Translation::get('ImpactViewNotSupported'));
         }
         
         $category_ids = $this->get_selected_category_ids();

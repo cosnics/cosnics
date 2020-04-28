@@ -67,8 +67,7 @@ abstract class Manager extends Application
     {
         if (! isset($this->expandedEntities))
         {
-            $entityConditionService = new EntityConditionService();
-            $this->expandedEntities = $entityConditionService->expandEntities($this->getEntities());
+            $this->expandedEntities = $this->getService(EntityConditionService::class)->expandEntities($this->getEntities());
         }
         
         return $this->expandedEntities;

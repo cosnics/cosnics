@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Package\Finder;
 
+use Chamilo\Configuration\Configuration;
+
 /**
  *
  * @package Chamilo\Configuration\Package\Finder
@@ -17,6 +19,6 @@ class AvailablePackageBundles extends PackageBundles
      */
     protected function isRelevantPackage($packageNamespace)
     {
-        return ! \Chamilo\Configuration\Configuration::is_registered($packageNamespace);
+        return ! Configuration::is_registered($packageNamespace);
     }
 }

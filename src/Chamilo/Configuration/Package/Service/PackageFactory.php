@@ -7,6 +7,8 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
+use Exception;
+use stdClass;
 
 /**
  *
@@ -120,7 +122,7 @@ class PackageFactory
 
         if (!$path)
         {
-            throw new \Exception(Translation::get('InvalidPackageContext', array('CONTEXT' => $context)));
+            throw new Exception(Translation::get('InvalidPackageContext', array('CONTEXT' => $context)));
         }
 
         return $this->parseComposerJsonPath($path);
@@ -143,7 +145,7 @@ class PackageFactory
      *
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
      */
-    public function parseComposerJson(\stdClass $jsonPackageObject)
+    public function parseComposerJson(stdClass $jsonPackageObject)
     {
         $cosnicsProperties = $jsonPackageObject->extra->cosnics;
 

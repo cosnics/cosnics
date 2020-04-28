@@ -80,8 +80,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getRelation()
     {
-        $relationService = new RelationService();
-        $relation = $relationService->getRelationByName('isAvailableFor');
+        $relation = $this->getService(RelationService::class)->getRelationByName('isAvailableFor');
 
         if (! $relation instanceof Relation)
         {

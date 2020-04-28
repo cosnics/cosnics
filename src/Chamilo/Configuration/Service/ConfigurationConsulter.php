@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Configuration\Service
@@ -44,7 +46,7 @@ class ConfigurationConsulter extends DataConsulter
 
                 if (!array_key_exists($key, $values))
                 {
-                    throw new \Exception(
+                    throw new Exception(
                         'The requested variable is not available in an unconfigured environment (' .
                         implode(' > ', $keys) .
                         ')'
@@ -58,7 +60,7 @@ class ConfigurationConsulter extends DataConsulter
 
             return $values;
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
             return null;
         }

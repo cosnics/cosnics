@@ -33,50 +33,39 @@ class EntityFormService
 {
 
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance
+     * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
-    private $schemaInstance;
+    private $propertyProviderService;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService
      */
-    private $entity;
+    private $vocabularyService;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Format\Form\FormValidator
+     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
      */
-    private $formValidator;
+    private $elementService;
 
     /**
-     *
-     * @var \Chamilo\Core\User\Storaga\DataClass\User
-     */
-    private $user;
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     * @param \Chamilo\Core\User\Storaga\DataClass\User $user
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     * @param \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService $vocabularyService
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
      */
     public function __construct(
-        SchemaInstance $schemaInstance, DataClassEntity $entity, FormValidator $formValidator, User $user
+        PropertyProviderService $propertyProviderService, VocabularyService $vocabularyService,
+        ElementService $elementService
     )
     {
-        $this->schemaInstance = $schemaInstance;
-        $this->entity = $entity;
-        $this->formValidator = $formValidator;
-        $this->user = $user;
+        $this->propertyProviderService = $propertyProviderService;
+        $this->vocabularyService = $vocabularyService;
+        $this->elementService = $elementService;
     }
 
     /**
-     * Adds the dependencies to the form
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      */
-    private function addDependencies()
+    private function addDependencies(FormValidator $formValidator)
     {
         $resource_manager = ResourceManager::getInstance();
         $plugin_path = Path::getInstance()->getPluginPath('Chamilo\Core\Metadata', true) . 'Bootstrap/Tagsinput/';
@@ -90,25 +79,31 @@ class EntityFormService
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Input.js'
         );
 
-        $this->formValidator->addElement('html', implode(PHP_EOL, $dependencies));
+        $formValidator->addElement('html', implode(PHP_EOL, $dependencies));
     }
 
-    public function addElements()
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance $schemaInstance
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function addElements(
+        FormValidator $formValidator, SchemaInstance $schemaInstance, DataClassEntity $entity, User $user
+    )
     {
-        $this->addDependencies();
+        $this->addDependencies($formValidator);
 
-        $elementService = new ElementService();
-        $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
-
-        $propertyProviderService = new PropertyProviderService($this->getEntity(), $this->getSchemaInstance());
+        $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
         while ($element = $elements->next_result())
         {
             try
             {
-                $providerLink = $propertyProviderService->getProviderLinkForElement($element);
-                $vocabularyService = new VocabularyService();
-
                 $providedIcon = new FontAwesomeGlyph(
                     'lock', array(), Translation::get('ProvidedMetadataElementValue', null, 'Chamilo\Core\Metadata'),
                     'fas'
@@ -120,8 +115,8 @@ class EntityFormService
                 if ($element->usesVocabulary())
                 {
                     $providedVocabularies =
-                        $vocabularyService->getProvidedVocabulariesForUserEntitySchemaInstanceElement(
-                            $this->getUser(), $this->getEntity(), $this->getSchemaInstance(), $element
+                        $this->getVocabularyService()->getProvidedVocabulariesForUserEntitySchemaInstanceElement(
+                            $user, $entity, $schemaInstance, $element
                         );
 
                     $html = array();
@@ -137,12 +132,12 @@ class EntityFormService
 
                     $html[] = '</div>';
 
-                    $this->formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
+                    $formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
                 }
                 else
                 {
-                    $providedValue = $vocabularyService->getProvidedValueForUserEntitySchemaInstanceElement(
-                        $this->getUser(), $this->getEntity(), $this->getSchemaInstance(), $element
+                    $providedValue = $this->getVocabularyService()->getProvidedValueForUserEntitySchemaInstanceElement(
+                        $user, $entity, $schemaInstance, $element
                     );
 
                     $html = array();
@@ -151,14 +146,13 @@ class EntityFormService
                     $html[] = $providedValue;
                     $html[] = '</div>';
 
-                    $this->formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
+                    $formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
                 }
             }
             catch (NoProviderAvailableException $exception)
             {
-                $elementName =
-                    EntityService::PROPERTY_METADATA_SCHEMA . '[' . $this->getSchemaInstance()->get_schema_id() . '][' .
-                    $this->getSchemaInstance()->get_id() . '][' . $element->get_id() . ']';
+                $elementName = EntityService::PROPERTY_METADATA_SCHEMA . '[' . $schemaInstance->get_schema_id() . '][' .
+                    $schemaInstance->getId() . '][' . $element->get_id() . ']';
 
                 if ($element->usesVocabulary())
                 {
@@ -172,13 +166,13 @@ class EntityFormService
                     }
 
                     $tagElementGroup = array();
-                    $tagElementGroup[] = $this->formValidator->createElement(
+                    $tagElementGroup[] = $formValidator->createElement(
                         'text', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']', null,
                         array(
                             'id' => $uniqueIdentifier,
                             'class' => $class,
-                            'data-schema-id' => $this->getSchemaInstance()->get_schema_id(),
-                            'data-schema-instance-id' => $this->getSchemaInstance()->get_id(),
+                            'data-schema-id' => $schemaInstance->get_schema_id(),
+                            'data-schema-instance-id' => $schemaInstance->getId(),
                             'data-element-id' => $element->get_id(),
                             'data-element-value-limit' => $element->get_value_limit()
                         )
@@ -186,7 +180,7 @@ class EntityFormService
 
                     if ($element->isVocabularyUserDefined())
                     {
-                        $tagElementGroup[] = $this->formValidator->createElement(
+                        $tagElementGroup[] = $formValidator->createElement(
                             'hidden', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_NEW . ']', null,
                             array('id' => 'new-' . $uniqueIdentifier)
                         );
@@ -209,15 +203,15 @@ class EntityFormService
                         ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
                     );
 
-                    $tagElementGroup[] = $this->formValidator->createElement(
-                        'static', null, null, $vocabularyAction->as_html()
+                    $tagElementGroup[] = $formValidator->createElement(
+                        'static', null, null, $vocabularyAction->render()
                     );
 
-                    $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
+                    $formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
                 }
                 else
                 {
-                    $this->formValidator->addElement(
+                    $formValidator->addElement(
                         'textarea', $elementName, $element->get_display_name(),
                         array('cols' => 60, 'rows' => 6, 'maxlength' => 1000)
                     );
@@ -227,92 +221,78 @@ class EntityFormService
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
+     * @return \Chamilo\Core\Metadata\Element\Service\ElementService
      */
-    public function getEntity()
+    public function getElementService(): ElementService
     {
-        return $this->entity;
+        return $this->elementService;
     }
 
     /**
-     *
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     */
+    public function setElementService(ElementService $elementService): void
+    {
+        $this->elementService = $elementService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
+     */
+    public function getPropertyProviderService(): PropertyProviderService
+    {
+        return $this->propertyProviderService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     */
+    public function setPropertyProviderService(
+        PropertyProviderService $propertyProviderService
+    ): void
+    {
+        $this->propertyProviderService = $propertyProviderService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService
+     */
+    public function getVocabularyService(): VocabularyService
+    {
+        return $this->vocabularyService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService $vocabularyService
+     */
+    public function setVocabularyService(VocabularyService $vocabularyService): void
+    {
+        $this->vocabularyService = $vocabularyService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     */
-    public function setEntity(DataClassEntity $entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    public function getFormValidator()
-    {
-        return $this->formValidator;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     */
-    public function setFormValidator($formValidator)
-    {
-        $this->formValidator = $formValidator;
-    }
-
-    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function getSchemaInstance()
-    {
-        return $this->schemaInstance;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstancea $schemaInstance
-     */
-    public function setSchemaInstance($schemaInstance)
-    {
-        $this->schemaInstance = $schemaInstance;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storaga\DataClass\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storaga\DataClass\User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    public function setDefaults()
+    public function setDefaults(
+        SchemaInstance $schemaInstance, DataClassEntity $entity, FormValidator $formValidator, User $user
+    )
     {
         $defaults = array();
 
-        $elementService = new ElementService();
-        $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
-
-        $vocabularyService = new VocabularyService();
-        $propertyProviderService = new PropertyProviderService($this->getEntity(), $this->getSchemaInstance());
+        $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
         while ($element = $elements->next_result())
         {
             try
             {
-                $providerLink = $propertyProviderService->getProviderLinkForElement($element);
+                $providerLink = $this->getPropertyProviderService()->getProviderLinkForElement($entity, $element);
                 continue;
             }
             catch (NoProviderAvailableException $exception)
@@ -320,22 +300,22 @@ class EntityFormService
                 if ($element->usesVocabulary())
                 {
                     $elementName =
-                        EntityService::PROPERTY_METADATA_SCHEMA . '[' . $this->getSchemaInstance()->get_schema_id() .
-                        '][' . $this->getSchemaInstance()->get_id() . '][' . $element->get_id() . '][' .
+                        EntityService::PROPERTY_METADATA_SCHEMA . '[' . $schemaInstance->get_schema_id() . '][' .
+                        $schemaInstance->get_id() . '][' . $element->get_id() . '][' .
                         EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']';
 
                     $options = array();
 
                     $elementInstanceVocabularies =
-                        $elementService->getElementInstanceVocabulariesForSchemaInstanceAndElement(
-                            $this->getSchemaInstance(), $element
+                        $this->getElementService()->getElementInstanceVocabulariesForSchemaInstanceAndElement(
+                            $schemaInstance, $element
                         )->as_array();
 
                     if (count($elementInstanceVocabularies) == 0)
                     {
                         $elementInstanceVocabularies =
-                            $vocabularyService->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
-                                $this->getUser(), $this->getSchemaInstance(), $element
+                            $this->getVocabularyService()->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
+                                $user, $schemaInstance, $element
                             );
                     }
 
@@ -356,11 +336,11 @@ class EntityFormService
                 else
                 {
                     $elementName =
-                        EntityService::PROPERTY_METADATA_SCHEMA . '[' . $this->getSchemaInstance()->get_schema_id() .
-                        '][' . $this->getSchemaInstance()->get_id() . '][' . $element->get_id() . ']';
+                        EntityService::PROPERTY_METADATA_SCHEMA . '[' . $schemaInstance->get_schema_id() . '][' .
+                        $schemaInstance . '][' . $element->get_id() . ']';
                     $elementInstanceVocabulary =
-                        $elementService->getElementInstanceVocabularyForSchemaInstanceAndElement(
-                            $this->getSchemaInstance(), $element
+                        $this->getElementService()->getElementInstanceVocabularyForSchemaInstanceAndElement(
+                            $schemaInstance, $element
                         );
 
                     if ($elementInstanceVocabulary instanceof Vocabulary && $elementInstanceVocabulary->get_value())
@@ -377,6 +357,6 @@ class EntityFormService
             }
         }
 
-        $this->formValidator->setDefaults($defaults);
+        $formValidator->setDefaults($defaults);
     }
 }

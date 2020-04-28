@@ -6,6 +6,8 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use DOMDocument;
+use DOMXPath;
 
 /**
  *
@@ -14,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * This installer can be used to create the storage structure for the users application.
  */
-class Installer extends \Chamilo\Configuration\Package\Action\Installer
+class Installer extends Action\Installer
 {
 
     /**
@@ -53,9 +55,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
             if (file_exists($language_info_file) && $file_info['extension'] == 'info')
             {
-                $dom_document = new \DOMDocument('1.0', 'UTF-8');
+                $dom_document = new DOMDocument('1.0', 'UTF-8');
                 $dom_document->load($language_info_file);
-                $dom_xpath = new \DOMXPath($dom_document);
+                $dom_xpath = new DOMXPath($dom_document);
 
                 $language_node = $dom_xpath->query('/packages/package')->item(0);
 

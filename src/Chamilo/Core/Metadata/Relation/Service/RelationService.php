@@ -20,18 +20,19 @@ class RelationService
 {
 
     /**
-     * @param $relationName
+     * @param string $relationName
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
     public function getRelationByName($relationName)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Relation::class_name(), Relation::PROPERTY_NAME), ComparisonCondition::EQUAL,
+            new PropertyConditionVariable(Relation::class, Relation::PROPERTY_NAME), ComparisonCondition::EQUAL,
             new StaticConditionVariable($relationName)
         );
 
-        return DataManager::retrieve(Relation::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Relation::class, new DataClassRetrieveParameters($condition));
     }
 }

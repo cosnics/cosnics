@@ -2,12 +2,13 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use ClassContext;
     
     // Types
     const TYPE_NORMAL = '1';

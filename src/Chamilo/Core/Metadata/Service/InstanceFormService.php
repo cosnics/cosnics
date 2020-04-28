@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Core\Metadata\Entity\EntityInterface;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
@@ -16,88 +15,54 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  */
 class InstanceFormService
 {
-
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Entity\EntityInterface
+     * @var \Chamilo\Core\Metadata\Service\EntityService
      */
-    private $entity;
+    private $entityService;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Format\Form\FormValidator
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
      */
-    private $formValidator;
+    public function __construct(EntityService $entityService)
+    {
+        $this->entityService = $entityService;
+    }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     */
-    public function __construct(EntityInterface $entity, FormValidator $formValidator)
-    {
-        $this->entity = $entity;
-        $this->formValidator = $formValidator;
-    }
-
-    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    public function getFormValidator()
-    {
-        return $this->formValidator;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     */
-    public function setFormValidator($formValidator)
-    {
-        $this->formValidator = $formValidator;
-    }
-
-    public function addElements(EntityService $entityService, RelationService $relationService)
+    public function addElements(FormValidator $formValidator, DataClassEntity $entity)
     {
         $entityFactory = DataClassEntityFactory::getInstance();
-        $entity = $entityFactory->getEntity($this->getEntity()->getDataClassName());
-        $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $entity);
-        
+        $entity = $entityFactory->getEntity($entity->getDataClassName());
+        $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity);
+
         while ($availableSchema = $availableSchemas->next_result())
         {
-            $this->formValidator->addElement(
-                'checkbox', 
-                InstanceService::PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']', 
-                $availableSchema->get_name(), 
-                null, 
-                null, 
-                $availableSchema->get_id());
+            $formValidator->addElement(
+                'checkbox', InstanceService::PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']',
+                $availableSchema->get_name(), null, null, $availableSchema->get_id()
+            );
         }
     }
 
-    public function setDefaults()
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityService
+     */
+    public function getEntityService(): EntityService
     {
-        $defaults = array();
-        
-        $this->formValidator->setDefaults($defaults);
+        return $this->entityService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     */
+    public function setEntityService(EntityService $entityService): void
+    {
+        $this->entityService = $entityService;
     }
 }

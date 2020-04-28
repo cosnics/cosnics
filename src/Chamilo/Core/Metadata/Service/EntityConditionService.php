@@ -24,20 +24,72 @@ class EntityConditionService
     /**
      *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
+     *
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
+     * @throws \Exception
+     */
+    public function expandEntities($entities)
+    {
+        $expandedEntities = array();
+
+        foreach ($entities as $entity)
+        {
+
+            $expandedEntities = array_merge($expandedEntities, $this->expandEntity($entity));
+        }
+
+        return $expandedEntities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     *
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
+     * @throws \Exception
+     */
+    public function expandEntity($entity)
+    {
+        $expandedEntities = array();
+
+        if (!$entity->isDataClassType())
+        {
+            $expandedEntities[] = $entity;
+        }
+        else
+        {
+            $dataClassInstances = DataManager::retrieves(
+                $entity->getDataClassName(), new DataClassRetrievesParameters()
+            );
+
+            while ($dataClassInstance = $dataClassInstances->next_result())
+            {
+                $expandedEntities[] = DataClassEntityFactory::getInstance()->getEntityFromDataClass($dataClassInstance);
+            }
+        }
+
+        return $expandedEntities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
      * @param string $dataClass
      * @param string $typeProperty
      * @param string $identifierProperty
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
+     * @throws \Exception
      */
     public function getEntitiesCondition($entities, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
-        
+
         foreach ($entities as $entity)
         {
             $entityConditions[] = $this->getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty);
         }
-        
+
         return new OrCondition($entityConditions);
     }
 
@@ -47,69 +99,27 @@ class EntityConditionService
      * @param string $dataClass
      * @param string $typeProperty
      * @param string $identifierProperty
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \Exception
      */
     public function getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
-        
+
         $entityConditions[] = new EqualityCondition(
-            new PropertyConditionVariable($dataClass::class_name(), $typeProperty), 
-            new StaticConditionVariable($entity->getDataClassName()));
-        
-        if (! $entity->isDataClassType() && $identifierProperty)
+            new PropertyConditionVariable($dataClass, $typeProperty),
+            new StaticConditionVariable($entity->getDataClassName())
+        );
+
+        if (!$entity->isDataClassType() && $identifierProperty)
         {
             $entityConditions[] = new EqualityCondition(
-                new PropertyConditionVariable($dataClass::class_name(), $identifierProperty), 
-                new StaticConditionVariable($entity->getDataClassIdentifier()));
+                new PropertyConditionVariable($dataClass, $identifierProperty),
+                new StaticConditionVariable($entity->getDataClassIdentifier())
+            );
         }
-        
+
         return new AndCondition($entityConditions);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
-     */
-    public function expandEntities($entities)
-    {
-        $expandedEntities = array();
-        
-        foreach ($entities as $entity)
-        {
-            
-            $expandedEntities = array_merge($expandedEntities, $this->expandEntity($entity));
-        }
-        
-        return $expandedEntities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
-     */
-    public function expandEntity($entity)
-    {
-        $expandedEntities = array();
-        
-        if (! $entity->isDataClassType())
-        {
-            $expandedEntities[] = $entity;
-        }
-        else
-        {
-            $dataClassInstances = DataManager::retrieves(
-                $entity->getDataClassName(), 
-                new DataClassRetrievesParameters());
-            
-            while ($dataClassInstance = $dataClassInstances->next_result())
-            {
-                $expandedEntities[] = DataClassEntityFactory::getInstance()->getEntityFromDataClass($dataClassInstance);
-            }
-        }
-        
-        return $expandedEntities;
     }
 }

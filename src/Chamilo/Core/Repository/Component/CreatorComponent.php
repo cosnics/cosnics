@@ -124,8 +124,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                         )
                     );
 
-                    $instanceService = new InstanceService();
-                    $selectedTab = $instanceService->updateInstances(
+                    $selectedTab = $this->getService(InstanceService::class)->updateInstances(
                         $this->get_user(), $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
                     );
 

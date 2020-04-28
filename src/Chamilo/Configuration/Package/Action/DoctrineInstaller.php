@@ -9,6 +9,8 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFact
 use Doctrine\ORM\EntityManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
+use Doctrine\ORM\Tools\SchemaTool;
+use Exception;
 
 /**
  * This installer can be used to create the storage structure with doctrine
@@ -16,7 +18,7 @@ use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExte
  * @author Sven Vanpoucke
  * @author Directie Onderwijs - Digitaal Leren
  */
-abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\Installer
+abstract class DoctrineInstaller extends Installer
 {
     /**
      * Scans for the available storage units and creates them
@@ -46,7 +48,7 @@ abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\I
         /** @var EntityManager $entityManager */
         $entityManager = $container->get(EntityManager::class);
 
-        $schema_tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
+        $schema_tool = new SchemaTool($entityManager);
 
         $classesMetadata = array();
 
@@ -75,7 +77,7 @@ abstract class DoctrineInstaller extends \Chamilo\Configuration\Package\Action\I
 
             $schema_tool->updateSchema($classesMetadata, true);
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             echo '<pre>';
             print_r($ex->getMessage());

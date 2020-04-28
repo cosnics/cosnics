@@ -50,6 +50,11 @@ class EntityService
     private $elementService;
 
     /**
+     * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
+     */
+    private $propertyProviderService;
+
+    /**
      * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
      * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
      */
@@ -64,6 +69,8 @@ class EntityService
      *
      * @return integer[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function getAvailableSchemaIdsForEntityType(DataClassEntity $entity)
     {
@@ -75,8 +82,9 @@ class EntityService
     /**
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
     public function getAvailableSchemasForEntityType(DataClassEntity $entity)
     {
@@ -115,15 +123,33 @@ class EntityService
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(SchemaInstance::class_name(), SchemaInstance::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_ENTITY_TYPE),
             ComparisonCondition::EQUAL, new StaticConditionVariable($entity->getDataClassName())
         );
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(SchemaInstance::class_name(), SchemaInstance::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_ENTITY_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($entity->getDataClassIdentifier())
         );
 
         return $conditions;
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
+     */
+    public function getPropertyProviderService(): PropertyProviderService
+    {
+        return $this->propertyProviderService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     */
+    public function setPropertyProviderService(
+        PropertyProviderService $propertyProviderService
+    ): void
+    {
+        $this->propertyProviderService = $propertyProviderService;
     }
 
     /**
@@ -147,19 +173,20 @@ class EntityService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
     public function getSchemaInstancesForEntity($entity)
     {
         $entityType = DataClassEntityFactory::getInstance()->getEntity($entity->getDataClassName());
-        $schemaIds = $this->getAvailableSchemaIdsForEntityType($entityType);
+        $schemaIds = $this->getAvailableSchemaIdsForEntityType($entity);
 
         $conditions = $this->getEntityCondition($entity);
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(SchemaInstance::class_name(), SchemaInstance::PROPERTY_SCHEMA_ID), $schemaIds
+            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_SCHEMA_ID), $schemaIds
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class_name(), new DataClassRetrievesParameters(new AndCondition($conditions))
+            SchemaInstance::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
     }
 
@@ -167,52 +194,54 @@ class EntityService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance[]
+     * @throws \Exception
      */
     public function getSchemaInstancesForSchemaAndEntity(Schema $schema, DataClassEntity $entity)
     {
         $conditions = $this->getEntityCondition($entity);
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(SchemaInstance::class_name(), SchemaInstance::PROPERTY_SCHEMA_ID),
+            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_SCHEMA_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($schema->get_id())
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class_name(), new DataClassRetrievesParameters(new AndCondition($conditions))
+            SchemaInstance::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
     }
 
     /**
-     * @param $sourceType
+     * @param string $sourceType
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation $relation
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $targetEntity
      *
-     * @return array
+     * @return string[]
+     * @throws \Exception
      */
     public function getSourceRelationIdsForEntity($sourceType, Relation $relation, DataClassEntity $targetEntity)
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE),
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE),
             ComparisonCondition::EQUAL, new StaticConditionVariable($sourceType)
         );
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID),
-            ComparisonCondition::EQUAL, new StaticConditionVariable($relation->get_id())
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_RELATION_ID),
+            ComparisonCondition::EQUAL, new StaticConditionVariable($relation->getId())
         );
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE),
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE),
             ComparisonCondition::EQUAL, new StaticConditionVariable($targetEntity->getDataClassName())
         );
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($targetEntity->getDataClassIdentifier())
         );
 
         $condition = new AndCondition($conditions);
 
         return DataManager::distinct(
-            RelationInstance::class_name(), new DataClassDistinctParameters(
+            RelationInstance::class, new DataClassDistinctParameters(
                 $condition, new DataClassProperties(
                     array(new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID))
                 )
@@ -224,18 +253,19 @@ class EntityService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary[]
+     * @throws \Exception
      */
     public function getVocabularyByElementIdAndUserId(Element $element, User $user)
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID),
-            ComparisonCondition::EQUAL, new StaticConditionVariable($element->get_id())
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
+            ComparisonCondition::EQUAL, new StaticConditionVariable($element->getId())
         );
 
         return DataManager::retrieves(
-            Vocabulary::class_name(), new DataClassRetrievesParameters(new AndCondition($conditions))
+            Vocabulary::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
     }
 
@@ -254,11 +284,9 @@ class EntityService
         $submittedElementValues
     )
     {
-        $propertyProviderService = new PropertyProviderService($entity);
-
         try
         {
-            $providerLink = $propertyProviderService->getProviderLinkForElement($element);
+            $providerLink = $this->getPropertyProviderService()->getProviderLinkForElement($entity, $element);
 
             return true;
         }
@@ -309,8 +337,8 @@ class EntityService
         else
         {
             $vocabulary = new Vocabulary();
-            $vocabulary->set_element_id($element->get_id());
-            $vocabulary->set_user_id($currentUser->get_id());
+            $vocabulary->set_element_id($element->getId());
+            $vocabulary->set_user_id($currentUser->getId());
             $vocabulary->set_value($submittedElementValue);
 
             if (!$vocabulary->create())
@@ -319,9 +347,9 @@ class EntityService
             }
 
             $elementInstance = new ElementInstance();
-            $elementInstance->set_schema_instance_id($schemaInstance->get_id());
-            $elementInstance->set_element_id($element->get_id());
-            $elementInstance->set_vocabulary_id($vocabulary->get_id());
+            $elementInstance->set_schema_instance_id($schemaInstance->getId());
+            $elementInstance->set_element_id($element->getId());
+            $elementInstance->set_vocabulary_id($vocabulary->getId());
 
             if (!$elementInstance->create())
             {
@@ -359,6 +387,7 @@ class EntityService
         foreach ($submittedExistingSchemaIds as $submittedExistingSchemaId)
         {
             $schemaInstance = DataManager::retrieve_by_id(SchemaInstance::class_name(), $submittedExistingSchemaId);
+
             if (!$this->processEntitySchemaInstance(
                 $currentUser, $schemaInstance, $entity, $submittedSchemaValues[$submittedExistingSchemaId]
             ))
@@ -404,7 +433,10 @@ class EntityService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      * @param $submittedElementValues
      *
-     * @return bool
+     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     private function processEntityVocabularyElement(
         User $currentUser, SchemaInstance $schemaInstance, Element $element, $submittedElementValues
@@ -450,7 +482,7 @@ class EntityService
 
         foreach ($elementInstanceIdsToDelete as $elementInstanceIdToDelete)
         {
-            $elementInstance = DataManager::retrieve_by_id(ElementInstance::class_name(), $elementInstanceIdToDelete);
+            $elementInstance = DataManager::retrieve_by_id(ElementInstance::class, $elementInstanceIdToDelete);
 
             if (!$elementInstance->delete())
             {
@@ -463,8 +495,8 @@ class EntityService
             foreach ($submittedNewElementInstanceValues as $submittedNewElementInstanceValue)
             {
                 $vocabulary = new Vocabulary();
-                $vocabulary->set_element_id($element->get_id());
-                $vocabulary->set_user_id($currentUser->get_id());
+                $vocabulary->set_element_id($element->getId());
+                $vocabulary->set_user_id($currentUser->getId());
                 $vocabulary->set_value($submittedNewElementInstanceValue);
 
                 if (!$vocabulary->create())
@@ -473,7 +505,7 @@ class EntityService
                 }
                 else
                 {
-                    $elementInstanceIdsToAdd[] = $vocabulary->get_id();
+                    $elementInstanceIdsToAdd[] = $vocabulary->getId();
                 }
             }
         }
@@ -481,8 +513,8 @@ class EntityService
         foreach ($elementInstanceIdsToAdd as $elementInstanceIdToAdd)
         {
             $elementInstance = new ElementInstance();
-            $elementInstance->set_schema_instance_id($schemaInstance->get_id());
-            $elementInstance->set_element_id($element->get_id());
+            $elementInstance->set_schema_instance_id($schemaInstance->getId());
+            $elementInstance->set_element_id($element->getId());
             $elementInstance->set_vocabulary_id($elementInstanceIdToAdd);
 
             if (!$elementInstance->create())
@@ -499,15 +531,17 @@ class EntityService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param $submittedSchemaValues
      *
-     * @return bool
+     * @return boolean
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function updateEntitySchemaValues(
         User $currentUser, DataClassEntity $entity, $submittedSchemaValues
     )
     {
         $entityType = DataClassEntityFactory::getInstance()->getEntity($entity->getDataClassName());
-        $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType($entityType);
+        $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType($entity);
 
         $submittedSchemaIds = array_keys($submittedSchemaValues);
 
@@ -515,7 +549,7 @@ class EntityService
 
         foreach ($submittedAvailableSchemaIds as $submittedAvailableSchemaId)
         {
-            $schema = DataManager::retrieve_by_id(Schema::class_name(), $submittedAvailableSchemaId);
+            $schema = DataManager::retrieve_by_id(Schema::class, $submittedAvailableSchemaId);
             if (!$this->processEntitySchema(
                 $currentUser, $schema, $entity, $submittedSchemaValues[$submittedAvailableSchemaId]
             ))

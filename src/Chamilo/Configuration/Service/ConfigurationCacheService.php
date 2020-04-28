@@ -5,6 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -57,7 +58,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getConfigurationFilePath()
     {
-        return \Chamilo\Libraries\File\Path::getInstance()->getStoragePath() . 'configuration/configuration.ini';
+        return Path::getInstance()->getStoragePath() . 'configuration/configuration.ini';
     }
 
     /**

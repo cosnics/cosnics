@@ -200,20 +200,19 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function addMetadataTabs()
     {
-        $relationService = new RelationService();
-        $entityService = new EntityService();
+        $entityService = $this->getService(EntityService::class);
 
         $entityFactory = DataClassEntityFactory::getInstance();
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
-        $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
+        $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($entity);
 
         if (count($availableSchemaIds) > 0)
         {
             $entity = $entityFactory->getEntity(
                 $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
             );
-            $schemaInstances = $entityService->getSchemaInstancesForEntity(new RelationService(), $entity);
+            $schemaInstances = $entityService->getSchemaInstancesForEntity($entity);
 
             while ($schemaInstance = $schemaInstances->next_result())
             {
@@ -545,14 +544,12 @@ abstract class ContentObjectForm extends FormValidator
 
     public function build_metadata_choice_form()
     {
-        $relationService = new RelationService();
-        $entityService = new EntityService();
         $entity = DataClassEntityFactory::getInstance()->getEntity(
             $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
         );
 
-        $instanceFormService = new InstanceFormService($entity, $this);
-        $instanceFormService->addElements($entityService, $relationService);
+        $instanceFormService = $this->getService(InstanceFormService::class);
+        $instanceFormService->addElements($this, $entity);
     }
 
     /**
@@ -562,11 +559,9 @@ abstract class ContentObjectForm extends FormValidator
     {
         $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this->get_content_object());
 
-        $entityFormService = new EntityFormService(
-            $schemaInstance, $entity, $this, $this->get_content_object()->get_owner()
-        );
-        $entityFormService->addElements();
-        $entityFormService->setDefaults();
+        $entityFormService = $this->getService(EntityFormService::class);
+        $entityFormService->addElements($this, $schemaInstance, $entity, $this->get_content_object()->get_owner());
+        $entityFormService->setDefaults($schemaInstance, $entity, $this, $this->get_content_object()->get_owner());
     }
 
     /**
@@ -1071,14 +1066,12 @@ abstract class ContentObjectForm extends FormValidator
         $user = new User();
         $user->setId($this->get_owner_id());
 
-        $instanceService = new InstanceService();
-        $this->selectedTabIdentifier = $instanceService->updateInstances(
+        $this->selectedTabIdentifier = $this->getService(InstanceService::class)->updateInstances(
             $user, $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
         );
 
         $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($object);
-        $entityService = new EntityService();
-        $entityService->updateEntitySchemaValues(
+        $this->getService(EntityService::class)->updateEntitySchemaValues(
             $user, $entity, $values[EntityService::PROPERTY_METADATA_SCHEMA]
         );
 

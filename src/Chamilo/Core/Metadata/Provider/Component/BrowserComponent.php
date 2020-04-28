@@ -104,14 +104,13 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $entityConditionService = new EntityConditionService();
         $conditions = array();
 
         $entities = $this->getEntities();
 
         if (count($entities) > 0)
         {
-            $conditions[] = $entityConditionService->getEntitiesCondition(
+            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
                 $entities, ProviderLink::class_name(), ProviderLink::PROPERTY_ENTITY_TYPE
             );
         }

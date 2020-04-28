@@ -26,20 +26,88 @@ class RelationInstanceService
 
     /**
      *
+     * @param string $encodedDataClassEntity
+     *
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
+     */
+    public function convertEncodedDataClassEntityValuesToDataClassEntity($encodedDataClassEntity)
+    {
+        $dataClassEntityFactory = DataClassEntityFactory::getInstance();
+        $dataClassEntity = unserialize($encodedDataClassEntity);
+
+        return $dataClassEntityFactory->getEntityFromDataClassNameAndDataClassIdentifier(
+            $dataClassEntity[DataClassEntity::PROPERTY_TYPE], $dataClassEntity[DataClassEntity::PROPERTY_IDENTIFIER]
+        );
+    }
+
+    /**
+     *
+     * @param User $user
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $sourceEntities
+     * @param integer[] $relationIds
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function createRelationInstances(User $user, $sourceEntities, $relationIds, $targetEntities)
+    {
+        $failures = 0;
+        $attempts = 0;
+
+        foreach ($sourceEntities as $sourceEntity)
+        {
+            foreach ($relationIds as $relationId)
+            {
+                foreach ($targetEntities as $targetEntity)
+                {
+                    if (!$this->relationInstanceExists(
+                        $sourceEntity->getDataClassName(), $sourceEntity->getDataClassIdentifier(),
+                        $targetEntity->getDataClassName(), $targetEntity->getDataClassIdentifier(), $relationId
+                    ))
+                    {
+                        $attempts ++;
+
+                        $relationInstance = new RelationInstance();
+                        $relationInstance->set_source_type($sourceEntity->getDataClassName());
+                        $relationInstance->set_source_id($sourceEntity->getDataClassIdentifier());
+                        $relationInstance->set_target_type($targetEntity->getDataClassName());
+                        $relationInstance->set_target_id($targetEntity->getDataClassIdentifier());
+                        $relationInstance->set_relation_id($relationId);
+                        $relationInstance->set_user_id($user->get_id());
+                        $relationInstance->set_creation_date(time());
+
+                        if (!$relationInstance->create())
+                        {
+                            $failures ++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return !($failures > 0);
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string[] $submittedValues
+     * @param string[][] $submittedValues
+     *
+     * @return boolean
      */
     public function createRelationInstancesFromSubmittedValues(User $user, $submittedValues)
     {
         $relationIds = $submittedValues[RelationInstance::PROPERTY_RELATION_ID];
 
         $sourceEntities = $this->getDataClassEntitiesFromTypeFromSubmittedValues(
-            self::PROPERTY_SOURCE,
-            $submittedValues);
+            self::PROPERTY_SOURCE, $submittedValues
+        );
 
         $targetEntities = $this->getDataClassEntitiesFromTypeFromSubmittedValues(
-            self::PROPERTY_TARGET,
-            $submittedValues);
+            self::PROPERTY_TARGET, $submittedValues
+        );
 
         return $this->createRelationInstances($user, $sourceEntities, $relationIds, $targetEntities);
     }
@@ -47,7 +115,8 @@ class RelationInstanceService
     /**
      *
      * @param string $type
-     * @param string[] $submittedValues
+     * @param string[][] $submittedValues
+     *
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
      */
     public function getDataClassEntitiesFromTypeFromSubmittedValues($type, $submittedValues)
@@ -64,102 +133,46 @@ class RelationInstanceService
 
     /**
      *
-     * @param string $encodedDataClassEntity
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
-     */
-    public function convertEncodedDataClassEntityValuesToDataClassEntity($encodedDataClassEntity)
-    {
-        $dataClassEntityFactory = DataClassEntityFactory::getInstance();
-        $dataClassEntity = unserialize($encodedDataClassEntity);
-
-        return $dataClassEntityFactory->getEntityFromDataClassNameAndDataClassIdentifier(
-            $dataClassEntity[DataClassEntity::PROPERTY_TYPE],
-            $dataClassEntity[DataClassEntity::PROPERTY_IDENTIFIER]);
-    }
-
-    /**
-     *
-     * @param User $user
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $sourceEntities
-     * @param integer[] $relationIds
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
-     */
-    public function createRelationInstances(User $user, $sourceEntities, $relationIds, $targetEntities)
-    {
-        $failures = 0;
-        $attempts = 0;
-
-        foreach ($sourceEntities as $sourceEntity)
-        {
-            foreach ($relationIds as $relationId)
-            {
-                foreach ($targetEntities as $targetEntity)
-                {
-                    if (! $this->relationInstanceExists(
-                        $sourceEntity->getDataClassName(),
-                        $sourceEntity->getDataClassIdentifier(),
-                        $targetEntity->getDataClassName(),
-                        $targetEntity->getDataClassIdentifier(),
-                        $relationId))
-                    {
-                        $attempts ++;
-
-                        $relationInstance = new RelationInstance();
-                        $relationInstance->set_source_type($sourceEntity->getDataClassName());
-                        $relationInstance->set_source_id($sourceEntity->getDataClassIdentifier());
-                        $relationInstance->set_target_type($targetEntity->getDataClassName());
-                        $relationInstance->set_target_id($targetEntity->getDataClassIdentifier());
-                        $relationInstance->set_relation_id($relationId);
-                        $relationInstance->set_user_id($user->get_id());
-                        $relationInstance->set_creation_date(time());
-
-                        if (! $relationInstance->create())
-                        {
-                            $failures ++;
-                        }
-                    }
-                }
-            }
-        }
-
-        return ! ($failures > 0);
-    }
-
-    /**
-     *
      * @param string $sourceType
      * @param integer $sourceIdentifier
      * @param string $targetType
      * @param integer $targetIdentifier
      * @param integer $relationId
+     *
      * @return boolean
+     * @throws \ReflectionException
      */
     public function relationInstanceExists($sourceType, $sourceIdentifier, $targetType, $targetIdentifier, $relationId)
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE),
-            new StaticConditionVariable($sourceType));
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE),
+            new StaticConditionVariable($sourceType)
+        );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID),
-            new StaticConditionVariable($sourceIdentifier));
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
+            new StaticConditionVariable($sourceIdentifier)
+        );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE),
-            new StaticConditionVariable($targetType));
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE),
+            new StaticConditionVariable($targetType)
+        );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
-            new StaticConditionVariable($targetIdentifier));
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
+            new StaticConditionVariable($targetIdentifier)
+        );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID),
-            new StaticConditionVariable($relationId));
+            new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_RELATION_ID),
+            new StaticConditionVariable($relationId)
+        );
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(RelationInstance::class_name(), new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(RelationInstance::class, new DataClassCountParameters($condition)) > 0;
     }
 }

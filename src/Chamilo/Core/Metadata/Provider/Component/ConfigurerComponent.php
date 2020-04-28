@@ -96,9 +96,9 @@ class ConfigurerComponent extends Manager
 
     public function handleSelectedEntityType()
     {
-        $entityService = new EntityService();
-        $elementService = new ElementService();
-        $relationService = new RelationService();
+        $entityService = $this->getService(EntityService::class);
+        $elementService = $this->getService(ElementService::class);
+        $relationService = $this->getService(RelationService::class);
 
         $form = new ProviderLinkForm(
             $entityService, $elementService, $relationService, $this->getSelectedEntity(), $this->get_url()
@@ -108,10 +108,9 @@ class ConfigurerComponent extends Manager
         {
             $submittedValues = $form->exportValues();
 
-            $propertyProviderService = new PropertyProviderService($this->getSelectedEntity());
+            $propertyProviderService = $this->getService(PropertyProviderService::class);
             $success = $propertyProviderService->updateEntityProviderLinks(
-                $entityService, $elementService, $relationService,
-                $submittedValues[EntityService::PROPERTY_METADATA_SCHEMA]
+                $this->getSelectedEntity(), $submittedValues[EntityService::PROPERTY_METADATA_SCHEMA]
             );
 
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';

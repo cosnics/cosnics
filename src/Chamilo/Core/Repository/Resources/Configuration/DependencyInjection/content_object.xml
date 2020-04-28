@@ -24,6 +24,9 @@
                      method="buildResourceFixerDirector"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface"
+                 alias="Chamilo\Core\Repository\Publication\Service\PublicationAggregator"/>
+
         <service id="Chamilo\Core\Repository\Publication\Service\PublicationAggregator"/>
         <service id="Chamilo\Core\Repository\Publication\Factory\PublicationTargetRepositoryCacheProviderFactory"/>
 
@@ -44,7 +47,7 @@
 
         <service id="Chamilo\Core\Repository\Service\RepositoryCategoryService"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectSaver"/>
-        
+
         <service id="Chamilo\Core\Repository\Service\IncludeParserManager"/>
         <service id="Chamilo\Core\Repository\Service\IncludeParser\IncludeChamiloParser">
             <tag name="Chamilo\Core\Repository\Service\IncludeParser\ChamiloIncludeParser"/>

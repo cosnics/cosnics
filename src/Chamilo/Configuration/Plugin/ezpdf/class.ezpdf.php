@@ -805,12 +805,10 @@ class Cezpdf extends Cpdf
             {
                 $x1 = $x;
             }
-            ;
             if ($x < $x0)
             {
                 $x0 = $x;
             }
-            ;
         }
         $this->setLineStyle($outer);
         $this->line($x0 - $gap / 2 - $outer / 2, $y0, $x1 - $gap / 2 + $outer / 2, $y0);

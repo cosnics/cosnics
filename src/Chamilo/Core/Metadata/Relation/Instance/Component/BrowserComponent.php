@@ -104,7 +104,6 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $entityConditionService = new EntityConditionService();
         $conditions = array();
 
         $relations = $this->getRelations();
@@ -128,7 +127,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($sourceEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getEntitiesCondition(
+            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
                 $sourceEntities, RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE,
                 RelationInstance::PROPERTY_SOURCE_ID
             );
@@ -138,7 +137,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($targetEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getEntitiesCondition(
+            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
                 $targetEntities, RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE,
                 RelationInstance::PROPERTY_TARGET_ID
             );

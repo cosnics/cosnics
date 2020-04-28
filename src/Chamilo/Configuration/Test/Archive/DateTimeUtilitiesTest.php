@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Test\Archive;
 
-class DateTimeUtilitiesTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_TestCase;
+
+class DateTimeUtilitiesTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp()

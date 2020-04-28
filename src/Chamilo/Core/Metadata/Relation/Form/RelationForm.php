@@ -15,30 +15,21 @@ class RelationForm extends FormValidator
 
     /**
      *
-     * @var Relation
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Relation
      */
     private $relation;
 
     /**
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation $relation
+     * @param string $formUrl
      *
-     * @var \Chamilo\Core\Metadata\Service\EntityTranslationFormService
+     * @throws \Exception
      */
-    private $entityTranslationFormService;
-
-    /**
-     * Constructor
-     *
-     * @param string $form_url
-     * @param Relation $relation
-     */
-    public function __construct(Relation $relation, EntityTranslationFormService $entityTranslationFormServic, $form_url
-    )
+    public function __construct(Relation $relation, $formUrl)
     {
-        parent::__construct('relation', self::FORM_METHOD_POST, $form_url);
+        parent::__construct('relation', self::FORM_METHOD_POST, $formUrl);
 
         $this->relation = $relation;
-        $this->entityTranslationFormService = $entityTranslationFormServic;
-        $this->entityTranslationFormService->setFormValidator($this);
 
         $this->buildForm();
         $this->setFormDefaults();
@@ -46,6 +37,8 @@ class RelationForm extends FormValidator
 
     /**
      * Builds this form
+     *
+     * @throws \Exception
      */
     protected function buildForm()
     {
@@ -59,19 +52,25 @@ class RelationForm extends FormValidator
             'required'
         );
 
-        $this->entityTranslationFormService->addFieldsToForm();
+        $this->getEntityTranslationFormService()->addFieldsToForm($this);
         $this->addSaveResetButtons();
     }
 
     /**
-     * Sets the default values
-     *
-     * @param Element $element
+     * @return \Chamilo\Core\Metadata\Service\EntityTranslationFormService
+     */
+    protected function getEntityTranslationFormService()
+    {
+        return $this->getService(EntityTranslationFormService::class);
+    }
+
+    /**
+     * @throws \Exception
      */
     protected function setFormDefaults()
     {
         $this->setDefaults(array(Relation::PROPERTY_NAME => $this->relation->get_name()));
 
-        $this->entityTranslationFormService->setFormDefaults();
+        $this->getEntityTranslationFormService()->setFormDefaults($this, $this->relation);
     }
 }

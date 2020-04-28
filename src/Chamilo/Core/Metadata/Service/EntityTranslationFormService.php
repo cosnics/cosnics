@@ -6,8 +6,8 @@ use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 
@@ -21,109 +21,63 @@ use Exception;
  */
 class EntityTranslationFormService
 {
-
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface
-     */
-    private $entityTranslationImplementation;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    private $formValidator;
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface $entityTranslationImplementation
-     */
-    public function __construct(EntityTranslationInterface $entityTranslationImplementation)
-    {
-        $this->entityTranslationImplementation = $entityTranslationImplementation;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface
-     */
-    public function getEntityTranslationImplementation()
-    {
-        return $this->entityTranslationImplementation;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface $entity
-     */
-    public function setEntityTranslationImplementation(EntityTranslationInterface $entityTranslationImplementation)
-    {
-        $this->entityTranslationImplementation = $entityTranslationImplementation;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    public function getFormValidator()
-    {
-        return $this->formValidator;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     *
+     * @throws \Exception
      */
-    public function setFormValidator($formValidator)
+    public function addFieldsToForm(FormValidator $formValidator)
     {
-        $this->formValidator = $formValidator;
-    }
-
-    public function addFieldsToForm()
-    {
-        if (! $this->getFormValidator() instanceof FormValidator)
+        if (!$formValidator instanceof FormValidator)
         {
             throw new Exception(Translation::get('NoFormValidatorSet'));
         }
-        
-        $this->getFormValidator()->addElement('category', Translation::get('Translations'));
-        
+
+        $formValidator->addElement('category', Translation::get('Translations'));
+
         $languages = DataManager::retrieves(
-            Language::class_name(), 
-            new DataClassRetrievesParameters());
+            Language::class, new DataClassRetrievesParameters()
+        );
         $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
-        
+
         while ($language = $languages->next_result())
         {
             $fieldName = EntityTranslationService::PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
-            $this->getFormValidator()->addElement('text', $fieldName, $language->get_original_name());
-            
+            $formValidator->addElement('text', $fieldName, $language->get_original_name());
+
             if ($language->get_isocode() == $platformLanguage)
             {
-                $this->getFormValidator()->addRule(
-                    $fieldName, 
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
-                    'required');
+                $formValidator->addRule(
+                    $fieldName, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                );
             }
         }
-        
-        $this->getFormValidator()->addElement('category');
+
+        $formValidator->addElement('category');
     }
 
-    public function setFormDefaults()
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @param \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface $entityTranslationImplementation
+     *
+     * @throws \Exception
+     */
+    public function setFormDefaults(
+        FormValidator $formValidator, EntityTranslationInterface $entityTranslationImplementation
+    )
     {
-        if (! $this->getFormValidator() instanceof FormValidator)
+        if (!$formValidator instanceof FormValidator)
         {
             throw new Exception(Translation::get('NoFormValidatorSet'));
         }
-        
+
         $defaults = array();
-        
-        foreach ($this->getEntityTranslationImplementation()->getTranslations() as $isocode => $translation)
+
+        foreach ($entityTranslationImplementation->getTranslations() as $isocode => $translation)
         {
             $defaults[EntityTranslationService::PROPERTY_TRANSLATION][$isocode] = $translation->get_value();
         }
-        
-        $this->getFormValidator()->setDefaults($defaults);
+
+        $formValidator->setDefaults($defaults);
     }
 }

@@ -46,16 +46,18 @@ class ProviderLinkForm extends FormValidator
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string $postUrl
      */
-    public function __construct(EntityService $entityService, ElementService $elementService, 
-        RelationService $relationService, DataClassEntity $entity, $postUrl)
+    public function __construct(
+        EntityService $entityService, ElementService $elementService, RelationService $relationService,
+        DataClassEntity $entity, $postUrl
+    )
     {
         parent::__construct('ProviderLink', self::FORM_METHOD_POST, $postUrl);
-        
+
         $this->entityService = $entityService;
         $this->elementService = $elementService;
         $this->relationService = $relationService;
         $this->entity = $entity;
-        
+
         $this->buildForm();
     }
 
@@ -64,15 +66,10 @@ class ProviderLinkForm extends FormValidator
      */
     protected function buildForm()
     {
-        $providerFormService = new ProviderFormService(
-            $this->entityService, 
-            $this->elementService, 
-            $this->relationService, 
-            $this->entity, 
-            $this);
-        $providerFormService->addElements();
-        $providerFormService->setDefaults();
-        
+        $providerFormService = $this->getService(ProviderFormService::class);
+        $providerFormService->addElements($this->entity, $this);
+        $providerFormService->setDefaults($this->entity, $this);
+
         $this->addSaveResetButtons();
     }
 }

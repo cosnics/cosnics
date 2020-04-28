@@ -29,36 +29,64 @@ class PropertyProviderService
 {
 
     /**
-     *
-     * @var \Chamilo\Core\Metadata\Entity\DataClassEntity
+     * @var \Chamilo\Core\Metadata\Service\EntityService
      */
-    private $entity;
+    private $entityService;
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
      */
-    public function __construct(DataClassEntity $entity)
+    private $elementService;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
+     */
+    private $relationService;
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
+     */
+    public function __construct(
+        EntityService $entityService, ElementService $elementService, RelationService $relationService
+    )
     {
-        $this->entity = $entity;
+        $this->entityService = $entityService;
+        $this->elementService = $elementService;
+        $this->relationService = $relationService;
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
+     * @return \Chamilo\Core\Metadata\Element\Service\ElementService
      */
-    public function getEntity()
+    public function getElementService(): ElementService
     {
-        return $this->entity;
+        return $this->elementService;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
      */
-    public function setEntity($entity)
+    public function setElementService(ElementService $elementService): void
     {
-        $this->entity = $entity;
+        $this->elementService = $elementService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityService
+     */
+    public function getEntityService(): EntityService
+    {
+        return $this->entityService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     */
+    public function setEntityService(EntityService $entityService): void
+    {
+        $this->entityService = $entityService;
     }
 
     /**
@@ -75,24 +103,27 @@ class PropertyProviderService
     }
 
     /**
-     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return string
      * @throws \Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
-    public function getPropertyValues(Element $element)
+    public function getPropertyValues(DataClassEntity $entity, Element $element)
     {
-        $providerLink = $this->getProviderLinkForElement($element);
+        $providerLink = $this->getProviderLinkForElement($entity, $element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
 
         return $provider->renderProperty(
-            $providerRegistration->get_property_name(), $this->getEntity()->getDataClass()
+            $providerRegistration->get_property_name(), $entity->getDataClass()
         );
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink
@@ -100,12 +131,12 @@ class PropertyProviderService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */
-    public function getProviderLinkForElement(Element $element)
+    public function getProviderLinkForElement(DataClassEntity $entity, Element $element)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($this->getEntity()->getDataClassName())
+            new StaticConditionVariable($entity->getDataClassName())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_ELEMENT_ID),
@@ -127,14 +158,16 @@ class PropertyProviderService
     }
 
     /**
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink[]
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      * @throws \Exception
      */
-    public function getProviderLinksForEntity()
+    public function getProviderLinksForEntity(DataClassEntity $entity)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($this->getEntity()->getDataClassName())
+            new StaticConditionVariable($entity->getDataClassName())
         );
 
         $parameters = new DataClassRetrievesParameters($condition);
@@ -144,28 +177,57 @@ class PropertyProviderService
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration[]
+     * @throws \Exception
      */
-    public function getProviderRegistrationsForEntity()
+    public function getProviderRegistrationsForEntity(DataClassEntity $entity)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ProviderRegistration::class_name(), ProviderRegistration::PROPERTY_ENTITY_TYPE
-            ), new StaticConditionVariable($this->getEntity()->getDataClassName())
+                ProviderRegistration::class, ProviderRegistration::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable($entity->getDataClassName())
         );
 
         $parameters = new DataClassRetrievesParameters($condition);
 
-        return DataManager::retrieves(ProviderRegistration::class_name(), $parameters);
+        return DataManager::retrieves(ProviderRegistration::class, $parameters);
     }
 
-    public function updateEntityProviderLinkForElement(Element $element, $submittedProviderRegistrationId)
+    /**
+     * @return \Chamilo\Core\Metadata\Relation\Service\RelationService
+     */
+    public function getRelationService(): RelationService
+    {
+        return $this->relationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
+     */
+    public function setRelationService(RelationService $relationService): void
+    {
+        $this->relationService = $relationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
+     * @param $submittedProviderRegistrationId
+     *
+     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function updateEntityProviderLinkForElement(
+        DataClassEntity $entity, Element $element, $submittedProviderRegistrationId
+    )
     {
         if ($submittedProviderRegistrationId)
         {
             try
             {
-                $providerLink = $this->getProviderLinkForElement($element);
+                $providerLink = $this->getProviderLinkForElement($entity, $element);
                 $providerLink->set_provider_registration_id($submittedProviderRegistrationId);
 
                 return $providerLink->update();
@@ -173,8 +235,8 @@ class PropertyProviderService
             catch (NoProviderAvailableException $exception)
             {
                 $providerLink = new ProviderLink();
-                $providerLink->set_entity_type($this->getEntity()->getDataClassName());
-                $providerLink->set_element_id($element->get_id());
+                $providerLink->set_entity_type($entity->getDataClassName());
+                $providerLink->set_element_id($element->getId());
                 $providerLink->set_provider_registration_id($submittedProviderRegistrationId);
 
                 return $providerLink->create();
@@ -184,7 +246,7 @@ class PropertyProviderService
         {
             try
             {
-                $providerLink = $this->getProviderLinkForElement($element);
+                $providerLink = $this->getProviderLinkForElement($entity, $element);
 
                 return $providerLink->delete();
             }
@@ -196,28 +258,23 @@ class PropertyProviderService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Relation\Service\RelationServic $relationService
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedProviderLinkValues
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
      */
-    public function updateEntityProviderLinks(
-        EntityService $entityService, ElementService $elementService, RelationService $relationService,
-        $submittedProviderLinkValues
-    )
+    public function updateEntityProviderLinks(DataClassEntity $entity, $submittedProviderLinkValues)
     {
-        $availableSchemas =
-            $entityService->getAvailableSchemasForEntityType($relationService, $this->getEntity())->as_array();
+        $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity)->as_array();
 
         foreach ($availableSchemas as $availableSchema)
         {
             if (isset($submittedProviderLinkValues[$availableSchema->get_id()]))
             {
                 if (!$this->updateEntityProviderLinksForSchema(
-                    $elementService, $availableSchema, $submittedProviderLinkValues[$availableSchema->get_id()]
+                    $entity, $availableSchema, $submittedProviderLinkValues[$availableSchema->get_id()]
                 ))
                 {
                     return false;
@@ -229,22 +286,26 @@ class PropertyProviderService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
-     * @param string[] $submittedSchemaValues
+     * @param $submittedSchemaValues
+     *
+     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function updateEntityProviderLinksForSchema(
-        ElementService $elementService, Schema $schema, $submittedSchemaValues
-    )
+    public function updateEntityProviderLinksForSchema(DataClassEntity $entity, Schema $schema, $submittedSchemaValues)
     {
-        $elements = $elementService->getElementsForSchema($schema);
+        $elements = $this->getElementService()->getElementsForSchema($schema);
 
         while ($element = $elements->next_result())
         {
             if (isset($submittedSchemaValues[$element->get_id()]))
             {
-                if (!$this->updateEntityProviderLinkForElement($element, $submittedSchemaValues[$element->get_id()]))
+                if (!$this->updateEntityProviderLinkForElement(
+                    $entity, $element, $submittedSchemaValues[$element->get_id()]
+                ))
                 {
                     return false;
                 }

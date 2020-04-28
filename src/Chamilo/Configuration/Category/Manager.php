@@ -108,9 +108,9 @@ abstract class Manager extends Application
     public function get_additional_parameters()
     {
         $parameters = array();
-        if (! is_null(Request::get(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID)))
+        if (! is_null(Request::get(Manager::PARAM_CATEGORY_ID)))
         {
-            $parameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
+            $parameters[] = Manager::PARAM_CATEGORY_ID;
         }
         
         return array_merge($parameters, $this->get_application()->get_category_parameters());

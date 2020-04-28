@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Package\Properties\Dependencies\Dependency;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Format\MessageLogger;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Composer\Semver\Semver;
 use Exception;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -109,7 +111,7 @@ class Dependency
         $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
                 'Found', array(), Utilities::COMMON_LIBRARIES
             ) . ': ';
-        $registration = \Chamilo\Configuration\Configuration::registration($this->get_id());
+        $registration = Configuration::registration($this->get_id());
 
         if (empty($registration))
         {
@@ -120,7 +122,7 @@ class Dependency
         }
         else
         {
-            $target_version = \Composer\Semver\Semver::satisfies(
+            $target_version = Semver::satisfies(
                 $registration[Registration::PROPERTY_VERSION], $this->get_version()
             );
 

@@ -6,11 +6,13 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\LanguageConsulter;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
+use Exception;
 
 /**
  * This class represents the current configuration
@@ -21,7 +23,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
  */
 class Configuration
 {
-    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+    use DependencyInjectionContainerTrait;
 
     // Constants
     const REGISTRATION_CONTEXT = 1;
@@ -153,11 +155,11 @@ class Configuration
         $data_source_name = DataSourceName::factory(
             'Doctrine',
             array(
-                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'),
-                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'),
-                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'),
-                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'),
-                'password' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'password')));
+                'driver' => Configuration::get('Chamilo\Configuration', 'database', 'driver'),
+                'username' => Configuration::get('Chamilo\Configuration', 'database', 'username'),
+                'host' => Configuration::get('Chamilo\Configuration', 'database', 'host'),
+                'name' => Configuration::get('Chamilo\Configuration', 'database', 'name'),
+                'password' => Configuration::get('Chamilo\Configuration', 'database', 'password')));
 
         $connection_parameters = array(
             'user' => $data_source_name->get_username(),
@@ -170,7 +172,7 @@ class Configuration
             DriverManager::getConnection($connection_parameters, $configuration)->connect();
             return true;
         }
-        catch (\Exception $exception)
+        catch (Exception $exception)
         {
             return false;
         }

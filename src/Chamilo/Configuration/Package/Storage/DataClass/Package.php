@@ -8,6 +8,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use DOMElement;
+use DOMXPath;
 use Exception;
 
 /**
@@ -319,7 +321,7 @@ class Package extends DataClass
      * @deprecated Use PackageFactory->parsePackageFromDom($domXpath, $packageNode) now, or better even don't use this
      *             anymore at all and use PackageFactory->getPackage($context) instead
      */
-    public static function parse_package(\DOMXPath $domXpath, \DOMElement $packageNode)
+    public static function parse_package(DOMXPath $domXpath, DOMElement $packageNode)
     {
         $packageFactory = new PackageFactory(
             new PathBuilder(ClassnameUtilities::getInstance()),

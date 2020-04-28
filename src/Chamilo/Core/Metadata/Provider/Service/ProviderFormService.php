@@ -47,65 +47,38 @@ class ProviderFormService
     private $relationService;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
-    private $entity;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    private $formValidator;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $elementOptions;
-
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
-     */
-    private $availableSchemas;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $elementNames;
-
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Storage\DataClass\Element[]
-     */
-    private $schemaElements;
+    private $propertyProviderService;
 
     /**
      *
      * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
      * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
      * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
      */
     public function __construct(
         EntityService $entityService, ElementService $elementService, RelationService $relationService,
-        DataClassEntity $entity, FormValidator $formValidator
+        PropertyProviderService $propertyProviderService
     )
     {
         $this->entityService = $entityService;
         $this->elementService = $elementService;
         $this->relationService = $relationService;
-        $this->entity = $entity;
-        $this->formValidator = $formValidator;
+        $this->propertyProviderService = $propertyProviderService;
     }
 
-    public function addElements()
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function addElements(DataClassEntity $entity, FormValidator $formValidator)
     {
-        $availableSchemas = $this->getAvailableSchemas();
-        $tabs_generator = new DynamicFormTabsRenderer('ProviderLinks', $this->getFormValidator());
+        $availableSchemas = $this->getAvailableSchemas($entity);
+        $tabs_generator = new DynamicFormTabsRenderer('ProviderLinks', $formValidator);
 
         foreach ($availableSchemas as $availableSchema)
         {
@@ -113,7 +86,7 @@ class ProviderFormService
                 new DynamicFormTab(
                     'schema-' . $availableSchema->get_id(), $availableSchema->get_name(),
                     new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
-                    array($this, 'addElementsForSchema'), array($availableSchema)
+                    array($this, 'addElementsForSchema'), array($entity, $formValidator, $availableSchema)
                 )
             );
         }
@@ -122,50 +95,51 @@ class ProviderFormService
     }
 
     /**
-     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     *
+     * @throws \Exception
      */
-    public function addElementsForSchema(Schema $schema)
+    public function addElementsForSchema(DataClassEntity $entity, FormValidator $formValidator, Schema $schema)
     {
         $elements = $this->getElementsForSchema($schema);
 
         foreach ($elements as $element)
         {
-            $this->getFormValidator()->addElement(
+            $formValidator->addElement(
                 'select', $this->getElementName($schema, $element), $element->get_display_name(),
-                $this->getElementOptions()
+                $this->getElementOptions($entity)
             );
         }
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    private function getAvailableSchemas()
+    private function getAvailableSchemas(DataClassEntity $entity)
     {
-        if (!isset($this->availableSchemas))
-        {
-            $this->availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType(
-                $this->getRelationService(), $this->getEntity()
-            )->as_array();
-        }
-
-        return $this->availableSchemas;
+        return $this->getEntityService()->getAvailableSchemasForEntityType($entity)->as_array();
     }
 
     /**
-     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     *
+     * @return integer[]
+     * @throws \Exception
      */
-    public function getDefaultsForSchema(Schema $schema)
+    public function getDefaultsForSchema(DataClassEntity $entity, Schema $schema)
     {
         $defaults = array();
         $elements = $this->getElementsForSchema($schema);
 
         foreach ($elements as $element)
         {
-            $providerLink = $this->getElementProviderLink($element);
+            $providerLink = $this->getElementProviderLink($entity, $element);
 
             if ($providerLink instanceof ProviderLink)
             {
@@ -180,56 +154,57 @@ class ProviderFormService
      *
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
+     *
+     * @return string
      */
     private function getElementName(Schema $schema, Element $element)
     {
-        if (!isset($this->elementNames[$schema->get_id()][$element->get_id()]))
-        {
-            $this->elementNames[$schema->get_id()][$element->get_id()] =
-                EntityService::PROPERTY_METADATA_SCHEMA . '[' . $schema->get_id() . '][' . $element->get_id() . ']';
-        }
-
-        return $this->elementNames[$schema->get_id()][$element->get_id()];
-    }
-
-    private function getElementOptions()
-    {
-        if (!isset($this->elementOptions))
-        {
-            $this->elementOptions[0] = Translation::get('NoProvidedValue', null, 'Chamilo\Core\Metadata\Provider');
-
-            $propertyProviderService = new PropertyProviderService($this->getEntity());
-            $providerRegistrations = $propertyProviderService->getProviderRegistrationsForEntity();
-
-            while ($providerRegistration = $providerRegistrations->next_result())
-            {
-                $translationNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                    $providerRegistration->get_provider_class(), 2
-                );
-                $translationVariable = StringUtilities::getInstance()->createString(
-                    $providerRegistration->get_property_name()
-                )->upperCamelize();
-
-                $this->elementOptions[$providerRegistration->get_id()] = Translation::get(
-                    $translationVariable, null, $translationNamespace
-                );
-            }
-        }
-
-        return $this->elementOptions;
+        return EntityService::PROPERTY_METADATA_SCHEMA . '[' . $schema->getId() . '][' . $element->getId() . ']';
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @param Element $element
+     * @return string[]
+     * @throws \Exception
+     */
+    private function getElementOptions(DataClassEntity $entity)
+    {
+        $elementOptions = array();
+
+        $elementOptions[0] = Translation::get('NoProvidedValue', null, 'Chamilo\Core\Metadata\Provider');
+
+        $providerRegistrations = $this->getPropertyProviderService()->getProviderRegistrationsForEntity($entity);
+
+        while ($providerRegistration = $providerRegistrations->next_result())
+        {
+            $translationNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $providerRegistration->get_provider_class(), 2
+            );
+            $translationVariable = StringUtilities::getInstance()->createString(
+                $providerRegistration->get_property_name()
+            )->upperCamelize();
+
+            $elementOptions[$providerRegistration->get_id()] = Translation::get(
+                $translationVariable, null, $translationNamespace
+            );
+        }
+
+        return $elementOptions;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink
+     * @throws \Exception
      */
-    private function getElementProviderLink(Element $element)
+    private function getElementProviderLink(DataClassEntity $entity, Element $element)
     {
-        $entityProviderLinks = $this->getEntityProviderLinks();
+        $entityProviderLinks = $this->getEntityProviderLinks($entity);
 
-        return $entityProviderLinks[$element->get_id()];
+        return $entityProviderLinks[$element->getId()];
     }
 
     /**
@@ -250,53 +225,35 @@ class ProviderFormService
         $this->elementService = $elementService;
     }
 
-    private function getElementsForSchema($schema)
-    {
-        if (!isset($this->schemaElements[$schema->get_id()]))
-        {
-            $this->schemaElements[$schema->get_id()] =
-                $this->getElementService()->getElementsForSchema($schema)->as_array();
-        }
-
-        return $this->schemaElements[$schema->get_id()];
-    }
-
     /**
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Element
+     * @throws \Exception
      */
-    public function getEntity()
+    private function getElementsForSchema(Schema $schema)
     {
-        return $this->entity;
+        return $this->getElementService()->getElementsForSchema($schema)->as_array();
     }
 
     /**
-     *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
-     */
-    public function setEntity(DataClassEntity $entity)
-    {
-        $this->entity = $entity;
-    }
-
-    /**
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink[]
+     * @throws \Exception
      */
-    private function getEntityProviderLinks()
+    private function getEntityProviderLinks(DataClassEntity $entity)
     {
-        if (!isset($this->entityProviderLinks))
-        {
-            $propertyProviderService = new PropertyProviderService($this->getEntity());
-            $entityProviderLinks = $propertyProviderService->getProviderLinksForEntity();
+        $entityProviderLinks = array();
 
-            while ($entityProviderLink = $entityProviderLinks->next_result())
-            {
-                $this->entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
-            }
+        $entityProviderLinksResultSet = $this->getPropertyProviderService()->getProviderLinksForEntity($entity);
+
+        while ($entityProviderLink = $entityProviderLinksResultSet->next_result())
+        {
+            $entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
         }
 
-        return $this->entityProviderLinks;
+        return $entityProviderLinks;
     }
 
     /**
@@ -318,21 +275,19 @@ class ProviderFormService
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
+     * @return \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
-    public function getFormValidator()
+    public function getPropertyProviderService(): PropertyProviderService
     {
-        return $this->formValidator;
+        return $this->propertyProviderService;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
      */
-    public function setFormValidator($formValidator)
+    public function setPropertyProviderService(PropertyProviderService $propertyProviderService): void
     {
-        $this->formValidator = $formValidator;
+        $this->propertyProviderService = $propertyProviderService;
     }
 
     /**
@@ -353,16 +308,23 @@ class ProviderFormService
         $this->relationService = $relationService;
     }
 
-    public function setDefaults()
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Exception
+     */
+    public function setDefaults(DataClassEntity $entity, FormValidator $formValidator)
     {
         $defaults = array();
-        $availableSchemas = $this->getAvailableSchemas();
+        $availableSchemas = $this->getAvailableSchemas($entity);
 
         foreach ($availableSchemas as $availableSchema)
         {
-            $defaults = array_merge($defaults, $this->getDefaultsForSchema($availableSchema));
+            $defaults = array_merge($defaults, $this->getDefaultsForSchema($entity, $availableSchema));
         }
 
-        $this->getFormValidator()->setDefaults($defaults);
+        $formValidator->setDefaults($defaults);
     }
 }

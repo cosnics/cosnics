@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -185,7 +186,7 @@ class Setting extends DataClass
             return $success;
         }
 
-        \Chamilo\Configuration\Configuration::getInstance()->reset();
+        Configuration::getInstance()->reset();
         return $success;
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
+use Chamilo\Core\Repository\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -247,7 +249,7 @@ class MediawikiLinkHolderArray
                     ComplexContentObjectItem :: PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
 
-            $current_complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
+            $current_complex_wiki_page = DataManager :: retrieves(
                 ComplexContentObjectItem :: class_name(),
                 new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->next_result();
             $wiki_complex_ids[$pdbk] = $current_complex_wiki_page->get_id();
@@ -277,8 +279,8 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $query_parameters = $this->parent->get_mediawiki_parser_context()->get_parameters();
-                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_VIEW_WIKI_PAGE;
-                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
+                    $query_parameters[Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_VIEW_WIKI_PAGE;
+                    $query_parameters[Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
 
                     $replacePairs[$searchkey] = MediawikiLinker :: makeColouredLinkObj(
                         $title,

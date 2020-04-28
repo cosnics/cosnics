@@ -27,26 +27,27 @@ trait EntityTranslationTrait
      */
     public function getTranslations()
     {
-        if (! isset($this->translations))
+        if (!isset($this->translations))
         {
             $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this);
-            $entityTranslationService = new EntityTranslationService($entity);
-            $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode();
+            $entityTranslationService = new EntityTranslationService();
+            $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode($entity);
         }
-        
+
         return $this->translations;
     }
 
     /**
      *
      * @param string $isocode
+     *
      * @return string
      */
     public function getTranslationByIsocode($isocode)
     {
         $translations = $this->getTranslations();
         $bestMatchIsoCode = Locale::lookup(array_keys($translations), $isocode, true);
-        
+
         if ($bestMatchIsoCode)
         {
             return $translations[$bestMatchIsoCode]->get_value();

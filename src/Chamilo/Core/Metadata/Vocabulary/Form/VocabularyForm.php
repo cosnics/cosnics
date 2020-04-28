@@ -19,31 +19,24 @@ class VocabularyForm extends FormValidator
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary
      */
     private $vocabulary;
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Service\EntityTranslationFormService
-     */
-    private $entityTranslationFormService;
-
-    /**
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary $vocabulary
+     * @param string $formUrl
      *
-     * @param \Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary $vocabulary
-     * @param \Chamilo\Core\Metadata\Service\EntityTranslationFormService $entityTranslationFormService
-     * @param string $form_url
+     * @throws \Exception
      */
     public function __construct(
-        Vocabulary $vocabulary, EntityTranslationFormService $entityTranslationFormService, $formUrl
+        Vocabulary $vocabulary, $formUrl
     )
     {
         parent::__construct('vocabulary', self::FORM_METHOD_POST, $formUrl);
 
         $this->vocabulary = $vocabulary;
-        $this->entityTranslationFormService = $entityTranslationFormService;
-        $this->entityTranslationFormService->setFormValidator($this);
 
         $this->buildForm();
         $this->setFormDefaults();
@@ -51,11 +44,13 @@ class VocabularyForm extends FormValidator
 
     /**
      * Builds this form
+     *
+     * @throws \Exception
      */
     protected function buildForm()
     {
         $element = DataManager::retrieve_by_id(
-            Element::class_name(), $this->vocabulary->get_element_id()
+            Element::class, $this->vocabulary->get_element_id()
         );
 
         $this->addElement('category', Translation::get('General'));
@@ -93,14 +88,21 @@ class VocabularyForm extends FormValidator
 
         $this->addElement('checkbox', Vocabulary::PROPERTY_DEFAULT_VALUE, Translation::get('DefaultValue'));
 
-        $this->entityTranslationFormService->addFieldsToForm();
+        $this->getEntityTranslationFormService()->addFieldsToForm($this);
         $this->addSaveResetButtons();
     }
 
     /**
+     * @return \Chamilo\Core\Metadata\Service\EntityTranslationFormService
+     */
+    protected function getEntityTranslationFormService()
+    {
+        return $this->getService(EntityTranslationFormService::class);
+    }
+
+    /**
      * Sets the default values
-     *
-     * @param Element $element
+     * @throws \Exception
      */
     protected function setFormDefaults()
     {
@@ -111,6 +113,6 @@ class VocabularyForm extends FormValidator
 
         $this->setDefaults($defaults);
 
-        $this->entityTranslationFormService->setFormDefaults();
+        $this->getEntityTranslationFormService()->setFormDefaults($this, $this->vocabulary);
     }
 }
