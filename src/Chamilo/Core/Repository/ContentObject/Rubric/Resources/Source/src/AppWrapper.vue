@@ -1,16 +1,16 @@
 <template>
     <div id="app-wrapper" class="container-fluid">
-        <app :rubric-data="rubricData" :config="config" :version="version"></app>
+        <rubric-builder :api-config="config" :rubric-data="rubricData" :version="version"></rubric-builder>
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import App from './App.vue';
+import RubricBuilder from './RubricBuilder.vue';
 
 @Component({
     components: {
-        App
+        RubricBuilder
     },
 })
 export default class AppWrapper extends Vue {

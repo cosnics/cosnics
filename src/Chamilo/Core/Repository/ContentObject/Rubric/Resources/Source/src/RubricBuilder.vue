@@ -1,7 +1,5 @@
 <template>
     <div id="app">
-        <!--<rubric-builder apiConfig="config" rubric="myRubric" version="currentVersion"></rubric-builder>-->
-
         <div class="app-header">
             <ul class="app-header-menu">
                 <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
@@ -49,7 +47,7 @@
             ScoreRubricView, CriteriumDetailsView, LevelsView
         },
     })
-    export default class App extends Vue {
+    export default class RubricBuilder extends Vue {
         private selectedCriterium: Criterium|null = null;
         private showSplitView: boolean = false;
         private content: string = 'rubric';
@@ -57,7 +55,7 @@
         private rubric: Rubric|null = null;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
-        @Prop({type: Object, default: null}) readonly config!: object|null;
+        @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
 
         selectCriterium(criterium: Criterium|null) {
@@ -68,7 +66,7 @@
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
                 // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.config as APIConfiguration, 0, this.version!);
+                this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }
         }
     }
