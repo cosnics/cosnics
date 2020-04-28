@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
@@ -202,7 +201,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $entityService = $this->getService(EntityService::class);
 
-        $entityFactory = DataClassEntityFactory::getInstance();
+        $entityFactory = $this->getDataClassEntityFactory();
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($entity);
@@ -544,7 +543,7 @@ abstract class ContentObjectForm extends FormValidator
 
     public function build_metadata_choice_form()
     {
-        $entity = DataClassEntityFactory::getInstance()->getEntity(
+        $entity = $this->getDataClassEntityFactory()->getEntity(
             $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
         );
 
@@ -557,7 +556,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function build_metadata_form(SchemaInstance $schemaInstance)
     {
-        $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this->get_content_object());
+        $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($this->get_content_object());
 
         $entityFormService = $this->getService(EntityFormService::class);
         $entityFormService->addElements($this, $schemaInstance, $entity, $this->get_content_object()->get_owner());
@@ -705,6 +704,14 @@ abstract class ContentObjectForm extends FormValidator
             $form_type, $workspace, $content_object, $form_name, $method, $action, $extra, $additional_elements,
             $allow_new_version
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory()
+    {
+        return $this->getService(DataClassEntityFactory::class);
     }
 
     /**
@@ -1070,7 +1077,7 @@ abstract class ContentObjectForm extends FormValidator
             $user, $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
         );
 
-        $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($object);
+        $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($object);
         $this->getService(EntityService::class)->updateEntitySchemaValues(
             $user, $entity, $values[EntityService::PROPERTY_METADATA_SCHEMA]
         );

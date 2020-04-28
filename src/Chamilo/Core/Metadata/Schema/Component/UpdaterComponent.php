@@ -63,7 +63,7 @@ class UpdaterComponent extends Manager
 
                 if ($success)
                 {
-                    $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($schema);
+                    $entity = $this->getService(DataClassEntityFactory::class)->getEntityFromDataClass($schema);
                     $success = $this->getService(EntityTranslationService::class)->updateEntityTranslations(
                         $entity, $values[EntityTranslationService::PROPERTY_TRANSLATION]
                     );

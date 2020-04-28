@@ -81,7 +81,7 @@ class ConfigurerComponent extends Manager
 
         if (is_string($entityType))
         {
-            return DataClassEntityFactory::getInstance()->getEntityFromDataClassName($entityType);
+            return $this->getService(DataClassEntityFactory::class)->getEntityFromDataClassName($entityType);
         }
         else
         {

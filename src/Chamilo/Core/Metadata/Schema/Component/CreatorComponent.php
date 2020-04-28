@@ -51,7 +51,7 @@ class CreatorComponent extends Manager
 
                 if ($success)
                 {
-                    $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($schema);
+                    $entity = $this->getService(DataClassEntityFactory::class)->getEntityFromDataClass($schema);
                     $success = $this->getService(EntityTranslationService::class)->createEntityTranslations(
                         $entity, $values[EntityTranslationService::PROPERTY_TRANSLATION]
                     );

@@ -32,10 +32,9 @@ class RelationInstanceService
      */
     public function convertEncodedDataClassEntityValuesToDataClassEntity($encodedDataClassEntity)
     {
-        $dataClassEntityFactory = DataClassEntityFactory::getInstance();
         $dataClassEntity = unserialize($encodedDataClassEntity);
 
-        return $dataClassEntityFactory->getEntityFromDataClassNameAndDataClassIdentifier(
+        return $this->getService(DataClassEntityFactory::class)->getEntityFromDataClassNameAndDataClassIdentifier(
             $dataClassEntity[DataClassEntity::PROPERTY_TYPE], $dataClassEntity[DataClassEntity::PROPERTY_IDENTIFIER]
         );
     }

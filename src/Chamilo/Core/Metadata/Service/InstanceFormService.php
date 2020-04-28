@@ -21,11 +21,18 @@ class InstanceFormService
     private $entityService;
 
     /**
-     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     * @var \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
      */
-    public function __construct(EntityService $entityService)
+    private $dataClassEntityFactory;
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
+     */
+    public function __construct(EntityService $entityService, DataClassEntityFactory $dataClassEntityFactory)
     {
         $this->entityService = $entityService;
+        $this->dataClassEntityFactory = $dataClassEntityFactory;
     }
 
     /**
@@ -37,8 +44,7 @@ class InstanceFormService
      */
     public function addElements(FormValidator $formValidator, DataClassEntity $entity)
     {
-        $entityFactory = DataClassEntityFactory::getInstance();
-        $entity = $entityFactory->getEntity($entity->getDataClassName());
+        $entity = $this->getDataClassEntityFactory()->getEntity($entity->getDataClassName());
         $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity);
 
         while ($availableSchema = $availableSchemas->next_result())
@@ -48,6 +54,22 @@ class InstanceFormService
                 $availableSchema->get_name(), null, null, $availableSchema->get_id()
             );
         }
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory(): DataClassEntityFactory
+    {
+        return $this->dataClassEntityFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
+     */
+    public function setDataClassEntityFactory(DataClassEntityFactory $dataClassEntityFactory): void
+    {
+        $this->dataClassEntityFactory = $dataClassEntityFactory;
     }
 
     /**

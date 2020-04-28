@@ -31,7 +31,8 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     {
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Metadata\Relation\Instance\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $component->setTargetEntities($this->getTargetEntities());
         $component->setRelations($this->getRelation());
         $component->setSourceEntities($this->getSourceEntities());
@@ -41,25 +42,23 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
 
     /**
      *
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
+     * @throws \Exception
      */
-    public function getTargetEntities()
+    public function getRelation()
     {
-        $registrations = Configuration::registrations_by_type(
-            'Chamilo\Core\Repository\ContentObject');
+        $relation = $this->getService(RelationService::class)->getRelationByName('isAvailableFor');
 
-        $entities = array();
-        $entityFactory = DataClassEntityFactory::getInstance();
-
-        foreach ($registrations as $registration)
+        if (!$relation instanceof Relation)
         {
-            $entities[] = $entityFactory->getEntity(
-                $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-                     $registration[Registration::PROPERTY_NAME],
-                    DataClassEntity::INSTANCE_IDENTIFIER);
+            throw new Exception(
+                Translation::get(
+                    'RelationNotAvailable', array('TYPE' => 'isAvailableFor'), 'Chamilo\Core\Metadata\Relation'
+                )
+            );
         }
 
-        return $entities;
+        return array($relation);
     }
 
     /**
@@ -69,28 +68,32 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     public function getSourceEntities()
     {
         $entities = array();
-        $entities[] = DataClassEntityFactory::getInstance()->getEntity(Schema::class_name());
+        $entities[] = $this->getService(DataClassEntityFactory::class)->getEntity(Schema::class_name());
+
         return $entities;
     }
 
     /**
      *
-     * @throws \Exception
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
-    public function getRelation()
+    public function getTargetEntities()
     {
-        $relation = $this->getService(RelationService::class)->getRelationByName('isAvailableFor');
+        $registrations = Configuration::registrations_by_type(
+            'Chamilo\Core\Repository\ContentObject'
+        );
 
-        if (! $relation instanceof Relation)
+        $entities = array();
+        $entityFactory = $this->getService(DataClassEntityFactory::class);
+
+        foreach ($registrations as $registration)
         {
-            throw new Exception(
-                Translation::get(
-                    'RelationNotAvailable',
-                    array('TYPE' => 'isAvailableFor'),
-                    'Chamilo\Core\Metadata\Relation'));
+            $entities[] = $entityFactory->getEntity(
+                $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
+                $registration[Registration::PROPERTY_NAME], DataClassEntity::INSTANCE_IDENTIFIER
+            );
         }
 
-        return array($relation);
+        return $entities;
     }
 }

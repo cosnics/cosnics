@@ -22,6 +22,19 @@ class EntityConditionService
 {
 
     /**
+     * @var \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    private $dataClassEntityFactory;
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
+     */
+    public function __construct(DataClassEntityFactory $dataClassEntityFactory)
+    {
+        $this->dataClassEntityFactory = $dataClassEntityFactory;
+    }
+
+    /**
      *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
      *
@@ -64,11 +77,27 @@ class EntityConditionService
 
             while ($dataClassInstance = $dataClassInstances->next_result())
             {
-                $expandedEntities[] = DataClassEntityFactory::getInstance()->getEntityFromDataClass($dataClassInstance);
+                $expandedEntities[] = $this->getDataClassEntityFactory()->getEntityFromDataClass($dataClassInstance);
             }
         }
 
         return $expandedEntities;
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory(): DataClassEntityFactory
+    {
+        return $this->dataClassEntityFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
+     */
+    public function setDataClassEntityFactory(DataClassEntityFactory $dataClassEntityFactory): void
+    {
+        $this->dataClassEntityFactory = $dataClassEntityFactory;
     }
 
     /**

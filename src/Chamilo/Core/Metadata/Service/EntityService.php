@@ -3,7 +3,6 @@ namespace Chamilo\Core\Metadata\Service;
 
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
@@ -177,7 +176,6 @@ class EntityService
      */
     public function getSchemaInstancesForEntity($entity)
     {
-        $entityType = DataClassEntityFactory::getInstance()->getEntity($entity->getDataClassName());
         $schemaIds = $this->getAvailableSchemaIdsForEntityType($entity);
 
         $conditions = $this->getEntityCondition($entity);
@@ -540,7 +538,6 @@ class EntityService
         User $currentUser, DataClassEntity $entity, $submittedSchemaValues
     )
     {
-        $entityType = DataClassEntityFactory::getInstance()->getEntity($entity->getDataClassName());
         $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType($entity);
 
         $submittedSchemaIds = array_keys($submittedSchemaValues);

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Traits;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Locale;
 
 /**
@@ -22,19 +23,14 @@ trait EntityTranslationTrait
     private $translations;
 
     /**
-     *
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation[]
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     * @throws \Exception
      */
-    public function getTranslations()
+    public function getDataClassEntityFactory()
     {
-        if (!isset($this->translations))
-        {
-            $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this);
-            $entityTranslationService = new EntityTranslationService();
-            $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode($entity);
-        }
-
-        return $this->translations;
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            DataClassEntityFactory::class
+        );
     }
 
     /**
@@ -42,6 +38,7 @@ trait EntityTranslationTrait
      * @param string $isocode
      *
      * @return string
+     * @throws \Exception
      */
     public function getTranslationByIsocode($isocode)
     {
@@ -63,4 +60,21 @@ trait EntityTranslationTrait
      * @return string
      */
     abstract public function getTranslationFallback();
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation[]
+     * @throws \Exception
+     */
+    public function getTranslations()
+    {
+        if (!isset($this->translations))
+        {
+            $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($this);
+            $entityTranslationService = new EntityTranslationService();
+            $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode($entity);
+        }
+
+        return $this->translations;
+    }
 }
