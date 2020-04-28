@@ -13,12 +13,28 @@ export default class DataConnector {
     protected rubricDataId: number;
     protected currentVersion: number;
 
-    public isSaving: boolean = false;
+    private _isSaving: boolean = false;
 
     public constructor(apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number) {
         this.rubricDataId = rubricDataId;
         this.currentVersion = currentVersion;
         this.apiConfiguration = apiConfiguration;
+    }
+
+    get processingSize() {
+        return this.queue.pending + this.queue.size;
+    }
+
+    get isSaving() {
+        return this._isSaving;
+    }
+
+    private beginSaving() {
+        this._isSaving = true;
+    }
+
+    private endSaving() {
+        this._isSaving = false;
     }
 
     async addLevel(level: Level, index: number) {
@@ -99,16 +115,13 @@ export default class DataConnector {
         const data = await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters);
     }
 
-    beginSaving() {
-        this.isSaving = true;
-    }
-
-    endSaving() {
-        this.isSaving = false;
-    }
-
     protected async executeAPIRequest(apiURL: string, parameters: any) {
         return new Promise((resolve, reject) => {
+
+            function timeout(ms: number) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
             this.queue.add(async () => {
                 this.beginSaving();
                 parameters['rubricDataId'] = this.rubricDataId;
@@ -123,6 +136,7 @@ export default class DataConnector {
                     this.rubricDataId = res.data.rubric.id;
                     this.currentVersion = res.data.rubric.version;
                     resolve(res.data);*/
+                    await timeout(300); // simulate a save
                     resolve({});
                 } catch (err) {
                     reject(err);

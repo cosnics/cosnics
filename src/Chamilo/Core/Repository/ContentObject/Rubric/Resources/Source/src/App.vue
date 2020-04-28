@@ -11,12 +11,12 @@
                 <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>
             </ul>
             <div class="save-state">
-                <!--<div v-if="store.isSaving" class="saving">
-                    Processing {{store.queue.pending + store.queue.size}} saves...
+                <div v-if="dataConnector && dataConnector.isSaving" class="saving">
+                    Processing {{dataConnector.processingSize}} saves...
                 </div>
-                <div v-else class="saved" role="alert">
+                <div v-else-if="dataConnector" class="saved" role="alert">
                     All changes saved
-                </div>-->
+                </div>
             </div>
         </div>
         <div class="rubrics">
