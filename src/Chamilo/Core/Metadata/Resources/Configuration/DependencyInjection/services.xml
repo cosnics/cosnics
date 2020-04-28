@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+        
+        <service id="Chamilo\Core\Metadata\Entity\DataClassEntityFactory"/>
+
+        <service id="Chamilo\Core\Metadata\Service\EntityConditionService"/>
+        <service id="Chamilo\Core\Metadata\Service\EntityFormService"/>
+        <service id="Chamilo\Core\Metadata\Service\EntityService"/>
+        <service id="Chamilo\Core\Metadata\Service\EntityTranslationFormService"/>
+        <service id="Chamilo\Core\Metadata\Service\EntityTranslationService"/>
+        <service id="Chamilo\Core\Metadata\Service\InstanceFormService"/>
+        <service id="Chamilo\Core\Metadata\Service\InstanceService"/>
+
+        <service id="Chamilo\Core\Metadata\Element\Service\ElementService"/>
+
+        <service id="Chamilo\Core\Metadata\Provider\Service\PropertyProviderService"/>
+        <service id="Chamilo\Core\Metadata\Provider\Service\ProviderFormService"/>
+
+        <service id="Chamilo\Core\Metadata\Relation\Service\RelationService"/>
+
+        <service id="Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService"/>
+
+    </services>
+</container>

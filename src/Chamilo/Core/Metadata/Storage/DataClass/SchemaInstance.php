@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -22,39 +19,45 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class SchemaInstance extends DataClass
 {
+    const PROPERTY_CREATION_DATE = 'creation_date';
+
+    const PROPERTY_ENTITY_ID = 'entity_id';
+
     /**
      * **************************************************************************************************************
      * Properties *
      * **************************************************************************************************************
      */
     const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_ENTITY_ID = 'entity_id';
+
     const PROPERTY_SCHEMA_ID = 'schema_id';
+
     const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_CREATION_DATE = 'creation_date';
 
     /**
      * **************************************************************************************************************
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * Get the default properties
-     * 
-     * @param string[] $extended_property_names
-     *
-     * @return string[] The property names.
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
      */
-    public static function get_default_property_names($extended_property_names = array())
+    private $schema;
+
+    /**
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     */
+    public function getSchema()
     {
-        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
-        $extended_property_names[] = self::PROPERTY_SCHEMA_ID;
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_CREATION_DATE;
-        
-        return parent::get_default_property_names($extended_property_names);
+        if (!isset($this->schema))
+        {
+            $this->schema = DataManager::retrieve_by_id(Schema::class, $this->get_schema_id());
+        }
+
+        return $this->schema;
     }
 
     /**
@@ -62,88 +65,6 @@ class SchemaInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
-    /**
-     *
-     * @return string
-     */
-    public function get_entity_type()
-    {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
-    }
-
-    /**
-     *
-     * @param string $entityType
-     */
-    public function set_entity_type($entityType)
-    {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_entity_id()
-    {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
-    }
-
-    /**
-     *
-     * @param string $entityId
-     */
-    public function set_entity_id($entityId)
-    {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_schema_id()
-    {
-        return $this->get_default_property(self::PROPERTY_SCHEMA_ID);
-    }
-
-    /**
-     *
-     * @param int $schemaId
-     */
-    public function set_schema_id($schemaId)
-    {
-        $this->set_default_property(self::PROPERTY_SCHEMA_ID, $schemaId);
-    }
-
-    public function getSchema()
-    {
-        if (! isset($this->schema))
-        {
-            $this->schema = DataManager::retrieve_by_id(Schema::class_name(), $this->get_schema_id());
-        }
-        
-        return $this->schema;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_user_id()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @param integer
-     */
-    public function set_user_id($user_id)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
-    }
 
     public function getUser()
     {
@@ -160,6 +81,107 @@ class SchemaInstance extends DataClass
     }
 
     /**
+     * Get the default properties
+     *
+     * @param string[] $extended_property_names
+     *
+     * @return string[] The property names.
+     */
+    public static function get_default_property_names($extended_property_names = array())
+    {
+        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
+        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
+        $extended_property_names[] = self::PROPERTY_SCHEMA_ID;
+        $extended_property_names[] = self::PROPERTY_USER_ID;
+        $extended_property_names[] = self::PROPERTY_CREATION_DATE;
+
+        return parent::get_default_property_names($extended_property_names);
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @return string[string]
+     */
+    protected function get_dependencies()
+    {
+        $dependencies = array();
+
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE
+                    ), new StaticConditionVariable(static::class_name())
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
+            )
+        );
+
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE
+                    ), new StaticConditionVariable(static::class_name())
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
+            )
+        );
+
+        $dependencies[RelationInstance::class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+
+        $dependencies[ElementInstance::class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(ElementInstance::class_name(), ElementInstance::PROPERTY_SCHEMA_INSTANCE_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        return $dependencies;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_entity_id()
+    {
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_entity_type()
+    {
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_schema_id()
+    {
+        return $this->get_default_property(self::PROPERTY_SCHEMA_ID);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_user_id()
+    {
+        return $this->get_default_property(self::PROPERTY_USER_ID);
+    }
+
+    /**
      *
      * @param integer
      */
@@ -169,42 +191,38 @@ class SchemaInstance extends DataClass
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     * 
-     * @return string[string]
+     *
+     * @param string $entityId
      */
-    protected function get_dependencies()
+    public function set_entity_id($entityId)
     {
-        $dependencies = array();
-        
-        $sourceConditions = new AndCondition(
-            array(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RelationInstance::class_name(), 
-                        RelationInstance::PROPERTY_SOURCE_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
-                new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID), 
-                    new StaticConditionVariable($this->get_id()))));
-        
-        $targetConditions = new AndCondition(
-            array(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RelationInstance::class_name(), 
-                        RelationInstance::PROPERTY_TARGET_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
-                new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID), 
-                    new StaticConditionVariable($this->get_id()))));
-        
-        $dependencies[RelationInstance::class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
-        
-        $dependencies[ElementInstance::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ElementInstance::class_name(), ElementInstance::PROPERTY_SCHEMA_INSTANCE_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
-        return $dependencies;
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
+    }
+
+    /**
+     *
+     * @param string $entityType
+     */
+    public function set_entity_type($entityType)
+    {
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+    }
+
+    /**
+     *
+     * @param int $schemaId
+     */
+    public function set_schema_id($schemaId)
+    {
+        $this->set_default_property(self::PROPERTY_SCHEMA_ID, $schemaId);
+    }
+
+    /**
+     *
+     * @param integer
+     */
+    public function set_user_id($user_id)
+    {
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 }

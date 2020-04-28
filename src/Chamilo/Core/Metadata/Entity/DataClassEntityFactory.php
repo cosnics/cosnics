@@ -26,13 +26,31 @@ class DataClassEntityFactory
     private $entityClassNameCache;
 
     /**
-     *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classNameUtilities
      */
     public function __construct(ClassnameUtilities $classNameUtilities)
     {
         $this->classNameUtilities = $classNameUtilities;
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     *
+     * @return string
+     */
+    private function determineEntityClassName($dataClassName)
+    {
+        if (!isset($this->entityClassNameCache[$dataClassName]))
+        {
+            $dataClassBaseName = $this->getClassNameUtilities()->getPackageNameFromNamespace($dataClassName);
+            $dataClassPackage = $this->getClassNameUtilities()->getNamespaceParent($dataClassName, 3);
+
+            $this->entityClassNameCache[$dataClassName] =
+                $dataClassPackage . '\Integration\\' . __NAMESPACE__ . '\\' . $dataClassBaseName . 'Entity';
+        }
+
+        return $this->entityClassNameCache[$dataClassName];
     }
 
     /**
@@ -58,38 +76,31 @@ class DataClassEntityFactory
      * @param string $dataClassName
      * @param integer $dataClassIdentifier
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface
      */
     public function getEntity($dataClassName, $dataClassIdentifier = null, DataClass $dataClass = null)
     {
         $entityClassName = $this->determineEntityClassName($dataClassName);
+
         return new $entityClassName($dataClassName, $dataClassIdentifier, $dataClass);
     }
 
     /**
      *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
-     */
-    public function getEntityFromDataClassNameAndDataClassIdentifier($dataClassName, $dataClassIdentifier)
-    {
-        return $this->getEntity($dataClassName, $dataClassIdentifier);
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
+     *
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
      */
     public function getEntityFromDataClass(DataClass $dataClass)
     {
-        return $this->getEntity($dataClass->class_name(), $dataClass->get_id(), $dataClass);
+        return $this->getEntity($dataClass->class_name(), $dataClass->getId(), $dataClass);
     }
 
     /**
      *
      * @param string $dataClassName
+     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface
      */
     public function getEntityFromDataClassName($dataClassName)
@@ -100,20 +111,13 @@ class DataClassEntityFactory
     /**
      *
      * @param string $dataClassName
-     * @return string
+     * @param integer $dataClassIdentifier
+     *
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
      */
-    private function determineEntityClassName($dataClassName)
+    public function getEntityFromDataClassNameAndDataClassIdentifier($dataClassName, $dataClassIdentifier)
     {
-        if (! isset($this->entityClassNameCache[$dataClassName]))
-        {
-            $dataClassBaseName = $this->getClassNameUtilities()->getPackageNameFromNamespace($dataClassName);
-            $dataClassPackage = $this->getClassNameUtilities()->getNamespaceParent($dataClassName, 3);
-            
-            $this->entityClassNameCache[$dataClassName] = $dataClassPackage . '\Integration\\' . __NAMESPACE__ . '\\' .
-                 $dataClassBaseName . 'Entity';
-        }
-        
-        return $this->entityClassNameCache[$dataClassName];
+        return $this->getEntity($dataClassName, $dataClassIdentifier);
     }
 
     /**
@@ -122,10 +126,11 @@ class DataClassEntityFactory
      */
     public static function getInstance()
     {
-        if (! isset(self::$instance))
+        if (!isset(self::$instance))
         {
             self::$instance = new self(ClassnameUtilities::getInstance());
         }
+
         return self::$instance;
     }
 }

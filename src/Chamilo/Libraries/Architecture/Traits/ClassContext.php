@@ -18,8 +18,8 @@ trait ClassContext
      * @param boolean $camelCase
      *
      * @return string
-     * @deprecated Use ClassName::class or static::class now
      * @throws \ReflectionException
+     * @deprecated Use ClassName::class or static::class now
      */
     public static function class_name($fullyQualified = true, $camelCase = true)
     {

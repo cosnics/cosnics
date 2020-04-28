@@ -22,7 +22,7 @@ class RelationService
     /**
      * @param $relationName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getRelationByName($relationName)

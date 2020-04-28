@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityFormService;
@@ -63,6 +62,7 @@ abstract class ContentObjectForm extends FormValidator
 {
     const NEW_CATEGORY = 'new_category';
     const PROPERTY_ATTACHMENTS = 'attachments';
+    const PROPERTY_VERSION = 'version';
 
     const RESULT_ERROR = 'ObjectUpdateFailed';
     const RESULT_SUCCESS = 'ObjectUpdated';
@@ -493,12 +493,13 @@ abstract class ContentObjectForm extends FormValidator
             {
                 if ($object instanceof ForcedVersionSupport)
                 {
-                    $this->addElement('hidden', 'version', null, array('class' => 'version'));
+                    $this->addElement('hidden', self::PROPERTY_VERSION, null, array('class' => 'version'));
                 }
                 else
                 {
                     $this->addElement(
-                        'checkbox', 'version', Translation::get('CreateAsNewVersion'), null, array('class' => 'version')
+                        'checkbox', self::PROPERTY_VERSION, Translation::get('CreateAsNewVersion'), null,
+                        array('class' => 'version')
                     );
 
                     $this->addElement('html', '<div class="content-object-version-comment hidden">');
@@ -854,7 +855,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $values = $this->exportValues();
 
-        return (isset($values['version']) && $values['version'] == 1);
+        return (isset($values[self::PROPERTY_VERSION]) && $values[self::PROPERTY_VERSION] == 1);
     }
 
     /**
@@ -907,7 +908,7 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($content_object instanceof ForcedVersionSupport && $this->form_type == self::TYPE_EDIT)
         {
-            $defaults['version'] = 1;
+            $defaults[self::PROPERTY_VERSION] = 1;
         }
 
         if ($content_object instanceof AttachmentSupport)
@@ -1022,7 +1023,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->set_category_from_values($object, $values);
         }
 
-        if (isset($values['version']) && $values['version'] == 1)
+        if (isset($values[self::PROPERTY_VERSION]) && $values[self::PROPERTY_VERSION] == 1)
         {
             $object->set_comment(nl2br($values[ContentObject::PROPERTY_COMMENT]));
             $result = $object->version();
@@ -1078,8 +1079,7 @@ abstract class ContentObjectForm extends FormValidator
         $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($object);
         $entityService = new EntityService();
         $entityService->updateEntitySchemaValues(
-            $user, new RelationService(), new ElementService(), $entity,
-            $values[EntityService::PROPERTY_METADATA_SCHEMA]
+            $user, $entity, $values[EntityService::PROPERTY_METADATA_SCHEMA]
         );
 
         return $result;
