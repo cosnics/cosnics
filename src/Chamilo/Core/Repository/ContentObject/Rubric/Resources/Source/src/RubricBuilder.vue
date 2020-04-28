@@ -22,7 +22,7 @@
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
                 <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" @criterium-selected="selectCriterium" />
-                <levels-view v-else-if="content === 'levels'" :rubric="rubric"></levels-view>
+                <levels-view v-else-if="content === 'levels'" :rubric="rubric" :data-connector="dataConnector"></levels-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>

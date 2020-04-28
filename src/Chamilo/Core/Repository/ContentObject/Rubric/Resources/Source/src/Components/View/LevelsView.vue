@@ -101,6 +101,7 @@
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Rubric from '../../Domain/Rubric';
     import Level from '../../Domain/Level';
+    import DataConnector from '../../Connector/DataConnector';
 
     @Component({
         name: 'levels-view'
@@ -111,6 +112,7 @@
         private editMode: boolean = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
+        @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         isLabelHidden(level: Level) : boolean {
             const index = this.rubric.levels.indexOf(level);
@@ -134,7 +136,7 @@
         addLevel(editMode: boolean = false) {
             const level = this.getDefaultLevel();
             this.rubric.addLevel(level);
-            // todo: dataConnector
+            this.dataConnector?.addLevel(level, this.rubric.levels.length);
             this.selectLevel(level);
             if (editMode) {
                 this.editMode = true;
