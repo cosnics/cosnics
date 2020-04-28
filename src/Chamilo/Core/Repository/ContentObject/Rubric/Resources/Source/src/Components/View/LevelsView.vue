@@ -155,6 +155,7 @@
             this.editMode = false;
             this.removingLevel = null;
             this.rubric.removeLevel(level);
+            this.dataConnector?.deleteLevel(level);
             this.selectLevel(null);
         }
 
