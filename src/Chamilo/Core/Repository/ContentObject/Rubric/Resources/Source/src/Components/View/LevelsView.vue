@@ -134,6 +134,7 @@
         addLevel(editMode: boolean = false) {
             const level = this.getDefaultLevel();
             this.rubric.addLevel(level);
+            // todo: dataConnector
             this.selectLevel(level);
             if (editMode) {
                 this.editMode = true;

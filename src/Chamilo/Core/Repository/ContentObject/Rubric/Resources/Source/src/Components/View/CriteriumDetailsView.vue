@@ -68,6 +68,7 @@
             const choice = this.rubric.getChoice(criterium, level);
             choice.hasFixedScore = false;
             choice.fixedScore = Choice.FIXED_SCORE;
+            // todo: dataConnector
             this.$forceUpdate();
         }
 

@@ -4,6 +4,7 @@
 			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu">
 				<rubric-pane id="view1"
 							 :rubric="rubric"
+							 :data-connector="dataConnector"
 							 :selected-cluster="selectedClusterView1"
 							 :other-selected-cluster="selectedClusterView2"
 							 :selected-criterium="selectedCriterium"
@@ -30,6 +31,7 @@
 				></rubric-pane>
 				<rubric-pane id="view2" v-if="split"
 							 :rubric="rubric"
+							 :data-connector="dataConnector"
 							 :selected-cluster="selectedClusterView2"
 							 :other-selected-cluster="selectedClusterView1"
 							 :selected-criterium="selectedCriterium"
@@ -71,6 +73,7 @@
 	import RubricPane from './RubricPane.vue';
     import CriteriumDetailsView from './CriteriumDetailsView.vue';
 	import RemoveDialog from './RemoveDialog.vue';
+	import DataConnector from '../../Connector/DataConnector';
 
 	@Component({
 		name: 'score-rubric-view',
@@ -95,6 +98,7 @@
 		@Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 		@Prop(Boolean) readonly split!: boolean;
+		@Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
 		get clusters() {
 			return [...this.rubric.clusters];
@@ -178,7 +182,7 @@
 				}
 			}
 			item!.parent!.removeChild(item);
-			// Todo! // this.store.removeChild(item, item!.parent!);
+			this.dataConnector?.deleteTreeNode(item);
 			this.hideRemoveDialog();
 		}
 

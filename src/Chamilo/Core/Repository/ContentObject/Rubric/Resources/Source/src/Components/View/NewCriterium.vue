@@ -34,6 +34,7 @@
 
         addNewCriterium() {
             this.category.addChild(this.newCriterium!, this.category.criteria.length);
+            // todo: dataConnector: add criterium but also choices!!!
             this.cancel();
         }
 

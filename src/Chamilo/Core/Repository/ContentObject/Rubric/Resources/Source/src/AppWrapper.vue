@@ -1,6 +1,6 @@
 <template>
     <div id="app-wrapper" class="container-fluid">
-        <app :rubric-data="rubricData"></app>
+        <app :rubric-data="rubricData" :config="config" :version="version"></app>
     </div>
 </template>
 
@@ -14,6 +14,20 @@ import App from './App.vue';
     },
 })
 export default class AppWrapper extends Vue {
+    private version = 0;
+
+    private config: any = {
+        'addLevelURL': 'https://test',
+        'addTreeNodeURL': 'https://test',
+        'deleteLevelURL': 'https://test',
+        'deleteTreeNodeURL': 'https://test',
+        'moveLevelURL': 'https://test',
+        'moveTreeNodeURL': 'https://test',
+        'updateChoiceURL': 'https://test',
+        'updateLevelURL': 'https://test',
+        'updateTreeNodeURL': 'https://test'
+    };
+
     private rubricData = {
         "id":"t9hnqokwvenfdgskc7ykas",
         "useScores":true,

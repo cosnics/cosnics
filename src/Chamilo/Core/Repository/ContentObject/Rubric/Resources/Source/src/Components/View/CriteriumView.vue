@@ -45,6 +45,7 @@
         }
 
         startEditing() {
+            // todo: dataConnector: how to deal with updates?
             this.isEditing = true;
             this.oldTitle = this.criterium.title;
             this.$emit('start-edit');

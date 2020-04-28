@@ -1,9 +1,9 @@
-import APIConfiguration from "./APIConfiguration";
-import PQueue from "p-queue";
-import Level from "../Domain/Level";
-import TreeNode from "../Domain/TreeNode";
-import Choice from "../Domain/Choice";
-import axios from "axios";
+import axios from 'axios';
+import APIConfiguration from './APIConfiguration';
+import PQueue from 'p-queue';
+import Level from '../Domain/Level';
+import TreeNode from '../Domain/TreeNode';
+import Choice from '../Domain/Choice';
 
 export default class DataConnector {
 
@@ -22,127 +22,113 @@ export default class DataConnector {
     }
 
     async addLevel(level: Level, index: number) {
-        let parameters = {
-            'newSort': index + 1,
+        const parameters = {
+            'newSort': index + 1, // why + 1?
             'levelData': JSON.stringify(level)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters, function(data) {
-            level.id = data.level.id;
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters);
+        // level.id = data.level.id;
     }
 
     async addTreeNode(treeNode: TreeNode, parentTreeNode: TreeNode, index: number) {
-        let parameters = {
+        const parameters = {
             'treeNodeData': JSON.stringify(treeNode),
             'newParentId': parentTreeNode.id,
-            'newSort': index + 1
+            'newSort': index + 1 // why + 1?
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
     }
 
     async deleteLevel(level: Level) {
-        let parameters = {
+        const parameters = {
             'levelData': JSON.stringify(level)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.deleteLevelURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.deleteLevelURL, parameters);
     }
 
     async deleteTreeNode(treeNode: TreeNode) {
-        let parameters = {
+        const parameters = {
             'treeNodeData': JSON.stringify(treeNode)
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.deleteTreeNodeURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.deleteTreeNodeURL, parameters);
     }
 
     async moveLevel(level: Level, newIndex: number) {
-        let parameters = {
+        const parameters = {
             'levelData': JSON.stringify(level),
-            'newSort': newIndex + 1
+            'newSort': newIndex + 1 // why + 1?
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.moveLevelURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.moveLevelURL, parameters);
     }
 
     async moveTreeNode(treeNode: TreeNode, newParentNode: TreeNode, newIndex: number) {
-        let parameters = {
+        const parameters = {
             'treeNodeData': JSON.stringify(treeNode),
             'newParentId': newParentNode.id,
-            'newSort': newIndex + 1
+            'newSort': newIndex + 1 // why + 1?
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.moveTreeNodeURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.moveTreeNodeURL, parameters);
     }
 
     async updateChoice(choice: Choice) {
-        let parameters = {
+        const parameters = {
             'choiceData': JSON.stringify(choice),
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
     }
 
     async updateLevel(level: Level) {
-        let parameters = {
+        const parameters = {
             'levelData': JSON.stringify(level),
         }
 
-        await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters);
     }
 
     async updateTreeNode(treeNode: TreeNode) {
-        let parameters = {
+        const parameters = {
             'treeNodeData': JSON.stringify(treeNode),
         }
-
-        await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters, function(data) {
-
-        });
+        const data = await this.executeAPIRequest(this.apiConfiguration.updateTreeNodeURL, parameters);
     }
 
-    protected async executeAPIRequest(apiURL: string, parameters: any, successCallback: (data: any) => void) {
+    beginSaving() {
         this.isSaving = true;
+    }
 
-        await (async () => {
-            await this.queue.add(() => {
+    endSaving() {
+        this.isSaving = false;
+    }
+
+    protected async executeAPIRequest(apiURL: string, parameters: any) {
+        return new Promise((resolve, reject) => {
+            this.queue.add(async () => {
+                this.beginSaving();
                 parameters['rubricDataId'] = this.rubricDataId;
                 parameters['version'] = this.currentVersion;
+                const formData = new FormData();
+                for (const [key, value] of Object.entries(parameters)) {
+                    formData.set(key, value as any);
+                }
 
-                let formData = new FormData();
-                parameters.forEach((value: any, key: string) => {
-                    formData.set(key, value);
-                })
-
-                axios.post(apiURL, formData, ).then(
-                    (value) => {
-                        this.rubricDataId = value.data.rubric.id;
-                        this.currentVersion = value.data.rubric.version;
-                        successCallback(value.data);
-                    },
-                    (reason: any) => {
-
-                    }
-                )
+                try {
+                    /*const res = await axios.post(apiURL, formData);
+                    this.rubricDataId = res.data.rubric.id;
+                    this.currentVersion = res.data.rubric.version;
+                    resolve(res.data);*/
+                    resolve({});
+                } catch (err) {
+                    reject(err);
+                }
             });
-        })();
-
-        this.queue.onIdle().then(() => this.isSaving = false);
+            this.queue.onIdle().then(this.endSaving.bind(this));
+        });
     }
 }

@@ -62,6 +62,7 @@
         }
 
         startEditing() {
+            // todo: dataConnector: how to deal with updates? How to deal with the color swatch update?
             this.isEditing = true;
             this.oldTitle = this.category.title;
             this.$emit('start-edit');

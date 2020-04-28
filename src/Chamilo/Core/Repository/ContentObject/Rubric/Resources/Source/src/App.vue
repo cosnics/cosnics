@@ -23,7 +23,7 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
-                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" @criterium-selected="selectCriterium" />
+                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" @criterium-selected="selectCriterium" />
                 <levels-view v-else-if="content === 'levels'" :rubric="rubric"></levels-view>
             </div>
             <div v-else class="app-container-loading">
@@ -38,12 +38,11 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import ScoreRubricView from './Components/View/ScoreRubricView.vue';
     import CriteriumDetailsView from './Components/View/CriteriumDetailsView.vue';
-    import ScoreRubricStore from './ScoreRubricStore';
     import Criterium from './Domain/Criterium';
     import LevelsView from './Components/View/LevelsView.vue';
     import APIConfiguration from './Connector/APIConfiguration';
     import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import Cluster from "./Domain/Cluster";
+    import DataConnector from './Connector/DataConnector';
 
     @Component({
         components: {
@@ -54,14 +53,12 @@
         private selectedCriterium: Criterium|null = null;
         private showSplitView: boolean = false;
         private content: string = 'rubric';
-        private apiConfiguration: APIConfiguration|null = null;
+        private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
 
-        @Prop({type: Object, default: null}) readonly rubricData!: Object|null;
-
-        private config: any = {
-            'addLevelURL': 'https://test'
-        };
+        @Prop({type: Object, default: null}) readonly rubricData!: object|null;
+        @Prop({type: Object, default: null}) readonly config!: object|null;
+        @Prop({type: Number, default: null}) readonly version!: number|null;
 
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
@@ -70,7 +67,8 @@
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
-                this.apiConfiguration = APIConfiguration.fromJSON(this.config);
+                // todo: get rubric data id
+                this.dataConnector = new DataConnector(this.config as APIConfiguration, 0, this.version!);
             }
         }
     }

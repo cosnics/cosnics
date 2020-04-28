@@ -35,6 +35,7 @@
 
         addNewCluster() {
             this.rubric.addChild(this.newCluster!, this.rubric.clusters.length);
+            // todo: dataConnector
             this.$emit('cluster-selected', this.newCluster);
             this.cancel();
         }

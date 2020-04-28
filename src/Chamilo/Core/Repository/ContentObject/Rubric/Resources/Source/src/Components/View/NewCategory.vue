@@ -38,6 +38,7 @@
 
         addNewCategory() {
             this.cluster.addChild(this.newCategory!, this.cluster.categories.length);
+            // todo: dataConnector
             this.cancel();
         }
 

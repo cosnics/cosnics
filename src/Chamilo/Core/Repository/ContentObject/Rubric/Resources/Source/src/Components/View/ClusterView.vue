@@ -45,6 +45,7 @@
         }
 
         startEditing() {
+            // todo: dataConnector: how to deal with updates?
             this.isEditing = true;
             this.oldTitle = this.cluster.title;
             this.$emit('start-edit');
