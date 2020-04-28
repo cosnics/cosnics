@@ -9,7 +9,6 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
-    import Category from '../../Domain/Category';
     import Criterium from '../../Domain/Criterium';
     import NameInput from './NameInput.vue';
 
@@ -18,9 +17,9 @@
         components: { NameInput }
     })
     export default class NewCriterium extends Vue {
+
         private newCriterium: Criterium|null = null;
 
-        @Prop({type: Category, required: true}) readonly category!: Category;
         @Prop({type: Boolean, default: false}) readonly criteriumDragging!: boolean;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
 
@@ -33,8 +32,7 @@
         }
 
         addNewCriterium() {
-            this.category.addChild(this.newCriterium!, this.category.criteria.length);
-            // todo: dataConnector: add criterium but also choices!!!
+            this.$emit('criterium-added', this.newCriterium);
             this.cancel();
         }
 

@@ -9,9 +9,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Cluster from '../../Domain/Cluster';
     import Category from '../../Domain/Category';
-    import Criterium from '../../Domain/Criterium';
     import NameInput from './NameInput.vue';
 
     @Component({
@@ -22,7 +20,6 @@
 
         private newCategory: Category|null = null;
 
-        @Prop({type: Cluster, required: true}) readonly cluster!: Cluster;
         @Prop({type: String, default: null}) readonly viewId!: string|null;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
 
@@ -37,8 +34,7 @@
         }
 
         addNewCategory() {
-            this.cluster.addChild(this.newCategory!, this.cluster.categories.length);
-            // todo: dataConnector
+            this.$emit('category-added', this.newCategory);
             this.cancel();
         }
 

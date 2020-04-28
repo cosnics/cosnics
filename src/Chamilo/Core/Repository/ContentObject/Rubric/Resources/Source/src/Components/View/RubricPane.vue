@@ -9,7 +9,7 @@
                         :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
                         @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></cluster-view>
                 </draggable>
-                <new-cluster :view-id="id" :rubric="rubric" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-selected="selectCluster"></new-cluster>
+                <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
             </div>
         </div>
         <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
@@ -25,7 +25,7 @@
                                         :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
                                         @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></criterium-view>
                     </draggable>
-                    <new-criterium :category="category" :criterium-dragging="criteriumDragging"></new-criterium>
+                    <new-criterium :criterium-dragging="criteriumDragging" @criterium-added="addCriterium(category, $event)"></new-criterium>
                 </li>
                 <li v-if="criteriumDragging" slot="footer" class="category null-category">
                     <div class="category-header">
@@ -41,7 +41,7 @@
                 <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
             </draggable>
             <!-- todo: 'rubric' cluster, v-if="selectedCluster" can then be removed -->
-            <new-category v-if="selectedCluster" :cluster="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)"></new-category>
+            <new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
         </div>
     </div>
 </template>
@@ -136,6 +136,25 @@
                 });
             }
         }*/
+
+        // Add TreeNodes
+
+        addCluster(cluster: Cluster) {
+            this.rubric.addChild(cluster, this.rubric.clusters.length);
+            this.dataConnector?.addTreeNode(cluster, this.rubric, this.rubric.clusters.length);
+            this.selectCluster(cluster);
+        }
+
+        addCategory(category: Category) {
+            this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
+            this.dataConnector?.addTreeNode(category, this.selectedCluster!, this.selectedCluster!.categories.length);
+        }
+
+        addCriterium(category: Category, criterium: Criterium) {
+            category.addChild(criterium, category.criteria.length);
+            this.dataConnector?.addTreeNode(criterium, category, category.criteria.length);
+            // todo: dataConnector: add choices!!!
+        }
 
         // Menu Actions
 
