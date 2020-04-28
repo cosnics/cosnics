@@ -60,7 +60,8 @@ class SubscriptionRandomizer
      */
     protected function getPossibleUsers(CourseGroup $courseGroup, CourseGroup $parentCourseGroup)
     {
-        if($parentCourseGroup->is_root())
+        $numberOfParentMembers = $parentCourseGroup->count_members();
+        if($numberOfParentMembers == 0)
         {
             $possibleUsers = $this->getAllCourseUsers($courseGroup->get_course_code());
         }
