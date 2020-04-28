@@ -37,13 +37,14 @@ export default class Criterium extends TreeNode {
 
     static fromJSON(criterium:string|CriteriumJsonObject):Criterium {
         let criteriumObject: CriteriumJsonObject;
-        if(typeof criterium === 'string') {
+
+        if (typeof criterium === 'string') {
             criteriumObject = JSON.parse(criterium);
         } else {
             criteriumObject = criterium;
         }
 
-        let newCriterium = new Criterium(
+        const newCriterium = new Criterium(
             criteriumObject.title,
             criteriumObject.id
         );

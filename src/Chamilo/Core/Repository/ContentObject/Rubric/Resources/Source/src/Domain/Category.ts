@@ -48,22 +48,27 @@ export default class Category extends TreeNode {
 
     static fromJSON(category:string|CategoryJsonObject):Category {
         let categoryObject: CategoryJsonObject;
-        if(typeof category === 'string') {
+
+        if (typeof category === 'string') {
             categoryObject = JSON.parse(category);
         } else {
             categoryObject = category;
         }
 
-        let newCategory = new Category(
+        const newCategory = new Category(
             categoryObject.title,
             categoryObject.id
         );
 
         newCategory.color = categoryObject.color;
         newCategory.id = categoryObject.id;
-        categoryObject.criteria
-            .map(criteriumJsonObject => Criterium.fromJSON(criteriumJsonObject))
-            .forEach(criterium => newCategory.addChild(criterium));
+
+        const criteria = categoryObject.criteria
+            .map(criteriumJsonObject => Criterium.fromJSON(criteriumJsonObject)) as TreeNode[];
+        criteria.forEach(criterium => criterium.parent = newCategory);
+
+        // Note: Setting children directly loses the notifyAddChild behavior.
+        newCategory._children = criteria;
 
         return newCategory;
     }

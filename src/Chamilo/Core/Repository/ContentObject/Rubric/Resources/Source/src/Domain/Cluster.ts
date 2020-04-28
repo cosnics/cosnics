@@ -60,23 +60,28 @@ export default class Cluster extends TreeNode {
 
     static fromJSON(cluster: string | ClusterJsonObject): Cluster {
         let clusterObject: ClusterJsonObject;
+
         if (typeof cluster === 'string') {
             clusterObject = JSON.parse(cluster);
         } else {
             clusterObject = cluster;
         }
 
-        let newCluster = new Cluster(
+        const newCluster = new Cluster(
             clusterObject.title,
             clusterObject.id
         );
 
-        clusterObject.categories
-            .map(categoryJsonObject => Category.fromJSON(categoryJsonObject))
-            .forEach(category => newCluster.addCategory(category));
-        clusterObject.criteria
-            .map(criteriumObject => Criterium.fromJSON(criteriumObject))
-            .forEach(criterium => newCluster.addCriterium(criterium));
+        const categories = clusterObject.categories
+            .map(categoryJsonObject => Category.fromJSON(categoryJsonObject)) as TreeNode[];
+        const criteria = clusterObject.criteria
+            .map(criteriumObject => Criterium.fromJSON(criteriumObject)) as TreeNode[];
+
+        const children = categories.concat(criteria);
+        children.forEach(child => child.parent = newCluster);
+
+        // Note: Setting children directly loses the notifyAddChild behavior.
+        newCluster._children = children;
 
         return newCluster;
     }

@@ -96,7 +96,7 @@ export default class Rubric extends TreeNode {
             rubricObject = rubric;
         }
 
-        let newRubric = new Rubric(rubricObject.title, rubricObject.id);
+        const newRubric = new Rubric(rubricObject.title, rubricObject.id);
 
         newRubric.levels.push(...rubricObject.levels.map(level => Level.fromJSON(level)));
 
@@ -108,11 +108,14 @@ export default class Rubric extends TreeNode {
                 )
         });
 
-        rubricObject.clusters
-            .map(clusterJsonObject => Cluster.fromJSON(clusterJsonObject))
-            .forEach(cluster => newRubric.addChild(cluster));
+        const clusters = rubricObject.clusters
+            .map(clusterJsonObject => Cluster.fromJSON(clusterJsonObject)) as TreeNode[];
+        clusters.forEach(cluster => cluster.parent = newRubric);
 
+        // Note: Setting children directly loses the notifyAddChild behavior. So we have to perform the actions here.
+        newRubric._children = clusters;
         newRubric.useScores = rubricObject.useScores;
+        newRubric.getAllCriteria().forEach(criterium => newRubric.onCriteriumAdded(criterium));
 
         return newRubric;
     }
