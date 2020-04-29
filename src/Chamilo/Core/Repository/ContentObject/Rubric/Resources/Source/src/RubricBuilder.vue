@@ -1324,7 +1324,10 @@
 
         .cluster-content {
             display: flex;
-            margin-top: 1.5em;
+            margin-top: 1.3em;
+            padding-top: .2em;
+            margin-left: -.5em;
+            padding-left: .5em;
             flex: 1;
             overflow: auto;
             @include scrollbar();
