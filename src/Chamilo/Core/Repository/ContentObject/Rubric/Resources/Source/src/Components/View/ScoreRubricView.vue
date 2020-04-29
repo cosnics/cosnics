@@ -23,6 +23,7 @@
 							 @item-actions="onItemActions($event)"
 							 @start-edit="onStartEdit"
 							 @finish-edit="onFinishEdit"
+							 @change-color="onChangeColor"
 							 @remove="showRemoveDialog"
 							 @color-picker="onColorPicker"
 							 @start-drag="startDrag"
@@ -50,6 +51,7 @@
 							 @item-actions="onItemActions($event)"
 							 @start-edit="onStartEdit"
 							 @finish-edit="onFinishEdit"
+							 @change-color="onChangeColor"
 							 @remove="showRemoveDialog"
 							 @color-picker="onColorPicker"
 							 @start-drag="startDrag"
@@ -155,6 +157,10 @@
 			}
 			this.isEditing = false;
 			this.oldItemTitle = '';
+		}
+
+		onChangeColor(category: Category) {
+			this.dataConnector?.updateTreeNode(category);
 		}
 
 		showRemoveDialog(item: Cluster|Category|Criterium|null) {
