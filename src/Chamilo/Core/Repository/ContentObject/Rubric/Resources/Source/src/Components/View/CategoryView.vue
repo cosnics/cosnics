@@ -16,7 +16,7 @@
         <swatches :colors="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
         <div v-if="isEditing" class="edit-title">
             <div class="cover"></div>
-            <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor categorie" v-model="category.title"/>
+            <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor categorie" v-model="newTitle"/>
         </div>
     </div>
 </template>
@@ -34,6 +34,7 @@
     export default class CategoryView extends Vue {
         private isEditing: boolean = false;
         private oldTitle: string = '';
+        private newTitle: string = '';
 
         // Color palette generated with http://medialab.github.io/iwanthue/
         private readonly swatchColors = ['', '#5e318e', '#bd002f', '#b10099', '#1c5ce2', '#00943e', '#0182ed', '#ff2b84', '#e76f01', '#c58d00', '#ff9385', '#b7aaff', '#a4c592', '#56e9c2', '#56ee7a', '#e8d275'];
@@ -42,6 +43,10 @@
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: String, required: true}) readonly editCategoryColorId!: string;
         @Prop({type: Category, required: true}) readonly category!: Category;
+
+        mounted() {
+            this.newTitle = this.category.title;
+        }
 
         get showMenuActions() {
             return this.menuActionsId === this.id;
@@ -68,15 +73,18 @@
             this.$emit('start-edit');
         }
 
-        finishEditing() {
+        finishEditing(canceled=false) {
             this.isEditing = false;
             this.oldTitle = '';
-            this.$emit('finish-edit');
+            this.$emit('finish-edit', this.newTitle, canceled);
+            if (canceled) {
+                this.newTitle = this.category.title;
+            }
         }
 
         cancel() {
             this.category.title = this.oldTitle;
-            this.finishEditing();
+            this.finishEditing(true);
         }
     }
 </script>

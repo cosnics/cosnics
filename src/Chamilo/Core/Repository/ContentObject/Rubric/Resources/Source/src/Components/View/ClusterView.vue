@@ -16,7 +16,7 @@
             </div>
             <div v-if="isEditing" class="edit-title">
                 <div class="cover" @click.stop=""></div>
-                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor onderverdeling" v-model="cluster.title" />
+                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor onderverdeling" v-model="newTitle" />
             </div>
         </div>
     </li>
@@ -34,11 +34,16 @@
     export default class ClusterView extends Vue {
         private isEditing: boolean = false;
         private oldTitle: string = '';
+        private newTitle: string = '';
 
         @Prop({type: String, required: true}) readonly id!: string;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: Boolean, required: true}) readonly selected!: boolean;
         @Prop({type: Cluster, required: true}) readonly cluster!: Cluster;
+
+        mounted() {
+            this.newTitle = this.cluster.title;
+        }
 
         get showMenuActions() {
             return this.menuActionsId === this.id;
@@ -51,15 +56,18 @@
             this.$emit('start-edit');
         }
 
-        finishEditing() {
+        finishEditing(canceled=false) {
+            this.$emit('finish-edit', this.newTitle, canceled);
             this.isEditing = false;
             this.oldTitle = '';
-            this.$emit('finish-edit');
+            if (canceled) {
+                this.newTitle = this.cluster.title;
+            }
         }
 
         cancel() {
             this.cluster.title = this.oldTitle;
-            this.finishEditing();
+            this.finishEditing(true);
         }
     }
 </script>

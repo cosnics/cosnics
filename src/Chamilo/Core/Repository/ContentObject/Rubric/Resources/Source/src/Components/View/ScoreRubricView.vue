@@ -87,6 +87,7 @@
 		private newClusterDialogView: string = '';
 		private newCategoryDialogView: string = '';
 		private isEditing: boolean = false;
+		private oldItemTitle: string = '';
 		private removeItem: Cluster|Category|Criterium|null = null;
 		private editCategoryColorId: string = '';
 		private initiatedDrag: string = '';
@@ -141,13 +142,19 @@
 			this.menuActionsId = '';
 		}
 
-		onStartEdit() {
+		onStartEdit(item: TreeNode) {
 			this.isEditing = true;
+			this.oldItemTitle = item.title;
 			this.hideMenu();
 		}
 
-		onFinishEdit() {
+		onFinishEdit(item: TreeNode, newTitle: string, canceled=false) {
+			if (!canceled && newTitle !== this.oldItemTitle) {
+				item.title = newTitle;
+				this.dataConnector?.updateTreeNode(item);
+			}
 			this.isEditing = false;
+			this.oldItemTitle = '';
 		}
 
 		showRemoveDialog(item: Cluster|Category|Criterium|null) {

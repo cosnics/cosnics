@@ -7,7 +7,7 @@
                         :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
                     <cluster-view v-for="cluster in clusters"
                         :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
-                        @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></cluster-view>
+                        @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(cluster)" @finish-edit="onFinishEdit(cluster, ...arguments)"></cluster-view>
                 </draggable>
                 <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
             </div>
@@ -18,12 +18,12 @@
                        @start="startDrag($event, 'category')" @end="endDrag" @change="onChangeCategory">
                 <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
                     <category-view :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" :category="category" :menu-actions-id="menuActionsId" :edit-category-color-id="editCategoryColorId"
-                                   @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></category-view>
+                                   @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(category)" @finish-edit="onFinishEdit(category, ...arguments)"></category-view>
                     <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
                                :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="criteria">
                         <criterium-view v-for="criterium in category.criteria" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
                                         :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
-                                        @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit" @finish-edit="onFinishEdit"></criterium-view>
+                                        @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(criterium)" @finish-edit="onFinishEdit(criterium, ...arguments)"></criterium-view>
                     </draggable>
                     <new-criterium :criterium-dragging="criteriumDragging" @criterium-added="addCriterium(category, $event)"></new-criterium>
                 </li>
@@ -49,6 +49,7 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import draggable from 'vuedraggable';
+    import TreeNode from '../../Domain/TreeNode';
     import Rubric from '../../Domain/Rubric';
     import Cluster from '../../Domain/Cluster';
     import Category from '../../Domain/Category';
@@ -153,17 +154,16 @@
         addCriterium(category: Category, criterium: Criterium) {
             category.addChild(criterium, category.criteria.length);
             this.dataConnector?.addTreeNode(criterium, category, category.criteria.length);
-            // todo: dataConnector: add choices!!!
         }
 
         // Menu Actions
 
-        onStartEdit() {
-            this.$emit('start-edit');
+        onStartEdit(item: TreeNode) {
+            this.$emit('start-edit', item);
         }
 
-        onFinishEdit() {
-            this.$emit('finish-edit');
+        onFinishEdit(item: TreeNode, newTitle: string, canceled=false) {
+            this.$emit('finish-edit', item, newTitle, canceled);
         }
 
         onRemove(item: Cluster|Category|Criterium) {

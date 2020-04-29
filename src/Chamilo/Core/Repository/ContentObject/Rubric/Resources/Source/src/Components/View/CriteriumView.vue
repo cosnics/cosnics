@@ -16,7 +16,7 @@
             </div>
             <div v-if="isEditing" class="edit-title">
                 <div class="cover"></div>
-                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="criterium.title"/>
+                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="newTitle"/>
             </div>
         </div>
     </li>
@@ -34,11 +34,16 @@
     export default class CriteriumView extends Vue {
         private isEditing: boolean = false;
         private oldTitle: string = '';
+        private newTitle: string = '';
 
         @Prop({type: String, required: true}) readonly id!: string;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: Boolean, required: true}) readonly selected!: boolean;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
+
+        mounted() {
+            this.newTitle = this.criterium.title;
+        }
 
         get showMenuActions() {
             return this.menuActionsId === this.id;
@@ -51,15 +56,18 @@
             this.$emit('start-edit');
         }
 
-        finishEditing() {
+        finishEditing(canceled=false) {
             this.isEditing = false;
             this.oldTitle = '';
-            this.$emit('finish-edit');
+            this.$emit('finish-edit', this.newTitle, canceled);
+            if (canceled) {
+                this.newTitle = this.criterium.title;
+            }
         }
 
         cancel() {
             this.criterium.title = this.oldTitle;
-            this.finishEditing();
+            this.finishEditing(true);
         }
     }
 </script>
