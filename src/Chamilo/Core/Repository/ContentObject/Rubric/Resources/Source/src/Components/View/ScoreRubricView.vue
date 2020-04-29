@@ -60,7 +60,7 @@
 				></rubric-pane>
 			</div>
 		</div>
-        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)"></criterium-details-view>
+        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)" @change-criterium="onChangeCriterium" @change-choice="onChangeChoice"></criterium-details-view>
 		<remove-dialog :remove-item="removeItem" @remove="onRemoveItem" @cancel="hideRemoveDialog"></remove-dialog>
 	</div>
 </template>
@@ -72,6 +72,7 @@
 	import Cluster from '../../Domain/Cluster';
 	import Category from '../../Domain/Category';
 	import Criterium from '../../Domain/Criterium';
+	import Choice from '../../Domain/Choice';
 	import RubricPane from './RubricPane.vue';
     import CriteriumDetailsView from './CriteriumDetailsView.vue';
 	import RemoveDialog from './RemoveDialog.vue';
@@ -161,6 +162,14 @@
 
 		onChangeColor(category: Category) {
 			this.dataConnector?.updateTreeNode(category);
+		}
+
+		onChangeCriterium(criterium: Criterium) {
+			this.dataConnector?.updateTreeNode(criterium);
+		}
+
+		onChangeChoice(choice: Choice) {
+			this.dataConnector?.updateChoice(choice);
 		}
 
 		showRemoveDialog(item: Cluster|Category|Criterium|null) {

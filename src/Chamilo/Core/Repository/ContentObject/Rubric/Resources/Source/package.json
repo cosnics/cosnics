@@ -8,10 +8,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@types/debounce": "^1.2.0",
     "axios": "^0.19.2",
     "bootstrap": "^3.4.1",
     "bootstrap-vue": "2.2.2",
     "core-js": "3.6.4",
+    "debounce": "^1.2.0",
     "jquery": "^2.2.4",
     "jquery-ui": "^1.12.1",
     "jquery.fancytree": "^2.34.0",
