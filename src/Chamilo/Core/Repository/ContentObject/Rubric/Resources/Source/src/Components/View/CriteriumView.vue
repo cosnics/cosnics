@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Criterium from '../../Domain/Criterium';
     import NameInput from './NameInput.vue';
 
@@ -42,6 +42,10 @@
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
 
         mounted() {
+            this.resetTitle();
+        }
+
+        resetTitle() {
             this.newTitle = this.criterium.title;
         }
 
@@ -60,14 +64,18 @@
             this.isEditing = false;
             this.oldTitle = '';
             this.$emit('finish-edit', this.newTitle, canceled);
-            if (canceled) {
-                this.newTitle = this.criterium.title;
-            }
         }
 
         cancel() {
             this.criterium.title = this.oldTitle;
             this.finishEditing(true);
+            this.resetTitle();
+        }
+
+        // Because mounted() only occurs once, and this component keeps its own state, we have to check if the title has changed through an external update.
+        @Watch('criterium.title')
+        onTitleChanged() {
+            this.resetTitle();
         }
     }
 </script>

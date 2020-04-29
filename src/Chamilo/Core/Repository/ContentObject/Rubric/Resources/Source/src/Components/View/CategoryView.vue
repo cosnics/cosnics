@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Category from '../../Domain/Category';
     import NameInput from './NameInput.vue';
     import Swatches from 'vue-swatches';
@@ -45,6 +45,10 @@
         @Prop({type: Category, required: true}) readonly category!: Category;
 
         mounted() {
+            this.resetTitle();
+        }
+
+        resetTitle() {
             this.newTitle = this.category.title;
         }
 
@@ -77,14 +81,18 @@
             this.isEditing = false;
             this.oldTitle = '';
             this.$emit('finish-edit', this.newTitle, canceled);
-            if (canceled) {
-                this.newTitle = this.category.title;
-            }
         }
 
         cancel() {
             this.category.title = this.oldTitle;
             this.finishEditing(true);
+            this.resetTitle();
+        }
+
+        // Because mounted() only occurs once, and this component keeps its own state, we have to check if the title has changed through an external update.
+        @Watch('category.title')
+        onTitleChanged() {
+            this.resetTitle();
         }
     }
 </script>

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Cluster from '../../Domain/Cluster';
     import NameInput from './NameInput.vue';
 
@@ -42,6 +42,10 @@
         @Prop({type: Cluster, required: true}) readonly cluster!: Cluster;
 
         mounted() {
+            this.resetTitle();
+        }
+
+        resetTitle() {
             this.newTitle = this.cluster.title;
         }
 
@@ -60,14 +64,18 @@
             this.$emit('finish-edit', this.newTitle, canceled);
             this.isEditing = false;
             this.oldTitle = '';
-            if (canceled) {
-                this.newTitle = this.cluster.title;
-            }
         }
 
         cancel() {
             this.cluster.title = this.oldTitle;
             this.finishEditing(true);
+            this.resetTitle();
+        }
+
+        // Because mounted() only occurs once, and this component keeps its own state, we have to check if the title has changed through an external update.
+        @Watch('cluster.title')
+        onTitleChanged() {
+            this.resetTitle();
         }
     }
 </script>
