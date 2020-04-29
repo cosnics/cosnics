@@ -665,6 +665,7 @@
             font-size: 1.6rem;
             margin: 0;
             display: inline-block;
+            line-height: 1.3em;
         }
 
         .actions {
