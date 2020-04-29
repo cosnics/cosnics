@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
@@ -139,6 +140,72 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function attachContentObjectByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        if ($this->isContentObjectAttachedTo($contentObject, $attachmentIdentifier, $type))
+        {
+            return true;
+        }
+        else
+        {
+            return $this->createContentObjectAttachment(
+                $this->getContentObjectAttachmentInstanceFromParameters($contentObject, $attachmentIdentifier, $type)
+            );
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer[] $attachmentIdentifiers
+     * @param string $type
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     */
+    public function attachContentObjectsByIdentifierAndType(
+        ContentObject $contentObject, array $attachmentIdentifiers = array(),
+        string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        foreach ($attachmentIdentifiers as $attachmentIdentifier)
+        {
+            if (!$this->attachContentObjectByIdentifierAndType($contentObject, $attachmentIdentifier, $type))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return integer
+     * @throws \ReflectionException
+     */
+    public function countContentObjectAttachmentsByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        return $this->getContentObjectRepository()->countContentObjectAttachmentsByIdentifierAndType(
+            $contentObject, $attachmentIdentifier, $type
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return boolean
      * @throws \ReflectionException
@@ -195,6 +262,17 @@ class ContentObjectSaver
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function createContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    {
+        return $this->getContentObjectRepository()->createContentObjectAttachment($contentObjectAttachment);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
@@ -233,12 +311,94 @@ class ContentObjectSaver
         // Process attachments
         if ($contentObject instanceof AttachmentSupport)
         {
-            $contentObject->attach_content_objects(
-                $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'], ContentObject::ATTACHMENT_NORMAL
+            $this->attachContentObjectsByIdentifierAndType(
+                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'],
+                ContentObject::ATTACHMENT_NORMAL
             );
         }
 
         return $contentObject;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     */
+    public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    {
+        return $this->getContentObjectRepository()->deleteContentObjectAttachment($contentObjectAttachment);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $type
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function detachAllContentObjectsByType(
+        ContentObject $contentObject, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        foreach ($this->findContentObjectAttachments($contentObject) as $contentObjectAttachment)
+        {
+            if (!$this->detachContentObjectByIdentifierAndType(
+                $contentObject, $contentObjectAttachment->getId(), ContentObject::ATTACHMENT_NORMAL
+            ))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function detachContentObjectByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        $attachment = $this->retrieveContentObjectAttachmentByIdentifierAndType(
+            $contentObject, $attachmentIdentifier, $type
+        );
+
+        if ($attachment instanceof ContentObjectAttachment)
+        {
+            return $this->deleteContentObjectAttachment($attachment);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $type
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param integer $offset
+     * @param integer $count
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
+     */
+    public function findContentObjectAttachments(
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = array(), $offset = null,
+        $count = null
+    )
+    {
+        return $this->getContentObjectRepository()->retrieveContentObjectAttachments(
+            $contentObject, $type, $orderBy, $offset, $count
+        );
     }
 
     /**
@@ -300,6 +460,26 @@ class ContentObjectSaver
     public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
     {
         $this->classnameUtilities = $classnameUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
+     */
+    public function getContentObjectAttachmentInstanceFromParameters(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        $attachment = new ContentObjectAttachment();
+
+        $attachment->set_attachment_id($attachmentIdentifier);
+        $attachment->set_content_object_id($contentObject->getId());
+        $attachment->set_type($type);
+
+        return $attachment;
     }
 
     /**
@@ -512,6 +692,39 @@ class ContentObjectSaver
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     */
+    public function isContentObjectAttachedTo(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        return $this->countContentObjectAttachmentsByIdentifierAndType($contentObject, $attachmentIdentifier, $type) >
+            0;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
+     * @throws \Exception
+     */
+    public function retrieveContentObjectAttachmentByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        return $this->getContentObjectRepository()->retrieveContentObjectAttachmentByIdentifierAndType(
+            $contentObject, $attachmentIdentifier, $type
+        );
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Workspace\PersonalWorkspace $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
@@ -602,6 +815,7 @@ class ContentObjectSaver
      * @return boolean
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function updateContentObjectFromInstanceAndValuesInWorkspace(
         WorkspaceInterface $workspace, ContentObject $contentObject, array $values
@@ -655,13 +869,10 @@ class ContentObjectSaver
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need
              * to be added, and attaches and detaches accordingly.
              */
-            foreach ($contentObject->get_attachments() as $attached_object_id)
-            {
-                $contentObject->detach_content_object($attached_object_id->getId(), ContentObject::ATTACHMENT_NORMAL);
-            }
-
-            $contentObject->attach_content_objects(
-                $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'], ContentObject::ATTACHMENT_NORMAL
+            $this->detachAllContentObjectsByType($contentObject, ContentObject::ATTACHMENT_NORMAL);
+            $this->attachContentObjectsByIdentifierAndType(
+                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'],
+                ContentObject::ATTACHMENT_NORMAL
             );
         }
 

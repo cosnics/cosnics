@@ -2,10 +2,13 @@
 namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -46,6 +49,46 @@ class ContentObjectRepository
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return integer
+     * @throws \ReflectionException
+     */
+    public function countContentObjectAttachmentsByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        $conditions = array();
+
+        if (!is_null($attachmentIdentifier))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ), new StaticConditionVariable($attachmentIdentifier)
+            );
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+            ), new StaticConditionVariable($contentObject->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
+            ), new StaticConditionVariable($type)
+        );
+
+        return $this->getDataClassRepository()->count(
+            ContentObjectAttachment::class, new DataClassCountParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return boolean
      * @throws \Exception
@@ -53,6 +96,28 @@ class ContentObjectRepository
     public function createContentObject(ContentObject $contentObject)
     {
         return $this->getDataClassRepository()->create($contentObject);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function createContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    {
+        return $this->getDataClassRepository()->create($contentObjectAttachment);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
+     *
+     * @return boolean
+     * @throws \ReflectionException
+     */
+    public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    {
+        return $this->getDataClassRepository()->delete($contentObjectAttachment);
     }
 
     /**
@@ -204,6 +269,77 @@ class ContentObjectRepository
         $parameters->setCondition(new AndCondition($conditions));
 
         return $parameters;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param integer $attachmentIdentifier
+     * @param string $type
+     *
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
+     * @throws \Exception
+     */
+    public function retrieveContentObjectAttachmentByIdentifierAndType(
+        ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
+    )
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+            ), new StaticConditionVariable($contentObject->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+            ), new StaticConditionVariable($attachmentIdentifier)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
+            ), new StaticConditionVariable($type)
+        );
+
+        return $this->getDataClassRepository()->retrieve(
+            ContentObjectAttachment::class, new DataClassRetrieveParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param string $type
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param integer $offset
+     * @param integer $count
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
+     */
+    public function retrieveContentObjectAttachments(
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = array(), $offset = null,
+        $count = null
+    )
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+            ), new StaticConditionVariable($contentObject->getId())
+        );
+
+        $join = new Join(
+            ContentObjectAttachment::class, new EqualityCondition(
+                new PropertyConditionVariable(
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
+            )
+        );
+
+        $parameters = new DataClassRetrievesParameters(
+            $condition, $count, $offset, $orderBy, new Joins(array($join))
+        );
+
+        return $this->retrieveContentObjects(ContentObject::class, $parameters);
     }
 
     /**
