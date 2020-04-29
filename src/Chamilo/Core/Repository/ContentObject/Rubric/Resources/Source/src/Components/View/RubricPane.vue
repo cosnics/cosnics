@@ -123,6 +123,7 @@
         }
 
         /*@Watch('isEditing')
+        // Not sure yet if I want to use this, since the result is a bit unsatisfactory. leaving this here for now.
         onEditStateChanged() {
             if (this.isEditing) {
                 this.$nextTick(()=> {
@@ -143,6 +144,10 @@
         addCluster(cluster: Cluster) {
             this.rubric.addChild(cluster, this.rubric.clusters.length);
             this.dataConnector?.addTreeNode(cluster, this.rubric, this.rubric.clusters.length);
+            const category = new Category();
+            category.color = '';
+            cluster.addChild(category, 0);
+            this.dataConnector?.addTreeNode(category, cluster, 0);
             this.selectCluster(cluster);
         }
 
