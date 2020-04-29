@@ -121,14 +121,16 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
 
     /**
      * Gets the action links to display
-     * 
+     *
      * @param mixed[] $user_with_subscription_status
      *
      * @return string
+     * @throws \Exception
      */
     public function get_actions($user_with_subscription_status_and_type)
     {
         $user_id = $user_with_subscription_status_and_type[User::PROPERTY_ID];
+        $hasEditRight = $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT);
         
         // construct the toolbar
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
@@ -138,14 +140,20 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
         $details_url = $this->get_component()->get_url($parameters);
-        
-        // always show details
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Details'), 
-                Theme::getInstance()->getCommonImagePath('Action/Details'), 
-                $details_url, 
-                ToolbarItem::DISPLAY_ICON));
+
+
+        if ($hasEditRight || $this->get_component()->getUser()->getId() == $user_id)
+        {
+            // only show details for your own account or if you are a teacher
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Details'),
+                    Theme::getInstance()->getCommonImagePath('Action/Details'),
+                    $details_url,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
         
         // display the actions to change the individual status and unsubscribe
         // if:
@@ -154,7 +162,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
         // (2) the row is not the current user
         // AND
         // (3) the row is not a group-only subscription
-        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if ($hasEditRight)
         {
             if ($user_id != $this->get_component()->get_user()->get_id() && $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE] %
                  2)

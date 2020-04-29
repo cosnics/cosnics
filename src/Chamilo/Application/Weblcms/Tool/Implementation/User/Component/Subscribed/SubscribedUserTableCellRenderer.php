@@ -97,6 +97,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
     public function get_actions($user_with_subscription_status)
     {
         $user_id = $user_with_subscription_status[User::PROPERTY_ID];
+        $hasEditRight = $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT);
         
         // construct the toolbar
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
@@ -107,13 +108,18 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
         $details_url = $this->get_component()->get_url($parameters);
-        
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Details'), 
-                Theme::getInstance()->getCommonImagePath('Action/Details'), 
-                $details_url, 
-                ToolbarItem::DISPLAY_ICON));
+
+        if ($hasEditRight || $this->get_component()->getUser()->getId() == $user_id)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Details'),
+                    Theme::getInstance()->getCommonImagePath('Action/Details'),
+                    $details_url,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
         
         // display the actions to change the individual status and unsubscribe
         // if:
@@ -122,7 +128,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         // (2) the row is not the current user
         // AND
         // (3) we are not editing groups
-        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if ($hasEditRight)
         {
             $group_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
             if ($user_id != $this->get_component()->get_user()->get_id() && ! isset($group_id))
