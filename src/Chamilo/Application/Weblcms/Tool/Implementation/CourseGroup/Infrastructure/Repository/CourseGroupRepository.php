@@ -108,4 +108,14 @@ class CourseGroupRepository extends CommonDataClassRepository
             new StaticConditionVariable($courseGroup->getId())
         );
     }
+
+    /**
+     * @param int $courseGroupId
+     *
+     * @return bool|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getCourseGroupById(int $courseGroupId)
+    {
+        return $this->dataClassRepository->retrieveById(CourseGroup::class, $courseGroupId);
+    }
 }

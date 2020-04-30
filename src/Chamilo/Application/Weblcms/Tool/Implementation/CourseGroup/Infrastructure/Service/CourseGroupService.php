@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -137,5 +138,13 @@ class CourseGroupService
     public function countMembersDirectlySubscribedInGroup(CourseGroup $courseGroup)
     {
         return $this->courseGroupRepository->countMembersDirectlySubscribedInGroup($courseGroup);
+    }
+
+    /**
+     * @param int $courseGroupId
+     */
+    public function getCourseGroupById(int $courseGroupId)
+    {
+        return $this->courseGroupRepository->getCourseGroupById($courseGroupId);
     }
 }
