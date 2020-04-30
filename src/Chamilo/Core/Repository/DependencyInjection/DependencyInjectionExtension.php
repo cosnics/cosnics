@@ -57,6 +57,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('instance.xml');
         $xmlFileLoader->load('console.xml');
         $xmlFileLoader->load('content_object.xml');
+        $xmlFileLoader->load('registration.xml');
         $xmlFileLoader->load('services.xml');
 
         $xmlFileLoader = new XmlFileLoader(

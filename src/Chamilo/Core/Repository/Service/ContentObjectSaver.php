@@ -91,6 +91,11 @@ class ContentObjectSaver
     private $dataClassEntityFactory;
 
     /**
+     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    private $templateRegistrationConsulter;
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
      * @param \Chamilo\Core\Repository\Service\RepositoryCategoryService $repositoryCategoryService
      * @param \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface $publicationAggregator
@@ -100,6 +105,7 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
      * @param \Chamilo\Core\Metadata\Service\EntityService $metadataEntityService
      * @param \Chamilo\Core\User\Service\UserService $userService
+     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
@@ -109,7 +115,8 @@ class ContentObjectSaver
         PublicationAggregatorInterface $publicationAggregator,
         ContentObjectRelationService $contentObjectRelationService, IncludeParserManager $includeParserManager,
         InstanceService $metadataInstanceService, DataClassEntityFactory $dataClassEntityFactory,
-        EntityService $metadataEntityService, UserService $userService, SessionUtilities $sessionUtilities,
+        EntityService $metadataEntityService, UserService $userService,
+        TemplateRegistrationConsulter $templateRegistrationConsulter, SessionUtilities $sessionUtilities,
         StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities
     )
     {
@@ -122,6 +129,7 @@ class ContentObjectSaver
         $this->dataClassEntityFactory = $dataClassEntityFactory;
         $this->metadataEntityService = $metadataEntityService;
         $this->userService = $userService;
+        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
         $this->sessionUtilities = $sessionUtilities;
         $this->stringUtilities = $stringUtilities;
         $this->classnameUtilities = $classnameUtilities;
@@ -505,7 +513,8 @@ class ContentObjectSaver
      */
     public function getContentObjectInstanceForTemplateIdentfier(int $templateIdentifier)
     {
-        $templateRegistration = Configuration::registration_by_id($templateIdentifier);
+        $templateRegistration =
+            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($templateIdentifier);
 
         $contentObjectInstance = $templateRegistration->get_template()->get_content_object();
         $contentObjectInstance->set_template_registration_id($templateIdentifier);
@@ -673,6 +682,22 @@ class ContentObjectSaver
     public function setStringUtilities(StringUtilities $stringUtilities): void
     {
         $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
+    {
+        return $this->templateRegistrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
+     */
+    public function setTemplateRegistrationConsulter(TemplateRegistrationConsulter $templateRegistrationConsulter): void
+    {
+        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
     }
 
     /**

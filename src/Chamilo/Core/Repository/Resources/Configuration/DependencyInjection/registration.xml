@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+
+        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationConsulter">
+            <argument key="$dataLoader"
+                      type="service"
+                      id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheLoader"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheLoader"
+                 class="Chamilo\Configuration\Service\DataCacheFilesystemLoader">
+            <argument type="service"
+                      id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader"/>
+        <service id="Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository"/>
+    </services>
+</container>

@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Service\ContentObjectSaver;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -38,12 +39,6 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 {
 
     /**
-     *
-     * @var int
-     */
-    private $template_id;
-
-    /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \ReflectionException
@@ -60,13 +55,20 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
         $type_selector_renderer = new BasicTypeSelectorRenderer($this, $type_selector);
 
-        $this->template_id = TypeSelector::get_selection();
+        $templateIdentifier = TypeSelector::get_selection();
 
-        if ($this->template_id)
+        if ($templateIdentifier)
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($this->template_id);
+            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($templateIdentifier);
             $template = $template_registration->get_template();
             $object = $template->get_content_object();
+
+//            $contentObject = $this->getContentObjectSaver()->getContentObjectInstanceForTemplateAndUserIdentfier(
+//                $templateIdentifier, $this->get_user_id()
+//            );
+//
+//            var_dump($contentObject);
+//            exit;
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
@@ -74,8 +76,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     'CreateContentType', array(
                         'OBJECTTYPE' => strtolower(
                             Translation::get(
-                                $template->translate('TypeName'), null,
-                                $template_registration->get_content_object_type()
+                                $template->translate('TypeName'), null, $object->package()
                             )
                         )
                     )
@@ -90,12 +91,12 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             );
             $object->set_parent_id($category);
 
-            $object->set_template_registration_id($this->template_id);
+            $object->set_template_registration_id($templateIdentifier);
 
             $content_object_form = ContentObjectForm::factory(
                 ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $object, 'create_content_object',
                 FormValidator::FORM_METHOD_POST,
-                $this->get_url(array(TypeSelector::PARAM_SELECTION => $this->template_id)), null
+                $this->get_url(array(TypeSelector::PARAM_SELECTION => $templateIdentifier)), null
             );
 
             if ($content_object_form->validate())
@@ -192,6 +193,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
     }
 
     /**
+     * @return \Chamilo\Core\Repository\Service\ContentObjectSaver
+     */
+    public function getContentObjectSaver()
+    {
+        return $this->getService(ContentObjectSaver::class);
+    }
+
+    /**
      * @return \Chamilo\Core\Metadata\Service\InstanceService
      */
     private function getInstanceService()
@@ -199,6 +208,10 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         return $this->getService(InstanceService::class);
     }
 
+    /**
+     * @return string[]
+     * @throws \ReflectionException
+     */
     public function get_allowed_content_object_types()
     {
         $types = DataManager::get_registered_types(true);

@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 
 /**
  *
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderInterface
+class DataCacheFilesystemLoader extends DoctrineFilesystemCacheService implements DataLoaderInterface
 {
 
     /**
