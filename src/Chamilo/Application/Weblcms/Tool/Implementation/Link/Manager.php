@@ -21,6 +21,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Link::class_name(), RssFeed::class_name());
+        return array(Link::class, RssFeed::class);
     }
 }

@@ -97,10 +97,10 @@ class ExportParameters
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::class,
                                         WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
                                         ContentObject::class,
@@ -108,7 +108,7 @@ class ExportParameters
 
                         $condition = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
                             new StaticConditionVariable($this->getWorkspace()->getId()));
 
@@ -156,10 +156,10 @@ class ExportParameters
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::class,
                                         WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
                                         ContentObject::class,
@@ -169,13 +169,13 @@ class ExportParameters
 
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
                             new StaticConditionVariable($this->getWorkspace()->getId()));
 
                         $conditions[] = new InCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID),
                             $category_ids);
 

@@ -40,7 +40,7 @@ class TabEditComponent extends Manager
         $tab = intval($this->getPostDataValue(self::PARAM_TAB));
         $title = $this->getPostDataValue(self::PARAM_TITLE);
         
-        $tab = DataManager::retrieve_by_id(Tab::class_name(), $tab);
+        $tab = DataManager::retrieve_by_id(Tab::class, $tab);
         
         if ($tab->getUserId() == $userId)
         {

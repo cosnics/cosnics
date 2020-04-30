@@ -32,7 +32,7 @@ class UpdateElementComponent extends Manager
         $trail->add_help('dynamic form general');
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), 
             new StaticConditionVariable($element_id));
         $element = DataManager::retrieve_dynamic_form_elements($condition)->next_result();
         

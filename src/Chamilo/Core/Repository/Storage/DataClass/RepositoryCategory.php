@@ -325,7 +325,7 @@ class RepositoryCategory extends PlatformCategory
     public function has_children()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id())
         );
 
@@ -335,7 +335,7 @@ class RepositoryCategory extends PlatformCategory
     public function get_children_ids($recursive = true)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id())
         );
 
@@ -346,7 +346,7 @@ class RepositoryCategory extends PlatformCategory
                 new DataClassProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
             );
 
-            return (DataManager::distinct(self::class_name(), $parameters));
+            return (DataManager::distinct(self::class, $parameters));
         }
         else
         {

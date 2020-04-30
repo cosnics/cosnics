@@ -34,7 +34,7 @@ class ViewerComponent extends Manager
                 \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component->set_template_by_name(
-                CourseStudentTrackerTemplate::class_name());
+                CourseStudentTrackerTemplate::class);
             return $component->run();
         }
         else

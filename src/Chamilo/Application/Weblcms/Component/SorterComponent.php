@@ -234,7 +234,7 @@ class SorterComponent extends Manager
         );
 
         $course_user_category = DataManager::retrieve_by_id(
-            CourseUserCategory::class_name(), $course_type_user_category->get_course_user_category_id()
+            CourseUserCategory::class, $course_type_user_category->get_course_user_category_id()
         );
 
         $form = new CourseUserCategoryForm(

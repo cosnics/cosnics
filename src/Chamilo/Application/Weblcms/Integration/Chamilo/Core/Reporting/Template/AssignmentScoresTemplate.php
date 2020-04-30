@@ -39,7 +39,7 @@ class AssignmentScoresTemplate extends ReportingTemplate
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[Manager::PARAM_BLOCK_ID] = 4;
 
         $breadcrumbTrail->add(

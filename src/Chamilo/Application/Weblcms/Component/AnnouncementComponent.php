@@ -146,7 +146,7 @@ class AnnouncementComponent extends Manager
 
     private function get_publication_conditions($course, $tool)
     {
-        $type = Announcement::class_name();
+        $type = Announcement::class;
         $last_visit_date = WeblcmsDataManager::get_last_visit_date(
             $course->get_id(), $this->get_user_id(), $tool, 0
         );

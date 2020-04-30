@@ -157,7 +157,7 @@ class BrowserComponent extends Manager
 
             if (ContentObject::is_available('Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'))
             {
-                $classes[] = File::class_name();
+                $classes[] = File::class;
             }
 
             $image_subselect_conditions = array();

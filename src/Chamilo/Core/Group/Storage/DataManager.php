@@ -47,7 +47,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_root_group()
     {
         return static::retrieve(
-            Group::class_name(),
+            Group::class,
             new DataClassRetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
@@ -398,7 +398,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $joins = array();
         $joins[] = new Join(
-            User::class_name(),
+            User::class,
             new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                 new PropertyConditionVariable(User::class, User::PROPERTY_ID)));

@@ -44,7 +44,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
         if ($this->courseIdentifier)
         {
             $this->course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                Course::class_name(), $this->courseIdentifier
+                Course::class, $this->courseIdentifier
             );
 
             $query = Request::get('query');
@@ -220,7 +220,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             //            }
 
             $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters($user_condition, null, null, $order)
+                User::class, new DataClassRetrievesParameters($user_condition, null, null, $order)
             );
 
             $users = array();
@@ -378,7 +378,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             foreach ($group_relations as $group_relation)
             {
                 $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                    Group::class_name(), $group_relation->getEntityId()
+                    Group::class, $group_relation->getEntityId()
                 );
 
                 if ($group instanceof Group)

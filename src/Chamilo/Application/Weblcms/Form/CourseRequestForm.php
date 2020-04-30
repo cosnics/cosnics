@@ -113,7 +113,7 @@ class CourseRequestForm extends FormValidator
 
                 $parameters = new DataClassRetrievesParameters(null, null, null, $order);
                 $users_result = DataManager::retrieves(
-                    User::class_name(), $parameters
+                    User::class, $parameters
                 );
                 $users = array();
                 while ($user = $users_result->next_result())
@@ -129,7 +129,7 @@ class CourseRequestForm extends FormValidator
             else
             {
                 $user_name = DataManager::retrieve_by_id(
-                    User::class_name(), (int) $this->request_user_id
+                    User::class, (int) $this->request_user_id
                 )->get_fullname();
                 $this->addElement(
                     'static', 'user', Translation::get('User', null, Manager::context()), $user_name
@@ -154,14 +154,14 @@ class CourseRequestForm extends FormValidator
             );
 
             $name_user = DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->request->get_user_id()
+                User::class, (int) $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
                 'static', 'request', Translation::get('User', null, Manager::context()), $name_user
             );
 
             $request_name =
-                CourseDataManager::retrieve_by_id(Course::class_name(), $this->request->get_course_id())->get_title();
+                CourseDataManager::retrieve_by_id(Course::class, $this->request->get_course_id())->get_title();
 
             $this->addElement('static', 'request', Translation::get('CourseName'), $request_name);
 

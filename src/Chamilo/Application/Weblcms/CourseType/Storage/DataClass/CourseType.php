@@ -390,7 +390,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         {
             $properties->add(
                 new DataClassProperty(
-                    new PropertyConditionVariable(Course::class_name(), $property), 
+                    new PropertyConditionVariable(Course::class, $property),
                     new StaticConditionVariable($this->get_course_setting($setting_name))));
         }
         
@@ -514,7 +514,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**

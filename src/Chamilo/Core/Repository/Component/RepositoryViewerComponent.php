@@ -43,7 +43,7 @@ class RepositoryViewerComponent extends Manager
             $html[] = $this->render_header();
 
             $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            $object = DataManager::retrieve_by_id(File::class_name(), $object_id);
+            $object = DataManager::retrieve_by_id(File::class, $object_id);
 
             $html[] = '<script>';
             $html[] = 'window.opener.$("input[name=' . $element_name . '_title]").val("' . addslashes(
@@ -66,6 +66,6 @@ class RepositoryViewerComponent extends Manager
 
     public function get_allowed_content_object_types()
     {
-        return array(File::class_name());
+        return array(File::class);
     }
 }

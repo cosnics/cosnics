@@ -57,7 +57,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         if (!$this->glossary_item || $this->glossary_item->get_id() != $glossary_item->get_ref())
         {
             $this->glossary_item = DataManager::retrieve_by_id(
-                GlossaryItem::class_name(), $glossary_item->get_ref()
+                GlossaryItem::class, $glossary_item->get_ref()
             );
         }
 

@@ -46,7 +46,7 @@ class VanAchterUserResultReportingBlock extends UserResultReportingBlock
             else
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) $user_id);
             }
 

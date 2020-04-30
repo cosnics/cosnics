@@ -24,7 +24,7 @@ class UserViewTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(UserView::class_name(), $parameters);
+        return DataManager::retrieves(UserView::class, $parameters);
     }
 
     /**
@@ -33,6 +33,6 @@ class UserViewTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(UserView::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(UserView::class, new DataClassCountParameters($condition));
     }
 }

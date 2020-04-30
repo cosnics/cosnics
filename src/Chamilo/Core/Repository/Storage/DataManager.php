@@ -269,7 +269,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    SynchronizationData::class_name(), SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
+                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
                 )
             )
         );
@@ -277,7 +277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new DataClassRetrieveParameters($condition);
         $parameters->set_joins(new Joins(array($join)));
 
-        return self::retrieve(SynchronizationData::class_name(), $parameters);
+        return self::retrieve(SynchronizationData::class, $parameters);
     }
 
     public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = array()
@@ -287,14 +287,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    SynchronizationData::class_name(), SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
+                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
                 )
             )
         );
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
 
-        return self::retrieves(SynchronizationData::class_name(), $parameters);
+        return self::retrieves(SynchronizationData::class, $parameters);
     }
 
     public static function get_version_ids($object)
@@ -725,14 +725,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // foreach ($formats as $format)
         // {
         // $conditions[] = new PatternMatchCondition(
-        // new PropertyConditionVariable(Element ::class_name(), Element :: PROPERTY_CONFIGURATION),
+        // new PropertyConditionVariable(Element ::class, Element :: PROPERTY_CONFIGURATION),
         // '*' . $format . '*');
         // }
         //
         // $condition = new OrCondition($conditions);
         //
         // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
-        // Block ::class_name(),
+        // Block ::class,
         // new DataClassCountParameters($condition));
         //
         // if ($usedInBlocks > 0)
@@ -1340,11 +1340,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Remove the relations
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(), WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
+                WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
             ), new StaticConditionVariable($category->get_id())
         );
 
-        $succes = self::deletes(WorkspaceContentObjectRelation::class_name(), $condition);
+        $succes = self::deletes(WorkspaceContentObjectRelation::class, $condition);
 
         // delete the category
         $condition = new EqualityCondition(

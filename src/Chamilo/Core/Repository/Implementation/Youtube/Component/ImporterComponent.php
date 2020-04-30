@@ -15,7 +15,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
     public function import_external_repository_object($object)
     {
-        $youtube = ContentObject::factory(Youtube::class_name());
+        $youtube = ContentObject::factory(Youtube::class);
         $youtube->set_title($object->get_title());
         $youtube->set_description($object->get_description());
         $youtube->set_owner_id($this->get_user_id());

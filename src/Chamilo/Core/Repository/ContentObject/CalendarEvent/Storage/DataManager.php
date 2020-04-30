@@ -46,7 +46,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $nonRepeatableConditions = array();
         
         $nonRepeatableConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_FREQUENCY), 
+            new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_FREQUENCY),
             new StaticConditionVariable(CalendarEvent::FREQUENCY_NONE));
         
         $startConditions = array();
@@ -54,7 +54,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! empty($fromDate))
         {
             $startConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable($fromDate));
         }
@@ -62,7 +62,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! empty($toDate))
         {
             $startConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE),
                 ComparisonCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable($toDate));
         }
@@ -74,7 +74,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! empty($fromDate))
         {
             $endConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable($fromDate));
         }
@@ -82,7 +82,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! empty($toDate))
         {
             $endConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE),
                 ComparisonCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable($toDate));
         }
@@ -108,13 +108,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $repeatableConditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_FREQUENCY), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_FREQUENCY),
                 new StaticConditionVariable(CalendarEvent::FREQUENCY_NONE)));
         
         if (! empty($fromDate))
         {
             $repeatableConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE),
                 ComparisonCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable($toDate));
         }
@@ -123,13 +123,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $untilConditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_UNTIL), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_UNTIL),
                 new StaticConditionVariable(0)));
         
         if (! empty($fromDate))
         {
             $untilConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_UNTIL), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_UNTIL),
                 ComparisonCondition::GREATER_THAN, 
                 new StaticConditionVariable($fromDate));
         }
@@ -137,7 +137,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $untilCondition = new AndCondition($untilConditions);
         
         $foreverCondition = new EqualityCondition(
-            new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_UNTIL), 
+            new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_UNTIL),
             new StaticConditionVariable(0));
         
         $repeatableConditions[] = new OrCondition(array($untilCondition, $foreverCondition));

@@ -41,7 +41,7 @@ class TabSortComponent extends Manager
         
         foreach ($tabs[self::PARAM_ORDER] as $sortOrder => $tabId)
         {
-            $tab = DataManager::retrieve_by_id(Tab::class_name(), intval($tabId));
+            $tab = DataManager::retrieve_by_id(Tab::class, intval($tabId));
             $tab->setSort($sortOrder + 1);
             
             if (! $tab->update())

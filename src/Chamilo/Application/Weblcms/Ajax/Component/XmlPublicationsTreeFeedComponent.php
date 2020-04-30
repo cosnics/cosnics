@@ -88,7 +88,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         if (!$course)
         {
-            $course = CourseDataManager::retrieve_by_id(Course::class_name(), $category->get_course());
+            $course = CourseDataManager::retrieve_by_id(Course::class, $category->get_course());
         }
 
         if (!$user)

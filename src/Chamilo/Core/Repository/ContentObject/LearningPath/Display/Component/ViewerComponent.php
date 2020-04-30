@@ -150,7 +150,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $parameters[CreatorComponent::PARAM_CREATE_MODE] = CreatorComponent::CREATE_MODE_FOLDER;
 
             $folderSelector = new ActionSelector(
-                $this, $this->getUser()->getId(), array(Section::class_name()), $parameters
+                $this, $this->getUser()->getId(), array(Section::class), $parameters
             );
 
             $folderButton = $folderSelector->getActionButton(

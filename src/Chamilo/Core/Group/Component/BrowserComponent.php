@@ -345,7 +345,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         switch ($table_class_name)
         {
-            case GroupTable::class_name() :
+            case GroupTable::class :
                 $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
                 if (is_null($query))
@@ -357,7 +357,7 @@ class BrowserComponent extends Manager implements TableSupport
                     return $this->get_all_groups_condition();
                 }
 
-            case GroupRelUserTable::class_name() :
+            case GroupRelUserTable::class :
                 return $this->get_users_condition();
         }
 
@@ -430,7 +430,7 @@ class BrowserComponent extends Manager implements TableSupport
             $condition = new OrCondition($or_conditions);
 
             $users = DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters($condition)
+                User::class, new DataClassRetrievesParameters($condition)
             );
 
             $userconditions = array();

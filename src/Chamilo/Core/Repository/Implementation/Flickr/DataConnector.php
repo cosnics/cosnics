@@ -221,10 +221,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (($feed_type == Manager::FEED_TYPE_GENERAL && $query) || $feed_type == Manager::FEED_TYPE_MY_PHOTOS)
         {
             $properties = array();
-            $properties[] = new PropertyConditionVariable(ExternalObject::class_name(), self::SORT_DATE_POSTED);
-            $properties[] = new PropertyConditionVariable(ExternalObject::class_name(), self::SORT_DATE_TAKEN);
-            $properties[] = new PropertyConditionVariable(ExternalObject::class_name(), self::SORT_INTERESTINGNESS);
-            $properties[] = new PropertyConditionVariable(ExternalObject::class_name(), self::SORT_RELEVANCE);
+            $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_DATE_POSTED);
+            $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_DATE_TAKEN);
+            $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_INTERESTINGNESS);
+            $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_RELEVANCE);
 
             return $properties;
         }

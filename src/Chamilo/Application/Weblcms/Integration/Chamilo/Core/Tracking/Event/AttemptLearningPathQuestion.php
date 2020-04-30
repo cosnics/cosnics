@@ -21,6 +21,6 @@ class AttemptLearningPathQuestion extends Event
     public function getTrackerClasses()
     {
         return array(
-            LearningPathTreeNodeQuestionAttempt::class_name());
+            LearningPathTreeNodeQuestionAttempt::class);
     }
 }

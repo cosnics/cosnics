@@ -58,7 +58,7 @@ class SetElementTargetEntitiesComponent extends Manager
         {
             $elementRightsService->setTargetEntitiesForElement($element, $targetEntities);
             
-            if ($element->getType() != Block::class_name())
+            if ($element->getType() != Block::class)
             {
                 throw new RuntimeException('Only blocks are allowed at this time');
             }

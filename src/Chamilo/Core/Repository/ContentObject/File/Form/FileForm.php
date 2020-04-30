@@ -67,7 +67,7 @@ class FileForm extends ContentObjectForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_owner_id()
+                User::class, (int) $this->get_owner_id()
             )
         );
 
@@ -103,7 +103,7 @@ class FileForm extends ContentObjectForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_owner_id()
+                User::class, (int) $this->get_owner_id()
             )
         );
 
@@ -158,7 +158,7 @@ class FileForm extends ContentObjectForm
         $owner_id = $this->get_owner_id();
 
         $owner = DataManager::retrieve_by_id(
-            User::class_name(), (int) $owner_id
+            User::class, (int) $owner_id
         );
 
         $calculator = new Calculator($owner);

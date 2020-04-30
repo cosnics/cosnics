@@ -60,7 +60,7 @@ class EndingAssignments extends Block
 
         $subselect_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Assignment::class_name())
+            new StaticConditionVariable(Assignment::class)
         );
 
         $conditions[] = new SubselectCondition(

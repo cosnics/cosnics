@@ -145,7 +145,7 @@ abstract class TabComponent extends Manager
             {
                 $label = Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES);
                 $glyph = new FontAwesomeGlyph('info-circle');
-                $allowedContentObjectTypes = array(Introduction::class_name());
+                $allowedContentObjectTypes = array(Introduction::class);
 
                 $parameters = $this->get_parameters();
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
@@ -274,7 +274,7 @@ abstract class TabComponent extends Manager
                 new DynamicVisualTab(
                     'view_details', $this->getCurrentGroupName(), new FontAwesomeGlyph('info-circle'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
-                    get_class($this) == DetailsComponent::class_name()
+                    get_class($this) == DetailsComponent::class
                 )
             );
         }
@@ -283,7 +283,7 @@ abstract class TabComponent extends Manager
             new DynamicVisualTab(
                 'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
                 new FontAwesomeGlyph('folder'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                get_class($this) == BrowserComponent::class_name()
+                get_class($this) == BrowserComponent::class
             )
         );
 
@@ -294,7 +294,7 @@ abstract class TabComponent extends Manager
                     'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
                     new FontAwesomeGlyph('pencil-alt'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
-                    get_class($this) == EditorComponent::class_name()
+                    get_class($this) == EditorComponent::class
                 )
             );
 
@@ -303,7 +303,7 @@ abstract class TabComponent extends Manager
                     'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
                     new FontAwesomeGlyph('plus-circle'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)),
-                    get_class($this) == ManageSubscriptionsComponent::class_name()
+                    get_class($this) == ManageSubscriptionsComponent::class
                 )
             );
         }

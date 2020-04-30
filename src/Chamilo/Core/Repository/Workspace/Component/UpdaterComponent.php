@@ -32,7 +32,7 @@ class UpdaterComponent extends TabComponent
         $workspaceId = Request::get(self::PARAM_WORKSPACE_ID);
 
         /** @var Workspace $workspace */
-        $workspace = DataManager::retrieve_by_id(Workspace::class_name(), $workspaceId);
+        $workspace = DataManager::retrieve_by_id(Workspace::class, $workspaceId);
         
         $form = new WorkspaceForm($this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())), $workspace);
         

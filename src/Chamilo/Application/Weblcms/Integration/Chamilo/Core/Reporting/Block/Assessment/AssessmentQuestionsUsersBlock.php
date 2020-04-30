@@ -116,14 +116,14 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         }
         // Retrieve all the assessment attempts trackers for the current assessment ordered by the user id.
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
             new StaticConditionVariable($publication->get_id()));
         $order_by = array();
         $order_by[] = new OrderBy(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID));
         
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class_name(), 
+            AssessmentAttempt::class, 
             new DataClassRetrievesParameters($condition))->as_array();
         
         $user_question_statistics = array();
@@ -198,18 +198,18 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         // Retrieve all the question attempts trackers of a single user ordered by the question id.
         $condition = new InCondition(
             new PropertyConditionVariable(
-                QuestionAttempt::class_name(),
+                QuestionAttempt::class,
                 QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempts_tracker_ids);
         
         $order_by = array();
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                QuestionAttempt::class_name(),
+                QuestionAttempt::class,
                 QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
         
         $question_attempts_trackers = DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
         
         $user_question_statistics = array();

@@ -100,7 +100,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // */
     // private static function retrieveCourseGroupRelation($id)
     // {
-    // return self :: retrieveEntity(CourseGroupRelation ::class_name(), $id);
+    // return self :: retrieveEntity(CourseGroupRelation ::class, $id);
     // }
     //
     // /******************************************************************************************************************/
@@ -164,7 +164,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     //
     // $message = self :: createErrorMessage('$id', $original->get_id(), $read->get_id());
     // $this->assertSame($original->get_id(), $read->get_id(), $message);
@@ -208,7 +208,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->update());
@@ -225,7 +225,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_id(null);
     //
@@ -243,7 +243,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_group_id(null);
     //
@@ -261,7 +261,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_course_id(null);
     //
@@ -279,7 +279,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_status(null);
     //
@@ -297,7 +297,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // if ($method !== null)
     // {
@@ -306,7 +306,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->assertTrue($read->update());
     //
     // $reread = self :: retrieveCourseGroupRelation($read->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $reread);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $reread);
     //
     // $message = self :: createErrorMessage('$id', $read->get_id(), $reread->get_id());
     // $this->assertSame($read->get_id(), $reread->get_id(), $message);
@@ -386,7 +386,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->save());
@@ -403,7 +403,7 @@ class CourseGroupRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseGroupRelation($original->get_id());
-    // $this->assertInstanceOf(CourseGroupRelation ::class_name(), $read);
+    // $this->assertInstanceOf(CourseGroupRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_id(null);
     //

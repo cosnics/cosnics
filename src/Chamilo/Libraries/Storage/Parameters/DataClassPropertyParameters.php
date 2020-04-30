@@ -27,7 +27,7 @@ abstract class DataClassPropertyParameters extends DataClassParameters
     {
         // So you think you're being funny, eh? Right back at you ... you dog-blasted, ornery, no-account, long-eared
         // varmint!
-        $class = self::class_name();
+        $class = self::class;
         if (is_object($parameter) && $parameter instanceof $class)
         {
             return $parameter;

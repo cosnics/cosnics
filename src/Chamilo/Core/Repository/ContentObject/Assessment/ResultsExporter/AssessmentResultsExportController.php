@@ -290,7 +290,7 @@ class AssessmentResultsExportController
     {
         $assessment_result = $question_result->get_assessment_result();
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $assessment_result->get_user_id());
 
         if ($user)

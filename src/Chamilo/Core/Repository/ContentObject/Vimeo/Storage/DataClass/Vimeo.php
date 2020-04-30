@@ -25,7 +25,7 @@ class Vimeo extends ContentObject implements Versionable, Includeable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_video_url()
@@ -43,15 +43,15 @@ class Vimeo extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
             new StaticConditionVariable(Manager::get_namespace('Vimeo')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_ENABLED),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
 
         $external_repositories = DataManager::retrieves(
-            Instance::class_name(),
+            Instance::class,
             new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;
     }

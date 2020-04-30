@@ -220,14 +220,14 @@ class ResultsViewerComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_ASSESSMENT))
         );
 
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+                new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
                 new StaticConditionVariable($this->get_user_id())
             );
         }

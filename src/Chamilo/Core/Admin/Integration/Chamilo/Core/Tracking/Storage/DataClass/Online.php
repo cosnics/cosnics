@@ -26,11 +26,11 @@ class Online extends SimpleTracker
         $parameters[self::PARAM_TIME] = time();
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID), 
             new StaticConditionVariable($parameters[self::PARAM_USER]));
         
         $existing_online_tracker = DataManager::retrieve(
-            self::class_name(), 
+            self::class,
             new DataClassRetrieveParameters($condition));
         
         if ($existing_online_tracker)
@@ -64,7 +64,7 @@ class Online extends SimpleTracker
     public function empty_tracker_before_date($date)
     {
         $condition = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LAST_ACCESS_DATE), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_LAST_ACCESS_DATE), 
             InEqualityCondition::LESS_THAN_OR_EQUAL, 
             new StaticConditionVariable($date));
         return $this->remove($condition);

@@ -152,7 +152,7 @@ class CourseManagementRights extends WeblcmsRights
         if (! $this->rights[$entity_type][$group_id])
         {
             $base_group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $group_id);
-            $location = CourseDataManager::retrieve_by_id(Course::class_name(), $course_id)->get_rights_location();
+            $location = CourseDataManager::retrieve_by_id(Course::class, $course_id)->get_rights_location();
             
             if (is_null($base_group))
             {
@@ -170,24 +170,24 @@ class CourseManagementRights extends WeblcmsRights
             $group_conditions = array();
             $group_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(), 
+                    RightsLocationEntityRight::class, 
                     RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable($entity_type));
             $group_conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(), 
+                    RightsLocationEntityRight::class, 
                     RightsLocationEntityRight::PROPERTY_ENTITY_ID), 
                 $group_ids);
             $conditions[] = new AndCondition($group_conditions);
             $all_conditions = array();
             $all_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(), 
+                    RightsLocationEntityRight::class, 
                     RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable(0));
             $all_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(), 
+                    RightsLocationEntityRight::class, 
                     RightsLocationEntityRight::PROPERTY_ENTITY_ID), 
                 new StaticConditionVariable(0));
             $conditions[] = new AndCondition($all_conditions);

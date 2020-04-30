@@ -13,13 +13,13 @@ class EntityTableDataProvider extends DataClassTableDataProvider
     function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(RightsLocationEntityRightGroup::class_name(), $parameters);
+        return DataManager::retrieves(RightsLocationEntityRightGroup::class, $parameters);
     }
 
     function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        return DataManager::count(RightsLocationEntityRightGroup::class_name(), $parameters);
+        return DataManager::count(RightsLocationEntityRightGroup::class, $parameters);
     }
 }
 ?>

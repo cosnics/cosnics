@@ -22,7 +22,7 @@ class Connector
             new StaticConditionVariable(Session::get_user_id()));
         
         $objects = DataManager::retrieve_active_content_objects(
-            RssFeed::class_name(), 
+            RssFeed::class,
             $condition);
         
         if ($objects->size() == 0)

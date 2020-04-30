@@ -37,7 +37,7 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
 
             foreach ($objects as $object)
             {
-                $complex_content_object_item = ComplexContentObjectItem::factory(ComplexWikiPage::class_name());
+                $complex_content_object_item = ComplexContentObjectItem::factory(ComplexWikiPage::class);
                 $complex_content_object_item->set_ref($object);
                 $complex_content_object_item->set_parent($this->get_root_content_object()->get_id());
                 $complex_content_object_item->set_user_id($this->get_user_id());

@@ -25,12 +25,12 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_allowed_types()
     {
-        return array(WikiPage::class_name());
+        return array(WikiPage::class);
     }
 
     public function get_locked()

@@ -83,7 +83,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function count_feedbacks()
     {
         return DataManager::count(
-            WikiPageFeedback::class_name(), new DataClassCountParameters($this->getWikiPageFeedbackCondition())
+            WikiPageFeedback::class, new DataClassCountParameters($this->getWikiPageFeedbackCondition())
         );
     }
 
@@ -95,7 +95,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     protected function getWikiPageFeedbackCondition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(WikiPageFeedback::class_name(), WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
+            new PropertyConditionVariable(WikiPageFeedback::class, WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
             new StaticConditionVariable($this->wikiPage->getId())
         );
     }
@@ -193,7 +193,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedback($feedback_id)
     {
         return DataManager::retrieve_by_id(
-            WikiPageFeedback::class_name(), $feedback_id
+            WikiPageFeedback::class, $feedback_id
         );
     }
 
@@ -206,7 +206,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedbacks($count, $offset)
     {
         return DataManager::retrieves(
-            WikiPageFeedback::class_name(),
+            WikiPageFeedback::class,
             new DataClassRetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset)
         );
     }

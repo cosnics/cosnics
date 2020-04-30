@@ -114,7 +114,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             BreadcrumbTrail::getInstance(), $this, $this->publication
         );
 
-        if ($this->get_root_content_object()->get_type() == Assessment::class_name())
+        if ($this->get_root_content_object()->get_type() == Assessment::class)
         {
             try
             {
@@ -488,17 +488,17 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function forum_count_topic_views($complex_topic_id)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumTopicView::class_name(), ForumTopicView::PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_publication()->getId())
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumTopicView::class_name(), ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($complex_topic_id)
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ForumTopicView::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(ForumTopicView::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -515,12 +515,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_wiki_page_statistics_reporting_template_name()
     {
-        return WikiPageTemplate::class_name();
+        return WikiPageTemplate::class;
     }
 
     public function get_wiki_statistics_reporting_template_name()
     {
-        return WikiTemplate::class_name();
+        return WikiTemplate::class;
     }
 
     public function get_wiki_publication()
@@ -591,7 +591,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return DataManager::retrieve_by_id(LearningPathTreeNodeAttempt::class_name(), $learning_path_item_attempt_id);
+        return DataManager::retrieve_by_id(LearningPathTreeNodeAttempt::class, $learning_path_item_attempt_id);
     }
 
     /**

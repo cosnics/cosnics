@@ -14,7 +14,7 @@ class ExportTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return DataManager::retrieve_active_content_objects(
-            File::class_name(), 
+            File::class, 
             $parameters);
     }
 
@@ -22,7 +22,7 @@ class ExportTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassCountParameters($condition);
         return DataManager::count_active_content_objects(
-            (File::class_name()), 
+            (File::class), 
             $parameters);
     }
 }

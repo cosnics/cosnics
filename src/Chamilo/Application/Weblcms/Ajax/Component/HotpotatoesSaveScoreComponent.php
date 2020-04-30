@@ -21,12 +21,12 @@ class HotpotatoesSaveScoreComponent extends Manager
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 AssessmentAttempt::PROPERTY_ID),
             new StaticConditionVariable($id));
         
         $tracker = DataManager::retrieve(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrieveParameters($condition));
         
         if ($tracker)

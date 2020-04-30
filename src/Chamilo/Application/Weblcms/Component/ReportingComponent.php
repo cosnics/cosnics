@@ -27,13 +27,13 @@ class ReportingComponent extends Manager implements DelegateComponent
         {
             $this->set_parameter(
                 self::PARAM_TEMPLATE_ID,
-                CourseDataTemplate::class_name());
+                CourseDataTemplate::class);
 
             $application = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $application->set_template_by_name(
-                CourseDataTemplate::class_name());
+                CourseDataTemplate::class);
             return $application->run();
         }
         else

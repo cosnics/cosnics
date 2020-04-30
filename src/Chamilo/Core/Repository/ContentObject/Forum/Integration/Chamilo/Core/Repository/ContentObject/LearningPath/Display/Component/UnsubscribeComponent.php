@@ -32,7 +32,7 @@ class UnsubscribeComponent extends Manager
             throw new NoObjectSelectedException($contentObjectTranslation);
         }
 
-        $forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(Forum::class_name(), $forumId);
+        $forum = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(Forum::class, $forumId);
 
         if(!$forum instanceof Forum)
         {

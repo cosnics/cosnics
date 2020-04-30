@@ -142,7 +142,7 @@ class ContentObjectRepository
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
@@ -159,10 +159,10 @@ class ContentObjectRepository
         $joinCondition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID));
 
-        $join = new Join(WorkspaceContentObjectRelation::class_name(), $joinCondition);
+        $join = new Join(WorkspaceContentObjectRelation::class, $joinCondition);
 
         return new Joins(array($join));
     }

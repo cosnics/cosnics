@@ -51,7 +51,7 @@ class BlockConfigComponent extends Manager
         $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
         $data = $this->getPostDataValue(self::PARAM_DATA);
         
-        $block = DataManager::retrieve_by_id(Block::class_name(), $block);
+        $block = DataManager::retrieve_by_id(Block::class, $block);
         
         /** @var Element $block */
         if ($block->getUserId() == $userId)

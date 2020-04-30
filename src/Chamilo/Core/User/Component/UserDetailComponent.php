@@ -55,7 +55,7 @@ class UserDetailComponent extends Manager
         if ($id)
         {
             $user = DataManager::retrieve_by_id(
-                User::class_name(), (int) $id
+                User::class, (int) $id
             );
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($user);

@@ -126,11 +126,11 @@ class Rights extends RightsUtil
             {
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRightGroup::class_name(), 
+                        RightsLocationEntityRightGroup::class,
                         RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID), 
                     new StaticConditionVariable($location_entity_right->get_id()));
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class_name(), 
+                    RightsLocationEntityRightGroup::class,
                     new DataClassRetrievesParameters($condition));
                 
                 while ($right_group = $right_groups->next_result())
@@ -153,11 +153,11 @@ class Rights extends RightsUtil
                 {
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRightGroup::class_name(), 
+                            RightsLocationEntityRightGroup::class,
                             RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID), 
                         new StaticConditionVariable($location_entity_right->get_id()));
                     $right_groups = DataManager::retrieves(
-                        RightsLocationEntityRightGroup::class_name(), 
+                        RightsLocationEntityRightGroup::class,
                         new DataClassRetrievesParameters($condition));
                     
                     while ($right_group = $right_groups->next_result())
@@ -178,11 +178,11 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        Group::class_name(),
+                        Group::class,
                         Group::PROPERTY_ID),
                     $allowed_groups);
                 $groups = DataManager::retrieves(
-                    Group::class_name(),
+                    Group::class,
                     new DataClassRetrievesParameters($condition));
                 
                 while ($group = $groups->next_result())
@@ -220,11 +220,11 @@ class Rights extends RightsUtil
             {
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRightGroup::class_name(), 
+                        RightsLocationEntityRightGroup::class,
                         RightsLocationEntityRightGroup::PROPERTY_GROUP_ID), 
                     new StaticConditionVariable($user_group_id));
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class_name(), 
+                    RightsLocationEntityRightGroup::class,
                     new DataClassRetrievesParameters($condition));
                 
                 while ($right_group = $right_groups->next_result())
@@ -242,7 +242,7 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class_name(), 
+                        RightsLocationEntityRight::class,
                         RightsLocationEntityRight::PROPERTY_ID), 
                     $location_entity_right_ids);
                 $location_entity_rights = \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_rights(
@@ -283,18 +283,18 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        User::class_name(),
+                        User::class,
                         User::PROPERTY_ID),
                     $user_ids);
                 $authorized_user_count = \Chamilo\Core\User\Storage\DataManager::count(
-                    User::class_name(),
+                    User::class,
                     new DataClassCountParameters($condition));
                 
                 if ($authorized_user_count == 0)
                 {
                     $condition = new InCondition(
                         new PropertyConditionVariable(
-                            User::class_name(),
+                            User::class,
                             User::PROPERTY_PLATFORMADMIN),
                         1);
                 }
@@ -303,12 +303,12 @@ class Rights extends RightsUtil
             {
                 $condition = new InCondition(
                     new PropertyConditionVariable(
-                        User::class_name(),
+                        User::class,
                         User::PROPERTY_PLATFORMADMIN),
                     1);
             }
             $authorized_users = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class_name(),
+                User::class,
                 new DataClassRetrievesParameters($condition));
             
             while ($authorized_user = $authorized_users->next_result())

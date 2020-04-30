@@ -74,7 +74,7 @@ class UpdateComponent extends CourseFormActionComponent
         if ($titular_id)
         {
             $titular = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $course->get_titular_id()
             );
 

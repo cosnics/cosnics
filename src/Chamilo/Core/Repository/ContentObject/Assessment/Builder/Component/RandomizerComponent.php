@@ -32,13 +32,13 @@ class RandomizerComponent extends Manager
                     new StaticConditionVariable($this->get_parent_content_object_id()))));
         
         $supported_types = array(
-            ComplexFillInBlanksQuestion::class_name(), 
-            ComplexHotspotQuestion::class_name(), 
-            ComplexAssessmentMatchingQuestion::class_name(), 
-            ComplexAssessmentMatrixQuestion::class_name(), 
-            ComplexAssessmentMultipleChoiceQuestion::class_name(), 
-            ComplexOrderingQuestion::class_name(), 
-            ComplexAssessmentSelectQuestion::class_name());
+            ComplexFillInBlanksQuestion::class,
+            ComplexHotspotQuestion::class,
+            ComplexAssessmentMatchingQuestion::class,
+            ComplexAssessmentMatrixQuestion::class,
+            ComplexAssessmentMultipleChoiceQuestion::class,
+            ComplexOrderingQuestion::class,
+            ComplexAssessmentSelectQuestion::class);
         
         $failures = 0;
         $questions = 0;

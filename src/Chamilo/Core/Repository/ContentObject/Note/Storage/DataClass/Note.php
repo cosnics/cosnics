@@ -18,6 +18,6 @@ class Note extends ContentObject implements Versionable, AttachmentSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 }

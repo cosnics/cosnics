@@ -38,7 +38,7 @@ class BlockVisibilityComponent extends Manager
         
         $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
         
-        $block = DataManager::retrieve_by_id(Block::class_name(), $blockId);
+        $block = DataManager::retrieve_by_id(Block::class, $blockId);
         
         if ($block->getUserId() == $userId)
         {

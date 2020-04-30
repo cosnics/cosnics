@@ -114,12 +114,12 @@ class RightsForm extends FormValidator
                 );
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRightGroup::class_name(),
+                        RightsLocationEntityRightGroup::class,
                         RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
                     ), new StaticConditionVariable($location_entity_right->get_id())
                 );
 
-                if (!DataManager::deletes(RightsLocationEntityRightGroup::class_name(), $condition))
+                if (!DataManager::deletes(RightsLocationEntityRightGroup::class, $condition))
                 {
                     return false;
                 }

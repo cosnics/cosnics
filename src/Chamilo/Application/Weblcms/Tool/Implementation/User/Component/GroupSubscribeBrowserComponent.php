@@ -215,7 +215,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         if (!$this->rootGroup)
         {
             $group = DataManager::retrieve(
-                Group::class_name(), new DataClassRetrieveParameters(
+                Group::class, new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0)

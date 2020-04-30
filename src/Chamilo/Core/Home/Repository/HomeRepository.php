@@ -25,7 +25,7 @@ class HomeRepository
      */
     public function findElementByIdentifier($elementIdentifier)
     {
-        return DataManager::retrieve_by_id(Element::class_name(), $elementIdentifier);
+        return DataManager::retrieve_by_id(Element::class, $elementIdentifier);
     }
 
     /**
@@ -41,10 +41,10 @@ class HomeRepository
             null,
             null,
             array(
-                new OrderBy(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_TYPE)),
-                new OrderBy(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_SORT))));
+                new OrderBy(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
+                new OrderBy(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))));
 
-        return DataManager::retrieves(Element::class_name(), $parameters);
+        return DataManager::retrieves(Element::class, $parameters);
     }
 
     /**
@@ -58,10 +58,10 @@ class HomeRepository
     {
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Element::class_name(), Block::PROPERTY_USER_ID),
+                new PropertyConditionVariable(Element::class, Block::PROPERTY_USER_ID),
                 new StaticConditionVariable($userIdentifier)));
 
-        return DataManager::retrieves(Block::class_name(), $parameters);
+        return DataManager::retrieves(Block::class, $parameters);
     }
 
     /**
@@ -73,7 +73,7 @@ class HomeRepository
     public function getElementsByUserIdentifierCondition($userIdentifier)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier));
     }
 
@@ -87,7 +87,7 @@ class HomeRepository
     {
         $parameters = new DataClassCountParameters($this->getElementsByUserIdentifierCondition($userIdentifier));
 
-        return DataManager::count(Element::class_name(), $parameters);
+        return DataManager::count(Element::class, $parameters);
     }
 
     public function findBlockTypes()

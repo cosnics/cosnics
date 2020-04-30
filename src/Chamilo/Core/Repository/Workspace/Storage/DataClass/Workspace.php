@@ -140,24 +140,24 @@ class Workspace extends DataClass implements WorkspaceInterface
     public function get_dependencies()
     {
         return array(
-            WorkspaceEntityRelation::class_name() => new EqualityCondition(
+            WorkspaceEntityRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation::class_name(), 
+                    WorkspaceEntityRelation::class,
                     WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())), 
-            WorkspaceContentObjectRelation::class_name() => new EqualityCondition(
+            WorkspaceContentObjectRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceContentObjectRelation::class_name(), 
+                    WorkspaceContentObjectRelation::class,
                     WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())), 
-            WorkspaceCategoryRelation::class_name() => new EqualityCondition(
+            WorkspaceCategoryRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceCategoryRelation::class_name(), 
+                    WorkspaceCategoryRelation::class,
                     WorkspaceCategoryRelation::PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())), 
-            WorkspaceUserFavourite::class_name() => new EqualityCondition(
+            WorkspaceUserFavourite::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceUserFavourite::class_name(), 
+                    WorkspaceUserFavourite::class,
                     WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())));
     }

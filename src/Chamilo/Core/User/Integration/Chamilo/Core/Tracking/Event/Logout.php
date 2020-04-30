@@ -20,7 +20,7 @@ class Logout extends Event
      */
     public function getTrackerClasses()
     {
-        return array(LoginLogout::class_name());
+        return array(LoginLogout::class);
     }
 
     public function getType()

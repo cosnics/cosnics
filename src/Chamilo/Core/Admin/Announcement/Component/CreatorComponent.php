@@ -99,7 +99,7 @@ class CreatorComponent extends Manager implements ViewerInterface
      */
     public function get_allowed_content_object_types()
     {
-        return array(SystemAnnouncement::class_name());
+        return array(SystemAnnouncement::class);
     }
 
     /**

@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
             
             foreach ($ids as $id)
             {
-                $external_instance = DataManager::retrieve_by_id(Instance::class_name(), $id);
+                $external_instance = DataManager::retrieve_by_id(Instance::class, $id);
                 
                 if (! $external_instance->delete())
                 {

@@ -66,12 +66,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
 
     public function get_wiki_page_statistics_reporting_template_name()
     {
-        return WikiPageTemplate::class_name();
+        return WikiPageTemplate::class;
     }
 
     public function get_wiki_statistics_reporting_template_name()
     {
-        return WikiTemplate::class_name();
+        return WikiTemplate::class;
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS

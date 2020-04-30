@@ -34,7 +34,7 @@ class UpdaterComponent extends Manager
 
         if ($id)
         {
-            $help_item = DataManager::retrieve_by_id(HelpItem::class_name(), $id);
+            $help_item = DataManager::retrieve_by_id(HelpItem::class, $id);
 
             $form = new HelpItemForm($help_item, $this->get_url(array(Manager::PARAM_HELP_ITEM => $id)));
 

@@ -124,7 +124,7 @@ class Connector
         $subcondition = new AndCondition($subconditions);
         
         $condition = new SubselectCondition(
-            new PropertyConditionVariable(CourseUserCategory::class_name(), CourseUserCategory::PROPERTY_ID), 
+            new PropertyConditionVariable(CourseUserCategory::class, CourseUserCategory::PROPERTY_ID), 
             new PropertyConditionVariable(
                 CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID), 
@@ -132,7 +132,7 @@ class Connector
             $subcondition);
         
         return DataManager::retrieves(
-            CourseUserCategory::class_name(), 
+            CourseUserCategory::class,
             new DataClassRetrievesParameters($condition));
     }
 }

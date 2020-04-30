@@ -112,7 +112,7 @@ class ToolPublicationsBlock extends ToolBlock
             {
                 $params = $this->get_parent()->get_parameters();
 
-                $params[Manager::PARAM_TEMPLATE_ID] = PublicationDetailTemplate::class_name();
+                $params[Manager::PARAM_TEMPLATE_ID] = PublicationDetailTemplate::class;
                 $params[Manager::PARAM_COURSE] = $course_id;
                 $params[Manager::PARAM_USERS] = $user_id;
                 $params[Manager::PARAM_PUBLICATION] = $content_object_publication->get_id();

@@ -436,7 +436,7 @@ class RightsService
                 {
                     $entity_type_condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRight::class_name(),
+                            RightsLocationEntityRight::class,
                             RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
                         new StaticConditionVariable($entity->get_entity_type()));
 
@@ -447,7 +447,7 @@ class RightsService
 
                         $and_conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                RightsLocationEntityRight::class_name(),
+                                RightsLocationEntityRight::class,
                                 RightsLocationEntityRight::PROPERTY_ENTITY_ID),
                             new StaticConditionVariable($entity_item_id));
 
@@ -461,13 +461,13 @@ class RightsService
 
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class_name(),
+                        RightsLocationEntityRight::class,
                         RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(0));
 
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class_name(),
+                        RightsLocationEntityRight::class,
                         RightsLocationEntityRight::PROPERTY_ENTITY_ID),
                     new StaticConditionVariable(0));
 
@@ -573,7 +573,7 @@ class RightsService
             }
             else
             {
-                DataClassCache::truncate(RightsLocationEntityRight::class_name());
+                DataClassCache::truncate(RightsLocationEntityRight::class);
                 return $this->createRightsLocationEntityRightFromParameters(
                     $right,
                     $entityId,

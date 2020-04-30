@@ -117,12 +117,12 @@ class PublisherComponent extends Manager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
 
         $contentObjectNumbers = DataManager::distinct(
-            WorkspaceContentObjectRelation::class_name(),
+            WorkspaceContentObjectRelation::class,
             new DataClassDistinctParameters(
                 $condition,
                 new DataClassProperties(

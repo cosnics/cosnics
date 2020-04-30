@@ -112,7 +112,7 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
 
         $searchCondition = $this->getButtonToolbarRenderer()->getConditions(
-            array(new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_NAME))
+            array(new PropertyConditionVariable(Element::class, Element::PROPERTY_NAME))
         );
 
         if ($searchCondition)
@@ -121,7 +121,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_SCHEMA_ID),
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($this->getSchemaId())
         );
 

@@ -35,7 +35,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $current_user_id = Session::get_user_id();
         $current_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(), intval($current_user_id)
+            User::class, intval($current_user_id)
         );
 
         $user_home_allowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
@@ -110,22 +110,22 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieveTabBlocks($tabElement)
     {
         $columnCondition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
             new StaticConditionVariable($tabElement->getId())
         );
 
         $columnIdentifiers = self::distinct(
-            Element::class_name(), new DataClassDistinctParameters(
+            Element::class, new DataClassDistinctParameters(
                 $columnCondition,
                 new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))
             )
         );
 
         $condition = new InCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID), $columnIdentifiers
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), $columnIdentifiers
         );
 
-        return self::retrieves(Block::class_name(), new DataClassRetrievesParameters($condition));
+        return self::retrieves(Block::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -137,8 +137,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function truncateHome($userIdentifier)
     {
         return self::deletes(
-            Element::class_name(), new EqualityCondition(
-                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID),
+            Element::class, new EqualityCondition(
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
                 new StaticConditionVariable($userIdentifier)
             )
         );

@@ -107,10 +107,10 @@ class UserViewMenu extends HtmlMenu
         $menu_item = array();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_USER_ID),
+            new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->application->get_user_id())
         );
-        $userviews = DataManager::retrieves(UserView::class_name(), new DataClassRetrievesParameters($condition));
+        $userviews = DataManager::retrieves(UserView::class, new DataClassRetrievesParameters($condition));
 
         $userview = array();
         $userview['title'] = Translation::get('UserViews');

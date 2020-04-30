@@ -23,7 +23,7 @@ class SettingsConnector
      */
     public function retrieve_namespaces()
     {
-        $namespaces = DataManager::retrieves(Schema::class_name(), new DataClassRetrievesParameters());
+        $namespaces = DataManager::retrieves(Schema::class, new DataClassRetrievesParameters());
         
         if ($namespaces->size())
         {

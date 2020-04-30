@@ -49,7 +49,7 @@ class UserEntity implements RightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            User::class_name(), new DataClassCountParameters($condition)
+            User::class, new DataClassCountParameters($condition)
         );
     }
 
@@ -60,7 +60,7 @@ class UserEntity implements RightsEntity
      */
     public static function data_class_class_name()
     {
-        return User::class_name();
+        return User::class;
     }
 
     public static function getInstance()

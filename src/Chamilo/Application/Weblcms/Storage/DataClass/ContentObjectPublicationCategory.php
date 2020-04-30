@@ -306,7 +306,7 @@ class ContentObjectPublicationCategory extends PlatformCategory implements
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -317,8 +317,8 @@ class ContentObjectPublicationCategory extends PlatformCategory implements
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TOOL));
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
+            new PropertyConditionVariable(self::class, self::PROPERTY_COURSE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_TOOL));
     }
 }

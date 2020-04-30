@@ -46,7 +46,7 @@ class DownloadSelectedPublicationsComponent extends Manager
                 $publication_id);
             
             if ($this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) &&
-                 $publication[ContentObject::PROPERTY_TYPE] != Page::class_name())
+                 $publication[ContentObject::PROPERTY_TYPE] != Page::class)
             {
                 $content_object_ids[] = $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID];
             }

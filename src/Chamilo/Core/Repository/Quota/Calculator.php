@@ -343,7 +343,7 @@ class Calculator
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class_name(), new DataClassRetrieveParameters(
+            Group::class, new DataClassRetrieveParameters(
                 $condition,
                 array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
             )
@@ -372,7 +372,7 @@ class Calculator
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class_name(), new DataClassRetrieveParameters(
+            Group::class, new DataClassRetrieveParameters(
                 $condition, array(
                     new OrderBy(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), SORT_ASC

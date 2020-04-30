@@ -116,7 +116,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
             $condition = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID),
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
                     $excludedCourseTypes
                 )
             );
@@ -163,7 +163,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
                     $class, 'Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface'
                 ))
                 {
-                    $types[$tool->get_id()][] = Introduction::class_name();
+                    $types[$tool->get_id()][] = Introduction::class;
                     $tool_names[$tool->get_id()] = $tool->get_name();
                 }
             }
@@ -186,7 +186,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             {
                 foreach ($possible_courses as $course)
                 {
-                    if ($type == Introduction::class_name() && (!$course_settings_controller->get_course_setting(
+                    if ($type == Introduction::class && (!$course_settings_controller->get_course_setting(
                                 $course, CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
                             ) || !empty(
                             DataManager::retrieve_introduction_publication_by_course_and_tool(

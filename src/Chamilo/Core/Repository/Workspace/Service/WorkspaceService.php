@@ -361,7 +361,7 @@ class WorkspaceService
         if (is_null($orderProperty))
         {
             $orderProperty = array(
-                new OrderBy(new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME), SORT_ASC));
+                new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC));
         }
         
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(

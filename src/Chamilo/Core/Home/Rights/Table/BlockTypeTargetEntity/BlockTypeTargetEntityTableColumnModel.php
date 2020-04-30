@@ -25,7 +25,7 @@ class BlockTypeTargetEntityTableColumnModel extends RecordTableColumnModel imple
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                BlockTypeTargetEntity::class_name(), 
+                BlockTypeTargetEntity::class,
                 BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
         
         $this->add_column(

@@ -99,7 +99,7 @@ class ProviderLink extends DataClass
     {
         if (! isset($this->element))
         {
-            $this->element = DataManager::retrieve_by_id(Element::class_name(), $this->get_element_id());
+            $this->element = DataManager::retrieve_by_id(Element::class, $this->get_element_id());
         }
         
         return $this->element;
@@ -141,7 +141,7 @@ class ProviderLink extends DataClass
         if (! isset($this->providerRegistration))
         {
             $this->providerRegistration = DataManager::retrieve_by_id(
-                ProviderRegistration::class_name(), 
+                ProviderRegistration::class, 
                 $this->get_provider_registration_id());
         }
         

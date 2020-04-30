@@ -57,21 +57,21 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID));
         
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_START_TIME));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_START_TIME));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_TOTAL_TIME));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_TIME));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_TOTAL_SCORE));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_SCORE));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
         
         $properties->add(
             new PropertyConditionVariable(
@@ -79,27 +79,27 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ANSWER));
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ANSWER));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_SCORE));
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_SCORE));
         
         $joins = new Joins();
         
         $joins->add(
             new Join(
-                AssessmentAttempt::class_name(), 
+                AssessmentAttempt::class, 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        QuestionAttempt::class_name(), 
+                        QuestionAttempt::class, 
                         QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID), 
-                    new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ID))));
+                    new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID))));
         
         $joins->add(
             new Join(
-                User::class_name(), 
+                User::class, 
                 new EqualityCondition(
-                    new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID), 
+                    new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID), 
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
         
         $joins->add(
@@ -107,7 +107,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication::class, 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class_name(), 
+                        AssessmentAttempt::class, 
                         AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, 
@@ -127,7 +127,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ComplexContentObjectItem::class, 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        QuestionAttempt::class_name(), 
+                        QuestionAttempt::class, 
                         QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID), 
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, 
@@ -135,7 +135,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, $order_by, $joins);
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::records(
-            QuestionAttempt::class_name(), 
+            QuestionAttempt::class, 
             $parameters);
     }
 }

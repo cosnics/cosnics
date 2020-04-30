@@ -234,7 +234,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $workspaces = $this->workspaceService->getWorkspacesForUser(
             $this->getUser(), RightsService::RIGHT_USE, null, null,
-            array(new OrderBy(new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME)))
+            array(new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME)))
         );
 
         return $workspaces;

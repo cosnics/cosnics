@@ -227,7 +227,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 );
             }
 
-            $this->course = CourseDataManager::retrieve_by_id(Course::class_name(), $course_id);
+            $this->course = CourseDataManager::retrieve_by_id(Course::class, $course_id);
 
             if (empty($this->course))
             {

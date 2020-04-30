@@ -226,7 +226,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            User::class_name(),
+            User::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -277,7 +277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                User::class_name(),
+                User::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                     new PropertyConditionVariable(
@@ -406,7 +406,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
 
             return \Chamilo\Core\User\Storage\DataManager::count(
-                User::class_name(),
+                User::class,
                 new DataClassCountParameters($condition));
         }
         else

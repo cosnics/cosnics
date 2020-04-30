@@ -20,6 +20,6 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getEntityType()
     {
-        return Hotpotatoes::class_name();
+        return Hotpotatoes::class;
     }
 }

@@ -56,7 +56,7 @@ class RegistrationRepository
     public function findRegistrationsAsRecords()
     {
         return $this->getDataClassRepository()->records(
-            Registration::class_name(),
+            Registration::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Registration::class)))));
     }
@@ -67,6 +67,6 @@ class RegistrationRepository
      */
     public function clearRegistrationCache()
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Registration::class_name());
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Registration::class);
     }
 }

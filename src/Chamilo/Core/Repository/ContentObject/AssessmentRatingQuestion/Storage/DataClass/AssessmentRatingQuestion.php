@@ -23,7 +23,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_correct()

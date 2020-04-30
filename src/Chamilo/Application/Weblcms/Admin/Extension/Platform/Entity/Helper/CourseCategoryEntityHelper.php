@@ -179,14 +179,14 @@ class CourseCategoryEntityHelper
             $course_category_ids[] = $course_category->get_id();
 
             $condition = new InCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
                 $course_category_ids);
 
             $parameters = new DataClassDistinctParameters(
                 $condition,
                 new DataClassProperties(array(new PropertyConditionVariable(Course::class, Course::PROPERTY_ID))));
 
-            return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(Course::class_name(), $parameters);
+            return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(Course::class, $parameters);
         }
         else
         {

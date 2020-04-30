@@ -49,7 +49,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -100,7 +100,7 @@ class ForumPost extends DataClass implements AttachmentSupport
         if (!isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) $this->get_user_id()
             );
         }
@@ -284,7 +284,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) Session::get_user_id()
                 )
             );
@@ -331,7 +331,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) Session::get_user_id()
                 )
             );

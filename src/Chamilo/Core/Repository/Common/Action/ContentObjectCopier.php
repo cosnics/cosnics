@@ -134,7 +134,7 @@ class ContentObjectCopier
         $file = FileProperties::from_path($newPath);
 
         $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $this->targetUserIdentifier);
 
         $parameters = ImportParameters::factory(

@@ -48,7 +48,7 @@ class ExporterComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $type_conditions = array();
-        $types = array(File::class_name());
+        $types = array(File::class);
         
         foreach ($types as $type)
         {

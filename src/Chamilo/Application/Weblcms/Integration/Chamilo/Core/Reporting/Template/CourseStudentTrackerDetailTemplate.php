@@ -40,7 +40,7 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[Manager::PARAM_BLOCK_ID] = 0;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
@@ -55,7 +55,7 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
         $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $user_id);
 
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $user_id
         );
 

@@ -39,13 +39,13 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
         $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
         
         $this->add_column(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_START_TIME));
+            new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_START_TIME));
         
         $this->add_column(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_END_TIME));
+            new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_END_TIME));
         
         $this->add_column(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_TOTAL_TIME));
+            new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_TIME));
         
         $publication = $this->get_component()->get_publication();
         $parameters = new DataClassRetrieveParameters(
@@ -59,11 +59,11 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
         {
             $this->add_column(
                 new DataClassPropertyTableColumn(
-                    AssessmentAttempt::class_name(), 
+                    AssessmentAttempt::class,
                     AssessmentAttempt::PROPERTY_TOTAL_SCORE));
         }
         
         $this->add_column(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_STATUS));
+            new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_STATUS));
     }
 }

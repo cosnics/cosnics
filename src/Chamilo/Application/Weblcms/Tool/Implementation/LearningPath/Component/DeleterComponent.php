@@ -54,12 +54,12 @@ class DeleterComponent extends Manager
             {
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        LearningPathTreeNodeAttempt::class_name(), LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
+                        LearningPathTreeNodeAttempt::class, LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
                     ), new StaticConditionVariable($pid)
                 );
 
                 $attempts = DataManager::retrieves(
-                    LearningPathTreeNodeAttempt::class_name(), new DataClassRetrievesParameters($condition)
+                    LearningPathTreeNodeAttempt::class, new DataClassRetrievesParameters($condition)
                 );
 
                 while ($attempt = $attempts->next_result())

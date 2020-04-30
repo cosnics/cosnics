@@ -26,7 +26,7 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE, Translation::get(
+                Vocabulary::class, Vocabulary::PROPERTY_VALUE, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Vocabulary::PROPERTY_VALUE)->upperCamelize(),
                 null, 'Chamilo\Core\Metadata'
             )

@@ -18,7 +18,7 @@ class OperatingSystemBlock extends Block
         $tracker = new OperatingSystem();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                OperatingSystem::class_name(),
+                OperatingSystem::class,
                 OperatingSystem::PROPERTY_TYPE),
             new StaticConditionVariable('os'));
         $description[0] = Translation::get('Os');

@@ -40,7 +40,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         
         $condition = new AndCondition($conditions);
         
-        return DataManager::retrieve(StructureLocationRole::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(StructureLocationRole::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -55,15 +55,15 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         $joins = new Joins();
         $joins->add(
             new Join(
-                StructureLocationRole::class_name(), 
+                StructureLocationRole::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        StructureLocationRole::class_name(), 
+                        StructureLocationRole::class,
                         StructureLocationRole::PROPERTY_ROLE_ID), 
-                    new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ID))));
+                    new PropertyConditionVariable(Role::class, Role::PROPERTY_ID))));
         
         return DataManager::retrieves(
-            Role::class_name(), 
+            Role::class,
             new DataClassRetrievesParameters(
                 $this->getStructureLocationIdCondition($structureLocationId), 
                 null, 
@@ -83,7 +83,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                StructureLocationRole::class_name(), 
+                StructureLocationRole::class,
                 StructureLocationRole::PROPERTY_STRUCTURE_LOCATION_ID), 
             new StaticConditionVariable($structureLocationId));
     }
@@ -98,7 +98,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
     protected function getRoleIdCondition($roleId)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(StructureLocationRole::class_name(), StructureLocationRole::PROPERTY_ROLE_ID), 
+            new PropertyConditionVariable(StructureLocationRole::class, StructureLocationRole::PROPERTY_ROLE_ID), 
             new StaticConditionVariable($roleId));
     }
 }

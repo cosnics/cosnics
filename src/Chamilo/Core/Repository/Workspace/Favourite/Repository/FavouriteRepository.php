@@ -27,7 +27,7 @@ class FavouriteRepository
      */
     public function findFavouriteByIdentifier($identifier)
     {
-        return DataManager::retrieve_by_id(WorkspaceUserFavourite::class_name(), $identifier);
+        return DataManager::retrieve_by_id(WorkspaceUserFavourite::class, $identifier);
     }
 
     /**
@@ -42,18 +42,18 @@ class FavouriteRepository
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceUserFavourite::class_name(), 
+                WorkspaceUserFavourite::class,
                 WorkspaceUserFavourite::PROPERTY_USER_ID), 
             new StaticConditionVariable($user->getId()));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceUserFavourite::class_name(), 
+                WorkspaceUserFavourite::class,
                 WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($workspaceIdentifier));
         
         $condition = new AndCondition($conditions);
         
-        return DataManager::retrieve(WorkspaceUserFavourite::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(WorkspaceUserFavourite::class, new DataClassRetrieveParameters($condition));
     }
 }

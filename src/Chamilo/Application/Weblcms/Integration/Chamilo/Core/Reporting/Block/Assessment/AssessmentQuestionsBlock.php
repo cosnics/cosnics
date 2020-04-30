@@ -65,7 +65,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-                    AssessmentQuestionUsersTemplate::class_name();
+                    AssessmentQuestionUsersTemplate::class;
                 $params[Manager::PARAM_QUESTION] =
                     $question->get_id();
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';

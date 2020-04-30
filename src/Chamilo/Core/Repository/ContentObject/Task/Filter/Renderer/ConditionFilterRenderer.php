@@ -38,11 +38,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $creation_date_conditions = array();
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_START_DATE),
                 InequalityCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))));
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_START_DATE),
                 InequalityCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($creation_date_conditions);
@@ -52,14 +52,14 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             if ($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_START_DATE), 
+                    new PropertyConditionVariable(Task::class, Task::PROPERTY_START_DATE),
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))));
             }
             elseif ($filter_data->get_start_date(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_START_DATE), 
+                    new PropertyConditionVariable(Task::class, Task::PROPERTY_START_DATE),
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_TO_DATE))));
             }
@@ -70,11 +70,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $modification_date_conditions = array();
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_DUE_DATE), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_DUE_DATE),
                 InequalityCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_due_date(FilterData::FILTER_FROM_DATE))));
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_DUE_DATE), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_DUE_DATE),
                 InequalityCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_due_date(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($modification_date_conditions);
@@ -84,14 +84,14 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             if ($filter_data->get_due_date(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_DUE_DATE), 
+                    new PropertyConditionVariable(Task::class, Task::PROPERTY_DUE_DATE),
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_due_date(FilterData::FILTER_FROM_DATE))));
             }
             elseif ($filter_data->get_due_date(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_DUE_DATE), 
+                    new PropertyConditionVariable(Task::class, Task::PROPERTY_DUE_DATE),
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_due_date(FilterData::FILTER_TO_DATE))));
             }
@@ -107,21 +107,21 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             }
             
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_FREQUENCY), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_FREQUENCY),
                 new StaticConditionVariable($frequency_type));
         }
         
         if ($filter_data->has_filter_property(FilterData::FILTER_CATEGORY))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_CATEGORY), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_CATEGORY),
                 new StaticConditionVariable($filter_data->get_filter_property(FilterData::FILTER_CATEGORY)));
         }
         
         if ($filter_data->has_filter_property(FilterData::FILTER_PRIORITY))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Task::class_name(), Task::PROPERTY_PRIORITY), 
+                new PropertyConditionVariable(Task::class, Task::PROPERTY_PRIORITY),
                 new StaticConditionVariable($filter_data->get_filter_property(FilterData::FILTER_PRIORITY)));
         }
         

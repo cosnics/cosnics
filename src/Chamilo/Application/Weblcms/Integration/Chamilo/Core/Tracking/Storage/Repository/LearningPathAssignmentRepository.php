@@ -73,7 +73,7 @@ class LearningPathAssignmentRepository extends
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
-            User::class_name(),
+            User::class,
             $this->getTargetBaseVariable(User::class)
         );
     }
@@ -104,7 +104,7 @@ class LearningPathAssignmentRepository extends
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
-            User::class_name(),
+            User::class,
             $this->getTargetBaseVariable(User::class)
         );
     }

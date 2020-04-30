@@ -122,21 +122,21 @@ class HomeService
         
         // Process tabs
         $this->createDefaultElementsByUserIdentifier(
-            Tab::class_name(), 
+            Tab::class, 
             $defaultElements, 
             $elementIdentifierMap, 
             $user->getId());
         
         // Process columns
         $this->createDefaultElementsByUserIdentifier(
-            Column::class_name(), 
+            Column::class, 
             $defaultElements, 
             $elementIdentifierMap, 
             $user->getId());
         
         // Process blocks
         $this->createDefaultElementsByUserIdentifier(
-            Block::class_name(), 
+            Block::class, 
             $defaultElements, 
             $elementIdentifierMap, 
             $user->getId());
@@ -295,13 +295,13 @@ class HomeService
      */
     public function userHasMultipleTabs(User $user = null)
     {
-        $tabs = $this->getElements($user, Tab::class_name());
+        $tabs = $this->getElements($user, Tab::class);
         return count($tabs) > 1;
     }
 
     public function tabByUserAndIdentifierHasMultipleColumns(User $user = null, $tabIdentifier)
     {
-        $columns = $this->getElements($user, Column::class_name(), $tabIdentifier);
+        $columns = $this->getElements($user, Column::class, $tabIdentifier);
         return count($columns) > 1;
     }
 

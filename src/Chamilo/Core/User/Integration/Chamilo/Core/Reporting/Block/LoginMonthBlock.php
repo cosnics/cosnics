@@ -22,7 +22,7 @@ class LoginMonthBlock extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class_name(),
+                LoginLogout::class,
                 LoginLogout::PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $user_id = $this->get_user_id();
@@ -30,14 +30,14 @@ class LoginMonthBlock extends Block
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    LoginLogout::class_name(),
+                    LoginLogout::class,
                     LoginLogout::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
         }
         $condition = new AndCondition($conditions);
         
         $data = Tracker::get_data(
-            LoginLogout::class_name(),
+            LoginLogout::class,
             Manager::context(),
             $condition);
         

@@ -55,7 +55,7 @@ class LearningPathProgressTemplate extends ReportingTemplate
                 ContentObjectPublication::PROPERTY_TOOL
             ),
             new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name())
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class)
             )
         );
 

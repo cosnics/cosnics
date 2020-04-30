@@ -51,7 +51,7 @@ class DeleterComponent extends Manager
             
             foreach ($schema_ids as $schema_id)
             {
-                $schema = DataManager::retrieve_by_id(Schema::class_name(), $schema_id);
+                $schema = DataManager::retrieve_by_id(Schema::class, $schema_id);
                 
                 if ($schema->is_fixed())
                 {

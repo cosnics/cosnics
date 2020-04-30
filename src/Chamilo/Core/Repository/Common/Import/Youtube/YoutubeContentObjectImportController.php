@@ -52,25 +52,25 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        Instance::class_name(),
+                        Instance::class,
                         Instance::PROPERTY_TYPE),
                     new StaticConditionVariable(self::REPOSITORY_TYPE));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        Instance::class_name(),
+                        Instance::class,
                         Instance::PROPERTY_ENABLED),
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
                 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                    Instance::class_name(),
+                    Instance::class,
                     new DataClassRetrievesParameters($condition));
                 
                 $external_repository = $external_repositories->next_result();
                 $youtube_connector = DataConnector::getInstance($external_repository);
                 $external_object = $youtube_connector->retrieve_external_repository_object($external_id);
                 
-                $youtube = ContentObject::factory(Youtube::class_name());
+                $youtube = ContentObject::factory(Youtube::class);
                 $youtube->set_title($external_object->get_title());
                 $youtube->set_description($external_object->get_description());
                 $youtube->set_owner_id($this->get_parameters()->get_user());
@@ -106,18 +106,18 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Instance::class_name(),
+                Instance::class,
                 Instance::PROPERTY_TYPE),
             new StaticConditionVariable(self::REPOSITORY_TYPE));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Instance::class_name(),
+                Instance::class,
                 Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
         
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-            Instance::class_name(),
+            Instance::class,
             new DataClassRetrievesParameters($condition));
         $youtube_connector_available = $external_repositories->size() == 1;
         

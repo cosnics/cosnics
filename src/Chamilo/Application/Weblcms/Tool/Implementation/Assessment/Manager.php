@@ -90,14 +90,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
 
-        if ($publication[ContentObject::PROPERTY_TYPE] == Assessment::class_name())
+        if ($publication[ContentObject::PROPERTY_TYPE] == Assessment::class)
         {
             $complex_display_item = $toolbar->get_item(1);
             $complex_display_item->set_image(new FontAwesomeGlyph('forward'));
             $complex_display_item->set_label(Translation::get('Take'));
         }
 
-        if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class_name())
+        if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class)
         {
             $toolbar->insert_item(
                 new ToolbarItem(
@@ -122,7 +122,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        return array(Assessment::class_name(), Hotpotatoes::class_name());
+        return array(Assessment::class, Hotpotatoes::class);
     }
 
     public function get_available_browser_types()

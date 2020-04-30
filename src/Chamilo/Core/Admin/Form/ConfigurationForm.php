@@ -584,7 +584,7 @@ class ConfigurationForm extends FormValidator
                     );
                     $condition = new AndCondition($conditions);
                     $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
-                        UserSetting::class_name(), new DataClassRetrieveParameters($condition)
+                        UserSetting::class, new DataClassRetrieveParameters($condition)
                     );
 
                     if ($user_setting)

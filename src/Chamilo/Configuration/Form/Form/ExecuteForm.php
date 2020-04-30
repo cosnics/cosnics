@@ -198,11 +198,11 @@ class ExecuteForm extends FormValidator
     public function setDefaults($parameters = array())
     {
         $subcondition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_DYNAMIC_FORM_ID), 
             new StaticConditionVariable($this->form->get_id()));
         $subselect = new SubselectCondition(
-            new PropertyConditionVariable(Value::class_name(), Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
+            new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), 
             Element::get_table_name(), 
             $subcondition);
         
@@ -212,7 +212,7 @@ class ExecuteForm extends FormValidator
         {
             $element = DataManager::retrieve_dynamic_form_elements(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
+                    new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), 
                     new StaticConditionVariable($value->get_dynamic_form_element_id())))->next_result();
             
             if ($element->get_type() == Element::TYPE_RADIO_BUTTONS)

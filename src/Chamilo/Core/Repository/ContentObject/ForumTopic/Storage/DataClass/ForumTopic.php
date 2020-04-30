@@ -66,7 +66,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_allowed_types()
     {
-        return array(ForumPost::class_name());
+        return array(ForumPost::class);
     }
 
     /**
@@ -76,7 +76,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -481,7 +481,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) Session::get_user_id()));
                 $email_notificator->set_is_topic_edited(true);
 

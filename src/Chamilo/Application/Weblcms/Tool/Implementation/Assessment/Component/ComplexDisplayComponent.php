@@ -96,15 +96,15 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         $track = new AssessmentAttempt();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         $count = $trackers->size();
@@ -131,7 +131,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         // Executing assessment
 
-        if ($this->assessment->get_type() == Hotpotatoes::class_name())
+        if ($this->assessment->get_type() == Hotpotatoes::class)
         {
             $html = array();
 
@@ -283,11 +283,11 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $question_attempts = array();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             new StaticConditionVariable($this->assessment_attempt->get_id()));
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         while ($question_attempt = $question_attempts_result_set->next_result())

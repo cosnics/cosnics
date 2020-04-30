@@ -153,17 +153,17 @@ class InstanceForm extends FormValidator
             {
                 $this->addElement(
                     'radio', Instance::PROPERTY_TYPE, Translation::get('Type'),
-                    Translation::get(PlatformInstance::class_name(false)), PlatformInstance::class_name()
+                    Translation::get(PlatformInstance::class_name(false)), PlatformInstance::class
                 );
                 $this->addElement(
                     'radio', Instance::PROPERTY_TYPE, null, Translation::get(PersonalInstance::class_name(false)),
-                    PersonalInstance::class_name()
+                    PersonalInstance::class
                 );
             }
         }
         else
         {
-            $this->addElement('hidden', Instance::PROPERTY_TYPE, PersonalInstance::class_name());
+            $this->addElement('hidden', Instance::PROPERTY_TYPE, PersonalInstance::class);
         }
     }
 
@@ -477,7 +477,7 @@ class InstanceForm extends FormValidator
         }
         else
         {
-            $defaults[Instance::PROPERTY_TYPE] = PersonalInstance::class_name();
+            $defaults[Instance::PROPERTY_TYPE] = PersonalInstance::class;
         }
 
         parent::setDefaults($defaults);

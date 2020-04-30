@@ -79,7 +79,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function getContentObjectTypes()
     {
-        return array(Announcement::class_name());
+        return array(Announcement::class);
     }
 
     /**

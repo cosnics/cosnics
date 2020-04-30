@@ -78,7 +78,7 @@ class GroupMenu extends HtmlMenu
                 new StaticConditionVariable(0)
             );
             $group = DataManager::retrieves(
-                Group::class_name(), new DataClassRetrievesParameters(
+                Group::class, new DataClassRetrievesParameters(
                     $condition, 1, null,
                     new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
                 )
@@ -88,7 +88,7 @@ class GroupMenu extends HtmlMenu
         else
         {
             $this->current_category = DataManager::retrieve(
-                Group::class_name(), new DataClassRetrieveParameters(
+                Group::class, new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                         new StaticConditionVariable($current_category)
@@ -144,7 +144,7 @@ class GroupMenu extends HtmlMenu
             new StaticConditionVariable(0)
         );
         $group = DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 $condition, 1, null,
                 new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
             )
@@ -197,7 +197,7 @@ class GroupMenu extends HtmlMenu
             new StaticConditionVariable($parent_id)
         );
         $groups = DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
                 new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
             )

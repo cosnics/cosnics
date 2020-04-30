@@ -37,7 +37,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) $this->get_parameters()->get_user()));
                 
                 if (! $calculator->canUpload($file->get_size()))
@@ -56,7 +56,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class_name(),
+                            User::class,
                             (int) $this->get_parameters()->get_user()));
                     
                     if ($calculator->canUpload($file->get_size()))
@@ -112,10 +112,10 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parameters()->get_user()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Webpage::class_name(), Webpage::PROPERTY_HASH), 
+                new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_HASH), 
                 new StaticConditionVariable($hash));
             $condition = new AndCondition($conditions);
-            $content_objects = DataManager::retrieve_active_content_objects(Webpage::class_name(), $condition);
+            $content_objects = DataManager::retrieve_active_content_objects(Webpage::class, $condition);
             
             if ($content_objects->size() > 0)
             {

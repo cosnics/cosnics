@@ -66,12 +66,12 @@ class DeleterComponent extends Manager
                 $status_tracker = new WeblcmsPeerAssessmentAttemptStatusTracker();
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        WeblcmsPeerAssessmentAttemptStatusTracker::class_name(),
+                        WeblcmsPeerAssessmentAttemptStatusTracker::class,
                         WeblcmsPeerAssessmentAttemptStatusTracker::PROPERTY_ATTEMPT_ID),
                     new StaticConditionVariable($attempt->get_id()));
 
                 $statuses = DataManager::retrieves(
-                    WeblcmsPeerAssessmentAttemptStatusTracker::class_name(),
+                    WeblcmsPeerAssessmentAttemptStatusTracker::class,
                     new DataClassRetrievesParameters($condition))->as_array();
 
                 // delete scores and feedaback
@@ -85,7 +85,7 @@ class DeleterComponent extends Manager
                         new AndCondition(
                             new EqualityCondition(
                                 new PropertyConditionVariable(
-                                    WeblcmsPeerAssessmentScoreTracker::class_name(),
+                                    WeblcmsPeerAssessmentScoreTracker::class,
                                     WeblcmsPeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
                                 new StaticConditionVariable($status->get_id()))));
 
@@ -94,7 +94,7 @@ class DeleterComponent extends Manager
                         new AndCondition(
                             new EqualityCondition(
                                 new PropertyConditionVariable(
-                                    WeblcmsPeerAssessmentFeedbackTracker::class_name(),
+                                    WeblcmsPeerAssessmentFeedbackTracker::class,
                                     WeblcmsPeerAssessmentFeedbackTracker::PROPERTY_ATTEMPT_STATUS_ID),
                                 new StaticConditionVariable($status->get_id()))));
                 }

@@ -272,7 +272,7 @@ abstract class ContentObjectForm extends FormValidator
         {
             $calculator = new Calculator(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), (int) $this->get_owner_id()
+                    User::class, (int) $this->get_owner_id()
                 )
             );
 

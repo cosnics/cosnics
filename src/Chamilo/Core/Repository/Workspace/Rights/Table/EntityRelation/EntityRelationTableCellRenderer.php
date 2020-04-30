@@ -89,13 +89,13 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
                 if ($entityRelation->get_entity_type() == UserEntity::ENTITY_TYPE)
                 {
                     return DataManager::retrieve_by_id(
-                        User::class_name(), $entityRelation->get_entity_id()
+                        User::class, $entityRelation->get_entity_id()
                     )->get_fullname();
                 }
                 else
                 {
                     return DataManager::retrieve_by_id(
-                        Group::class_name(), $entityRelation->get_entity_id()
+                        Group::class, $entityRelation->get_entity_id()
                     )->get_name();
                 }
             case RightsService::RIGHT_VIEW :

@@ -80,7 +80,7 @@ class AssignmentBlock extends AssignmentReportingManager
             }
 
             $params = $this->get_parent()->get_parameters();
-            $params[Manager::PARAM_TEMPLATE_ID] = AssignmentEntitiesTemplate::class_name();
+            $params[Manager::PARAM_TEMPLATE_ID] = AssignmentEntitiesTemplate::class;
             $params[Manager::PARAM_PUBLICATION] = $publicationId;
 
             $link = $this->createLink($this->get_parent()->get_url($params), $glyph->render());

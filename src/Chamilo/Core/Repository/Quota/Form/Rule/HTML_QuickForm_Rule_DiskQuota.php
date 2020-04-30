@@ -23,7 +23,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
         
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) Session::get_user_id()));
         
         return $calculator->canUpload($size);

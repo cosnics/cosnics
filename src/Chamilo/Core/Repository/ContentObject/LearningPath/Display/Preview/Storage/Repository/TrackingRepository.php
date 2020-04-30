@@ -389,7 +389,7 @@ class TrackingRepository implements TrackingRepositoryInterface
             }
         }
 
-        return new DataClassIterator(TreeNodeAttempt::class_name(), $allData);
+        return new DataClassIterator(TreeNodeAttempt::class, $allData);
     }
 
     /**

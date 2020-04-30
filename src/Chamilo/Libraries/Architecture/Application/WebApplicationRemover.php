@@ -36,12 +36,12 @@ class WebApplicationRemover extends Remover
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ApplicationItem::class_name(), ApplicationItem::PROPERTY_APPLICATION),
+            new PropertyConditionVariable(ApplicationItem::class, ApplicationItem::PROPERTY_APPLICATION),
             new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context))
         );
 
         $menu_item = DataManager::retrieve(
-            ApplicationItem::class_name(), new DataClassRetrieveParameters($condition)
+            ApplicationItem::class, new DataClassRetrieveParameters($condition)
         );
 
         if ($menu_item instanceof Item)

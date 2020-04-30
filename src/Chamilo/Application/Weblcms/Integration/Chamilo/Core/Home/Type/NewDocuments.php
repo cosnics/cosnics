@@ -26,7 +26,7 @@ class NewDocuments extends NewBlock
      */
     public function getContentObjectTypes()
     {
-        return array(File::class_name(), Webpage::class_name());
+        return array(File::class, Webpage::class);
     }
 
     /**

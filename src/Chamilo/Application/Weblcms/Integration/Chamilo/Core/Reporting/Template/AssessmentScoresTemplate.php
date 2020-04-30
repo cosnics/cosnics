@@ -47,7 +47,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
             new PropertyConditionVariable(
                 ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable(Assessment::class_name()));
+            new StaticConditionVariable(Assessment::class));
         $condition = new AndCondition($conditions);
         
         $order_by = new OrderBy(

@@ -70,7 +70,7 @@ abstract class NewBlock extends Block
             Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types')));
         $archiveCondition = new NotCondition(
             new InCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID), 
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
                 $excludedCourseTypes));
         
         // All user courses

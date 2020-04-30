@@ -66,7 +66,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                Course::class_name(),
+                Course::class,
                 Course::PROPERTY_ID
             ),
             $subscribedCourseIds

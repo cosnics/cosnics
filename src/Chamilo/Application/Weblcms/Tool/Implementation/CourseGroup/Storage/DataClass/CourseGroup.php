@@ -229,7 +229,7 @@ class CourseGroup extends NestedTreeNode
                 if ($include_users)
                 {
                     $users[$relation->get_user()] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(), $relation->get_user()
+                        User::class, $relation->get_user()
                     );
                 }
                 else

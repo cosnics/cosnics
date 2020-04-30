@@ -30,7 +30,7 @@ class ImporterComponent extends Manager
                 throw new RuntimeException('Invalid export type selected');
             }
             
-            $document = ContentObject::factory(File::class_name());
+            $document = ContentObject::factory(File::class);
             $document->set_title($external_object->get_title());
             
             $descriptionRequired = Configuration::getInstance()->get_setting(

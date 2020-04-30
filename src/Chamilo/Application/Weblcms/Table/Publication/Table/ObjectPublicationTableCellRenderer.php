@@ -229,7 +229,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class_name(), $group_id
+                                Group::class, $group_id
                             );
                             if ($group)
                             {
@@ -283,7 +283,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
     public function retrieve_user($user_id)
     {
         return DataManager::retrieve_by_id(
-            User::class_name(), $user_id
+            User::class, $user_id
         );
     }
 }

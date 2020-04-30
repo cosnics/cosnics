@@ -32,7 +32,7 @@ class RelationTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(Relation::class_name(), $parameters);
+        return DataManager::retrieves(Relation::class, $parameters);
     }
 
     /**
@@ -43,6 +43,6 @@ class RelationTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(Relation::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Relation::class, new DataClassCountParameters($condition));
     }
 }

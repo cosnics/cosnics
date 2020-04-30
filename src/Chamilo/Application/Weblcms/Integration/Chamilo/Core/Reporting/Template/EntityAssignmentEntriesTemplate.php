@@ -55,7 +55,7 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();

@@ -31,7 +31,7 @@ class ActivatorComponent extends Manager
             
             foreach ($ids as $id)
             {
-                $external_instance = DataManager::retrieve_by_id(Instance::class_name(), $id);
+                $external_instance = DataManager::retrieve_by_id(Instance::class, $id);
                 $external_instance->activate();
                 
                 if (! $external_instance->update())

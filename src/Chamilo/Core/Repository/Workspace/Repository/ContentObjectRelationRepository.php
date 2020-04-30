@@ -42,19 +42,19 @@ class ContentObjectRelationRepository
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->get_object_number()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspaceImplementation->getId()));
 
         $relationCondition = new AndCondition($relationConditions);
 
         return DataManager::count(
-            WorkspaceContentObjectRelation::class_name(),
+            WorkspaceContentObjectRelation::class,
             new DataClassCountParameters($relationCondition)) > 0;
     }
 
@@ -71,20 +71,20 @@ class ContentObjectRelationRepository
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->get_object_number()));
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
 
         $relationCondition = new AndCondition($relationConditions);
 
         return DataManager::retrieve(
-            WorkspaceContentObjectRelation::class_name(),
+            WorkspaceContentObjectRelation::class,
             new DataClassRetrieveParameters($relationCondition));
     }
 
@@ -116,14 +116,14 @@ class ContentObjectRelationRepository
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObjectId));
 
         $relationCondition = new AndCondition($relationConditions);
 
         return DataManager::retrieves(
-            WorkspaceContentObjectRelation::class_name(),
+            WorkspaceContentObjectRelation::class,
             new DataClassRetrievesParameters($relationCondition));
     }
 
@@ -136,12 +136,12 @@ class ContentObjectRelationRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(),
+                WorkspaceContentObjectRelation::class,
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->get_object_number()));
 
         return DataManager::distinct(
-            WorkspaceContentObjectRelation::class_name(),
+            WorkspaceContentObjectRelation::class,
             new DataClassDistinctParameters(
                 $condition,
                 new DataClassProperties(

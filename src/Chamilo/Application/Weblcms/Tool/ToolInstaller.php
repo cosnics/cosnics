@@ -244,7 +244,7 @@ abstract class ToolInstaller extends Installer
     {
         $course_management_rights = CourseManagementRights::getInstance();
 
-        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
         while ($course = $courses->next_result())
         {
             if (!$this->install_static_tool_setting_relations_for_object(

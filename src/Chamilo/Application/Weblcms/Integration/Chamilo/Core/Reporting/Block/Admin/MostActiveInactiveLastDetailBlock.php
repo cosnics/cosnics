@@ -26,7 +26,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
         $this->add_reporting_data_rows_for_course_visit_data($reporting_data);
         $reporting_data->add_row(Translation::get('LastPublication'));
         
-        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
         while ($course = $courses->next_result())
         {
             $condition = new EqualityCondition(

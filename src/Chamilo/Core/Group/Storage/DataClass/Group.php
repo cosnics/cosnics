@@ -100,7 +100,7 @@ class Group extends NestedSet
                     new StaticConditionVariable($this->get_id())
                 );
                 $this->subgroup_count[(int) $recursive] = DataManager::count(
-                    Group::class_name(), new DataClassCountParameters($children_condition)
+                    Group::class, new DataClassCountParameters($children_condition)
                 );
             }
         }
@@ -140,7 +140,7 @@ class Group extends NestedSet
             elseif ($include_subgroups && $recursive_subgroups)
             {
                 $join = new Join(
-                    Group::class_name(), new EqualityCondition(
+                    Group::class, new EqualityCondition(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
@@ -173,7 +173,7 @@ class Group extends NestedSet
             else
             {
                 $join = new Join(
-                    Group::class_name(), new EqualityCondition(
+                    Group::class, new EqualityCondition(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
@@ -290,7 +290,7 @@ class Group extends NestedSet
             }
 
             $subgroupIdentifiers = DataManager::distinct(
-                Group::class_name(), new DataClassDistinctParameters(
+                Group::class, new DataClassDistinctParameters(
                     $childrenCondition,
                     new DataClassProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))
                 )

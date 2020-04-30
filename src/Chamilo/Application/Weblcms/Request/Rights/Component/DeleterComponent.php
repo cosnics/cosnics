@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
             foreach ($ids as $id)
             {
                 $location_entity_right_group = DataManager::retrieve_by_id(
-                    RightsLocationEntityRightGroup::class_name(), 
+                    RightsLocationEntityRightGroup::class,
                     (int) $id);
                 
                 if (! $location_entity_right_group->delete())

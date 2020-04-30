@@ -31,6 +31,6 @@ class SelectTableColumnModel extends DataClassTableColumnModel implements TableC
             new StaticTableColumn(self::COLUMN_TYPE, $glyph->render())
         );
 
-        $this->add_column(new DataClassPropertyTableColumn(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE));
+        $this->add_column(new DataClassPropertyTableColumn(Vocabulary::class, Vocabulary::PROPERTY_VALUE));
     }
 }

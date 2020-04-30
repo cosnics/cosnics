@@ -34,14 +34,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary::class_name(),
+                Vocabulary::class,
                 new ComparisonCondition(
-                    new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
                     ComparisonCondition::EQUAL,
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
 
         return self::count(
-            User::class_name(),
+            User::class,
             new DataClassCountParameters(
                 $condition,
                 $joins,
@@ -64,9 +64,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary::class_name(),
+                Vocabulary::class,
                 new ComparisonCondition(
-                    new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
                     ComparisonCondition::EQUAL,
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
 

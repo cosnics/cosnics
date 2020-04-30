@@ -99,16 +99,16 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
             new StaticConditionVariable($this->get_id()));
 
         $properties = new DataClassProperties();
         $properties->add(
             new DataClassProperty(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
                 new StaticConditionVariable($this->get_parent())));
 
-        if (! DataManager::updates(Course::class_name(), $properties, $condition))
+        if (! DataManager::updates(Course::class, $properties, $condition))
         {
             return false;
         }
@@ -123,7 +123,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -133,7 +133,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT));
+        return array(new PropertyConditionVariable(self::class, self::PROPERTY_PARENT));
     }
 
     public function get_parent_ids()
@@ -175,7 +175,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     public function get_children_ids($recursive = true)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT),
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id()));
 
         if (! $recursive)
@@ -183,7 +183,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
             $parameters = new DataClassDistinctParameters(
                 $condition,
                 new DataClassProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID))));
-            return DataManager::distinct(self::class_name(), $parameters);
+            return DataManager::distinct(self::class, $parameters);
         }
         else
         {

@@ -95,7 +95,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
             }
             else
             {
-                $cloi = ComplexContentObjectItem::factory(Forum::class_name());
+                $cloi = ComplexContentObjectItem::factory(Forum::class);
 
                 if ($this->get_complex_content_object_item())
                 {
@@ -188,6 +188,6 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
 
     public function get_allowed_content_object_types()
     {
-        return array(Forum::class_name());
+        return array(Forum::class);
     }
 }

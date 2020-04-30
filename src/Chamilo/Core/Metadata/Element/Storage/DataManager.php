@@ -14,10 +14,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_display_order_total_for_schema($schema_id)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_SCHEMA_ID),
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID),
             ComparisonCondition::EQUAL,
             new StaticConditionVariable($schema_id));
 
-        return DataManager::count(Element::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Element::class, new DataClassCountParameters($condition));
     }
 }

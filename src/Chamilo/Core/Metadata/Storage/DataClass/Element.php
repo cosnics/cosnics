@@ -102,7 +102,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         if (!isset($this->schema))
         {
-            $this->schema = DataManager::retrieve_by_id(Schema::class_name(), $this->get_schema_id());
+            $this->schema = DataManager::retrieve_by_id(Schema::class, $this->get_schema_id());
         }
 
         return $this->schema;
@@ -143,15 +143,15 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         $dependencies = array();
 
-        $dependencies[EntityTranslation::class_name()] = new AndCondition(
+        $dependencies[EntityTranslation::class] = new AndCondition(
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        EntityTranslation::class_name(), EntityTranslation::PROPERTY_ENTITY_TYPE
-                    ), new StaticConditionVariable(static::class_name())
+                        EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE
+                    ), new StaticConditionVariable(static::class)
                 ), new EqualityCondition(
                 new PropertyConditionVariable(
-                    EntityTranslation::class_name(), EntityTranslation::PROPERTY_ENTITY_ID
+                    EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID
                 ), new StaticConditionVariable($this->get_id())
             )
             )
@@ -161,10 +161,10 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE
-                    ), new StaticConditionVariable(static::class_name())
+                        RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE
+                    ), new StaticConditionVariable(static::class)
                 ), new EqualityCondition(
-                new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID),
+                new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
                 new StaticConditionVariable($this->get_id())
             )
             )
@@ -174,29 +174,29 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE
-                    ), new StaticConditionVariable(static::class_name())
+                        RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE
+                    ), new StaticConditionVariable(static::class)
                 ), new EqualityCondition(
-                new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
+                new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
                 new StaticConditionVariable($this->get_id())
             )
             )
         );
 
-        $dependencies[RelationInstance::class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
 
-        $dependencies[ElementInstance::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ElementInstance::class_name(), ElementInstance::PROPERTY_ELEMENT_ID),
+        $dependencies[ElementInstance::class] = new EqualityCondition(
+            new PropertyConditionVariable(ElementInstance::class, ElementInstance::PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($this->get_id())
         );
 
-        $dependencies[Vocabulary::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID),
+        $dependencies[Vocabulary::class] = new EqualityCondition(
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($this->get_id())
         );
 
-        $dependencies[ProviderLink::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ProviderLink::class_name(), ProviderLink::PROPERTY_ELEMENT_ID),
+        $dependencies[ProviderLink::class] = new EqualityCondition(
+            new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($this->get_id())
         );
 
@@ -230,7 +230,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_SCHEMA_ID));
+        return array(new PropertyConditionVariable(self::class, self::PROPERTY_SCHEMA_ID));
     }
 
     /**
@@ -240,7 +240,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -263,7 +263,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         if (!$this->namespace)
         {
             $schema = \Chamilo\Core\Metadata\Storage\DataManager::retrieve_by_id(
-                Schema::class_name(), $this->get_schema_id()
+                Schema::class, $this->get_schema_id()
             );
 
             if (!$schema)

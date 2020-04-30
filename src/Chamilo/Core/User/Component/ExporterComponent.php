@@ -44,7 +44,7 @@ class ExporterComponent extends Manager
             $export = $form->exportValues();
             $file_type = $export['file_type'];
             $result = DataManager::retrieves(
-                User::class_name(),
+                User::class,
                 new DataClassRetrievesParameters());
             while ($user = $result->next_result())
             {

@@ -145,7 +145,7 @@ class PublicationForm extends ContentObjectPublicationForm
                         $parameters = new DataClassRetrieveParameters(
                             new EqualityCondition(
                                 new PropertyConditionVariable(
-                                    Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID
+                                    Publication::class, Publication::PROPERTY_PUBLICATION_ID
                                 ), new StaticConditionVariable($publication->get_id())
                             )
                         );

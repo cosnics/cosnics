@@ -48,7 +48,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function installDefaultSchemas()
     {
         $schemaDefinition = array();
-        $schemaDefinition[Schema::class_name()] = array(
+        $schemaDefinition[Schema::class] = array(
             Schema::PROPERTY_NAMESPACE => 'dc',
             Schema::PROPERTY_NAME => 'Dublin Core',
             Schema::PROPERTY_DESCRIPTION => '',
@@ -56,7 +56,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             Schema::PROPERTY_FIXED => '1'
         );
 
-        $schemaDefinition[Element::class_name()] = array(
+        $schemaDefinition[Element::class] = array(
             'contributor' => array(
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
@@ -141,7 +141,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
 
         $schemaDefinition = array();
-        $schemaDefinition[Schema::class_name()] = array(
+        $schemaDefinition[Schema::class] = array(
             Schema::PROPERTY_NAMESPACE => 'ct',
             Schema::PROPERTY_NAME => 'Tags',
             Schema::PROPERTY_DESCRIPTION => '',
@@ -149,7 +149,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             Schema::PROPERTY_FIXED => '1'
         );
 
-        $schemaDefinition[Element::class_name()] = array(
+        $schemaDefinition[Element::class] = array(
             'tags' => array(
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,

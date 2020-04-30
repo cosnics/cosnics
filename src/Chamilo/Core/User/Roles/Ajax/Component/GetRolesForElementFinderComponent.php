@@ -69,7 +69,7 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
     protected function getCondition()
     {
         return $this->ajaxResultGenerator->getSearchCondition(
-            array(new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE))
+            array(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE))
         );
     }
 
@@ -91,7 +91,7 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
     {
         return $this->getRoleService()->getRoles(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            array(new OrderBy(new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE)))
+            array(new OrderBy(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE)))
         );
     }
 

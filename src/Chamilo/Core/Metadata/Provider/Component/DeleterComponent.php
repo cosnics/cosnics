@@ -47,7 +47,7 @@ class DeleterComponent extends Manager
             
             foreach ($providerLinkIds as $providerLinkId)
             {
-                $providerLink = DataManager::retrieve_by_id(ProviderLink::class_name(), $providerLinkId);
+                $providerLink = DataManager::retrieve_by_id(ProviderLink::class, $providerLinkId);
                 
                 if (! $providerLink->delete())
                 {

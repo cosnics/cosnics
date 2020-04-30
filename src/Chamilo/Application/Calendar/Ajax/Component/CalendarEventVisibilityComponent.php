@@ -16,6 +16,6 @@ class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calendar\Event
      */
     public function retrieveVisibility(Condition $condition)
     {
-        return DataManager::retrieve(Visibility::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Visibility::class, new DataClassRetrieveParameters($condition));
     }
 }

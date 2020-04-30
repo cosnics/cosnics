@@ -44,7 +44,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) $this->get_application()->get_user_id()
             )
         );

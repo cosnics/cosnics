@@ -56,7 +56,7 @@ class DeleterComponent extends Manager implements DelegateComponent
 
             $content_object = $publication->get_content_object();
 
-            if ($content_object->get_type() == Introduction::class_name())
+            if ($content_object->get_type() == Introduction::class)
             {
                 $publication->ignore_display_order();
             }

@@ -306,7 +306,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             foreach ($courses as $course_properties)
             {
                 $course_instances[$course_properties[Course::PROPERTY_ID]] = DataClass::factory(
-                    Course::class_name(), $course_properties
+                    Course::class, $course_properties
                 );
             }
 
@@ -319,7 +319,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $count = 0;
             foreach ($courses as $course_properties)
             {
-                $course = DataClass::factory(Course::class_name(), $course_properties);
+                $course = DataClass::factory(Course::class, $course_properties);
 
                 $course_id = $course->get_id();
 

@@ -38,7 +38,7 @@ class DeleteFileComponent extends Manager
             
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                new StaticConditionVariable(File::class_name()));
+                new StaticConditionVariable(File::class));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->getUser()->getId()));

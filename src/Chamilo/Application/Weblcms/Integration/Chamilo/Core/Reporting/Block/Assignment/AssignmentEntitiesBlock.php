@@ -116,7 +116,7 @@ class AssignmentEntitiesBlock extends AssignmentReportingManager
 
         $detailParams = $this->get_parent()->get_parameters();
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            EntityAssignmentEntriesTemplate::class_name();
+            EntityAssignmentEntriesTemplate::class;
         $detailParams[Manager::PARAM_ENTITY_TYPE] =
             $entityType;
         $detailParams[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->getPublicationId();

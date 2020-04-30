@@ -195,7 +195,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         if (!$this->rootGroup)
         {
             $group = DataManager::retrieve(
-                Group::class_name(), new DataClassRetrieveParameters(
+                Group::class, new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0)
@@ -296,7 +296,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
             new DynamicVisualTab(
                 'view_details', $this->getCurrentGroup()->get_name(), new FontAwesomeGlyph('info-circle'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
-                get_class($this) == SubscribeGroupsDetailsComponent::class_name()
+                get_class($this) == SubscribeGroupsDetailsComponent::class
             )
         );
 
@@ -304,7 +304,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
             new DynamicVisualTab(
                 'view_subgroups', $this->getTranslation('BrowseChildren'), new FontAwesomeGlyph('folder'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
-                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class_name()
+                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class
             )
         );
 

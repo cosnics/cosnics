@@ -25,7 +25,7 @@ class GroupUsersTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieves(
-            User::class_name(),
+            User::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -37,7 +37,7 @@ class GroupUsersTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return DataManager::count(
-            User::class_name(),
+            User::class,
             new DataClassCountParameters($condition));
     }
 }

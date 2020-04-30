@@ -320,8 +320,8 @@ class Configuration
      */
     public static function reset()
     {
-        RecordResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
-        DataClassResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        RecordResultSetCache::truncates(array(Registration::class, Setting::class));
+        DataClassResultSetCache::truncates(array(Registration::class, Setting::class));
         self::getInstance()->getConfigurationConsulter()->clearData();
         self::getInstance()->getRegistrationConsulter()->clearData();
         self::getInstance()->getLanguageConsulter()->clearData();

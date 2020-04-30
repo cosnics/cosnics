@@ -184,7 +184,7 @@ class Element extends DataClass
     public function load_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Option::class_name(), Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
+            new PropertyConditionVariable(Option::class, Option::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new StaticConditionVariable($this->get_id())
         );
         $options = DataManager::retrieve_dynamic_form_element_options($condition);

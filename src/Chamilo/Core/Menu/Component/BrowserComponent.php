@@ -97,7 +97,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('desktop', array(), null, 'fas'), $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class_name()
+                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class
                     )
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -108,7 +108,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('folder', array(), null, 'fas'), $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class_name()
+                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class
                     )
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -118,7 +118,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 new Button(
                     $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('link', array(), null, 'fas'), $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class_name())
+                    array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class)
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

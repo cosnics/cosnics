@@ -76,7 +76,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $subselect_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Introduction::class_name()));
+            new StaticConditionVariable(Introduction::class));
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
@@ -279,7 +279,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $subselect_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Forum::class_name()));
+            new StaticConditionVariable(Forum::class));
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
@@ -345,7 +345,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $lastPost->get_user_id());
 
             $muteClass = $publication[ContentObjectPublication::PROPERTY_HIDDEN] ? ' text-muted-invisible' : '';
@@ -457,7 +457,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                      ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT)))
                 {
                     $forum = DataManager::retrieve_by_id(
-                        Forum::class_name(),
+                        Forum::class,
                         $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
                     $forumGlyphType = $forum->get_locked() ? 'lock' : 'file';
@@ -515,7 +515,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function getForumActions($publication, $first, $last)
     {
         $forum = DataManager::retrieve_by_id(
-            Forum::class_name(),
+            Forum::class,
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
         $buttonToolBar = new ButtonToolBar();
@@ -780,7 +780,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->getPublicationButton(
                         Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('book'),
-                        array(Introduction::class_name()),
+                        array(Introduction::class),
                         $publishParameters));
             }
 

@@ -69,7 +69,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         {
 
             $user = DataManager::retrieve_by_id(
-                User::class_name(), (int) $request_user_id
+                User::class, (int) $request_user_id
             );
             if ($this->get_user_key($user) == $request_key)
             {

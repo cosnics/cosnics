@@ -324,7 +324,7 @@ class SynchronizationData extends DataClass
     {
         if (! isset($this->external))
         {
-            $this->external = DataManager::retrieve_by_id(Instance::class_name(), $this->get_external_id());
+            $this->external = DataManager::retrieve_by_id(Instance::class, $this->get_external_id());
         }
         return $this->external;
     }
@@ -394,7 +394,7 @@ class SynchronizationData extends DataClass
     public static function get_by_content_object_id($content_object_id)
     {
         $conditions = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object_id));
         return DataManager::retrieve_synchronization_data($conditions);
     }
@@ -409,10 +409,10 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
         return DataManager::retrieve_synchronization_data($condition);
@@ -428,10 +428,10 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_OBJECT_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_EXTERNAL_OBJECT_ID),
             new StaticConditionVariable($external_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
         

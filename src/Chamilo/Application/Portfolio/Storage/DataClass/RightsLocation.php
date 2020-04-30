@@ -138,14 +138,14 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->get_publication_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
+                new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_NODE_ID),
                 new StaticConditionVariable($this->get_node_id()));
             $condition = new AndCondition($conditions);
 
-            return DataManager::deletes(RightsLocation::class_name(), $condition);
+            return DataManager::deletes(RightsLocation::class, $condition);
         }
         else
         {

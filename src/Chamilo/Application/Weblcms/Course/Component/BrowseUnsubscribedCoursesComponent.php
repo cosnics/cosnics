@@ -58,7 +58,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
         
         $conditions[] = new NotCondition(
             new SubselectCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID), 
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), 
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_COURSE_ID), 
@@ -85,7 +85,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
             
             $conditions[] = new NotCondition(
                 new SubselectCondition(
-                    new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID), 
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), 
                     new PropertyConditionVariable(
                         CourseEntityRelation::class,
                         CourseEntityRelation::PROPERTY_COURSE_ID), 

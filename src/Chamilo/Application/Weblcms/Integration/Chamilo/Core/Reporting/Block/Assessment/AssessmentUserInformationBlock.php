@@ -72,7 +72,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $conditions[] = parent::get_assessment_attempts_condition();
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
         
         return new AndCondition($conditions);

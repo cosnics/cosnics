@@ -36,7 +36,7 @@ class TabDeleteComponent extends Manager
             JsonAjaxResult::not_allowed();
         }
         
-        $tab = DataManager::retrieve_by_id(Tab::class_name(), intval($this->getPostDataValue(self::PARAM_TAB)));
+        $tab = DataManager::retrieve_by_id(Tab::class, intval($this->getPostDataValue(self::PARAM_TAB)));
 
         if(!$tab instanceof Tab)
         {

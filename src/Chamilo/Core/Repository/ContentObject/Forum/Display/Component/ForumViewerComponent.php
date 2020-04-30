@@ -244,7 +244,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $child->get_ref());
             $child->set_ref($contentObject);
 
-            if ($contentObject->get_type() == ForumTopic::class_name())
+            if ($contentObject->get_type() == ForumTopic::class)
             {
                 $this->topics[] = $child;
             }
@@ -483,7 +483,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderSubforumLastPost(ComplexForum $subforum)
     {
-        $lastPost = DataManager::retrieve_by_id(ForumPost::class_name(), $subforum->get_ref()->get_last_post());
+        $lastPost = DataManager::retrieve_by_id(ForumPost::class, $subforum->get_ref()->get_last_post());
 
         $isLocked = ($subforum->get_ref()->is_locked() &&
              (! $this->isForumManager($this->get_user()) || ! $this->get_user()->is_platform_admin() ||
@@ -522,7 +522,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $lastPost->get_user_id());
 
             if ($user instanceof User)
@@ -614,7 +614,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderTopicLastPost(ComplexForumTopic $topic)
     {
-        $lastPost = DataManager::retrieve_by_id(ForumPost::class_name(), $topic->get_ref()->get_last_post());
+        $lastPost = DataManager::retrieve_by_id(ForumPost::class, $topic->get_ref()->get_last_post());
 
         $isLocked = $topic->get_ref()->is_locked() && (! $this->get_user()->is_platform_admin() ||
              ! ($this->get_user_id() == $topic->get_ref()->get_owner_id()));
@@ -821,7 +821,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $this->getPublicationButton(
                     Translation::get('NewTopic'),
                     new FontAwesomeGlyph('plus'),
-                    array(ForumTopic::class_name()),
+                    array(ForumTopic::class),
                     $publishParameters,
                     array(),
                     'btn-primary'));
@@ -837,7 +837,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $this->getPublicationButton(
                         Translation::get('NewSubForum'),
                         new FontAwesomeGlyph('plus'),
-                        array(Forum::class_name()),
+                        array(Forum::class),
                         $publishParameters));
             }
 

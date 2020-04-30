@@ -25,7 +25,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
             new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable(0));
         $group = DataManager::retrieves(
-            Group::class_name(),
+            Group::class,
             new DataClassRetrievesParameters(
                 $condition,
                 1,
@@ -58,7 +58,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
             new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentId));
         $groups = DataManager::retrieves(
-            Group::class_name(),
+            Group::class,
             new DataClassRetrievesParameters(
                 $condition,
                 null,

@@ -53,19 +53,19 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        Instance::class_name(),
+                        Instance::class,
                         Instance::PROPERTY_TYPE),
                     new StaticConditionVariable(
                         Manager::get_namespace(self::FORMAT)));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        Instance::class_name(),
+                        Instance::class,
                         Instance::PROPERTY_ENABLED),
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
                 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                    Instance::class_name(),
+                    Instance::class,
                     new DataClassRetrievesParameters($condition));
                 
                 $external_repository = $external_repositories->next_result();
@@ -108,18 +108,18 @@ class VimeoContentObjectImportController extends ContentObjectImportController
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Instance::class_name(),
+                Instance::class,
                 Instance::PROPERTY_TYPE),
             new StaticConditionVariable(Manager::get_namespace(self::FORMAT)));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Instance::class_name(),
+                Instance::class,
                 Instance::PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
         
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-            Instance::class_name(),
+            Instance::class,
             new DataClassRetrievesParameters($condition));
         $vimeo_connector_available = $external_repositories->size() == 1;
         

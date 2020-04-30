@@ -190,13 +190,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $properties = new DataClassProperties(
                 array(
                     new PropertiesConditionVariable(
-                        Course::class_name())));
+                        Course::class)));
             
             $parameters = new RecordRetrievesParameters(
                 $properties, 
                 new InCondition(
                     new PropertyConditionVariable(
-                        Course::class_name(),
+                        Course::class,
                         Course::PROPERTY_ID),
                     $course_ids), 
                 null, 
@@ -204,11 +204,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            Course::class_name(),
+                            Course::class,
                             Course::PROPERTY_TITLE))));
             
             return DataManager::records(
-                Course::class_name(),
+                Course::class,
                 $parameters);
         }
         else

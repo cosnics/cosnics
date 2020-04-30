@@ -177,7 +177,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
 
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name(), true);
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class, true);
 
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
@@ -279,7 +279,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(), true
+                Assignment::class, true
             );
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
@@ -316,7 +316,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(), true
+                Assignment::class, true
             );
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
@@ -372,7 +372,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name())
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class)
             )
         );
 

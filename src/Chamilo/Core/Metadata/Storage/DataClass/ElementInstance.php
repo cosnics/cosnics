@@ -112,7 +112,7 @@ class ElementInstance extends DataClass
 
     public function getVocabulary()
     {
-        return DataManager::retrieve_by_id(Vocabulary::class_name(), $this->get_vocabulary_id());
+        return DataManager::retrieve_by_id(Vocabulary::class, $this->get_vocabulary_id());
     }
 
     /**

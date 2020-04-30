@@ -20,7 +20,7 @@ class Leave extends Event
      */
     public function getTrackerClasses()
     {
-        return array(Visit::class_name());
+        return array(Visit::class);
     }
 
     public function getType()

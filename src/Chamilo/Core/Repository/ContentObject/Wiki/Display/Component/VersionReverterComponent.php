@@ -24,7 +24,7 @@ class VersionReverterComponent extends Manager
         {
             $version_object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
-                ComplexWikiPage::class_name(), $complex_wiki_page_id
+                ComplexWikiPage::class, $complex_wiki_page_id
             );
             $wiki_page = $complex_wiki_page->get_ref_object();
 

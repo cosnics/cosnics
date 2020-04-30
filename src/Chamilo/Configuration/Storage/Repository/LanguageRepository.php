@@ -56,7 +56,7 @@ class LanguageRepository
     public function findLanguagesAsRecords()
     {
         return $this->getDataClassRepository()->records(
-            Language::class_name(),
+            Language::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Language::class)))));
     }
@@ -67,6 +67,6 @@ class LanguageRepository
      */
     public function clearLanguageCache()
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Language::class_name());
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Language::class);
     }
 }

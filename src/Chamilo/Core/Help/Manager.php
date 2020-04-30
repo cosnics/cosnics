@@ -46,7 +46,7 @@ abstract class Manager extends Application
 
     public function count_help_items($condition)
     {
-        return DataManager::count(HelpItem::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(HelpItem::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class Manager extends Application
     public function retrieve_help_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            HelpItem::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            HelpItem::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

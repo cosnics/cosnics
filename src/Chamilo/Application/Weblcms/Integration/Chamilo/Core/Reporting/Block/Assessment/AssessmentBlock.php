@@ -75,14 +75,14 @@ abstract class AssessmentBlock extends ToolBlock
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication_id)
         );
 
         if ($user_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+                new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id)
             );
         }
@@ -90,7 +90,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class_name(), new DataClassRetrievesParameters($condition)
+            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
         );
     }
 
@@ -219,7 +219,7 @@ abstract class AssessmentBlock extends ToolBlock
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID
+                    QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID
                 ), new StaticConditionVariable($question_cid)
             );
         }
@@ -233,7 +233,7 @@ abstract class AssessmentBlock extends ToolBlock
 
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID
+                    QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID
                 ), $assessment_attempt_ids
             );
         }
@@ -241,7 +241,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            QuestionAttempt::class_name(), new DataClassRetrievesParameters($condition)
+            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
         );
     }
 

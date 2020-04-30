@@ -60,14 +60,14 @@ class RepositoryImplementationCategoryItem extends Item
         if (!isset($this->children))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT),
+                new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id())
             );
             $parameters = new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT))
+                new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))
             );
-            $items = DataManager::retrieves(Item::class_name(), $parameters);
+            $items = DataManager::retrieves(Item::class, $parameters);
             $this->children = $items->as_array();
         }
 
@@ -81,7 +81,7 @@ class RepositoryImplementationCategoryItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }
 
     public function has_children()

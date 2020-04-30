@@ -20,6 +20,6 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getEntityType()
     {
-        return ExternalCalendar::class_name();
+        return ExternalCalendar::class;
     }
 }

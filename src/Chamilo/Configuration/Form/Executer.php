@@ -72,13 +72,13 @@ class Executer
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION), 
             new StaticConditionVariable($this->application->context()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME), 
             new StaticConditionVariable($this->name));
         $condition = new AndCondition($conditions);
         
-        return DataManager::retrieve(Instance::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Instance::class, new DataClassRetrieveParameters($condition));
     }
 }

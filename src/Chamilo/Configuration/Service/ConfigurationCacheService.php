@@ -70,7 +70,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         $settings = $this->getConfigurationFileSettings();
 
         $settingObjects = DataManager::records(
-            Setting::class_name(),
+            Setting::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Setting::class)))));
 
@@ -99,7 +99,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     {
         $registrations = array();
         $registrationsObjects = DataManager::records(
-            Registration::class_name(),
+            Registration::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Registration::class)))));
 
@@ -137,7 +137,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     {
         $languages = array();
         $languageObjects = DataManager::records(
-            Language::class_name(),
+            Language::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Language::class)))));
 

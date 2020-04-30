@@ -38,11 +38,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $creation_date_conditions = array();
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE), 
                 InequalityCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))));
             $creation_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE), 
                 InequalityCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($creation_date_conditions);
@@ -52,14 +52,14 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             if ($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                    new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE), 
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_FROM_DATE))));
             }
             elseif ($filter_data->get_start_date(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_START_DATE), 
+                    new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE), 
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_start_date(FilterData::FILTER_TO_DATE))));
             }
@@ -70,11 +70,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $modification_date_conditions = array();
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE), 
                 InequalityCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_end_date(FilterData::FILTER_FROM_DATE))));
             $modification_date_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE), 
                 InequalityCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable(strtotime($filter_data->get_end_date(FilterData::FILTER_TO_DATE))));
             $conditions[] = new AndCondition($modification_date_conditions);
@@ -84,14 +84,14 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             if ($filter_data->get_end_date(FilterData::FILTER_FROM_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                    new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE), 
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_end_date(FilterData::FILTER_FROM_DATE))));
             }
             elseif ($filter_data->get_end_date(FilterData::FILTER_TO_DATE))
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_END_DATE), 
+                    new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE), 
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable(strtotime($filter_data->get_end_date(FilterData::FILTER_TO_DATE))));
             }
@@ -107,7 +107,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             }
             
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CalendarEvent::class_name(), CalendarEvent::PROPERTY_FREQUENCY), 
+                new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_FREQUENCY), 
                 new StaticConditionVariable($frequency_type));
         }
         

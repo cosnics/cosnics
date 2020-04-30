@@ -41,7 +41,7 @@ class GranterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
+                $request = DataManager::retrieve_by_id(Request::class, (int) $id);
 
                 if (!$this->getRightsService()->isUserIdentifierTargetForUser(
                     $request->get_user_id(), $this->getUser()

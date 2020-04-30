@@ -20,7 +20,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_valid_parameters()
     {
-        $data_class_mock = $this->createMock(DataClass::class_name());
+        $data_class_mock = $this->createMock(DataClass::class);
         $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, $method_mapping);
@@ -45,7 +45,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_invalid_context()
     {
-        $data_class_mock = $this->createMock(DataClass::class_name());
+        $data_class_mock = $this->createMock(DataClass::class);
         $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, null, $method_mapping);
@@ -58,7 +58,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_empty_method_mapping()
     {
-        $data_class_mock = $this->createMock(DataClass::class_name());
+        $data_class_mock = $this->createMock(DataClass::class);
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, array());
         
@@ -70,7 +70,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_constructor_with_invalid_method_mapping()
     {
-        $data_class_mock = $this->createMock(DataClass::class_name());
+        $data_class_mock = $this->createMock(DataClass::class);
         $method_mapping = array('test' => 'delete_method');
         
         new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, $method_mapping);
@@ -107,7 +107,7 @@ class ImplementationNotifierTest extends Test
      */
     public function test_event_notification_with_unmapped_method()
     {
-        $data_class_mock = $this->createMock(DataClass::class_name());
+        $data_class_mock = $this->createMock(DataClass::class);
         $method_mapping = array(ImplementationNotifierDataClassListener::BEFORE_DELETE => 'delete_method');
         
         $implementation_notifier = new ImplementationNotifierDataClassListener(
@@ -156,7 +156,7 @@ class ImplementationNotifierTest extends Test
             'libraries\storage\ImplementationNotifierDataClassListener', 
             array('get_implementation_packages'), 
             array(
-                $this->createMock(DataClass::class_name()),
+                $this->createMock(DataClass::class),
                 'libraries\test\implementation_notifier', 
                 array($event => $event_method)));
         

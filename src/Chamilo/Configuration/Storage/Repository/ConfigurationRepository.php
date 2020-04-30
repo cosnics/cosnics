@@ -61,7 +61,7 @@ class ConfigurationRepository
     public function findSettingsAsRecords()
     {
         return $this->getDataClassRepository()->records(
-            Setting::class_name(),
+            Setting::class,
             new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Setting::class)))));
     }
@@ -94,6 +94,6 @@ class ConfigurationRepository
      */
     public function clearSettingCache()
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Setting::class_name());
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Setting::class);
     }
 }

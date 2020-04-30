@@ -86,7 +86,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
                 Translation::get('Assessments')));
         
         $params = array();
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params), $assessment->get_title()));

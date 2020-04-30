@@ -269,7 +269,7 @@ class HtmlFilterRenderer extends FilterRenderer
         if ($filter_data->has_filter_property(FilterData::FILTER_USER_VIEW))
         {
             $user_view = DataManager::retrieve_by_id(
-                UserView::class_name(), $filter_data->get_filter_property(FilterData::FILTER_USER_VIEW)
+                UserView::class, $filter_data->get_filter_property(FilterData::FILTER_USER_VIEW)
             );
             if (!empty($user_view))
             {

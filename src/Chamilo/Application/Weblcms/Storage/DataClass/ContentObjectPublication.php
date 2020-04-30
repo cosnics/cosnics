@@ -165,11 +165,11 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Feedback::class_name(), Feedback::PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_id())
         );
 
-        return DataManager::deletes(Feedback::class_name(), $condition);
+        return DataManager::deletes(Feedback::class, $condition);
     }
 
     /**
@@ -275,9 +275,9 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_ID),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TOOL),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_CATEGORY_ID)
+            new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_TOOL),
+            new PropertyConditionVariable(self::class, self::PROPERTY_CATEGORY_ID)
         );
     }
 
@@ -293,7 +293,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER_INDEX);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER_INDEX);
     }
 
     /**
@@ -332,7 +332,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         if (!isset($this->publisher))
         {
             $this->publisher = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::clasS_name(), $this->get_publisher_id()
+                User::class, $this->get_publisher_id()
             );
         }
 

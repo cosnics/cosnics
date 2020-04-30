@@ -22,13 +22,13 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_allowed_types()
     {
         $allowed_types = array();
-        $allowed_types[] = BlogItem::class_name();
+        $allowed_types[] = BlogItem::class;
         return $allowed_types;
     }
 

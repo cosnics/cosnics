@@ -59,7 +59,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
             $failures = 0;
             foreach ($object_ids as $object_id)
             {
-                $ccoi = ComplexContentObjectItem::factory(GlossaryItem::class_name());
+                $ccoi = ComplexContentObjectItem::factory(GlossaryItem::class);
                 $ccoi->set_parent($this->get_root_content_object_id());
                 $ccoi->set_ref($object_id);
                 $ccoi->set_user_id($this->get_user_id());
@@ -92,6 +92,6 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
     public function get_allowed_content_object_types()
     {
-        return array(GlossaryItem::class_name());
+        return array(GlossaryItem::class);
     }
 }

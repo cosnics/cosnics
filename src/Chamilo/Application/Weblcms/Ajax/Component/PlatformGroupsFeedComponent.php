@@ -183,7 +183,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         return DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
                 array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )

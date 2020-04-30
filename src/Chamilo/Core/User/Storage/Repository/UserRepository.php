@@ -258,7 +258,7 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieve(
-            User::class_name(), new DataClassRetrieveParameters(new OrCondition($conditions))
+            User::class, new DataClassRetrieveParameters(new OrCondition($conditions))
         );
     }
 

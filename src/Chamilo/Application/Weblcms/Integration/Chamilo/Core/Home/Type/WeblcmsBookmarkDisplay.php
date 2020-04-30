@@ -88,7 +88,7 @@ class WeblcmsBookmarkDisplay extends Block implements
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Bookmark::class_name(), Bookmark::PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Bookmark::class, Bookmark::PROPERTY_APPLICATION), 
             new StaticConditionVariable(Manager::package()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID), 
@@ -98,7 +98,7 @@ class WeblcmsBookmarkDisplay extends Block implements
         $parameters = new DataClassRetrievesParameters($condition);
         
         $bookmarks_resultset = DataManager::retrieve_active_content_objects(
-            Bookmark::class_name(), 
+            Bookmark::class,
             $parameters);
         
         return $bookmarks_resultset;

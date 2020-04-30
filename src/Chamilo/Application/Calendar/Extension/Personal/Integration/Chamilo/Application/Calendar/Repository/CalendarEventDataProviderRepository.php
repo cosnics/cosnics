@@ -78,13 +78,13 @@ class CalendarEventDataProviderRepository
 
         $joins = array();
         $joins[] = new Join(
-            PublicationUser::class_name(),
+            PublicationUser::class,
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
                 new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_PUBLICATION)),
             Join::TYPE_LEFT);
         $joins[] = new Join(
-            PublicationGroup::class_name(),
+            PublicationGroup::class,
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
                 new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_PUBLICATION)),

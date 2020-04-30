@@ -26,7 +26,7 @@ class UpdaterComponent extends Manager
         
         if (isset($instance_id))
         {
-            $this->external_instance = DataManager::retrieve_by_id(Instance::class_name(), $instance_id);
+            $this->external_instance = DataManager::retrieve_by_id(Instance::class, $instance_id);
             
             $form = new InstanceForm($this, $this->external_instance);
             

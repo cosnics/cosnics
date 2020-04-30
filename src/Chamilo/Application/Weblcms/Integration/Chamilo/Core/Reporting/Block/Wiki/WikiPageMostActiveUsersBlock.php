@@ -38,7 +38,7 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
         arsort($users);
         $keys = array_keys($users);
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $keys[0]);
         
         $reporting_data->add_category(0);

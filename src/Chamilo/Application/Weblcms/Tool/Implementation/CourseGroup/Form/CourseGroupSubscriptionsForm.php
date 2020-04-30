@@ -283,7 +283,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             );
             $parameters = new DataClassRetrievesParameters($condition);
             $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class_name(), $parameters
+                User::class, $parameters
             )->as_array();
             $succes &= $this->course_group->subscribe_users($users_to_add);
 

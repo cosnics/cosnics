@@ -13,6 +13,6 @@ class ComplexGlossary extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(GlossaryItem::class_name());
+        return array(GlossaryItem::class);
     }
 }

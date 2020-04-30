@@ -171,7 +171,7 @@ class Renderer extends CourseListRenderer
 
             foreach ($courses as $course_properties)
             {
-                $course = DataClass::factory(Course::class_name(), $course_properties);
+                $course = DataClass::factory(Course::class, $course_properties);
 
                 $course_id = $course->get_id();
 

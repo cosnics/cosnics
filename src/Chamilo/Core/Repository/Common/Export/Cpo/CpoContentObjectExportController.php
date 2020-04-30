@@ -600,11 +600,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), 
+                ContentObjectInclude::class,
                 ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object->get_id()));
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class_name(), 
+            ContentObjectInclude::class,
             new DataClassRetrievesParameters($condition));
         
         if ($content_object_includes->size() > 0)
@@ -624,7 +624,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         /** @var \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance $external_instance */
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            Instance::class_name(),
+            Instance::class,
             $external_instance_id);
         
         if (! $this->has_external_instance_node($external_instance_id))

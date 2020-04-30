@@ -75,7 +75,7 @@ class AssessmentAttempt extends AbstractAttempt
     public function get_times_taken($publication, $user_id = null)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
         
         if ($user_id)
@@ -83,18 +83,18 @@ class AssessmentAttempt extends AbstractAttempt
             $conditions = array();
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID), 
+                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
             $condition = new AndCondition($conditions);
         }
         
-        return DataManager::count(self::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(self::class, new DataClassCountParameters($condition));
     }
 
     public function get_average_score($publication, $user_id = null)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
         
         if ($user_id)
@@ -102,12 +102,12 @@ class AssessmentAttempt extends AbstractAttempt
             $conditions = array();
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID), 
+                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
             $condition = new AndCondition($conditions);
         }
         
-        $trackers = DataManager::retrieves(self::class_name(), new DataClassRetrievesParameters($condition));
+        $trackers = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
         $num = $trackers->size();
         
         $total_score = 0;

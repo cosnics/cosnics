@@ -37,9 +37,9 @@ class BrowserComponent extends Manager
     private function get_table_data()
     {
         $data = array();
-        $data[] = $this->get_data(LoginTemplate::class_name());
-        $data[] = $this->get_data(DataTemplate::class_name());
-        $data[] = $this->get_data(UserTemplate::class_name());
+        $data[] = $this->get_data(LoginTemplate::class);
+        $data[] = $this->get_data(DataTemplate::class);
+        $data[] = $this->get_data(UserTemplate::class);
         return $data;
     }
 

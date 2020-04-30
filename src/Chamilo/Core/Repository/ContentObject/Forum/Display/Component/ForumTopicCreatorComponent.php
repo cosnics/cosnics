@@ -87,7 +87,7 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
             $failures = 0;
             foreach ($object_id as $key => $value)
             {
-                $cloi = ComplexContentObjectItem::factory(ForumTopic::class_name());
+                $cloi = ComplexContentObjectItem::factory(ForumTopic::class);
 
                 if ($this->get_complex_content_object_item())
                 {
@@ -104,7 +104,7 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
                 $cloi->set_display_order(
                     DataManager::select_next_display_order(
                         $cloi->get_parent(),
-                        ForumTopic::class_name()));
+                        ForumTopic::class));
 
                 if (! $cloi->create())
                 {
@@ -133,6 +133,6 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
 
     public function get_allowed_content_object_types()
     {
-        return array(ForumTopic::class_name());
+        return array(ForumTopic::class);
     }
 }

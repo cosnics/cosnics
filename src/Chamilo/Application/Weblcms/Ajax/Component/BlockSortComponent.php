@@ -39,7 +39,7 @@ class BlockSortComponent extends Manager
         $i = 1;
         foreach ($blocks as $block_id)
         {
-            $block = DataManager::retrieve_by_id(CourseModule::class_name(), $block_id);
+            $block = DataManager::retrieve_by_id(CourseModule::class, $block_id);
             $block->set_sort($i);
             $block->update();
             $i ++;

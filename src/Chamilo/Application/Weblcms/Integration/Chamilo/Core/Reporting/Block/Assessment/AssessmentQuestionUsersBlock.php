@@ -69,7 +69,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[Manager::PARAM_TEMPLATE_ID] =
-                    AssessmentQuestionAttemptsUserTemplate::class_name();
+                    AssessmentQuestionAttemptsUserTemplate::class;
                 $params[Manager::PARAM_USERS] = $user->get_id();
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
             }

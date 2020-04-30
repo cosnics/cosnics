@@ -15,7 +15,7 @@ class NoOfUsersPictureBlock extends Block
     {
         $reporting_data = new ReportingData();
         $users = DataManager::retrieves(
-            User::class_name(),
+            User::class,
             new DataClassRetrievesParameters());
         $picturetext = Translation::get('Picture');
         $nopicturetext = Translation::get('NoPicture');

@@ -42,7 +42,7 @@ class DeleterComponent extends Manager
             
             foreach ($vocabulary_ids as $vocabulary_id)
             {
-                $vocabulary = DataManager::retrieve_by_id(Vocabulary::class_name(), $vocabulary_id);
+                $vocabulary = DataManager::retrieve_by_id(Vocabulary::class, $vocabulary_id);
                 
                 if (! $vocabulary->delete())
                 {

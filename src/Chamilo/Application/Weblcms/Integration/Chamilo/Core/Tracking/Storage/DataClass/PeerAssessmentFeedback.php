@@ -32,7 +32,7 @@ class PeerAssessmentFeedback extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant(self::class . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

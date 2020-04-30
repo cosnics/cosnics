@@ -143,7 +143,7 @@ class SearcherComponent extends Manager
                     {
                         $object = $pub->get_content_object();
                         
-                        if ($object->get_type() != Introduction::class_name())
+                        if ($object->get_type() != Introduction::class)
                         {
                             $url = $this->get_url(
                                 array(

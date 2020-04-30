@@ -37,7 +37,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) $this->get_parameters()->get_user()));
                 
                 if (! $calculator->canUpload($file->get_size()))
@@ -54,7 +54,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class_name(),
+                            User::class,
                             (int) $this->get_parameters()->get_user()));
                     
                     if ($calculator->canUpload($file->get_size()))
@@ -115,7 +115,7 @@ class FileContentObjectImportController extends ContentObjectImportController
             $condition = new AndCondition($conditions);
             $parameters = new DataClassRetrievesParameters($condition);
             
-            $content_objects = DataManager::retrieve_active_content_objects(File::class_name(), $parameters);
+            $content_objects = DataManager::retrieve_active_content_objects(File::class, $parameters);
             
             if ($content_objects->size() > 0)
             {

@@ -86,7 +86,7 @@ abstract class ExternalObject
     public function get_connector()
     {
         $external_instance = DataManager::retrieve_by_id(
-            Instance::class_name(), $this->get_external_repository_id()
+            Instance::class, $this->get_external_repository_id()
         );
 
         return DataConnector::getInstance($external_instance);
@@ -281,12 +281,12 @@ abstract class ExternalObject
             $sync_conditions = array();
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    SynchronizationData::class_name(), SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID
+                    SynchronizationData::class, SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID
                 ), new StaticConditionVariable($this->get_id())
             );
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    SynchronizationData::class_name(), SynchronizationData::PROPERTY_EXTERNAL_ID
+                    SynchronizationData::class, SynchronizationData::PROPERTY_EXTERNAL_ID
                 ), new StaticConditionVariable($this->get_external_repository_id())
             );
             $sync_conditions[] = new EqualityCondition(

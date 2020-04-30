@@ -106,7 +106,7 @@ class RoleService implements RoleServiceInterface
         catch (Exception $ex)
         {
             $role = $this->createRoleByName($roleName);
-            DataClassCache::truncate(Role::class_name());
+            DataClassCache::truncate(Role::class);
             
             return $role;
         }

@@ -123,7 +123,7 @@ class Setting extends DataClass
 
     public static function get_class_name()
     {
-        return self::class_name();
+        return self::class;
     }
 
     public static function initialize(Instance $external_instance)
@@ -200,9 +200,9 @@ class Setting extends DataClass
     public static function load($external_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
-        $settings = DataManager::retrieves(self::class_name(), new DataClassRetrievesParameters($condition));
+        $settings = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
         
         while ($setting = $settings->next_result())
         {

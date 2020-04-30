@@ -16,7 +16,7 @@ class LpHotpotatoesSaveScoreComponent extends Manager
         $score = Request::post('score');
 
         $attempt = DataManager::retrieve_by_id(
-            LearningPathTreeNodeAttempt::class_name(),
+            LearningPathTreeNodeAttempt::class,
             $id);
 
         if ($attempt instanceof LearningPathTreeNodeAttempt)

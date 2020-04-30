@@ -54,8 +54,8 @@ abstract class Manager extends Application
     {
         $types = array();
 
-        $types[] = UserEntity::class_name();
-        $types[] = PlatformGroupEntity::class_name();
+        $types[] = UserEntity::class;
+        $types[] = PlatformGroupEntity::class;
 
         return $types;
     }
@@ -65,16 +65,16 @@ abstract class Manager extends Application
         switch ($type)
         {
             case UserEntity::ENTITY_TYPE :
-                $class = UserEntity::class_name();
+                $class = UserEntity::class;
                 break;
             case PlatformGroupEntity::ENTITY_TYPE :
-                $class = PlatformGroupEntity::class_name();
+                $class = PlatformGroupEntity::class;
                 break;
             case CourseCategoryEntity::ENTITY_TYPE :
-                $class = CourseCategoryEntity::class_name();
+                $class = CourseCategoryEntity::class;
                 break;
             case CourseEntity::ENTITY_TYPE :
-                $class = CourseEntity::class_name();
+                $class = CourseEntity::class;
                 break;
         }
 
@@ -83,16 +83,16 @@ abstract class Manager extends Application
             switch ($type)
             {
                 case UserEntity::ENTITY_TYPE :
-                    $class = UserEntityHelper::class_name();
+                    $class = UserEntityHelper::class;
                     break;
                 case PlatformGroupEntity::ENTITY_TYPE :
-                    $class = PlatformGroupEntityHelper::class_name();
+                    $class = PlatformGroupEntityHelper::class;
                     break;
                 case CourseCategoryEntity::ENTITY_TYPE :
-                    $class = CourseCategoryEntityHelper::class_name();
+                    $class = CourseCategoryEntityHelper::class;
                     break;
                 case CourseEntity::ENTITY_TYPE :
-                    $class = CourseEntityHelper::class_name();
+                    $class = CourseEntityHelper::class;
                     break;
             }
         }
@@ -218,8 +218,8 @@ abstract class Manager extends Application
     {
         $types = array();
 
-        $types[] = CourseEntity::class_name();
-        $types[] = CourseCategoryEntity::class_name();
+        $types[] = CourseEntity::class;
+        $types[] = CourseCategoryEntity::class;
 
         return $types;
     }

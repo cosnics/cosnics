@@ -79,6 +79,6 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
 
     public function get_allowed_content_object_types()
     {
-        return array(Introduction::class_name());
+        return array(Introduction::class);
     }
 }

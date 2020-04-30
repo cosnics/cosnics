@@ -42,7 +42,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_locked()
@@ -204,9 +204,9 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $this->set_last_post($lastpostid);
             if (!($lastpostid == 0))
             {
-                $lastpostt = DataManager::retrieve_by_id(ForumPost::class_name(), $lastpostid);
+                $lastpostt = DataManager::retrieve_by_id(ForumPost::class, $lastpostid);
 
-                $lasttop = DataManager::retrieve_by_id(ForumTopic::class_name(), $lastpostt->get_forum_topic_id());
+                $lasttop = DataManager::retrieve_by_id(ForumTopic::class, $lastpostt->get_forum_topic_id());
 
                 if ($is_parent_forum && $lastpostistopic == false)
                 {
@@ -342,7 +342,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     public function get_allowed_types()
     {
-        return array(Forum::class_name(), ForumTopic::class_name());
+        return array(Forum::class, ForumTopic::class);
     }
 
     /**
@@ -508,7 +508,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
                 $item->get_ref()
             );
 
-            if ($object->get_type() == Forum::class_name())
+            if ($object->get_type() == Forum::class)
             {
                 $this->set_total_topics($this->get_total_topics() - $object->get_total_topics());
             }

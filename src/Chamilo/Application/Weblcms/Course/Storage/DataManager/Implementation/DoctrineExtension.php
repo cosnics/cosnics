@@ -107,7 +107,7 @@ class DoctrineExtension
         $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE));
 
         $query_builder = $this->process_group_by($query_builder, $group_by);
-        $query_builder = $this->process_order_by($query_builder, User::class_name(), $order_property);
+        $query_builder = $this->process_order_by($query_builder, User::class, $order_property);
         $query_builder = $this->process_limit($query_builder, $count, $offset);
 
         $sql .= substr($query_builder->getSQL(), 7);
@@ -179,7 +179,7 @@ class DoctrineExtension
     protected function build_basic_sql_all_course_users($properties, $course_id, $condition)
     {
         $query_builder = $this->database->get_connection()->createQueryBuilder();
-        $query_builder = $this->process_data_class_properties($query_builder, User::class_name(), $properties);
+        $query_builder = $this->process_data_class_properties($query_builder, User::class, $properties);
         
         $sql = $query_builder->getSQL();
 
@@ -213,7 +213,7 @@ class DoctrineExtension
         
         $joins->add(
             new Join(
-                Group::class_name(), 
+                Group::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), 
                     new PropertyConditionVariable(
@@ -281,7 +281,7 @@ class DoctrineExtension
         
         $joins->add(
             new Join(
-                User::class_name(), 
+                User::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID), 
                     new PropertyConditionVariable(
@@ -367,7 +367,7 @@ class DoctrineExtension
             
             $joins->add(
                 new Join(
-                    User::class_name(), 
+                    User::class,
                     new EqualityCondition(
                         new PropertyConditionVariable(User::class, User::PROPERTY_ID), 
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID))));
@@ -386,7 +386,7 @@ class DoctrineExtension
             $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
             
             return DataManager::getInstance()->build_records_sql(
-                Group::class_name(), 
+                Group::class,
                 $parameters);
         }
     }

@@ -41,7 +41,7 @@ class AssessmentsBlock extends AssessmentBlock
         $reporting_data->set_rows($rows);
 
         $course_id = $this->getCourseId();
-        $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true);
+        $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true);
 
         $count = 1;
         $glyph = new FontAwesomeGlyph('chart-pie');
@@ -66,7 +66,7 @@ class AssessmentsBlock extends AssessmentBlock
         while ($pub = $pub_resultset->next_result())
         {
             $params = $this->get_parent()->get_parameters();
-            $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+            $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
             $params[Manager::PARAM_PUBLICATION] = $pub->get_id();
             $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
 

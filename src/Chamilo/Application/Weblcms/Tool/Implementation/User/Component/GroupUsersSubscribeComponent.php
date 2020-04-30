@@ -87,7 +87,7 @@ class GroupUsersSubscribeComponent extends Manager
         }
 
         $groups = DataManager::retrieves(
-            Group::class_name(),
+            Group::class,
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),

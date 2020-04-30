@@ -37,7 +37,7 @@ class ColumnDeleteComponent extends Manager
         }
         
         $column = DataManager::retrieve_by_id(
-            Column::class_name(), 
+            Column::class,
             intval($this->getPostDataValue(self::PARAM_COLUMN)));
         
         if ($column->getUserId() == $userId)

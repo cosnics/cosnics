@@ -254,7 +254,7 @@ class Basic extends Renderer
 
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
-        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class);
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -368,7 +368,7 @@ class Basic extends Renderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class);
 
         foreach ($tabs as $tabKey => $tab)
         {

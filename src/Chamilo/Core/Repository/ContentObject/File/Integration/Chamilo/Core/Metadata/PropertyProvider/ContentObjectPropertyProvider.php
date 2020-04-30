@@ -23,7 +23,7 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getEntityType()
     {
-        return File::class_name();
+        return File::class;
     }
 
     /**

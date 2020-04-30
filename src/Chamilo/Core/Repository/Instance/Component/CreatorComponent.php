@@ -161,11 +161,11 @@ class CreatorComponent extends Manager
             }
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TYPE),
+                new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TYPE),
                 new StaticConditionVariable($active_manager->get_context())
             );
             $parameters = new DataClassCountParameters($condition);
-            $count = DataManager::count(Instance::class_name(), $parameters);
+            $count = DataManager::count(Instance::class, $parameters);
 
             if (!$multiple && $count > 0)
             {

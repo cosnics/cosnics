@@ -18,7 +18,7 @@ class CountryBlock extends Block
         $tracker = new Country();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                Country::class_name(),
+                Country::class,
                 Country::PROPERTY_TYPE),
             new StaticConditionVariable('country'));
         $description[0] = Translation::get('Countries');

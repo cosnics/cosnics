@@ -248,7 +248,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     public static function get_allowed_types()
     {
-        return array(LearningPath::class_name());
+        return array(LearningPath::class);
     }
 
     /**

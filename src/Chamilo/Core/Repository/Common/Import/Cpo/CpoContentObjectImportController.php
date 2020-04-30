@@ -160,7 +160,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_external_instance_id_cache_id($old_external_instance_id, $new_external_instance_id)
     {
         $this->set_cache_id(
-            Instance::class_name(),
+            Instance::class,
             Instance::PROPERTY_ID,
             $old_external_instance_id, 
             $new_external_instance_id);
@@ -211,7 +211,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function get_external_instance_id_cache_id($old_external_instance_id)
     {
         return $this->get_cache_id(
-            Instance::class_name(),
+            Instance::class,
             Instance::PROPERTY_ID,
             $old_external_instance_id);
     }
@@ -486,12 +486,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
                     $external_instance_node = $external_instance_node_list->item(0);
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION), 
+                        new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION), 
                         new StaticConditionVariable($external_instance_node->getAttribute('type')));
                     $condition = new AndCondition($conditions);
                     
                     $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                        Instance::class_name(),
+                        Instance::class,
                         new DataClassRetrievesParameters($condition));
                     while ($external_instance = $external_instances->next_result())
                     {

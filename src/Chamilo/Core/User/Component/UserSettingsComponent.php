@@ -93,7 +93,7 @@ class UserSettingsComponent extends ProfileComponent
 
         $setting_contexts = DataManager::retrieve_setting_contexts(
             new EqualityCondition(
-                new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_SETTING),
+                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_SETTING),
                 new StaticConditionVariable(1)
             )
         );

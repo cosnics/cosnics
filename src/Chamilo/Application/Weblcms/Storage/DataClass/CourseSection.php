@@ -282,7 +282,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -292,6 +292,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_ID));
+        return array(new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID));
     }
 }

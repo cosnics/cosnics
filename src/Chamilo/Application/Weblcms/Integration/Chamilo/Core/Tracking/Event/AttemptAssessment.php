@@ -21,6 +21,6 @@ class AttemptAssessment extends Event
     public function getTrackerClasses()
     {
         return array(
-            AssessmentAttempt::class_name());
+            AssessmentAttempt::class);
     }
 }

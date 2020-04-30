@@ -29,20 +29,20 @@ class ContentObjectTemplateRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                TemplateRegistration::class_name(), TemplateRegistration::PROPERTY_CONTENT_OBJECT_TYPE
+                TemplateRegistration::class, TemplateRegistration::PROPERTY_CONTENT_OBJECT_TYPE
             ),
             new StaticConditionVariable($contentObjectType)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                TemplateRegistration::class_name(), TemplateRegistration::PROPERTY_NAME
+                TemplateRegistration::class, TemplateRegistration::PROPERTY_NAME
             ),
             new StaticConditionVariable($templateName)
         );
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(TemplateRegistration::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(TemplateRegistration::class, new DataClassRetrieveParameters($condition));
     }
 }

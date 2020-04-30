@@ -243,7 +243,7 @@ class ViewerComponent extends Manager implements TableSupport
             $condition = new OrCondition($or_conditions);
 
             $users = DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters($condition)
+                User::class, new DataClassRetrievesParameters($condition)
             );
 
             while ($user = $users->next_result())

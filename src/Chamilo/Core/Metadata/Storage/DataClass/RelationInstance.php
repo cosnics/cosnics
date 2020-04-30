@@ -160,7 +160,7 @@ class RelationInstance extends DataClass
     {
         if (! isset($this->relation))
         {
-            $this->relation = DataManager::retrieve_by_id(Relation::class_name(), $this->get_relation_id());
+            $this->relation = DataManager::retrieve_by_id(Relation::class, $this->get_relation_id());
         }
         
         return $this->relation;

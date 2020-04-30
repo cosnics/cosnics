@@ -70,7 +70,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
         
         $params = array();
-        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $assessment->get_title()));
@@ -82,7 +82,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
         $filters = array(Manager::PARAM_USERS);
         
         $params = array();
-        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionUsersTemplate::class_name();
+        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionUsersTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $question->get_ref_object()->get_title()));

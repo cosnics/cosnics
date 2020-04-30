@@ -150,7 +150,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         {
 
             $course_user_category = DataManager::retrieve_by_id(
-                CourseUserCategory::class_name(),
+                CourseUserCategory::class,
                 $user_course_category_id);
 
             if ($course_user_category)

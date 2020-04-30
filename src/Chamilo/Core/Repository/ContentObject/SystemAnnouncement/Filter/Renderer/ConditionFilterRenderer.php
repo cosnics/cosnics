@@ -35,7 +35,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         if ($filter_data->has_filter_property(FilterData::FILTER_ICON))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(SystemAnnouncement::class_name(), SystemAnnouncement::PROPERTY_ICON), 
+                new PropertyConditionVariable(SystemAnnouncement::class, SystemAnnouncement::PROPERTY_ICON), 
                 new StaticConditionVariable($filter_data->get_filter_property(FilterData::FILTER_ICON)));
         }
         

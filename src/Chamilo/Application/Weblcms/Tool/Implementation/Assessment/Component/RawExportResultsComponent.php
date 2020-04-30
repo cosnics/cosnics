@@ -92,13 +92,13 @@ class RawExportResultsComponent extends Manager
     protected function get_assessment_results()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
             new StaticConditionVariable($this->get_publication_id()));
         
         $assessment_results = array();
         
         $assessment_attempts = WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class_name(), 
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
         while ($assessment_attempt = $assessment_attempts->next_result())
         {
@@ -139,14 +139,14 @@ class RawExportResultsComponent extends Manager
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                QuestionAttempt::class_name(), 
+                QuestionAttempt::class,
                 QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID), 
             new StaticConditionVariable($assessment_attempt->get_id()));
         
         $question_results = array();
         
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class_name(), 
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
         while ($question_attempt = $question_attempts->next_result())
         {

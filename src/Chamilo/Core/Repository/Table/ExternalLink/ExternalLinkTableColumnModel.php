@@ -20,12 +20,12 @@ class ExternalLinkTableColumnModel extends DataClassTableColumnModel implements 
         $glyph = new FontAwesomeGlyph('link', array(), null, 'fas');
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION, $glyph->render()
+                Instance::class, Instance::PROPERTY_IMPLEMENTATION, $glyph->render()
             )
         );
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Instance::class_name(), Instance::PROPERTY_TITLE
+                Instance::class, Instance::PROPERTY_TITLE
             )
         );
     }

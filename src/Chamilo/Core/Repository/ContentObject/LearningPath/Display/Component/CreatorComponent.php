@@ -179,7 +179,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
     {
         if ($this->isFolderCreateMode())
         {
-            return array(Section::class_name());
+            return array(Section::class);
         }
 
         return $this->learningPath->get_allowed_types();

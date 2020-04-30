@@ -91,7 +91,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
 
                 if (!$object instanceof Portfolio)
                 {
-                    $new_object = ContentObject::factory(PortfolioItem::class_name());
+                    $new_object = ContentObject::factory(PortfolioItem::class);
                     $new_object->set_owner_id($this->get_user_id());
                     $new_object->set_title(PortfolioItem::get_type_name());
                     $new_object->set_description(PortfolioItem::get_type_name());

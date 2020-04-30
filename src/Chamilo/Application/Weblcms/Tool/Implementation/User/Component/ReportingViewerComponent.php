@@ -25,7 +25,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
             \Chamilo\Core\Reporting\Viewer\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component->set_template_by_name(
-            CourseStudentTrackerDetailTemplate::class_name());
+            CourseStudentTrackerDetailTemplate::class);
         return $component->run();
     }
 

@@ -64,7 +64,7 @@ class RightsTreeRenderer extends HtmlMenu
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->groups
         );
         $sub_groups = DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters($condition)
+            Group::class, new DataClassRetrievesParameters($condition)
         );
         while ($group = $sub_groups->next_result())
         {

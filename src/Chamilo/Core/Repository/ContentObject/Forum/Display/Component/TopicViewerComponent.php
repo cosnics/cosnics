@@ -140,7 +140,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             }
 
             $this->forumTopic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ForumTopic::class_name(), $complexForumTopic->get_ref()
+                ForumTopic::class, $complexForumTopic->get_ref()
             );
         }
 
@@ -161,7 +161,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             while ($child = $children->next_result())
             {
-                $this->forumTopicPosts[] = DataManager::retrieve_by_id(ForumPost::class_name(), $child->get_id());
+                $this->forumTopicPosts[] = DataManager::retrieve_by_id(ForumPost::class, $child->get_id());
             }
         }
 
@@ -254,11 +254,11 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             {
                 $conditions = array();
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_TITLE),
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE),
                     '*' . $query . '*', ForumPost::get_table_name(), false
                 );
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_CONTENT),
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CONTENT),
                     '*' . $query . '*', ForumPost::get_table_name(), false
                 );
 

@@ -85,8 +85,8 @@ class BrowseComponent extends Manager implements TableSupport
     {
         return $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE),
                 new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)));
     }
 }

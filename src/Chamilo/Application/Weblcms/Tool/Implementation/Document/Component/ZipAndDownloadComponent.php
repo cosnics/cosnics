@@ -111,7 +111,7 @@ class ZipAndDownloadComponent extends Manager
 
                 $subselect_condition = new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                    array(File::class_name(), Webpage::class_name()));
+                    array(File::class, Webpage::class));
 
                 $conditions[] = new SubselectCondition(
                     new PropertyConditionVariable(

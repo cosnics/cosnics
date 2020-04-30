@@ -51,7 +51,7 @@ class PlatformGroupEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            Group::class_name(), new DataClassCountParameters($condition)
+            Group::class, new DataClassCountParameters($condition)
         );
     }
 
@@ -62,7 +62,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public static function data_class_class_name()
     {
-        return Group::class_name();
+        return Group::class;
     }
 
     public static function getInstance()
@@ -256,7 +256,7 @@ class PlatformGroupEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

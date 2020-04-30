@@ -68,7 +68,7 @@ class BuilderComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID),
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_DYNAMIC_FORM_ID),
             new StaticConditionVariable($this->get_form()->get_id())
         );
     }

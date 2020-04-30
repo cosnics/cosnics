@@ -199,7 +199,7 @@ class PlatformgroupMenuRenderer extends GenericTree
         );
 
         return (DataManager::count(
-                Group::class_name(), new DataClassCountParameters($condition)
+                Group::class, new DataClassCountParameters($condition)
             ) > 0);
     }
 }

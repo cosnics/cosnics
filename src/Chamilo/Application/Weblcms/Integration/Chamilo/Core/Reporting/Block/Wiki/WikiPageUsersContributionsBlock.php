@@ -48,7 +48,7 @@ class WikiPageUsersContributionsBlock extends ToolBlock
             if ($count < 5)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) $user);
                 $reporting_data->add_category(0);
                 $reporting_data->add_data_category_row(0, Translation::get('Fullname'), $user->get_fullname());

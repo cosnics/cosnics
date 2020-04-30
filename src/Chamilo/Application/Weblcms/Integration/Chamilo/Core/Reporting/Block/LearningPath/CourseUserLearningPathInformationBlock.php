@@ -46,7 +46,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         );
         $user_id = $this->get_user_id();
 
-        $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name());
+        $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class);
 
         $params = array();
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;

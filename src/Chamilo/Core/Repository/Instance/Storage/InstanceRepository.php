@@ -31,10 +31,10 @@ class InstanceRepository
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
             new StaticConditionVariable($implementation)
         );
 
-        return DataManager::retrieve(Instance::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Instance::class, new DataClassRetrieveParameters($condition));
     }
 }

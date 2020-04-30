@@ -53,11 +53,11 @@ class BrowserComponent extends Manager
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
         $object = DataManager::retrieve_by_id(
-            Assignment::class_name(),
+            Assignment::class,
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );
 
-        $calendar_event = ContentObject::factory(CalendarEvent::class_name());
+        $calendar_event = ContentObject::factory(CalendarEvent::class);
 
         $calendar_event->set_title($object->get_title());
         $calendar_event->set_description($object->get_description());

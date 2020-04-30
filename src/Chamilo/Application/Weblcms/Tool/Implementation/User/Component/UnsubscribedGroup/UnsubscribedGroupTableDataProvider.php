@@ -19,14 +19,14 @@ class UnsubscribedGroupTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieves(
-            Group::class_name(),
+            Group::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
         return DataManager::count(
-            Group::class_name(),
+            Group::class,
             new DataClassCountParameters($condition));
     }
 }

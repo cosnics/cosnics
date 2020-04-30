@@ -30,7 +30,7 @@ class ForumUnsubscribeComponent extends Manager
         
         if ($subscribe_id)
         {
-            $subscribe = DataManager::retrieve_by_id(ForumSubscribe::class_name(), $subscribe_id);
+            $subscribe = DataManager::retrieve_by_id(ForumSubscribe::class, $subscribe_id);
             $succes = $subscribe->delete();
             if ($succes)
             {

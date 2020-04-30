@@ -1011,7 +1011,7 @@ class CourseGroupForm extends FormValidator
             while ($course_user = $course_users_drs->next_result())
             {
                 $course_users[$course_user[User::PROPERTY_ID]] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), $course_user[User::PROPERTY_ID]
+                    User::class, $course_user[User::PROPERTY_ID]
                 );
             }
         }
@@ -1059,7 +1059,7 @@ class CourseGroupForm extends FormValidator
                 foreach ($subscribed_users_drs as $user_id)
                 {
                     $subscribed_users[$user_id] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(), $user_id
+                        User::class, $user_id
                     );
                 }
             }

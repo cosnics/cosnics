@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         return $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Relation::class_name(), Relation::PROPERTY_NAME))
+            array(new PropertyConditionVariable(Relation::class, Relation::PROPERTY_NAME))
         );
     }
 }

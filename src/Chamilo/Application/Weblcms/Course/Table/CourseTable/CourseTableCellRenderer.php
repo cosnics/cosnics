@@ -81,7 +81,7 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
         {
             switch ($column->get_class_name())
             {
-                case Course::class_name() :
+                case Course::class :
                 {
                     switch ($column->get_name())
                     {

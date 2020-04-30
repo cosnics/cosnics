@@ -209,7 +209,7 @@ class ExporterComponent extends Manager
             );
 
             $groupUsers = DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters(
+                User::class, new DataClassRetrievesParameters(
                     $condition, null, null, $orderBy
                 )
             )->as_array();

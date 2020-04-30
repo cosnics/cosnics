@@ -39,7 +39,7 @@ class ColumnWidthComponent extends Manager
         $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
         $columnWidth = $this->getPostDataValue(self::PARAM_WIDTH);
         
-        $column = DataManager::retrieve_by_id(Column::class_name(), $columnId);
+        $column = DataManager::retrieve_by_id(Column::class, $columnId);
         
         if ($column->getUserId() == $userId)
         {

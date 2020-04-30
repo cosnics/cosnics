@@ -30,7 +30,7 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(Vocabulary::class_name(), $parameters);
+        return DataManager::retrieves(Vocabulary::class, $parameters);
     }
 
     /**
@@ -42,6 +42,6 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(Vocabulary::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Vocabulary::class, new DataClassCountParameters($condition));
     }
 }

@@ -90,7 +90,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
         {
             switch ($column->get_class_name())
             {
-                case Course::class_name() :
+                case Course::class :
                 {
                     switch ($column->get_name())
                     {
@@ -105,7 +105,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
 
                     break;
                 }
-                case Role::class_name() :
+                case Role::class :
                 {
                     switch ($column->get_name())
                     {

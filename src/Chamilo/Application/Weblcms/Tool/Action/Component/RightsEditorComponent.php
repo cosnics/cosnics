@@ -120,7 +120,7 @@ class RightsEditorComponent extends Manager
             case self::LOCATION_TYPE_LOCATIONS :
 
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class_name(),
+                    Course::class,
                     Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
 
                 if ($course)

@@ -169,14 +169,14 @@ class CourseFeedComponent extends AjaxManager
         }
 
         $this->course_count = DataManager::count(
-            Course::class_name(), new DataClassCountParameters($condition)
+            Course::class, new DataClassCountParameters($condition)
         );
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(),
-            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE)))
+            array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
         );
 
-        return DataManager::retrieves(Course::class_name(), $parameters);
+        return DataManager::retrieves(Course::class, $parameters);
     }
 
     public function set_course_count($course_count)

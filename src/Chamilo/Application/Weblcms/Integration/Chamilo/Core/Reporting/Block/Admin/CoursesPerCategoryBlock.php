@@ -26,14 +26,14 @@ class CoursesPerCategoryBlock extends CourseBlock
         while ($category = $categories->next_result())
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
                 new StaticConditionVariable($category->get_id()));
 
             $reporting_data->add_category($category->get_name());
             $reporting_data->add_data_category_row(
                 $category->get_name(),
                 Translation::get('count'),
-                CourseDataManager::count(Course::class_name(), new DataClassCountParameters($condition)));
+                CourseDataManager::count(Course::class, new DataClassCountParameters($condition)));
         }
 
         return $reporting_data;

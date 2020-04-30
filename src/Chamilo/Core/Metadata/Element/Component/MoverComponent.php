@@ -28,7 +28,7 @@ class MoverComponent extends Manager
         {
             $this->set_parameter(self::PARAM_ELEMENT_ID, $metadata_element_id);
             
-            $metadata_element = DataManager::retrieve_by_id(Element::class_name(), $metadata_element_id);
+            $metadata_element = DataManager::retrieve_by_id(Element::class, $metadata_element_id);
             if ($move = Request::get(Manager::PARAM_MOVE))
             {
                 $this->set_parameter(self::PARAM_MOVE, $move);

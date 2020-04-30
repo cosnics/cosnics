@@ -154,26 +154,26 @@ class RightsLocation extends NestedTreeNode
         $locked_parent_conditions = $this->get_nested_set_condition_array();
 
         $locked_parent_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LOCKED), new StaticConditionVariable(true)
+            new PropertyConditionVariable(self::class, self::PROPERTY_LOCKED), new StaticConditionVariable(true)
         );
 
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
             ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_left_value())
         );
 
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_right_value())
         );
 
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
-        $order = array(new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE)));
+        $order = array(new OrderBy(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE)));
 
         $datamanager = self::package() . '\Storage\DataManager';
 
         return $datamanager::retrieve(
-            self::class_name(), new DataClassRetrieveParameters($locked_parent_condition, $order)
+            self::class, new DataClassRetrieveParameters($locked_parent_condition, $order)
         );
     }
 
@@ -187,12 +187,12 @@ class RightsLocation extends NestedTreeNode
         $conditions = parent::get_nested_set_condition_array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_TYPE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_TREE_TYPE),
             new StaticConditionVariable($this->get_tree_type())
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TREE_IDENTIFIER),
+            new PropertyConditionVariable(self::class, self::PROPERTY_TREE_IDENTIFIER),
             new StaticConditionVariable($this->get_tree_identifier())
         );
 

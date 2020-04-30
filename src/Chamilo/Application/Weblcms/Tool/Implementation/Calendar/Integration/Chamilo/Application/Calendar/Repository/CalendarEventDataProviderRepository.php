@@ -28,7 +28,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
      */
     protected function getContentObjectClassName()
     {
-        return CalendarEvent::class_name();
+        return CalendarEvent::class;
     }
 
     /**

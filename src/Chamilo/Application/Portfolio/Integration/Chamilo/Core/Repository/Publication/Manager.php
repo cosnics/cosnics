@@ -178,7 +178,7 @@ class Manager implements PublicationInterface
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
             new StaticConditionVariable($publication_id));
         $record = self::record(
-            Publication::class_name(),
+            Publication::class,
             new RecordRetrieveParameters(
                 new DataClassProperties(new PropertiesConditionVariable(Publication::class)),
                 $condition));

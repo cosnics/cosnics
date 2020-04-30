@@ -31,10 +31,10 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     public function findRoleByName($roleName)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE),
+            new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE),
             new StaticConditionVariable($roleName));
 
-        return DataManager::retrieve(Role::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Role::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -50,7 +50,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
     {
         return DataManager::retrieves(
-            Role::class_name(),
+            Role::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $orderBy))->as_array();
     }
 
@@ -63,6 +63,6 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
      */
     public function countRoles(Condition $condition = null)
     {
-        return DataManager::count(Role::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Role::class, new DataClassCountParameters($condition));
     }
 }

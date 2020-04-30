@@ -312,42 +312,42 @@ class ContentObject extends CompositeDataClass
         // {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
             ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
                 ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
 
-        return DataManager::count(ContentObjectInclude::class_name(), $parameters);
+        return DataManager::count(ContentObjectInclude::class, $parameters);
     }
 
     public function count_includes()
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
             ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
                 ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
 
-        return DataManager::count(ContentObjectInclude::class_name(), $parameters);
+        return DataManager::count(ContentObjectInclude::class, $parameters);
     }
 
     public function count_parents()
@@ -619,11 +619,11 @@ class ContentObject extends CompositeDataClass
         // Delete link with workspaces
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class_name(), WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
+                WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_object_number())
         );
 
-        if (!DataManager::deletes(WorkspaceContentObjectRelation::class_name(), $condition))
+        if (!DataManager::deletes(WorkspaceContentObjectRelation::class, $condition))
         {
             return false;
         }
@@ -754,18 +754,18 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
             ), new StaticConditionVariable($id)
         );
         $condition = new AndCondition($conditions);
 
         $include = DataManager::retrieve(
-            ContentObjectInclude::class_name(), new DataClassRetrieveParameters($condition)
+            ContentObjectInclude::class, new DataClassRetrieveParameters($condition)
         );
 
         if ($include instanceof ContentObjectInclude)
@@ -1246,14 +1246,14 @@ class ContentObject extends CompositeDataClass
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
-            ContentObjectInclude::class_name(), new EqualityCondition(
+            ContentObjectInclude::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
                 ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
@@ -1277,14 +1277,14 @@ class ContentObject extends CompositeDataClass
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
                 ), new StaticConditionVariable($this->get_id())
             );
 
             $join = new Join(
-                ContentObjectInclude::class_name(), new EqualityCondition(
+                ContentObjectInclude::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
+                        ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
                     ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
                 )
             );
@@ -1347,7 +1347,7 @@ class ContentObject extends CompositeDataClass
         if (!isset($this->owner))
         {
             $this->owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_owner_id()
+                User::class, (int) $this->get_owner_id()
             );
         }
 
@@ -1475,7 +1475,7 @@ class ContentObject extends CompositeDataClass
         {
             $sync_condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    SynchronizationData::class_name(), SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
+                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
                 ), new StaticConditionVariable($this->get_id())
             );
 
@@ -1811,17 +1811,17 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
             ), new StaticConditionVariable($object_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectInclude::class_name(), new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(ContentObjectInclude::class, new DataClassCountParameters($condition)) > 0;
     }
 
     /**
@@ -2184,11 +2184,11 @@ class ContentObject extends CompositeDataClass
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
-        if (!DataManager::deletes(ContentObjectInclude::class_name(), $condition))
+        if (!DataManager::deletes(ContentObjectInclude::class, $condition))
         {
             return false;
         }

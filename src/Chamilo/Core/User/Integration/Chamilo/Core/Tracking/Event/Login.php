@@ -26,12 +26,12 @@ class Login extends Event
     public function getTrackerClasses()
     {
         return array(
-            LoginLogout::class_name(),
-            Browser::class_name(),
-            Country::class_name(),
-            OperatingSystem::class_name(),
-            Provider::class_name(),
-            Referrer::class_name());
+            LoginLogout::class,
+            Browser::class,
+            Country::class,
+            OperatingSystem::class,
+            Provider::class,
+            Referrer::class);
     }
 
     public function getType()

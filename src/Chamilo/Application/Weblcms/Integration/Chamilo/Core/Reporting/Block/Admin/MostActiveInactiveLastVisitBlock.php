@@ -16,7 +16,7 @@ class MostActiveInactiveLastVisitBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         
-        $course_count = $courses = CourseDataManager::count(Course::class_name());
+        $course_count = $courses = CourseDataManager::count(Course::class);
         
         $reporting_data->set_categories(
             array(

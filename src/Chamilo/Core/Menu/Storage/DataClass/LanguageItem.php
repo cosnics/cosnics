@@ -38,7 +38,7 @@ class LanguageItem extends Item
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }
 
     /**

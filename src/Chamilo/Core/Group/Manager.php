@@ -307,7 +307,7 @@ abstract class Manager extends Application
     public function retrieve_groups($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

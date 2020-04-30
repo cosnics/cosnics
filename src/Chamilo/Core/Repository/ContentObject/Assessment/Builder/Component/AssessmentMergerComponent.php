@@ -69,7 +69,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         else
         {
             $selected_assessment = DataManager::retrieve_by_id(
-                Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+                Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
             );
             $display = ContentObjectRenditionImplementation::launch(
                 $selected_assessment, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
@@ -121,7 +121,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
 
     public function get_allowed_content_object_types()
     {
-        return array(Assessment::class_name());
+        return array(Assessment::class);
     }
 
     public function get_condition($selected_assessment)
@@ -159,7 +159,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
     public function get_table_condition($table_class_name)
     {
         $selected_assessment = DataManager::retrieve_by_id(
-            Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+            Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
         );
 
         return $this->get_condition($selected_assessment);

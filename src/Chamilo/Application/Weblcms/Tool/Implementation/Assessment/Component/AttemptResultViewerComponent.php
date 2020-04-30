@@ -72,11 +72,11 @@ class AttemptResultViewerComponent extends Manager
         $assessment_attempt_id = Request::get(self::PARAM_USER_ASSESSMENT);
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID),
             new StaticConditionVariable($assessment_attempt_id));
 
         $this->assessment_attempt = DataManager::retrieve(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrieveParameters($condition));
 
         if (! $this->assessment_attempt)
@@ -179,11 +179,11 @@ class AttemptResultViewerComponent extends Manager
         $question_attempts = array();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             new StaticConditionVariable($this->assessment_attempt->get_id()));
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         while ($question_attempt = $question_attempts_result_set->next_result())
@@ -230,20 +230,20 @@ class AttemptResultViewerComponent extends Manager
         if ($question_attempt_id)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ID),
+                new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ID),
                 new StaticConditionVariable($question_attempt_id));
         }
         else
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    QuestionAttempt::class_name(),
+                    QuestionAttempt::class,
                     QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
                 new StaticConditionVariable($this->assessment_attempt->get_id()));
         }
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         $results = array();
@@ -272,17 +272,17 @@ class AttemptResultViewerComponent extends Manager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             new StaticConditionVariable($this->assessment_attempt->get_id()));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
             new StaticConditionVariable($question_cid));
 
         $condition = new AndCondition($conditions);
 
         $question_attempt = DataManager::retrieve(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrieveParameters($condition));
 
         $question_attempt->set_score($score);

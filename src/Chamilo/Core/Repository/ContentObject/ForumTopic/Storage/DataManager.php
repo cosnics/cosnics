@@ -82,17 +82,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $creation_date_order)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
         $order_by = array();
         $order_by[] = new OrderBy(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_CREATION_DATE),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
             $creation_date_order);
 
         $parameters = new DataClassRetrieveParameters($condition, $order_by);
 
-        return self::retrieve(ForumPost::class_name(), $parameters);
+        return self::retrieve(ForumPost::class, $parameters);
     }
 
     /**
@@ -106,7 +106,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_forum_post_date($forum_post_id)
     {
-        $post = self::retrieve_by_id(ForumPost::class_name(), $forum_post_id);
+        $post = self::retrieve_by_id(ForumPost::class, $forum_post_id);
 
         if (! $post)
         {
@@ -129,7 +129,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
         if ($condition)
@@ -139,7 +139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(ForumPost::class_name(), new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumPost::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -152,7 +152,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_forum_post($forum_post_id)
     {
-        return self::retrieve_by_id(ForumPost::class_name(), $forum_post_id);
+        return self::retrieve_by_id(ForumPost::class, $forum_post_id);
     }
 
     /**
@@ -164,30 +164,30 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function is_attached_to_forum_topic($forum_topic_id, $attachment_id)
     {
         $join = new Join(
-            ForumPost::class_name(),
+            ForumPost::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ForumPostAttachment::class_name(),
+                    ForumPostAttachment::class,
                     ForumPostAttachment::PROPERTY_FORUM_POST_ID),
-                new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_ID)));
+                new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_ID)));
 
         $joins = new Joins(array($join));
 
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
             new StaticConditionVariable($attachment_id));
 
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassCountParameters($condition, $joins);
 
-        return self::count(ForumPostAttachment::class_name(), $parameters) > 0;
+        return self::count(ForumPostAttachment::class, $parameters) > 0;
     }
 
     /**
@@ -199,10 +199,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_forum_topic_posts($forum_topic_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
-        return self::count(ForumPost::class_name(), new DataClassCountParameters($condition));
+        return self::count(ForumPost::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -218,16 +218,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_FORUM_TOPIC_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($topic_id));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_ID),
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_ID),
             new StaticConditionVariable($post_id));
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumPost::class_name(), new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumPost::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -250,16 +250,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_FORUM_POST_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($object->get_id()));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
             new StaticConditionVariable($attachment_id));
 
         $condition = new AndCondition($conditions);
 
-        return self::deletes(ForumPostAttachment::class_name(), $condition);
+        return self::deletes(ForumPostAttachment::class, $condition);
     }
 
     /*
@@ -269,10 +269,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_attached_objects($forum_post_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_FORUM_POST_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($forum_post_id));
 
-        return self::retrieves(ForumPostAttachment::class_name(), new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumPostAttachment::class, new DataClassRetrievesParameters($condition));
     }
 
     /*
@@ -285,16 +285,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_FORUM_POST_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($forum_post_id));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_ATTACHMENT_ID),
             new StaticConditionVariable($attachment_id));
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumPostAttachment::class_name(), new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumPostAttachment::class, new DataClassRetrieveParameters($condition));
     }
 
     /*
@@ -304,10 +304,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_forum_post_attachments($forum_post_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_FORUM_POST_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($forum_post_id));
 
-        return self::count(ForumPostAttachment::class_name(), new DataClassCountParameters($condition));
+        return self::count(ForumPostAttachment::class, new DataClassCountParameters($condition));
     }
 
     /*
@@ -319,18 +319,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $order_by = null)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumPostAttachment::class_name(), ForumPostAttachment::PROPERTY_FORUM_POST_ID),
+            new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($forum_post_id));
 
         $joins = new Joins();
 
         $joins->add(
             new Join(
-                ForumPostAttachment::class_name(),
+                ForumPostAttachment::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     new PropertyConditionVariable(
-                        ForumPostAttachment::class_name(),
+                        ForumPostAttachment::class,
                         ForumPostAttachment::PROPERTY_ATTACHMENT_ID))));
 
         $parameters = new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by, $joins);
@@ -357,20 +357,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ForumTopicSubscribe::class_name(),
+                ForumTopicSubscribe::class,
                 ForumTopicSubscribe::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
         if ($user_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ForumTopicSubscribe::class_name(), ForumTopicSubscribe::PROPERTY_USER_ID),
+                new PropertyConditionVariable(ForumTopicSubscribe::class, ForumTopicSubscribe::PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
         }
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumTopicSubscribe::class_name(), new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumTopicSubscribe::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -384,11 +384,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ForumTopicSubscribe::class_name(),
+                ForumTopicSubscribe::class,
                 ForumTopicSubscribe::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
-        return self::retrieves(ForumTopicSubscribe::class_name(), new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumTopicSubscribe::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -405,7 +405,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         foreach ($subscribeds as $subscribe)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) $subscribe->get_user_id());
             $users[$user->get_id()] = $user;
         }

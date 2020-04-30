@@ -44,7 +44,7 @@ class ForumSubscribe extends DataClass
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -98,7 +98,7 @@ class ForumSubscribe extends DataClass
         if (! isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(), 
+                User::class,
                 (int) $this->get_user_id());
         }
         return $this->user;

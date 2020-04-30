@@ -47,7 +47,7 @@ class CourseEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(Course::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Course::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -57,7 +57,7 @@ class CourseEntity implements RightsEntity
      */
     public static function data_class_class_name()
     {
-        return Course::class_name();
+        return Course::class;
     }
 
     public static function getInstance()
@@ -86,7 +86,7 @@ class CourseEntity implements RightsEntity
     public function get_element_finder_element($id)
     {
         $course = DataManager::retrieve_by_id(
-            Course::class_name(), (int) $id
+            Course::class, (int) $id
         );
 
         if (!$course)
@@ -221,6 +221,6 @@ class CourseEntity implements RightsEntity
         $condition = $this->get_condition($condition);
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(Course::class_name(), $parameters);
+        return DataManager::retrieves(Course::class, $parameters);
     }
 }

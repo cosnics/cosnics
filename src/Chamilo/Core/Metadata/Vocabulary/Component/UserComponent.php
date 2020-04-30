@@ -108,7 +108,7 @@ class UserComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID), 
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         

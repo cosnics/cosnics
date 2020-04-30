@@ -98,7 +98,7 @@ class PersonalBlogLayout extends BlogLayout
     {
         $blogItem = $complexBlogItem->get_ref_object();
         $author = DataManager::retrieve_by_id(
-            User::class_name(), (int) $blogItem->get_owner_id()
+            User::class, (int) $blogItem->get_owner_id()
         );
 
         if ($author instanceof User)

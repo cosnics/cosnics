@@ -148,7 +148,7 @@ class EventParser
 
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
             $this->getPublication()->get_publication_object(), $this->getFromDate(), $this->getToDate(),
-            Event::class_name()
+            Event::class
         );
 
         $parsedEvents = $parser->getEvents();

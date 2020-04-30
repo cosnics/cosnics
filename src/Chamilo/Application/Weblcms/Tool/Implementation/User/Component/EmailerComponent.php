@@ -32,7 +32,7 @@ class EmailerComponent extends Manager
             foreach ($ids as $id)
             {
                 $users[] = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     $id);
             }
 

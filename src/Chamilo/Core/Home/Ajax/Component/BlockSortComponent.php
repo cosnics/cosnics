@@ -40,7 +40,7 @@ class BlockSortComponent extends Manager
         $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
         parse_str($this->getPostDataValue(self::PARAM_ORDER), $blocks);
         
-        $column = DataManager::retrieve_by_id(Column::class_name(), $columnId);
+        $column = DataManager::retrieve_by_id(Column::class, $columnId);
         
         if ($column->getUserId() == $userId)
         {
@@ -48,7 +48,7 @@ class BlockSortComponent extends Manager
             
             foreach ($blocks[self::PARAM_ORDER] as $sortOrder => $blockId)
             {
-                $block = DataManager::retrieve_by_id(Block::class_name(), intval($blockId));
+                $block = DataManager::retrieve_by_id(Block::class, intval($blockId));
                 
                 if ($block)
                 {

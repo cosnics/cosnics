@@ -192,7 +192,7 @@ class WeblcmsRights extends RightsUtil
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class_name(),
+                                Group::class,
                                 $group_id);
                             if ($group)
                             {

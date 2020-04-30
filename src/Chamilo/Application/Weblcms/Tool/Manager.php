@@ -390,7 +390,7 @@ abstract class Manager extends Application
                     $parameters[self::PARAM_ACTION] = self::ACTION_PUBLISH_INTRODUCTION;
 
                     $actionSelector = new ActionSelector(
-                        $this, $this->getUser()->getId(), array(Introduction::class_name()), $parameters
+                        $this, $this->getUser()->getId(), array(Introduction::class), $parameters
                     );
 
                     $buttonToolbar->addItem(

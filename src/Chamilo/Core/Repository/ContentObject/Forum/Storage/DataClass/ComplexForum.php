@@ -19,7 +19,7 @@ class ComplexForum extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(Forum::class_name(), ForumTopic::class_name());
+        return array(Forum::class, ForumTopic::class);
     }
 
     public function create()
@@ -49,7 +49,7 @@ class ComplexForum extends ComplexContentObjectItem
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) Session::get_user_id()));
 
         $parent->add_topic($lo->get_total_topics());

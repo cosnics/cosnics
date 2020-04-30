@@ -179,7 +179,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $this->getPublicationButton(
                             Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
-                            array(Introduction::class_name()), $parameters
+                            array(Introduction::class), $parameters
                         )
                     );
                 }

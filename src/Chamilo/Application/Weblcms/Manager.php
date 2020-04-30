@@ -119,7 +119,7 @@ abstract class Manager extends Application
     public function get_user_info($user_id)
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $user_id);
     }
 

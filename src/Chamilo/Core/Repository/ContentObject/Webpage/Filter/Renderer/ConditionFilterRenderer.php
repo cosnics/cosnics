@@ -44,11 +44,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             {
                 $equality_conditions = array();
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Webpage::class_name(), Webpage::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_FILESIZE), 
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 0.9));
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Webpage::class_name(), Webpage::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_FILESIZE), 
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 1.1));
                 $conditions[] = new AndCondition($equality_conditions);
@@ -56,7 +56,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             else
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Webpage::class_name(), Webpage::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_FILESIZE), 
                     $compare, 
                     new StaticConditionVariable($filesize_bytes));
             }

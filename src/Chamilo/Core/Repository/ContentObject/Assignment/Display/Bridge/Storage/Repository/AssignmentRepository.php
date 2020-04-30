@@ -739,7 +739,7 @@ abstract class AssignmentRepository
 
         $joins->add(
             new Join(
-                User::class_name(),
+                User::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID)

@@ -41,7 +41,7 @@ class BlockEditComponent extends Manager
         $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
         $title = $this->getPostDataValue(self::PARAM_TITLE);
         
-        $block = DataManager::retrieve_by_id(Block::class_name(), $block);
+        $block = DataManager::retrieve_by_id(Block::class, $block);
 
         if(!$block instanceof Block)
         {

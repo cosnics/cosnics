@@ -95,7 +95,7 @@ class RequestForm extends FormValidator
                 );
 
                 $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                    User::class_name(),
+                    User::class,
                     new DataClassRetrievesParameters(null, null, null, $order)
                 );
 
@@ -113,7 +113,7 @@ class RequestForm extends FormValidator
             else
             {
                 $user_name = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), $this->user_id
+                    User::class, $this->user_id
                 )->get_fullname();
                 $this->addElement(
                     'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
@@ -138,14 +138,14 @@ class RequestForm extends FormValidator
             );
 
             $name_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(), $this->request->get_user_id()
+                User::class, $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
                 'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $name_user
             );
 
             $request_name = DataManager::retrieve_by_id(
-                Course::class_name(), $this->request->get_course_id()
+                Course::class, $this->request->get_course_id()
             )->get_name();
 
             $this->addElement('static', 'request', Translation::get('CourseName'), $request_name);

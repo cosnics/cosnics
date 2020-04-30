@@ -24,15 +24,15 @@ abstract class AggregateTracker extends Tracker
         
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($this::class_name(), self::PROPERTY_TYPE), 
+            new PropertyConditionVariable(static::class, self::PROPERTY_TYPE),
             new StaticConditionVariable($this->get_type()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($this::class_name(), self::PROPERTY_NAME), 
+            new PropertyConditionVariable(static::class, self::PROPERTY_NAME),
             new StaticConditionVariable($this->get_name()));
         $condition = new AndCondition($conditions);
         
         $tracker_items = DataManager::retrieves(
-            $this->class_name(), 
+            static::class,
             new DataClassRetrievesParameters($condition));
         
         if ($tracker_items->size() != 0)

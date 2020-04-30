@@ -28,9 +28,9 @@ class CourseEntityHelper
     public static function get_table_columns()
     {
         $columns = array();
-        $columns[] = new DataClassPropertyTableColumn(Course::class_name(), Course::PROPERTY_TITLE);
+        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE);
         $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
-        $columns[] = new DataClassPropertyTableColumn(Course::class_name(), Course::PROPERTY_VISUAL_CODE);
+        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE);
         return $columns;
     }
 
@@ -44,7 +44,7 @@ class CourseEntityHelper
                 break;
             case self::PROPERTY_PATH :
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class_name(),
+                    Course::class,
                     $result[self::PROPERTY_COURSE_ID]);
                 return $course->get_fully_qualified_name();
             default :
@@ -83,10 +83,10 @@ class CourseEntityHelper
         $properties = new DataClassProperties();
         $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN));
-        $properties->add(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE));
-        $properties->add(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE));
+        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
         $properties->add(
-            new FixedPropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
+            new FixedPropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
 
         $parameters = new RecordRetrievesParameters(
             $properties,
@@ -123,10 +123,10 @@ class CourseEntityHelper
     private static function get_joins()
     {
         $join = new Join(
-            Course::class_name(),
+            Course::class,
             new EqualityCondition(
                 new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_ID),
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID)));
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)));
         return new Joins(array($join));
     }
 
@@ -135,7 +135,7 @@ class CourseEntityHelper
         $entities = array();
 
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-            Course::class_name(),
+            Course::class,
             $entity_id);
 
         if ($course instanceof Course)

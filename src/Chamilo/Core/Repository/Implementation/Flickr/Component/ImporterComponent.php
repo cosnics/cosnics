@@ -18,7 +18,7 @@ class ImporterComponent extends Manager
     {
         if ($external_object->is_importable())
         {
-            $image = ContentObject::factory(File::class_name());
+            $image = ContentObject::factory(File::class);
             $image->set_title($external_object->get_title());
             
             if (Configuration::getInstance()->get_setting(
