@@ -1607,6 +1607,7 @@
     .level-details {
         flex: 1;
         display: flex;
+        flex-wrap: wrap;
 
         .ld-weight {
             margin: 0 10px;
@@ -1639,6 +1640,7 @@
     }
 
     .ld-description {
+        flex-basis: 100%;
         margin-top: 1.2em;
     }
 
@@ -1747,6 +1749,10 @@
     .ld-cover {
         width: 0;
         height: 0;
+    }
+
+    .lc-edit .ld-cover {
+        display: none;
     }
 
     .ld-edit {
@@ -1882,9 +1888,14 @@
     .lc-edit {
         margin-top: 1.4em;
         width: 100%;
+        max-width: 580px;
 
         > div, > form > div {
             margin-bottom: 1.1em;
+        }
+
+        .level-details {
+            flex-direction: column;
         }
 
         .input-detail {
@@ -2012,8 +2023,16 @@
             overflow-y: auto;
         }
 
+        .lc-edit {
+            margin-left: .5em;
+        }
+
         .ld-delete-hide {
             visibility: hidden;
+        }
+
+        .lc-list .ld-description {
+            order: 1;
         }
 
         .lc-list .levels-list-item:hover .level-title-input::placeholder,

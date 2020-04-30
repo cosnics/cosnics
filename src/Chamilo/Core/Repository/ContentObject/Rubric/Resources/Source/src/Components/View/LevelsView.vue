@@ -2,28 +2,8 @@
     <div class="levels-container" :class="{'container-lc-list': !editMode}" @click="(editMode || newLevel) ? null : selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div v-if="editMode" class="lc-edit" :class="{'new-level': newLevel !== null}">
             <form>
-                <div class="level-detail ld-level">
-                    <label for="level_title" class="lc-label label-level-title">Niveau</label>
-                    <input id="level_title" tabindex="0" type="text" autocomplete="off" v-model="selectedLevel.title" placeholder="Vul hier een niveau in" class="input-detail level-title-input">
-                </div>
-                <div class="level-detail ld-description">
-                    <label for="level_description" class="lc-label label-level-description">Beschrijving</label>
-                    <textarea id="level_description" tabindex="0" v-model="selectedLevel.description" placeholder="Vul hier een beschrijving in" class="ta-description input-detail"></textarea>
-                </div>
-                <div class="level-detail ld-weight">
-                    <label for="level_score" class="lc-label label-level-weight">Punten</label>
-                    <input id="level_score" tabindex="0" type="number" name="Weight" maxlength="3" v-model="selectedLevel.score" class="input-detail level-weight-input">
-                </div>
-                <div class="level-detail ld-default">
-                    <input id="level_default" tabindex="0" type="radio" :checked="selectedLevel.isDefault" @click.stop="setDefault(selectedLevel)" @keydown.space.prevent="setDefault(selectedLevel)" class="input-detail">
-                    <label class="lc-label label-level-default" :class="selectedLevel.isDefault ? 'checked' : 'not-checked'" @click.stop="" for="level_default"><i class="fa fa-fw fa-check"></i>Standaard keuze</label>
-                </div>
+                <level-details :edit-mode="true" :level="selectedLevel" :level-index="0" :new-level="newLevel" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
             </form>
-            <div v-if="!newLevel" class="ld-delete">
-                <button class="lc-btn btn-level-delete" @click.prevent="showRemoveLevelDialog(selectedLevel)"><!--    v-b-popover.hover.top="'Verwijder'">-->
-                    <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>Verwijder niveau
-                </button>
-            </div>
             <div v-if="!newLevel" class="lc-return">
                 <a role="button" @click.stop="editMode=false">Terug naar overzicht niveaus.</a>
             </div>
@@ -38,37 +18,7 @@
                 <form>
                 <ul class="lc-levels" @click.stop="">
                     <li v-for="(level, levelIndex) in levels" :key="`level_${levelIndex}`" class="levels-list-item" :class="`${isSelected(level) ? 'selected' : 'not-selected'} ${isLabelHidden(level) ? 'labels-hide' : ''} ${newLevel === level ? 'new-level' : ''}`" >
-                        <div class="level-details">
-                            <div class="level-detail ld-level" @click.stop="selectLevel(level)">
-                                <label :for="`level_title_${levelIndex}`" class="lc-label label-maybe-hide">Niveau</label>
-                                <input :id="`level_title_${levelIndex}`" tabindex="0" type="text" autocomplete="off" v-model="level.title" placeholder="Vul hier een niveau in" @focus="selectLevel(level)" @keydown.enter.prevent="" class="level-title-input input-detail">
-                                <div class="ld-cover"></div>
-                            </div>
-                            <div class="level-detail ld-weight" @click.stop="selectLevel(level)">
-                                <label :for="`level_score_${levelIndex}`" class="lc-label label-maybe-hide">Punten</label>
-                                <input :id="`level_score_${levelIndex}`" tabindex="0" type="number" name="Weight" maxlength="3" v-model="level.score" @focus="selectLevel(level)" @keydown.enter.prevent="" class="level-weight-input input-detail">
-                                <div class="ld-cover"></div>
-                            </div>
-                            <div class="level-detail ld-default">
-                                <label :for="`level_default_${levelIndex}`" class="lc-label label-maybe-hide">Standaard</label>
-                                <input :id="`level_default_${levelIndex}`" tabindex="0" type="radio" :checked="level.isDefault" @click.stop="setDefault(level)" @keydown.space.prevent="setDefault(level)" @keydown.enter.prevent="" class="input-detail level-default-input">
-                                <label class="lc-label label-level-default" :class="`${level.isDefault ? 'checked' : 'not-checked'} ${newLevel && newLevel !== level && newLevel.isDefault && level.isDefault ? 'old-default' : ''}`" @click.stop="" :for="`level_default_${levelIndex}`"><i class="fa fa-fw fa-check"></i></label>
-                            </div>
-                            <div class="level-detail ld-delete" :class="{'ld-delete-hide': level === newLevel}">
-                                <button class="lc-btn btn-level-delete" :disabled="newLevel !== null" @click.prevent="showRemoveLevelDialog(level)"><!--    v-b-popover.hover.top="'Verwijder'">-->
-                                    <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                            <div class="level-detail ld-edit">
-                                <button class="lc-btn btn-level-edit" :disabled="newLevel !== null" @click.prevent="editLevel(level)">
-                                    <i class="fa fa-fw fa-edit"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="ld-description" :class="{ empty: level.description.length === 0 }">
-                            <label :for="`level_description_${levelIndex}`" class="lc-label label-maybe-hide">Beschrijving</label>
-                            <textarea :id="`level_description_${levelIndex}`" tabindex="0" v-model="level.description" placeholder="Vul hier een beschrijving in" @focus="selectLevel(level)" class="ta-description input-detail"></textarea>
-                        </div>
+                        <level-details :level="level" :level-index="levelIndex" :new-level="newLevel" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
                         <div v-if="level === newLevel" class="actions">
                             <button class="btn-name-input btn-ok" @click.prevent="addLevel">Voeg toe</button>
                             <button class="btn-name-input btn-cancel" @click.prevent="cancelLevel">Annuleer</button>
@@ -109,16 +59,21 @@
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Rubric from '../../Domain/Rubric';
     import Level from '../../Domain/Level';
+    import LevelDetails from './LevelDetails.vue';
     import DataConnector from '../../Connector/DataConnector';
 
     @Component({
-        name: 'levels-view'
+        name: 'levels-view',
+        components: {
+            LevelDetails
+        },
     })
     export default class LevelsView extends Vue {
         private newLevel: Level|null = null;
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
         private editMode: boolean = false;
+        private isCompact: boolean = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
@@ -206,6 +161,19 @@
             return new Level('');
         }
 
+        mounted() {
+            window.addEventListener('resize', this.handleResize);
+            this.handleResize();
+        }
+
+        beforeDestroy() {
+            window.removeEventListener('resize', this.handleResize);
+        }
+
+        handleResize() {
+            this.isCompact = window.innerWidth < 900;
+        }
+
         @Watch('rubric.levels.length')
         onLevelsChanged(newLength: Number, oldLength: Number) {
             window.setTimeout(() => {
@@ -233,6 +201,20 @@
                 this.$nextTick(() => {
                     (this.$refs['btn-remove-level'] as HTMLElement).focus();
                 });
+            }
+        }
+
+        @Watch('isCompact')
+        onDetectEditMode(newisCompact: boolean, oldIsCompact: boolean) {
+            if (document.activeElement && !this.editMode && !oldIsCompact && newisCompact) {
+                if (document.activeElement.classList.contains('input-detail')) {
+                    const parentClass = document.activeElement.parentElement?.classList[1];
+                    this.editMode = true;
+                    window.setTimeout(() => {
+                        const elem = document.querySelector(`.${parentClass} .input-detail`);
+                        (elem as HTMLElement).focus();
+                    }, 50);
+                }
             }
         }
     }
