@@ -4,9 +4,9 @@ namespace Chamilo\Application\Portfolio\Service;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository;
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -40,17 +40,25 @@ class PublicationService
     private $translator;
 
     /**
+     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    private $templateRegistrationConsulter;
+
+    /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
-        PublicationRepository $publicationRepository, RightsService $rightsService, Translator $translator
+        PublicationRepository $publicationRepository, RightsService $rightsService,
+        TemplateRegistrationConsulter $templateRegistrationConsulter, Translator $translator
     )
     {
         $this->publicationRepository = $publicationRepository;
         $this->rightsService = $rightsService;
+        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
         $this->translator = $translator;
     }
 
@@ -114,8 +122,8 @@ class PublicationService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function createRootPortfolioAndPublicationForUser(User $user)
     {
@@ -140,9 +148,8 @@ class PublicationService
      */
     public function createRootPortfolioForUser(User $user)
     {
-        $templateRegistration = Configuration::registration_default_by_type(
-            Portfolio::package()
-        );
+        $templateRegistration =
+            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::package());
 
         $portfolio = new Portfolio();
         $portfolio->set_title($user->get_fullname());
@@ -357,6 +364,24 @@ class PublicationService
     public function setRightsService(RightsService $rightsService)
     {
         $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
+    {
+        return $this->templateRegistrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
+     */
+    public function setTemplateRegistrationConsulter(
+        TemplateRegistrationConsulter $templateRegistrationConsulter
+    ): void
+    {
+        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
     }
 
     /**

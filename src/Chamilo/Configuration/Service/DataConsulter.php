@@ -33,6 +33,27 @@ class DataConsulter
         $this->dataLoader = $dataLoader;
     }
 
+    public function clearData()
+    {
+        $this->data = null;
+
+        return $this->getDataLoader()->clearData();
+    }
+
+    /**
+     *
+     * @return string[][]
+     */
+    public function getData()
+    {
+        if (!isset($this->data))
+        {
+            $this->data = $this->getDataLoader()->getData();
+        }
+
+        return $this->data;
+    }
+
     /**
      *
      * @return \Chamilo\Configuration\Interfaces\DataLoaderInterface
@@ -44,30 +65,10 @@ class DataConsulter
 
     /**
      *
-     * @param \Chamilo\Configuration\Interfaces\DataLoaderInterface $configurationCache
+     * @param \Chamilo\Configuration\Interfaces\DataLoaderInterface $dataLoader
      */
     public function setDataLoader(DataLoaderInterface $dataLoader)
     {
         $this->dataLoader = $dataLoader;
-    }
-
-    /**
-     *
-     * @return string[][]
-     */
-    public function getData()
-    {
-        if (! isset($this->data))
-        {
-            $this->data = $this->getDataLoader()->getData();
-        }
-
-        return $this->data;
-    }
-
-    public function clearData()
-    {
-        $this->data = null;
-        return $this->getDataLoader()->clearData();
     }
 }

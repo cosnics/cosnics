@@ -19,7 +19,7 @@ use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
-use Chamilo\Core\Repository\Service\ConfigurationCacheService;
+use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Core\Repository\Service\TypeSelectorCacheService;
 use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -132,7 +132,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_repository_configuration', new ConfigurationCacheService()
+            'chamilo_repository_configuration', $this->container->get(TemplateRegistrationLoader::class)
         );
 
         $cacheManager->addCacheService('chamilo_packages', new PackageBundlesCacheService());

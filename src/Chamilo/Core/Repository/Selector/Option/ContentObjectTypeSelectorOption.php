@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Selector\Option;
 
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -39,6 +40,17 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     {
         $this->name = $name;
         $this->template_registration_id = $template_registration_id;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
     }
 
     public function get_image_path($imageSize = IdentGlyph::SIZE_BIG)
@@ -86,14 +98,14 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     /**
      * Get the TemplateRegistration for the option
      *
-     * @return use core\repository\common\template\TemplateRegistration
+     * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration
      * @throws \Exception
      */
     public function get_template_registration()
     {
         if ($this->get_template_registration_id())
         {
-            return Configuration::registration_by_id(
+            return $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier(
                 (int) $this->get_template_registration_id()
             );
         }

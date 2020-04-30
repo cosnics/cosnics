@@ -12,7 +12,6 @@
                       id="Chamilo\Libraries\File\PathBuilder"/>
         </service>
 
-        <service id="Chamilo\Core\Repository\Service\ConfigurationCacheService"/>
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository"/>
         <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer"/>

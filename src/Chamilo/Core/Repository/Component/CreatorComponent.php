@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\ContentObjectSaver;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -59,16 +60,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
         if ($templateIdentifier)
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($templateIdentifier);
+            $template_registration =
+                $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($templateIdentifier);
             $template = $template_registration->get_template();
-            $object = $template->get_content_object();
+            //            $contentObject = $template->get_content_object();
 
-//            $contentObject = $this->getContentObjectSaver()->getContentObjectInstanceForTemplateAndUserIdentfier(
-//                $templateIdentifier, $this->get_user_id()
-//            );
-//
-//            var_dump($contentObject);
-//            exit;
+            $contentObject = $this->getContentObjectSaver()->getContentObjectInstanceForTemplateAndUserIdentfier(
+                $templateIdentifier, $this->get_user_id()
+            );
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
@@ -76,7 +75,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     'CreateContentType', array(
                         'OBJECTTYPE' => strtolower(
                             Translation::get(
-                                $template->translate('TypeName'), null, $object->package()
+                                $template->translate('TypeName'), null, $contentObject->package()
                             )
                         )
                     )
@@ -84,17 +83,17 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                 )
             );
 
-            $object->set_owner_id($this->get_user_id());
+            $contentObject->set_owner_id($this->get_user_id());
 
             $category = FilterData::getInstance($this->getWorkspace())->get_filter_property(
                 FilterData::FILTER_CATEGORY
             );
-            $object->set_parent_id($category);
+            $contentObject->set_parent_id($category);
 
-            $object->set_template_registration_id($templateIdentifier);
+            $contentObject->set_template_registration_id($templateIdentifier);
 
             $content_object_form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $object, 'create_content_object',
+                ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $contentObject, 'create_content_object',
                 FormValidator::FORM_METHOD_POST,
                 $this->get_url(array(TypeSelector::PARAM_SELECTION => $templateIdentifier)), null
             );
@@ -102,9 +101,9 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             if ($content_object_form->validate())
             {
                 $values = $content_object_form->exportValues();
-                $object = $content_object_form->create_content_object();
+                $contentObject = $content_object_form->create_content_object();
 
-                if (!$object)
+                if (!$contentObject)
                 {
                     $this->redirect(
                         Translation::get(
@@ -120,20 +119,21 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_CREATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
-                            Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
-                            Activity::PROPERTY_CONTENT => $object->get_title()
+                            Activity::PROPERTY_CONTENT_OBJECT_ID => $contentObject->get_id(),
+                            Activity::PROPERTY_CONTENT => $contentObject->get_title()
                         )
                     );
 
                     $selectedTab = $this->getInstanceService()->updateInstances(
-                        $this->get_user(), $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
+                        $this->get_user(), $contentObject,
+                        (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
                     );
 
                     if ($selectedTab)
                     {
                         $parameters = array();
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
-                        $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
+                        $parameters[self::PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
                         $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
                             self::TABS_CONTENT_OBJECT => $selectedTab
                         );
@@ -142,15 +142,15 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     }
                 }
 
-                if (is_array($object))
+                if (is_array($contentObject))
                 {
-                    $parent = $object[0]->get_parent_id();
-                    $typeContext = $object[0]->package();
+                    $parent = $contentObject[0]->get_parent_id();
+                    $typeContext = $contentObject[0]->package();
                 }
                 else
                 {
-                    $parent = $object->get_parent_id();
-                    $typeContext = $object->package();
+                    $parent = $contentObject->get_parent_id();
+                    $typeContext = $contentObject->package();
                 }
 
                 $parameters = array();
@@ -206,6 +206,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
     private function getInstanceService()
     {
         return $this->getService(InstanceService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     /**

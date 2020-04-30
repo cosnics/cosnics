@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Service;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Service\InstanceService;
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -231,9 +230,10 @@ class ContentObjectSaver
 
         if (!$contentObject->get_template_registration_id())
         {
-            $default_template_registration = Configuration::registration_default_by_type(
-                ClassnameUtilities::getInstance()->getNamespaceParent($contentObject->context(), 2)
-            );
+            $default_template_registration =
+                $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
+                    $contentObject->package()
+                );
 
             $contentObject->set_template_registration_id($default_template_registration->getId());
         }

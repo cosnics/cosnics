@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Filter;
 
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 
@@ -16,32 +17,21 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class FilterData
 {
-    // Storage
     const FILTER_CATEGORY = ContentObject::PROPERTY_PARENT_ID;
-
-    // Available general filters
-
     const FILTER_CATEGORY_RECURSIVE = 'category_recursive';
-
     const FILTER_CREATION_DATE = ContentObject::PROPERTY_CREATION_DATE;
-
     const FILTER_FROM_DATE = 'from';
-
     const FILTER_MODIFICATION_DATE = ContentObject::PROPERTY_MODIFICATION_DATE;
-
     const FILTER_TEXT = 'text';
-
     const FILTER_TO_DATE = 'to';
-
     const FILTER_TYPE = 'filter_type';
-
     const FILTER_USER_VIEW = 'view';
 
     const STORAGE = 'filter';
 
     /**
      *
-     * @var \core\repository\filter\FilterData
+     * @var \Chamilo\Core\Repository\Filter\FilterData
      */
     private static $instance;
 
@@ -64,7 +54,7 @@ class FilterData
     private $context;
 
     /**
-     * Constructs a new Filter
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      */
     public function __construct(WorkspaceInterface $workspaceImplementation)
     {
@@ -72,6 +62,11 @@ class FilterData
         $this->initialize();
     }
 
+    /**
+     * @param string[] $parsed_url
+     *
+     * @return string
+     */
     public static function build_url($parsed_url)
     {
         $scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
@@ -99,6 +94,12 @@ class FilterData
         return $scheme . $user . $pass . $host . $port . $path . $query . $fragment;
     }
 
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     * @param $url
+     *
+     * @return string
+     */
     public static function clean_url(WorkspaceInterface $workspaceImplementation, $url)
     {
         $filter_data = self::getInstance($workspaceImplementation);
@@ -121,6 +122,8 @@ class FilterData
 
     /**
      * Clear all filter parameters from the session
+     *
+     * @param boolean $updateSession
      */
     public function clear($updateSession = true)
     {
@@ -159,8 +162,9 @@ class FilterData
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
-     * @return FilterData
+     * @return \Chamilo\Core\Repository\Filter\FilterData
      */
     public static function getInstance(WorkspaceInterface $workspaceImplementation)
     {
@@ -172,7 +176,15 @@ class FilterData
             if (is_numeric($type) && !empty($type))
             {
                 $template_id = $filter_data->get_filter_property(FilterData::FILTER_TYPE);
-                $template_registration = Configuration::registration_by_id((int) $template_id);
+                /**
+                 * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
+                 */
+                $templateRegistrationConsulter =
+                    DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                        TemplateRegistrationConsulter::class
+                    );
+                $template_registration =
+                    $templateRegistrationConsulter->getTemplateRegistrationByIdentifier((int) $template_id);
 
                 $class_name = $template_registration->get_content_object_type() . '\Filter\FilterData';
                 $filter_data = new $class_name($workspaceImplementation);
@@ -184,6 +196,9 @@ class FilterData
         return self::$instance;
     }
 
+    /**
+     * @return string
+     */
     protected function getStorageKey()
     {
         return static::STORAGE . '_' . $this->workspaceImplementation->getHash();
@@ -204,7 +219,7 @@ class FilterData
                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context);
         }
 
-        return ContentObject::class_name();
+        return ContentObject::class;
     }
 
     public function get_category()
@@ -221,7 +236,8 @@ class FilterData
             if (is_numeric($type) && !empty($type))
             {
                 $template_id = $this->get_filter_property(FilterData::FILTER_TYPE);
-                $template_registration = Configuration::registration_by_id((int) $template_id);
+                $template_registration =
+                    $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier((int) $template_id);
                 $this->context = $template_registration->get_content_object_type();
             }
             else
@@ -239,7 +255,7 @@ class FilterData
      *
      * @return int NULL
      */
-    public function get_creation_date($type = self :: FILTER_FROM_DATE)
+    public function get_creation_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_CREATION_DATE, $type);
     }
@@ -251,7 +267,7 @@ class FilterData
      *
      * @return int NULL
      */
-    public function get_date($date_type = self :: FILTER_CREATION_DATE, $part_type = self :: FILTER_FROM_DATE)
+    public function get_date($date_type = self::FILTER_CREATION_DATE, $part_type = self::FILTER_FROM_DATE)
     {
         $filter_property = $this->get_filter_property($date_type);
 
@@ -301,7 +317,7 @@ class FilterData
      *
      * @return int NULL
      */
-    public function get_modification_date($type = self :: FILTER_FROM_DATE)
+    public function get_modification_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_MODIFICATION_DATE, $type);
     }

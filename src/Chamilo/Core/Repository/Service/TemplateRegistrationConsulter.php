@@ -66,7 +66,7 @@ class TemplateRegistrationConsulter extends DataConsulter
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration
      */
-    public function getTemplateRegistrationByType($type)
+    public function getTemplateRegistrationDefaultByType($type)
     {
         return $this->getTemplateRegistrations()[TemplateRegistrationLoader::REGISTRATION_DEFAULT][$type];
     }

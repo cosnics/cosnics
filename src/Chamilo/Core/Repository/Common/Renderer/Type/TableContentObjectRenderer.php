@@ -2,9 +2,10 @@
 namespace Chamilo\Core\Repository\Common\Renderer\Type;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Table\ContentObject\Table\RepositoryTable;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 class TableContentObjectRenderer extends ContentObjectRenderer
 {
@@ -12,7 +13,8 @@ class TableContentObjectRenderer extends ContentObjectRenderer
     /**
      * Returns the HTML output of this renderer.
      *
-     * @return string The HTML output
+     * @return string
+     * @throws \ReflectionException
      */
     public function as_html()
     {
@@ -21,7 +23,8 @@ class TableContentObjectRenderer extends ContentObjectRenderer
         if ($this->get_repository_browser()->has_filter_type())
         {
             $filter_type = $this->get_repository_browser()->get_filter_type();
-            $template_registration = Configuration::registration_by_id($filter_type);
+            $template_registration =
+                $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($filter_type);
 
             $classname = $template_registration->get_content_object_type() . '\\' . $class;
             if (!class_exists($classname))
@@ -37,5 +40,16 @@ class TableContentObjectRenderer extends ContentObjectRenderer
         $table = new $classname($this, $this->get_parameters(), $this->get_condition());
 
         return $table->as_html();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
     }
 }

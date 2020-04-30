@@ -5,23 +5,20 @@ use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
-use Chamilo\Core\Repository\Service\ConfigurationCacheService;
-use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -32,11 +29,6 @@ use Exception;
 abstract class ContentObjectInstaller extends Installer
 {
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * Perform additional installation steps
      *
@@ -44,17 +36,33 @@ abstract class ContentObjectInstaller extends Installer
      */
     public function extra()
     {
-        if (! $this->register_templates())
+        if (!$this->register_templates())
         {
             return false;
         }
 
-        if (! $this->import_content_object())
+        if (!$this->import_content_object())
         {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer
+     * @throws \Exception
+     */
+    public function getContentObjectTemplateSynchronizer()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ContentObjectTemplateSynchronizer::class
+        );
+    }
+
+    public function get_data_manager()
+    {
+        return DataManager::getInstance();
     }
 
     /**
@@ -72,19 +80,17 @@ abstract class ContentObjectInstaller extends Installer
         foreach ($examplePaths as $examplePath)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_PLATFORMADMIN),
-                new StaticConditionVariable(1));
+                new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
+            );
             $user = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class_name(),
-                new DataClassRetrievesParameters($condition))->next_result();
+                User::class, new DataClassRetrievesParameters($condition)
+            )->next_result();
 
             Session::register('_uid', $user->get_id());
 
             $parameters = ImportParameters::factory(
-                ContentObjectImport::FORMAT_CPO,
-                $user->get_id(),
-                0,
-                FileProperties::from_path($examplePath));
+                ContentObjectImport::FORMAT_CPO, $user->get_id(), 0, FileProperties::from_path($examplePath)
+            );
             $import = ContentObjectImportController::factory($parameters);
             $import->run();
 
@@ -94,6 +100,7 @@ abstract class ContentObjectInstaller extends Installer
             {
                 $message = Translation::get('ContentObjectImportFailed');
                 $this->failed($message);
+
                 return false;
             }
             else
@@ -101,19 +108,15 @@ abstract class ContentObjectInstaller extends Installer
                 $this->add_message(self::TYPE_NORMAL, Translation::get('ImportSuccessfull'));
             }
         }
+
         return true;
     }
 
     public function register_templates()
     {
-        $contentObjectTemplateSynchronizer = new ContentObjectTemplateSynchronizer(
-            new ContentObjectTemplateLoader(PathBuilder::getInstance()),
-            new ContentObjectTemplateRepository(),
-            new ConfigurationCacheService());
-
         try
         {
-            $contentObjectTemplateSynchronizer->synchronize(static::package());
+            $this->getContentObjectTemplateSynchronizer()->synchronize(static::package());
 
             return true;
         }

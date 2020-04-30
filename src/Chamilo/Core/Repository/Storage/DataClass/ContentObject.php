@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -405,8 +406,8 @@ class ContentObject extends CompositeDataClass
                 if (!$content_object->get_template_registration_id())
                 {
                     $default_template_registration =
-                        \Chamilo\Core\Repository\Configuration::registration_default_by_type(
-                            ClassnameUtilities::getInstance()->getNamespaceParent($content_object->context(), 2)
+                        $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
+                            $content_object->package()
                         );
 
                     $content_object->set_template_registration_id($default_template_registration->get_id());
@@ -844,6 +845,17 @@ class ContentObject extends CompositeDataClass
     static public function getStorageSpaceProperty()
     {
         return null;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
     }
 
     /**
@@ -1342,6 +1354,8 @@ class ContentObject extends CompositeDataClass
         return $this->owner;
     }
 
+    // create a version
+
     public function get_owner_fullname()
     {
         $owner = $this->get_owner();
@@ -1353,8 +1367,6 @@ class ContentObject extends CompositeDataClass
 
         return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::context());
     }
-
-    // create a version
 
     /**
      * Returns the ID of this object's owner.
@@ -1451,6 +1463,8 @@ class ContentObject extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_STATE);
     }
 
+    // XXX: Keep this around? Override? Make useful?
+
     /**
      *
      * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
@@ -1474,8 +1488,6 @@ class ContentObject extends CompositeDataClass
         return $this->synchronization_data;
     }
 
-    // XXX: Keep this around? Override? Make useful?
-
     public function set_synchronization_data($external_sync)
     {
         $this->synchronization_data = $external_sync;
@@ -1485,9 +1497,10 @@ class ContentObject extends CompositeDataClass
     {
         if (!isset($this->template_registration))
         {
-            $this->template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id(
-                (int) $this->get_template_registration_id()
-            );
+            $this->template_registration =
+                $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier(
+                    (int) $this->get_template_registration_id()
+                );
 
             if (!$this->template_registration instanceof TemplateRegistration)
             {

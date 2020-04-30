@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 
-use Chamilo\Core\Repository\Service\ConfigurationCacheService;
+use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository;
 use RuntimeException;
@@ -13,36 +13,36 @@ use RuntimeException;
 class ContentObjectTemplateSynchronizer
 {
     /**
-     * @var ContentObjectTemplateLoader
+     * @var \Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader
      */
     protected $contentObjectTemplateLoader;
 
     /**
-     * @var ContentObjectTemplateRepository
+     * @var \Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository
      */
     protected $contentObjectTemplateRepository;
 
     /**
-     * @var ConfigurationCacheService
+     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationLoader
      */
-    protected $configurationCacheService;
+    protected $templateRegistrationLoader;
 
     /**
      * ContentObjectTemplateSynchronizer constructor.
      *
      * @param ContentObjectTemplateLoader $contentObjectTemplateLoader
      * @param ContentObjectTemplateRepository $contentObjectTemplateRepository
-     * @param ConfigurationCacheService $configurationCacheService
+     * @param TemplateRegistrationLoader $templateRegistrationLoader
      */
     public function __construct(
         ContentObjectTemplateLoader $contentObjectTemplateLoader,
         ContentObjectTemplateRepository $contentObjectTemplateRepository,
-        ConfigurationCacheService $configurationCacheService
+        TemplateRegistrationLoader $templateRegistrationLoader
     )
     {
         $this->contentObjectTemplateLoader = $contentObjectTemplateLoader;
         $this->contentObjectTemplateRepository = $contentObjectTemplateRepository;
-        $this->configurationCacheService = $configurationCacheService;
+        $this->templateRegistrationLoader = $templateRegistrationLoader;
     }
 
     /**
@@ -81,6 +81,6 @@ class ContentObjectTemplateSynchronizer
             }
         }
 
-        $this->configurationCacheService->clearAndWarmUp();
+        $this->templateRegistrationLoader->clearAndWarmUp();
     }
 }

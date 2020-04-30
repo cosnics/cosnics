@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer\Component;
 
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
@@ -58,8 +58,11 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
                 if (count($types) == 1 && $type_selector->count_options() == 1)
                 {
-                    $single_category = array_pop($type_selector->get_categories());
-                    $single_option = array_pop($single_category->get_options());
+                    $categories = $type_selector->get_categories();
+                    $single_category = array_pop($categories);
+
+                    $options = $single_category->get_options();
+                    $single_option = array_pop($options);
 
                     return $this->get_creation_form($single_option->get_template_registration_id());
                 }
@@ -82,6 +85,14 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repo_viewer_viewer');
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     public function get_additional_parameters()
@@ -113,7 +124,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_creation_form($template_id)
     {
-        $template_registration = Configuration::registration_by_id($template_id);
+        $template_registration =
+            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($template_id);
         $template = $template_registration->get_template();
 
         $object = $template->get_content_object();
@@ -151,9 +163,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_editing_form($content_object_id)
     {
-        $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $content_object_id
-        );
+        $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(

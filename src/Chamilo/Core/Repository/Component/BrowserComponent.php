@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterDataButtonSearchForm;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
@@ -115,7 +115,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->has_filter_type())
             {
                 $filter_type = $this->get_filter_type();
-                $template_registration = Configuration::registration_by_id((int) $filter_type);
+                $template_registration =
+                    $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier((int) $filter_type);
 
                 $buttonToolbar->addItem(
                     new Button(
@@ -210,6 +211,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     public function get_additional_parameters()

@@ -1,16 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\Filter\Renderer;
 
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -255,7 +256,8 @@ class HtmlFilterRenderer extends FilterRenderer
             // Template id
             elseif (is_numeric($type) && !empty($type))
             {
-                $template_registration = Configuration::registration_by_id($type);
+                $template_registration =
+                    $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($type);
                 $template = $template_registration->get_template();
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_TYPE), $template->translate('TypeName')
@@ -292,6 +294,17 @@ class HtmlFilterRenderer extends FilterRenderer
         $class_name = $filter_data->get_context() . '\Filter\Renderer\HtmlFilterRenderer';
 
         return new $class_name($filter_data, $workspace);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
     }
 
     /**

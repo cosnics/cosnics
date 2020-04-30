@@ -2,9 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
-use Chamilo\Core\Repository\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
@@ -27,7 +27,7 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
      */
     protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
     {
-        $templateRegistration = Configuration::getInstance()->get_registration_default_by_type(
+        $templateRegistration = $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
             LearningPath::package()
         );
 
@@ -35,6 +35,14 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $templateRegistration->getId());
 
         return $filterData;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     /**
@@ -46,6 +54,6 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
      */
     protected function validateContentObject(ContentObject $contentObject)
     {
-        return ($contentObject instanceOf LearningPath);
+        return ($contentObject instanceof LearningPath);
     }
 }

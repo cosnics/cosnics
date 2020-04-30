@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\FormFilterRenderer;
@@ -268,7 +269,7 @@ abstract class Manager extends Application
         {
             $context = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3);
 
-            if (!\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($context))
+            if (!Configuration::getInstance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }
