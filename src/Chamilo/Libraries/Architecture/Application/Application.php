@@ -785,7 +785,8 @@ abstract class Application
      */
     public static function package()
     {
-        $className = self::class_name(false);
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $className = $classNameUtilities->getClassNameFromNamespace(get_called_class());
 
         if ($className == 'Manager')
         {
@@ -793,7 +794,7 @@ abstract class Application
         }
         else
         {
-            return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
+            return $classNameUtilities->getNamespaceParent(static::context());
         }
     }
 

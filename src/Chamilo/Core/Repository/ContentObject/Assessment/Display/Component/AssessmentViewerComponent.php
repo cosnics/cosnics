@@ -378,18 +378,18 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem:: class_name(), ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
+                ComplexContentObjectItem::class, ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
             )
         );
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem:: class_name(), ComplexContentObjectItem :: PROPERTY_ID
+                ComplexContentObjectItem::class, ComplexContentObjectItem :: PROPERTY_ID
             ), $question_ids
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem:: class_name(), new DataClassRetrievesParameters($condition, null, null, $order_by)
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
         )->as_array();
     }
 

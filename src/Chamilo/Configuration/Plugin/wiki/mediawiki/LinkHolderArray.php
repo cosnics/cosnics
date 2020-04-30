@@ -212,7 +212,7 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $title_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE),
+                        new PropertyConditionVariable(ContentObject::class, ContentObject :: PROPERTY_TITLE),
                         new StaticConditionVariable($title->getText()));
                 }
             }
@@ -240,17 +240,17 @@ class MediawikiLinkHolderArray
             $complex_wiki_page_conditions = array();
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem :: PROPERTY_PARENT),
                 new StaticConditionVariable($wiki->get_id()));
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem :: PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
 
             $current_complex_wiki_page = DataManager :: retrieves(
-                ComplexContentObjectItem :: class_name(),
+                ComplexContentObjectItem::class,
                 new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->next_result();
             $wiki_complex_ids[$pdbk] = $current_complex_wiki_page->get_id();
         }

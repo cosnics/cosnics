@@ -594,7 +594,7 @@ class RightsUtil
     {
         $conditions = array();
 
-        $class_name = $context . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
+        $class_name = $context . '\Storage\DataClass\RightsLocationEntityRight';
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
@@ -950,7 +950,7 @@ class RightsUtil
     {
         $conditions = array();
 
-        $class_name = $context . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
+        $class_name = $context . '\Storage\DataClass\RightsLocationEntityRight';
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($entity_type)

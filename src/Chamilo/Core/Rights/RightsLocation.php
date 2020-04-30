@@ -212,7 +212,7 @@ class RightsLocation extends NestedTreeNode
     {
         $conditions = array();
 
-        $class_name = static::package() . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
+        $class_name = static::package() . '\Storage\DataClass\RightsLocationEntityRight';
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),

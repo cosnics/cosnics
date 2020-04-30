@@ -408,7 +408,7 @@ abstract class Table
      */
     public static function get_name()
     {
-        return static::class_name(false, false);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class, true);
     }
 
     /**

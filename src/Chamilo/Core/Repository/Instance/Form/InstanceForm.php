@@ -153,10 +153,10 @@ class InstanceForm extends FormValidator
             {
                 $this->addElement(
                     'radio', Instance::PROPERTY_TYPE, Translation::get('Type'),
-                    Translation::get(PlatformInstance::class_name(false)), PlatformInstance::class
+                    Translation::get('PlatformInstance'), PlatformInstance::class
                 );
                 $this->addElement(
-                    'radio', Instance::PROPERTY_TYPE, null, Translation::get(PersonalInstance::class_name(false)),
+                    'radio', Instance::PROPERTY_TYPE, null, Translation::get('PersonalInstance'),
                     PersonalInstance::class
                 );
             }

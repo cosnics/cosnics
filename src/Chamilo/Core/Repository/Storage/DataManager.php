@@ -725,14 +725,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // foreach ($formats as $format)
         // {
         // $conditions[] = new PatternMatchCondition(
-        // new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
+        // new PropertyConditionVariable(Element::class, Element :: PROPERTY_CONFIGURATION),
         // '*' . $format . '*');
         // }
         //
         // $condition = new OrCondition($conditions);
         //
         // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
-        // Block :: class_name(),
+        // Block::class,
         // new DataClassCountParameters($condition));
         //
         // if ($usedInBlocks > 0)

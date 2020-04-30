@@ -48,7 +48,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
             );
         }
 
-        $user = DataManager:: retrieve_by_id(User:: class_name(), $userId);
+        $user = DataManager:: retrieve_by_id(User::class, $userId);
 
         if (empty($user))
         {

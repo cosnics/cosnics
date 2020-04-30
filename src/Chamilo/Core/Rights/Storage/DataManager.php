@@ -30,145 +30,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     // TODO: Fix DataManager implementation (retrieve_granted_rights_array)
     // DONE
-    public static function retrieve_identifiers_with_right_granted(
-        $right_id, $context, $entities_condition, $condition, $parent_has_right, $offset = null, $max_objects = null
-    )
-    {
-        $context_location = ($context . '\Storage\DataClass\RightsLocation');
-        $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-        $context_dm = ($context . '\Storage\DataManager');
 
-        if (!$parent_has_right)
-        {
-
-            $join_condition = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID),
-                new PropertyConditionVariable(
-                    $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
-                )
-            );
-            if ($right_id)
-            {
-                $right_id_condition = new EqualityCondition(
-                    new PropertyConditionVariable(
-                        $context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID
-                    ), new StaticConditionVariable($right_id)
-                );
-                $join_condition = new AndCondition($join_condition, $right_id_condition);
-            }
-
-            $join = new Join($context_entity_right::class_name(), $join_condition);
-
-            $joins = new Joins();
-            $joins->add($join);
-
-            if ($entities_condition)
-            {
-                $condition = new AndCondition($condition, $entities_condition);
-            }
-
-            $parameters = new DataClassDistinctParameters(
-                $condition, new DataClassProperties(
-                    array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
-                ), $joins
-            );
-
-            return $context_dm::distinct($context_location::class_name(), $parameters);
-        }
-        else
-        {
-            // Inheriting children
-            $inheriting_condition = new AndCondition(
-                $condition, new EqualityCondition(
-                    new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_INHERIT),
-                    new StaticConditionVariable(1)
-                )
-            );
-            $parameters = new DataClassDistinctParameters(
-                $inheriting_condition, new DataClassProperties(
-                    array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
-                )
-            );
-            $inheriting_identifiers = $context_dm::distinct($context_location::class_name(), $parameters);
-
-            // Non-inheriting children
-            $join = new Join(
-                $context_entity_right::class_name(), new EqualityCondition(
-                    new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
-                    )
-                )
-            );
-
-            $joins = new Joins(array($join));
-
-            $non_inheriting_conditions = array();
-            $non_inheriting_conditions[] = $condition;
-            $non_inheriting_conditions[] = $entities_condition;
-            $non_inheriting_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_INHERIT),
-                new StaticConditionVariable(0)
-            );
-            $non_inheriting_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID
-                ), new StaticConditionVariable($right_id)
-            );
-
-            $parameters = new DataClassDistinctParameters(
-                new AndCondition($non_inheriting_conditions), new DataClassProperties(
-                    array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
-                ), $joins
-            );
-
-            $non_inheriting_identifiers = $context_dm::distinct($context_location::class_name(), $parameters);
-
-            return array_merge($inheriting_identifiers, $non_inheriting_identifiers);
-        }
-    }
-
-    // DONE
-    public static function retrieve_location_overview_with_rights_granted(
-        $context, $condition, $entities_condition, $offset = null, $max_objects = null
-    )
-    {
-        $context_location = ($context . '\Storage\DataClass\RightsLocation');
-        $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        $properties = new DataClassProperties();
-
-        $properties->add(
-            new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE)
-        );
-        $properties->add(
-            new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_IDENTIFIER)
-        );
-
-        $join_conditions = array();
-
-        if ($entities_condition)
-        {
-            $join_conditions[] = $entities_condition;
-        }
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
-            ), new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID)
-        );
-
-        $join = new Join($context_entity_right::class_name(), new AndCondition($join_conditions));
-
-        $joins = new Joins(array($join));
-
-        $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, null, $joins);
-
-        return $context_dm::records($context_location::class_name(), $parameters);
-    }
-
-    // DONE
     public static function count_location_overview_with_rights_granted($context, $condition, $entities_condition)
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -207,236 +69,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $context_dm::count($context_location::class_name(), $parameters);
     }
 
-    // PERFORMANCE-TWEAKS-START
-
     // DONE
-    /**
-     * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
-     *
-     * @return array Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
-     */
-    public static function filter_location_identifiers_by_granted_right(
-        $context, $right, $entity_condition, $location_ids
-    )
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID));
 
-        $conditions[] = $entity_condition;
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID), $location_ids
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class, $context_class::PROPERTY_RIGHT_ID),
-            new StaticConditionVariable($right)
-        );
-        $condition = new AndCondition($conditions);
-
-        $parameters = new RecordRetrievesParameters($properties, $condition);
-
-        $rights_location_entity_rights = self::records($context_class, $parameters);
-
-        $location_ids = array();
-
-        while ($rights_location_entity_right = $rights_location_entity_rights->next_result())
-        {
-            $location_ids[$rights_location_entity_right[$context_class::PROPERTY_LOCATION_ID]] = 1;
-        }
-
-        return $location_ids;
-    }
-
-    // DONE
-    public static function retrieve_location_ids_by_identifiers($context, $identifiers, $type)
-    {
-        $context_location = ($context . '\Storage\DataClass\RightsLocation');
-
-        $properties = new DataClassProperties();
-
-        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER));
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER), $identifiers
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_location, $context_location::PROPERTY_TYPE),
-            new StaticConditionVariable($type)
-        );
-        $condition = new AndCondition($conditions);
-
-        $parameters = new RecordRetrievesParameters($properties, $condition);
-
-        $locations = self::records($context_location, $parameters);
-
-        $location_ids = array();
-
-        while ($location = $locations->next_result())
-        {
-            $location_ids[$location[$context_location::PROPERTY_IDENTIFIER]] =
-                $location[$context_location::PROPERTY_ID];
-        }
-
-        return $location_ids;
-    }
-
-    //DONE
-    public static function retrieve_location_parent_ids($context, $condition)
-    {
-        $context_location = ($context . '\Storage\DataClass\RightsLocation');
-
-        $properties = new DataClassProperties();
-
-        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_PARENT_ID));
-
-        $parameters = new RecordRetrievesParameters($properties, $condition);
-
-        $locations = self::records($context_location, $parameters);
-
-        $location_parent_ids = array();
-        while ($location = $locations->next_result())
-        {
-            $location_parent_ids[$location[$context_location::PROPERTY_ID]] =
-                $location[$context_location::PROPERTY_PARENT_ID];
-        }
-
-        return $location_parent_ids;
-    }
-
-    // PERFORMANCE-TWEAKS-END
-
-    /*
-     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
-     * This could be easily replaced with a generic retrieve, as is evidenced from the method body.
-     */
-    // DONE
-    public function retrieve_rights_location($context, $condition = null)
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocation');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        $rights_location = $context_dm::retrieve(
-            $context_class::class_name(), new DataClassRetrieveParameters($condition)
-        );
-
-        if ($rights_location)
-        {
-            $rights_location->set_context($context);
-        }
-
-        return $rights_location;
-    }
-
-    // DONE
-    public static function retrieve_rights_location_by_identifier(
-        $context, $type, $identifier, $tree_identifier = '0', $tree_type = RightsUtil :: TREE_TYPE_ROOT
-    )
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocation');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TREE_TYPE),
-            new StaticConditionVariable($tree_type)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TREE_IDENTIFIER),
-            new StaticConditionVariable($tree_identifier)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_IDENTIFIER),
-            new StaticConditionVariable($identifier)
-        );
-
-        if ($type != null)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TYPE),
-                new StaticConditionVariable($type)
-            );
-        }
-
-        $condition = new AndCondition($conditions);
-
-        $location = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve(
-            $context_class, new DataClassRetrieveParameters($condition)
-        );
-
-        if (!$location)
-        {
-            return false;
-        }
-
-        return $location;
-    }
-
-    /*
-     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
-     * This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method body.
-     */
-    // DONE
-    public static function retrieve_rights_location_by_id($context, $location_id)
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocation');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        $location = $context_dm::retrieve_by_id($context_class::class_name(), $location_id);
-
-        if (!$location)
-        {
-            return null;
-        }
-
-        return $location;
-    }
-
-    // DONE
-    public static function retrieve_rights_location_entity_right(
-        $context, $right, $entity_id, $entity_type, $location_id
-    )
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entity_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entity_type)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_RIGHT_ID),
-            new StaticConditionVariable($right)
-        );
-        $condition = new AndCondition($conditions);
-
-        $rights_location_entity_right = $context_dm::retrieve(
-            $context_class::class_name(), new DataClassRetrieveParameters($condition)
-        );
-
-        if ($rights_location_entity_right)
-        {
-            $rights_location_entity_right->set_context($context);
-        }
-
-        return $rights_location_entity_right;
-    }
-
-    /**
-     * Removes the entity rights linked to a location.
-     */
-
-    // DONE
     public static function delete_rights_location_entity_rights(
         $location, $entity_type = null, $entity_id = null, $right_id = null
     )
@@ -482,62 +117,50 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $context_dm::deletes($context_class::class_name(), $condition);
     }
 
-    /*
-     * @deprecated Provided for backwards campatibility for the migration package which post_processes locations from
-     * different contexts. This could be easily replaced with a generic retrieves, as is evidenced from the method body.
-     */
-    // DONE - No longer used?
-    public static function retrieve_rights_locations(
-        $context, $condition = null, $offset = null, $max_objects = null, $order_by = null
-    )
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocation');
-        $context_dm = ($context . '\Storage\DataManager');
-
-        return $context_dm::retrieves(
-            $context_class::class_name(), new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
-        );
-    }
-
-    /*
-     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
-     * This could be easily replaced with a generic retrieves, as is evidenced from the method body.
-     */
     // DONE
-    public static function retrieve_rights_location_rights(
-        $context, $condition = null, $offset = null, $max_objects = null, $order_by = null
+
+    /**
+     * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
+     *
+     * @return array Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
+     */
+    public static function filter_location_identifiers_by_granted_right(
+        $context, $right, $entity_condition, $location_ids
     )
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-        $context_dm = ($context . '\Storage\DataManager');
 
-        return $context_dm::retrieves(
-            $context_class::class_name(), new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID));
+
+        $conditions[] = $entity_condition;
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID), $location_ids
         );
-    }
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class, $context_class::PROPERTY_RIGHT_ID),
+            new StaticConditionVariable($right)
+        );
+        $condition = new AndCondition($conditions);
 
-    /*
-     * @deprecated Provided for backwards campatibility for the migration package which post_processes locations from
-     * different contexts. This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method
-     * body.
-     */
-    // DONE
-    public static function retrieve_rights_location_entity_right_by_id($context, $id)
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-        $context_dm = ($context . '\Storage\DataManager');
+        $parameters = new RecordRetrievesParameters($properties, $condition);
 
-        $rights_location_entity_right = $context_dm::retrieve_by_id($context_class::class_name(), $id);
+        $rights_location_entity_rights = self::records($context_class, $parameters);
 
-        if ($rights_location_entity_right)
+        $location_ids = array();
+
+        while ($rights_location_entity_right = $rights_location_entity_rights->next_result())
         {
-            $rights_location_entity_right->set_context($context);
+            $location_ids[$rights_location_entity_right[$context_class::PROPERTY_LOCATION_ID]] = 1;
         }
 
-        return $rights_location_entity_right;
+        return $location_ids;
     }
 
+    // PERFORMANCE-TWEAKS-START
+
     // DONE
+
     public static function retrieve_granted_rights_array($location, $entities_condition)
     {
         $context = $location->get_context();
@@ -594,6 +217,426 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $granted_rights;
     }
+
+    // DONE
+
+    public static function retrieve_identifiers_with_right_granted(
+        $right_id, $context, $entities_condition, $condition, $parent_has_right, $offset = null, $max_objects = null
+    )
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+        $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        if (!$parent_has_right)
+        {
+
+            $join_condition = new EqualityCondition(
+                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID),
+                new PropertyConditionVariable(
+                    $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
+                )
+            );
+            if ($right_id)
+            {
+                $right_id_condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        $context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID
+                    ), new StaticConditionVariable($right_id)
+                );
+                $join_condition = new AndCondition($join_condition, $right_id_condition);
+            }
+
+            $join = new Join($context_entity_right::class_name(), $join_condition);
+
+            $joins = new Joins();
+            $joins->add($join);
+
+            if ($entities_condition)
+            {
+                $condition = new AndCondition($condition, $entities_condition);
+            }
+
+            $parameters = new DataClassDistinctParameters(
+                $condition, new DataClassProperties(
+                array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+            ), $joins
+            );
+
+            return $context_dm::distinct($context_location::class_name(), $parameters);
+        }
+        else
+        {
+            // Inheriting children
+            $inheriting_condition = new AndCondition(
+                $condition, new EqualityCondition(
+                    new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_INHERIT),
+                    new StaticConditionVariable(1)
+                )
+            );
+            $parameters = new DataClassDistinctParameters(
+                $inheriting_condition, new DataClassProperties(
+                    array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+                )
+            );
+            $inheriting_identifiers = $context_dm::distinct($context_location::class_name(), $parameters);
+
+            // Non-inheriting children
+            $join = new Join(
+                $context_entity_right::class_name(), new EqualityCondition(
+                    new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
+                    )
+                )
+            );
+
+            $joins = new Joins(array($join));
+
+            $non_inheriting_conditions = array();
+            $non_inheriting_conditions[] = $condition;
+            $non_inheriting_conditions[] = $entities_condition;
+            $non_inheriting_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_INHERIT),
+                new StaticConditionVariable(0)
+            );
+            $non_inheriting_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID
+                ), new StaticConditionVariable($right_id)
+            );
+
+            $parameters = new DataClassDistinctParameters(
+                new AndCondition($non_inheriting_conditions), new DataClassProperties(
+                array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+            ), $joins
+            );
+
+            $non_inheriting_identifiers = $context_dm::distinct($context_location::class_name(), $parameters);
+
+            return array_merge($inheriting_identifiers, $non_inheriting_identifiers);
+        }
+    }
+
+    //DONE
+
+    public static function retrieve_location_ids_by_identifiers($context, $identifiers, $type)
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER));
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER), $identifiers
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_location, $context_location::PROPERTY_TYPE),
+            new StaticConditionVariable($type)
+        );
+        $condition = new AndCondition($conditions);
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $locations = self::records($context_location, $parameters);
+
+        $location_ids = array();
+
+        while ($location = $locations->next_result())
+        {
+            $location_ids[$location[$context_location::PROPERTY_IDENTIFIER]] =
+                $location[$context_location::PROPERTY_ID];
+        }
+
+        return $location_ids;
+    }
+
+    // PERFORMANCE-TWEAKS-END
+
+    /*
+     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
+     * This could be easily replaced with a generic retrieve, as is evidenced from the method body.
+     */
+    // DONE
+
+    public static function retrieve_location_overview_with_rights_granted(
+        $context, $condition, $entities_condition, $offset = null, $max_objects = null
+    )
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+        $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $properties = new DataClassProperties();
+
+        $properties->add(
+            new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE)
+        );
+        $properties->add(
+            new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_IDENTIFIER)
+        );
+
+        $join_conditions = array();
+
+        if ($entities_condition)
+        {
+            $join_conditions[] = $entities_condition;
+        }
+
+        $join_conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                $context_entity_right::class_name(), $context_entity_right::PROPERTY_LOCATION_ID
+            ), new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_ID)
+        );
+
+        $join = new Join($context_entity_right::class_name(), new AndCondition($join_conditions));
+
+        $joins = new Joins(array($join));
+
+        $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, null, $joins);
+
+        return $context_dm::records($context_location::class_name(), $parameters);
+    }
+
+    // DONE
+
+    public static function retrieve_location_parent_ids($context, $condition)
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_PARENT_ID));
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $locations = self::records($context_location, $parameters);
+
+        $location_parent_ids = array();
+        while ($location = $locations->next_result())
+        {
+            $location_parent_ids[$location[$context_location::PROPERTY_ID]] =
+                $location[$context_location::PROPERTY_PARENT_ID];
+        }
+
+        return $location_parent_ids;
+    }
+
+    /*
+     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
+     * This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method body.
+     */
+    // DONE
+
+    public function retrieve_rights_location($context, $condition = null)
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocation');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $rights_location = $context_dm::retrieve(
+            $context_class::class_name(), new DataClassRetrieveParameters($condition)
+        );
+
+        if ($rights_location)
+        {
+            $rights_location->set_context($context);
+        }
+
+        return $rights_location;
+    }
+
+    // DONE
+
+    public static function retrieve_rights_location_by_id($context, $location_id)
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocation');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $location = $context_dm::retrieve_by_id($context_class::class_name(), $location_id);
+
+        if (!$location)
+        {
+            return null;
+        }
+
+        return $location;
+    }
+
+    /**
+     * Removes the entity rights linked to a location.
+     */
+
+    // DONE
+    public static function retrieve_rights_location_by_identifier(
+        $context, $type, $identifier, $tree_identifier = '0', $tree_type = RightsUtil :: TREE_TYPE_ROOT
+    )
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocation');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TREE_TYPE),
+            new StaticConditionVariable($tree_type)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TREE_IDENTIFIER),
+            new StaticConditionVariable($tree_identifier)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_IDENTIFIER),
+            new StaticConditionVariable($identifier)
+        );
+
+        if ($type != null)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TYPE),
+                new StaticConditionVariable($type)
+            );
+        }
+
+        $condition = new AndCondition($conditions);
+
+        $location = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve(
+            $context_class, new DataClassRetrieveParameters($condition)
+        );
+
+        if (!$location)
+        {
+            return false;
+        }
+
+        return $location;
+    }
+
+    /*
+     * @deprecated Provided for backwards campatibility for the migration package which post_processes locations from
+     * different contexts. This could be easily replaced with a generic retrieves, as is evidenced from the method body.
+     */
+    // DONE - No longer used?
+
+    public static function retrieve_rights_location_entity_right(
+        $context, $right, $entity_id, $entity_type, $location_id
+    )
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_ID),
+            new StaticConditionVariable($entity_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($entity_type)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_LOCATION_ID),
+            new StaticConditionVariable($location_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_RIGHT_ID),
+            new StaticConditionVariable($right)
+        );
+        $condition = new AndCondition($conditions);
+
+        $rights_location_entity_right = $context_dm::retrieve(
+            $context_class::class_name(), new DataClassRetrieveParameters($condition)
+        );
+
+        if ($rights_location_entity_right)
+        {
+            $rights_location_entity_right->set_context($context);
+        }
+
+        return $rights_location_entity_right;
+    }
+
+    /*
+     * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
+     * This could be easily replaced with a generic retrieves, as is evidenced from the method body.
+     */
+    // DONE
+
+    public static function retrieve_rights_location_entity_right_by_id($context, $id)
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        $rights_location_entity_right = $context_dm::retrieve_by_id($context_class::class_name(), $id);
+
+        if ($rights_location_entity_right)
+        {
+            $rights_location_entity_right->set_context($context);
+        }
+
+        return $rights_location_entity_right;
+    }
+
+    /*
+     * @deprecated Provided for backwards campatibility for the migration package which post_processes locations from
+     * different contexts. This could be easily replaced with a generic retrieve_by_id, as is evidenced from the method
+     * body.
+     */
+    // DONE
+
+    public static function retrieve_rights_location_rights(
+        $context, $condition = null, $offset = null, $max_objects = null, $order_by = null
+    )
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        return $context_dm::retrieves(
+            $context_class::class_name(), new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+        );
+    }
+
+    // DONE
+
+    public static function retrieve_rights_location_rights_for_location($context, $location_id, $rights)
+    {
+        $class_name = $context . '\Storage\DataClass\RightsLocationEntityRight';
+
+        if (!is_array($rights))
+        {
+            $rights = array($rights);
+        }
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),
+            new StaticConditionVariable($location_id)
+        );
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_RIGHT_ID), $rights
+        );
+
+        $condition = new AndCondition($conditions);
+
+        // order by entity_type to avoid invalid data when looping the rights
+        $order = new OrderBy(
+            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), SORT_ASC
+        );
+
+        return self::retrieve_rights_location_rights($context, $condition, null, null, $order);
+    }
+    // DONE
+
+    public static function retrieve_rights_locations(
+        $context, $condition = null, $offset = null, $max_objects = null, $order_by = null
+    )
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocation');
+        $context_dm = ($context . '\Storage\DataManager');
+
+        return $context_dm::retrieves(
+            $context_class::class_name(), new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+        );
+    }
+
     // DONE
 
     /**
@@ -690,32 +733,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $target_entities;
-    }
-
-    // DONE
-    public static function retrieve_rights_location_rights_for_location($context, $location_id, $rights)
-    {
-        $class_name = $context . '\Storage\DataClass\\' . RightsLocationEntityRight::class_name(false);
-
-        if (!is_array($rights))
-        {
-            $rights = array($rights);
-        }
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location_id)
-        );
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_RIGHT_ID), $rights
-        );
-
-        $condition = new AndCondition($conditions);
-
-        // order by entity_type to avoid invalid data when looping the rights
-        $order = new OrderBy(
-            new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), SORT_ASC
-        );
-
-        return self::retrieve_rights_location_rights($context, $condition, null, null, $order);
     }
 }

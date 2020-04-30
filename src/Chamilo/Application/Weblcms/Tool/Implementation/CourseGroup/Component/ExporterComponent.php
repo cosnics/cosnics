@@ -218,7 +218,7 @@ class ExporterComponent extends Manager
         {
             // if (!$block_data instanceof User)
             // {
-            // $block_data = DataClass:: factory(User:: class_name(), $block_data);
+            // $block_data = DataClass:: factory(User::class, $block_data);
             // }
 
             $index ++;
