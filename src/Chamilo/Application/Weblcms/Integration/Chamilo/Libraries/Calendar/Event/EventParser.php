@@ -111,14 +111,14 @@ class EventParser
     public function getEvents()
     {
         $course = DataManager::retrieve_by_id(
-            Course::class_name(), 
+            Course::class,
             $this->getPublication()->get_course_id());
         
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
             $this->getPublication()->get_content_object(), 
             $this->getFromDate(), 
             $this->getToDate(), 
-            Event::class_name());
+            Event::class);
         
         $events = $parser->getEvents();
         foreach ($events as &$parsedEvent)

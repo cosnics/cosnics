@@ -21,6 +21,6 @@ class AttemptLearningPathItem extends Event
     public function getTrackerClasses()
     {
         return array(
-            TreeNodeAttempt::class_name());
+            TreeNodeAttempt::class);
     }
 }

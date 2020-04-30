@@ -22,6 +22,6 @@ class ContentObjectPropertyProvider
      */
     public function getEntityType()
     {
-        return Assignment::class_name();
+        return Assignment::class;
     }
 }

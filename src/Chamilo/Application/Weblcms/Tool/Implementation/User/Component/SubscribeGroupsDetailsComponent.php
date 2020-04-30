@@ -129,14 +129,14 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $conditions = array();
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+            new PropertyConditionVariable(User::class, User::PROPERTY_ID),
             $subscribedUserIds);
 
         $conditionProperties = array();
-        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
         $searchCondition = $this->tabButtonToolbarRenderer->getConditions($conditionProperties);
         if ($searchCondition)

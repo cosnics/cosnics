@@ -33,13 +33,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Forum::class_name());
+        return array(Forum::class);
     }
 
     public static function get_subforum_parents($subforum_id)
     {
         $parent = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $subforum_id);
 
         while (! empty($parent))
@@ -48,7 +48,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $parent = DataManager::retrieve_complex_content_object_items(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_REF),
                     new StaticConditionVariable($parent->get_parent())))->as_array();
             $parent = $parent[0];

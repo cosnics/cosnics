@@ -127,7 +127,7 @@ class TreeBuilderTest extends ChamiloTestCase
 
         $this->contentObjectRepositoryMock->expects($this->once())
             ->method('findAll')
-            ->with(ContentObject::class_name())
+            ->with(ContentObject::class)
             ->will($this->returnValue($resultSet));
 
         $this->tree = $this->treeBuilder->buildTree($contentObjects[0]);

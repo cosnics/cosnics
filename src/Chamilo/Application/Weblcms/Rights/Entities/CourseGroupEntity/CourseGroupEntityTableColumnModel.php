@@ -18,9 +18,9 @@ class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION));
         $this->add_column(new StaticTableColumn(self::COLUMN_USERS));
         $this->add_column(new StaticTableColumn(self::COLUMN_SUBGROUPS));
         

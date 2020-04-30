@@ -47,7 +47,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCourse($courseId)
     {
-        return DataManager::retrieve_by_id(Course::class_name(), $courseId);
+        return DataManager::retrieve_by_id(Course::class, $courseId);
     }
 
     /**
@@ -72,12 +72,12 @@ class CourseRepository implements CourseRepositoryInterface
     function findCourses(array $courseIds)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID),
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
             $courseIds
         );
 
         $courses = DataManager::retrieves(
-            Course::class_name(),
+            Course::class,
             new DataClassRetrievesParameters($condition)
         );
 
@@ -93,7 +93,7 @@ class CourseRepository implements CourseRepositoryInterface
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                Course::class_name(),
+                Course::class,
                 Course::PROPERTY_COURSE_TYPE_ID
             ),
             new StaticConditionVariable($courseTypeId)
@@ -102,7 +102,7 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
         $courses = DataManager::retrieves(
-            Course::class_name(),
+            Course::class,
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
 
@@ -123,7 +123,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Course::class_name(),
+                Course::class,
                 Course::PROPERTY_COURSE_TYPE_ID
             ),
             new StaticConditionVariable($courseType->getId())
@@ -131,7 +131,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                Course::class_name(),
+                Course::class,
                 Course::PROPERTY_ID
             ),
             $subscribedCourseIds
@@ -142,7 +142,7 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
         $courses = DataManager::retrieves(
-            Course::class_name(),
+            Course::class,
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
 
@@ -182,7 +182,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         $courses = DataManager::retrieves(
-            Course::class_name(),
+            Course::class,
             new DataClassRetrievesParameters($condition, null, null, array(), $joins)
         );
 
@@ -232,7 +232,7 @@ class CourseRepository implements CourseRepositoryInterface
     public function findCoursesByParameters(DataClassRetrievesParameters $retrievesParameters)
     {
         $courses = DataManager::retrieves(
-            Course::class_name(),
+            Course::class,
             $retrievesParameters
         );
 
@@ -296,26 +296,26 @@ class CourseRepository implements CourseRepositoryInterface
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($userId)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($courseId)
         );
 
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassRetrieveParameters($condition)
         );
     }
@@ -333,26 +333,26 @@ class CourseRepository implements CourseRepositoryInterface
         $conditions = array();
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             $groupIds
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($courseId)
         );
 
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassRetrievesParameters($condition)
         )->as_array();
     }
@@ -367,12 +367,12 @@ class CourseRepository implements CourseRepositoryInterface
     public function findCourseToolByName($toolName)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_NAME),
+            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_NAME),
             new StaticConditionVariable($toolName)
         );
 
         return DataManager::retrieve(
-            CourseTool::class_name(),
+            CourseTool::class,
             new DataClassRetrieveParameters($condition)
         );
     }
@@ -384,7 +384,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findToolRegistrations()
     {
-        return DataManager::retrieves(CourseTool::class_name())->as_array();
+        return DataManager::retrieves(CourseTool::class)->as_array();
     }
 
     /**
@@ -397,30 +397,30 @@ class CourseRepository implements CourseRepositoryInterface
     public function findCoursesWithTitularAndCourseSettings(Condition $condition = null)
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertiesConditionVariable(Course::class_name()));
-        $properties->add(new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_NAME));
-        $properties->add(new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_TOOL_ID));
+        $properties->add(new PropertiesConditionVariable(Course::class));
+        $properties->add(new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_NAME));
+        $properties->add(new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID));
         $properties->add(
-            new PropertyConditionVariable(CourseRelCourseSetting::class_name(), CourseRelCourseSetting::PROPERTY_VALUE)
+            new PropertyConditionVariable(CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_VALUE)
         );
 
         $properties->add(
-            new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME, 'titular_firstname')
+            new FixedPropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME, 'titular_firstname')
         );
 
         $properties->add(
-            new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME, 'titular_lastname')
+            new FixedPropertyConditionVariable(User::class, User::PROPERTY_LASTNAME, 'titular_lastname')
         );
 
         $joins = new Joins();
 
         $joins->add(
             new Join(
-                CourseRelCourseSetting::class_name(),
+                CourseRelCourseSetting::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID),
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
                     new PropertyConditionVariable(
-                        CourseRelCourseSetting::class_name(),
+                        CourseRelCourseSetting::class,
                         CourseRelCourseSetting::PROPERTY_COURSE_ID
                     )
                 )
@@ -429,23 +429,23 @@ class CourseRepository implements CourseRepositoryInterface
 
         $joins->add(
             new Join(
-                CourseSetting::class_name(),
+                CourseSetting::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseRelCourseSetting::class_name(),
+                        CourseRelCourseSetting::class,
                         CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID
                     ),
-                    new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_ID)
+                    new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_ID)
                 )
             )
         );
 
         $joins->add(
             new Join(
-                User::class_name(),
+                User::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITULAR_ID),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID)
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_TITULAR_ID),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID)
                 ),
                 Join::TYPE_LEFT
             )
@@ -455,7 +455,7 @@ class CourseRepository implements CourseRepositoryInterface
             new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
 
         $courseRecords = DataManager::records(
-            Course::class_name(),
+            Course::class,
             $recordRetrievesParameters
         );
 

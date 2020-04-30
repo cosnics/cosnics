@@ -68,7 +68,7 @@ class SchemaInstance extends DataClass
 
     public function getUser()
     {
-        return DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
     }
 
     /**
@@ -111,11 +111,11 @@ class SchemaInstance extends DataClass
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE
-                    ), new StaticConditionVariable(static::class_name())
+                        RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE
+                    ), new StaticConditionVariable(static::class)
                 ),
                 new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID),
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
                     new StaticConditionVariable($this->get_id())
                 )
             )
@@ -125,20 +125,20 @@ class SchemaInstance extends DataClass
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE
-                    ), new StaticConditionVariable(static::class_name())
+                        RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE
+                    ), new StaticConditionVariable(static::class)
                 ),
                 new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID),
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
                     new StaticConditionVariable($this->get_id())
                 )
             )
         );
 
-        $dependencies[RelationInstance::class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
 
-        $dependencies[ElementInstance::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ElementInstance::class_name(), ElementInstance::PROPERTY_SCHEMA_INSTANCE_ID),
+        $dependencies[ElementInstance::class] = new EqualityCondition(
+            new PropertyConditionVariable(ElementInstance::class, ElementInstance::PROPERTY_SCHEMA_INSTANCE_ID),
             new StaticConditionVariable($this->get_id())
         );
 

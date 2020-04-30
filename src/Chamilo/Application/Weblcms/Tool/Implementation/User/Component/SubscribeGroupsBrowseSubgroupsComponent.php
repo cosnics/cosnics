@@ -45,17 +45,17 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
     public function get_table_condition($table_class_name)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId()));
 
         $query = $this->tabButtonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
                 '*' . $query . '*');
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $conditions[] = new OrCondition($conditions2);
         }

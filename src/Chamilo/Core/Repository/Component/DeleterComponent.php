@@ -45,7 +45,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $object_id)
             {
-                $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+                $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
                 $unlinkAllowed = $this->getPublicationAggregator()->canContentObjectBeUnlinked($object);
 
                 if (RightsService::getInstance()->canDestroyContentObject(

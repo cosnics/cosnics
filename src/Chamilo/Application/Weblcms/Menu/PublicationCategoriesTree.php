@@ -57,41 +57,41 @@ class PublicationCategoriesTree extends GenericTree
 
     public function get_node($node_id)
     {
-        return DataManager::retrieve_by_id(ContentObjectPublicationCategory::class_name(), $node_id);
+        return DataManager::retrieve_by_id(ContentObjectPublicationCategory::class, $node_id);
     }
 
     public function get_node_children($parent_node_id)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_node_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
         );
         if (!$this->is_invisible_allowed())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_VISIBLE
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_VISIBLE
                 ), new StaticConditionVariable(true)
             );
         }
         $condition = new AndCondition($conditions);
 
         $children = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters(
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
                 $condition, null, null, new OrderBy(
                     new PropertyConditionVariable(
-                        ContentObjectPublicationCategory::class_name(),
+                        ContentObjectPublicationCategory::class,
                         ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                     )
                 )
@@ -224,24 +224,24 @@ class PublicationCategoriesTree extends GenericTree
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($node_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
         );
         if (!$this->is_invisible_allowed())
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_VISIBLE
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_VISIBLE
                 ), new StaticConditionVariable(true)
             );
         }
@@ -249,7 +249,7 @@ class PublicationCategoriesTree extends GenericTree
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-                ContentObjectPublicationCategory::class_name(), new DataClassCountParameters($condition)
+                ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
             ) > 0;
     }
 }

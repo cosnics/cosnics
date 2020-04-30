@@ -52,7 +52,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
     public function allowed_to_delete_category($category_id)
     {
         $category = DataManager::retrieve_by_id(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             $category_id);
 
         if ($category && ! $category->get_allow_change())
@@ -72,7 +72,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
     public function allowed_to_edit_category($category_id)
     {
         $category = DataManager::retrieve_by_id(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             $category_id);
 
         if ($category && ! $category->get_allow_change())
@@ -92,20 +92,20 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->get_parent()->get_course_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->get_parent()->get_tool_id()));
 
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             new DataClassCountParameters($condition));
     }
 
@@ -118,18 +118,18 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->get_parent()->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->get_parent()->get_tool_id()));
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -143,17 +143,17 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_parent()->get_course_id()));
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CATEGORY_ID),
             $category_id);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL),
             new StaticConditionVariable($this->get_parent()->get_tool_id()));
         $condition = new AndCondition($conditions);
@@ -164,11 +164,11 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_PARENT),
             new StaticConditionVariable($category_id));
         $subcategries = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition));
 
         while ($cat = $subcategries->next_result())

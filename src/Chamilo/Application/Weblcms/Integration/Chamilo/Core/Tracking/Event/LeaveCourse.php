@@ -21,7 +21,7 @@ class LeaveCourse extends Event
     public function getTrackerClasses()
     {
         return array(
-            CourseVisit::class_name());
+            CourseVisit::class);
     }
 
     public function getType()

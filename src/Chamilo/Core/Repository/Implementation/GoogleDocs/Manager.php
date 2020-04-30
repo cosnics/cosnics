@@ -42,13 +42,13 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $document_conditions = array();
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), '*.doc', File::get_type_name()
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.doc', File::get_type_name()
         );
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), '*.xls', File::get_type_name()
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.xls', File::get_type_name()
         );
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), '*.ppt', File::get_type_name()
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.ppt', File::get_type_name()
         );
 
         return new OrCondition($document_conditions);

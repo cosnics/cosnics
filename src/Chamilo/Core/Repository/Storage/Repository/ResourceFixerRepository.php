@@ -57,15 +57,15 @@ class ResourceFixerRepository
     {
         $conditions = [
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*<resource*'),
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*data-co-id*')];
 
         $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
 
-        return $this->dataClassRepository->retrieves(ContentObject::class_name(), $parameters);
+        return $this->dataClassRepository->retrieves(ContentObject::class, $parameters);
     }
 
     /**
@@ -77,15 +77,15 @@ class ResourceFixerRepository
     {
         $conditions = [
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*<resource*'),
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*data-co-id*')];
 
         $parameters = new DataClassCountParameters(new OrCondition($conditions));
 
-        return $this->dataClassRepository->count(ContentObject::class_name(), $parameters);
+        return $this->dataClassRepository->count(ContentObject::class, $parameters);
     }
 
     /**
@@ -94,7 +94,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentMatchingQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentMatchingQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentMatchingQuestion::class);
     }
 
     /**
@@ -106,7 +106,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchingQuestion::class_name(),
+            AssessmentMatchingQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -116,7 +116,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentMatchNumericQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentMatchNumericQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentMatchNumericQuestion::class);
     }
 
     /**
@@ -128,7 +128,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchNumericQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchNumericQuestion::class_name(),
+            AssessmentMatchNumericQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -138,7 +138,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentMatchTextQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentMatchTextQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentMatchTextQuestion::class);
     }
 
     /**
@@ -150,7 +150,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchTextQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchTextQuestion::class_name(),
+            AssessmentMatchTextQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -160,7 +160,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentMatrixQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentMatrixQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentMatrixQuestion::class);
     }
 
     /**
@@ -172,7 +172,7 @@ class ResourceFixerRepository
     public function findAssessmentMatrixQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatrixQuestion::class_name(),
+            AssessmentMatrixQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -182,7 +182,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentMultipleChoiceQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentMultipleChoiceQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentMultipleChoiceQuestion::class);
     }
 
     /**
@@ -194,7 +194,7 @@ class ResourceFixerRepository
     public function findAssessmentMultipleChoiceQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMultipleChoiceQuestion::class_name(),
+            AssessmentMultipleChoiceQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -204,7 +204,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentRatingQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentRatingQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentRatingQuestion::class);
     }
 
     /**
@@ -216,7 +216,7 @@ class ResourceFixerRepository
     public function findAssessmentRatingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentRatingQuestion::class_name(),
+            AssessmentRatingQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -226,7 +226,7 @@ class ResourceFixerRepository
      */
     public function countAssessmentSelectQuestions()
     {
-        return $this->dataClassRepository->count(AssessmentSelectQuestion::class_name());
+        return $this->dataClassRepository->count(AssessmentSelectQuestion::class);
     }
 
     /**
@@ -238,7 +238,7 @@ class ResourceFixerRepository
     public function findAssessmentSelectQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentSelectQuestion::class_name(),
+            AssessmentSelectQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -248,7 +248,7 @@ class ResourceFixerRepository
      */
     public function countFillInBlanksQuestions()
     {
-        return $this->dataClassRepository->count(FillInBlanksQuestion::class_name());
+        return $this->dataClassRepository->count(FillInBlanksQuestion::class);
     }
 
     /**
@@ -260,7 +260,7 @@ class ResourceFixerRepository
     public function findFillInBlanksQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            FillInBlanksQuestion::class_name(),
+            FillInBlanksQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -270,7 +270,7 @@ class ResourceFixerRepository
      */
     public function countForumPosts()
     {
-        return $this->dataClassRepository->count(ForumPost::class_name());
+        return $this->dataClassRepository->count(ForumPost::class);
     }
 
     /**
@@ -282,7 +282,7 @@ class ResourceFixerRepository
     public function findForumPosts($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            ForumPost::class_name(),
+            ForumPost::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -292,7 +292,7 @@ class ResourceFixerRepository
      */
     public function countHotspotQuestions()
     {
-        return $this->dataClassRepository->count(HotspotQuestion::class_name());
+        return $this->dataClassRepository->count(HotspotQuestion::class);
     }
 
     /**
@@ -304,7 +304,7 @@ class ResourceFixerRepository
     public function findHotspotQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            HotspotQuestion::class_name(),
+            HotspotQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -314,7 +314,7 @@ class ResourceFixerRepository
      */
     public function countOrderingQuestions()
     {
-        return $this->dataClassRepository->count(OrderingQuestion::class_name());
+        return $this->dataClassRepository->count(OrderingQuestion::class);
     }
 
     /**
@@ -326,7 +326,7 @@ class ResourceFixerRepository
     public function findOrderingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            OrderingQuestion::class_name(),
+            OrderingQuestion::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -336,7 +336,7 @@ class ResourceFixerRepository
      */
     public function countWorkspaces()
     {
-        return $this->dataClassRepository->count(Workspace::class_name());
+        return $this->dataClassRepository->count(Workspace::class);
     }
 
     /**
@@ -348,7 +348,7 @@ class ResourceFixerRepository
     public function findWorkspaces($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
@@ -362,7 +362,7 @@ class ResourceFixerRepository
     public function findContentObjectById($contentObjectId)
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $contentObjectId);
     }
 }

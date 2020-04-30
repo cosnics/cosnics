@@ -53,11 +53,11 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
     protected function retrieveEntitiesForCourse($course_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($course_id));
 
         return CourseGroupDataManager::retrieves(
-            CourseGroup::class_name(),
+            CourseGroup::class,
             new DataClassRetrievesParameters($condition))->as_array();
     }
 }

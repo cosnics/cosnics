@@ -18,7 +18,7 @@ class BrowserBlock extends Block
         $tracker = new Browser();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                Browser::class_name(),
+                Browser::class,
                 Browser::PROPERTY_TYPE),
             new StaticConditionVariable('browser'));
         $description[0] = Translation::get('Browsers');

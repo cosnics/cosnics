@@ -24,7 +24,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public static function get_additional_property_names()
@@ -47,7 +47,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
         if (! $this->reference_object instanceof Portfolio)
         {
             $this->reference_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_reference());
         }
         return $this->reference_object;

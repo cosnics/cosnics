@@ -45,7 +45,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
 
         return DataManager::retrieve_by_id(
-            CourseGroup::class_name(), $course_group_id
+            CourseGroup::class, $course_group_id
         );
     }
 

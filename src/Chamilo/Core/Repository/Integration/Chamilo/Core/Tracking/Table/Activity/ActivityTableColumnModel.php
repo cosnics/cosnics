@@ -29,9 +29,9 @@ class ActivityTableColumnModel extends DataClassTableColumnModel
         $glyph = new FontAwesomeGlyph('mouse', array(), Translation::get('ActivityType'), 'fas');
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE_ICON, $glyph->render()));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class_name(), Activity::PROPERTY_TYPE));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class_name(), Activity::PROPERTY_CONTENT));
+        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_TYPE));
+        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_CONTENT));
         $this->add_column(new StaticTableColumn(self::PROPERTY_USER, Translation::get('User')));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class_name(), Activity::PROPERTY_DATE));
+        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_DATE));
     }
 }

@@ -70,7 +70,7 @@ abstract class NewBlock extends Block
             Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types')));
         $archiveCondition = new NotCondition(
             new InCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID), 
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID), 
                 $excludedCourseTypes));
         
         // All user courses
@@ -108,7 +108,7 @@ abstract class NewBlock extends Block
                     $condition, 
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ContentObjectPublication::class_name(),
+                            ContentObjectPublication::class,
                             ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX)));
                 
                 if ($publications == 0)
@@ -151,7 +151,7 @@ abstract class NewBlock extends Block
             $this->getContentObjectTypes());
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLICATION_DATE),
             InequalityCondition::GREATER_THAN_OR_EQUAL, 
             new StaticConditionVariable($last_visit_date));

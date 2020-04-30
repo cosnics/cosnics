@@ -45,37 +45,37 @@ class EndingAssignments extends Block
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID
             ),
             $course_ids
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL
             ),
             new StaticConditionVariable('assignment')
         );
 
         $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Assignment::class_name())
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+            new StaticConditionVariable(Assignment::class)
         );
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
             ),
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             null,
             $subselect_condition
         );
         $condition = new AndCondition($conditions);
 
         $publications = DataManager::retrieves(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassRetrievesParameters(
                 $condition,
                 null,
@@ -83,7 +83,7 @@ class EndingAssignments extends Block
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ContentObjectPublication::class_name(),
+                            ContentObjectPublication::class,
                             ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                         )
                     )

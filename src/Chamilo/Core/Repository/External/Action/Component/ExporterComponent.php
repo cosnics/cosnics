@@ -24,7 +24,7 @@ class ExporterComponent extends Manager implements TableSupport
         if (isset($external_repository_id))
         {
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class,
                 $external_repository_id);
             $success = $this->export_external_repository_object($object);
         }
@@ -48,12 +48,12 @@ class ExporterComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $type_conditions = array();
-        $types = array(File::class_name());
+        $types = array(File::class);
         
         foreach ($types as $type)
         {
             $type_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                 new StaticConditionVariable($type));
         }
         
@@ -65,10 +65,10 @@ class ExporterComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable(ContentObject::STATE_NORMAL));
         
         return new AndCondition($conditions);

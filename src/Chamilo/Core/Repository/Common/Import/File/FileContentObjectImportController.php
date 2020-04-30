@@ -37,7 +37,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) $this->get_parameters()->get_user()));
                 
                 if (! $calculator->canUpload($file->get_size()))
@@ -54,7 +54,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class_name(),
+                            User::class,
                             (int) $this->get_parameters()->get_user()));
                     
                     if ($calculator->canUpload($file->get_size()))
@@ -107,15 +107,15 @@ class FileContentObjectImportController extends ContentObjectImportController
             $hash = md5_file($file->get_path());
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parameters()->get_user()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
                 new StaticConditionVariable($hash));
             $condition = new AndCondition($conditions);
             $parameters = new DataClassRetrievesParameters($condition);
             
-            $content_objects = DataManager::retrieve_active_content_objects(File::class_name(), $parameters);
+            $content_objects = DataManager::retrieve_active_content_objects(File::class, $parameters);
             
             if ($content_objects->size() > 0)
             {

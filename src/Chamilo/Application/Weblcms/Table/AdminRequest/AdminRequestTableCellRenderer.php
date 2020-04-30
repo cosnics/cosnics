@@ -46,11 +46,11 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 return $motivation;
             case AdminRequestTableColumnModel::USER_NAME :
                 return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), $request->get_user_id()
+                    User::class, $request->get_user_id()
                 )->get_fullname();
 
             case AdminRequestTableColumnModel::COURSE_NAME :
-                return DataManager::retrieve_by_id(Course::class_name(), $request->get_course_id())->get_title();
+                return DataManager::retrieve_by_id(Course::class, $request->get_course_id())->get_title();
             case CommonRequest::PROPERTY_SUBJECT :
                 return $request->get_subject();
 

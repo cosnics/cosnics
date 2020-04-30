@@ -78,11 +78,11 @@ class DependencyVerifier
     {
         $condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT),
+                new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT),
                 new StaticConditionVariable($this->get_package()->get_context())));
 
         $registrations = DataManager::retrieves(
-            Registration::class_name(),
+            Registration::class,
             new DataClassRetrievesParameters($condition));
 
         while ($registration = $registrations->next_result())

@@ -50,7 +50,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(),
+                CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
             ),
             new StaticConditionVariable($courseUserCategory->getId())
@@ -58,7 +58,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(),
+                CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_COURSE_TYPE_ID
             ),
             new StaticConditionVariable($courseType->getId())
@@ -66,7 +66,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                Course::class_name(),
+                Course::class,
                 Course::PROPERTY_ID
             ),
             $subscribedCourseIds

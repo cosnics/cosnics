@@ -21,6 +21,6 @@ class AttemptLearningPath extends Event
     public function getTrackerClasses()
     {
         return array(
-            LearningPathAttempt::class_name());
+            LearningPathAttempt::class);
     }
 }

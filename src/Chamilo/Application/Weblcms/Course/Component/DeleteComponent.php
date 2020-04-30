@@ -38,7 +38,7 @@ class DeleteComponent extends Manager
         
         foreach ($course_ids as $course_id)
         {
-            $course = DataManager::retrieve_by_id(Course::class_name(), $course_id);
+            $course = DataManager::retrieve_by_id(Course::class, $course_id);
             
             if (! $course)
             {

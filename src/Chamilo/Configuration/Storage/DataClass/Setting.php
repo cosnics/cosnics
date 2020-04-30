@@ -149,9 +149,9 @@ class Setting extends DataClass
             if ($this->get_user_setting())
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
+                    new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
                     new StaticConditionVariable($this->get_id()));
-                if (! \Chamilo\Core\User\Storage\DataManager::deletes(UserSetting::class_name(), $condition))
+                if (! \Chamilo\Core\User\Storage\DataManager::deletes(UserSetting::class, $condition))
                 {
                     return false;
                 }

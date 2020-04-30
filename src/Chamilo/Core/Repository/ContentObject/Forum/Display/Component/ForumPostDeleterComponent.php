@@ -20,7 +20,7 @@ class ForumPostDeleterComponent extends Manager
     public function run()
     {
         $selected_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
-        $delete_post = DataManager::retrieve_by_id(ForumPost::class_name(), $selected_post_id);
+        $delete_post = DataManager::retrieve_by_id(ForumPost::class, $selected_post_id);
 
         if (! $delete_post instanceof ForumPost)
         {

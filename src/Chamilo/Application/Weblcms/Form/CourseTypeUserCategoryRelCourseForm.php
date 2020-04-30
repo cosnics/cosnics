@@ -38,7 +38,7 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
         $this->addElement('static', Course::PROPERTY_ID, Translation::get('CourseCode'));
 
         $course = CourseDataManager::retrieve_by_id(
-            Course::class_name(),
+            Course::class,
             $this->course_type_user_category_rel_course->get_course_id());
 
         $categories = DataManager::retrieve_course_user_categories_from_course_type(
@@ -107,7 +107,7 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
         $course_type_user_category_rel_course = $this->course_type_user_category_rel_course;
 
         $course = CourseDataManager::retrieve_by_id(
-            Course::class_name(),
+            Course::class,
             $course_type_user_category_rel_course->get_course_id());
 
         $defaults[Course::PROPERTY_ID] = $course->get_title();

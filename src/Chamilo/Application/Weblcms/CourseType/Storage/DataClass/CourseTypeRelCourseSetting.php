@@ -149,7 +149,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function get_course_type()
     {
-        return $this->get_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, CourseType::class_name());
+        return $this->get_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, CourseType::class);
     }
 
     /**

@@ -15,7 +15,7 @@ class ActiveInactiveBlock extends Block
     {
         $reporting_data = new ReportingData();
         $users = DataManager::retrieves(
-            User::class_name(),
+            User::class,
             new DataClassRetrievesParameters());
         $active[Translation::get('Active')] = 0;
         $active[Translation::get('Inactive')] = 0;

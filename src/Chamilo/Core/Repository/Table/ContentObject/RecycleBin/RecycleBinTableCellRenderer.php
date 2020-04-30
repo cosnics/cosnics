@@ -75,7 +75,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                     $category = DataManager::retrieve_categories(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID
+                                RepositoryCategory::class, RepositoryCategory::PROPERTY_ID
                             ), new StaticConditionVariable($pid)
                         )
                     )->next_result();

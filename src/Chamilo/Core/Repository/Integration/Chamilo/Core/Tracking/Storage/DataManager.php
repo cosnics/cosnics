@@ -19,7 +19,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_activity_parameters($type, $content_object)
     {
         $activity_condition = new EqualityCondition(
-            new PropertyConditionVariable(Activity::class_name(), Activity::PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(Activity::class, Activity::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object->get_id()));
 
         return new $type($activity_condition);
@@ -56,9 +56,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function countDirectActivitiesForContentObject(ContentObject $contentObject)
     {
-        $activity_parameters = self::get_activity_parameters(DataClassCountParameters::class_name(), $contentObject);
+        $activity_parameters = self::get_activity_parameters(DataClassCountParameters::class, $contentObject);
 
-        return self::count(Activity::class_name(), $activity_parameters);
+        return self::count(Activity::class, $activity_parameters);
     }
 
     /**
@@ -70,9 +70,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieveDirectActivitiesForContentObject(ContentObject $contentObject)
     {
-        $activity_parameters = self::get_activity_parameters(DataClassRetrievesParameters::class_name(), $contentObject);
+        $activity_parameters = self::get_activity_parameters(DataClassRetrievesParameters::class, $contentObject);
 
-        return self::retrieves(Activity::class_name(), $activity_parameters);
+        return self::retrieves(Activity::class, $activity_parameters);
     }
 
     public static function retrieve_activities(ContentObject $current_content_object, $condition, $offset, $count,

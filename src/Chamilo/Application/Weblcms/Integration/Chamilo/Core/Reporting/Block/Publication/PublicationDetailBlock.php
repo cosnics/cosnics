@@ -26,13 +26,13 @@ class PublicationDetailBlock extends ToolBlock
         $pid = Request::get(Manager::PARAM_PUBLICATION_ID);
         
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $pid);
         
         if (empty($content_object_publication))
         {
             $content_object_publication = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class,
                 $pid);
             $title = $content_object_publication->get_title();
             $id = $content_object_publication->get_id();

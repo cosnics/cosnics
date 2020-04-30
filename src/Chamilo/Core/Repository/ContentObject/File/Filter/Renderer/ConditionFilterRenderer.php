@@ -47,11 +47,11 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             {
                 $equality_conditions = array();
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
                     InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 0.9));
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
                     InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 1.1));
                 $conditions[] = new AndCondition($equality_conditions);
@@ -59,7 +59,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             else
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
                     $compare, 
                     new StaticConditionVariable($filesize_bytes));
             }
@@ -68,7 +68,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         if ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION))
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
                 '*.' . $filter_data->get_filter_property(FilterData::FILTER_EXTENSION));
         }
         elseif ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION_TYPE))
@@ -80,7 +80,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             foreach ($extensions as $extension)
             {
                 $extension_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+                    new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
                     '*.' . $extension);
             }
             

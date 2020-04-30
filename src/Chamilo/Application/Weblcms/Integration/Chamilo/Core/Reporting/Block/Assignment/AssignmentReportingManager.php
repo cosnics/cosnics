@@ -177,7 +177,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
 
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name(), true);
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class, true);
 
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $publicationId;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
@@ -204,7 +204,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     public function getContentObjectPublication()
     {
         return DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $this->getPublicationId()
+            ContentObjectPublication::class, $this->getPublicationId()
         );
     }
 
@@ -279,7 +279,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(), true
+                Assignment::class, true
             );
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
@@ -316,7 +316,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                Assignment::class_name(), true
+                Assignment::class, true
             );
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
@@ -365,26 +365,26 @@ abstract class AssignmentReportingManager extends ToolBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name())
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class)
             )
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
             new StaticConditionVariable(Assignment::class)
         );
 
         $condition = new AndCondition($conditions);
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
             )
         );
 

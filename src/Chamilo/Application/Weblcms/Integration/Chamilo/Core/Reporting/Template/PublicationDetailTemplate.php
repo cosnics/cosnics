@@ -89,7 +89,7 @@ class PublicationDetailTemplate extends ReportingTemplate
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => ToolPublicationsDetailTemplate::class_name()),
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => ToolPublicationsDetailTemplate::class),
                     array(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION)),
                 Translation::get(
                     'TypeName',
@@ -98,7 +98,7 @@ class PublicationDetailTemplate extends ReportingTemplate
                         $this->tool ? $this->tool : Request::get('tool')))));
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->pid);
 
         if (! isset($publication))

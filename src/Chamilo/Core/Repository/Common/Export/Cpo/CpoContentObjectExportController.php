@@ -359,7 +359,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $content_object_ids, 
                 ContentObject::get_table_name());
         }
@@ -369,7 +369,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         }
         
         $parameters = new DataClassRetrievesParameters($condition);
-        $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         
         while ($content_object = $content_objects->next_result())
         {
@@ -505,12 +505,12 @@ class CpoContentObjectExportController extends ContentObjectExportController
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($content_object->get_id()), 
                 ComplexContentObjectItem::get_table_name());
             $children = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class,
                 $condition);
             
             if ($children->size() > 0)
@@ -556,11 +556,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), 
+                ContentObjectAttachment::class,
                 ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object->get_id()));
         $content_object_attachments = DataManager::retrieves(
-            ContentObjectAttachment::class_name(), 
+            ContentObjectAttachment::class,
             new DataClassRetrievesParameters($condition));
         
         if ($content_object_attachments->size() > 0)
@@ -600,11 +600,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude::class_name(), 
+                ContentObjectInclude::class,
                 ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID), 
             new StaticConditionVariable($content_object->get_id()));
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class_name(), 
+            ContentObjectInclude::class,
             new DataClassRetrievesParameters($condition));
         
         if ($content_object_includes->size() > 0)
@@ -624,7 +624,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         /** @var \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance $external_instance */
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            Instance::class_name(),
+            Instance::class,
             $external_instance_id);
         
         if (! $this->has_external_instance_node($external_instance_id))
@@ -681,7 +681,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         if ($category_id != 0)
         {
-            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class, $category_id);
             $this->set_category_id_cache($category->get_id());
             
             $category_node = $this->get_category_node($category_id);
@@ -713,7 +713,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             else
             {
                 $category = DataManager::retrieve_by_id(
-                    RepositoryCategory::class_name(), 
+                    RepositoryCategory::class,
                     array_shift($cache_category_ids));
                 $previous = $category->get_parent_ids();
             }
@@ -721,7 +721,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             foreach ($cache_category_ids as $cache_category_id)
             {
                 $parents[$cache_category_id] = $previous;
-                $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $cache_category_id);
+                $category = DataManager::retrieve_by_id(RepositoryCategory::class, $cache_category_id);
                 $parents[$cache_category_id] = $category->get_parent_ids();
                 $previous = array_intersect($previous, $parents[$cache_category_id]);
             }

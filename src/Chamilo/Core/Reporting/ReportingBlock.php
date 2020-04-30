@@ -69,7 +69,7 @@ abstract class ReportingBlock
 
     public function get_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class);
     }
 
     abstract public function get_views();

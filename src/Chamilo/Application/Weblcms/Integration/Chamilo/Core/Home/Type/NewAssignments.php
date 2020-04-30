@@ -27,7 +27,7 @@ class NewAssignments extends NewBlock
      */
     public function displayNewItem($publication)
     {
-        if ($publication[ContentObject::PROPERTY_TYPE] != Assignment::class_name())
+        if ($publication[ContentObject::PROPERTY_TYPE] != Assignment::class)
         {
             return;
         }
@@ -41,7 +41,7 @@ class NewAssignments extends NewBlock
      */
     public function getContentObjectTypes()
     {
-        return array(Assignment::class_name());
+        return array(Assignment::class);
     }
 
     /**
@@ -78,7 +78,7 @@ class NewAssignments extends NewBlock
     public function getBadgeContent($publication)
     {
         $content_object = DataManager::retrieve_by_id(
-            Assignment::class_name(),
+            Assignment::class,
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );
 

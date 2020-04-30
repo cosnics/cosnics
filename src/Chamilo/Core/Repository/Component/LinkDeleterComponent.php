@@ -44,7 +44,7 @@ class LinkDeleterComponent extends Manager
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $contentObjectIdentifier);
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $contentObjectIdentifier);
 
         if (!RightsService::getInstance()->canDestroyContentObject(
             $this->get_user(),
@@ -146,8 +146,8 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $item = DataManager::retrieve_by_id(ComplexContentObjectItem::class_name(), $link_id);
-            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $item->get_ref());
+            $item = DataManager::retrieve_by_id(ComplexContentObjectItem::class, $link_id);
+            $object = DataManager::retrieve_by_id(ContentObject::class, $item->get_ref());
 
             if (!$item->delete())
             {
@@ -182,7 +182,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+            $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
             if (!$object->detach_content_object($link_id, ContentObject::ATTACHMENT_NORMAL))
             {
                 $failures ++;
@@ -207,7 +207,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $link_id);
+            $object = DataManager::retrieve_by_id(ContentObject::class, $link_id);
             if (!$object->detach_content_object($object_id, ContentObject::ATTACHMENT_NORMAL))
             {
                 $failures ++;

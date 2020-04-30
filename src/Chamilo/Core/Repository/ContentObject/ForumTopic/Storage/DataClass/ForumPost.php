@@ -49,7 +49,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -100,7 +100,7 @@ class ForumPost extends DataClass implements AttachmentSupport
         if (!isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) $this->get_user_id()
             );
         }
@@ -269,7 +269,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $this->set_modification_date($now);
 
             $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_forum_topic_id()
             );
             $email_notificator = new PostEmailNotificator();
@@ -284,7 +284,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) Session::get_user_id()
                 )
             );
@@ -315,7 +315,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $this->set_modification_date($now);
 
             $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_forum_topic_id()
             );
             $first_post = $forum_topic->is_first_post($this);
@@ -331,7 +331,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) Session::get_user_id()
                 )
             );
@@ -377,7 +377,7 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         $delete_attachments = DataManager::retrieve_attached_objects($this->get_id())->as_array();
         $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_forum_topic_id()
         );
         $first_post = $forum_topic->is_first_post($this);

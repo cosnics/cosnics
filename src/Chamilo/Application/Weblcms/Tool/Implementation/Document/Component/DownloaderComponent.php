@@ -25,7 +25,7 @@ class DownloaderComponent extends Manager
     {
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id);
 
         if (! $publication instanceof ContentObjectPublication)

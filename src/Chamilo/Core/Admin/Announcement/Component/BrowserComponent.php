@@ -191,12 +191,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                 '*' . $query . '*'
             );
 
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $query . '*'
             );
 
@@ -215,7 +215,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $publisher_id = $this->getUser()->getId();
 
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                 new StaticConditionVariable($publisher_id)
             );
         }
@@ -232,21 +232,21 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             case self::FILTER_TODAY :
                 $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
                 $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_MODIFICATION_DATE),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
             case self::FILTER_THIS_WEEK :
                 $time = strtotime('Next Monday', strtotime('-1 Week', time()));
                 $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_MODIFICATION_DATE),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
             case self::FILTER_THIS_MONTH :
                 $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
                 $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_MODIFICATION_DATE),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;

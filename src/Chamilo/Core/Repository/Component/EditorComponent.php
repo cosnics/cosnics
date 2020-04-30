@@ -43,7 +43,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
         if ($id)
         {
-            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+            $object = DataManager::retrieve_by_id(ContentObject::class, $id);
 
             if (!$object)
             {

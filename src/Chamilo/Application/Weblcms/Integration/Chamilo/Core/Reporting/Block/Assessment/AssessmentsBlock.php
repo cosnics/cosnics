@@ -41,7 +41,7 @@ class AssessmentsBlock extends AssessmentBlock
         $reporting_data->set_rows($rows);
 
         $course_id = $this->getCourseId();
-        $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true);
+        $tool = ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true);
 
         $count = 1;
         $glyph = new FontAwesomeGlyph('chart-pie');
@@ -49,24 +49,24 @@ class AssessmentsBlock extends AssessmentBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($tool)
         );
         $condition = new AndCondition($conditions);
 
         $pub_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
         );
 
         while ($pub = $pub_resultset->next_result())
         {
             $params = $this->get_parent()->get_parameters();
-            $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+            $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
             $params[Manager::PARAM_PUBLICATION] = $pub->get_id();
             $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
 

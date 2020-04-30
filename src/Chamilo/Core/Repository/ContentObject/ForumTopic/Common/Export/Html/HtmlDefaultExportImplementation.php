@@ -180,7 +180,7 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == 'document')
             {
-                $obj = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+                $obj = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
                 
                 if ($obj->is_image())
                 {

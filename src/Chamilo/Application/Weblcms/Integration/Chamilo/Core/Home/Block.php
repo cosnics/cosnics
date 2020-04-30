@@ -28,24 +28,24 @@ class Block extends BlockRenderer
     {
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                LoginLogout::class_name(),
+                LoginLogout::class,
                 LoginLogout::PROPERTY_DATE));
         
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class_name(),
+                LoginLogout::class,
                 LoginLogout::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class_name(),
+                LoginLogout::class,
                 LoginLogout::PROPERTY_TYPE),
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
         
         $trackers = DataManager::retrieves(
-            LoginLogout::class_name(),
+            LoginLogout::class,
             new DataClassRetrievesParameters($condition, 1, 0, array($order_by)));
         
         $tracker = $trackers->next_result();

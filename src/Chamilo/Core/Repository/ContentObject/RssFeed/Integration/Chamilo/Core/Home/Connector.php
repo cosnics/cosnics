@@ -18,11 +18,11 @@ class Connector
         $options = array();
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));
         
         $objects = DataManager::retrieve_active_content_objects(
-            RssFeed::class_name(), 
+            RssFeed::class,
             $condition);
         
         if ($objects->size() == 0)

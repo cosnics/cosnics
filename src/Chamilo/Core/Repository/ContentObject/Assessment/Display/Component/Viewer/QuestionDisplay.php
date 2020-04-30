@@ -148,7 +148,7 @@ abstract class QuestionDisplay
     public static function factory($formvalidator, $complex_content_object_question, $question_nr)
     {
         $question = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $complex_content_object_question->get_ref());
         $type = $question->get_type();
 

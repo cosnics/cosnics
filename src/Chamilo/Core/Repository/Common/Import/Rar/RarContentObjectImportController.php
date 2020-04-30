@@ -76,7 +76,7 @@ class RarContentObjectImportController extends ContentObjectImportController
 
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class_name(),
+                            User::class,
                             (int) $this->get_parameters()->get_user()));
 
                     if (! $calculator->canUpload($total_filesize))
@@ -95,7 +95,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                     else
                     {
                         $category = DataManager::retrieve_by_id(
-                            RepositoryCategory::class_name(),
+                            RepositoryCategory::class,
                             $this->get_parameters()->get_category());
                     }
 

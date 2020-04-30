@@ -26,13 +26,13 @@ class UserEntityHelper
     {
         $columns = array();
         $columns[] = new DataClassPropertyTableColumn(
-            User::class_name(),
+            User::class,
             User::PROPERTY_LASTNAME);
         $columns[] = new DataClassPropertyTableColumn(
-            User::class_name(),
+            User::class,
             User::PROPERTY_FIRSTNAME);
         $columns[] = new DataClassPropertyTableColumn(
-            User::class_name(),
+            User::class,
             User::PROPERTY_EMAIL);
         return $columns;
     }
@@ -81,24 +81,24 @@ class UserEntityHelper
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    User::class_name(),
+                    User::class,
                     User::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $properties = new DataClassProperties();
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
-                new PropertiesConditionVariable(User::class_name())));
+                new PropertiesConditionVariable(User::class)));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
 
         return DataManager::records(
-            User::class_name(),
+            User::class,
             $parameters);
     }
 
@@ -112,12 +112,12 @@ class UserEntityHelper
     public static function count_table_data($condition)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    User::class_name(),
+                    User::class,
                     User::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $parameters = new DataClassCountParameters(
@@ -128,11 +128,11 @@ class UserEntityHelper
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
                         new PropertyConditionVariable(
-                            User::class_name(),
+                            User::class,
                             User::PROPERTY_ID)))));
 
         return DataManager::count(
-            User::class_name(),
+            User::class,
             $parameters);
     }
 
@@ -141,7 +141,7 @@ class UserEntityHelper
         $entities = array();
 
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $entity_id);
 
         if ($user instanceof User)

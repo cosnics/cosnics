@@ -67,7 +67,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentMatchNumericQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentMatchNumericQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentMatchNumericQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -93,7 +93,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentMatchTextQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentMatchTextQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentMatchTextQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -119,7 +119,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentMatchingQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentMatchingQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentMatchingQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -145,7 +145,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentMatrixQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentMatrixQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentMatrixQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -171,7 +171,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentMultipleChoiceQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentMultipleChoiceQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentMultipleChoiceQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -197,7 +197,7 @@ class UpgraderComponent extends Manager
     private function fixAssessmentSelectQuestions()
     {
         $existingQuestions = DataManager::retrieves(
-            AssessmentSelectQuestion::class_name(), new DataClassRetrievesParameters()
+            AssessmentSelectQuestion::class, new DataClassRetrievesParameters()
         );
 
         while ($existingQuestion = $existingQuestions->next_result())
@@ -222,7 +222,7 @@ class UpgraderComponent extends Manager
 
     private function fixAssignmentAllowedTypes()
     {
-        $existingAssignments = DataManager::retrieves(Assignment::class_name(), new DataClassRetrievesParameters());
+        $existingAssignments = DataManager::retrieves(Assignment::class, new DataClassRetrievesParameters());
 
         while ($existingAssignment = $existingAssignments->next_result())
         {
@@ -257,7 +257,7 @@ class UpgraderComponent extends Manager
         foreach ($formats as $format)
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_CONFIGURATION),
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION),
                 '*' . $format . '*'
             );
         }
@@ -265,7 +265,7 @@ class UpgraderComponent extends Manager
         $condition = new OrCondition($conditions);
 
         $blocks = \Chamilo\Core\Home\Storage\DataManager::retrieves(
-            Block::class_name(), new DataClassRetrievesParameters($condition)
+            Block::class, new DataClassRetrievesParameters($condition)
         );
 
         while ($block = $blocks->next_result())
@@ -280,7 +280,7 @@ class UpgraderComponent extends Manager
 
     private function fixHotspotQuestions()
     {
-        $existingQuestions = DataManager::retrieves(HotspotQuestion::class_name(), new DataClassRetrievesParameters());
+        $existingQuestions = DataManager::retrieves(HotspotQuestion::class, new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -304,7 +304,7 @@ class UpgraderComponent extends Manager
 
     private function fixOrderingQuestions()
     {
-        $existingQuestions = DataManager::retrieves(OrderingQuestion::class_name(), new DataClassRetrievesParameters());
+        $existingQuestions = DataManager::retrieves(OrderingQuestion::class, new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -329,7 +329,7 @@ class UpgraderComponent extends Manager
     private function fixTemplates()
     {
         $existingTemplates = DataManager::retrieves(
-            TemplateRegistration::class_name(), new DataClassRetrievesParameters()
+            TemplateRegistration::class, new DataClassRetrievesParameters()
         );
 
         while ($existingTemplate = $existingTemplates->next_result())

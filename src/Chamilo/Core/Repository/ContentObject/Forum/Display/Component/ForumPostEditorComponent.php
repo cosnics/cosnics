@@ -30,7 +30,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
     public function run()
     {
         $this->selected_forum_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
-        $this->forumpost = DataManager::retrieve_by_id(ForumPost::class_name(), $this->selected_forum_post_id);
+        $this->forumpost = DataManager::retrieve_by_id(ForumPost::class, $this->selected_forum_post_id);
 
         if ($this->forumpost->get_user_id() == $this->get_user_id() || $this->get_parent()->is_allowed(EDIT_RIGHT))
         {

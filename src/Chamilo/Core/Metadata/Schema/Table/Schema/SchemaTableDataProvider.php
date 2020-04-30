@@ -32,7 +32,7 @@ class SchemaTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(Schema::class_name(), $parameters);
+        return DataManager::retrieves(Schema::class, $parameters);
     }
 
     /**
@@ -43,6 +43,6 @@ class SchemaTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(Schema::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Schema::class, new DataClassCountParameters($condition));
     }
 }

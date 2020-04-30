@@ -51,7 +51,7 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
 
         $params_detail = $this->get_parent()->get_parameters();
         $params_detail[Manager::PARAM_TEMPLATE_ID] =
-            AssignmentStudentEntriesTemplate::class_name();
+            AssignmentStudentEntriesTemplate::class;
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $userId;
         $params_detail[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] =
             Entry::ENTITY_TYPE_USER;

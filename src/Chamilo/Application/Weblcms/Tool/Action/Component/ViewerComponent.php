@@ -53,7 +53,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     {
         // check if the content object has indeed been published for the user
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->get_publication_id()
         );
 
@@ -192,7 +192,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
             array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        Feedback::class_name(),
+                        Feedback::class,
                         Feedback::PROPERTY_MODIFICATION_DATE
                     )
                 )
@@ -200,7 +200,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         );
 
         return DataManager::retrieves(
-            Feedback::class_name(),
+            Feedback::class,
             $parameters
         );
     }
@@ -213,7 +213,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $parameters = new DataClassCountParameters($this->get_feedback_conditions());
 
         return DataManager::count(
-            Feedback::class_name(),
+            Feedback::class,
             $parameters
         );
     }
@@ -224,7 +224,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     public function retrieve_feedback($feedback_id)
     {
         return DataManager::retrieve_by_id(
-            Feedback::class_name(),
+            Feedback::class,
             $feedback_id
         );
     }
@@ -278,7 +278,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Feedback::class_name(),
+                Feedback::class,
                 Feedback::PROPERTY_PUBLICATION_ID
             ),
             new StaticConditionVariable($this->publication->get_id())

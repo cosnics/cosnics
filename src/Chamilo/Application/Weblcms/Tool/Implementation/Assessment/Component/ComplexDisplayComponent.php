@@ -70,7 +70,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
 
             $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $this->publication_id);
 
             if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
@@ -96,15 +96,15 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         $track = new AssessmentAttempt();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         $count = $trackers->size();
@@ -131,7 +131,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         // Executing assessment
 
-        if ($this->assessment->get_type() == Hotpotatoes::class_name())
+        if ($this->assessment->get_type() == Hotpotatoes::class)
         {
             $html = array();
 
@@ -283,11 +283,11 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $question_attempts = array();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             new StaticConditionVariable($this->assessment_attempt->get_id()));
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         while ($question_attempt = $question_attempts_result_set->next_result())
@@ -368,9 +368,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     {
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         return $assessment_publication->get_configuration();
     }

@@ -24,18 +24,18 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
         if ($type == LinkTable::TYPE_PARENTS)
         {
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $data_class->get_parent()
+                ContentObject::class, $data_class->get_parent()
             );
         }
         elseif ($type == LinkTable::TYPE_CHILDREN)
         {
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $data_class->get_ref()
+                ContentObject::class, $data_class->get_ref()
             );
             if (in_array($object->get_type(), DataManager::get_active_helper_types()))
             {
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $object->get_reference()
+                    ContentObject::class, $object->get_reference()
                 );
             }
         }

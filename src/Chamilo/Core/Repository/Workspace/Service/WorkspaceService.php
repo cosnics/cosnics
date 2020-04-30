@@ -361,7 +361,7 @@ class WorkspaceService
         if (is_null($orderProperty))
         {
             $orderProperty = array(
-                new OrderBy(new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME), SORT_ASC));
+                new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC));
         }
         
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
@@ -397,7 +397,7 @@ class WorkspaceService
     {
         if ($type == self::TYPE_PERSONAL)
         {
-            $user = DataManager::retrieve_by_id(User::class_name(), $typeIdentifier);
+            $user = DataManager::retrieve_by_id(User::class, $typeIdentifier);
             
             return $this->getPersonalWorkspaceForUser($user);
         }

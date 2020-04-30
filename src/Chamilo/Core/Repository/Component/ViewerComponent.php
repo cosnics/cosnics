@@ -531,7 +531,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         if (!isset($this->contentObject))
         {
             $this->contentObject =
-                DataManager::retrieve_by_id(ContentObject::class_name(), $this->getContentObjectIdentifier());
+                DataManager::retrieve_by_id(ContentObject::class, $this->getContentObjectIdentifier());
         }
 
         return $this->contentObject;
@@ -659,7 +659,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     public function get_table_condition($table_class_name)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->getContentObject()->get_object_number())
         );
     }

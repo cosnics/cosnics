@@ -59,7 +59,7 @@ class CourseChangeCourseTypeForm extends FormValidator
     public function get_course_types()
     {
         $course_type_objects = DataManager::retrieves(
-            CourseType::class_name(), new DataClassRetrievesParameters()
+            CourseType::class, new DataClassRetrievesParameters()
         );
         $course_types = array();
         if (empty($this->course_type_id) || $this->allow_no_course_type)

@@ -81,7 +81,7 @@ class CourseImportForm extends FormValidator
 
             $cat = DataManager::retrieve_course_categories_ordered_by_name(
                 new EqualityCondition(
-                    new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME),
+                    new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
                     new StaticConditionVariable($csvcourse['category'])
                 )
             )->next_result();
@@ -310,7 +310,7 @@ class CourseImportForm extends FormValidator
     {
         $cat = DataManager::retrieve_course_categories_ordered_by_name(
             new EqualityCondition(
-                new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_NAME),
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
                 new StaticConditionVariable($category_name)
             )
         )->next_result();

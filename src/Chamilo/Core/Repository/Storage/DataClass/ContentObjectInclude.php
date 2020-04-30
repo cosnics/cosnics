@@ -48,7 +48,7 @@ class ContentObjectInclude extends DataClass
     {
         if (! isset($this->include_object))
         {
-            $this->include_object = DataManager::retrieve_by_id(ContentObject::class_name(), $this->get_include_id());
+            $this->include_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_include_id());
         }
         return $this->include_object;
     }

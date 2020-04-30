@@ -42,7 +42,7 @@ class HintComponent extends Manager
         $type = $this->getPostDataValue(self::PARAM_HINT_TYPE);
         
         $complex_content_object_item = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $identifiers[0]);
         
         switch ($type)

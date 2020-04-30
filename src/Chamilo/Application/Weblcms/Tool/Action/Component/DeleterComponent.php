@@ -41,7 +41,7 @@ class DeleterComponent extends Manager implements DelegateComponent
         foreach ($publication_ids as $pid)
         {
             $publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $pid);
 
             if (! $publication instanceof ContentObjectPublication)
@@ -56,7 +56,7 @@ class DeleterComponent extends Manager implements DelegateComponent
 
             $content_object = $publication->get_content_object();
 
-            if ($content_object->get_type() == Introduction::class_name())
+            if ($content_object->get_type() == Introduction::class)
             {
                 $publication->ignore_display_order();
             }

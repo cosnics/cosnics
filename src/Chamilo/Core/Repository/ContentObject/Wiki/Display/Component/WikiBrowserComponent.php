@@ -55,7 +55,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         // append with extra conditions
         $owner_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->owner)
         );
         if ($condition)
@@ -79,11 +79,11 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                 '*' . $query . '*'
             );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $query . '*'
             );
 

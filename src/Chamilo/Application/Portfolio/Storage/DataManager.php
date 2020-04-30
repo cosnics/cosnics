@@ -38,29 +38,29 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             new StaticConditionVariable($location_id));
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_RIGHT_ID),
             $rights);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publication_id));
         $condition = new AndCondition($conditions);
 
         $order = new OrderBy(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
             SORT_ASC);
 
         return self::retrieves(
-            RightsLocationEntityRight::class_name(),
+            RightsLocationEntityRight::class,
             new DataClassRetrievesParameters($condition, null, null, $order));
     }
 
@@ -81,32 +81,32 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($entity_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($entity_type));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             new StaticConditionVariable($location_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_RIGHT_ID),
             new StaticConditionVariable($right));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publication_id));
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(RightsLocationEntityRight::class_name(), new DataClassRetrieveParameters($condition));
+        return self::retrieve(RightsLocationEntityRight::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -122,7 +122,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             new StaticConditionVariable($location->get_node_id()));
 
@@ -131,7 +131,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $additional_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(),
+                    RightsLocationEntityRight::class,
                     RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($entity_type));
         }
@@ -139,7 +139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $additional_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(),
+                    RightsLocationEntityRight::class,
                     RightsLocationEntityRight::PROPERTY_ENTITY_ID),
                 new StaticConditionVariable($entity_id));
         }
@@ -147,7 +147,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $additional_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(),
+                    RightsLocationEntityRight::class,
                     RightsLocationEntityRight::PROPERTY_RIGHT_ID),
                 new StaticConditionVariable($right_id));
         }
@@ -158,6 +158,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($additional_conditions);
         }
 
-        return self::deletes(RightsLocationEntityRight::class_name(), $condition);
+        return self::deletes(RightsLocationEntityRight::class, $condition);
     }
 }

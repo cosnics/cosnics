@@ -53,10 +53,10 @@ class EntityComponent extends Manager implements TableSupport
         foreach ($this->get_entity_types() as $entity_type)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($entity_type::ENTITY_TYPE)
             );
-            $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+            $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
 
             if ($count > 0)
             {
@@ -95,7 +95,7 @@ class EntityComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->get_selected_entity_type())
         );
 

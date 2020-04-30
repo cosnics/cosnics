@@ -63,10 +63,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $expanded_entity_conditions = array();
                 
                 $expanded_entity_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable($expanded_entity_type));
                 $expanded_entity_conditions[] = new InCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
                     $expanded_entity_ids);
                 
                 $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
@@ -74,7 +74,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             
             $condition = new OrCondition($expanded_entities_conditions);
             
-            return DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) > 0;
+            return DataManager::count(Admin::class, new DataClassCountParameters($condition)) > 0;
         }
         else
         {
@@ -99,10 +99,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $expanded_entity_conditions = array();
                 
                 $expanded_entity_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable($expanded_entity_type));
                 $expanded_entity_conditions[] = new InCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
                     $expanded_entity_ids);
                 
                 $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
@@ -128,10 +128,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $expanded_target_conditions = array();
                 
                 $expanded_target_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
                     new StaticConditionVariable($expanded_target_type));
                 $expanded_target_conditions[] = new InCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_ID),
                     $expanded_target_ids);
                 
                 $expanded_targets_conditions[] = new AndCondition($expanded_target_conditions);
@@ -146,7 +146,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $condition = new AndCondition($conditions);
         
-        return DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(Admin::class, new DataClassCountParameters($condition)) > 0;
     }
 
     public static function retrieve_courses($user)
@@ -162,10 +162,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $expanded_entity_conditions = array();
                 
                 $expanded_entity_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable($expanded_entity_type));
                 $expanded_entity_conditions[] = new InCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
                     $expanded_entity_ids);
                 
                 $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
@@ -173,7 +173,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             
             $condition = new OrCondition($expanded_entities_conditions);
             
-            $admins = DataManager::retrieves(Admin::class_name(), new DataClassRetrievesParameters($condition));
+            $admins = DataManager::retrieves(Admin::class, new DataClassRetrievesParameters($condition));
             $course_ids = array();
             
             while ($admin = $admins->next_result())
@@ -190,13 +190,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $properties = new DataClassProperties(
                 array(
                     new PropertiesConditionVariable(
-                        Course::class_name())));
+                        Course::class)));
             
             $parameters = new RecordRetrievesParameters(
                 $properties, 
                 new InCondition(
                     new PropertyConditionVariable(
-                        Course::class_name(),
+                        Course::class,
                         Course::PROPERTY_ID),
                     $course_ids), 
                 null, 
@@ -204,11 +204,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            Course::class_name(),
+                            Course::class,
                             Course::PROPERTY_TITLE))));
             
             return DataManager::records(
-                Course::class_name(),
+                Course::class,
                 $parameters);
         }
         else

@@ -71,17 +71,17 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         // retrieve the tools
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_SECTION_TYPE),
+            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_SECTION_TYPE),
             new StaticConditionVariable(CourseSection::TYPE_TOOL));
 
-        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters($condition));
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($condition));
 
         $active_tools = array();
 
         while ($tool = $tools->next_result())
         {
             $course_settings_controller = CourseSettingsController::getInstance();
-            $course = DataManager::retrieve_by_id(Course::class_name(), Request::get('course'));
+            $course = DataManager::retrieve_by_id(Course::class, Request::get('course'));
 
             if ($course_settings_controller->get_course_setting(
                 $course,
@@ -104,12 +104,12 @@ class CourseSectionToolSelectorForm extends FormValidator
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseToolRelCourseSection::class_name(),
+                CourseToolRelCourseSection::class,
                 CourseToolRelCourseSection::PROPERTY_SECTION_ID),
             new StaticConditionVariable($this->course_section->get_id()));
 
         return $registered_tools_resultset = DataManager::retrieves(
-            CourseToolRelCourseSection::class_name(),
+            CourseToolRelCourseSection::class,
             new DataClassRetrievesParameters($condition));
     }
 
@@ -121,10 +121,10 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         // retrieve the sections for this course
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
             new StaticConditionVariable(Request::get('course')));
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            CourseSection::class_name(),
+            CourseSection::class,
             new DataClassRetrievesParameters($condition));
 
         $course_section_ids = array();
@@ -158,18 +158,18 @@ class CourseSectionToolSelectorForm extends FormValidator
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class_name(),
+                    CourseToolRelCourseSection::class,
                     CourseToolRelCourseSection::PROPERTY_TOOL_ID),
                 new StaticConditionVariable($selected_tool_id));
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class_name(),
+                    CourseToolRelCourseSection::class,
                     CourseToolRelCourseSection::PROPERTY_SECTION_ID),
                 $course_section_ids);
             $condition = new AndCondition($conditions);
 
             $course_tool_rel_course_sections = DataManager::retrieves(
-                CourseToolRelCourseSection::class_name(),
+                CourseToolRelCourseSection::class,
                 new DataClassRetrievesParameters($condition));
 
             if ($course_tool_rel_course_sections->size() > 0)

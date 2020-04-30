@@ -22,7 +22,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getTreeNodeAttemptClassName()
     {
-        return DummyTreeNodeAttempt::class_name();
+        return DummyTreeNodeAttempt::class;
     }
 
     /**
@@ -31,7 +31,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getTreeNodeQuestionAttemptClassName()
     {
-        return DummyQuestionAttempt::class_name();
+        return DummyQuestionAttempt::class;
     }
 
     /**

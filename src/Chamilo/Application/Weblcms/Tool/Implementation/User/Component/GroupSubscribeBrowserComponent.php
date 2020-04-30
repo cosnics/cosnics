@@ -148,7 +148,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
             return null;
         }
 
-        return DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        return DataManager::retrieve_by_id(Group::class, $groupId);
     }
 
     /**
@@ -215,9 +215,9 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         if (!$this->rootGroup)
         {
             $group = DataManager::retrieve(
-                Group::class_name(), new DataClassRetrieveParameters(
+                Group::class, new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0)
                     )
                 )
@@ -261,7 +261,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId())
         );
 
@@ -270,7 +270,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $this->subscribedGroups
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->subscribedGroups
                 )
             );
         }
@@ -279,10 +279,10 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), '*' . $query . '*'
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
             );
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
             );
             $conditions[] = new OrCondition($conditions2);
         }

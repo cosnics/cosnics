@@ -19,7 +19,7 @@ class PersonalCalendarEventDataProviderRepository extends \Chamilo\Application\C
      */
     protected function getContentObjectClassName()
     {
-        return ExternalCalendar::class_name();
+        return ExternalCalendar::class;
     }
 
     /**

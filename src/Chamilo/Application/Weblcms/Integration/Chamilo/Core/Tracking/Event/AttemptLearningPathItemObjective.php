@@ -21,6 +21,6 @@ class AttemptLearningPathItemObjective extends Event
     public function getTrackerClasses()
     {
         return array(
-            LpiAttemptObjective::class_name());
+            LpiAttemptObjective::class);
     }
 }

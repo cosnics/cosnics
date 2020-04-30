@@ -22,14 +22,14 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
 
-        $users = \Chamilo\Core\User\Storage\DataManager::count(User::class_name());
+        $users = \Chamilo\Core\User\Storage\DataManager::count(User::class);
 
         $courses = DataManager::count(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassCountParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(),
+                        CourseEntityRelation::class,
                         CourseEntityRelation::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)),
                 null,
@@ -38,7 +38,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,
                             new PropertyConditionVariable(
-                                CourseEntityRelation::class_name(),
+                                CourseEntityRelation::class,
                                 CourseEntityRelation::PROPERTY_ENTITY_ID))))));
 
         $reporting_data->set_categories(

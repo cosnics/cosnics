@@ -24,7 +24,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
         $question_cid = Request::get(
             Manager::PARAM_QUESTION);
         $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $question_cid);
         
         $reporting_data = new ReportingData();
@@ -36,7 +36,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
         $reporting_data->set_categories($categories);
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->getPublicationId());
         
         $this->add_category_from_array(
@@ -49,7 +49,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
             $this->get_question_information($complex_question->get_ref_object()), 
             $reporting_data);
         
-        $user = DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        $user = DataManager::retrieve_by_id(User::class, $this->get_user_id());
         $user_attempts = $this->get_question_attempts_from_publication_and_question(
             $this->getPublicationId(),
             $question_cid, 

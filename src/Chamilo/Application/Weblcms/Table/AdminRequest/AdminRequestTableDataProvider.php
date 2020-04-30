@@ -30,7 +30,7 @@ class AdminRequestTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieves(
-            CourseRequest::class_name(),
+            CourseRequest::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -41,6 +41,6 @@ class AdminRequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(CourseRequest::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseRequest::class, new DataClassCountParameters($condition));
     }
 }

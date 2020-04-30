@@ -117,7 +117,7 @@ class TabRenderer
         
         $columns = $this->getHomeService()->getElements(
             $this->getApplication()->getUser(), 
-            Column::class_name(), 
+            Column::class,
             $tab->getId());
         
         foreach ($columns as $column)

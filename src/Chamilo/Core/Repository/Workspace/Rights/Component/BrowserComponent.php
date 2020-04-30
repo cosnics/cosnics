@@ -36,7 +36,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(), 
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($this->getCurrentWorkspace()->getId()));
     }

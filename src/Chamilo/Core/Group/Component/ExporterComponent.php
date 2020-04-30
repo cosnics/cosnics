@@ -52,7 +52,7 @@ class ExporterComponent extends Manager
     public function build_group_tree($parent_group)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_group));
         $result = $this->retrieve_groups($condition);
         while ($group = $result->next_result())

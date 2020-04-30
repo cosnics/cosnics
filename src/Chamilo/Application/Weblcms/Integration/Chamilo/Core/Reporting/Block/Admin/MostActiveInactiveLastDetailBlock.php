@@ -26,12 +26,12 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
         $this->add_reporting_data_rows_for_course_visit_data($reporting_data);
         $reporting_data->add_row(Translation::get('LastPublication'));
         
-        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
         while ($course = $courses->next_result())
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($course->get_id()));
             $publications = DataManager::retrieve_content_object_publications(

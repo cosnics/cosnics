@@ -31,7 +31,7 @@ class UpdaterComponent extends Manager
     {
         $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
         $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $selected_complex_content_object_item->get_ref()
+            ContentObject::class, $selected_complex_content_object_item->get_ref()
         );
 
         if (!$content_object)
@@ -69,12 +69,12 @@ class UpdaterComponent extends Manager
                     $selected_complex_content_object_item->update();
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                            ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($old_id), ComplexContentObjectItem::get_table_name()
                     );
                     $parameters = new DataClassRetrievesParameters($condition);
                     $children = DataManager::retrieve_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), $parameters
+                        ComplexContentObjectItem::class, $parameters
                     );
                     $failures = 0;
                     while ($child = $children->next_result())

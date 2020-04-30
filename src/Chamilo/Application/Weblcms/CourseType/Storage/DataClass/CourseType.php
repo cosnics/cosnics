@@ -317,19 +317,19 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::class, 
                 CourseTypeRelCourseSetting::PROPERTY_COURSE_SETTING_ID), 
             new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID]));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::class, 
                 CourseTypeRelCourseSetting::PROPERTY_COURSE_TYPE_ID), 
             new StaticConditionVariable($this->get_id()));
         
         $condition = new AndCondition($conditions);
         
         return DataManager::retrieve(
-            CourseTypeRelCourseSetting::class_name(), 
+            CourseTypeRelCourseSetting::class, 
             new DataClassRetrieveParameters($condition));
     }
 
@@ -390,7 +390,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         {
             $properties->add(
                 new DataClassProperty(
-                    new PropertyConditionVariable(Course::class_name(), $property), 
+                    new PropertyConditionVariable(Course::class, $property), 
                     new StaticConditionVariable($this->get_course_setting($setting_name))));
         }
         
@@ -514,7 +514,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**

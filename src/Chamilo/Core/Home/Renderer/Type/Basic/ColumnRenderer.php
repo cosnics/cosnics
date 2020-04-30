@@ -63,7 +63,7 @@ class ColumnRenderer
             $column->getWidth() . '">';
 
         $blocks = $this->getHomeService()->getElements(
-            $this->getApplication()->getUser(), Block::class_name(), $column->getId()
+            $this->getApplication()->getUser(), Block::class, $column->getId()
         );
 
         foreach ($blocks as $block)

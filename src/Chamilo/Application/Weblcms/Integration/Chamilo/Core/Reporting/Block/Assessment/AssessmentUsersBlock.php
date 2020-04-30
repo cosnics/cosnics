@@ -115,7 +115,7 @@ class AssessmentUsersBlock extends AssessmentBlock
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-                    AssessmentAttemptsUserTemplate::class_name();
+                    AssessmentAttemptsUserTemplate::class;
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user->get_id();
                 $filter = array(Manager::PARAM_BLOCK_ID);
 
@@ -140,7 +140,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     protected function get_assessment_attempts_condition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($this->getPublicationId())
         );
     }
@@ -235,7 +235,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     protected function retrieve_assessment_attempts()
     {
         return WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($this->get_assessment_attempts_condition())
         );
     }

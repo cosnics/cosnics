@@ -54,8 +54,8 @@ abstract class Manager extends Application
     {
         $types = array();
 
-        $types[] = UserEntity::class_name();
-        $types[] = PlatformGroupEntity::class_name();
+        $types[] = UserEntity::class;
+        $types[] = PlatformGroupEntity::class;
 
         return $types;
     }
@@ -65,16 +65,16 @@ abstract class Manager extends Application
         switch ($type)
         {
             case UserEntity::ENTITY_TYPE :
-                $class = UserEntity::class_name();
+                $class = UserEntity::class;
                 break;
             case PlatformGroupEntity::ENTITY_TYPE :
-                $class = PlatformGroupEntity::class_name();
+                $class = PlatformGroupEntity::class;
                 break;
             case CourseCategoryEntity::ENTITY_TYPE :
-                $class = CourseCategoryEntity::class_name();
+                $class = CourseCategoryEntity::class;
                 break;
             case CourseEntity::ENTITY_TYPE :
-                $class = CourseEntity::class_name();
+                $class = CourseEntity::class;
                 break;
         }
 
@@ -83,16 +83,16 @@ abstract class Manager extends Application
             switch ($type)
             {
                 case UserEntity::ENTITY_TYPE :
-                    $class = UserEntityHelper::class_name();
+                    $class = UserEntityHelper::class;
                     break;
                 case PlatformGroupEntity::ENTITY_TYPE :
-                    $class = PlatformGroupEntityHelper::class_name();
+                    $class = PlatformGroupEntityHelper::class;
                     break;
                 case CourseCategoryEntity::ENTITY_TYPE :
-                    $class = CourseCategoryEntityHelper::class_name();
+                    $class = CourseCategoryEntityHelper::class;
                     break;
                 case CourseEntity::ENTITY_TYPE :
-                    $class = CourseEntityHelper::class_name();
+                    $class = CourseEntityHelper::class;
                     break;
             }
         }
@@ -115,11 +115,11 @@ abstract class Manager extends Application
         $selected_type = Request::get(self::PARAM_ENTITY_TYPE, UserEntity::ENTITY_TYPE);
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($selected_type)
         );
 
-        if (DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassCountParameters($condition)) == 0 &&
             $selected_type == UserEntity::ENTITY_TYPE)
         {
             return PlatformGroupEntity::ENTITY_TYPE;
@@ -147,21 +147,21 @@ abstract class Manager extends Application
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->get_selected_entity_type())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($this->get_selected_entity_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
             new StaticConditionVariable($selected_type)
         );
 
         $condition = new AndCondition($conditions);
 
-        if (DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassCountParameters($condition)) == 0 &&
             $selected_type == CourseEntity::ENTITY_TYPE)
         {
             return CourseCategoryEntity::ENTITY_TYPE;
@@ -185,7 +185,7 @@ abstract class Manager extends Application
             )
         );
 
-        $count = DataManager::count(Admin::class_name());
+        $count = DataManager::count(Admin::class);
 
         if ($count > 0)
         {
@@ -218,8 +218,8 @@ abstract class Manager extends Application
     {
         $types = array();
 
-        $types[] = CourseEntity::class_name();
-        $types[] = CourseCategoryEntity::class_name();
+        $types[] = CourseEntity::class;
+        $types[] = CourseCategoryEntity::class;
 
         return $types;
     }

@@ -36,7 +36,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION
         );
         $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $question_id
+            ComplexContentObjectItem::class, $question_id
         );
 
         $users_resultset = DataManager::retrieve_publication_target_users(
@@ -69,7 +69,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[Manager::PARAM_TEMPLATE_ID] =
-                    AssessmentQuestionAttemptsUserTemplate::class_name();
+                    AssessmentQuestionAttemptsUserTemplate::class;
                 $params[Manager::PARAM_USERS] = $user->get_id();
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
             }

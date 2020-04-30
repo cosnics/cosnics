@@ -537,23 +537,23 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->get_course_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->get_tool())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id)
         );
         $condition = new AndCondition($conditions);
 
         $cats = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
         while ($cat = $cats->next_result())
@@ -737,7 +737,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             if ($type == self::TYPE_FILE)
             {
                 $object =
-                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
 
                 if ($object->is_image())
                 {

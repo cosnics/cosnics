@@ -84,13 +84,13 @@ class PublicationRepository
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID), $publicationIdentifiers
         );
 
         $conditions[] = $this->getTimeConditions();
 
         return $this->getDataClassRepository()->count(
-            Publication::class_name(), new DataClassCountParameters(new AndCondition($conditions))
+            Publication::class, new DataClassCountParameters(new AndCondition($conditions))
         );
     }
 
@@ -100,16 +100,16 @@ class PublicationRepository
     protected function getTimeConditions()
     {
         $fromDateVariables = new PropertyConditionVariable(
-            Publication::class_name(), Publication::PROPERTY_FROM_DATE
+            Publication::class, Publication::PROPERTY_FROM_DATE
         );
 
         $toDateVariable = new PropertyConditionVariable(
-            Publication::class_name(), Publication::PROPERTY_TO_DATE
+            Publication::class, Publication::PROPERTY_TO_DATE
         );
 
         $timeConditions = array();
         $timeConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_HIDDEN),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_HIDDEN),
             new StaticConditionVariable(0)
         );
 
@@ -292,7 +292,7 @@ class PublicationRepository
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID), $publicationIdentifiers
         );
 
         $conditions[] = $this->getTimeConditions();

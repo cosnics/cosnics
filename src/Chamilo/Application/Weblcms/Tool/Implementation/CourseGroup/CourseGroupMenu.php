@@ -79,7 +79,7 @@ class CourseGroupMenu extends HtmlMenu
         }
         else
         {
-            $this->current_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $current_group);
+            $this->current_group = DataManager::retrieve_by_id(CourseGroup::class, $current_group);
             if (empty($this->current_group))
             {
                 throw new ObjectNotExistException(
@@ -161,10 +161,10 @@ class CourseGroupMenu extends HtmlMenu
     private function get_menu_items($parent_id = 0)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id)
         );
-        $groups = DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
+        $groups = DataManager::retrieves(CourseGroup::class, new DataClassRetrievesParameters($condition));
 
         // $current_group = $this->current_group;
 

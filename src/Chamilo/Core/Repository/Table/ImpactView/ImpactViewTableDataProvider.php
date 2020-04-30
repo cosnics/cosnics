@@ -18,14 +18,14 @@ class ImpactViewTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieve_active_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
         return DataManager::count_active_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class,
             new DataClassCountParameters($condition));
     }
 }

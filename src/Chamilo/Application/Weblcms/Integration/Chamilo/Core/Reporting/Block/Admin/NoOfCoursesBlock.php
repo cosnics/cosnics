@@ -14,7 +14,7 @@ class NoOfCoursesBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $count = CourseDataManager::count(Course::class_name());
+        $count = CourseDataManager::count(Course::class);
         
         $reporting_data->set_categories(array(Translation::get('CourseCount')));
         $reporting_data->set_rows(array(Translation::get('count')));

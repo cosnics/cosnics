@@ -51,12 +51,12 @@ class AttachmentViewerComponent extends Manager
             $reference_content_object_id = $reference_content_object->get_additional_property(
                 self::PROPERTY_REFERENCE_ID);
             $reference_content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class,
                 $reference_content_object_id);
         }
         
         $attachment = DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $attachment_id);
         
         if (! $reference_content_object->is_attached_to_or_included_in($attachment_id))

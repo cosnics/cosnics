@@ -20,7 +20,7 @@ class HotspotQuestion extends ContentObject implements Versionable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function add_answer($answer)
@@ -73,7 +73,7 @@ class HotspotQuestion extends ContentObject implements Versionable
 
         if (isset($image) && $image != 0)
         {
-            return DataManager::retrieve_by_id(ContentObject::class_name(), $image);
+            return DataManager::retrieve_by_id(ContentObject::class, $image);
         }
         else
         {

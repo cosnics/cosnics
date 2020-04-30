@@ -109,7 +109,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class_name(), 
+                                Group::class, 
                                 $group_id);
                             if ($group)
                             {
@@ -128,7 +128,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                         foreach ($entity_ids as $course_group_id)
                         {
                             $course_group = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_by_id(
-                                CourseGroup::class_name(), 
+                                CourseGroup::class, 
                                 $course_group_id);
                             
                             if ($course_group)

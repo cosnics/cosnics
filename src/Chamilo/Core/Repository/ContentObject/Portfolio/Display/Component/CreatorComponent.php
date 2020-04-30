@@ -86,12 +86,12 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                 }
 
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $object_id
+                    ContentObject::class, $object_id
                 );
 
                 if (!$object instanceof Portfolio)
                 {
-                    $new_object = ContentObject::factory(PortfolioItem::class_name());
+                    $new_object = ContentObject::factory(PortfolioItem::class);
                     $new_object->set_owner_id($this->get_user_id());
                     $new_object->set_title(PortfolioItem::get_type_name());
                     $new_object->set_description(PortfolioItem::get_type_name());

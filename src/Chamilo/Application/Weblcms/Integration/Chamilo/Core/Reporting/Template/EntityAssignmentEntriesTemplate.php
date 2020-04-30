@@ -49,13 +49,13 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publicationId
         )->get_content_object();
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();

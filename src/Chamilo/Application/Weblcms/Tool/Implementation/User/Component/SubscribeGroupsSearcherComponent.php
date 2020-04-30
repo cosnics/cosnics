@@ -73,8 +73,8 @@ class SubscribeGroupsSearcherComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $properties = array(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION)
         );
 
         $searchCondition = $this->buttonToolbarRenderer->getConditions($properties);

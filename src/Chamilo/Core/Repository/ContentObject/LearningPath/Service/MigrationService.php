@@ -294,18 +294,18 @@ class MigrationService
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT
             ),
             new StaticConditionVariable($parentId)
         );
 
         return $this->contentObjectRepository->findAll(
-            ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
                 $condition, null, null, array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem::class_name(),
+                            ComplexContentObjectItem::class,
                             ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                         )
                     )
@@ -326,7 +326,7 @@ class MigrationService
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexLearningPathItem::class_name(), ComplexLearningPathItem::PROPERTY_PREREQUISITES
+                    ComplexLearningPathItem::class, ComplexLearningPathItem::PROPERTY_PREREQUISITES
                 ),
                 null
             )
@@ -334,7 +334,7 @@ class MigrationService
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ComplexLearningPathItem::class_name(), ComplexLearningPathItem::PROPERTY_ID
+                ComplexLearningPathItem::class, ComplexLearningPathItem::PROPERTY_ID
             ),
             array_keys($this->complexContentObjectItemsMappingForLearningPath)
         );
@@ -342,7 +342,7 @@ class MigrationService
         $condition = new AndCondition($conditions);
 
         return $this->contentObjectRepository->countAll(
-                ComplexLearningPathItem::class_name(), new DataClassCountParameters($condition)
+                ComplexLearningPathItem::class, new DataClassCountParameters($condition)
             ) > 0;
     }
 

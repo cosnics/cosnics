@@ -99,7 +99,7 @@ class CreatorComponent extends Manager implements ViewerInterface
      */
     public function get_allowed_content_object_types()
     {
-        return array(SystemAnnouncement::class_name());
+        return array(SystemAnnouncement::class);
     }
 
     /**
@@ -118,13 +118,13 @@ class CreatorComponent extends Manager implements ViewerInterface
         {
             $parameters = new DataClassRetrievesParameters(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIdentifiers, ContentObject::get_table_name()
                 )
             );
 
             $contentObjects = DataManager::retrieve_active_content_objects(
-                ContentObject::class_name(), $parameters
+                ContentObject::class, $parameters
             );
 
             $html[] = '<div class="panel panel-default">';

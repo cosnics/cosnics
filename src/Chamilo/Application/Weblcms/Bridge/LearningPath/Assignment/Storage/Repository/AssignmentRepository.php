@@ -64,14 +64,14 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
-            User::class_name(),
-            $this->getTargetBaseVariable(User::class_name())
+            User::class,
+            $this->getTargetBaseVariable(User::class)
         );
     }
 
@@ -95,14 +95,14 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     {
         return $this->findTargetsForEntityTypeWithEntries(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
-            User::class_name(),
-            $this->getTargetBaseVariable(User::class_name())
+            User::class,
+            $this->getTargetBaseVariable(User::class)
         );
     }
 
@@ -112,9 +112,9 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     protected function getDataClassPropertiesForUser()
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
 
         return $properties;
     }

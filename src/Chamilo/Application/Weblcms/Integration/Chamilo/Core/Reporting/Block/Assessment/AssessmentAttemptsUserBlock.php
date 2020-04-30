@@ -27,11 +27,11 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         $counter = 0;
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->getPublicationId());
         
         $assessment = $publication->get_content_object();
-        $isHotpotatoes = $assessment->get_type() == Hotpotatoes::class_name();
+        $isHotpotatoes = $assessment->get_type() == Hotpotatoes::class;
         
         $assessment_attempts = $this->get_assessment_attempts($this->getPublicationId(), $this->get_user_id());
         while ($assessment_attempt = $assessment_attempts->next_result())

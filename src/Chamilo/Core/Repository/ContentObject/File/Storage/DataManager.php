@@ -15,10 +15,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_file_id_by_hash($hash)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_HASH), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_HASH),
             new StaticConditionVariable($hash));
         $file = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            File::class_name(), 
+            File::class,
             $condition)->next_result();
         
         if ($file)
@@ -33,28 +33,28 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_HASH), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_HASH),
             new StaticConditionVariable($hash), 
             'file');
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id));
         
         $condition = new AndCondition($conditions);
         
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_by_condition(
-            File::class_name(), 
+            File::class,
             $condition);
     }
 
     public static function get_file_by_filename($filename)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
             new StaticConditionVariable($filename), 
             'file');
         return \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_by_condition(
-            File::class_name(), 
+            File::class,
             $condition);
     }
 
@@ -62,15 +62,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_STORAGE_PATH), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_STORAGE_PATH),
             new StaticConditionVariable($storage_path));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(File::class_name(), File::PROPERTY_PATH), 
+            new PropertyConditionVariable(File::class, File::PROPERTY_PATH),
             new StaticConditionVariable($path));
         $condition = new AndCondition($conditions);
         
         $count = \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
-            File::class_name(), 
+            File::class,
             new DataClassCountParameters($condition));
         
         return ($count == 1 ? true : false);

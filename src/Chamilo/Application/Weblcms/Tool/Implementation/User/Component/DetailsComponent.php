@@ -31,7 +31,7 @@ class DetailsComponent extends Manager
         {
             /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
             $user = DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS));
 
             $details = new UserDetails($user);
@@ -48,7 +48,7 @@ class DetailsComponent extends Manager
             foreach ($_POST['user_id'] as $user_id)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     $user_id);
                 $details = new UserDetails($user);
                 $groups = new UserGroups($user->get_id(), true, $availableGroups);

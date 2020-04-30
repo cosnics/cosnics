@@ -36,6 +36,6 @@ class RepositoryApplicationItem extends ApplicationItem
      */
     public static function parent_class_name()
     {
-        return get_parent_class(ApplicationItem::class_name());
+        return get_parent_class(ApplicationItem::class);
     }
 }

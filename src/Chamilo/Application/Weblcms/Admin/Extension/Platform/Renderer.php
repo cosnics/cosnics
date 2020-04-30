@@ -171,7 +171,7 @@ class Renderer extends CourseListRenderer
 
             foreach ($courses as $course_properties)
             {
-                $course = DataClass::factory(Course::class_name(), $course_properties);
+                $course = DataClass::factory(Course::class, $course_properties);
 
                 $course_id = $course->get_id();
 
@@ -304,7 +304,7 @@ class Renderer extends CourseListRenderer
             if ($selected_course_type_id > 0)
             {
                 $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
-                    CourseType::class_name(), $selected_course_type_id
+                    CourseType::class, $selected_course_type_id
                 );
 
                 if (!$course_type || !$course_type->is_active())

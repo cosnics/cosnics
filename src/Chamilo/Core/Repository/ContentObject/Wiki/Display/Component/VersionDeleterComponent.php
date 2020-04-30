@@ -25,14 +25,14 @@ class VersionDeleterComponent extends Manager
         {
             $object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+                ComplexContentObjectItem::class, $complex_wiki_page_id
             );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             if ($object_id)
             {
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $object_id
+                    ContentObject::class, $object_id
                 );
 
                 $delete_allowed = DataManager::content_object_deletion_allowed(

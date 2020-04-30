@@ -56,17 +56,17 @@ class DeleterComponent extends Manager
                     
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ORIGIN), 
+                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN), 
                         new StaticConditionVariable(Admin::ORIGIN_INTERNAL));
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
                         new StaticConditionVariable($selected_entity_type));
                     $conditions[] = new InCondition(
-                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID), 
                         $selected_entity_id);
                     $condition = new AndCondition($conditions);
                     
-                    if (! DataManager::deletes(Admin::class_name(), $condition))
+                    if (! DataManager::deletes(Admin::class, $condition))
                     {
                         $success = false;
                         $message = Translation::get(
@@ -79,12 +79,12 @@ class DeleterComponent extends Manager
                         // Let's determine where we want to redirect
                         // 1. Admin-instances with the same entity type
                         $condition = new EqualityCondition(
-                            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
                             new StaticConditionVariable($selected_entity_type));
                         
                         $condition = new AndCondition($condition);
                         
-                        $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                        $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
                         
                         if ($count > 0)
                         {
@@ -94,7 +94,7 @@ class DeleterComponent extends Manager
                         }
                         else
                         {
-                            $count = DataManager::count(Admin::class_name());
+                            $count = DataManager::count(Admin::class);
                             
                             if ($count > 0)
                             {
@@ -118,7 +118,7 @@ class DeleterComponent extends Manager
                 
                 foreach ($admin_ids as $admin_id)
                 {
-                    $admin = DataManager::retrieve_by_id(Admin::class_name(), $admin_id);
+                    $admin = DataManager::retrieve_by_id(Admin::class, $admin_id);
                     
                     if ($admin->get_origin() == Admin::ORIGIN_EXTERNAL || ! $admin->delete())
                     {
@@ -136,18 +136,18 @@ class DeleterComponent extends Manager
                 $conditions = array();
                 
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($admin->get_entity_id()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE), 
                     new StaticConditionVariable($admin->get_target_type()));
                 
                 $condition = new AndCondition($conditions);
                 
-                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
                 
                 if ($count > 0)
                 {
@@ -162,15 +162,15 @@ class DeleterComponent extends Manager
                 $conditions = array();
                 
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($admin->get_entity_id()));
                 
                 $condition = new AndCondition($conditions);
                 
-                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
                 
                 if ($count > 0)
                 {
@@ -183,10 +183,10 @@ class DeleterComponent extends Manager
                 // 3. Admin-instances for the same entity type
                 
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
+                    new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($admin->get_entity_type()));
                 
-                $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
                 
                 if ($count > 0)
                 {

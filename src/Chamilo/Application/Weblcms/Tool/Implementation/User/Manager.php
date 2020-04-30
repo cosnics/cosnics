@@ -110,14 +110,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassDistinctParameters(
                 new AndCondition($conditions),
                 new DataClassProperties(
@@ -136,7 +136,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     public function isGroupSubscribed($groupId)
     {
         /** @var Group $group */
-        $group = DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        $group = DataManager::retrieve_by_id(Group::class, $groupId);
         $parents = $group->get_ancestors();
 
         $subscribedPlatformGroupIds = $this->get_subscribed_platformgroup_ids($this->get_course_id());

@@ -52,7 +52,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 }
             case ContentObject::PROPERTY_TITLE :
                 {
-                    if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class_name())
+                    if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class)
                     {
                         $details_url = $this->get_component()->get_url(
                             array(

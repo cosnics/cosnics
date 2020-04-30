@@ -20,7 +20,7 @@ class EntityTableColumnModel
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
 
         parent::initialize_columns();
 

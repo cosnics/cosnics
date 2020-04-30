@@ -27,7 +27,7 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
         $publication_id = $this->get_tool_browser()->get_publication_id();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ID),
             new StaticConditionVariable($publication_id));
 
         return DataManager::retrieve_content_object_publications($condition, array(), 0, 1)->as_array();

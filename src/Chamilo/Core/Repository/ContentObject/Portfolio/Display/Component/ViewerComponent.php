@@ -608,7 +608,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
 
         $last_activities = DataManager::retrieve_activities(
             $this->get_current_content_object(), null, 0, 1,
-            array(new OrderBy(new PropertyConditionVariable(Activity::class_name(), Activity::PROPERTY_DATE)))
+            array(new OrderBy(new PropertyConditionVariable(Activity::class, Activity::PROPERTY_DATE)))
         );
 
         $last_activity = $last_activities->next_result();

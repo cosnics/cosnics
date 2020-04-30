@@ -47,7 +47,7 @@ class DeleterComponent extends Manager
             
             foreach ($relationInstanceIds as $relationInstanceId)
             {
-                $relationInstance = DataManager::retrieve_by_id(RelationInstance::class_name(), $relationInstanceId);
+                $relationInstance = DataManager::retrieve_by_id(RelationInstance::class, $relationInstanceId);
                 
                 if (! $relationInstance->delete())
                 {

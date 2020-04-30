@@ -67,7 +67,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CATEGORY_ID
             ),
             ComparisonCondition::EQUAL,
@@ -91,7 +91,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID
             ),
             ComparisonCondition::EQUAL,
@@ -114,7 +114,7 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         return new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL
             ),
             ComparisonCondition::EQUAL,
@@ -132,7 +132,7 @@ class PublicationRepository implements PublicationRepositoryInterface
     protected function findPublicationsByCondition(Condition $condition)
     {
         $result = new DataClassRecordResultSet(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             DataManager::retrieve_content_object_publications($condition)
         );
 
@@ -166,12 +166,12 @@ class PublicationRepository implements PublicationRepositoryInterface
         $conditions = array();
 
         $from_date_variables = new PropertyConditionVariable(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             ContentObjectPublication::PROPERTY_FROM_DATE
         );
 
         $to_date_variable = new PropertyConditionVariable(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             ContentObjectPublication::PROPERTY_TO_DATE
         );
 
@@ -179,7 +179,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $time_conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_HIDDEN
             ),
             ComparisonCondition::EQUAL,
@@ -224,7 +224,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ID
             ),
             $publicationIds
         );
@@ -232,7 +232,7 @@ class PublicationRepository implements PublicationRepositoryInterface
         $condition = new AndCondition($conditions);
 
         $result = new DataClassRecordResultSet(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             DataManager::retrieve_content_object_publications($condition)
         );
 
@@ -248,7 +248,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     public function findPublicationById($publicationId)
     {
-        return DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publicationId);
+        return DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
     }
 
     /**
@@ -336,7 +336,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_PARENT
             ),
             ComparisonCondition::EQUAL,
@@ -360,7 +360,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_COURSE
             ),
             ComparisonCondition::EQUAL,
@@ -369,7 +369,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_TOOL
             ),
             ComparisonCondition::EQUAL,
@@ -388,7 +388,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {
-        return DataManager::retrieves(ContentObjectPublicationCategory::class_name(), $condition)->as_array();
+        return DataManager::retrieves(ContentObjectPublicationCategory::class, $condition)->as_array();
     }
 
     /**
@@ -400,7 +400,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     public function findPublicationCategoryById($categoryId)
     {
-        return DataManager::retrieve_by_id(ContentObjectPublicationCategory::class_name(), $categoryId);
+        return DataManager::retrieve_by_id(ContentObjectPublicationCategory::class, $categoryId);
     }
 
     /**

@@ -14,11 +14,11 @@ class GroupRelUserTableDataProvider extends DataClassTableDataProvider
     {
         $order_property = array();
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
+            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
             SORT_ASC, 
             \Chamilo\Core\User\Storage\DataManager::get_alias(User::get_table_name()));
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
+            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
             SORT_ASC, 
             \Chamilo\Core\User\Storage\DataManager::get_alias(User::get_table_name()));
         

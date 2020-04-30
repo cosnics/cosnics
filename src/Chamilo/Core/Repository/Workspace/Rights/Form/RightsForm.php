@@ -71,14 +71,14 @@ class RightsForm extends FormValidator
             {
                 $entityType = UserEntity::getInstance()->get_entity_translated_name();
                 $entityName = DataManager::retrieve_by_id(
-                    User::class_name(), 
+                    User::class,
                     $this->entityRelation->get_entity_id())->get_fullname();
             }
             else
             {
                 $entityType = PlatformGroupEntity::getInstance()->get_entity_translated_name();
                 $entityName = DataManager::retrieve_by_id(
-                    Group::class_name(), 
+                    Group::class,
                     $this->entityRelation->get_entity_id())->get_name();
             }
             

@@ -52,7 +52,7 @@ class UsersTrackingBlock extends CourseBlock
             );
 
             $params = $this->get_parent()->get_parameters();
-            $params[Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerDetailTemplate::class_name();
+            $params[Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerDetailTemplate::class;
             $params[Manager::PARAM_USERS] = $user[User::PROPERTY_ID];
 
             $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';

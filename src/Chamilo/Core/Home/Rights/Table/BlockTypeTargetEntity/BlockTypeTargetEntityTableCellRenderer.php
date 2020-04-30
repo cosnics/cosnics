@@ -77,7 +77,7 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
                     foreach ($entityIds as $group_id)
                     {
                         $group =
-                            \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $group_id);
+                            \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $group_id);
                         if ($group)
                         {
                             $targetEntitiesHtml[] =

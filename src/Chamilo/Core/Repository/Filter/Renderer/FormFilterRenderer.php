@@ -309,11 +309,11 @@ class FormFilterRenderer extends FilterRenderer
     private function get_user_views()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_USER_ID),
+            new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
         $parameters = new DataClassRetrievesParameters($condition);
-        $user_views = DataManager::retrieves(UserView::class_name(), $parameters);
+        $user_views = DataManager::retrieves(UserView::class, $parameters);
 
         $user_view_options = array();
         $user_view_options[0] = '-- ' . Translation::get('SelectAView') . ' --';

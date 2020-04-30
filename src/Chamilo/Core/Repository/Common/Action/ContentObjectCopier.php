@@ -134,7 +134,7 @@ class ContentObjectCopier
         $file = FileProperties::from_path($newPath);
 
         $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $this->targetUserIdentifier);
 
         $parameters = ImportParameters::factory(
@@ -246,12 +246,12 @@ class ContentObjectCopier
         DataClassCache::reset();
 
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             $contentObjectIdentifiers);
 
         $parameters = new DataClassRetrievesParameters($condition);
 
-        $content_objects = DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters);
+        $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
 
         while ($content_object = $content_objects->next_result())
         {

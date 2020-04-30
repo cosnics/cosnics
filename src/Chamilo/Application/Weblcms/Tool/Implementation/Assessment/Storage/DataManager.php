@@ -52,90 +52,90 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $properties = new DataClassProperties();
         
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID));
         
-        $properties->add(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
-        
-        $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_START_TIME));
+        $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_TOTAL_TIME));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_START_TIME));
         
         $properties->add(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_TOTAL_SCORE));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_TIME));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_SCORE));
+        
+        $properties->add(
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
         
         $properties->add(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_ANSWER));
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ANSWER));
         
         $properties->add(
-            new PropertyConditionVariable(QuestionAttempt::class_name(), QuestionAttempt::PROPERTY_SCORE));
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_SCORE));
         
         $joins = new Joins();
         
         $joins->add(
             new Join(
-                AssessmentAttempt::class_name(), 
+                AssessmentAttempt::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        QuestionAttempt::class_name(), 
+                        QuestionAttempt::class,
                         QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID), 
-                    new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ID))));
+                    new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID))));
         
         $joins->add(
             new Join(
-                User::class_name(), 
+                User::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID), 
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
+                    new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
         
         $joins->add(
             new Join(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class_name(), 
+                        AssessmentAttempt::class,
                         AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), 
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_ID))));
         
         $joins->add(
             new Join(
-                ContentObject::class_name(), 
+                ContentObject::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), 
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID), 
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID))));
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
         
         $joins->add(
             new Join(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        QuestionAttempt::class_name(), 
+                        QuestionAttempt::class,
                         QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID), 
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_ID))));
         
         $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, $order_by, $joins);
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::records(
-            QuestionAttempt::class_name(), 
+            QuestionAttempt::class,
             $parameters);
     }
 }

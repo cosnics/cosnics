@@ -651,11 +651,11 @@ class CourseGroupForm extends FormValidator
 
         // existing groups size
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_course_group->getId())
         );
         $course_groups =
-            DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
+            DataManager::retrieves(CourseGroup::class, new DataClassRetrievesParameters($condition));
 
         $size_children = 0;
         while ($existing_course_group = $course_groups->next_result())
@@ -748,15 +748,15 @@ class CourseGroupForm extends FormValidator
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME),
             new StaticConditionVariable($course_group->get_name())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($course_group->get_course_code())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($course_group->get_parent_id())
         );
 
@@ -766,14 +766,14 @@ class CourseGroupForm extends FormValidator
         if ($course_group->getId())
         {
             $not_condition = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_ID),
                 new StaticConditionVariable($course_group->getId())
             );
             $conditions[] = new NotCondition($not_condition);
         }
         $condition = new AndCondition($conditions);
 
-        $data_set = DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
+        $data_set = DataManager::retrieves(CourseGroup::class, new DataClassRetrievesParameters($condition));
 
         return ($data_set->size() > 0);
     }
@@ -823,7 +823,7 @@ class CourseGroupForm extends FormValidator
                 $parent_group_id = $values[CourseGroup::PROPERTY_PARENT_ID];
 
                 /** @var CourseGroup $parent_course_group */
-                $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $parent_group_id);
+                $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class, $parent_group_id);
                 if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
                 {
                     return false;
@@ -871,7 +871,7 @@ class CourseGroupForm extends FormValidator
 
         if ($parent_group_id)
         {
-            $parent_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $parent_group_id);
+            $parent_group = DataManager::retrieve_by_id(CourseGroup::class, $parent_group_id);
         }
         else
         {
@@ -1011,7 +1011,7 @@ class CourseGroupForm extends FormValidator
             while ($course_user = $course_users_drs->next_result())
             {
                 $course_users[$course_user[User::PROPERTY_ID]] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), $course_user[User::PROPERTY_ID]
+                    User::class, $course_user[User::PROPERTY_ID]
                 );
             }
         }
@@ -1059,7 +1059,7 @@ class CourseGroupForm extends FormValidator
                 foreach ($subscribed_users_drs as $user_id)
                 {
                     $subscribed_users[$user_id] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(), $user_id
+                        User::class, $user_id
                     );
                 }
             }
@@ -1188,16 +1188,16 @@ class CourseGroupForm extends FormValidator
                     $counter ++;
                 }
 
-                $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $parent_cgid);
+                $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class, $parent_cgid);
                 // existing groups size
                 $total_size = $total_size_diff;
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($parent_course_group->getId())
                 );
 
                 $c_course_groups = DataManager::retrieves(
-                    CourseGroup::class_name(), new DataClassRetrievesParameters($condition)
+                    CourseGroup::class, new DataClassRetrievesParameters($condition)
                 );
 
                 while ($course_group = $c_course_groups->next_result())
@@ -1221,7 +1221,7 @@ class CourseGroupForm extends FormValidator
             {
                 /** @var CourseGroup $parent_course_group */
                 $parent_course_group = DataManager::retrieve_by_id(
-                    CourseGroup::class_name(), $this->course_group->get_parent_id()
+                    CourseGroup::class, $this->course_group->get_parent_id()
                 );
                 if ($parent_course_group->get_max_number_of_members() > 0)
                 {
@@ -1265,7 +1265,7 @@ class CourseGroupForm extends FormValidator
                 // with their previous values.
 
                 /** @var CourseGroup $course_group */
-                $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group->getId());
+                $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group->getId());
 
                 $course_group->set_description($values[CourseGroup::PROPERTY_DESCRIPTION . $counter]);
                 $course_group->set_max_number_of_members(

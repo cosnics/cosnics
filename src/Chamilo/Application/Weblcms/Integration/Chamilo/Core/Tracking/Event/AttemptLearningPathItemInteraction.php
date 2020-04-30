@@ -21,6 +21,6 @@ class AttemptLearningPathItemInteraction extends Event
     public function getTrackerClasses()
     {
         return array(
-            LpiAttemptInteraction::class_name());
+            LpiAttemptInteraction::class);
     }
 }

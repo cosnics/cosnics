@@ -38,7 +38,7 @@ class BlockMoveComponent extends Manager
             JsonAjaxResult::not_allowed();
         }
         
-        $block = DataManager::retrieve_by_id(Block::class_name(), intval($this->getPostDataValue(self::PARAM_BLOCK)));
+        $block = DataManager::retrieve_by_id(Block::class, intval($this->getPostDataValue(self::PARAM_BLOCK)));
 
         if(!$block instanceof Block)
         {

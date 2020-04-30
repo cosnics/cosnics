@@ -28,13 +28,13 @@ class XmlGroupMenuFeedComponent extends Manager
 
         $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id)
         );
         $groups_tree = DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))
+                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
             )
         )->as_array();
 

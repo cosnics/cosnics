@@ -58,7 +58,7 @@ class ViewerComponent extends Manager implements TableSupport
             $this->group = $this->retrieve_group($id);
             $this->root_group = $this->retrieve_groups(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
             )->next_result();
@@ -176,7 +176,7 @@ class ViewerComponent extends Manager implements TableSupport
             );
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+                new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
                 new StaticConditionVariable($group->get_id())
             );
             $users = $this->retrieve_group_rel_users($condition);
@@ -223,7 +223,7 @@ class ViewerComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable(Request::get(self::PARAM_GROUP_ID))
         );
 
@@ -232,24 +232,24 @@ class ViewerComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
             );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
             );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
             );
             $condition = new OrCondition($or_conditions);
 
             $users = DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters($condition)
+                User::class, new DataClassRetrievesParameters($condition)
             );
 
             while ($user = $users->next_result())
             {
                 $userconditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable($user->get_id())
                 );
             }
@@ -261,7 +261,7 @@ class ViewerComponent extends Manager implements TableSupport
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable(0)
                 );
             }

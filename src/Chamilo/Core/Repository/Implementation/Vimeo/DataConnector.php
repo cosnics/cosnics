@@ -167,7 +167,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $rights = array();
 
         if (ContentObject::is_available(
-            \Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo::class_name()
+            \Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo::class
         ))
         {
             $rights[ExternalObject::RIGHT_USE] = true;

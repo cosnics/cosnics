@@ -115,7 +115,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_content_data($exportFormat)
     {
         $external_repository = DataManager::retrieve_by_id(
-            Instance::class_name(), 
+            Instance::class,
             $this->get_external_repository_id());
         $downloadMethod = $this->get_export_link($exportFormat);
 

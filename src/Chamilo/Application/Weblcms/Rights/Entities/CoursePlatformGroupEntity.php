@@ -102,7 +102,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         if ($this->limited_groups)
         {
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                 $this->limited_groups);
         }
         
@@ -110,7 +110,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                     $this->excluded_groups));
         }
         

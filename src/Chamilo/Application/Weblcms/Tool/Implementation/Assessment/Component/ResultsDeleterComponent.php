@@ -36,12 +36,12 @@ class ResultsDeleterComponent extends Manager
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssessmentAttempt::class_name(),
+                    AssessmentAttempt::class,
                     AssessmentAttempt::PROPERTY_ID),
                 new StaticConditionVariable($uaid));
 
             $item = DataManager::retrieve(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 new DataClassRetrieveParameters($condition));
 
             if ($item)
@@ -74,12 +74,12 @@ class ResultsDeleterComponent extends Manager
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    QuestionAttempt::class_name(),
+                    QuestionAttempt::class,
                     QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
                 new StaticConditionVariable($user_assessment->get_id()));
 
             $items = DataManager::retrieves(
-                QuestionAttempt::class_name(),
+                QuestionAttempt::class,
                 new DataClassRetrievesParameters($condition));
 
             while ($question_attempt = $items->next_result())
@@ -95,12 +95,12 @@ class ResultsDeleterComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($aid));
 
         $items = DataManager::retrieves(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
         while ($assessment_attempt = $items->next_result())

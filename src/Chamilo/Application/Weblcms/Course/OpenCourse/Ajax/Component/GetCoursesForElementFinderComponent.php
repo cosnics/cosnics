@@ -35,7 +35,7 @@ class GetCoursesForElementFinderComponent
     {
         return $this->getOpenCourseService()->getClosedCourses(
             $this->getCondition(), $this->ajaxResultGenerator->getOffset(), 100,
-            array(new OrderBy(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE)))
+            array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
         );
     }
 

@@ -39,7 +39,7 @@ class Feedback extends DataClass
         if (! isset($this->user))
         {
             $this->user = DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $this->get_user_id());
         }
         

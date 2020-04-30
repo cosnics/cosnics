@@ -46,7 +46,7 @@ class EntityRelationRepository
 
         $entityRelationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
             ),
             new StaticConditionVariable($workspaceImplementation->getId())
@@ -55,7 +55,7 @@ class EntityRelationRepository
         $entityRelationConditions[] = new EqualityCondition(
             new OperationConditionVariable(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation::class_name(),
+                    WorkspaceEntityRelation::class,
                     WorkspaceEntityRelation::PROPERTY_RIGHTS
                 ),
                 OperationConditionVariable::BITWISE_AND,
@@ -69,7 +69,7 @@ class EntityRelationRepository
         $entityRelationCondition = new AndCondition($entityRelationConditions);
 
         return DataManager::count(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 new DataClassCountParameters($entityRelationCondition)
             ) > 0;
     }
@@ -97,14 +97,14 @@ class EntityRelationRepository
 
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            WorkspaceEntityRelation::class_name(),
+                            WorkspaceEntityRelation::class,
                             WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE
                         ),
                         new StaticConditionVariable($entityType)
                     );
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            WorkspaceEntityRelation::class_name(),
+                            WorkspaceEntityRelation::class,
                             WorkspaceEntityRelation::PROPERTY_ENTITY_ID
                         ),
                         new StaticConditionVariable($entityIdentifier)
@@ -137,7 +137,7 @@ class EntityRelationRepository
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
             ),
             new StaticConditionVariable($workspace->getId())
@@ -145,14 +145,14 @@ class EntityRelationRepository
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE
             ),
             new StaticConditionVariable($entityType)
         );
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_ENTITY_ID
             ),
             new StaticConditionVariable($entityIdentifier)
@@ -161,7 +161,7 @@ class EntityRelationRepository
         $entityCondition = new AndCondition($entityConditions);
 
         return DataManager::retrieve(
-            WorkspaceEntityRelation::class_name(),
+            WorkspaceEntityRelation::class,
             new DataClassRetrieveParameters($entityCondition)
         );
     }
@@ -175,7 +175,7 @@ class EntityRelationRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation::class_name(),
+                WorkspaceEntityRelation::class,
                 WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
             ),
             new StaticConditionVariable($workspace->getId())
@@ -194,6 +194,6 @@ class EntityRelationRepository
      */
     public function findEntityRelationByIdentifier($identifier)
     {
-        return DataManager::retrieve_by_id(WorkspaceEntityRelation::class_name(), $identifier);
+        return DataManager::retrieve_by_id(WorkspaceEntityRelation::class, $identifier);
     }
 }

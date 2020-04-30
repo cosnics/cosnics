@@ -88,17 +88,17 @@ class WeblcmsBookmarkDisplay extends Block implements
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Bookmark::class_name(), Bookmark::PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Bookmark::class, Bookmark::PROPERTY_APPLICATION),
             new StaticConditionVariable(Manager::package()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));
         
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters($condition);
         
         $bookmarks_resultset = DataManager::retrieve_active_content_objects(
-            Bookmark::class_name(), 
+            Bookmark::class,
             $parameters);
         
         return $bookmarks_resultset;

@@ -19,19 +19,19 @@ class LogoutComponent extends Manager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_external_repository()->get_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable('session_token'));
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $condition = new AndCondition($conditions);
         
         $parameters = new DataClassRetrieveParameters($condition);
-        $user_setting = DataManager::retrieve(Setting::class_name(), $parameters);
+        $user_setting = DataManager::retrieve(Setting::class, $parameters);
         
         if ($user_setting->delete())
         {

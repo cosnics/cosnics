@@ -87,11 +87,11 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
             ), new StaticConditionVariable($filter_id)
         );
         $relations = DataManager::retrieves(
-            CourseGroupUserRelation::class_name(), new DataClassRetrievesParameters($condition)
+            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition)
         );
 
         $user_ids = array();
@@ -117,7 +117,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
         {
             $query = '*' . $search_query . '*';
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), $query
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $query
             );
         }
 
@@ -131,7 +131,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
         if ($filter_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($filter_id)
             );
         }
@@ -143,13 +143,13 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
                 );
 
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($root_course_group->get_id())
             );
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($course_id)
         );
 
@@ -166,9 +166,9 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
         }
 
         return DataManager::retrieves(
-            CourseGroup::class_name(), new DataClassRetrievesParameters(
+            CourseGroup::class, new DataClassRetrievesParameters(
                 $condition, null, null, array(
-                    new OrderBy(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME))
+                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
                 )
             )
         );

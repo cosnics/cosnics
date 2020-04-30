@@ -19,7 +19,7 @@ class RefererBlock extends Block
         $tracker = new Referrer();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                Provider::class_name(),
+                Provider::class,
                 Referrer::PROPERTY_TYPE),
             new StaticConditionVariable('referer'));
         $description[0] = Translation::get('Referers');

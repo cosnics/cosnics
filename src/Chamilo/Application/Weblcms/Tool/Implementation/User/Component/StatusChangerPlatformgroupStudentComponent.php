@@ -18,23 +18,23 @@ class StatusChangerPlatformgroupStudentComponent extends StatusChangerComponent
         $conditions = array();
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), 
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID), 
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($this->object));
         
         $condition = new AndCondition($conditions);
         
         return DataManager::retrieve(
-            CourseEntityRelation::class_name(), 
+            CourseEntityRelation::class,
             new DataClassRetrieveParameters($condition));
     }
 

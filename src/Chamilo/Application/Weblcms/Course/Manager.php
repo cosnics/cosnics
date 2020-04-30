@@ -93,9 +93,9 @@ abstract class Manager extends Application
     {
         $course_ids = $this->get_selected_course_ids();
         $condition = new InCondition(
-            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID), 
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
             $course_ids);
-        $result_set = DataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters($condition));
+        $result_set = DataManager::retrieves(Course::class, new DataClassRetrievesParameters($condition));
         if ($result_set->size() == 0)
         {
             throw new ObjectNotExistException(Translation::get('Course'), $course_ids);

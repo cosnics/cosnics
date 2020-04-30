@@ -20,7 +20,7 @@ class UserInformationBlock extends ToolBlock
         $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $user_id);
 
         $userFullName = $userEmail = $userName = Translation::getInstance()->getTranslation(

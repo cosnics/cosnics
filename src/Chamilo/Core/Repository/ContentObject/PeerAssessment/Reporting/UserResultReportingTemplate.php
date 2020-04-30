@@ -28,7 +28,7 @@ class UserResultReportingTemplate extends ReportingTemplate
             Manager::PARAM_ATTEMPT
         );
         $this->user = DataManager::retrieve_by_id(
-            User::class_name(), (int) $user_id
+            User::class, (int) $user_id
         );
 
         $this->peer_assessment = $this->get_parent()->get_root_content_object();

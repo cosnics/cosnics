@@ -40,19 +40,19 @@ class AssessmentScoresTemplate extends ReportingTemplate
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable(Assessment::class_name()));
+            new StaticConditionVariable(Assessment::class));
         $condition = new AndCondition($conditions);
         
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_MODIFIED_DATE));
         
         $publications = DataManager::retrieve_content_object_publications(

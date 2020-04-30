@@ -99,21 +99,21 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
         $parameters = new DataClassDistinctParameters(
             new InequalityCondition(
-                new PropertyConditionVariable(Online::class_name(), Online::PROPERTY_LAST_ACCESS_DATE),
+                new PropertyConditionVariable(Online::class, Online::PROPERTY_LAST_ACCESS_DATE),
                 InEqualityCondition::GREATER_THAN,
                 new StaticConditionVariable($pastTime)),
             new DataClassProperties(array(new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID))));
 
-        $userIds = DataManager::distinct(Online::class_name(), $parameters);
+        $userIds = DataManager::distinct(Online::class, $parameters);
 
         if (! empty($userIds))
         {
-            return new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds);
+            return new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIds);
         }
         else
         {
             return new EqualityCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                 new StaticConditionVariable(- 1));
         }
     }
@@ -121,7 +121,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
     private function get_user_html($user_id)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $user_id);
 
         $html[] = '<br /><div style="float: left; width: 150px;">';

@@ -86,7 +86,7 @@ class User extends DataClass
         $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
         if ($user_id && $user_id != '')
         {
-            return DataManager::retrieve_by_id(User::class_name(), (int) $user_id)->is_platform_admin();
+            return DataManager::retrieve_by_id(User::class, (int) $user_id)->is_platform_admin();
         }
         else
         {
@@ -115,11 +115,11 @@ class User extends DataClass
     public function delete()
     {
         $group_rel_user_condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_id())
         );
         $success = \Chamilo\Core\Group\Storage\DataManager::deletes(
-            GroupRelUser::class_name(), $group_rel_user_condition
+            GroupRelUser::class, $group_rel_user_condition
         );
 
         if ($success)

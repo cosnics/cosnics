@@ -59,7 +59,7 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
         {
             case self::PROPERTY_OWNER_FULLNAME :
                 $author = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     $contentObject->get_owner_id());
                 if ($author)
                 {

@@ -72,7 +72,7 @@ abstract class Tracker extends DataClass
      */
     public function remove(Condition $condition = null)
     {
-        return DataManager::deletes(static::class_name(), $condition);
+        return DataManager::deletes(static::class, $condition);
     }
 
     /**

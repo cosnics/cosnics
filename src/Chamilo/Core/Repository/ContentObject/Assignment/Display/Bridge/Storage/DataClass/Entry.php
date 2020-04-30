@@ -163,7 +163,7 @@ abstract class Entry extends DataClass
             if (!isset($this->contentObject))
             {
                 $this->contentObject = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $this->getContentObjectId()
                 );
             }

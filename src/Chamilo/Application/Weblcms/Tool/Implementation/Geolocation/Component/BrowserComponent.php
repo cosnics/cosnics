@@ -35,7 +35,7 @@ class BrowserComponent extends Manager
 
             foreach ($publications as $publication)
             {
-                $publication_object = DataClass::factory(ContentObjectPublication::class_name(), $publication);
+                $publication_object = DataClass::factory(ContentObjectPublication::class, $publication);
 
                 if ($publication_object->is_visible_for_target_users())
                 {

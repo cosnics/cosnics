@@ -27,21 +27,21 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
         if (!$this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID)
+                new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_OWNER_ID)
             );
         }
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE)
         );
 
         $versionGlyph = new FontAwesomeGlyph('undo', array(), Translation::get('Versions'));

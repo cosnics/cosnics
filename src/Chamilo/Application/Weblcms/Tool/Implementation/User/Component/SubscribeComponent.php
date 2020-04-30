@@ -153,7 +153,7 @@ class SubscribeComponent extends Manager
     protected function findUsersByIds(array $userIds = array())
     {
         return $this->getUserService()->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+            new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIds)
         );
     }
 

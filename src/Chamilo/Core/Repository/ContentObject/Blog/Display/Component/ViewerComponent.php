@@ -57,7 +57,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                                self::PARAM_TYPE => BlogItem::class_name()
+                                self::PARAM_TYPE => BlogItem::class
                             )
                         ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )

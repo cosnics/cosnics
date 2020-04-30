@@ -47,7 +47,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
     public function get_actions($assessment_attempt)
     {
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $assessment_attempt[AssessmentAttempt::PROPERTY_ASSESSMENT_ID]
+            ContentObjectPublication::class, $assessment_attempt[AssessmentAttempt::PROPERTY_ASSESSMENT_ID]
         );
 
         $assessment_attempt_status = $assessment_attempt[AssessmentAttempt::PROPERTY_STATUS];
@@ -57,15 +57,15 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
 
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($pub->get_id())
             )
         );
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         $toolbar = new Toolbar();
 
-        if ($assessment->get_type() != Hotpotatoes::class_name() &&
+        if ($assessment->get_type() != Hotpotatoes::class &&
             (($assessment_attempt_status == AssessmentAttempt::STATUS_COMPLETED &&
                     $assessment_publication->get_configuration()->show_feedback()) ||
                 $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT)))
@@ -125,7 +125,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
         {
             switch ($column->get_class_name())
             {
-                case AssessmentAttempt::class_name() :
+                case AssessmentAttempt::class :
                 {
                     switch ($column->get_name())
                     {

@@ -306,7 +306,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             foreach ($courses as $course_properties)
             {
                 $course_instances[$course_properties[Course::PROPERTY_ID]] = DataClass::factory(
-                    Course::class_name(), $course_properties
+                    Course::class, $course_properties
                 );
             }
 
@@ -319,7 +319,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $count = 0;
             foreach ($courses as $course_properties)
             {
-                $course = DataClass::factory(Course::class_name(), $course_properties);
+                $course = DataClass::factory(Course::class, $course_properties);
 
                 $course_id = $course->get_id();
 
@@ -564,7 +564,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             if ($selected_course_type_id > 0)
             {
                 $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
-                    CourseType::class_name(), $selected_course_type_id
+                    CourseType::class, $selected_course_type_id
                 );
 
                 if (!$course_type || !$course_type->is_active())

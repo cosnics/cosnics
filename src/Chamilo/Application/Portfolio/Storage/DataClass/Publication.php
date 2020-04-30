@@ -67,7 +67,7 @@ class Publication extends DataClass
         if (! isset($this->content_object))
         {
             $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_content_object_id());
         }
 
@@ -101,7 +101,7 @@ class Publication extends DataClass
         if (! isset($this->publisher))
         {
             $this->publisher = DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $this->get_publisher_id());
         }
 
@@ -161,8 +161,8 @@ class Publication extends DataClass
     protected function get_dependencies()
     {
         return array(
-            Feedback::class_name() => new EqualityCondition(
-                new PropertyConditionVariable(Feedback::class_name(), Feedback::PROPERTY_PUBLICATION_ID),
+            Feedback::class => new EqualityCondition(
+                new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->get_id())));
     }
 

@@ -211,7 +211,7 @@ class PublicationModifier implements PublicationModifierInterface
                 /**
                  * @var \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem $newObject
                  */
-                $newObject = ContentObject::factory(PortfolioItem::class_name());
+                $newObject = ContentObject::factory(PortfolioItem::class);
                 $newObject->set_owner_id($publicationTarget->getUserIdentifier());
                 $newObject->set_title(PortfolioItem::get_type_name());
                 $newObject->set_description(PortfolioItem::get_type_name());

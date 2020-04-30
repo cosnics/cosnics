@@ -89,10 +89,10 @@ class SessionRepository
      */
     public function getSessionForIdentifierNameAndSavePath($sessionIdentifier, $name, $savePath)
     {
-        $this->getDataClassRepositoryCache()->truncate(Session::class_name());
+        $this->getDataClassRepositoryCache()->truncate(Session::class);
         
         return $this->getDataClassRepository()->retrieve(
-            Session::class_name(), 
+            Session::class,
             new DataClassRetrieveParameters($this->getSessionCondition($sessionIdentifier, $name, $savePath)));
     }
 
@@ -107,13 +107,13 @@ class SessionRepository
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Session::class_name(), Session::PROPERTY_SESSION_ID), 
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_SESSION_ID),
             new StaticConditionVariable($sessionIdentifier));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Session::class_name(), Session::PROPERTY_NAME), 
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_NAME),
             new StaticConditionVariable($name));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Session::class_name(), Session::PROPERTY_SAVE_PATH), 
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_SAVE_PATH),
             new StaticConditionVariable($savePath));
         
         return new AndCondition($conditions);
@@ -129,7 +129,7 @@ class SessionRepository
     public function deleteSessionForIdentifierNameAndSavePath($sessionIdentifier, $name, $savePath)
     {
         return $this->getDataClassRepository()->deletes(
-            Session::class_name(), 
+            Session::class,
             $this->getSessionCondition($sessionIdentifier, $name, $savePath));
     }
 
@@ -141,10 +141,10 @@ class SessionRepository
     public function deleteSessionsOlderThanTimestamp($timetamp)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Session::class_name(), Session::PROPERTY_MODIFIED), 
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_MODIFIED),
             ComparisonCondition::LESS_THAN, 
             new StaticConditionVariable($timetamp));
         
-        return $this->getDataClassRepository()->deletes(Session::class_name(), $condition);
+        return $this->getDataClassRepository()->deletes(Session::class, $condition);
     }
 }

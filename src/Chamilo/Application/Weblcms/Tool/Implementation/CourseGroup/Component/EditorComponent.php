@@ -32,7 +32,7 @@ class EditorComponent extends TabComponent
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
         /** @var CourseGroup $course_group */
-        $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
+        $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(

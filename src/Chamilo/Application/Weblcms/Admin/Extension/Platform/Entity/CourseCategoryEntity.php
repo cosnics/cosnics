@@ -51,7 +51,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            CourseCategory::class_name(), new DataClassCountParameters($condition)
+            CourseCategory::class, new DataClassCountParameters($condition)
         );
     }
 
@@ -70,7 +70,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public static function data_class_class_name()
     {
-        return CourseCategory::class_name();
+        return CourseCategory::class;
     }
 
     public static function getInstance()
@@ -99,7 +99,7 @@ class CourseCategoryEntity implements NestedRightsEntity
     public function get_element_finder_element($id)
     {
         $course_category = DataManager::retrieve_by_id(
-            CourseCategory::class_name(), $id
+            CourseCategory::class, $id
         );
         if (!$course_category)
         {
@@ -288,7 +288,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            CourseCategory::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            CourseCategory::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

@@ -189,15 +189,15 @@ class BrowseComponent extends Manager implements TableSupport
         if ($category_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
                 new StaticConditionVariable($category_id)
             );
         }
 
         $search_condition = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE)
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
             )
         );
 

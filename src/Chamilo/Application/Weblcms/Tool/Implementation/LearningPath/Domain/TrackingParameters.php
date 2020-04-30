@@ -81,7 +81,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getTreeNodeAttemptClassName()
     {
-        return LearningPathTreeNodeAttempt::class_name();
+        return LearningPathTreeNodeAttempt::class;
     }
 
     /**
@@ -90,7 +90,7 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getTreeNodeQuestionAttemptClassName()
     {
-        return LearningPathTreeNodeQuestionAttempt::class_name();
+        return LearningPathTreeNodeQuestionAttempt::class;
     }
 
     /**

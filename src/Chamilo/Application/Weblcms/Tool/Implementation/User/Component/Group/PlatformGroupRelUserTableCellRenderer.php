@@ -78,7 +78,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
         {
             case GroupRelUser::PROPERTY_USER_ID :
                 $user_id = parent::render_cell($column, $groupreluser);
-                $user = DataManager::retrieve_by_id(User::class_name(), $user_id);
+                $user = DataManager::retrieve_by_id(User::class, $user_id);
 
                 return $user->get_fullname();
         }

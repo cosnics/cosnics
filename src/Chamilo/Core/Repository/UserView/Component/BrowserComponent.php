@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function get_table_condition($table_class_name)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_USER_ID),
+            new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
 
@@ -103,10 +103,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_NAME), '*' . $query . '*'
+                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_NAME), '*' . $query . '*'
             );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(UserView::class_name(), UserView::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_DESCRIPTION),
                 '*' . $query . '*'
             );
             $or_condition = new OrCondition($or_conditions);

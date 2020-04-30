@@ -42,25 +42,25 @@ class AssessmentUserScoresBlock extends ToolBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true)));
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true)));
         $condition = new AndCondition($conditions);
         
         $order_by = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE)));
         
         $publication_resultset = DataManager::retrieves(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             new DataClassRetrievesParameters($condition, null, null, $order_by));
         
         $publications = array();
@@ -120,19 +120,19 @@ class AssessmentUserScoresBlock extends ToolBlock
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class_name(), 
+                        AssessmentAttempt::class,
                         AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
                     new StaticConditionVariable($publication->get_id()));
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class_name(),
+                        AssessmentAttempt::class,
                         AssessmentAttempt::PROPERTY_USER_ID),
                     new StaticConditionVariable($user[User::PROPERTY_ID]));
                 $condition = new AndCondition($conditions);
                 
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                    AssessmentAttempt::class_name(), 
+                    AssessmentAttempt::class,
                     new DataClassRetrievesParameters($condition));
                 
                 if ($attempts_by_user->size() == 0)

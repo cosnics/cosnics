@@ -18,7 +18,7 @@ class ProviderBlock extends Block
         $tracker = new Provider();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                Provider::class_name(),
+                Provider::class,
                 Provider::PROPERTY_TYPE),
             new StaticConditionVariable('provider'));
         $description[0] = Translation::get('Providers');

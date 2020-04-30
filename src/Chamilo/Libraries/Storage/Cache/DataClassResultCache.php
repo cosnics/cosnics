@@ -104,7 +104,7 @@ class DataClassResultCache extends DataClassCache
      */
     private static function getCacheClassName(DataClass $object)
     {
-        $compositeDataClassName = CompositeDataClass::class_name();
+        $compositeDataClassName = CompositeDataClass::class;
 
         $isCompositeDataClass = $object instanceof $compositeDataClassName;
         $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;

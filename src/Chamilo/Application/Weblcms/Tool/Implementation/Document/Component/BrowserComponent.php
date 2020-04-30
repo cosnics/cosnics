@@ -144,7 +144,7 @@ class BrowserComponent extends Manager
         {
             $conditions[] = new InequalityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
             );
         }
@@ -157,7 +157,7 @@ class BrowserComponent extends Manager
 
             if (ContentObject::is_available('Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'))
             {
-                $classes[] = File::class_name();
+                $classes[] = File::class;
             }
 
             $image_subselect_conditions = array();
@@ -177,7 +177,7 @@ class BrowserComponent extends Manager
 
                 $image_subselect_conditions[] = new SubselectCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
                     ), new PropertyConditionVariable($class, $class::PROPERTY_ID), $class::get_table_name(),
                     $image_condition
                 );

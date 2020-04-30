@@ -97,10 +97,10 @@ class UserComponent extends Manager implements TableSupport
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)));
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
+                new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE)));
         
         if ($searchCondition)
         {
@@ -108,7 +108,7 @@ class UserComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         

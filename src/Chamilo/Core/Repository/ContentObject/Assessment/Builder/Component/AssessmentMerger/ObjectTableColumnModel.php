@@ -21,10 +21,10 @@ class ObjectTableColumnModel extends DataClassTableColumnModel implements TableC
         );
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
     }
 }

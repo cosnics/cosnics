@@ -31,7 +31,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $movedown_allowed = true;
 
         $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $this->get_component()->get_table_condition(__CLASS__)
+            ComplexContentObjectItem::class, $this->get_component()->get_table_condition(__CLASS__)
         );
         if ($count == 1)
         {
@@ -197,7 +197,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     );
 
                     return DataManager::count_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), $condition
+                        ComplexContentObjectItem::class, $condition
                     );
                 }
 

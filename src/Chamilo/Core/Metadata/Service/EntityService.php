@@ -90,8 +90,8 @@ class EntityService
         $schemaIds = $this->getAvailableSchemaIdsForEntityType($entity);
 
         return DataManager::retrieves(
-            Schema::class_name(), new DataClassRetrievesParameters(
-                new InCondition(new PropertyConditionVariable(Schema::class_name(), Schema::PROPERTY_ID), $schemaIds)
+            Schema::class, new DataClassRetrievesParameters(
+                new InCondition(new PropertyConditionVariable(Schema::class, Schema::PROPERTY_ID), $schemaIds)
             )
         );
     }
@@ -384,7 +384,7 @@ class EntityService
 
         foreach ($submittedExistingSchemaIds as $submittedExistingSchemaId)
         {
-            $schemaInstance = DataManager::retrieve_by_id(SchemaInstance::class_name(), $submittedExistingSchemaId);
+            $schemaInstance = DataManager::retrieve_by_id(SchemaInstance::class, $submittedExistingSchemaId);
 
             if (!$this->processEntitySchemaInstance(
                 $currentUser, $schemaInstance, $entity, $submittedSchemaValues[$submittedExistingSchemaId]

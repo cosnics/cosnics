@@ -61,9 +61,9 @@ class ShareComponent extends Manager implements TableSupport
             );
 
             $selectedContentObjectNumbers = DataManager::distinct(
-                ContentObject::class_name(), new DataClassDistinctParameters(
+                ContentObject::class, new DataClassDistinctParameters(
                     new InCondition(
-                        new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                         $selectedContentObjectIdentifiers
                     ), new DataClassProperties(
                         array(
@@ -99,9 +99,9 @@ class ShareComponent extends Manager implements TableSupport
             if (count($contentObjectIdentifiers) >= 1)
             {
                 $contentObjects = DataManager::retrieves(
-                    ContentObject::class_name(), new DataClassRetrievesParameters(
+                    ContentObject::class, new DataClassRetrievesParameters(
                         new InCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                             $contentObjectIdentifiers
                         )
                     )

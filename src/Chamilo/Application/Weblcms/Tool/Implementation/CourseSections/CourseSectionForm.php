@@ -112,17 +112,17 @@ class CourseSectionForm extends FormValidator
         $name = $values[CourseSection::PROPERTY_NAME];
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->course_section->get_course_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_NAME),
+            new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_NAME),
             new StaticConditionVariable($name)
         );
         $condition = new AndCondition($conditions);
 
         $course_sections = DataManager::retrieves(
-            CourseSection::class_name(), new DataClassRetrievesParameters($condition)
+            CourseSection::class, new DataClassRetrievesParameters($condition)
         );
 
         if ($course_sections->size() > 0)

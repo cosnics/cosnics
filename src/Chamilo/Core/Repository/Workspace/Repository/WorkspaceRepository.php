@@ -42,7 +42,7 @@ class WorkspaceRepository
      */
     public function findWorkspaceByIdentifier($identifier)
     {
-        return DataManager::retrieve_by_id(Workspace::class_name(), $identifier);
+        return DataManager::retrieve_by_id(Workspace::class, $identifier);
     }
 
     /**
@@ -54,11 +54,11 @@ class WorkspaceRepository
     public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = array())
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID),
+            new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID),
             $identifiers);
 
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters($condition, $limit, $offset, $orderProperty));
     }
 
@@ -74,7 +74,7 @@ class WorkspaceRepository
     public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(
                 $this->getWorkspacesByCreatorCondition($user),
                 $limit,
@@ -91,7 +91,7 @@ class WorkspaceRepository
     public function countWorkspacesByCreator(User $user)
     {
         return DataManager::count(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassCountParameters($this->getWorkspacesByCreatorCondition($user)));
     }
 
@@ -104,7 +104,7 @@ class WorkspaceRepository
     private function getWorkspacesByCreatorCondition(User $user)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_CREATOR_ID),
+            new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_CREATOR_ID),
             new StaticConditionVariable($user->getId()));
     }
 
@@ -119,7 +119,7 @@ class WorkspaceRepository
     public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty));
     }
 
@@ -129,7 +129,7 @@ class WorkspaceRepository
      */
     public function countAllWorkspaces()
     {
-        return DataManager::count(Workspace::class_name());
+        return DataManager::count(Workspace::class);
     }
 
     /**
@@ -144,7 +144,7 @@ class WorkspaceRepository
     public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(
                 $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
                 $limit,
@@ -162,7 +162,7 @@ class WorkspaceRepository
     public function countSharedWorkspacesForEntities($entities)
     {
         return DataManager::count(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassCountParameters(
                 $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
                 new Joins(array($this->getSharedWorkspacesJoin()))));
@@ -186,18 +186,18 @@ class WorkspaceRepository
 
                 $entityConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        WorkspaceEntityRelation::class_name(),
+                        WorkspaceEntityRelation::class,
                         WorkspaceEntityRelation::PROPERTY_ENTITY_ID),
                     new StaticConditionVariable($entityIdentifier));
                 $entityConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        WorkspaceEntityRelation::class_name(),
+                        WorkspaceEntityRelation::class,
                         WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable($entityType));
                 $entityConditions[] = new EqualityCondition(
                     new OperationConditionVariable(
                         new PropertyConditionVariable(
-                            WorkspaceEntityRelation::class_name(),
+                            WorkspaceEntityRelation::class,
                             WorkspaceEntityRelation::PROPERTY_RIGHTS),
                         OperationConditionVariable::BITWISE_AND,
                         new StaticConditionVariable($right)),
@@ -219,12 +219,12 @@ class WorkspaceRepository
     private function getSharedWorkspacesJoin($joinType = Join :: TYPE_NORMAL)
     {
         return new Join(
-            WorkspaceEntityRelation::class_name(),
+            WorkspaceEntityRelation::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation::class_name(),
+                    WorkspaceEntityRelation::class,
                     WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID),
-                new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID)),
+                new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID)),
             $joinType);
     }
 
@@ -241,7 +241,7 @@ class WorkspaceRepository
     public function findWorkspaceFavouritesByUser(User $user, $entities, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
                 $limit,
@@ -261,7 +261,7 @@ class WorkspaceRepository
     public function countWorkspaceFavouritesByUser(User $user, $entities)
     {
         return DataManager::count(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassCountParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
                 $this->getWorkspaceFavouritesByUserJoins(),
@@ -269,7 +269,7 @@ class WorkspaceRepository
                     array(
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,
-                            new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID))))));
+                            new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID))))));
     }
 
     /**
@@ -281,12 +281,12 @@ class WorkspaceRepository
     private function getFavouritesJoin($joinType = Join :: TYPE_NORMAL)
     {
         return new Join(
-            WorkspaceUserFavourite::class_name(),
+            WorkspaceUserFavourite::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceUserFavourite::class_name(),
+                    WorkspaceUserFavourite::class,
                     WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID),
-                new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID)),
+                new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID)),
             $joinType);
     }
 
@@ -343,7 +343,7 @@ class WorkspaceRepository
 
         $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
         $andConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(WorkspaceUserFavourite::class_name(), WorkspaceUserFavourite::PROPERTY_USER_ID),
+            new PropertyConditionVariable(WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
 
         return new AndCondition($andConditions);
@@ -433,7 +433,7 @@ class WorkspaceRepository
         $offset = null, $orderProperty = null)
     {
         return DataManager::retrieves(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassRetrievesParameters(
                 $this->getWorkspaceByUserCondition($user, $entities, $right, $condition),
                 $limit,
@@ -456,7 +456,7 @@ class WorkspaceRepository
     protected function countWorkspacesForUserWithCondition(User $user, $entities, $right, Condition $condition = null)
     {
         return DataManager::count(
-            Workspace::class_name(),
+            Workspace::class,
             new DataClassCountParameters(
                 $this->getWorkspaceByUserCondition($user, $entities, $right, $condition),
                 new Joins(array($this->getSharedWorkspacesJoin(Join::TYPE_LEFT)))));
@@ -473,7 +473,7 @@ class WorkspaceRepository
     {
         $condition = new NotCondition(
             new InCondition(
-                new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID),
+                new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID),
                 $excludedWorkspaceIdentifiers));
 
         return $condition;

@@ -21,6 +21,6 @@ class CreatePublication extends Event
     public function getTrackerClasses()
     {
         return array(
-            PublicationChange::class_name());
+            PublicationChange::class);
     }
 }

@@ -31,7 +31,7 @@ class UpdaterComponent extends Manager
         $this->set_parameter(self::PARAM_USER_VIEW_ID, $id);
         if ($id)
         {
-            $user_view = DataManager::retrieve_by_id(UserView::class_name(), $id);
+            $user_view = DataManager::retrieve_by_id(UserView::class, $id);
             
             $form = new UserViewForm(
                 UserViewForm::TYPE_EDIT, 

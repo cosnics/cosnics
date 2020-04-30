@@ -49,11 +49,11 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
     protected function add_breadcrumbs()
     {
         $assessment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->get_parameter(Manager::PARAM_PUBLICATION))->get_content_object();
         
         $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $this->get_parameter(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION));
         
         $trail = BreadcrumbTrail::getInstance();
@@ -70,7 +70,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
         
         $params = array();
-        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class_name();
+        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $assessment->get_title()));
@@ -82,7 +82,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
         $filters = array(Manager::PARAM_USERS);
         
         $params = array();
-        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionUsersTemplate::class_name();
+        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionUsersTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $question->get_ref_object()->get_title()));

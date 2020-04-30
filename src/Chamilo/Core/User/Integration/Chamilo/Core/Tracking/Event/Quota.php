@@ -20,6 +20,6 @@ class Quota extends Event
      */
     public function getTrackerClasses()
     {
-        return array(Change::class_name());
+        return array(Change::class);
     }
 }

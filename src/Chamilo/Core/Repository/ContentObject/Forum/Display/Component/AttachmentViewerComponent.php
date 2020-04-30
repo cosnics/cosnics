@@ -60,7 +60,7 @@ class AttachmentViewerComponent extends Manager
          * Render the attachment
          */
         $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $attachment_id);
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(

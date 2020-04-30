@@ -150,13 +150,13 @@ class UserComponent extends ItemComponent implements TableSupport
     {
         $properties = array();
         $properties[] = new PropertyConditionVariable(
-            User::class_name(), User::PROPERTY_FIRSTNAME
+            User::class, User::PROPERTY_FIRSTNAME
         );
         $properties[] = new PropertyConditionVariable(
-            User::class_name(), User::PROPERTY_LASTNAME
+            User::class, User::PROPERTY_LASTNAME
         );
         $properties[] = new PropertyConditionVariable(
-            User::class_name(), User::PROPERTY_OFFICIAL_CODE
+            User::class, User::PROPERTY_OFFICIAL_CODE
         );
 
         $searchConditions = $this->buttonToolbarRenderer->getConditions($properties);
@@ -170,19 +170,19 @@ class UserComponent extends ItemComponent implements TableSupport
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                User::class_name(), User::PROPERTY_PLATFORMADMIN
+                User::class, User::PROPERTY_PLATFORMADMIN
             ), new StaticConditionVariable(0)
         );
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    User::class_name(), User::PROPERTY_OFFICIAL_CODE
+                    User::class, User::PROPERTY_OFFICIAL_CODE
                 ), new StaticConditionVariable('')
             )
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                User::class_name(), User::PROPERTY_ACTIVE
+                User::class, User::PROPERTY_ACTIVE
             ), new StaticConditionVariable(1)
         );
 

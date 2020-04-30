@@ -246,7 +246,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
                 continue;
             }
 
-            $user = DataManager::retrieve_by_id(User::class_name(), $id);
+            $user = DataManager::retrieve_by_id(User::class, $id);
             if ($user)
             {
                 $allowed_user_ids[] = $id;

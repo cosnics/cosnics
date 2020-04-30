@@ -31,7 +31,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
      */
     protected function getContentObjectClassName()
     {
-        return Assignment::class_name();
+        return Assignment::class;
     }
 
     /**
@@ -48,7 +48,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
         if (! empty($fromDate))
         {
             $conditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                new PropertyConditionVariable(Assignment::class, Assignment::PROPERTY_END_TIME),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL, 
                 new StaticConditionVariable($fromDate));
         }
@@ -56,7 +56,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
         if (! empty($toDate))
         {
             $conditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Assignment::class_name(), Assignment::PROPERTY_END_TIME), 
+                new PropertyConditionVariable(Assignment::class, Assignment::PROPERTY_END_TIME),
                 ComparisonCondition::LESS_THAN_OR_EQUAL, 
                 new StaticConditionVariable($toDate));
         }

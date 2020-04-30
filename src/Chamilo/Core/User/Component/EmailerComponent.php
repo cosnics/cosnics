@@ -41,7 +41,7 @@ class EmailerComponent extends Manager
                 if (! $this->get_user()->is_platform_admin())
                 {
                     $users[] = DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) $id);
                 }
             }

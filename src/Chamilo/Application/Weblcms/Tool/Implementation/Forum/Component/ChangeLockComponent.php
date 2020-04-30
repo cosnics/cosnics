@@ -21,7 +21,7 @@ class ChangeLockComponent extends Manager
         $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id);
 
         if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))

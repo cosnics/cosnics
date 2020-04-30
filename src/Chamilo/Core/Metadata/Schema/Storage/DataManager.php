@@ -29,11 +29,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieveSchemaByNamespace($namespace)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Schema::class_name(), Schema::PROPERTY_NAMESPACE), 
+            new PropertyConditionVariable(Schema::class, Schema::PROPERTY_NAMESPACE),
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($namespace));
         
-        $schema = self::retrieve(Schema::class_name(), new DataClassRetrieveParameters($condition));
+        $schema = self::retrieve(Schema::class, new DataClassRetrieveParameters($condition));
         
         if (! $schema)
         {

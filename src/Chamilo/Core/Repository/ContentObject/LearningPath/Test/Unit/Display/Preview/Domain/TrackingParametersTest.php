@@ -21,14 +21,14 @@ class TrackingParametersTest extends ChamiloTestCase
     public function testGetTreeNodeAttemptClassName()
     {
         $trackingParameters = new TrackingParameters();
-        $this->assertEquals(DummyTreeNodeAttempt::class_name(), $trackingParameters->getTreeNodeAttemptClassName());
+        $this->assertEquals(DummyTreeNodeAttempt::class, $trackingParameters->getTreeNodeAttemptClassName());
     }
 
     public function testGetTreeNodeQuestionAttemptClassName()
     {
         $trackingParameters = new TrackingParameters();
         $this->assertEquals(
-            DummyQuestionAttempt::class_name(), $trackingParameters->getTreeNodeQuestionAttemptClassName()
+            DummyQuestionAttempt::class, $trackingParameters->getTreeNodeQuestionAttemptClassName()
         );
     }
 
@@ -41,14 +41,14 @@ class TrackingParametersTest extends ChamiloTestCase
     public function testCreateTreeNodeAttemptInstance()
     {
         $trackingParameters = new TrackingParameters();
-        $this->assertInstanceOf(TreeNodeAttempt::class_name(), $trackingParameters->createTreeNodeAttemptInstance());
+        $this->assertInstanceOf(TreeNodeAttempt::class, $trackingParameters->createTreeNodeAttemptInstance());
     }
 
     public function testCreateTreeNodeQuestionAttemptInstance()
     {
         $trackingParameters = new TrackingParameters();
         $this->assertInstanceOf(
-            TreeNodeQuestionAttempt::class_name(), $trackingParameters->createTreeNodeQuestionAttemptInstance()
+            TreeNodeQuestionAttempt::class, $trackingParameters->createTreeNodeQuestionAttemptInstance()
         );
     }
 

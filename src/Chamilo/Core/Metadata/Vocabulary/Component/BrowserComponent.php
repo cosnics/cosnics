@@ -106,7 +106,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($userId != 0)
         {
-            $user = DataManager::retrieve_by_id(User::class_name(), $userId);
+            $user = DataManager::retrieve_by_id(User::class, $userId);
             $breadcrumbTitle = $user->get_fullname();
         }
         else
@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
 
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE))
+            array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE))
         );
 
         if ($searchCondition)
@@ -147,14 +147,14 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID),
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($this->getSelectedElementId())
         );
 
         $userId = $this->getSelectedUserId();
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($userId)
         );
 

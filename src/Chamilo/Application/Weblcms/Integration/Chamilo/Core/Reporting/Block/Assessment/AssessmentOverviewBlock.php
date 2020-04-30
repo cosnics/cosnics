@@ -43,12 +43,12 @@ class AssessmentOverviewBlock extends ToolBlock
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 AssessmentAttempt::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         
         $attempts_result_set = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class_name(), 
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
         
         $attempts = array();
@@ -61,12 +61,12 @@ class AssessmentOverviewBlock extends ToolBlock
         foreach ($attempts as $key => $user_attempts)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) $key);
             foreach ($user_attempts as $key => $pub_attempts)
             {
                 $pub = DataManager::retrieve_by_id(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class,
                     $key);
                 
                 if (! $pub instanceof ContentObjectPublication)

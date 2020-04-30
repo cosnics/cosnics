@@ -21,13 +21,13 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Element::class_name(),
+                Element::class,
                 Element::PROPERTY_TITLE),
             new StaticConditionVariable(Translation::get('News', null, 'Chamilo\Core\Home')));
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Element::class_name(),
+                Element::class,
                 Element::PROPERTY_USER_ID),
             new StaticConditionVariable(0));
         
@@ -35,7 +35,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         
         $parameters = new DataClassRetrieveParameters($condition);
         $column = DataManager::retrieve(
-            Element::class_name(),
+            Element::class,
             $parameters);
         
         if ($column instanceof Column)

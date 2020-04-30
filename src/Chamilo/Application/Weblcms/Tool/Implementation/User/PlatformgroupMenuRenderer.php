@@ -68,7 +68,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_node($node_id)
     {
-        return DataManager::retrieve_by_id(Group::class_name(), $node_id);
+        return DataManager::retrieve_by_id(Group::class, $node_id);
     }
 
     /**
@@ -81,17 +81,17 @@ class PlatformgroupMenuRenderer extends GenericTree
     public function get_node_children($parent_node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_node_id)
         );
 
         // fetch groups
         $parameters = new DataClassRetrievesParameters(
             $condition, null, null,
-            array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
+            array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
         );
 
-        return DataManager::retrieves(Group::class_name(), $parameters);
+        return DataManager::retrieves(Group::class, $parameters);
     }
 
     public function get_node_class($node)
@@ -194,12 +194,12 @@ class PlatformgroupMenuRenderer extends GenericTree
     public function node_has_children($node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($node_id)
         );
 
         return (DataManager::count(
-                Group::class_name(), new DataClassCountParameters($condition)
+                Group::class, new DataClassCountParameters($condition)
             ) > 0);
     }
 }

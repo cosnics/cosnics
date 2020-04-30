@@ -27,11 +27,11 @@ class PlatformGroupEntityHelper
     {
         $columns = array();
         $columns[] = new DataClassPropertyTableColumn(
-            Group::class_name(),
+            Group::class,
             Group::PROPERTY_NAME);
         $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
         $columns[] = new DataClassPropertyTableColumn(
-            Group::class_name(),
+            Group::class,
             Group::PROPERTY_CODE);
         return $columns;
     }
@@ -58,7 +58,7 @@ class PlatformGroupEntityHelper
                 break;
             case self::PROPERTY_PATH :
                 $group = DataManager::retrieve_by_id(
-                    Group::class_name(),
+                    Group::class,
                     $result[Group::PROPERTY_ID]);
                 return $group->get_fully_qualified_name();
                 break;
@@ -81,24 +81,24 @@ class PlatformGroupEntityHelper
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    Group::class_name(),
+                    Group::class,
                     Group::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $properties = new DataClassProperties();
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
-                new PropertiesConditionVariable(Group::class_name())));
+                new PropertiesConditionVariable(Group::class)));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
 
         return DataManager::records(
-            Group::class_name(),
+            Group::class,
             $parameters);
     }
 
@@ -112,12 +112,12 @@ class PlatformGroupEntityHelper
     public function count_table_data($condition)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    Group::class_name(),
+                    Group::class,
                     Group::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $parameters = new DataClassCountParameters(
@@ -128,11 +128,11 @@ class PlatformGroupEntityHelper
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
                         new PropertyConditionVariable(
-                            Group::class_name(),
+                            Group::class,
                             Group::PROPERTY_ID)))));
 
         return DataManager::count(
-            Group::class_name(),
+            Group::class,
             $parameters);
     }
 
@@ -141,7 +141,7 @@ class PlatformGroupEntityHelper
         $entities = array();
 
         $group = DataManager::retrieve_by_id(
-            Group::class_name(),
+            Group::class,
             $entity_id);
 
         if ($group instanceof Group)

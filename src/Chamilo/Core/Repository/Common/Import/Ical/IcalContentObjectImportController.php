@@ -104,7 +104,7 @@ class IcalContentObjectImportController extends ContentObjectImportController
             )
         )
         {
-            $type = CalendarEvent::class_name();
+            $type = CalendarEvent::class;
         }
         elseif ($component instanceof VTodo && in_array(
                 'Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task',
@@ -112,7 +112,7 @@ class IcalContentObjectImportController extends ContentObjectImportController
             )
         )
         {
-            $type = Task::class_name();
+            $type = Task::class;
         }
 
         if ($type)

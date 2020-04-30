@@ -51,7 +51,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
     public function linkToSchemas()
     {
         $schemaNamespaces = array('dc', 'ct');
-        DataClassCache::truncate(Schema::class_name());
+        DataClassCache::truncate(Schema::class);
         
         $relationService = new RelationService();
         $relation = $relationService->getRelationByName('isAvailableFor');
@@ -61,7 +61,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
             $schema = DataManager::retrieveSchemaByNamespace($schemaNamespace);
             
             $relationInstance = new RelationInstance();
-            $relationInstance->set_source_type(Schema::class_name());
+            $relationInstance->set_source_type(Schema::class);
             $relationInstance->set_source_id($schema->get_id());
             $relationInstance->set_target_type($this->getContentObjectType());
             $relationInstance->set_target_id(0);

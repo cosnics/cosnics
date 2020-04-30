@@ -156,7 +156,7 @@ class CourseGroupUserRelation extends DataClass
     public function get_user_object()
     {
         return DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             $this->get_user());
     }
 }

@@ -65,31 +65,31 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL),
             new StaticConditionVariable('forum'));
 
         $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Introduction::class_name()));
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+            new StaticConditionVariable(Introduction::class));
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             ContentObject::get_table_name(),
             $subselect_condition);
 
         $condition = new AndCondition($conditions);
 
         $this->introduction_text = WeblcmsDataManager::retrieve(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassRetrieveParameters($condition));
 
         $this->size = 0;
@@ -213,23 +213,23 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->get_parent()->get_course_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->get_parent()->get_tool_id()));
 
         $order = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER));
 
         $categories = WeblcmsDataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $order));
 
         $html = array();
@@ -263,29 +263,29 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL),
             new StaticConditionVariable('forum'));
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CATEGORY_ID),
             $categoryId);
 
         $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            new StaticConditionVariable(Forum::class_name()));
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+            new StaticConditionVariable(Forum::class));
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             ContentObject::get_table_name(),
             $subselect_condition);
 
@@ -294,7 +294,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $order = array();
         $order[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX));
 
         if (! $this->get_course()->is_course_admin($this->get_user()))
@@ -345,7 +345,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 $lastPost->get_user_id());
 
             $muteClass = $publication[ContentObjectPublication::PROPERTY_HIDDEN] ? ' text-muted-invisible' : '';
@@ -457,7 +457,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                      ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT)))
                 {
                     $forum = DataManager::retrieve_by_id(
-                        Forum::class_name(),
+                        Forum::class,
                         $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
                     $forumGlyphType = $forum->get_locked() ? 'lock' : 'file';
@@ -515,7 +515,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function getForumActions($publication, $first, $last)
     {
         $forum = DataManager::retrieve_by_id(
-            Forum::class_name(),
+            Forum::class,
             $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
         $buttonToolBar = new ButtonToolBar();
@@ -780,7 +780,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->getPublicationButton(
                         Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('book'),
-                        array(Introduction::class_name()),
+                        array(Introduction::class),
                         $publishParameters));
             }
 

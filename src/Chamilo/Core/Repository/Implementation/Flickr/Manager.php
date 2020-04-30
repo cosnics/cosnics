@@ -61,7 +61,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         foreach ($image_types as $image_type)
         {
             $image_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), '*.' . $image_type
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.' . $image_type
             );
         }
 

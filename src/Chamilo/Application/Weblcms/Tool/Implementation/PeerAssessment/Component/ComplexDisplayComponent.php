@@ -160,12 +160,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
             $condition = new AndCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentScoreTracker::class_name(),
+                        PeerAssessmentScoreTracker::class,
                         PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
                     new StaticConditionVariable($status->get_id())));
 
             $items = DataManager::retrieves(
-                PeerAssessmentScoreTracker::class_name(),
+                PeerAssessmentScoreTracker::class,
                 new DataClassRetrievesParameters($condition))->as_array();
 
             // get the non empty values of the scores
@@ -236,17 +236,17 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
             $condition = new AndCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentScoreTracker::class_name(),
+                        PeerAssessmentScoreTracker::class,
                         PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
                     new StaticConditionVariable($status->get_id())),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentScoreTracker::class_name(),
+                        PeerAssessmentScoreTracker::class,
                         PeerAssessmentScoreTracker::PROPERTY_USER_ID),
                     new StaticConditionVariable($user_id)));
 
             $items = DataManager::retrieves(
-                PeerAssessmentScoreTracker::class_name(),
+                PeerAssessmentScoreTracker::class,
                 new DataClassRetrievesParameters($condition))->as_array();
 
             foreach ($items as $item)
@@ -265,12 +265,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         $tracker = new PeerAssessmentScoreTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentScoreTracker::class_name(),
+                PeerAssessmentScoreTracker::class,
                 PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
             new StaticConditionVariable($status->get_id()));
 
         $items = DataManager::retrieves(
-            PeerAssessmentScoreTracker::class_name(),
+            PeerAssessmentScoreTracker::class,
             new DataClassRetrievesParameters($condition))->as_array();
 
         // iterate over the results and put them in a two dimensional array
@@ -297,12 +297,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         $tracker = new PeerAssessmentScoreTracker();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                PeerAssessmentScoreTracker::class_name(),
+                PeerAssessmentScoreTracker::class,
                 PeerAssessmentScoreTracker::PROPERTY_ATTEMPT_STATUS_ID),
             new StaticConditionVariable($status->get_id()));
 
         $items = DataManager::retrieves(
-            PeerAssessmentScoreTracker::class_name(),
+            PeerAssessmentScoreTracker::class,
             new DataClassRetrievesParameters($condition))->as_array();
 
         // loop through the existing scores and update/delete them if necessary
@@ -378,17 +378,17 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
             $condition = new AndCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentFeedbackTracker::class_name(),
+                        PeerAssessmentFeedbackTracker::class,
                         PeerAssessmentFeedbackTracker::PROPERTY_ATTEMPT_STATUS_ID),
                     new StaticConditionVariable($status->get_id())),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        PeerAssessmentFeedbackTracker::class_name(),
+                        PeerAssessmentFeedbackTracker::class,
                         PeerAssessmentFeedbackTracker::PROPERTY_USER_ID),
                     new StaticConditionVariable($user_id)));
 
             $items = DataManager::retrieves(
-                PeerAssessmentFeedbackTracker::class_name(),
+                PeerAssessmentFeedbackTracker::class,
                 new DataClassRetrievesParameters($condition))->as_array();
 
             foreach ($items as $item)
@@ -410,12 +410,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentFeedbackTracker::class_name(),
+                    PeerAssessmentFeedbackTracker::class,
                     PeerAssessmentFeedbackTracker::PROPERTY_ATTEMPT_STATUS_ID),
                 new StaticConditionVariable($status->get_id()));
 
             $items = DataManager::retrieves(
-                PeerAssessmentFeedbackTracker::class_name(),
+                PeerAssessmentFeedbackTracker::class,
                 new DataClassRetrievesParameters($condition))->as_array();
         }
         // iterate over the results and put them in a two dimensional array
@@ -444,12 +444,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    PeerAssessmentFeedbackTracker::class_name(),
+                    PeerAssessmentFeedbackTracker::class,
                     PeerAssessmentFeedbackTracker::PROPERTY_ATTEMPT_STATUS_ID),
                 new StaticConditionVariable($status->get_id()));
 
             $items = DataManager::retrieves(
-                PeerAssessmentFeedbackTracker::class_name(),
+                PeerAssessmentFeedbackTracker::class,
                 new DataClassRetrievesParameters($condition))->as_array();
         }
 

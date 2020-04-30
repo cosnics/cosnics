@@ -66,7 +66,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_allowed_types()
     {
-        return array(ForumPost::class_name());
+        return array(ForumPost::class);
     }
 
     /**
@@ -76,7 +76,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -240,17 +240,17 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($this->get_id()));
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition);
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent());
             $lo->add_last_post($last_post);
         }
@@ -284,17 +284,17 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF),
                 new StaticConditionVariable($this->get_id()));
             $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $condition);
 
             while ($item = $wrappers->next_result())
             {
                 $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $item->get_parent());
                 $lo->recalculate_last_post();
             }
@@ -316,11 +316,11 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($this->get_id()));
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition);
         if ($emailnotificator)
         {
@@ -330,7 +330,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent());
             $lo->add_post($posts, $emailnotificator, $item->get_id(), $last_post_id);
         }
@@ -345,11 +345,11 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($this->get_id()));
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition);
 
         if ($emailnotificator)
@@ -361,7 +361,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent());
             $lo->notify_subscribed_users($emailnotificator);
         }
@@ -379,17 +379,17 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($this->get_id()));
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition);
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent());
             $lo->remove_post($posts);
         }
@@ -404,17 +404,17 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         }
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($this->get_id()));
         $parents = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition);
 
         while ($parent = $parents->next_result())
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $parent->get_parent());
 
             if ($content_object->is_locked())
@@ -481,7 +481,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(),
+                        User::class,
                         (int) Session::get_user_id()));
                 $email_notificator->set_is_topic_edited(true);
 

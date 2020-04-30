@@ -174,7 +174,7 @@ class CourseVisit extends Tracker
         // If the class is already fully retrieved from the database the caching system will catch this.
         if ($this->is_identified())
         {
-            return DataManager::retrieve_by_id(self::class_name(), $this->get_id());
+            return DataManager::retrieve_by_id(self::class, $this->get_id());
         }
         
         return DataManager::retrieve_course_visit_by_user_and_course_data(

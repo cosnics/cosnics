@@ -57,7 +57,7 @@ class MoverComponent extends Manager
                 $ids = array($ids);
             }
 
-            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $ids[0]);
+            $object = DataManager::retrieve_by_id(ContentObject::class, $ids[0]);
             $parent = $object->get_parent_id();
 
             $this->tree = array();
@@ -82,7 +82,7 @@ class MoverComponent extends Manager
 
                 foreach ($ids as $id)
                 {
-                    $object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+                    $object = DataManager::retrieve_by_id(ContentObject::class, $id);
 
                     if (RightsService::getInstance()->canEditContentObject(
                         $this->get_user(), $object, $this->getWorkspace()
@@ -94,7 +94,7 @@ class MoverComponent extends Manager
                         foreach ($versions as $version)
                         {
                             /** @var ContentObject $object */
-                            $object = DataManager::retrieve_by_id(ContentObject::class_name(), $version);
+                            $object = DataManager::retrieve_by_id(ContentObject::class, $version);
 
                             if ($this->getWorkspace() instanceof PersonalWorkspace)
                             {
@@ -220,15 +220,15 @@ class MoverComponent extends Manager
     private function get_categories_for_select($parent_id, $current_parent)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->getWorkspace()->getId())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->getWorkspace()->getWorkspaceType())
         );
 

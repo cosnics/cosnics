@@ -207,7 +207,7 @@ class PeerAssessmentGroupForm extends FormValidator
                             else
                             {
                                 $user = DataManager::retrieve_by_id(
-                                    User::class_name(), (int) $id
+                                    User::class, (int) $id
                                 );
                                 $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
                                 unset($group_users[$id]);
@@ -267,7 +267,7 @@ class PeerAssessmentGroupForm extends FormValidator
                                     else
                                     {
                                         $user = DataManager::retrieve_by_id(
-                                            User::class_name(), $user_id
+                                            User::class, $user_id
                                         );
                                         $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
                                         unset($group_users[$user_id]);

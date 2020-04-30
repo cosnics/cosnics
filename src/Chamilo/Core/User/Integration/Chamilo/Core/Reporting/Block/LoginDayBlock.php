@@ -23,7 +23,7 @@ class LoginDayBlock extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class_name(), LoginLogout::PROPERTY_TYPE
+                LoginLogout::class, LoginLogout::PROPERTY_TYPE
             ), new StaticConditionVariable('login')
         );
         $user_id = $this->get_user_id();
@@ -32,7 +32,7 @@ class LoginDayBlock extends Block
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    LoginLogout::class_name(), LoginLogout::PROPERTY_USER_ID
+                    LoginLogout::class, LoginLogout::PROPERTY_USER_ID
                 ), new StaticConditionVariable($user_id)
             );
         }
@@ -40,7 +40,7 @@ class LoginDayBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = DataManager::retrieves(
-            LoginLogout::class_name(), new DataClassRetrievesParameters($condition)
+            LoginLogout::class, new DataClassRetrievesParameters($condition)
         )->as_array();
 
         $days = array();

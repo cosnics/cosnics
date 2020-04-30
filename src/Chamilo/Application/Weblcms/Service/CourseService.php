@@ -521,7 +521,7 @@ class CourseService implements CourseServiceInterface
         }
 
         return $this->getUserService()->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+            new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIds)
         );
     }
 }

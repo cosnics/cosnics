@@ -139,9 +139,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tabs = new DynamicTabsRenderer(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
 
         $count = DataManager::count(
-            Registration::class_name(), new DataClassCountParameters(
+            Registration::class, new DataClassCountParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_TYPE),
+                    new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                     new StaticConditionVariable($this->getCurrentType())
                 )
             )
@@ -196,11 +196,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_TYPE),
+                new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                 new StaticConditionVariable($this->getCurrentType())
             )
         );
-        $registrations = DataManager::retrieves(Registration::class_name(), $parameters);
+        $registrations = DataManager::retrieves(Registration::class, $parameters);
 
         $table_data = array();
 

@@ -272,7 +272,7 @@ abstract class ContentObjectForm extends FormValidator
         {
             $calculator = new Calculator(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class_name(), (int) $this->get_owner_id()
+                    User::class, (int) $this->get_owner_id()
                 )
             );
 
@@ -476,7 +476,7 @@ abstract class ContentObjectForm extends FormValidator
         $object = $this->content_object;
 
         $owner =
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $this->get_owner_id());
+            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $this->get_owner_id());
 
         if (!$in_tab)
         {
@@ -623,25 +623,25 @@ abstract class ContentObjectForm extends FormValidator
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->workspace->getId())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->workspace->getWorkspaceType())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME),
             new StaticConditionVariable($category_name)
         );
         $condition = new AndCondition($conditions);
 
         $existingNewCategory = DataManager::retrieve(
-            RepositoryCategory::class_name(), new DataClassRetrieveParameters($condition)
+            RepositoryCategory::class, new DataClassRetrieveParameters($condition)
         );
 
         if ($existingNewCategory instanceof RepositoryCategory)

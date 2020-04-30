@@ -39,7 +39,7 @@ class AssessmentQuestionAttemptsBlock extends AssessmentQuestionAttemptsUserBloc
         $reporting_data)
     {
         $user = DataManager::retrieve_by_id(
-            User::class_name(), 
+            User::class, 
             $assessment_attempt->get_user_id());
         
         $reporting_data->add_data_category_row($counter, Translation::get('Name'), $user->get_fullname());

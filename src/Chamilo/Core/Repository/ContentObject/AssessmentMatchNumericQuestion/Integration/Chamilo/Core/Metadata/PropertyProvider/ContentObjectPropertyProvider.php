@@ -21,6 +21,6 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
      */
     public function getEntityType()
     {
-        return AssessmentMatchNumericQuestion::class_name();
+        return AssessmentMatchNumericQuestion::class;
     }
 }

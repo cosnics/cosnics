@@ -100,7 +100,7 @@ class BrowserComponent extends Manager
 
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
 
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager
 
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
 
@@ -120,7 +120,7 @@ class BrowserComponent extends Manager
 
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
 

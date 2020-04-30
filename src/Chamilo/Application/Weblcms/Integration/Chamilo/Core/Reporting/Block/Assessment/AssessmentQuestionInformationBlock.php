@@ -25,7 +25,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
         $question_cid = Request::get(
             Manager::PARAM_QUESTION);
         $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $question_cid);
         
         $reporting_data = new ReportingData();
@@ -37,7 +37,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
         $reporting_data->set_categories($categories);
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->getPublicationId());
         
         $this->add_category_from_array(

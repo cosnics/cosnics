@@ -263,7 +263,7 @@ class Request extends DataClass
         if (!isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_user_id()
+                User::class, (int) $this->get_user_id()
             );
         }
 

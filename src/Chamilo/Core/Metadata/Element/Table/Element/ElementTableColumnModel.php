@@ -38,7 +38,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Element::class_name(), Element::PROPERTY_NAME, Translation::get(
+                Element::class, Element::PROPERTY_NAME, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Element::PROPERTY_NAME)->upperCamelize(), null,
                 $this->get_component()->package()
             )
@@ -47,7 +47,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Element::class_name(), Element::PROPERTY_DISPLAY_NAME, Translation::get(
+                Element::class, Element::PROPERTY_DISPLAY_NAME, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Element::PROPERTY_DISPLAY_NAME)->upperCamelize(),
                 null, $this->get_component()->package()
             ), false

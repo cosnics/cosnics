@@ -10,19 +10,28 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 class WeblcmsPeerAssessmentFeedbackTracker extends SimpleTracker
 {
     const PROPERTY_ATTEMPT_STATUS_ID = 'attempt_status_id';
-    const PROPERTY_USER_ID = 'user_id';
+
     const PROPERTY_FEEDBACK = 'feedback';
 
-    /**
-     * Inherited
-     * 
-     * @see MainTracker :: track()
-     */
-    function validate_parameters(array $parameters = array())
+    const PROPERTY_USER_ID = 'user_id';
+
+    function __call($name, array $arguments)
     {
-        $this->set_attempt_status_id($parameters[self::PROPERTY_ATTEMPT_STATUS_ID]);
-        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
-        $this->set_feedback($parameters[self::PROPERTY_FEEDBACK]);
+        // generate error if no getter or setter is called and return
+        if (!preg_match('/^(get|set)_(.+)$/', $name, $matches))
+        {
+            trigger_error('method not found', E_USER_ERROR);
+
+            return;
+        }
+        // determine the method and property to be called
+        $method = $matches[1] . '_default_property';
+        $prop = constant(static::class . '::PROPERTY_' . strtoupper($matches[2]));
+        // prepend the property to the argument list
+        array_unshift($arguments, $prop);
+
+        // call get_default_property or set_default_property with the arguments
+        return call_user_func_array(array($this, $method), $arguments);
     }
 
     /**
@@ -31,7 +40,8 @@ class WeblcmsPeerAssessmentFeedbackTracker extends SimpleTracker
     static function get_default_property_names()
     {
         return parent::get_default_property_names(
-            array(self::PROPERTY_ATTEMPT_STATUS_ID, self::PROPERTY_USER_ID, self::PROPERTY_FEEDBACK));
+            array(self::PROPERTY_ATTEMPT_STATUS_ID, self::PROPERTY_USER_ID, self::PROPERTY_FEEDBACK)
+        );
     }
 
     /*
@@ -44,20 +54,16 @@ class WeblcmsPeerAssessmentFeedbackTracker extends SimpleTracker
      * $this->get_default_property(self :: PROPERTY_FEEDBACK); } function set_feedback($feedback) {
      * $this->set_default_property(self :: PROPERTY_FEEDBACK, $feedback); }
      */
-    function __call($name, array $arguments)
+
+    /**
+     * Inherited
+     *
+     * @see MainTracker :: track()
+     */
+    function validate_parameters(array $parameters = array())
     {
-        // generate error if no getter or setter is called and return
-        if (! preg_match('/^(get|set)_(.+)$/', $name, $matches))
-        {
-            trigger_error('method not found', E_USER_ERROR);
-            return;
-        }
-        // determine the method and property to be called
-        $method = $matches[1] . '_default_property';
-        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
-        // prepend the property to the argument list
-        array_unshift($arguments, $prop);
-        // call get_default_property or set_default_property with the arguments
-        return call_user_func_array(array($this, $method), $arguments);
+        $this->set_attempt_status_id($parameters[self::PROPERTY_ATTEMPT_STATUS_ID]);
+        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
+        $this->set_feedback($parameters[self::PROPERTY_FEEDBACK]);
     }
 }

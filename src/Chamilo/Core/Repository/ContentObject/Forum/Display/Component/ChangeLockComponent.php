@@ -18,7 +18,7 @@ class ChangeLockComponent extends Manager
     {
         $wrapper = $this->get_selected_complex_content_object_item();
         $object = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $wrapper->get_ref());
 
         if ($object->invert_locked())
@@ -32,7 +32,7 @@ class ChangeLockComponent extends Manager
         }
 
         $params = array();
-        if ($object->get_type() == Forum::class_name())
+        if ($object->get_type() == Forum::class)
         {
             $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         }

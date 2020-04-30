@@ -25,11 +25,11 @@ class WikiPageUsersContributionsBlock extends ToolBlock
                 Translation::get('NumberOfContributions')));
         
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         
         $wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $complex_content_object_item->get_ref());
         $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
         
@@ -48,7 +48,7 @@ class WikiPageUsersContributionsBlock extends ToolBlock
             if ($count < 5)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) $user);
                 $reporting_data->add_category(0);
                 $reporting_data->add_data_category_row(0, Translation::get('Fullname'), $user->get_fullname());

@@ -34,10 +34,10 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $reporting_data->set_categories($categories);
         
         $user_id = Request::get('users');
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $user_id);
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->getPublicationId());
         
         $this->add_category_from_array(
@@ -72,7 +72,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $conditions[] = parent::get_assessment_attempts_condition();
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         
         return new AndCondition($conditions);

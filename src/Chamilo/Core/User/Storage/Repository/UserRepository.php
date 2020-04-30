@@ -249,16 +249,16 @@ class UserRepository implements UserRepositoryInterface
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL),
+            new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
             new StaticConditionVariable($usernameOrEmail)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
             new StaticConditionVariable($usernameOrEmail)
         );
 
         return $this->getDataClassRepository()->retrieve(
-            User::class_name(), new DataClassRetrieveParameters(new OrCondition($conditions))
+            User::class, new DataClassRetrieveParameters(new OrCondition($conditions))
         );
     }
 

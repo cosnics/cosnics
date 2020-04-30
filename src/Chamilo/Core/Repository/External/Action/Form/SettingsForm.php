@@ -44,7 +44,7 @@ class SettingsForm extends FormValidator
 
         $this->configurer = $configurer;
         $this->external_repository = DataManager::retrieve_by_id(
-            Instance::class_name(),
+            Instance::class,
             $external_repository_id
         );
         $this->configuration = $this->parse_settings();

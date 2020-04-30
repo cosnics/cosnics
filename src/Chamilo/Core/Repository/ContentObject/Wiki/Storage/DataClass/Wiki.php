@@ -25,12 +25,12 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_allowed_types()
     {
-        return array(WikiPage::class_name());
+        return array(WikiPage::class);
     }
 
     public function get_locked()
@@ -61,10 +61,10 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     public function get_wiki_pages($return_complex_items = false)
     {
         $complex_content_objects = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id()),
                 ComplexContentObjectItem::get_table_name()));
@@ -79,7 +79,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
         while ($complex_content_object = $complex_content_objects->next_result())
         {
             $wiki_pages[] = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $complex_content_object->get_ref());
         }
 
@@ -90,16 +90,16 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     {
         $complex_content_object_item_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id()));
 
         $content_object_conditions = array();
         $content_object_conditions[] = $title_condition;
         $content_object_conditions[] = new SubselectCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
             ComplexContentObjectItem::get_table_name(),
             $complex_content_object_item_condition,
@@ -107,7 +107,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
         $content_object_condition = new AndCondition($content_object_conditions);
 
         return DataManager::retrieve_active_content_objects(
-            ContentObject::class_name(),
+            ContentObject::class,
             $content_object_condition);
     }
 

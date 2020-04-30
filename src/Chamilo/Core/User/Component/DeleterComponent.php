@@ -46,7 +46,7 @@ class DeleterComponent extends Manager
             foreach ($ids as $id)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) $id);
 
                 if (! DataManager::user_deletion_allowed($user))

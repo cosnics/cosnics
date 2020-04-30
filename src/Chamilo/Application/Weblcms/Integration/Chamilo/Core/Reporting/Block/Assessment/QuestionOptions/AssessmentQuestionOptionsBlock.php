@@ -131,11 +131,11 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             Manager::PARAM_QUESTION
         );
         $question_complex_content_object_item = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $question_complex_content_object_item_id
+            ComplexContentObjectItem::class, $question_complex_content_object_item_id
         );
 
         $question = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $question_complex_content_object_item->get_ref()
+            ContentObject::class, $question_complex_content_object_item->get_ref()
         );
 
         $type = (string) StringUtilities::getInstance()->createString($question->get_type_name())->upperCamelize();

@@ -15,7 +15,7 @@ class CourseInformationBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         
-        $course = CourseDataManager::retrieve_by_id(Course::class_name(), $this->getCourseId());
+        $course = CourseDataManager::retrieve_by_id(Course::class, $this->getCourseId());
         
         $reporting_data->set_categories(array(Translation::get('Name'), Translation::get('Titular')));
         $reporting_data->set_rows(array(Translation::get('count')));

@@ -9,20 +9,29 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
 {
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
-    const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
 
-    /**
-     * Inherited
-     * 
-     * @see MainTracker :: track()
-     */
-    function validate_parameters(array $parameters = array())
+    const PROPERTY_NAME = 'name';
+
+    const PROPERTY_PUBLICATION_ID = 'publication_id';
+
+    function __call($name, array $arguments)
     {
-        $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
-        $this->set_name($parameters[self::PROPERTY_NAME]);
-        $this->set_description($parameters[self::PROPERTY_DESCRIPTION]);
+        // generate error if no getter or setter is called and return
+        if (!preg_match('/^(get|set)_(.+)$/', $name, $matches))
+        {
+            trigger_error('method not found', E_USER_ERROR);
+
+            return;
+        }
+        // determine the method and property to be called
+        $method = $matches[1] . '_default_property';
+        $prop = constant(static::class . '::PROPERTY_' . strtoupper($matches[2]));
+        // prepend the property to the argument list
+        array_unshift($arguments, $prop);
+
+        // call get_default_property or set_default_property with the arguments
+        return call_user_func_array(array($this, $method), $arguments);
     }
 
     /**
@@ -31,23 +40,19 @@ class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
     static function get_default_property_names()
     {
         return parent::get_default_property_names(
-            array(self::PROPERTY_PUBLICATION_ID, self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION));
+            array(self::PROPERTY_PUBLICATION_ID, self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION)
+        );
     }
 
-    function __call($name, array $arguments)
+    /**
+     * Inherited
+     *
+     * @see MainTracker :: track()
+     */
+    function validate_parameters(array $parameters = array())
     {
-        // generate error if no getter or setter is called and return
-        if (! preg_match('/^(get|set)_(.+)$/', $name, $matches))
-        {
-            trigger_error('method not found', E_USER_ERROR);
-            return;
-        }
-        // determine the method and property to be called
-        $method = $matches[1] . '_default_property';
-        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
-        // prepend the property to the argument list
-        array_unshift($arguments, $prop);
-        // call get_default_property or set_default_property with the arguments
-        return call_user_func_array(array($this, $method), $arguments);
+        $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
+        $this->set_name($parameters[self::PROPERTY_NAME]);
+        $this->set_description($parameters[self::PROPERTY_DESCRIPTION]);
     }
 }

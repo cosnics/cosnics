@@ -46,7 +46,7 @@ class DeleterComponent extends Manager
         {
             /** @var ContentObjectPublication $publication */
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), $pid
+                ContentObjectPublication::class, $pid
             );
 
             if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication) ||
@@ -54,12 +54,12 @@ class DeleterComponent extends Manager
             {
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        LearningPathTreeNodeAttempt::class_name(), LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
+                        LearningPathTreeNodeAttempt::class, LearningPathTreeNodeAttempt::PROPERTY_PUBLICATION_ID
                     ), new StaticConditionVariable($pid)
                 );
 
                 $attempts = DataManager::retrieves(
-                    LearningPathTreeNodeAttempt::class_name(), new DataClassRetrievesParameters($condition)
+                    LearningPathTreeNodeAttempt::class, new DataClassRetrievesParameters($condition)
                 );
 
                 while ($attempt = $attempts->next_result())

@@ -119,8 +119,8 @@ class ProviderRegistration extends DataClass
     {
         $dependencies = array();
         
-        $dependencies[ProviderLink::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ProviderLink::class_name(), ProviderLink::PROPERTY_PROVIDER_REGISTRATION_ID), 
+        $dependencies[ProviderLink::class] = new EqualityCondition(
+            new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_PROVIDER_REGISTRATION_ID),
             new StaticConditionVariable($this->get_id()));
         
         return $dependencies;

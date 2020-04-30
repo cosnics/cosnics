@@ -278,7 +278,7 @@ abstract class Manager extends Application
         $tools = array();
 
         $course_tools = DataManager::retrieves(
-            CourseTool::class_name(), new DataClassRetrievesParameters()
+            CourseTool::class, new DataClassRetrievesParameters()
         );
 
         $edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
@@ -390,7 +390,7 @@ abstract class Manager extends Application
                     $parameters[self::PARAM_ACTION] = self::ACTION_PUBLISH_INTRODUCTION;
 
                     $actionSelector = new ActionSelector(
-                        $this, $this->getUser()->getId(), array(Introduction::class_name()), $parameters
+                        $this, $this->getUser()->getId(), array(Introduction::class), $parameters
                     );
 
                     $buttonToolbar->addItem(
@@ -484,7 +484,7 @@ abstract class Manager extends Application
             if ($category_id != 0)
             {
                 $category = DataManager::retrieve_by_id(
-                    ContentObjectPublicationCategory::class_name(), $category_id
+                    ContentObjectPublicationCategory::class, $category_id
                 );
 
                 if ($category instanceof ContentObjectPublicationCategory && !empty($this->get_course_id()) &&
@@ -546,7 +546,7 @@ abstract class Manager extends Application
                 if ($category_id != 0)
                 {
                     $category = DataManager::retrieve_by_id(
-                        ContentObjectPublicationCategory::class_name(), $category_id
+                        ContentObjectPublicationCategory::class, $category_id
                     );
 
                     if ($category instanceof ContentObjectPublicationCategory && !$category->is_recursive_visible())
@@ -582,7 +582,7 @@ abstract class Manager extends Application
                 if ($category_id && $category_id !== 0)
                 {
                     $category = DataManager::retrieve_by_id(
-                        ContentObjectPublicationCategory::class_name(), $category_id
+                        ContentObjectPublicationCategory::class, $category_id
                     );
 
                     if (empty($category))
@@ -854,7 +854,7 @@ abstract class Manager extends Application
     public static function get_pcattree_parents($pcattree)
     {
         $parent = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $pcattree
+            ContentObjectPublication::class, $pcattree
         );
 
         $parents[] = $parent;
@@ -862,7 +862,7 @@ abstract class Manager extends Application
         while ($parent && $parent->get_parent() != 0)
         {
             $parent = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), $parent->get_parent()
+                ContentObjectPublication::class, $parent->get_parent()
             );
 
             $parents[] = $parent;

@@ -51,7 +51,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 );
             case ContentObject::PROPERTY_OWNER_ID :
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(), $content_object->get_owner_id()
+                    User::class, $content_object->get_owner_id()
                 );
                 if (!$user)
                 {

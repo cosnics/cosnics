@@ -42,7 +42,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             );
 
             $forum_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $selected_complex_content_object_item->get_ref()
+                ContentObject::class, $selected_complex_content_object_item->get_ref()
             );
 
             BreadcrumbTrail::getInstance()->add(
@@ -109,9 +109,9 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     $selected_complex_content_object_item->update();
 
                     $children = DataManager::retrieve_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), new EqualityCondition(
+                        ComplexContentObjectItem::class, new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                             ), new StaticConditionVariable($old_id), ComplexContentObjectItem::get_table_name()
                         )
                     );

@@ -92,7 +92,7 @@ class AnnouncementComponent extends Manager
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
                         $location, $entities, $condition, new OrderBy(
                             new PropertyConditionVariable(
-                                ContentObjectPublication::class_name(),
+                                ContentObjectPublication::class,
                                 ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                             )
                         )
@@ -146,7 +146,7 @@ class AnnouncementComponent extends Manager
 
     private function get_publication_conditions($course, $tool)
     {
-        $type = Announcement::class_name();
+        $type = Announcement::class;
         $last_visit_date = WeblcmsDataManager::get_last_visit_date(
             $course->get_id(), $this->get_user_id(), $tool, 0
         );
@@ -156,7 +156,7 @@ class AnnouncementComponent extends Manager
         $conditions[] = WeblcmsDataManager::get_publications_condition($course, $this->get_user(), $tool, $type);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLICATION_DATE
             ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($last_visit_date)
         );

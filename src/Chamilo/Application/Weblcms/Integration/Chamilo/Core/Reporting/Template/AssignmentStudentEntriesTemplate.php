@@ -50,13 +50,13 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publicationId
         )->get_content_object();
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 0;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
@@ -68,7 +68,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
         );
 
         $user = DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $this->entityId
         );
 
@@ -76,7 +76,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
         {
             $params = [];
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-                CourseStudentTrackerDetailTemplate::class_name();
+                CourseStudentTrackerDetailTemplate::class;
             $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 0;
 
             BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url($params), $user->get_fullname()));
@@ -84,7 +84,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerDetailTemplate::class_name();
+            CourseStudentTrackerDetailTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         BreadcrumbTrail::getInstance()->add(

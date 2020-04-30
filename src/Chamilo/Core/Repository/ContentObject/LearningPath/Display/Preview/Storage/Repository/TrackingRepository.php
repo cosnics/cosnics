@@ -389,7 +389,7 @@ class TrackingRepository implements TrackingRepositoryInterface
             }
         }
 
-        return new DataClassIterator(TreeNodeAttempt::class_name(), $allData);
+        return new DataClassIterator(TreeNodeAttempt::class, $allData);
     }
 
     /**
@@ -462,7 +462,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        return new DataClassIterator(User::class_name(), array());
+        return new DataClassIterator(User::class, array());
     }
 
     /**

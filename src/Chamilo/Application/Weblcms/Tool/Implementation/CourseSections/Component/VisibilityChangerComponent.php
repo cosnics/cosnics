@@ -38,7 +38,7 @@ class VisibilityChangerComponent extends Manager
             foreach ($ids as $id)
             {
                 $course_section = DataManager::retrieve_by_id(
-                    CourseSection::class_name(),
+                    CourseSection::class,
                     (int) $id);
 
                 $course_section->set_visible(! $course_section->is_visible());

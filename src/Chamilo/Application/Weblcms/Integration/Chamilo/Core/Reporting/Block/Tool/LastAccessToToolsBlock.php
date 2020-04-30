@@ -49,7 +49,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                 $filter = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
 
                 $params = $this->get_parent()->get_parameters();
-                $params[Manager::PARAM_TEMPLATE_ID] = ToolPublicationsDetailTemplate::class_name();
+                $params[Manager::PARAM_TEMPLATE_ID] = ToolPublicationsDetailTemplate::class;
                 $params[Manager::PARAM_USERS] = $user_id;
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL] =
                     $tool_name;
@@ -65,9 +65,9 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
                 switch ($tool_name)
                 {
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class_name()) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assignment::class) :
                         $params = $this->get_parent()->get_parameters();
-                        $params[Manager::PARAM_TEMPLATE_ID] = AssignmentScoresTemplate::class_name();
+                        $params[Manager::PARAM_TEMPLATE_ID] = AssignmentScoresTemplate::class;
                         $params[Manager::PARAM_COURSE] = $course_id;
 
                         $url_detail = $this->get_parent()->get_url($params, $filter);
@@ -80,9 +80,9 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         );
 
                         break;
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name()) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class) :
                         $params = $this->get_parent()->get_parameters();
-                        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentScoresTemplate::class_name();
+                        $params[Manager::PARAM_TEMPLATE_ID] = AssessmentScoresTemplate::class;
                         $params[Manager::PARAM_COURSE] = $course_id;
 
                         $url_detail = $this->get_parent()->get_url($params, $filter);
@@ -95,9 +95,9 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         );
 
                         break;
-                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name()) :
+                    case ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class) :
                         $params = $this->get_parent()->get_parameters();
-                        $params[Manager::PARAM_TEMPLATE_ID] = LearningPathProgressTemplate::class_name();
+                        $params[Manager::PARAM_TEMPLATE_ID] = LearningPathProgressTemplate::class;
                         $params[Manager::PARAM_COURSE] = $course_id;
 
                         $url_detail = $this->get_parent()->get_url($params, $filter);
@@ -133,7 +133,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($this->getCourseId())
         );
 

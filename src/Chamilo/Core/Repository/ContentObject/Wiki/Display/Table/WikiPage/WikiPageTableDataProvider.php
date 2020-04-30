@@ -17,7 +17,7 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return DataManager::retrieve_complex_wiki_pages(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $parameters);
     }
 
@@ -28,7 +28,7 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassCountParameters($condition);
         return DataManager::count_complex_wiki_pages(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $parameters);
     }
 }

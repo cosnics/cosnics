@@ -31,7 +31,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
     {
         $user = $this->retrieve_user();
         $course_id = $course[Course::PROPERTY_ID];
-        $courseObject = DataManager::retrieve_by_id(Course::class_name(), $course_id);
+        $courseObject = DataManager::retrieve_by_id(Course::class, $course_id);
 
         if ($this->is_teacher($course_id))
         {

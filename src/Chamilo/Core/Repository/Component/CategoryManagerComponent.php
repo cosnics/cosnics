@@ -87,7 +87,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         $condition = new AndCondition(
             new OrCondition($conditions),
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_NORMAL)));
 
         $this->impact_view_table_condition = $condition;
@@ -107,12 +107,12 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         $condition = new AndCondition(
             new OrCondition($conditions),
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_NORMAL)));
 
         $parameters = new DataClassCountParameters($condition);
 
-        return DataManager::count_active_content_objects(ContentObject::class_name(), $parameters) > 0;
+        return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
     }
 
     /**
@@ -144,17 +144,17 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->getWorkspace()->getId()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
 
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassCountParameters($condition);
 
-        return DataManager::count(RepositoryCategory::class_name(), $parameters);
+        return DataManager::count(RepositoryCategory::class, $parameters);
     }
 
     /**
@@ -175,10 +175,10 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->getWorkspace()->getId()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
 
         $condition = new AndCondition($conditions);
@@ -233,15 +233,15 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
             new StaticConditionVariable($category_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable(ContentObject::STATE_NORMAL));
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassCountParameters($condition);
-        return DataManager::count_active_content_objects(ContentObject::class_name(), $parameters);
+        return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
 
     /*
@@ -279,12 +279,12 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     private function get_categories_condition($category_id, &$conditions = array())
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
             new StaticConditionVariable($category_id));
 
         // retrieve children
         $retrieve_children_condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($category_id));
         $child_categories = DataManager::retrieve_categories($retrieve_children_condition);
 

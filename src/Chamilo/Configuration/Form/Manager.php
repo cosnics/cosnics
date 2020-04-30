@@ -87,10 +87,10 @@ abstract class Manager extends Application
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable($application));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME), 
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
             new StaticConditionVariable($name));
         $condition = new AndCondition($conditions);
         $form = DataManager::retrieve_dynamic_forms($condition)->next_result();

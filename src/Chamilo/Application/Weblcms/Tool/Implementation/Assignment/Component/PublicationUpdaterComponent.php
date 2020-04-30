@@ -37,7 +37,7 @@ class PublicationUpdaterComponent extends Manager
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $pid);
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $pid
+            ContentObjectPublication::class, $pid
         );
 
         if (!$publication instanceof ContentObjectPublication)

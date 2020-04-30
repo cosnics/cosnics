@@ -57,7 +57,7 @@ class QuotaViewerComponent extends Manager
         else
         {
             $this->selected_user = DataManager::retrieve_by_id(
-                User::class_name(), (int) $selected_user_id
+                User::class, (int) $selected_user_id
             );
         }
         $this->calculator = new Calculator($this->selected_user);

@@ -33,10 +33,10 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
     {
         $order_property = array(
             new OrderBy(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)));
+                new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)));
 
         return DataManager::retrieves(
-            CourseSection::class_name(),
+            CourseSection::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
@@ -48,7 +48,7 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return DataManager::count(
-            CourseSection::class_name(),
+            CourseSection::class,
             new DataClassCountParameters($condition));
     }
 }

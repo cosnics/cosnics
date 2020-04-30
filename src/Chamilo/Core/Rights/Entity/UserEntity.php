@@ -49,7 +49,7 @@ class UserEntity implements RightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            User::class_name(), new DataClassCountParameters($condition)
+            User::class, new DataClassCountParameters($condition)
         );
     }
 
@@ -60,7 +60,7 @@ class UserEntity implements RightsEntity
      */
     public static function data_class_class_name()
     {
-        return User::class_name();
+        return User::class;
     }
 
     public static function getInstance()
@@ -88,7 +88,7 @@ class UserEntity implements RightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $user = DataManager::retrieve_by_id(User::class_name(), (int) $id);
+        $user = DataManager::retrieve_by_id(User::class, (int) $id);
 
         if (!$user)
         {
@@ -203,6 +203,6 @@ class UserEntity implements RightsEntity
         $condition = $this->get_condition($condition);
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(User::class_name(), $parameters);
+        return DataManager::retrieves(User::class, $parameters);
     }
 }

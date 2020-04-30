@@ -46,7 +46,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         );
         $user_id = $this->get_user_id();
 
-        $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name());
+        $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class);
 
         $params = array();
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
@@ -61,12 +61,12 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($toolName)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $condition = new AndCondition($conditions);
@@ -96,7 +96,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
             /** @var LearningPath $learning_path */
             $learning_path = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             if (!$learning_path instanceof LearningPath)

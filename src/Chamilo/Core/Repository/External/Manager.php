@@ -104,7 +104,7 @@ abstract class Manager extends Application implements NoContextComponent
         $this->set_parameter(self::PARAM_EMBEDDED, Request::get(self::PARAM_EMBEDDED, 0));
 
         $this->external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            Instance::class_name(), $external_instance_id
+            Instance::class, $external_instance_id
         );
 
         $external_repository_manager_action = Request::get(self::PARAM_ACTION);
@@ -465,17 +465,17 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_TYPE),
+            new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
             new StaticConditionVariable('Chamilo\Core\Repository\Implementation')
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_STATUS),
+            new PropertyConditionVariable(Registration::class, Registration::PROPERTY_STATUS),
             new StaticConditionVariable($status)
         );
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            Registration::class_name(), new DataClassRetrievesParameters($condition)
+            Registration::class, new DataClassRetrievesParameters($condition)
         );
     }
 

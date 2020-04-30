@@ -249,7 +249,7 @@ class MigrationServiceTest extends ChamiloTestCase
 
         $this->contentObjectRepositoryMock->expects($this->once())
             ->method('countAll')
-            ->with(ComplexLearningPathItem::class_name())
+            ->with(ComplexLearningPathItem::class)
             ->will($this->returnValue(5));
 
         $this->migrationService->migrateLearningPaths();

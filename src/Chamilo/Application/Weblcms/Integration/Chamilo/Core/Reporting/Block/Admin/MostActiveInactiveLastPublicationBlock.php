@@ -21,7 +21,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
         
         $arr[Translation::get('Past24hr')] = 0;
         $arr[Translation::get('PastWeek')] = 0;
@@ -36,12 +36,12 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
             
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($course->get_id()));
             $order_by = new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE));
             $publications = DataManager::retrieve_content_object_publications(
                 $condition, 

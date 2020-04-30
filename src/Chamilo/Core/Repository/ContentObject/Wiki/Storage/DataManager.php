@@ -15,11 +15,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_complex_wiki_pages($type, $parameters = null)
     {
         $join = new Join(
-            ContentObject::class_name(),
+            ContentObject::class,
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF)));
 
         $joins = $parameters->get_joins();
@@ -38,11 +38,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_complex_wiki_pages($type, $parameters = null)
     {
         $join = new Join(
-            ContentObject::class_name(),
+            ContentObject::class,
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF)));
 
         $joins = $parameters->get_joins();

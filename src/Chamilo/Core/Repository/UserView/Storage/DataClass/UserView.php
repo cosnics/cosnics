@@ -93,9 +93,9 @@ class UserView extends DataClass
     public function get_dependencies()
     {
         return array(
-            UserViewRelContentObject::class_name() => new EqualityCondition(
+            UserViewRelContentObject::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    UserViewRelContentObject::class_name(), 
+                    UserViewRelContentObject::class,
                     UserViewRelContentObject::PROPERTY_USER_VIEW_ID), 
                 new StaticConditionVariable($this->get_id())));
     }

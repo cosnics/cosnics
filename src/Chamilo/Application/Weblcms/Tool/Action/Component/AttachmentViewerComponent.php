@@ -40,7 +40,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
             throw new ParameterNotDefinedException(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
         }
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id);
 
         if (! $publication instanceof ContentObjectPublication)
@@ -94,7 +94,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
                     Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::context())));
 
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $object_id);
 
             $html = array();

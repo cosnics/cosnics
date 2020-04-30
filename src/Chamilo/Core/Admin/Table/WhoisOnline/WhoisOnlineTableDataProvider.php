@@ -33,7 +33,7 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return DataManager::retrieves(
-            User::class_name(),
+            User::class,
             $parameters);
     }
 
@@ -45,7 +45,7 @@ class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return DataManager::count(
-            User::class_name(),
+            User::class,
             new DataClassCountParameters($condition));
     }
 }

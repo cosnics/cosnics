@@ -120,7 +120,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
             // Exceptions that need post-processing go here ...
             case Group::PROPERTY_DESCRIPTION :
                 return DataManager::retrieve_by_id(
-                    Group::class_name(),
+                    Group::class,
                     $group_with_subscription_status[Group::PROPERTY_ID]
                 )->get_fully_qualified_name();
             case CourseEntityRelation::PROPERTY_STATUS :

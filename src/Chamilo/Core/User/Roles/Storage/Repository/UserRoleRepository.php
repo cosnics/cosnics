@@ -41,7 +41,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(RoleRelation::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(RoleRelation::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -56,13 +56,13 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         $joins = new Joins();
         $joins->add(
             new Join(
-                RoleRelation::class_name(),
+                RoleRelation::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_ROLE_ID),
-                    new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ID))));
+                    new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
+                    new PropertyConditionVariable(Role::class, Role::PROPERTY_ID))));
 
         return DataManager::retrieves(
-            Role::class_name(),
+            Role::class,
             new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, array(), $joins))->as_array();
     }
 
@@ -78,13 +78,13 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         $joins = new Joins();
         $joins->add(
             new Join(
-                User::class_name(),
+                User::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_USER_ID),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
+                    new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            User::class_name(),
+            User::class,
             new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, array(), $joins))->as_array();
     }
 
@@ -98,7 +98,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
     protected function getConditionForUser($userId)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_USER_ID),
+            new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
             new StaticConditionVariable($userId));
     }
 
@@ -112,7 +112,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
     protected function getConditionForRole($roleId)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_ROLE_ID),
+            new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
             new StaticConditionVariable($roleId));
     }
 }

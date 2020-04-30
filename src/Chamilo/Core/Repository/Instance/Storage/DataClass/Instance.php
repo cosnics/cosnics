@@ -163,9 +163,9 @@ class Instance extends CompositeDataClass
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID),
+                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
                 new StaticConditionVariable($this->get_id()));
-            $settings = DataManager::retrieves(Setting::class_name(), new DataClassRetrievesParameters($condition));
+            $settings = DataManager::retrieves(Setting::class, new DataClassRetrievesParameters($condition));
 
             while ($setting = $settings->next_result())
             {
@@ -201,10 +201,10 @@ class Instance extends CompositeDataClass
     public function has_settings()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_id()));
 
-        $settings = DataManager::count(Setting::class_name(), new DataClassCountParameters($condition));
+        $settings = DataManager::count(Setting::class, new DataClassCountParameters($condition));
 
         return $settings > 0;
     }
@@ -218,16 +218,16 @@ class Instance extends CompositeDataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE),
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable($variable));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_id()));
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(Setting::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Setting::class, new DataClassRetrieveParameters($condition));
     }
 }

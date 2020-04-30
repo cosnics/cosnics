@@ -141,11 +141,11 @@ class ItemRepository
     public function findItems()
     {
         $orderBy = array();
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT));
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
+        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT));
+        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class_name(), new DataClassRetrievesParameters(null, null, null, $orderBy)
+            Item::class, new DataClassRetrievesParameters(null, null, null, $orderBy)
         );
     }
 
@@ -175,7 +175,7 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT));
+        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
 
         return $this->getDataClassRepository()->retrieves(
             Item::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
@@ -213,11 +213,11 @@ class ItemRepository
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_TYPE),
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE),
             new StaticConditionVariable(CategoryItem::class)
         );
 
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
             Item::class, new DataClassRetrievesParameters(
@@ -252,7 +252,7 @@ class ItemRepository
     public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT),
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
             new StaticConditionVariable($parentIdentifier)
         );
 

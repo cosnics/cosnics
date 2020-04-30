@@ -45,15 +45,15 @@ class TargetComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->get_selected_entity_type())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($this->get_selected_entity_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
             new StaticConditionVariable($this->get_selected_target_type())
         );
 
@@ -77,21 +77,21 @@ class TargetComponent extends Manager implements TableSupport
             $conditions = array();
 
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($this->get_selected_entity_type())
             );
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID),
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
                 new StaticConditionVariable($this->get_selected_entity_id())
             );
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE),
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
                 new StaticConditionVariable($target_type::ENTITY_TYPE)
             );
 
             $condition = new AndCondition($conditions);
 
-            $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+            $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
 
             switch ($target_type::ENTITY_TYPE)
             {

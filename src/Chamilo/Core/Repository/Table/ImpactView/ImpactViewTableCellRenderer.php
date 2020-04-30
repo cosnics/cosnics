@@ -75,7 +75,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
                 if ($content_object->get_parent_id() != 0)
                 {
                     $category = DataManager::retrieve_by_id(
-                        RepositoryCategory::class_name(), $content_object->get_parent_id()
+                        RepositoryCategory::class, $content_object->get_parent_id()
                     );
 
                     return $category->get_name();

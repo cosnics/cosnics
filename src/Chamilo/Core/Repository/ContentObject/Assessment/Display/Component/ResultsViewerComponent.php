@@ -38,12 +38,12 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_ID
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
             ), $question_cids, ComplexContentObjectItem::get_table_name()
         );
 
         $questions_cloi = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $condition
+            ComplexContentObjectItem::class, $condition
         );
 
         $assessment = $this->get_root_content_object();
@@ -59,7 +59,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $result = $results[$question_cloi->get_id()];
 
             $question = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $question_cloi->get_ref()
+                ContentObject::class, $question_cloi->get_ref()
             );
             $answers = unserialize($result['answer']);
             $feedback = $result['feedback'];

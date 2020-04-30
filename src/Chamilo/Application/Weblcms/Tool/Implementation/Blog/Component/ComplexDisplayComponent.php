@@ -33,7 +33,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id);
 
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))

@@ -166,7 +166,7 @@ class RequestForm extends FormValidator
         {
             $condition = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_STATE),
+                    new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_STATE),
                     new StaticConditionVariable(CourseCategory::STATE_ARCHIVE)
                 )
             );

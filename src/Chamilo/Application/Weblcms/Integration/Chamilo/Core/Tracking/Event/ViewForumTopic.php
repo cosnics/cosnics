@@ -21,6 +21,6 @@ class ViewForumTopic extends Event
     public function getTrackerClasses()
     {
         return array(
-            ForumTopicView::class_name());
+            ForumTopicView::class);
     }
 }

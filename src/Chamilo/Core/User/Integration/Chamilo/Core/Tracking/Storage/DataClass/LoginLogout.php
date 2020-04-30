@@ -27,7 +27,7 @@ class LoginLogout extends SimpleTracker
     public function empty_tracker($event)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
             new StaticConditionVariable($event->get_name()));
         return $this->remove($condition);
     }
@@ -36,7 +36,7 @@ class LoginLogout extends SimpleTracker
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
             new StaticConditionVariable($event->get_name()));
         return parent::export($start_date, $end_date, $conditions);
     }

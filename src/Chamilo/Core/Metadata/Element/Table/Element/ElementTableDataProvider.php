@@ -31,10 +31,10 @@ class ElementTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DISPLAY_ORDER));
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER));
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(Element::class_name(), $parameters);
+        return DataManager::retrieves(Element::class, $parameters);
     }
 
     /**
@@ -46,6 +46,6 @@ class ElementTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(Element::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Element::class, new DataClassCountParameters($condition));
     }
 }

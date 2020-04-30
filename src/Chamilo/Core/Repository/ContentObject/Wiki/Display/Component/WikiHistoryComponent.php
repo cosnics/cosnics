@@ -40,7 +40,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
         if ($this->complex_wiki_page_id)
         {
             $complex_wiki_page = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(), $this->complex_wiki_page_id
+                ComplexContentObjectItem::class, $this->complex_wiki_page_id
             );
 
             $compareObjectIdentifiers =
@@ -63,7 +63,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 $compareObjectIdentifier = $compareObjectIdentifiers[1];
 
                 $compareObject = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $compareObjectIdentifier
+                    ContentObject::class, $compareObjectIdentifier
                 );
 
                 $html[] = '<h3 id="page-title">' . Translation::get('ComparerComponent') . ': ' .
@@ -108,7 +108,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
     public function count_content_object_versions_resultset($condition = null)
     {
         return DataManager::count_content_objects(
-            ContentObject::class_name(), $condition
+            ContentObject::class, $condition
         );
     }
 
@@ -172,7 +172,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
     public function get_table_condition($class_name)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->wiki_page->get_object_number())
         );
     }
@@ -182,7 +182,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
     )
     {
         return DataManager::retrieve_content_objects(
-            ContentObject::class_name(), $condition
+            ContentObject::class, $condition
         );
     }
 }

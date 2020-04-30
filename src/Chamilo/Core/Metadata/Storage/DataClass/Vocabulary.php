@@ -119,7 +119,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
             return null;
         }
         
-        return DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
     }
 
     /**
@@ -172,21 +172,21 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
     {
         $dependencies = array();
         
-        $dependencies[EntityTranslation::class_name()] = new AndCondition(
+        $dependencies[EntityTranslation::class] = new AndCondition(
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        EntityTranslation::class_name(), 
+                        EntityTranslation::class,
                         EntityTranslation::PROPERTY_ENTITY_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
+                    new StaticConditionVariable(static::class)),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        EntityTranslation::class_name(), 
+                        EntityTranslation::class,
                         EntityTranslation::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($this->get_id()))));
         
-        $dependencies[ElementInstance::class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ElementInstance::class_name(), ElementInstance::PROPERTY_VOCABULARY_ID), 
+        $dependencies[ElementInstance::class] = new EqualityCondition(
+            new PropertyConditionVariable(ElementInstance::class, ElementInstance::PROPERTY_VOCABULARY_ID),
             new StaticConditionVariable($this->get_id()));
         
         return $dependencies;

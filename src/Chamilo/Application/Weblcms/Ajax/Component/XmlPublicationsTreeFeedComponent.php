@@ -28,16 +28,16 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($category_id)
         );
 
         $categories_tree = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters(
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
                 $condition, null, null, array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ContentObjectPublicationCategory::class_name(),
+                            ContentObjectPublicationCategory::class,
                             ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                         )
                     )
@@ -88,7 +88,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         if (!$course)
         {
-            $course = CourseDataManager::retrieve_by_id(Course::class_name(), $category->get_course());
+            $course = CourseDataManager::retrieve_by_id(Course::class, $category->get_course());
         }
 
         if (!$user)
@@ -125,12 +125,12 @@ class XmlPublicationsTreeFeedComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($category_id)
         );
 
         return DataManager::count(
-                ContentObjectPublicationCategory::class_name(), new DataClassCountParameters($condition)
+                ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
             ) > 0;
     }
 }

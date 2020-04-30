@@ -48,7 +48,7 @@ class DenierComponent extends Manager
 
     function single_deny($id)
     {
-        $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
+        $request = DataManager::retrieve_by_id(Request::class, (int) $id);
         
         if (! Rights::getInstance()->is_target_user(
             $this->get_user(), 
@@ -105,7 +105,7 @@ class DenierComponent extends Manager
         
         foreach ($ids as $id)
         {
-            $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
+            $request = DataManager::retrieve_by_id(Request::class, (int) $id);
             
             if (! Rights::getInstance()->is_target_user(
                 $this->get_user(), 

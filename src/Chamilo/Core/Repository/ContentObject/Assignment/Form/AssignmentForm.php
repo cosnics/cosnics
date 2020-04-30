@@ -110,7 +110,7 @@ class AssignmentForm extends ContentObjectForm
         // attachment uploader and selector
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_owner_id()
+                User::class, (int) $this->get_owner_id()
             )
         );
 
@@ -317,12 +317,12 @@ class AssignmentForm extends ContentObjectForm
             {
                 $contentObjectIdentifiers = $object->get_automatic_feedback_co_ids();
                 $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIdentifiers
                 );
 
                 $attachments = DataManager::retrieve_active_content_objects(
-                    ContentObject::class_name(), new DataClassRetrievesParameters($condition)
+                    ContentObject::class, new DataClassRetrievesParameters($condition)
                 )->as_array();
 
                 $defaultAttachments = new AdvancedElementFinderElements();
@@ -347,7 +347,7 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = 0;
             $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = 1;
             $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class_name());
+            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class);
             $defaults[Assignment::PROPERTY_START_TIME] = time();
             $defaults[Assignment::PROPERTY_END_TIME] = strtotime('+1 day', time());
         }

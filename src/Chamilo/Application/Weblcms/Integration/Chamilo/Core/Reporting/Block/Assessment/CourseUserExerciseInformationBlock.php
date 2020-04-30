@@ -53,17 +53,17 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $glyph = new FontAwesomeGlyph('chart-pie');
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id)
         );
         $condition = new AndCondition($conditions);
 
         $trackerdata = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class_name(), new DataClassRetrievesParameters($condition)
+            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
         );
 
         $exercises = array();
@@ -97,19 +97,19 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
         $params_detail = $this->get_parent()->get_parameters();
         $params_detail[Manager::PARAM_TEMPLATE_ID] =
-            AssessmentAttemptsUserTemplate::class_name();
+            AssessmentAttemptsUserTemplate::class;
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true)
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true)
             )
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $condition = new AndCondition($conditions);
@@ -152,7 +152,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication::PROPERTY_ID];
 
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             $redirect = new Redirect($params, $filterParams);

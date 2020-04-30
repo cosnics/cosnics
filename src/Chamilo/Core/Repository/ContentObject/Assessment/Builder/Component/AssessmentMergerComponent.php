@@ -69,7 +69,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         else
         {
             $selected_assessment = DataManager::retrieve_by_id(
-                Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+                Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
             );
             $display = ContentObjectRenditionImplementation::launch(
                 $selected_assessment, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
@@ -121,21 +121,21 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
 
     public function get_allowed_content_object_types()
     {
-        return array(Assessment::class_name());
+        return array(Assessment::class);
     }
 
     public function get_condition($selected_assessment)
     {
         $sub_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($selected_assessment->get_id())
         );
         $condition = new SubselectCondition(
 
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), ComplexContentObjectItem::get_table_name(), $sub_condition, ContentObject::get_table_name()
         );
 
@@ -159,7 +159,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
     public function get_table_condition($table_class_name)
     {
         $selected_assessment = DataManager::retrieve_by_id(
-            Assessment::class_name(), \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+            Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
         );
 
         return $this->get_condition($selected_assessment);

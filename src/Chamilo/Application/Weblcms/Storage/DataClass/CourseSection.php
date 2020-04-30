@@ -141,9 +141,9 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         $id = $this->get_id();
         
         return array(
-            CourseToolRelCourseSection::class_name() => new EqualityCondition(
+            CourseToolRelCourseSection::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class_name(), 
+                    CourseToolRelCourseSection::class,
                     CourseToolRelCourseSection::PROPERTY_SECTION_ID), 
                 new StaticConditionVariable($id)));
     }
@@ -282,7 +282,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -292,6 +292,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_ID));
+        return array(new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID));
     }
 }

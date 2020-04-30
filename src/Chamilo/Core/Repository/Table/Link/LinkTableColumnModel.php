@@ -17,20 +17,20 @@ class LinkTableColumnModel extends DataClassTableColumnModel implements TableCol
         if ($this->get_table()->get_type() == LinkTable::TYPE_PUBLICATIONS)
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_APPLICATION));
+                new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION));
             $this->add_column(
-                new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_LOCATION));
-            $this->add_column(new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_DATE));
+                new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION));
+            $this->add_column(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
         }
         else
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TYPE, null, false));
+                new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE, null, false));
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, null, false));
+                new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, null, false));
             $this->add_column(
                 new DataClassPropertyTableColumn(
-                    ContentObject::class_name(), 
+                    ContentObject::class,
                     ContentObject::PROPERTY_DESCRIPTION, 
                     null, 
                     false));

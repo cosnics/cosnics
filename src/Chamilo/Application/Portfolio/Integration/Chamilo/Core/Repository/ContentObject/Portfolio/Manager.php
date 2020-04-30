@@ -42,17 +42,17 @@ class Manager implements PortfolioInterface
             $properties->add(
                 new DataClassProperty(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class_name(),
+                        RightsLocationEntityRight::class,
                         RightsLocationEntityRight::PROPERTY_LOCATION_ID),
                     new StaticConditionVariable($new_node_id)));
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight::class_name(),
+                    RightsLocationEntityRight::class,
                     RightsLocationEntityRight::PROPERTY_LOCATION_ID),
                 new StaticConditionVariable($old_node_id));
 
-            if (! DataManager::updates(RightsLocationEntityRight::class_name(), $properties, $condition))
+            if (! DataManager::updates(RightsLocationEntityRight::class, $properties, $condition))
             {
                 return false;
             }
@@ -60,14 +60,14 @@ class Manager implements PortfolioInterface
             $properties = new DataClassProperties();
             $properties->add(
                 new DataClassProperty(
-                    new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
+                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_NODE_ID),
                     new StaticConditionVariable($new_node_id)));
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
+                new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_NODE_ID),
                 new StaticConditionVariable($old_node_id));
 
-            if (! DataManager::updates(RightsLocation::class_name(), $properties, $condition))
+            if (! DataManager::updates(RightsLocation::class, $properties, $condition))
             {
                 return false;
             }
@@ -86,20 +86,20 @@ class Manager implements PortfolioInterface
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class_name(),
+                RightsLocationEntityRight::class,
                 RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             $node_ids);
 
-        if (! DataManager::deletes(RightsLocationEntityRight::class_name(), $condition))
+        if (! DataManager::deletes(RightsLocationEntityRight::class, $condition))
         {
             return false;
         }
 
         $condition = new InCondition(
-            new PropertyConditionVariable(RightsLocation::class_name(), RightsLocation::PROPERTY_NODE_ID),
+            new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_NODE_ID),
             $node_ids);
 
-        if (! DataManager::deletes(RightsLocation::class_name(), $condition))
+        if (! DataManager::deletes(RightsLocation::class, $condition))
         {
             return false;
         }

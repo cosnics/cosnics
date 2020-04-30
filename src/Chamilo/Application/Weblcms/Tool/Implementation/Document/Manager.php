@@ -85,7 +85,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $allowed_types = array();
 
-        $optional_types = array(File::class_name(), Webpage::class_name(), Page::class_name());
+        $optional_types = array(File::class, Webpage::class, Page::class);
 
         foreach ($optional_types as $optional_type)
         {

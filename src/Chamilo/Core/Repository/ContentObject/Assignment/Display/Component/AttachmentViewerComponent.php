@@ -36,7 +36,7 @@ class AttachmentViewerComponent extends Manager
 
         /** @var ContentObject $attachment */
         $attachment = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $attachment_id
         );
 

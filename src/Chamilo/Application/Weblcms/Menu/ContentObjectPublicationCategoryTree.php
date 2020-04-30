@@ -114,12 +114,12 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         }
         $tool_cond = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
         );
         $category_cond = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_CATEGORY_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CATEGORY_ID
             ), new StaticConditionVariable($category)
         );
 
@@ -171,7 +171,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
         );
         $conditions[] = $this->get_condition($category);
@@ -190,8 +190,8 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             ContentObject::get_table_name(), $subselect_condition
         );
 
@@ -206,23 +206,23 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($parent)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->browser->get_parent()->get_course_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->browser->get_parent()->get_tool_id())
         );
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
         $categories = array();

@@ -52,7 +52,7 @@ class PublicationRepository
         {
             if ($property_name != ContentObject::PROPERTY_ID)
             {
-                $propertiesArray[] = new PropertyConditionVariable(ContentObject::class_name(), $property_name);
+                $propertiesArray[] = new PropertyConditionVariable(ContentObject::class, $property_name);
             }
         }
 
@@ -127,7 +127,7 @@ class PublicationRepository
     protected function checkPublicationClassName($publicationClassName)
     {
         $reflectionClass = new ReflectionClass($publicationClassName);
-        if (! $reflectionClass->isSubclassOf(Publication::class_name()))
+        if (! $reflectionClass->isSubclassOf(Publication::class))
         {
             throw new InvalidArgumentException(
                 sprintf(
@@ -174,9 +174,9 @@ class PublicationRepository
     {
         $joinCondition = new EqualityCondition(
             new PropertyConditionVariable($publicationClassName, Publication::PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID));
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID));
 
-        return new Join(ContentObject::class_name(), $joinCondition);
+        return new Join(ContentObject::class, $joinCondition);
     }
 
     /**
@@ -188,7 +188,7 @@ class PublicationRepository
     protected function getSpecificContentObjectJoin($contentObjectTypeClassName)
     {
         $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable($contentObjectTypeClassName, DataClass::PROPERTY_ID));
 
         return new Join($contentObjectTypeClassName, $joinCondition);
@@ -235,7 +235,7 @@ class PublicationRepository
         }
         else
         {
-            $contentObjectTypeClassName = ContentObject::class_name();
+            $contentObjectTypeClassName = ContentObject::class;
         }
 
         $contentObject = new $contentObjectTypeClassName($defaultProperties, $additionalProperties);

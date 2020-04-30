@@ -117,20 +117,20 @@ class RightsGroupForm extends FormValidator
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRightGroup::class_name(),
+                            RightsLocationEntityRightGroup::class,
                             RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
                         ), new StaticConditionVariable($location_entity_right->get_id())
                     );
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRightGroup::class_name(),
+                            RightsLocationEntityRightGroup::class,
                             RightsLocationEntityRightGroup::PROPERTY_GROUP_ID
                         ), new StaticConditionVariable($group_id)
                     );
                     $condition = new AndCondition($conditions);
 
                     $existing_right_group = DataManager::retrieve(
-                        RightsLocationEntityRightGroup::class_name(), new DataClassRetrieveParameters($condition)
+                        RightsLocationEntityRightGroup::class, new DataClassRetrieveParameters($condition)
                     );
 
                     if (!$existing_right_group instanceof RightsLocationEntityRightGroup)

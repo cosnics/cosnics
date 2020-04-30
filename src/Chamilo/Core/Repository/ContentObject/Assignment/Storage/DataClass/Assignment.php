@@ -31,7 +31,7 @@ class Assignment extends ContentObject implements AttachmentSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public static function get_additional_property_names()
@@ -229,7 +229,7 @@ class Assignment extends ContentObject implements AttachmentSupport
     {
         $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
         $contentObjects = DataManager::retrieves(
-            ContentObject::class_name(), new InCondition(
+            ContentObject::class, new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 explode(',', $automaticFeedbackContentObjectIds)
             )

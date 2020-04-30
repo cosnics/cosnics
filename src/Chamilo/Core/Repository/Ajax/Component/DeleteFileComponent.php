@@ -37,17 +37,17 @@ class DeleteFileComponent extends Manager
             $conditions = array();
             
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), 
-                new StaticConditionVariable(File::class_name()));
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+                new StaticConditionVariable(File::class));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->getUser()->getId()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new StaticConditionVariable($contentObjectId));
             
             $file = DataManager::retrieve(
-                ContentObject::class_name(), 
+                ContentObject::class,
                 new DataClassRetrieveParameters(new AndCondition($conditions)));
             
             if ($file instanceof File)

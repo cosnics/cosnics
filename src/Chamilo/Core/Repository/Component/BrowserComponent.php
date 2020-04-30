@@ -245,12 +245,12 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable(ContentObject::STATE_NORMAL)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
 
@@ -260,7 +260,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                     new StaticConditionVariable($type)
                 )
             );

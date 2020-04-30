@@ -43,21 +43,21 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class_name())
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class)
             )
         );
         $condition = new AndCondition($conditions);
 
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
             )
         );
 
@@ -72,7 +72,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         {
             $publications[] = $publication;
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             if ($publication_resultset->size() > 5)
@@ -101,7 +101,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
             {
                 /** @var LearningPath $content_object */
                 $content_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                    ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
                 );
 
                 if ($publication_resultset->size() > 5)

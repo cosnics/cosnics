@@ -37,21 +37,21 @@ class Connector
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));
 
         $types_condition = array();
         foreach ($types as $type)
         {
             $types_condition[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                 new StaticConditionVariable($type));
         }
         $conditions[] = new OrCondition($types_condition);
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class_name(),
+            ContentObject::class,
             $condition);
 
         if ($objects->size() == 0)

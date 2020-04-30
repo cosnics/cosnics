@@ -24,10 +24,10 @@ class ExportTableColumnModel extends DataClassTableColumnModel implements TableC
             new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
     }
 }

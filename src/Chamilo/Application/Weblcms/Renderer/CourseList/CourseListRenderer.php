@@ -176,7 +176,7 @@ class CourseListRenderer
         if (!isset($this->tools))
         {
             $this->tools =
-                DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters())->as_array();
+                DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters())->as_array();
         }
 
         return $this->tools;

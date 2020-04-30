@@ -58,7 +58,7 @@ abstract class ActiveChangerComponent extends Manager
                 }
 
                 $user = DataManager::retrieve_by_id(
-                    User::class_name(),
+                    User::class,
                     (int) $id);
                 $user->set_active($active);
 

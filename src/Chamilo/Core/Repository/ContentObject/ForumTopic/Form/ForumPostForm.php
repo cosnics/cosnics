@@ -80,7 +80,7 @@ class ForumPostForm extends FormValidator
     {
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(), Session::get_user_id()
+                User::class, Session::get_user_id()
             )
         );
 

@@ -78,12 +78,12 @@ class GroupSubscribeComponent extends Manager
                     if (! $parent_group_id)
                     {
                         $group = DataManager::retrieve_by_id(
-                            Group::class_name(),
+                            Group::class,
                             $group_id);
                         $parent_group_id = $group->get_parent_id();
                     }
 
-                    DataClassCache::truncate(CourseEntityRelation::class_name());
+                    DataClassCache::truncate(CourseEntityRelation::class);
                 }
 
                 if ($failures == 0)

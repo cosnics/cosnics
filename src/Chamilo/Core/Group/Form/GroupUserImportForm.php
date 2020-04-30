@@ -134,11 +134,11 @@ class GroupUserImportForm extends FormValidator
     public function retrieve_group($group_code)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
             new StaticConditionVariable($group_code)
         );
 
-        $groups = DataManager::retrieves(Group::class_name(), new DataClassRetrievesParameters($condition));
+        $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
 
         return $groups->next_result();
     }
@@ -152,16 +152,16 @@ class GroupUserImportForm extends FormValidator
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id)
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(GroupRelUser::class_name(), new DataClassRetrievesParameters($condition))
+        return DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition))
             ->next_result();
     }
 

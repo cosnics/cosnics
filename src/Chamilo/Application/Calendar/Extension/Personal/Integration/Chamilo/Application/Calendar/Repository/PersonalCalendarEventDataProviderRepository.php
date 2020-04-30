@@ -64,7 +64,7 @@ abstract class PersonalCalendarEventDataProviderRepository implements
         
         return $this->publicationRepository->getPublicationsWithContentObjects(
             $parameters, 
-            Publication::class_name(), 
+            Publication::class,
             $this->getContentObjectClassName());
     }
 

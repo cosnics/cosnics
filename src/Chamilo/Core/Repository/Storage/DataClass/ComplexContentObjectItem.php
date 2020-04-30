@@ -76,7 +76,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         if (! isset($this->reference_object))
         {
             $this->reference_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_ref());
         }
         return $this->reference_object;
@@ -104,7 +104,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public function get_parent_object()
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
     }
 
@@ -156,7 +156,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         }
         else
         {
-            $ref_content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $this->get_ref());
+            $ref_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_ref());
             if (! $ref_content_object)
             {
                 $this->add_error(Translation::get('ReferenceObjectDoesNotExist'));
@@ -169,7 +169,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         }
         else
         {
-            $parent_content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $this->get_parent());
+            $parent_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_parent());
             if (! $parent_content_object)
             {
                 $this->add_error(Translation::get('ParentObjectDoesNotExist'));
@@ -196,11 +196,11 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public static function factory($class, &$record = [])
     {
-        if (is_subclass_of($class, ComplexContentObjectItem::class_name()))
+        if (is_subclass_of($class, ComplexContentObjectItem::class))
         {
             return parent::factory($class, $record);
         }
-        elseif (is_subclass_of($class, ContentObject::class_name()))
+        elseif (is_subclass_of($class, ContentObject::class))
         {
             $class = ClassnameUtilities::getInstance()->getNamespaceFromClassname($class) . '\Complex' . ClassnameUtilities::getInstance()->getClassNameFromNamespace(
                 $class);
@@ -220,7 +220,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(ComplexContentObjectItem::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -230,6 +230,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(ComplexContentObjectItem::class_name(), self::PROPERTY_PARENT));
+        return array(new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT));
     }
 }

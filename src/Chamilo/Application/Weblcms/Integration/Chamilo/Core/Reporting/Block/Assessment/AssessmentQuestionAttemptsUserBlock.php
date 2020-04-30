@@ -30,7 +30,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
             Manager::PARAM_QUESTION);
         
         $question = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class,
             $question_id);
         $weight = $question->get_weight();
         

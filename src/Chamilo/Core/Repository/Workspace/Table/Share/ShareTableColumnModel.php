@@ -11,10 +11,10 @@ class ShareTableColumnModel extends DataClassTableColumnModel implements TableCo
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Workspace::class_name(), Workspace::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(Workspace::class_name(), Workspace::PROPERTY_CREATOR_ID, null, false));
+            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(Workspace::class_name(), Workspace::PROPERTY_CREATION_DATE));
+            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATION_DATE));
     }
 }

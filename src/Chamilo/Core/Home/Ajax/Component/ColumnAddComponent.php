@@ -219,14 +219,14 @@ class ColumnAddComponent extends Manager
             $conditions = array();
 
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($tabId));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_USER_ID),
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
                 new StaticConditionVariable($userId));
 
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
-            $this->columns = DataManager::retrieves(Column::class_name(), $parameters)->as_array();
+            $this->columns = DataManager::retrieves(Column::class, $parameters)->as_array();
         }
 
         return $this->columns;

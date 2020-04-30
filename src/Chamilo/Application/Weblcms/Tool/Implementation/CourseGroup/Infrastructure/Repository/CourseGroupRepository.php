@@ -36,12 +36,12 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
     public function countCourseGroupsInCourse($courseId)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($courseId)
         );
 
         return $this->dataClassRepository->count(
-            CourseGroup::class_name(),
+            CourseGroup::class,
             new DataClassCountParameters($condition)
         );
     }
@@ -57,13 +57,13 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($course->getId())
         );
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_USER
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER
             ),
             $userIds
         );
@@ -76,9 +76,9 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
             new Join(
                 CourseGroup::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_ID),
                     new PropertyConditionVariable(
-                        CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                        CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
                     )
                 )
             )
@@ -101,14 +101,14 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
             ),
             new StaticConditionVariable($courseGroup->getId())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_USER
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER
             ),
             new StaticConditionVariable($user->getId())
         );

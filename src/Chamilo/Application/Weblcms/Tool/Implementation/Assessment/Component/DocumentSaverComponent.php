@@ -59,12 +59,12 @@ class DocumentSaverComponent extends Manager
         $open_document_question_ids = $this->retrieve_open_document_question_ids($publication_id);
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication_id));
 
         $assessment_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieves(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition))->as_array();
 
         $assessment_attempt_tracker_ids = array();
@@ -96,18 +96,18 @@ class DocumentSaverComponent extends Manager
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                QuestionAttempt::class_name(),
+                QuestionAttempt::class,
                 QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
             $open_document_question_ids);
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                QuestionAttempt::class_name(),
+                QuestionAttempt::class,
                 QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempt_tracker_ids);
         $condition = new AndCondition($conditions);
 
         $question_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieves(
-            QuestionAttempt::class_name(),
+            QuestionAttempt::class,
             new DataClassRetrievesParameters($condition))->as_array();
 
         $document_ids = array();
@@ -146,11 +146,11 @@ class DocumentSaverComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class_name(),
+                AssessmentAttempt::class,
                 AssessmentAttempt::PROPERTY_ID),
             new StaticConditionVariable($assessment_attempt_tracker_id));
         $assessment_attempts = AssessmentAttempt::get_data(
-            AssessmentAttempt::class_name(),
+            AssessmentAttempt::class,
             null,
             $condition)->as_array();
         $open_document_question_ids = $this->retrieve_open_document_question_ids(
@@ -167,22 +167,22 @@ class DocumentSaverComponent extends Manager
     protected function retrieve_open_document_question_ids($publication_id)
     {
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id);
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($publication->get_content_object_id()));
         $complex_questions = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition)->as_array();
         // Array of open question ids in the publication that permit documents
         // to be submitted.
         $open_document_question_ids = array();
         foreach ($complex_questions as $complex_question)
         {
-            if ($complex_question->get_ref_object()->get_type() == AssessmentOpenQuestion::class_name() &&
+            if ($complex_question->get_ref_object()->get_type() == AssessmentOpenQuestion::class &&
                  $this->is_open_question_document_allowed($complex_question->get_ref_object()))
             {
                 $open_document_question_ids[] = $complex_question->get_id();

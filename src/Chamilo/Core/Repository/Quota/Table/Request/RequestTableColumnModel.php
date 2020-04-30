@@ -16,15 +16,15 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_CREATION_DATE));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CREATION_DATE));
         
         if ($this->get_component()->get_table_type() != RequestTable::TYPE_PERSONAL)
         {
             $this->add_column(new StaticTableColumn(Translation::get('User')));
         }
         
-        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_QUOTA));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_MOTIVATION));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_QUOTA));
+        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_MOTIVATION));
         
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PENDING)
         {
@@ -39,7 +39,7 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PERSONAL)
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_DECISION, false));
+                new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_DECISION, false));
         }
     }
 }

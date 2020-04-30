@@ -33,16 +33,16 @@ class ViewerComponent extends Manager
         switch ($template_id)
         {
             case LoginTemplate::TEMPLATE_ID :
-                $class_name = LoginTemplate::class_name();
+                $class_name = LoginTemplate::class;
                 break;
             case DataTemplate::TEMPLATE_ID :
-                $class_name = DataTemplate::class_name();
+                $class_name = DataTemplate::class;
                 break;
             case UserTemplate::TEMPLATE_ID :
-                $class_name = UserTemplate::class_name();
+                $class_name = UserTemplate::class;
                 break;
             default :
-                $class_name = DataTemplate::class_name();
+                $class_name = DataTemplate::class;
                 break;
         }
 

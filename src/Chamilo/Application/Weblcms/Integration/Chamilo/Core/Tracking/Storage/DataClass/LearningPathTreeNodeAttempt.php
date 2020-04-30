@@ -51,12 +51,12 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathTreeNodeQuestionAttempt::class_name(),
+                LearningPathTreeNodeQuestionAttempt::class,
                 LearningPathTreeNodeQuestionAttempt::PROPERTY_TREE_NODE_ATTEMPT_ID),
             new StaticConditionVariable($this->get_id()));
         
         $trackers = DataManager::retrieves(
-            LearningPathTreeNodeQuestionAttempt::class_name(),
+            LearningPathTreeNodeQuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
         
         while ($tracker = $trackers->next_result())

@@ -21,6 +21,6 @@ class AttemptQuestion extends Event
     public function getTrackerClasses()
     {
         return array(
-            QuestionAttempt::class_name());
+            QuestionAttempt::class);
     }
 }

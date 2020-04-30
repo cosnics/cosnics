@@ -46,7 +46,7 @@ class PreviewerComponent extends Manager
     {
         $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $content_object_id);
     }
 

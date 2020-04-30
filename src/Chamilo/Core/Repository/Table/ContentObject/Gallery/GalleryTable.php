@@ -37,7 +37,7 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
 
         if (!$template_id || !is_numeric($template_id))
         {
-            $this->type = ContentObject::class_name();
+            $this->type = ContentObject::class;
         }
         else
         {

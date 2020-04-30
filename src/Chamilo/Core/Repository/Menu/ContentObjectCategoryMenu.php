@@ -100,11 +100,11 @@ class ContentObjectCategoryMenu extends HtmlMenu
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
                 new StaticConditionVariable($this->currentWorkspace->getId())
             );
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
                 new StaticConditionVariable($this->currentWorkspace->getWorkspaceType())
             );
             $condition = new AndCondition($conditions);

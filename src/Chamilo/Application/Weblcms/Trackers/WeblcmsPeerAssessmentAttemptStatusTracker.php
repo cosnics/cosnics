@@ -10,29 +10,38 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
 {
     const PROPERTY_ATTEMPT_ID = 'attempt_id';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_FACTOR = 'factor';
-    const PROPERTY_PROGRESS = 'progress';
+
     const PROPERTY_CLOSED = 'closed';
+
     const PROPERTY_CLOSED_BY = 'closed_by';
+
     const PROPERTY_CREATED = 'created';
+
+    const PROPERTY_FACTOR = 'factor';
+
     const PROPERTY_MODIFIED = 'modified';
 
-    /**
-     * Inherited
-     * 
-     * @see MainTracker :: track()
-     */
-    function validate_parameters(array $parameters = array())
+    const PROPERTY_PROGRESS = 'progress';
+
+    const PROPERTY_USER_ID = 'user_id';
+
+    function __call($name, array $arguments)
     {
-        $this->set_attempt_id($parameters[self::PROPERTY_ATTEMPT_ID]);
-        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
-        $this->set_factor($parameters[self::PROPERTY_FACTOR]);
-        $this->set_closed($parameters[self::PROPERTY_CLOSED]);
-        $this->set_closed_by($parameters[self::PROPERTY_CLOSED_BY]);
-        $this->set_progress($parameters[self::PROPERTY_PROGRESS]);
-        $this->set_created($parameters[self::PROPERTY_CREATED]);
-        $this->set_modified($parameters[self::PROPERTY_MODIFIED]);
+        // generate error if no getter or setter is called and return
+        if (!preg_match('/^(get|set)_(.+)$/', $name, $matches))
+        {
+            trigger_error('method not found', E_USER_ERROR);
+
+            return;
+        }
+        // determine the method and property to be called
+        $method = $matches[1] . '_default_property';
+        $prop = constant(static::class . '::PROPERTY_' . strtoupper($matches[2]));
+        // prepend the property to the argument list
+        array_unshift($arguments, $prop);
+
+        // call get_default_property or set_default_property with the arguments
+        return call_user_func_array(array($this, $method), $arguments);
     }
 
     /**
@@ -42,14 +51,16 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_ATTEMPT_ID, 
-                self::PROPERTY_USER_ID, 
-                self::PROPERTY_FACTOR, 
-                self::PROPERTY_PROGRESS, 
-                self::PROPERTY_CLOSED, 
-                self::PROPERTY_CLOSED_BY, 
-                self::PROPERTY_CREATED, 
-                self::PROPERTY_MODIFIED));
+                self::PROPERTY_ATTEMPT_ID,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_FACTOR,
+                self::PROPERTY_PROGRESS,
+                self::PROPERTY_CLOSED,
+                self::PROPERTY_CLOSED_BY,
+                self::PROPERTY_CREATED,
+                self::PROPERTY_MODIFIED
+            )
+        );
     }
 
     /*
@@ -68,20 +79,21 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
      * $this->get_default_property(self :: PROPERTY_CLOSED); } function set_closed($closed) {
      * $this->set_default_property(self :: PROPERTY_CLOSED, $closed); }
      */
-    function __call($name, array $arguments)
+
+    /**
+     * Inherited
+     *
+     * @see MainTracker :: track()
+     */
+    function validate_parameters(array $parameters = array())
     {
-        // generate error if no getter or setter is called and return
-        if (! preg_match('/^(get|set)_(.+)$/', $name, $matches))
-        {
-            trigger_error('method not found', E_USER_ERROR);
-            return;
-        }
-        // determine the method and property to be called
-        $method = $matches[1] . '_default_property';
-        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
-        // prepend the property to the argument list
-        array_unshift($arguments, $prop);
-        // call get_default_property or set_default_property with the arguments
-        return call_user_func_array(array($this, $method), $arguments);
+        $this->set_attempt_id($parameters[self::PROPERTY_ATTEMPT_ID]);
+        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
+        $this->set_factor($parameters[self::PROPERTY_FACTOR]);
+        $this->set_closed($parameters[self::PROPERTY_CLOSED]);
+        $this->set_closed_by($parameters[self::PROPERTY_CLOSED_BY]);
+        $this->set_progress($parameters[self::PROPERTY_PROGRESS]);
+        $this->set_created($parameters[self::PROPERTY_CREATED]);
+        $this->set_modified($parameters[self::PROPERTY_MODIFIED]);
     }
 }

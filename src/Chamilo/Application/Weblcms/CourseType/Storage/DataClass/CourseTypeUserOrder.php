@@ -149,7 +149,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -159,6 +159,6 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
      */
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID));
+        return array(new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID));
     }
 }

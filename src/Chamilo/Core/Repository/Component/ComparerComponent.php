@@ -56,8 +56,8 @@ class ComparerComponent extends Manager
             throw new NoObjectSelectedException($contentObjectTranslation);
         }
 
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
-        $contentObjectVersion = DataManager::retrieve_by_id(ContentObject::class_name(), $version_id);
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $object_id);
+        $contentObjectVersion = DataManager::retrieve_by_id(ContentObject::class, $version_id);
 
         if (!$contentObject instanceof ContentObject)
         {
@@ -133,7 +133,7 @@ class ComparerComponent extends Manager
             throw new NoObjectSelectedException($contentObjectTranslation);
         }
 
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $baseContentObjectId);
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $baseContentObjectId);
 
         if (!$contentObject instanceof ContentObject)
         {

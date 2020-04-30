@@ -78,18 +78,18 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable($setting));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_ID),
             new StaticConditionVariable(Session::get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_external_repository_instance_id()));
         
         $condition = new AndCondition($conditions);
         
-        return DataManager::retrieve(Setting::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Setting::class, new DataClassRetrieveParameters($condition));
     }
 
     public function login()

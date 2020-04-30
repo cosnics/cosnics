@@ -251,7 +251,7 @@ class DataClassRepository
             $parameters = DataClassCountParameters::generate($parameters);
         }
 
-        if (is_subclass_of($dataClassName, CompositeDataClass::class_name()))
+        if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
             return $this->countCompositeDataClass($dataClassName, $parameters);
         }

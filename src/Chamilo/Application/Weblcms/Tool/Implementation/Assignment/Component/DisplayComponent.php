@@ -144,7 +144,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         }
 
         $contentObjectPublication =
-            DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $contentObjectPublicationId);
+            DataManager::retrieve_by_id(ContentObjectPublication::class, $contentObjectPublicationId);
 
         if (!$contentObjectPublication instanceof ContentObjectPublication)
         {

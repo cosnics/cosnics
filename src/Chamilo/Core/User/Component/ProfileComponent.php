@@ -60,17 +60,17 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_APPLICATION),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable(self::context())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_NAME),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
             new StaticConditionVariable('account_fields')
         );
         $condition = new AndCondition($conditions);
 
         $extra_form = DataManager::retrieve(
-            Instance::class_name(), new DataClassRetrieveParameters($condition)
+            Instance::class, new DataClassRetrieveParameters($condition)
         );
 
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)

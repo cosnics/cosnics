@@ -95,7 +95,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
             }
             else
             {
-                $cloi = ComplexContentObjectItem::factory(Forum::class_name());
+                $cloi = ComplexContentObjectItem::factory(Forum::class);
 
                 if ($this->get_complex_content_object_item())
                 {
@@ -127,10 +127,10 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
         $items = array();
         $items = array_merge($items, $this->retrieve_used_items_parents($object));
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($object),
                 ComplexContentObjectItem::get_table_name()));
@@ -152,10 +152,10 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
         $items = array();
         $items[] = $object_id;
         $complex_content_object_items_parent = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF),
                 new StaticConditionVariable($object_id)));
         while ($complex_content_object_item_parent = $complex_content_object_items_parent->next_result())
@@ -188,6 +188,6 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
 
     public function get_allowed_content_object_types()
     {
-        return array(Forum::class_name());
+        return array(Forum::class);
     }
 }

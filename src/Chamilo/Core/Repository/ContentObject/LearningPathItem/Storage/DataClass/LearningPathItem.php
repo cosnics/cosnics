@@ -40,7 +40,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -88,7 +88,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
         if (! $this->reference_object instanceof LearningPath)
         {
             $this->reference_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class, 
                 $this->get_reference());
         }
         return $this->reference_object;

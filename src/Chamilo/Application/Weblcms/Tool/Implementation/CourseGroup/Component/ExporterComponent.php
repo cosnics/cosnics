@@ -61,7 +61,7 @@ class ExporterComponent extends Manager
         {
             $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
 
-            $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
+            $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
 
             $this->course_group = $course_group;
         }
@@ -103,8 +103,8 @@ class ExporterComponent extends Manager
             null,
             null,
             array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         );
 
@@ -112,7 +112,7 @@ class ExporterComponent extends Manager
 
         while ($user_record = $user_records->next_result())
         {
-            $users[] = DataClass::factory(User::class_name(), $user_record);
+            $users[] = DataClass::factory(User::class, $user_record);
         }
 
         $exporter = new UserExporter(
@@ -165,12 +165,12 @@ class ExporterComponent extends Manager
         if ($this->current_tab == SubscriptionsOverviewerComponent::TAB_COURSE_GROUPS)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
                 new StaticConditionVariable($this->get_course_id())
             );
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
             );
@@ -298,8 +298,8 @@ class ExporterComponent extends Manager
                 null,
                 null,
                 array(
-                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                    new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                    new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
                 )
             );
 
@@ -391,8 +391,8 @@ class ExporterComponent extends Manager
             null,
             null,
             array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         );
 

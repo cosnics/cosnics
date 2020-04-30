@@ -23,7 +23,7 @@ class Referrer extends User
     public function empty_tracker($event)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
             new StaticConditionVariable(self::TYPE_REFERER));
         return $this->remove($condition);
     }
@@ -31,8 +31,8 @@ class Referrer extends User
     public function export($start_date, $end_date)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
             new StaticConditionVariable(self::TYPE_REFERER));
-        return DataManager::retrieves(self::class_name(), new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
     }
 }

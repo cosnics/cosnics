@@ -53,7 +53,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
 
         $this->publication = $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id);
 
         if (! $this->publication instanceof ContentObjectPublication ||
@@ -120,18 +120,18 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ForumTopicView::class_name(),
+                ForumTopicView::class,
                 ForumTopicView::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->publication_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ForumTopicView::class_name(),
+                ForumTopicView::class,
                 ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($complex_topic_id));
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ForumTopicView::class_name(),
+            ForumTopicView::class,
             new DataClassCountParameters($condition));
     }
 

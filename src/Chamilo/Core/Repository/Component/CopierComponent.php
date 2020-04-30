@@ -35,7 +35,7 @@ class CopierComponent extends Manager
 
         foreach ($selected_content_object_ids as $selected_content_object_id)
         {
-            $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $selected_content_object_id);
+            $content_object = DataManager::retrieve_by_id(ContentObject::class, $selected_content_object_id);
 
             if (RightsService::getInstance()->canCopyContentObject(
                 $this->get_user(),

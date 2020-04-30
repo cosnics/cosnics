@@ -14,7 +14,7 @@ class ImporterComponent extends Manager
 
     public function import_external_repository_object($object)
     {
-        $vimeo = ContentObject::factory(Vimeo::class_name());
+        $vimeo = ContentObject::factory(Vimeo::class);
         $vimeo->set_title($object->get_title());
         $vimeo->set_description($object->get_description());
         $vimeo->set_owner_id($this->get_user_id());

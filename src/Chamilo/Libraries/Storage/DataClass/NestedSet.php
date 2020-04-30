@@ -56,22 +56,22 @@ abstract class NestedSet extends DataClass
         if ($include_object)
         {
             $parent_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
                 InequalityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
             );
             $parent_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
                 InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_right_value())
             );
         }
         else
         {
             $parent_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
                 InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_left_value())
             );
             $parent_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
                 InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_right_value())
             );
         }
@@ -104,13 +104,13 @@ abstract class NestedSet extends DataClass
         if ($recursive)
         {
             $children_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
                 $include_self ? InequalityCondition::GREATER_THAN_OR_EQUAL : InequalityCondition::GREATER_THAN,
                 new StaticConditionVariable($this->get_left_value())
             );
 
             $children_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+                new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
                 $include_self ? InequalityCondition::LESS_THAN_OR_EQUAL : InequalityCondition::LESS_THAN,
                 new StaticConditionVariable($this->get_right_value())
             );
@@ -122,11 +122,11 @@ abstract class NestedSet extends DataClass
                 $children_conditions[] = new OrCondition(
                     array(
                         new EqualityCondition(
-                            new PropertyConditionVariable(self::class_name(), self::PROPERTY_ID),
+                            new PropertyConditionVariable(self::class, self::PROPERTY_ID),
                             new StaticConditionVariable($this->get_id())
                         ),
                         new EqualityCondition(
-                            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_ID),
+                            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT_ID),
                             new StaticConditionVariable($this->get_id())
                         )
                     )
@@ -135,7 +135,7 @@ abstract class NestedSet extends DataClass
             else
             {
                 $children_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(self::class, self::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
                 );
             }
@@ -165,7 +165,7 @@ abstract class NestedSet extends DataClass
     public function build_post_order_ordering($sort_order = SORT_ASC)
     {
         return array(
-            new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE), $sort_order)
+            new OrderBy(new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE), $sort_order)
         );
     }
 
@@ -184,7 +184,7 @@ abstract class NestedSet extends DataClass
     public function build_pre_order_ordering($sort_order = SORT_ASC)
     {
         return array(
-            new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), $sort_order)
+            new OrderBy(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE), $sort_order)
         );
     }
 
@@ -204,7 +204,7 @@ abstract class NestedSet extends DataClass
         $sibling_conditions = $this->get_nested_set_condition_array();
 
         $sibling_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_parent_id())
         );
 
@@ -212,7 +212,7 @@ abstract class NestedSet extends DataClass
         {
             $sibling_conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(self::class_name(), self::PROPERTY_ID),
+                    new PropertyConditionVariable(self::class, self::PROPERTY_ID),
                     new StaticConditionVariable($this->get_id())
                 )
             );
@@ -454,7 +454,7 @@ abstract class NestedSet extends DataClass
 
         $conditions = $this->get_nested_set_condition_array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_ID),
             new StaticConditionVariable($object_or_id)
         );
 
@@ -1032,7 +1032,7 @@ abstract class NestedSet extends DataClass
 
         $conditions = $this->get_nested_set_condition_array();
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
         );
 
@@ -1043,8 +1043,8 @@ abstract class NestedSet extends DataClass
 
         $update_condition = new AndCondition($conditions);
 
-        $left_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE);
-        $right_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE);
+        $left_value_variable = new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE);
+        $right_value_variable = new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE);
 
         $right_value_data_class_property = new DataClassProperty(
             $right_value_variable, new OperationConditionVariable(
@@ -1075,12 +1075,12 @@ abstract class NestedSet extends DataClass
 
         $conditions = $this->get_nested_set_condition_array();
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
             InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_left_value())
         );
 
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_right_value())
         );
 
@@ -1133,7 +1133,7 @@ abstract class NestedSet extends DataClass
         // Update all necessary left-values
         $conditions = $this->get_nested_set_condition_array();
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable($insert_after)
         );
 
@@ -1144,7 +1144,7 @@ abstract class NestedSet extends DataClass
 
         $update_condition = new AndCondition($conditions);
 
-        $left_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE);
+        $left_value_variable = new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE);
 
         $properties = array();
         $properties[] = new DataClassProperty(
@@ -1166,7 +1166,7 @@ abstract class NestedSet extends DataClass
         // Update all necessary right-values
         $conditions = $this->get_nested_set_condition_array();
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE),
+            new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable($insert_after)
         );
 
@@ -1177,7 +1177,7 @@ abstract class NestedSet extends DataClass
 
         $update_condition = new AndCondition($conditions);
 
-        $right_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE);
+        $right_value_variable = new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE);
 
         $properties = array();
 

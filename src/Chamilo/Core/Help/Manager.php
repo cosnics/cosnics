@@ -46,7 +46,7 @@ abstract class Manager extends Application
 
     public function count_help_items($condition)
     {
-        return DataManager::count(HelpItem::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(HelpItem::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class Manager extends Application
     private static function get_help_item_by_name($context, $identifier)
     {
         $user_id = Session::get_user_id();
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $user_id);
 
         $language = LocalSetting::getInstance()->get('platform_language');
 
@@ -156,7 +156,7 @@ abstract class Manager extends Application
     public function retrieve_help_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         return DataManager::retrieves(
-            HelpItem::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            HelpItem::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

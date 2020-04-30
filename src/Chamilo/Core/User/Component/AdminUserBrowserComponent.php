@@ -129,11 +129,11 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
     {
         // construct search properties
         $search_properties = array();
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
-        $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL);
+        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
+        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
+        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
         // get conditions
         return $this->buttonToolbarRenderer->getConditions($search_properties);

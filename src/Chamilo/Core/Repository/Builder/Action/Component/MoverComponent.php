@@ -36,14 +36,14 @@ class MoverComponent extends Manager
         if (isset($id))
         {
             $complex_content_object_item = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $id);
             $parent = $complex_content_object_item->get_parent();
             $max = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($parent)));
 
@@ -57,19 +57,19 @@ class MoverComponent extends Manager
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER),
                     new StaticConditionVariable($new_place),
                     ComplexContentObjectItem::get_table_name());
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($parent),
                     ComplexContentObjectItem::get_table_name());
                 $condition = new AndCondition($conditions);
                 $items = DataManager::retrieve_complex_content_object_items(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     $condition);
                 $new_complex_content_object_item = $items->next_result();
                 $new_complex_content_object_item->set_display_order($display_order);

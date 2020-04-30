@@ -162,13 +162,13 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), '*' . $query . '*'
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
         );
         $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
         );
         $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE), '*' . $query . '*'
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), '*' . $query . '*'
         );
 
         return new OrCondition($conditions);
@@ -183,7 +183,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $this->rootGroup = $this->retrieve_groups(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
             )->next_result();
@@ -251,7 +251,7 @@ class BrowserComponent extends Manager implements TableSupport
         );
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group->getId())
         );
         $users = $this->retrieve_group_rel_users($condition);
@@ -317,7 +317,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_subgroups_condition()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
@@ -345,7 +345,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         switch ($table_class_name)
         {
-            case GroupTable::class_name() :
+            case GroupTable::class :
                 $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
                 if (is_null($query))
@@ -357,7 +357,7 @@ class BrowserComponent extends Manager implements TableSupport
                     return $this->get_all_groups_condition();
                 }
 
-            case GroupRelUserTable::class_name() :
+            case GroupRelUserTable::class :
                 return $this->get_users_condition();
         }
 
@@ -410,7 +410,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
@@ -419,18 +419,18 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
             );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
             );
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
             );
             $condition = new OrCondition($or_conditions);
 
             $users = DataManager::retrieves(
-                User::class_name(), new DataClassRetrievesParameters($condition)
+                User::class, new DataClassRetrievesParameters($condition)
             );
 
             $userconditions = array();
@@ -438,7 +438,7 @@ class BrowserComponent extends Manager implements TableSupport
             while ($user = $users->next_result())
             {
                 $userconditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable($user->get_id())
                 );
             }
@@ -450,7 +450,7 @@ class BrowserComponent extends Manager implements TableSupport
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable(0)
                 );
             }

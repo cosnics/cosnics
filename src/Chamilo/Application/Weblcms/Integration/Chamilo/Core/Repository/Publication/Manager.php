@@ -185,7 +185,7 @@ class Manager implements PublicationInterface
     {
         if (empty($context) || $context == ContentObjectPublication::class)
         {
-            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publication_id);
+            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class, $publication_id);
             if (!$publication)
             {
                 return false;

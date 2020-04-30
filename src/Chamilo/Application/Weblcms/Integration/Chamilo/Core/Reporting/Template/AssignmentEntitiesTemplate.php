@@ -36,7 +36,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
         $this->publicationId = Request::get(Manager::PARAM_PUBLICATION);
 
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publicationId
         )->get_content_object();
 
@@ -48,7 +48,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
 
         $params = [];
         $params[Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class_name();
+            CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         $breadcrumbTrail->add(

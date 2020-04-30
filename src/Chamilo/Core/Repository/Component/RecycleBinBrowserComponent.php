@@ -91,7 +91,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     private function empty_recycle_bin()
     {
         $parameters = new DataClassRetrievesParameters($this->get_current_user_recycle_bin_conditions());
-        $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         $count = 0;
         while ($object = $trashed_objects->next_result())
         {
@@ -99,7 +99,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
             $count ++;
         }
 
-        DataClassCountCache::truncate(ContentObject::class_name());
+        DataClassCountCache::truncate(ContentObject::class);
 
         return $count;
     }

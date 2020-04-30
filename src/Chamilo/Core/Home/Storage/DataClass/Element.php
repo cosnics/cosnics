@@ -171,9 +171,9 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), static::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
-        $childElements = DataManager::retrieves(Block::class_name(), new DataClassRetrievesParameters($condition));
+        $childElements = DataManager::retrieves(Block::class, new DataClassRetrievesParameters($condition));
 
         while ($childElement = $childElements->next_result())
         {
@@ -189,22 +189,22 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     public function hasChildren()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
 
-        $childCount = DataManager::count(Block::class_name(), new DataClassCountParameters($condition));
+        $childCount = DataManager::count(Block::class, new DataClassCountParameters($condition));
 
         return ($childCount == 0);
     }
 
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(Element::class_name(), self::PROPERTY_SORT);
+        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
     }
 
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(Element::class_name(), self::PROPERTY_PARENT_ID));
+        return array(new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID));
     }
 
     /**

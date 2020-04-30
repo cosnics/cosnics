@@ -208,11 +208,11 @@ class CoursesFeatureSubContext implements Context
     protected function get_course_by_title($course_title)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE), 
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
             new StaticConditionVariable($course_title));
         
         $course = DataManager::retrieve(
-            Course::class_name(), 
+            Course::class,
             new DataClassRetrieveParameters($condition));
         
         if (! $course)

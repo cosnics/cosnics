@@ -55,7 +55,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
 
         // Retrieve the questions of the assessment
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id
         );
 
@@ -70,13 +70,13 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT
             ),
             new StaticConditionVariable($publication->get_content_object_id())
         );
         $questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new DataClassRetrievesParameters($condition)
         );
 
@@ -100,7 +100,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
     protected function add_breadcrumbs()
     {
         $assessment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id
         )->get_content_object();
 

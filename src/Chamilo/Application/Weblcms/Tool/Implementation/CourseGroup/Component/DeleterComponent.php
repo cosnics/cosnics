@@ -43,7 +43,7 @@ class DeleterComponent extends Manager
         foreach ($publication_ids as $pid)
         {
             if ($publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $pid
             ))
             {
@@ -63,7 +63,7 @@ class DeleterComponent extends Manager
             // Make the course group deletable
             foreach ($ids as $group_id)
             {
-                $cg = DataManager::retrieve_by_id(CourseGroup::class_name(), $group_id);
+                $cg = DataManager::retrieve_by_id(CourseGroup::class, $group_id);
 
                 if (!$cg instanceof CourseGroup)
                 {

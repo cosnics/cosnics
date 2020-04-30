@@ -52,7 +52,7 @@ class BrowserComponent extends Manager implements TableSupport
         $tabs->add_tab(
             new DynamicContentTab(
                 'personal_instance', Translation::get('PersonalInstance'), null,
-                $this->get_table(PersonalInstance::class_name())
+                $this->get_table(PersonalInstance::class)
             )
         );
 
@@ -61,7 +61,7 @@ class BrowserComponent extends Manager implements TableSupport
             $tabs->add_tab(
                 new DynamicContentTab(
                     'platform_instance', Translation::get('PlatformInstance'), null,
-                    $this->get_table(PlatformInstance::class_name())
+                    $this->get_table(PlatformInstance::class)
                 )
             );
         }
@@ -129,14 +129,14 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TYPE),
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TYPE),
             new StaticConditionVariable($this->type)
         );
 
-        if ($this->type == PersonalInstance::class_name())
+        if ($this->type == PersonalInstance::class)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(PersonalInstance::class_name(), PersonalInstance::PROPERTY_USER_ID),
+                new PropertyConditionVariable(PersonalInstance::class, PersonalInstance::PROPERTY_USER_ID),
                 new StaticConditionVariable($this->get_user_id())
             );
         }
@@ -144,7 +144,7 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TITLE), '*' . $query . '*'
+                new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TITLE), '*' . $query . '*'
             );
         }
 

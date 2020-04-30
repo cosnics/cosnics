@@ -51,7 +51,7 @@ class WorkspaceUserFavourite extends DataClass
     {
         if (! isset($this->workspace))
         {
-            $this->workspace = DataManager::retrieve_by_id(Workspace::class_name(), $this->get_workspace_id());
+            $this->workspace = DataManager::retrieve_by_id(Workspace::class, $this->get_workspace_id());
         }
         
         return $this->workspace;

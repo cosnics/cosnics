@@ -55,7 +55,7 @@ class CreatorComponent extends Manager implements ViewerInterface
                 if ($complex_content_object_item_id)
                 {
                     $complex_content_object_item = DataManager::retrieve_by_id(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         $complex_content_object_item_id);
                     $cloi->set_parent($complex_content_object_item->get_ref());
                 }

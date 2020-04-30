@@ -26,16 +26,16 @@ class WikiMostVisitedPageBlock extends ToolBlock
         $reporting_data->set_rows(array(Translation::get('MostVisitedPage'), Translation::get('NumberOfVisits')));
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         $wiki = $publication->get_content_object();
         
         $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($wiki->get_id()))))->as_array();
         
@@ -54,31 +54,31 @@ class WikiMostVisitedPageBlock extends ToolBlock
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        Visit::class_name(),
+                        Visit::class,
                         Visit::PROPERTY_LOCATION),
                     '*publication=' . $this->getPublicationId() . '*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        Visit::class_name(),
+                        Visit::class,
                         Visit::PROPERTY_LOCATION),
                     '*display_action=view_item*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        Visit::class_name(),
+                        Visit::class,
                         Visit::PROPERTY_LOCATION),
                     '*application=weblcms*');
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(
-                        Visit::class_name(),
+                        Visit::class,
                         Visit::PROPERTY_LOCATION),
                     '*selected_cloi=' . $complex_content_object_item->get_id() . '*');
                 
                 $condition = new AndCondition($conditions);
                 
-                $items = DataManager::retrieves(Visit::class_name(), new DataClassRetrievesParameters($condition));
+                $items = DataManager::retrieves(Visit::class, new DataClassRetrievesParameters($condition));
                 
                 if (count($items) >= $most_visits)
                 {

@@ -33,10 +33,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     function run()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
-        $user_requests = DataManager::count(Request::class_name(), new DataClassCountParameters($condition));
+        $user_requests = DataManager::count(Request::class, new DataClassCountParameters($condition));
 
         $tabs = new DynamicTabsRenderer('request');
 
@@ -64,20 +64,20 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 if (count($target_users) > 0)
                 {
                     $target_condition = new InCondition(
-                        new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), $target_users
+                        new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID), $target_users
                     );
                 }
                 else
                 {
                     $target_condition = new EqualityCondition(
-                        new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID),
+                        new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
                         new StaticConditionVariable(- 1)
                     );
                 }
 
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
                 );
                 if (!$this->get_user()->is_platform_admin())
@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class_name(), new DataClassCountParameters($condition)) > 0)
+                if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
                     $this->table_type = RequestTable::TYPE_PENDING;
                     $table = new RequestTable($this);
@@ -100,7 +100,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
                 );
                 if (!$this->get_user()->is_platform_admin())
@@ -109,7 +109,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class_name(), new DataClassCountParameters($condition)) > 0)
+                if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
                     $this->table_type = RequestTable::TYPE_GRANTED;
                     $table = new RequestTable($this);
@@ -124,7 +124,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
                 );
                 if (!$this->get_user()->is_platform_admin())
@@ -133,7 +133,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class_name(), new DataClassCountParameters($condition)) > 0)
+                if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
                     $this->table_type = RequestTable::TYPE_DENIED;
                     $table = new RequestTable($this);
@@ -219,25 +219,25 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             case RequestTable::TYPE_PENDING :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
                 );
                 break;
             case RequestTable::TYPE_PERSONAL :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
                     new StaticConditionVariable($this->get_user_id())
                 );
                 break;
             case RequestTable::TYPE_GRANTED :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
                 );
                 break;
             case RequestTable::TYPE_DENIED :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
                 );
                 break;
@@ -253,13 +253,13 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             if (count($target_users) > 0)
             {
                 $conditions[] = new InCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), $target_users
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID), $target_users
                 );
             }
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
                     new StaticConditionVariable(- 1)
                 );
             }

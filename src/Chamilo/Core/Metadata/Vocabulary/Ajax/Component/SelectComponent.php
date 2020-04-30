@@ -156,7 +156,7 @@ class SelectComponent extends Manager implements TableSupport
         $conditions = array();
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE)));
+            array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE)));
         
         if ($searchCondition)
         {
@@ -164,7 +164,7 @@ class SelectComponent extends Manager implements TableSupport
         }
         
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ELEMENT_ID), 
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID), 
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
         
@@ -182,7 +182,7 @@ class SelectComponent extends Manager implements TableSupport
         if ($element->isVocabularyUserDefined())
         {
             $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID), 
                 ComparisonCondition::EQUAL, 
                 new StaticConditionVariable($this->get_user_id()));
         }
@@ -190,7 +190,7 @@ class SelectComponent extends Manager implements TableSupport
         if ($element->isVocabularyPredefined())
         {
             $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_USER_ID), 
+                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID), 
                 ComparisonCondition::EQUAL, 
                 new StaticConditionVariable(0));
         }
@@ -203,12 +203,12 @@ class SelectComponent extends Manager implements TableSupport
         $conditions = array();
         $conditions[] = $this->getVocabularyCondition();
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Vocabulary::class_name(), Vocabulary::PROPERTY_ID), 
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ID), 
             $vocabularyIds);
         
         $condition = new AndCondition($conditions);
         
-        return DataManager::retrieves(Vocabulary::class_name(), new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -233,7 +233,7 @@ class SelectComponent extends Manager implements TableSupport
         if (! isset($this->element))
         {
             $this->element = DataManager::retrieve_by_id(
-                Element::class_name(),
+                Element::class,
                 $this->getSelectedElementId());
         }
         

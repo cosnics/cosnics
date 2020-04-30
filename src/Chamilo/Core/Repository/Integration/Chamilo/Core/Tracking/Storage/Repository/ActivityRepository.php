@@ -29,7 +29,7 @@ class ActivityRepository extends CommonDataClassRepository
     public function countActivitiesForContentObject(ContentObject $contentObject)
     {
         return $this->dataClassRepository->count(
-            Activity::class_name(),
+            Activity::class,
             new DataClassCountParameters($this->getActivityConditionForContentObject($contentObject))
         );
     }
@@ -44,7 +44,7 @@ class ActivityRepository extends CommonDataClassRepository
     public function retrieveActivitiesForContentObject(ContentObject $contentObject)
     {
         return $this->dataClassRepository->retrieves(
-            Activity::class_name(),
+            Activity::class,
             new DataClassRetrievesParameters($this->getActivityConditionForContentObject($contentObject))
         );
     }
@@ -111,7 +111,7 @@ class ActivityRepository extends CommonDataClassRepository
     protected function getActivityConditionForContentObject(ContentObject $contentObject)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Activity::class_name(), Activity::PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(Activity::class, Activity::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->getId())
         );
     }

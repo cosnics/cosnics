@@ -334,18 +334,18 @@ class Calculator
 
         $conditions = array();
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $userGroupIds
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class_name(), new DataClassRetrieveParameters(
+            Group::class, new DataClassRetrieveParameters(
                 $condition,
-                array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA)))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
             )
         );
 
@@ -363,19 +363,19 @@ class Calculator
 
         $conditions = array();
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $userGroupIds
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
             InequalityCondition::GREATER_THAN, new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class_name(), new DataClassRetrieveParameters(
+            Group::class, new DataClassRetrieveParameters(
                 $condition, array(
                     new OrderBy(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DISK_QUOTA), SORT_ASC
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), SORT_ASC
                     )
                 )
             )
@@ -589,18 +589,18 @@ class Calculator
         {
             $condition = new AndCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                     new StaticConditionVariable($this->user->get_id())
                 ), new NotCondition(
                     new InCondition(
-                        new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                         DataManager::get_active_helper_types()
                     )
                 )
             );
 
             $this->usedDatabaseQuota = DataManager::count_active_content_objects(
-                ContentObject::class_name(), $condition
+                ContentObject::class, $condition
             );
         }
 

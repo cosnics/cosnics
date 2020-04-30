@@ -35,7 +35,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
         foreach ($publications as $publication)
         {
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), (int) $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, (int) $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             $icon = $content_object->get_icon_image(

@@ -26,14 +26,14 @@ class PlatformStatisticsBlock extends Block
         $reporting_data = new ReportingData();
         $uid = $this->get_user_id();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LoginLogout::class_name(), LoginLogout::PROPERTY_USER_ID), 
+            new PropertyConditionVariable(LoginLogout::class, LoginLogout::PROPERTY_USER_ID),
             new StaticConditionVariable($uid));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LoginLogout::class_name(), LoginLogout::PROPERTY_TYPE), 
+            new PropertyConditionVariable(LoginLogout::class, LoginLogout::PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $condition = new AndCondition($conditions);
         
-        $trackerdata = DataManager::retrieves(LoginLogout::class_name(), new DataClassRetrievesParameters($condition))->as_array();
+        $trackerdata = DataManager::retrieves(LoginLogout::class, new DataClassRetrievesParameters($condition))->as_array();
         
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)

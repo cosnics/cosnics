@@ -158,7 +158,7 @@ class CpoContentObjectImport extends ContentObjectImport
                 try
                 {
                     $contentObject = DataManager::retrieve_by_id(
-                        ContentObject::class_name(), $new_source
+                        ContentObject::class, $new_source
                     );
 
                     $resource->setAttribute('source', $new_source);
@@ -182,7 +182,7 @@ class CpoContentObjectImport extends ContentObjectImport
                 try
                 {
                     $contentObject = DataManager::retrieve_by_id(
-                        ContentObject::class_name(), $new_source
+                        ContentObject::class, $new_source
                     );
 
                     $placeholder->setAttribute('data-co-id', $new_source);

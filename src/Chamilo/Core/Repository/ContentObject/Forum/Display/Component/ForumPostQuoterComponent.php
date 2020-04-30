@@ -32,7 +32,7 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
     {
         $this->selected_forum_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
         
-        $quote_lo = DataManager::retrieve_by_id(ForumPost::class_name(), $this->selected_forum_post_id);
+        $quote_lo = DataManager::retrieve_by_id(ForumPost::class, $this->selected_forum_post_id);
         
         $this->forumpost = new ForumPost();
         
@@ -48,7 +48,7 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
         $this->forumpost->set_title($reply);
         
         $quoteUser = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(),
+            User::class,
             (int) $quote_lo->get_user_id());
         
         $quoteContent = array();

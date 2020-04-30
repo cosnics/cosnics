@@ -95,7 +95,7 @@ class WebpageForm extends ContentObjectForm
         $errors = array();
 
         $owner = DataManager::retrieve_by_id(
-            User::class_name(), (int) $this->get_owner_id()
+            User::class, (int) $this->get_owner_id()
         );
 
         $calculator = new Calculator($owner);

@@ -58,7 +58,7 @@ class CourseDeleterComponent extends Manager
     public function delete_course()
     {
         $course = DataManager::retrieve_by_id(
-            Course::class_name(), 
+            Course::class,
             $this->get_course_id());
         
         if (! $course->delete())

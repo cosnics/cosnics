@@ -119,7 +119,7 @@ class Activity extends Tracker
         if (!isset($this->user))
         {
             $this->user = DataManager::retrieve_by_id(
-                User::class_name(), $this->get_user_id()
+                User::class, $this->get_user_id()
             );
         }
 

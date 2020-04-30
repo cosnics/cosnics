@@ -82,12 +82,12 @@ class ImpactViewRecyclerComponent extends Manager
         $failures = 0;
         
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObjectPublication::PROPERTY_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID),
             $co_ids);
         
         $parameters = new DataClassRetrievesParameters($condition);
         
-        $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
+        $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
         $publicationAggregator = $this->getPublicationAggregator();
 
@@ -202,12 +202,12 @@ class ImpactViewRecyclerComponent extends Manager
     public function has_impact(array $selected_ids = array())
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObjectPublication::PROPERTY_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID),
             $selected_ids);
         
         $parameters = new DataClassRetrievesParameters($condition);
         
-        $objects = DataManager::retrieves(ContentObject::class_name(), $parameters);
+        $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
         $publicationAggregator = $this->getPublicationAggregator();
         
@@ -242,14 +242,14 @@ class ImpactViewRecyclerComponent extends Manager
         foreach ($selected_ids as $selected_co_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new StaticConditionVariable($selected_co_id));
         }
         
         return new AndCondition(
             new OrCondition($conditions), 
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_NORMAL)));
     }
 }

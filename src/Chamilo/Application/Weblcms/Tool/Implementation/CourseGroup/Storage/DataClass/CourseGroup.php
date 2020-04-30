@@ -141,9 +141,9 @@ class CourseGroup extends NestedTreeNode
     protected function get_dependencies($dependencies = array())
     {
         return array(
-            CourseGroupUserRelation::class_name() => new EqualityCondition(
+            CourseGroupUserRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                    CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
                 ), new StaticConditionVariable($this->get_id())
             )
         );
@@ -219,7 +219,7 @@ class CourseGroup extends NestedTreeNode
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
 
             $course_group_user_relations = DataManager::retrieves(
-                CourseGroupUserRelation::class_name(), new DataClassRetrievesParameters($condition)
+                CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition)
             );
 
             $users = array();
@@ -229,7 +229,7 @@ class CourseGroup extends NestedTreeNode
                 if ($include_users)
                 {
                     $users[$relation->get_user()] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class_name(), $relation->get_user()
+                        User::class, $relation->get_user()
                     );
                 }
                 else
@@ -273,7 +273,7 @@ class CourseGroup extends NestedTreeNode
 
         return new InCondition(
             new PropertyConditionVariable(
-                CourseGroupUserRelation::class_name(), CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
             ), $groups
         );
     }
@@ -297,7 +297,7 @@ class CourseGroup extends NestedTreeNode
     {
         $conditions = parent::get_nested_set_condition_array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->get_course_code())
         );
 

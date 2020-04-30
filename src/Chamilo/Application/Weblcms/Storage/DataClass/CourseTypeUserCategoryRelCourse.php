@@ -94,7 +94,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
     public function delete()
     {
         $this->notify(DataClassListener::BEFORE_DELETE);
-        $success = DataManager::deletes(self::class_name(), $this->get_primary_key_conditions());
+        $success = DataManager::deletes(self::class, $this->get_primary_key_conditions());
         $this->notify(DataClassListener::AFTER_DELETE, array($success));
 
         return $success;
@@ -111,13 +111,13 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::class,
                 CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::class,
                 CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
             new StaticConditionVariable($this->get_course_type_user_category_id()));
 
@@ -131,7 +131,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_SORT);
+        return new PropertyConditionVariable(self::class, self::PROPERTY_SORT);
     }
 
     /**
@@ -142,7 +142,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
-            new PropertyConditionVariable(self::class_name(), self::PROPERTY_USER_ID));
+            new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID));
     }
 }

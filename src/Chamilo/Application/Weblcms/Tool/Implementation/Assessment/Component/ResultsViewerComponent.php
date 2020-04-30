@@ -56,7 +56,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $this->set_parameter(self::PARAM_ASSESSMENT, $pid);
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $pid
+            ContentObjectPublication::class, $pid
         );
 
         $assessment = $this->publication->get_content_object();
@@ -220,14 +220,14 @@ class ResultsViewerComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable(Request::get(self::PARAM_ASSESSMENT))
         );
 
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
+                new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
                 new StaticConditionVariable($this->get_user_id())
             );
         }
@@ -238,9 +238,9 @@ class ResultsViewerComponent extends Manager implements TableSupport
         {
             $search_properties = array();
 
-            $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
-            $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
-            $search_properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
+            $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
+            $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
+            $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
 
             $search_conditions = $this->buttonToolbarRenderer->getConditions($search_properties);
             if ($search_conditions)

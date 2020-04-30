@@ -21,7 +21,7 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
 
     public static function get_type_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public static function get_additional_property_names()
@@ -31,7 +31,7 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
 
     public function get_allowed_types()
     {
-        return array(Indicator::class_name());
+        return array(Indicator::class);
     }
 
     public function get_assessment_type()

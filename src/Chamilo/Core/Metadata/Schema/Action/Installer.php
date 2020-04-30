@@ -76,7 +76,7 @@ class Installer
         try
         {
             $schema = DataManager::retrieveSchemaByNamespace(
-                $schemaDefinition[Schema::class_name()][Schema::PROPERTY_NAMESPACE]);
+                $schemaDefinition[Schema::class][Schema::PROPERTY_NAMESPACE]);
         }
         catch (Exception $ex)
         {
@@ -86,13 +86,13 @@ class Installer
         if (! $schema)
         {
             $schema = new Schema();
-            $schema->set_namespace($schemaDefinition[Schema::class_name()][Schema::PROPERTY_NAMESPACE]);
+            $schema->set_namespace($schemaDefinition[Schema::class][Schema::PROPERTY_NAMESPACE]);
         }
         
-        $schema->set_name($schemaDefinition[Schema::class_name()][Schema::PROPERTY_NAME]);
-        $schema->set_description($schemaDefinition[Schema::class_name()][Schema::PROPERTY_DESCRIPTION]);
-        $schema->set_url($schemaDefinition[Schema::class_name()][Schema::PROPERTY_URL]);
-        $schema->set_fixed($schemaDefinition[Schema::class_name()][Schema::PROPERTY_FIXED]);
+        $schema->set_name($schemaDefinition[Schema::class][Schema::PROPERTY_NAME]);
+        $schema->set_description($schemaDefinition[Schema::class][Schema::PROPERTY_DESCRIPTION]);
+        $schema->set_url($schemaDefinition[Schema::class][Schema::PROPERTY_URL]);
+        $schema->set_fixed($schemaDefinition[Schema::class][Schema::PROPERTY_FIXED]);
         
         $succes = $schema->is_identified() ? $schema->update() : $schema->create();
         
@@ -115,7 +115,7 @@ class Installer
         $elementService = new ElementService();
         $schemaDefinition = $this->getSchemaDefinition();
         
-        $elementDefinitions = $schemaDefinition[Element::class_name()];
+        $elementDefinitions = $schemaDefinition[Element::class];
         
         foreach ($elementDefinitions as $elementName => $elementProperties)
         {

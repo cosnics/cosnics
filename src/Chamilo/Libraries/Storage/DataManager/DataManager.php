@@ -246,7 +246,7 @@ class DataManager
             $parameters = DataClassCountParameters::generate($parameters);
         }
 
-        if (is_subclass_of($class, CompositeDataClass::class_name()))
+        if (is_subclass_of($class, CompositeDataClass::class))
         {
             return static::countCompositeDataClass($class, $parameters);
         }
@@ -588,7 +588,7 @@ class DataManager
      */
     private static function isCompositeDataClass($className)
     {
-        return is_subclass_of($className, CompositeDataClass::class_name());
+        return is_subclass_of($className, CompositeDataClass::class);
     }
 
     /**
@@ -876,7 +876,7 @@ class DataManager
 
         $parameters = static::setCompositeDataClassParameters($parentClassName, $className, $parameters);
 
-        return static::retrieveClass($parentClassName, $className, CompositeDataClass::class_name(), $parameters);
+        return static::retrieveClass($parentClassName, $className, CompositeDataClass::class, $parameters);
     }
 
     /**

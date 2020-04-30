@@ -54,7 +54,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
 
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $this->complexWikiPage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+            ComplexContentObjectItem::class, $complex_wiki_page_id
         );
         $this->wikiPage = $this->complexWikiPage->get_ref_object();
 
@@ -83,7 +83,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function count_feedbacks()
     {
         return DataManager::count(
-            WikiPageFeedback::class_name(), new DataClassCountParameters($this->getWikiPageFeedbackCondition())
+            WikiPageFeedback::class, new DataClassCountParameters($this->getWikiPageFeedbackCondition())
         );
     }
 
@@ -95,7 +95,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     protected function getWikiPageFeedbackCondition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(WikiPageFeedback::class_name(), WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
+            new PropertyConditionVariable(WikiPageFeedback::class, WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
             new StaticConditionVariable($this->wikiPage->getId())
         );
     }
@@ -193,7 +193,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedback($feedback_id)
     {
         return DataManager::retrieve_by_id(
-            WikiPageFeedback::class_name(), $feedback_id
+            WikiPageFeedback::class, $feedback_id
         );
     }
 
@@ -206,7 +206,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedbacks($count, $offset)
     {
         return DataManager::retrieves(
-            WikiPageFeedback::class_name(),
+            WikiPageFeedback::class,
             new DataClassRetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset)
         );
     }

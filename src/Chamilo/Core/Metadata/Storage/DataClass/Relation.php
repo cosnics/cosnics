@@ -88,16 +88,16 @@ class Relation extends DataClass implements EntityTranslationInterface
     {
         $dependencies = array();
         
-        $dependencies[EntityTranslation::class_name()] = new AndCondition(
+        $dependencies[EntityTranslation::class] = new AndCondition(
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        EntityTranslation::class_name(), 
+                        EntityTranslation::class,
                         EntityTranslation::PROPERTY_ENTITY_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
+                    new StaticConditionVariable(static::class)),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        EntityTranslation::class_name(), 
+                        EntityTranslation::class,
                         EntityTranslation::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($this->get_id()))));
         
@@ -105,25 +105,25 @@ class Relation extends DataClass implements EntityTranslationInterface
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), 
+                        RelationInstance::class,
                         RelationInstance::PROPERTY_SOURCE_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
+                    new StaticConditionVariable(static::class)),
                 new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_ID), 
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
                     new StaticConditionVariable($this->get_id()))));
         
         $targetConditions = new AndCondition(
             array(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        RelationInstance::class_name(), 
+                        RelationInstance::class,
                         RelationInstance::PROPERTY_TARGET_TYPE), 
-                    new StaticConditionVariable(static::class_name())), 
+                    new StaticConditionVariable(static::class)),
                 new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_ID), 
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
                     new StaticConditionVariable($this->get_id()))));
         
-        $dependencies[RelationInstance::class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
         
         return $dependencies;
     }

@@ -32,7 +32,7 @@ class Processor extends HtmlEditorProcessor
              * @var ContentObject $object
              */
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $selected_object
+                ContentObject::class, $selected_object
             );
 
             $display = ContentObjectRenditionImplementation::factory($object, 'json', 'image', $this);

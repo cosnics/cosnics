@@ -68,7 +68,7 @@ class ExternalCalendarForm extends ContentObjectForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class_name(), (int) $this->get_owner_id()
+                User::class, (int) $this->get_owner_id()
             )
         );
 

@@ -65,20 +65,20 @@ class AvailabilityRepository
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
 
         if (! is_null($isAvailable))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY),
+                new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable));
         }
 
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class_name(),
+            Availability::class,
             new DataClassRetrievesParameters($condition));
     }
 
@@ -94,24 +94,24 @@ class AvailabilityRepository
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
 
         if (! is_null($isAvailable))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_AVAILABILITY),
+                new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable));
         }
 
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class_name(),
+            Availability::class,
             new DataClassRetrievesParameters($condition));
     }
 
@@ -127,18 +127,18 @@ class AvailabilityRepository
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_ID),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_ID),
             new StaticConditionVariable($calendarIdentifier));
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Availability::class_name(),
+            Availability::class,
             new DataClassRetrieveParameters($condition));
     }
 
@@ -150,9 +150,9 @@ class AvailabilityRepository
     public function removeAvailabilityByCalendarType($calendarType)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Availability::class_name(), Availability::PROPERTY_CALENDAR_TYPE),
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType));
 
-        return $this->getDataClassRepository()->deletes(Availability::class_name(), $condition);
+        return $this->getDataClassRepository()->deletes(Availability::class, $condition);
     }
 }

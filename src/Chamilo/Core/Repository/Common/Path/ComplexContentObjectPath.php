@@ -236,7 +236,7 @@ abstract class ComplexContentObjectPath
         $this->children = array();
         $this->parents = array();
         
-        DataClassCache::truncate(ComplexContentObjectItem::class_name());
+        DataClassCache::truncate(ComplexContentObjectItem::class);
         
         $this->initialize($root);
     }
@@ -252,18 +252,18 @@ abstract class ComplexContentObjectPath
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($root_content_object->get_id()));
             $order = new OrderBy(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER), 
                 SORT_ASC);
             $parameters = new DataClassRetrievesParameters($condition, null, null, array($order));
             
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class,
                 $parameters);
             
             $previous_sibling_node = null;
@@ -276,7 +276,7 @@ abstract class ComplexContentObjectPath
                 if ($content_object instanceof HelperContentObjectSupport)
                 {
                     $content_object = DataManager::retrieve_by_id(
-                        ContentObject::class_name(), 
+                        ContentObject::class,
                         $content_object->get_reference());
                 }
                 

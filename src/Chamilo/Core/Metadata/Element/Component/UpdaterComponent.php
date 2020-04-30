@@ -35,7 +35,7 @@ class UpdaterComponent extends Manager
         $element_id = Request::get(self::PARAM_ELEMENT_ID);
         $this->set_parameter(self::PARAM_ELEMENT_ID, $element_id);
         
-        $element = DataManager::retrieve_by_id(Element::class_name(), $element_id);
+        $element = DataManager::retrieve_by_id(Element::class, $element_id);
         
         $form = new ElementForm($this->get_url(), $element);
         

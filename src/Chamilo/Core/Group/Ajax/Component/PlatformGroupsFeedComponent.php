@@ -95,10 +95,10 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($filter_id)
         );
-        $relations = DataManager::retrieves(GroupRelUser::class_name(), new DataClassRetrievesParameters($condition));
+        $relations = DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition));
 
         $user_ids = array();
 
@@ -123,10 +123,10 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         {
             $q = '*' . $search_query . '*';
             $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), $q
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $q
             );
             $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE), $q
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $q
             );
             $conditions[] = new OrCondition($name_conditions);
         }
@@ -136,14 +136,14 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         if ($filter_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($filter_id)
             );
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                 new StaticConditionVariable(0)
             );
         }
@@ -161,9 +161,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         return DataManager::retrieves(
-            Group::class_name(), new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         );
     }

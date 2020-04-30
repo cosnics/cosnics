@@ -19,7 +19,7 @@ class ComplexForum extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(Forum::class_name(), ForumTopic::class_name());
+        return array(Forum::class, ForumTopic::class);
     }
 
     public function create()
@@ -27,11 +27,11 @@ class ComplexForum extends ComplexContentObjectItem
         $success = parent::create();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
 
         $email_notificator = new SubforumEmailNotificator();
@@ -49,7 +49,7 @@ class ComplexForum extends ComplexContentObjectItem
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class_name(),
+                User::class,
                 (int) Session::get_user_id()));
 
         $parent->add_topic($lo->get_total_topics());
@@ -66,11 +66,11 @@ class ComplexForum extends ComplexContentObjectItem
         $succes = parent::delete();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
 
         $parent->remove_topic($lo->get_total_topics());

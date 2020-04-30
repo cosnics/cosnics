@@ -19,6 +19,6 @@ class Online extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataClass\Online::class_name());
+        return array(\Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataClass\Online::class);
     }
 }

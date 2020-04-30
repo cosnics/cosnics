@@ -45,7 +45,7 @@ class DeleterComponent extends Manager
             
             foreach ($element_ids as $element_id)
             {
-                $element = DataManager::retrieve_by_id(Element::class_name(), $element_id);
+                $element = DataManager::retrieve_by_id(Element::class, $element_id);
                 
                 if (! $element->delete())
                 {

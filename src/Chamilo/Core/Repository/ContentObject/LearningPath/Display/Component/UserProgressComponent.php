@@ -248,9 +248,9 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
     {
         return $this->getSearchButtonToolbarRenderer()->getConditions(
             array(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL)));
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)));
     }
 
     /**

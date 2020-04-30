@@ -47,27 +47,27 @@ class ToolPublicationsBlock extends ToolBlock
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
                 ), new StaticConditionVariable($user_id)
             );
         }
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($tool)
         );
 
         $condition = new AndCondition($conditions);
 
         $content_object_publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
         );
 
         $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('Details'));
@@ -88,7 +88,7 @@ class ToolPublicationsBlock extends ToolBlock
             $url = $redirect->getUrl();
 
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $content_object_publication->get_content_object_id()
+                ContentObject::class, $content_object_publication->get_content_object_id()
             );
 
             $des = $content_object->get_description();
@@ -112,7 +112,7 @@ class ToolPublicationsBlock extends ToolBlock
             {
                 $params = $this->get_parent()->get_parameters();
 
-                $params[Manager::PARAM_TEMPLATE_ID] = PublicationDetailTemplate::class_name();
+                $params[Manager::PARAM_TEMPLATE_ID] = PublicationDetailTemplate::class;
                 $params[Manager::PARAM_COURSE] = $course_id;
                 $params[Manager::PARAM_USERS] = $user_id;
                 $params[Manager::PARAM_PUBLICATION] = $content_object_publication->get_id();

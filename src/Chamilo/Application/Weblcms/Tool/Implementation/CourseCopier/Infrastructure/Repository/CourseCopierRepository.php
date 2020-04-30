@@ -51,7 +51,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
         
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_ID), 
             $categoryIds);
         
@@ -59,16 +59,16 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
         
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_PARENT));
         
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER));
         
         return DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), 
+            ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
     }
 
@@ -82,7 +82,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
     public function findContentObjectPublicationById($contentObjectPublicationId)
     {
         return DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $contentObjectPublicationId);
     }
 

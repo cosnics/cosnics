@@ -39,7 +39,7 @@ class ElementForm extends FormValidator
     protected function build_form()
     {
         $schema = DataManager::retrieve_by_id(
-            Schema::class_name(), 
+            Schema::class,
             $this->element->get_schema_id());
         $schemaName = $schema->get_namespace() . ' - ' . $schema->get_name();
         

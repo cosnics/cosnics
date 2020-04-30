@@ -31,7 +31,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-                    ToolPublicationsDetailTemplate::class_name();
+                    ToolPublicationsDetailTemplate::class;
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $this->get_user_id();
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL] =
                     $tool_name;
@@ -61,7 +61,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
             ), new StaticConditionVariable($this->get_user_id())
         );
 

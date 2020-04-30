@@ -79,10 +79,10 @@ class ExportParameters
                     {
                         $conditions = array();
                         $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                             new StaticConditionVariable($this->get_user()));
                         $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                             new StaticConditionVariable(ContentObject::STATE_NORMAL));
 
                         $condition = new AndCondition($conditions);
@@ -97,18 +97,18 @@ class ExportParameters
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::class,
                                         WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
-                                        ContentObject::class_name(),
+                                        ContentObject::class,
                                         ContentObject::PROPERTY_OBJECT_NUMBER))));
 
                         $condition = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
                             new StaticConditionVariable($this->getWorkspace()->getId()));
 
@@ -125,7 +125,7 @@ class ExportParameters
 
                     foreach ($this->get_category_ids() as $category_id)
                     {
-                        $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+                        $category = DataManager::retrieve_by_id(RepositoryCategory::class, $category_id);
 
                         $category_ids[] = $category_id;
                         $category_ids = array_merge($category_ids, $category->get_children_ids());
@@ -135,13 +135,13 @@ class ExportParameters
                     {
                         $conditions = array();
                         $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                             new StaticConditionVariable($this->get_user()));
                         $conditions[] = new InCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_PARENT_ID),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
                             $category_ids);
                         $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                             new StaticConditionVariable(ContentObject::STATE_NORMAL));
 
                         $condition = new AndCondition($conditions);
@@ -156,26 +156,26 @@ class ExportParameters
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::class,
                                         WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
-                                        ContentObject::class_name(),
+                                        ContentObject::class,
                                         ContentObject::PROPERTY_OBJECT_NUMBER))));
 
                         $conditions = array();
 
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
                             new StaticConditionVariable($this->getWorkspace()->getId()));
 
                         $conditions[] = new InCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::class,
                                 WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID),
                             $category_ids);
 
@@ -189,7 +189,7 @@ class ExportParameters
                     }
                 }
 
-                $this->category_content_object_ids = DataManager::distinct(ContentObject::class_name(), $parameters);
+                $this->category_content_object_ids = DataManager::distinct(ContentObject::class, $parameters);
             }
 
             return $this->category_content_object_ids;
@@ -201,7 +201,7 @@ class ExportParameters
             foreach ($this->content_object_ids as $contentObjectIdentifier)
             {
                 $contentObject = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $contentObjectIdentifier);
 
                 // if (RightsService :: getInstance()->canCopyContentObject(

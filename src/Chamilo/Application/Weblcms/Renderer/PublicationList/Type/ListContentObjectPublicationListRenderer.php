@@ -267,7 +267,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
 
         $contentObject = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+            ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );
 
         $publicationModified = $publicationModificationDate > $publicationCreationDate;
@@ -962,7 +962,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $publicationModificationDate = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
 
         $contentObject = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+            ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
         );
 
         $publicationModified = $publicationModificationDate > $publicationCreationDate;

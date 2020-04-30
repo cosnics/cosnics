@@ -21,6 +21,6 @@ class CreateCourseCategory extends Event
     public function getTrackerClasses()
     {
         return array(
-            CourseChange::class_name());
+            CourseChange::class);
     }
 }

@@ -122,7 +122,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
             return $this->getUser();
         }
 
-        $user = DataManager::retrieve_by_id(User::class_name(), $userId);
+        $user = DataManager::retrieve_by_id(User::class, $userId);
         if (!$user instanceof User)
         {
             return $this->getUser();

@@ -119,7 +119,7 @@ class RightsUtil
         $user_id = $user_id ? $user_id : Session::get_user_id();
 
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class_name(), (int) $user_id
+            User::class, (int) $user_id
         );
 
         if ($user->is_platform_admin())
