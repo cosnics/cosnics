@@ -64,6 +64,26 @@ class CourseGroupService
 
     /**
      * @param CourseGroup $courseGroup
+     * @param array $users
+     */
+    public function subscribeUsers(CourseGroup $courseGroup, array $users)
+    {
+        $currentMemberUserIds = $this->courseGroupRepository->getUserIdsDirectlySubscribedInGroup($courseGroup);
+        foreach($users as $user)
+        {
+            if(in_array($user->getId(), $currentMemberUserIds))
+            {
+                continue;
+            }
+
+            $this->createCourseGroupUserRelation($courseGroup, $user);
+        }
+
+        $this->recalculateMaxMembers($courseGroup);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
      * @param array $userIds
      */
     public function subscribeUsersById(CourseGroup $courseGroup, array $userIds)
@@ -77,16 +97,7 @@ class CourseGroupService
             $this->createCourseGroupUserRelation($courseGroup, $userToSubscribe);
         }
 
-        $numberOfGroupMembers = $this->countMembersDirectlySubscribedInGroup($courseGroup);
-        if($courseGroup->get_max_number_of_members() < $numberOfGroupMembers)
-        {
-            $courseGroup->set_max_number_of_members($numberOfGroupMembers);
-
-            if(!$this->courseGroupRepository->updateCourseGroup($courseGroup))
-            {
-                throw new \RuntimeException('Could not update course group %s', $courseGroup->getId());
-            }
-        }
+        $this->recalculateMaxMembers($courseGroup);
     }
 
     /**
@@ -96,26 +107,6 @@ class CourseGroupService
     public function subscribeUserToCourseGroup(CourseGroup $courseGroup, User $user)
     {
 
-    }
-
-    /**
-     * @param CourseGroup $courseGroup
-     * @param User $user
-     */
-    protected function createCourseGroupUserRelation(Coursegroup $courseGroup, User $user)
-    {
-        $courseGroupRelation = new CourseGroupUserRelation();
-        $courseGroupRelation->set_course_group($courseGroup->getId());
-        $courseGroupRelation->set_user($user->getId());
-
-        if (!$this->courseGroupRepository->createCourseGroupUserRelation($courseGroupRelation))
-        {
-            throw new \RuntimeException(
-                sprintf('The user %s could not be subscribed in group %s', $user->getId(), $courseGroup->getId())
-            );
-        }
-
-        $this->courseGroupDecoratorsManager->subscribeUser($courseGroup, $user);
     }
 
     /**
@@ -146,5 +137,42 @@ class CourseGroupService
     public function getCourseGroupById(int $courseGroupId)
     {
         return $this->courseGroupRepository->getCourseGroupById($courseGroupId);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     */
+    protected function createCourseGroupUserRelation(Coursegroup $courseGroup, User $user)
+    {
+        $courseGroupRelation = new CourseGroupUserRelation();
+        $courseGroupRelation->set_course_group($courseGroup->getId());
+        $courseGroupRelation->set_user($user->getId());
+
+        if (!$this->courseGroupRepository->createCourseGroupUserRelation($courseGroupRelation))
+        {
+            throw new \RuntimeException(
+                sprintf('The user %s could not be subscribed in group %s', $user->getId(), $courseGroup->getId())
+            );
+        }
+
+        $this->courseGroupDecoratorsManager->subscribeUser($courseGroup, $user);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     */
+    protected function recalculateMaxMembers(CourseGroup $courseGroup): void
+    {
+        $numberOfGroupMembers = $this->countMembersDirectlySubscribedInGroup($courseGroup);
+        if ($courseGroup->get_max_number_of_members() < $numberOfGroupMembers)
+        {
+            $courseGroup->set_max_number_of_members($numberOfGroupMembers);
+
+            if (!$this->courseGroupRepository->updateCourseGroup($courseGroup))
+            {
+                throw new \RuntimeException('Could not update course group %s', $courseGroup->getId());
+            }
+        }
     }
 }

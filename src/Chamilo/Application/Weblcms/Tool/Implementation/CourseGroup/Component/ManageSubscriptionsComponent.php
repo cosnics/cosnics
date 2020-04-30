@@ -71,8 +71,9 @@ class ManageSubscriptionsComponent extends TabComponent
     protected function getGroupButtonToolbarRenderer()
     {
         $buttonToolbar = new ButtonToolBar();
+        $hasEditRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
-        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if ($hasEditRight)
         {
             $buttonToolbar->addItem(
                 new Button(
@@ -88,6 +89,10 @@ class ManageSubscriptionsComponent extends TabComponent
                 )
             );
         }
+
+        $this->getCourseGroupDecoratorsManager()->addCourseGroupSubscriptionActions(
+            $buttonToolbar, $this->getCurrentCourseGroup(), $this->getUser(), $hasEditRight
+        );
 
         return new ButtonToolBarRenderer($buttonToolbar);
     }
