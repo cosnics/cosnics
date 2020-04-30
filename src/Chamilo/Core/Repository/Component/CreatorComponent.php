@@ -124,7 +124,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                         )
                     );
 
-                    $selectedTab = $this->getService(InstanceService::class)->updateInstances(
+                    $selectedTab = $this->getInstanceService()->updateInstances(
                         $this->get_user(), $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
                     );
 
@@ -189,6 +189,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repository_creator');
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\InstanceService
+     */
+    private function getInstanceService()
+    {
+        return $this->getService(InstanceService::class);
     }
 
     public function get_allowed_content_object_types()

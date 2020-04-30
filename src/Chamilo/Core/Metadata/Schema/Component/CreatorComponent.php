@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Component;
 
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Schema\Form\SchemaForm;
 use Chamilo\Core\Metadata\Schema\Manager;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
@@ -24,11 +23,13 @@ class CreatorComponent extends Manager
 {
 
     /**
-     * Executes this controller
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -51,8 +52,8 @@ class CreatorComponent extends Manager
 
                 if ($success)
                 {
-                    $entity = $this->getService(DataClassEntityFactory::class)->getEntityFromDataClass($schema);
-                    $success = $this->getService(EntityTranslationService::class)->createEntityTranslations(
+                    $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($schema);
+                    $success = $this->getEntityTranslationService()->createEntityTranslations(
                         $entity, $values[EntityTranslationService::PROPERTY_TRANSLATION]
                     );
                 }
@@ -76,10 +77,11 @@ class CreatorComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $form->toHtml();
+            $html[] = $form->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
     }
+
 }

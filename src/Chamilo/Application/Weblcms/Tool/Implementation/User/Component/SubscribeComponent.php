@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -24,10 +23,13 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class SubscribeComponent extends Manager
 {
-    const STATUS_SUCCESS = 1;
     const STATUS_FAILED_NOT_ALLOWED = 2;
+
     const STATUS_FAILED_REQUEST = 3;
+
     const STATUS_FAILED_UNKNOWN = 4;
+
+    const STATUS_SUCCESS = 1;
 
     /**
      * Runs this component and displays its output.
@@ -142,35 +144,17 @@ class SubscribeComponent extends Manager
     }
 
     /**
-     * Renders a detailed status page when there are users that could not be subscribed
+     * Finds user objects by a given array of user ids
      *
-     * @param user[][] $usersStatus
+     * @param int[] $userIds
      *
-     * @return string
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    protected function renderStatusPage($usersStatus = array())
+    protected function findUsersByIds(array $userIds = array())
     {
-        $translator = Translation::getInstance();
-
-        $html = array();
-
-        $html[] = $this->render_header();
-
-        $html[] = $this->renderUserList(
-            'panel-info', $translator->getTranslation('SubscribedUsers', null, Manager::context()),
-            $usersStatus[self::STATUS_SUCCESS]
+        return $this->getUserService()->findUsers(
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
         );
-
-        $html[] = $this->renderUserList(
-            'panel-danger', $translator->getTranslation('FailedUsersNotAllowed', null, Manager::context()),
-            $usersStatus[self::STATUS_FAILED_NOT_ALLOWED]
-        );
-
-        $html[] = $this->renderRequestUserList($translator, $usersStatus[self::STATUS_FAILED_REQUEST]);
-
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -207,23 +191,35 @@ class SubscribeComponent extends Manager
     }
 
     /**
-     * Finds user objects by a given array of user ids
+     * Renders a detailed status page when there are users that could not be subscribed
      *
-     * @param int[] $userIds
+     * @param user[][] $usersStatus
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return string
      */
-    protected function findUsersByIds(array $userIds = array())
+    protected function renderStatusPage($usersStatus = array())
     {
-        /**
-         *
-         * @var \Chamilo\Core\User\Service\UserService $userService
-         */
-        $userService = $this->getService(UserService::class);
+        $translator = Translation::getInstance();
 
-        return $userService->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+        $html = array();
+
+        $html[] = $this->render_header();
+
+        $html[] = $this->renderUserList(
+            'panel-info', $translator->getTranslation('SubscribedUsers', null, Manager::context()),
+            $usersStatus[self::STATUS_SUCCESS]
         );
+
+        $html[] = $this->renderUserList(
+            'panel-danger', $translator->getTranslation('FailedUsersNotAllowed', null, Manager::context()),
+            $usersStatus[self::STATUS_FAILED_NOT_ALLOWED]
+        );
+
+        $html[] = $this->renderRequestUserList($translator, $usersStatus[self::STATUS_FAILED_REQUEST]);
+
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

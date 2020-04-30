@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\FormFilterRenderer;
 use Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer;
@@ -819,5 +820,13 @@ abstract class Manager extends Application
         $this->set_parameter(
             DynamicTabsRenderer::PARAM_SELECTED_TAB, Request::get(DynamicTabsRenderer::PARAM_SELECTED_TAB)
         );
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory()
+    {
+        return $this->getService(DataClassEntityFactory::class);
     }
 }

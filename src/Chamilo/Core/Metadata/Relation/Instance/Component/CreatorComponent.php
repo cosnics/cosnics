@@ -4,7 +4,6 @@ namespace Chamilo\Core\Metadata\Relation\Instance\Component;
 use Chamilo\Core\Metadata\Relation\Instance\Form\RelationInstanceForm;
 use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -20,26 +19,27 @@ use Chamilo\Libraries\Utilities\Utilities;
 class CreatorComponent extends Manager
 {
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
+     */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        $relationInstance = new RelationInstance();
-
         $form = new RelationInstanceForm(
-            $relationInstance, $this->getSourceEntities(), $this->getRelations(), $this->getTargetEntities(),
-            $this->get_url()
+            $this->getSourceEntities(), $this->getRelations(), $this->getTargetEntities(), $this->get_url()
         );
 
         if ($form->validate())
         {
             $submittedValues = $form->exportValues();
-            $relationInstanceService = $this->getService(RelationInstanceService::class);
-            $success = $relationInstanceService->createRelationInstancesFromSubmittedValues(
-                $this->get_user(), $submittedValues
+            $success = $this->getRelationInstanceService()->createRelationInstancesFromSubmittedValues(
+                $this->getUser(), $submittedValues
             );
 
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
@@ -55,10 +55,18 @@ class CreatorComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $form->toHtml();
+            $html[] = $form->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService
+     */
+    public function getRelationInstanceService()
+    {
+        return $this->getService(RelationInstanceService::class);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Component;
 
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Form\RelationForm;
 use Chamilo\Core\Metadata\Relation\Manager;
 use Chamilo\Core\Metadata\Relation\Storage\DataManager;
@@ -26,11 +25,15 @@ class UpdaterComponent extends Manager
 {
 
     /**
-     * Executes this controller
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -38,7 +41,7 @@ class UpdaterComponent extends Manager
         $relation_id = Request::get(self::PARAM_RELATION_ID);
         $this->set_parameter(self::PARAM_RELATION_ID, $relation_id);
 
-        $relation = DataManager::retrieve_by_id(Relation::class_name(), $relation_id);
+        $relation = DataManager::retrieve_by_id(Relation::class, $relation_id);
 
         $form = new RelationForm($relation, $this->get_url());
 
@@ -53,8 +56,8 @@ class UpdaterComponent extends Manager
 
                 if ($success)
                 {
-                    $entity = $this->getService(DataClassEntityFactory::class)->getEntityFromDataClass($relation);
-                    $success = $this->getService(EntityTranslationService::class)->updateEntityTranslations(
+                    $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($relation);
+                    $success = $this->getEntityTranslationService()->updateEntityTranslations(
                         $entity, $values[EntityTranslationService::PROPERTY_TRANSLATION]
                     );
                 }
@@ -78,7 +81,7 @@ class UpdaterComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $form->toHtml();
+            $html[] = $form->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

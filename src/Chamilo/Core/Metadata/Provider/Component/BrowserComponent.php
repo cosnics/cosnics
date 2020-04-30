@@ -3,7 +3,6 @@ namespace Chamilo\Core\Metadata\Provider\Component;
 
 use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Core\Metadata\Provider\Table\ProviderLink\ProviderLinkTable;
-use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -33,9 +32,13 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -52,7 +55,8 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders this components output as html
+     * @return string
+     * @throws \Exception
      */
     public function as_html()
     {
@@ -63,7 +67,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->getButtonToolbarRenderer()->render();
 
         $table = new ProviderLinkTable($this);
-        $html[] = $table->as_html();
+        $html[] = $table->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -96,11 +100,10 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the condition
-     *
      * @param string $table_class_name
      *
-     * @return Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @throws \Exception
      */
     public function get_table_condition($table_class_name)
     {
@@ -110,8 +113,8 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($entities) > 0)
         {
-            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
-                $entities, ProviderLink::class_name(), ProviderLink::PROPERTY_ENTITY_TYPE
+            $conditions[] = $this->getEntityConditionService()->getEntitiesCondition(
+                $entities, ProviderLink::class, ProviderLink::PROPERTY_ENTITY_TYPE
             );
         }
 

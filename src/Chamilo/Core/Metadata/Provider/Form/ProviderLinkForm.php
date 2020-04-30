@@ -1,11 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Form;
 
-use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Provider\Service\ProviderFormService;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
@@ -16,60 +13,43 @@ class ProviderLinkForm extends FormValidator
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Service\EntityService
-     */
-    private $entityService;
-
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
-     */
-    private $elementService;
-
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
-     */
-    private $relationService;
-
-    /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\DataClassEntity
      */
     private $entity;
 
     /**
      *
-     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string $postUrl
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function __construct(
-        EntityService $entityService, ElementService $elementService, RelationService $relationService,
-        DataClassEntity $entity, $postUrl
-    )
+    public function __construct(DataClassEntity $entity, $postUrl)
     {
         parent::__construct('ProviderLink', self::FORM_METHOD_POST, $postUrl);
 
-        $this->entityService = $entityService;
-        $this->elementService = $elementService;
-        $this->relationService = $relationService;
         $this->entity = $entity;
 
         $this->buildForm();
     }
 
     /**
-     * Builds this form
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function buildForm()
     {
-        $providerFormService = $this->getService(ProviderFormService::class);
+        $providerFormService = $this->getProviderFormService();
         $providerFormService->addElements($this->entity, $this);
         $providerFormService->setDefaults($this->entity, $this);
 
         $this->addSaveResetButtons();
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Provider\Service\ProviderFormService
+     */
+    public function getProviderFormService()
+    {
+        return $this->getService(ProviderFormService::class);
     }
 }

@@ -48,8 +48,8 @@ class CreatorComponent extends Manager
 
                 if ($success)
                 {
-                    $entity = $this->getService(DataClassEntityFactory::class)->getEntityFromDataClass($relation);
-                    $success = $this->getService(EntityTranslationService::class)->createEntityTranslations(
+                    $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($relation);
+                    $success = $this->getEntityTranslationService()->createEntityTranslations(
                         $entity, $values[EntityTranslationService::PROPERTY_TRANSLATION]
                     );
                 }

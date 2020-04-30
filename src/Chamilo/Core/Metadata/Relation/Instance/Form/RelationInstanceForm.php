@@ -15,12 +15,6 @@ class RelationInstanceForm extends FormValidator
 
     /**
      *
-     * @var RelationInstance
-     */
-    private $relationInstance;
-
-    /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\DataClassEntity[]
      */
     private $sourceEntities;
@@ -39,19 +33,17 @@ class RelationInstanceForm extends FormValidator
 
     /**
      *
-     * @param \Chamilo\Core\Metadata\Storage\DataClass\RelationInstance $relationInstance
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $sourceEntities
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation[] $relations
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
      * @param string $postUrl
+     *
+     * @throws \Exception
      */
-    public function __construct(
-        RelationInstance $relationInstance, $sourceEntities, $relations, $targetEntities, $postUrl
-    )
+    public function __construct($sourceEntities, $relations, $targetEntities, $postUrl)
     {
         parent::__construct('relation', self::FORM_METHOD_POST, $postUrl);
 
-        $this->relationInstance = $relationInstance;
         $this->sourceEntities = $sourceEntities;
         $this->relations = $relations;
         $this->targetEntities = $targetEntities;
@@ -60,94 +52,13 @@ class RelationInstanceForm extends FormValidator
     }
 
     /**
-     * Builds this form
+     * @throws \Exception
      */
-    protected function buildForm()
-    {
-        $this->addSourceEntities();
-        $this->addRelations();
-        $this->addTargetEntities();
-
-        $this->addSaveResetButtons();
-    }
-
-    private function addSourceEntities()
-    {
-        $this->addSelect(
-            RelationInstanceService::PROPERTY_SOURCE, Translation::get('SelectSourceEntities'),
-            $this->getSourceEntityOptions()
-        );
-    }
-
-    private function addTargetEntities()
-    {
-        $this->addSelect(
-            RelationInstanceService::PROPERTY_TARGET, Translation::get('SelectTargetEntities'),
-            $this->getTargetEntityOptions()
-        );
-    }
-
     private function addRelations()
     {
         $this->addSelect(
             RelationInstance::PROPERTY_RELATION_ID, Translation::get('SelectRelations'), $this->getRelationOptions()
         );
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    private function getRelationOptions()
-    {
-        $relationOptions = array();
-
-        foreach ($this->relations as $relation)
-        {
-            $relationOptions[$relation->get_id()] = $relation->getTranslationByIsocode(
-                Translation::getInstance()->getLanguageIsocode()
-            );
-        }
-
-        return $relationOptions;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    private function getSourceEntityOptions()
-    {
-        return $this->getEntityOptions($this->sourceEntities);
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    private function getTargetEntityOptions()
-    {
-        return $this->getEntityOptions($this->targetEntities);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
-     *
-     * @return string[]
-     */
-    private function getEntityOptions($entities)
-    {
-        $expandedEntities = $this->getService(EntityConditionService::class)->expandEntities($entities);
-
-        $options = array();
-
-        foreach ($expandedEntities as $expandedEntity)
-        {
-            $options[$expandedEntity->getSerialization()] = $expandedEntity->getName();
-        }
-
-        return $options;
     }
 
     /**
@@ -184,5 +95,108 @@ class RelationInstanceForm extends FormValidator
                 $relationSelect->setSize(10);
             }
         }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function addSourceEntities()
+    {
+        $this->addSelect(
+            RelationInstanceService::PROPERTY_SOURCE, Translation::get('SelectSourceEntities'),
+            $this->getSourceEntityOptions()
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function addTargetEntities()
+    {
+        $this->addSelect(
+            RelationInstanceService::PROPERTY_TARGET, Translation::get('SelectTargetEntities'),
+            $this->getTargetEntityOptions()
+        );
+    }
+
+    /**
+     * Builds this form
+     * @throws \Exception
+     */
+    protected function buildForm()
+    {
+        $this->addSourceEntities();
+        $this->addRelations();
+        $this->addTargetEntities();
+
+        $this->addSaveResetButtons();
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityConditionService
+     */
+    private function getEntityConditionService()
+    {
+        return $this->getService(EntityConditionService::class);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    private function getEntityOptions($entities)
+    {
+        $expandedEntities = $this->getEntityConditionService()->expandEntities($entities);
+
+        $options = array();
+
+        foreach ($expandedEntities as $expandedEntity)
+        {
+            $options[$expandedEntity->getSerialization()] = $expandedEntity->getName();
+        }
+
+        return $options;
+    }
+
+    /**
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    private function getRelationOptions()
+    {
+        $relationOptions = array();
+
+        foreach ($this->relations as $relation)
+        {
+            $relationOptions[$relation->getId()] = $relation->getTranslationByIsocode(
+                Translation::getInstance()->getLanguageIsocode()
+            );
+        }
+
+        return $relationOptions;
+    }
+
+    /**
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    private function getSourceEntityOptions()
+    {
+        return $this->getEntityOptions($this->sourceEntities);
+    }
+
+    /**
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    private function getTargetEntityOptions()
+    {
+        return $this->getEntityOptions($this->targetEntities);
     }
 }

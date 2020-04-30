@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -26,4 +28,20 @@ abstract class Manager extends Application
     
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory()
+    {
+        return $this->getService(DataClassEntityFactory::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityTranslationService
+     */
+    public function getEntityTranslationService()
+    {
+        return $this->getService(EntityTranslationService::class);
+    }
 }

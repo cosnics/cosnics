@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
@@ -25,14 +24,17 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
 {
 
     /**
-     * Executes this component
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \ReflectionException
      */
     public function run()
     {
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Metadata\Relation\Instance\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
+
         $component->setTargetEntities($this->getTargetEntities());
         $component->setRelations($this->getRelation());
         $component->setSourceEntities($this->getSourceEntities());
@@ -47,7 +49,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getRelation()
     {
-        $relation = $this->getService(RelationService::class)->getRelationByName('isAvailableFor');
+        $relation = $this->getRelationService()->getRelationByName('isAvailableFor');
 
         if (!$relation instanceof Relation)
         {
@@ -62,13 +64,21 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     }
 
     /**
+     * @return \Chamilo\Core\Metadata\Relation\Service\RelationService
+     */
+    private function getRelationService()
+    {
+        return $this->getService(RelationService::class);
+    }
+
+    /**
      *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getSourceEntities()
     {
         $entities = array();
-        $entities[] = $this->getService(DataClassEntityFactory::class)->getEntity(Schema::class_name());
+        $entities[] = $this->getDataClassEntityFactory()->getEntity(Schema::class);
 
         return $entities;
     }
@@ -84,11 +94,10 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         );
 
         $entities = array();
-        $entityFactory = $this->getService(DataClassEntityFactory::class);
 
         foreach ($registrations as $registration)
         {
-            $entities[] = $entityFactory->getEntity(
+            $entities[] = $this->getDataClassEntityFactory()->getEntity(
                 $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
                 $registration[Registration::PROPERTY_NAME], DataClassEntity::INSTANCE_IDENTIFIER
             );

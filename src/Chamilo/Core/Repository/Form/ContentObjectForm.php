@@ -199,7 +199,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function addMetadataTabs()
     {
-        $entityService = $this->getService(EntityService::class);
+        $entityService = $this->getEntityService();
 
         $entityFactory = $this->getDataClassEntityFactory();
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
@@ -547,8 +547,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
         );
 
-        $instanceFormService = $this->getService(InstanceFormService::class);
-        $instanceFormService->addElements($this, $entity);
+        $this->getInstanceFormService()->addElements($this, $entity);
     }
 
     /**
@@ -558,7 +557,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($this->get_content_object());
 
-        $entityFormService = $this->getService(EntityFormService::class);
+        $entityFormService = $this->getEntityFormService();
         $entityFormService->addElements($this, $schemaInstance, $entity, $this->get_content_object()->get_owner());
         $entityFormService->setDefaults($schemaInstance, $entity, $this, $this->get_content_object()->get_owner());
     }
@@ -712,6 +711,38 @@ abstract class ContentObjectForm extends FormValidator
     public function getDataClassEntityFactory()
     {
         return $this->getService(DataClassEntityFactory::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityFormService
+     */
+    private function getEntityFormService()
+    {
+        return $this->getService(EntityFormService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\EntityService
+     */
+    private function getEntityService()
+    {
+        return $this->getService(EntityService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\InstanceFormService
+     */
+    private function getInstanceFormService()
+    {
+        return $this->getService(InstanceFormService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Service\InstanceService
+     */
+    private function getInstanceService()
+    {
+        return $this->getService(InstanceService::class);
     }
 
     /**
@@ -1073,12 +1104,12 @@ abstract class ContentObjectForm extends FormValidator
         $user = new User();
         $user->setId($this->get_owner_id());
 
-        $this->selectedTabIdentifier = $this->getService(InstanceService::class)->updateInstances(
+        $this->selectedTabIdentifier = $this->getInstanceService()->updateInstances(
             $user, $object, (array) $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA]
         );
 
         $entity = $this->getDataClassEntityFactory()->getEntityFromDataClass($object);
-        $this->getService(EntityService::class)->updateEntitySchemaValues(
+        $this->getEntityService()->updateEntitySchemaValues(
             $user, $entity, $values[EntityService::PROPERTY_METADATA_SCHEMA]
         );
 

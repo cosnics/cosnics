@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
@@ -20,13 +19,15 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
 {
 
     /**
-     * Executes this component
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \ReflectionException
      */
     public function run()
     {
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Metadata\Provider\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
         $component->setEntities($this->getEntities());
 
@@ -44,11 +45,10 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
         );
 
         $entities = array();
-        $entityFactory = $this->getService(DataClassEntityFactory::class);
 
         foreach ($registrations as $registration)
         {
-            $entities[] = $entityFactory->getEntity(
+            $entities[] = $this->getDataClassEntityFactory()->getEntity(
                 $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
                 $registration[Registration::PROPERTY_NAME], DataClassEntity::INSTANCE_IDENTIFIER
             );

@@ -16,34 +16,31 @@ use InvalidArgumentException;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'provider_action';
-    const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
-    const PARAM_ENTITY_TYPE = 'entity_type';
-    
-    // Actions
     const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
     const ACTION_CONFIGURE = 'Configurer';
-    
-    // Default action
+    const ACTION_DELETE = 'Deleter';
+
     const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    const PARAM_ACTION = 'provider_action';
+    const PARAM_ENTITY_TYPE = 'entity_type';
+    const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $entities;
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $expandedEntities;
 
     /**
      *
-     * @return \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getEntities()
     {
@@ -52,7 +49,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param \Chamilo\Core\Metadata\Interfaces\EntityInterface[] $entities
+     * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $entities
      */
     public function setEntities($entities)
     {
@@ -60,16 +57,24 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     * @return \Chamilo\Core\Metadata\Service\EntityConditionService
+     */
+    public function getEntityConditionService()
+    {
+        return $this->getService(EntityConditionService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
+     * @throws \Exception
      */
     public function getExpandedEntities()
     {
-        if (! isset($this->expandedEntities))
+        if (!isset($this->expandedEntities))
         {
-            $this->expandedEntities = $this->getService(EntityConditionService::class)->expandEntities($this->getEntities());
+            $this->expandedEntities = $this->getEntityConditionService()->expandEntities($this->getEntities());
         }
-        
+
         return $this->expandedEntities;
     }
 

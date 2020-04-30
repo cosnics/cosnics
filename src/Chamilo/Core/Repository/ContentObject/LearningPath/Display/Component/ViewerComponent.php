@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -137,9 +136,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this, $this->getUser()->getId(), $allowedTypes, $parameters, array(), 'btn-primary'
             );
 
-            /** @var ClassnameUtilities $classNameUtilities */
-            $classNameUtilities = $this->getService(ClassnameUtilities::class);
-            $firstItemContext = $classNameUtilities->getNamespaceParent(array_shift($allowedTypes), 3);
+            $firstItemContext = $this->getClassnameUtilities()->getNamespaceParent(array_shift($allowedTypes), 3);
             $itemTranslation = $translator->getTranslation('TypeName', null, $firstItemContext);
 
             $actionButton = $actionSelector->getActionButton(

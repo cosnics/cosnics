@@ -35,9 +35,13 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $buttonToolbarRenderer;
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -64,7 +68,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->buttonToolbarRenderer->render();
 
         $table = new RelationTable($this);
-        $html[] = $table->as_html();
+        $html[] = $table->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -96,11 +100,18 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the condition
-     *
+     * @return \Chamilo\Core\Metadata\Service\EntityConditionService
+     */
+    public function getEntityConditionService()
+    {
+        return $this->getService(EntityConditionService::class);
+    }
+
+    /**
      * @param string $table_class_name
      *
-     * @return Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @throws \Exception
      */
     public function get_table_condition($table_class_name)
     {
@@ -114,11 +125,11 @@ class BrowserComponent extends Manager implements TableSupport
 
             foreach ($relations as $relation)
             {
-                $relationIdentifiers[] = $relation->get_id();
+                $relationIdentifiers[] = $relation->getId();
             }
 
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(RelationInstance::class_name(), RelationInstance::PROPERTY_RELATION_ID),
+                new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_RELATION_ID),
                 $relationIdentifiers
             );
         }
@@ -127,8 +138,8 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($sourceEntities) > 0)
         {
-            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
-                $sourceEntities, RelationInstance::class_name(), RelationInstance::PROPERTY_SOURCE_TYPE,
+            $conditions[] = $this->getEntityConditionService()->getEntitiesCondition(
+                $sourceEntities, RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE,
                 RelationInstance::PROPERTY_SOURCE_ID
             );
         }
@@ -137,8 +148,8 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($targetEntities) > 0)
         {
-            $conditions[] = $this->getService(EntityConditionService::class)->getEntitiesCondition(
-                $targetEntities, RelationInstance::class_name(), RelationInstance::PROPERTY_TARGET_TYPE,
+            $conditions[] = $this->getEntityConditionService()->getEntitiesCondition(
+                $targetEntities, RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE,
                 RelationInstance::PROPERTY_TARGET_ID
             );
         }

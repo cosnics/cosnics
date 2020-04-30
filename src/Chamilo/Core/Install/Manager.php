@@ -68,12 +68,13 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      * Checks if the installation is allowed
+     *
+     * @return boolean
+     * @throws \ReflectionException
      */
     protected function checkInstallationAllowed()
     {
-        $fileConfigurationLocator = $this->getService(FileConfigurationLocator::class);
-
-        if (!$fileConfigurationLocator->isAvailable())
+        if (!$this->getFileConfigurationLocator()->isAvailable())
         {
             return true;
         }
@@ -92,6 +93,14 @@ abstract class Manager extends Application implements NoContextComponent
                 );
             }
         }
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
+     */
+    public function getFileConfigurationLocator()
+    {
+        return $this->getService(FileConfigurationLocator::class);
     }
 
     /**

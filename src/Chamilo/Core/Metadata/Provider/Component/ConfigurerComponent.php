@@ -1,13 +1,11 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Component;
 
-use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Provider\Form\ProviderLinkForm;
 use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -72,8 +70,16 @@ class ConfigurerComponent extends Manager
     }
 
     /**
-     *
+     * @return \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
+     */
+    public function getPropertyProviderService()
+    {
+        return $this->getService(PropertyProviderService::class);
+    }
+    
+    /**
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface
+     * @throws \Exception
      */
     public function getSelectedEntity()
     {
@@ -94,22 +100,20 @@ class ConfigurerComponent extends Manager
         }
     }
 
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     */
     public function handleSelectedEntityType()
     {
-        $entityService = $this->getService(EntityService::class);
-        $elementService = $this->getService(ElementService::class);
-        $relationService = $this->getService(RelationService::class);
-
-        $form = new ProviderLinkForm(
-            $entityService, $elementService, $relationService, $this->getSelectedEntity(), $this->get_url()
-        );
+        $form = new ProviderLinkForm($this->getSelectedEntity(), $this->get_url());
 
         if ($form->validate())
         {
             $submittedValues = $form->exportValues();
 
-            $propertyProviderService = $this->getService(PropertyProviderService::class);
-            $success = $propertyProviderService->updateEntityProviderLinks(
+            $success = $this->getPropertyProviderService()->updateEntityProviderLinks(
                 $this->getSelectedEntity(), $submittedValues[EntityService::PROPERTY_METADATA_SCHEMA]
             );
 
