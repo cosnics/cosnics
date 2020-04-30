@@ -39,7 +39,7 @@ export default class DataConnector {
 
     async addLevel(level: Level, index: number) {
         const parameters = {
-            'newSort': index + 1, // why + 1?
+            'newSort': index + 1,
             'levelData': JSON.stringify(level)
         }
 
@@ -51,7 +51,7 @@ export default class DataConnector {
         const parameters = {
             'treeNodeData': JSON.stringify(treeNode),
             'newParentId': parentTreeNode.id,
-            'newSort': index + 1 // why + 1?
+            'newSort': index + 1
         }
 
         const data = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
@@ -76,7 +76,7 @@ export default class DataConnector {
     async moveLevel(level: Level, newIndex: number) {
         const parameters = {
             'levelData': JSON.stringify(level),
-            'newSort': newIndex + 1 // why + 1?
+            'newSort': newIndex + 1
         }
 
         const data = await this.executeAPIRequest(this.apiConfiguration.moveLevelURL, parameters);
@@ -86,7 +86,7 @@ export default class DataConnector {
         const parameters = {
             'treeNodeData': JSON.stringify(treeNode),
             'newParentId': newParentNode.id,
-            'newSort': newIndex + 1 // why + 1?
+            'newSort': newIndex + 1
         }
 
         const data = await this.executeAPIRequest(this.apiConfiguration.moveTreeNodeURL, parameters);

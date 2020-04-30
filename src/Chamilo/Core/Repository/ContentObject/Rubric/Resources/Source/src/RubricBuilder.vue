@@ -1540,6 +1540,10 @@
         display: flex;
         justify-content: flex-start;
         margin-left: .8em;
+
+        .btn-ok {
+            margin-right: .5em;
+        }
     }
 
     .lc-btn {
@@ -1570,6 +1574,11 @@
     .lc-levels {
         list-style: none;
         padding: 0;
+
+        button {
+            margin-top: .7em;
+            margin-bottom: .25em;
+        }
     }
 
     .level-updown {
@@ -1621,6 +1630,12 @@
         .ld-level .lc-label, .ld-description .lc-label {
             margin-left: .3em;
         }
+
+        &.add-mode {
+            .levels-list-item:not(.new-level) {
+                pointer-events: none;
+            }
+        }
     }
 
     .ld-description {
@@ -1637,6 +1652,14 @@
         width: 100%;
         height: 40px;
         padding: .3em;
+
+        &::placeholder {
+            opacity: 0;
+        }
+    }
+
+    .lc-edit .level-title-input::placeholder {
+        opacity: 1;
     }
 
     .lc-label {
@@ -1776,6 +1799,16 @@
 
             &.checked {
                 color: #406e8d;
+
+                &.old-default {
+                    color: #aaa;
+
+                    &::after {
+                        content: '!';
+                        color: red;
+                    }
+                }
+
             }
         }
 
@@ -1977,6 +2010,15 @@
     @media only screen and (min-width: 900px) {
         .rubrics-wrapper-levels {
             overflow-y: auto;
+        }
+
+        .ld-delete-hide {
+            visibility: hidden;
+        }
+
+        .lc-list .levels-list-item:hover .level-title-input::placeholder,
+        .lc-list .levels-list-item.selected .level-title-input::placeholder {
+            opacity: 1;
         }
     }
 
