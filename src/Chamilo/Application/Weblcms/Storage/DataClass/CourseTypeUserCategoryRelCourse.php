@@ -111,13 +111,13 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::class,
                 CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::class,
                 CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID),
             new StaticConditionVariable($this->get_course_type_user_category_id()));
 

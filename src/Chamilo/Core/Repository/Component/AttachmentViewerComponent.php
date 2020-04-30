@@ -31,7 +31,7 @@ class AttachmentViewerComponent extends Manager
         if ($object_id && $attachment_id)
         {
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $object_id);
 
             if (! RightsService::getInstance()->canViewContentObject($this->get_user(), $object, $this->getWorkspace()))
@@ -40,7 +40,7 @@ class AttachmentViewerComponent extends Manager
             }
 
             $attachment = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $attachment_id);
 
             $html = array();

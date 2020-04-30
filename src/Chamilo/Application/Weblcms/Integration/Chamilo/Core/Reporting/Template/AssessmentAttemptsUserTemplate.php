@@ -62,7 +62,7 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
     protected function add_breadcrumbs()
     {
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id
         );
 

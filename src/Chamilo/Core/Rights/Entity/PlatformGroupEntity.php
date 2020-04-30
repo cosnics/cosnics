@@ -90,7 +90,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $group = DataManager::retrieve_by_id(Group::class_name(), $id);
+        $group = DataManager::retrieve_by_id(Group::class, $id);
         if (!$group)
         {
             return null;

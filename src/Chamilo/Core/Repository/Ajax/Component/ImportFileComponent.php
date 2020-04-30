@@ -148,7 +148,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         }
 
         $category = DataManager::retrieve_by_id(
-            RepositoryCategory::class_name(), $categoryId
+            RepositoryCategory::class, $categoryId
         );
 
         if (!$category)

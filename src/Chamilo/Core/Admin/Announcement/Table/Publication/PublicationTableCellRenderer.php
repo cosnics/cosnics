@@ -174,7 +174,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
     public function render_cell($column, $publication)
     {
         $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
+            ContentObject::class, $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
         );
 
         switch ($column->get_name())

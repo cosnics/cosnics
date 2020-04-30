@@ -37,17 +37,17 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
         {
             $property = new FunctionConditionVariable(
                 FunctionConditionVariable::SUM, 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_DISK_QUOTA), 
+                new PropertyConditionVariable(User::class, User::PROPERTY_DISK_QUOTA), 
                 'disk_quota');
             
             $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
             
-            $record = DataManager::record(User::class_name(), $parameters);
+            $record = DataManager::record(User::class, $parameters);
             $totalQuota = $record['disk_quota'];
         }
         else
         {
-            $users = DataManager::retrieves(User::class_name(), new DataClassRetrievesParameters());
+            $users = DataManager::retrieves(User::class, new DataClassRetrievesParameters());
             
             $totalQuota = 0;
             

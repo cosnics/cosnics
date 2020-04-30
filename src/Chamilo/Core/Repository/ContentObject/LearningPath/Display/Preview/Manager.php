@@ -129,7 +129,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
             );
 
             return DataManager::retrieve_by_id(
-                ContentObject::class_name(), $embedded_content_object_id
+                ContentObject::class, $embedded_content_object_id
             );
         }
         else

@@ -93,7 +93,7 @@ class PublicationTargetForm extends FormValidator
         foreach ($this->contentObjectIdentifiers as $id)
         {
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $id
+                ContentObject::class, $id
             );
 
             // fail if no object exists

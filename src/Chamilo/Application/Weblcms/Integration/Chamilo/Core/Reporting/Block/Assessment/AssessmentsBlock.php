@@ -49,18 +49,18 @@ class AssessmentsBlock extends AssessmentBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($tool)
         );
         $condition = new AndCondition($conditions);
 
         $pub_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
         );
 
         while ($pub = $pub_resultset->next_result())

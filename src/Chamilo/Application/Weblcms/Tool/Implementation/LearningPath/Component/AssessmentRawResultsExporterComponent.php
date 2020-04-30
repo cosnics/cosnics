@@ -62,7 +62,7 @@ class AssessmentRawResultsExporterComponent extends Manager
 
         /** @var ContentObjectPublication $publication */
         $publication = WeblcmsDataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $contentObjectPublicationId
         );
 

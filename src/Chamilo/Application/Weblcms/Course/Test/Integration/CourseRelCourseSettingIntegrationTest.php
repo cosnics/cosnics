@@ -90,7 +90,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // */
     // private static function retrieveCourseRelCourseSetting($id)
     // {
-    // return self :: retrieveEntity(CourseRelCourseSetting :: class_name(), $id);
+    // return self :: retrieveEntity(CourseRelCourseSetting ::class, $id);
     // }
     //
     // /******************************************************************************************************************/
@@ -157,7 +157,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     //
     // $message = self :: createErrorMessage('$id', $original->get_id(), $read->get_id());
     // $this->assertSame($original->get_id(), $read->get_id(), $message);
@@ -178,7 +178,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->update());
@@ -195,7 +195,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_course_id(null);
     //
@@ -213,7 +213,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_course_setting_id(null);
     //
@@ -231,12 +231,12 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     // $this->assertTrue($read->update());
     //
     // $reread = self :: retrieveCourseRelCourseSetting($read->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $reread);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $reread);
     //
     // $message = self :: createErrorMessage('$id', $read->get_id(), $reread->get_id());
     // $this->assertSame($read->get_id(), $reread->get_id(), $message);
@@ -299,7 +299,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->save());
@@ -316,7 +316,7 @@ class CourseRelCourseSettingIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseRelCourseSetting($original->get_id());
-    // $this->assertInstanceOf(CourseRelCourseSetting :: class_name(), $read);
+    // $this->assertInstanceOf(CourseRelCourseSetting ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_id(null);
     //

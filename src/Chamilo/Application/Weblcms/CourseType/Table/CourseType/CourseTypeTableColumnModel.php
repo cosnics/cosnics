@@ -20,16 +20,16 @@ class CourseTypeTableColumnModel extends DataClassTableColumnModel implements Ta
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_TITLE, false)
+            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_TITLE, false)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_DESCRIPTION, false)
+            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DESCRIPTION, false)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_ACTIVE, false)
+            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_ACTIVE, false)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseType::class_name(), CourseType::PROPERTY_DISPLAY_ORDER, false)
+            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER, false)
         );
     }
 }

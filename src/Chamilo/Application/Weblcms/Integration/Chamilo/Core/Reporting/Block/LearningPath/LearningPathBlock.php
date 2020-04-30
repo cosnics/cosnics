@@ -49,12 +49,12 @@ class LearningPathBlock extends CourseBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
             ), new StaticConditionVariable($tool)
         );
         $condition = new AndCondition($conditions);
@@ -86,7 +86,7 @@ class LearningPathBlock extends CourseBlock
             $url_title = $redirect->getUrl();
 
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $pub[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $pub[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             $reporting_data->add_category($count);

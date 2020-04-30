@@ -86,14 +86,14 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
             return false;
         }
 
-        $parent_variable = new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_PARENT);
+        $parent_variable = new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_PARENT);
 
         $condition = new EqualityCondition($parent_variable, new StaticConditionVariable($this->get_id()));
 
         $properties = new DataClassProperties();
         $properties->add(new DataClassProperty($parent_variable, new StaticConditionVariable($this->get_parent())));
 
-        if (! DataManager::updates(CourseCategory::class_name(), $properties, $condition))
+        if (! DataManager::updates(CourseCategory::class, $properties, $condition))
         {
             return false;
         }
@@ -144,7 +144,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         }
         else
         {
-            $parent = DataManager::retrieve_by_id(CourseCategory::class_name(), $this->get_parent());
+            $parent = DataManager::retrieve_by_id(CourseCategory::class, $this->get_parent());
 
             $parent_ids = array();
             $parent_ids[] = $parent->get_id();
@@ -165,7 +165,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 
         foreach ($parent_ids as $parent_id)
         {
-            $parent = DataManager::retrieve_by_id(CourseCategory::class_name(), $parent_id);
+            $parent = DataManager::retrieve_by_id(CourseCategory::class, $parent_id);
             $names[] = $parent->get_name();
         }
 

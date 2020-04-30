@@ -36,12 +36,12 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
             
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     ContentObjectPublication::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($course->get_id()));
             $order_by = new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE));
             $publications = DataManager::retrieve_content_object_publications(
                 $condition, 

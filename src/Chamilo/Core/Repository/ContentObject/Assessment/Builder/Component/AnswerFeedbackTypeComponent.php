@@ -53,13 +53,13 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
             $conditions[] = $this->get_table_condition();
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class, 
                     ComplexContentObjectItem::PROPERTY_ID), 
                 $complex_question_id);
             $condition = new AndCondition($conditions);
             
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 new DataClassRetrievesParameters($condition));
             
             $failures = 0;
@@ -120,7 +120,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_parent_content_object_id()));
     }

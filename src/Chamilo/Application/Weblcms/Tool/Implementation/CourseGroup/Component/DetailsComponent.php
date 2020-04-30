@@ -118,15 +118,15 @@ class DetailsComponent extends TabComponent implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
             );
 
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
             );
 
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
             );
 
             return new OrCondition($conditions);

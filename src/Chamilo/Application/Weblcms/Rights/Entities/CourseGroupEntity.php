@@ -50,7 +50,7 @@ class CourseGroupEntity implements NestedRightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(CourseGroup::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseGroup::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -60,7 +60,7 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     public static function data_class_class_name()
     {
-        return CourseGroup::class_name();
+        return CourseGroup::class;
     }
 
     public static function getInstance($course_id)
@@ -81,7 +81,7 @@ class CourseGroupEntity implements NestedRightsEntity
     private function get_condition($condition)
     {
         $course_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->course_id)
         );
 
@@ -108,7 +108,7 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $group = CourseGroupDataManager::retrieve_by_id(CourseGroup::class_name(), $id);
+        $group = CourseGroupDataManager::retrieve_by_id(CourseGroup::class, $id);
         if (!$group)
         {
             return null;
@@ -270,7 +270,7 @@ class CourseGroupEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return CourseGroupDataManager::retrieves(
-            CourseGroup::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            CourseGroup::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

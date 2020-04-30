@@ -56,7 +56,7 @@ class ForumPostAttachment extends DataClass
         if ($this->content_object == null)
         {
             $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class, 
                 $this->get_attachment_id());
         }
         return $this->content_object;
@@ -100,7 +100,7 @@ class ForumPostAttachment extends DataClass
         return self::class_to_type(
             get_class(
                 \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
+                    ContentObject::class, 
                     $this->get_attachment_id())));
     }
 

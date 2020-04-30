@@ -37,7 +37,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), 
                 $content_object_ids);
         }
         else
@@ -46,7 +46,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
         }
         
         $parameters = new DataClassRetrievesParameters($condition);
-        $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         
         while ($content_object = $content_objects->next_result())
         {

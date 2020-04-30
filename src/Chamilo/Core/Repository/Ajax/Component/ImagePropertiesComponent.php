@@ -63,6 +63,6 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function getContentObject()
     {
         $contentObjectId = Request::post('content_object');
-        return DataManager::retrieve_by_id(ContentObject::class_name(), $contentObjectId);
+        return DataManager::retrieve_by_id(ContentObject::class, $contentObjectId);
     }
 }

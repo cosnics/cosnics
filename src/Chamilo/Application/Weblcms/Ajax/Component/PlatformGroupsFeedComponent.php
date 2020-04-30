@@ -86,11 +86,11 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($filter_id)
         );
         $relations = DataManager::retrieves(
-            GroupRelUser::class_name(), new DataClassRetrievesParameters($condition)
+            GroupRelUser::class, new DataClassRetrievesParameters($condition)
         );
 
         $user_ids = array();
@@ -116,7 +116,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         {
             $query = '*' . $search_query . '*';
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), $query
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
             );
         }
 
@@ -128,7 +128,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         {
             $filter_id = substr($filter, 2);
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($filter_id)
             );
         }
@@ -139,17 +139,17 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             $groupConditions = array();
             $groupConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($course_id)
             );
             $groupConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
             );
 
             $subscribed_group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-                CourseEntityRelation::class_name(), new DataClassDistinctParameters(
+                CourseEntityRelation::class, new DataClassDistinctParameters(
                     new AndCondition($groupConditions), new DataClassProperties(
                         array(
                             new PropertyConditionVariable(
@@ -166,7 +166,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             }
 
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), $subscribed_group_ids
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $subscribed_group_ids
             );
         }
 
@@ -185,7 +185,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return DataManager::retrieves(
             Group::class_name(), new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         );
     }

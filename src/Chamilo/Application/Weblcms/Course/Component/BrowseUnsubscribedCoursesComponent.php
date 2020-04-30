@@ -48,11 +48,11 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
         
         $userConditions = array();
         $userConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID), 
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($user->get_id()));
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), 
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
         
@@ -60,7 +60,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
             new SubselectCondition(
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID), 
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), 
+                    CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_COURSE_ID), 
                 CourseEntityRelation::get_table_name(), 
                 new AndCondition($userConditions), 
@@ -73,13 +73,13 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
             $groupsConditions = array();
             $groupsConditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), 
+                    CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_ENTITY_ID), 
                 $user->get_groups(true), 
                 CourseEntityRelation::get_table_name());
             $groupsConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), 
+                    CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
             
@@ -87,7 +87,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
                 new SubselectCondition(
                     new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID), 
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), 
+                        CourseEntityRelation::class,
                         CourseEntityRelation::PROPERTY_COURSE_ID), 
                     CourseEntityRelation::get_table_name(), 
                     new AndCondition($groupsConditions), 

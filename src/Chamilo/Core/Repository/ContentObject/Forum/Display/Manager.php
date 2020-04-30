@@ -109,10 +109,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $wrappers = array();
 
         $children = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($root_complex_content_ref),
                 ComplexContentObjectItem::get_table_name()));
@@ -124,7 +124,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             if ($child->get_id() == $complex_content_item_id)
             {
                 $content_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $child->get_ref());
 
                 $wrappers[$child->get_id()] = $content_object;
@@ -143,7 +143,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             if ($wrap_child)
             {
                 $content_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $value);
 
                 $wrappers[$key] = $content_object;
@@ -182,7 +182,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             else
             {
                 $this->forum = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $this->get_complex_content_object_item()->get_ref());
             }
         }

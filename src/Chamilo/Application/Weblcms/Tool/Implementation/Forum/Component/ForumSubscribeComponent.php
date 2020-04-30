@@ -26,7 +26,7 @@ class ForumSubscribeComponent extends Manager
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->publication_id);
         
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
@@ -35,7 +35,7 @@ class ForumSubscribeComponent extends Manager
         }
         
         $object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             Request::get(self::PARAM_FORUM_ID));
         
         $succes = ForumDataManager::create_subscribe($this->get_user_id(), $object->get_id());

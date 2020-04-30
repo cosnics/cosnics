@@ -47,7 +47,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
         if (! $this->reference_object instanceof Portfolio)
         {
             $this->reference_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_reference());
         }
         return $this->reference_object;

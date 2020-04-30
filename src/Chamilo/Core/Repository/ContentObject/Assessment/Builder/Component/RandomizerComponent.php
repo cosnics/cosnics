@@ -23,11 +23,11 @@ class RandomizerComponent extends Manager
     public function run()
     {
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($this->get_parent_content_object_id()))));
         

@@ -49,7 +49,7 @@ abstract class ContentObjectRenderer implements TableSupport
 
     public function count_content_objects($condition)
     {
-        return DataManager::count_active_content_objects(ContentObject::class_name(), $condition);
+        return DataManager::count_active_content_objects(ContentObject::class, $condition);
     }
 
     public static function factory($type, $repository_browser)

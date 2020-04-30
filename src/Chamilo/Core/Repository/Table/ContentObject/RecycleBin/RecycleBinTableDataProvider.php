@@ -23,7 +23,7 @@ class RecycleBinTableDataProvider extends DataClassTableDataProvider
         
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         
-        $objects = DataManager::retrieve_active_content_objects(ContentObject::class_name(), $parameters);
+        $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         
         return $objects;
     }
@@ -32,6 +32,6 @@ class RecycleBinTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassCountParameters($condition);
         
-        return DataManager::count_active_content_objects(ContentObject::class_name(), $parameters);
+        return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
 }

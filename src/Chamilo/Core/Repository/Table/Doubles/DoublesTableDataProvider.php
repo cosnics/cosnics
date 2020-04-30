@@ -14,7 +14,7 @@ class DoublesTableDataProvider extends DataClassTableDataProvider
         
         if ($this->get_table()->is_detail())
         {
-            return DataManager::retrieve_active_content_objects(ContentObject::class_name(), $condition);
+            return DataManager::retrieve_active_content_objects(ContentObject::class, $condition);
         }
         
         return DataManager::retrieve_doubles_in_repository($condition, $count, $offset, $order_property);
@@ -26,7 +26,7 @@ class DoublesTableDataProvider extends DataClassTableDataProvider
         
         if ($this->get_table()->is_detail())
         {
-            return DataManager::count_active_content_objects(ContentObject::class_name(), $condition);
+            return DataManager::count_active_content_objects(ContentObject::class, $condition);
         }
         
         return DataManager::count_doubles_in_repository($condition);

@@ -45,7 +45,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
         /** @var CourseGroup $course_group */
-        $course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $course_group_id);
+        $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
         if (!$course_group)
         {
             throw new ObjectNotExistException(Translation::get('CourseGroup'), $course_group_id);
@@ -263,13 +263,13 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
             );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
             );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
             );
 
             return new OrCondition($conditions);

@@ -37,7 +37,7 @@ class AttachmentViewerComponent extends Manager
         {
             throw new ParameterNotDefinedException(self::PARAM_PARENT_ID);
         }
-        $parent = DataManager::retrieve_by_id(ContentObject::class_name(), $parent_id);
+        $parent = DataManager::retrieve_by_id(ContentObject::class, $parent_id);
         
         if (is_null($parent))
         {
@@ -53,7 +53,7 @@ class AttachmentViewerComponent extends Manager
             $error_message = Translation::get('NoAttachmentSelected');
         }
         
-        $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+        $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
         
         if (is_null($object))
         {
@@ -110,7 +110,7 @@ class AttachmentViewerComponent extends Manager
     public function get_content_object_display_attachment_url($attachment)
     {
         $object_id = Request::get(self::PARAM_OBJECT_ID);
-        $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+        $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
         
         if (! $this->is_view_attachment_allowed($object))
         {

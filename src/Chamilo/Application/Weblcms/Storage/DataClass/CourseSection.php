@@ -141,9 +141,9 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         $id = $this->get_id();
         
         return array(
-            CourseToolRelCourseSection::class_name() => new EqualityCondition(
+            CourseToolRelCourseSection::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class_name(), 
+                    CourseToolRelCourseSection::class,
                     CourseToolRelCourseSection::PROPERTY_SECTION_ID), 
                 new StaticConditionVariable($id)));
     }

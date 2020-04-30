@@ -36,7 +36,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
     {
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $complex_wiki_page = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+            ComplexContentObjectItem::class, $complex_wiki_page_id
         );
         $wiki_page = $complex_wiki_page->get_ref_object();
 

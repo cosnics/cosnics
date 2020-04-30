@@ -113,7 +113,7 @@ class BrowserComponent extends Manager
     {
         return new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
             ), SORT_DESC
         );
     }
@@ -129,7 +129,7 @@ class BrowserComponent extends Manager
                 $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
@@ -137,7 +137,7 @@ class BrowserComponent extends Manager
                 $time = strtotime('Next Monday', strtotime('-1 Week', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
@@ -145,7 +145,7 @@ class BrowserComponent extends Manager
                 $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;

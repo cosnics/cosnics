@@ -67,7 +67,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 foreach ($publication_ids as $publication_id)
                 {
                     $publication = DataManager::retrieve_by_id(
-                        ContentObjectPublication::class_name(), $publication_id
+                        ContentObjectPublication::class, $publication_id
                     );
                     $publication->set_category_id($form->exportValue('category'));
                     $publication->update();
@@ -83,11 +83,11 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     else
                     {
                         $condition = new EqualityCondition(
-                            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_NAME),
+                            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_NAME),
                             new StaticConditionVariable($publication->get_tool())
                         );
                         $course_modules = DataManager::retrieves(
-                            CourseTool::class_name(), new DataClassRetrievesParameters($condition)
+                            CourseTool::class, new DataClassRetrievesParameters($condition)
                         )->as_array();
 
                         $course_module_id = $course_modules[0]->get_id();
@@ -138,7 +138,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 else
                 {
                     $publication = DataManager::retrieve_by_id(
-                        ContentObjectPublication::class_name(), $publication_ids[0]
+                        ContentObjectPublication::class, $publication_ids[0]
                     );
 
                     $trail->add(
@@ -167,26 +167,26 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->get_course_id())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->get_tool_id())
         );
 
         $condition = new AndCondition($conditions);
 
         $categories = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
         while ($cat = $categories->next_result())
@@ -218,7 +218,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
         if (count($publication_ids) > 0)
         {
             $pub = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), $publication_ids[0]
+                ContentObjectPublication::class, $publication_ids[0]
             );
             if ($pub)
             {
@@ -261,7 +261,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 foreach ($publication_ids as $publication_id)
                 {
                     $publications[] = DataManager::retrieve_by_id(
-                        ContentObjectPublication::class_name(), $publication_id
+                        ContentObjectPublication::class, $publication_id
                     )->get_content_object()->get_title();
                 }
                 $form->addElement(

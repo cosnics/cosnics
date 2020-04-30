@@ -47,7 +47,7 @@ class UnsubscriberComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $groupreluser = DataManager::retrieve_by_id(GroupRelUser::class_name(), $id);
+                $groupreluser = DataManager::retrieve_by_id(GroupRelUser::class, $id);
 
                 if (! $groupreluser)
                 {

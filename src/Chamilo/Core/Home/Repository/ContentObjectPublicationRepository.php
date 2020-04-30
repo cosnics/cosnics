@@ -48,7 +48,7 @@ class ContentObjectPublicationRepository
     {
         return $this->publicationRepository->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByElementId($elementId)),
-            ContentObjectPublication::class_name());
+            ContentObjectPublication::class);
     }
 
     /**
@@ -61,7 +61,7 @@ class ContentObjectPublicationRepository
     public function findFirstContentObjectPublicationByElementId($elementId)
     {
         return DataManager::retrieve(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassRetrieveParameters($this->getConditionByElementId($elementId)));
     }
 
@@ -74,7 +74,7 @@ class ContentObjectPublicationRepository
      */
     public function deleteContentObjectPublicationsForElement($elementId)
     {
-        return DataManager::deletes(ContentObjectPublication::class_name(), $this->getConditionByElementId($elementId));
+        return DataManager::deletes(ContentObjectPublication::class, $this->getConditionByElementId($elementId));
     }
 
     /**
@@ -88,7 +88,7 @@ class ContentObjectPublicationRepository
     {
         return $this->publicationRepository->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByContentObjectId($contentObjectId)),
-            ContentObjectPublication::class_name());
+            ContentObjectPublication::class);
     }
 
     /**
@@ -101,7 +101,7 @@ class ContentObjectPublicationRepository
     public function countContentObjectPublicationsByContentObjectId($contentObjectId)
     {
         return DataManager::count(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassCountParameters($this->getConditionByContentObjectId($contentObjectId)));
     }
 
@@ -115,7 +115,7 @@ class ContentObjectPublicationRepository
     public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = array())
     {
         return DataManager::count(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassCountParameters($this->getConditionByContentObjectIds($contentObjectIds)));
     }
 
@@ -129,7 +129,7 @@ class ContentObjectPublicationRepository
     public function deleteContentObjectPublicationsByContentObjectId($contentObjectId)
     {
         return DataManager::deletes(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->getConditionByContentObjectId($contentObjectId));
     }
 
@@ -142,7 +142,7 @@ class ContentObjectPublicationRepository
      */
     public function findContentObjectPublicationById($publicationId)
     {
-        return DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publicationId);
+        return DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
     }
 
     /**
@@ -156,7 +156,7 @@ class ContentObjectPublicationRepository
     {
         return $this->publicationRepository->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByContentObjectOwnerId($ownerId)),
-            ContentObjectPublication::class_name());
+            ContentObjectPublication::class);
     }
 
     /**
@@ -170,7 +170,7 @@ class ContentObjectPublicationRepository
     {
         return $this->publicationRepository->countPublicationsWithContentObjects(
             new DataClassCountParameters($this->getConditionByContentObjectOwnerId($ownerId)),
-            ContentObjectPublication::class_name());
+            ContentObjectPublication::class);
     }
 
     /**
@@ -184,7 +184,7 @@ class ContentObjectPublicationRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($elementId));
     }
@@ -200,7 +200,7 @@ class ContentObjectPublicationRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObjectId));
     }
@@ -216,7 +216,7 @@ class ContentObjectPublicationRepository
     {
         return new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
             $contentObjectIds);
     }
@@ -231,7 +231,7 @@ class ContentObjectPublicationRepository
     protected function getConditionByContentObjectOwnerId($ownerId)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($ownerId));
     }
 }

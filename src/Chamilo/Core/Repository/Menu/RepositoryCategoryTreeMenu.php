@@ -86,7 +86,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node($node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
             new StaticConditionVariable($node_id)
         );
         $child = DataManager::retrieve_categories($condition)->next_result();
@@ -99,7 +99,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
         return DataManager::retrieve_categories(
             $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy(
                 new PropertyConditionVariable(
-                    RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_DISPLAY_ORDER
+                    RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
                 )
             )
         );
@@ -166,15 +166,15 @@ class RepositoryCategoryTreeMenu extends GenericTree
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_node_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->workspaceImplementation->getId())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->workspaceImplementation->getWorkspaceType())
         );
 
@@ -219,7 +219,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function node_has_children($parent_node_id)
     {
         return (DataManager::count(
-                RepositoryCategory::class_name(),
+                RepositoryCategory::class,
                 new DataClassCountParameters($this->get_retrieve_condition($parent_node_id))
             ) > 0);
     }

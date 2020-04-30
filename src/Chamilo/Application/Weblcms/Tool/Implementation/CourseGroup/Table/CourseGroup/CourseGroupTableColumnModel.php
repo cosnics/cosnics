@@ -27,9 +27,9 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION));
 
         $this->add_column(
             new StaticTableColumn(
@@ -37,6 +37,6 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
                 Translation::getInstance()->getTranslation('NumberOfMembers', array(), Manager::context())));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));
+            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));
     }
 }

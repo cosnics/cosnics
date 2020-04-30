@@ -194,7 +194,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($this->get_course_id())
             );
         }
@@ -204,19 +204,19 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
                     ), new StaticConditionVariable($this->get_course_id())
                 );
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
                     ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
                 );
             }
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
                 );
             }
@@ -224,7 +224,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         elseif ($this->current_tab == self::TAB_PLATFORM_GROUPS_USERS)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+                new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
                 new StaticConditionVariable(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
             );
         }
@@ -425,23 +425,23 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                     );
                     $conditions[] = $this->buttonToolbarRenderer->getConditions(
                         array(
-                            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
-                            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-                            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
-                            new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL)
+                            new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
+                            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+                            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                            new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
+                            new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)
                         )
                     );
                     break;
                 case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
                     $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), '*' . $query . '*'
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
                     );
                     $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE), '*' . $query . '*'
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), '*' . $query . '*'
                     );
                     $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION),
                         '*' . $query . '*'
                     );
                     break;

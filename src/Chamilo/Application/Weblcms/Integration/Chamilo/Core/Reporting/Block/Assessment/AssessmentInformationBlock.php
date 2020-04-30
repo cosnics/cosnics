@@ -28,7 +28,7 @@ class AssessmentInformationBlock extends AssessmentsBlock
         
         $publication_id = $this->getPublicationId();
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $publication_id);
         
         $this->add_category_from_array(

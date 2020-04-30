@@ -76,7 +76,7 @@ class DeleterComponent extends Manager
         {
             $complex_content_object_item_id = $available_node->get_complex_content_object_item()->get_id();
             $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 $complex_content_object_item_id);
             
             $current_parents_content_object_ids = $available_node->get_parents_content_object_ids(false, true);

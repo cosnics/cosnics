@@ -126,13 +126,13 @@ class Publisher
         if ($items_to_publish > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $content_object_ids, ContentObject::get_table_name()
             );
             $parameters = new DataClassRetrievesParameters($condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(
-                ContentObject::class_name(), $parameters
+                ContentObject::class, $parameters
             );
 
             $html[] = '<div class="panel panel-default">';

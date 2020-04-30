@@ -129,7 +129,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
         $complex_content_object_item = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             $complex_content_object_item_id);
         
         if (is_null($complex_content_object_item))
@@ -200,7 +200,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         if (! $this->parent_content_object)
         {
             $this->parent_content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class, 
                 $this->get_parent_content_object_id());
         }
         return $this->parent_content_object;
@@ -233,14 +233,14 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         {
             return new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class, 
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($this->get_complex_content_object_item()->get_ref()), 
                 ComplexContentObjectItem::get_table_name());
         }
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_root_content_object_id()), 
             ComplexContentObjectItem::get_table_name());

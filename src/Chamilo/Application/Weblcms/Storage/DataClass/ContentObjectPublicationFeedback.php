@@ -134,7 +134,7 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
 
     public function update_parent_modified_date()
     {
-        $parent_object = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $this->get_parent_id());
+        $parent_object = DataManager::retrieve_by_id(ContentObjectPublication::class, $this->get_parent_id());
         $parent_object->set_modified_date(time());
         $parent_object->update();
     }

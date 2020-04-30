@@ -49,7 +49,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $conditions = array();
 
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
                     new StaticConditionVariable($content_object->get_content_hash())
                 );
 
@@ -61,7 +61,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $condition = new AndCondition($conditions);
 
                 return DataManager::count_active_content_objects(
-                    ContentObject::class_name(), new DataClassCountParameters($condition)
+                    ContentObject::class, new DataClassCountParameters($condition)
                 );
             case ContentObject::PROPERTY_TITLE :
                 $title = parent::render_cell($column, $content_object);

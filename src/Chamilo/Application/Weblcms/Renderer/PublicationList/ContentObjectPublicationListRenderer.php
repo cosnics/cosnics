@@ -730,17 +730,17 @@ abstract class ContentObjectPublicationListRenderer
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
                 ), new StaticConditionVariable($this->tool_browser->get_parent()->get_course_id())
             );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
                 ), new StaticConditionVariable($this->tool_browser->get_parent()->get_tool_id())
             );
 
             $count = DataManager::count(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 new DataClassCountParameters(new AndCondition($conditions))
             );
 

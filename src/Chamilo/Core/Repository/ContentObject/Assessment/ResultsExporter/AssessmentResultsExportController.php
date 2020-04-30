@@ -249,12 +249,12 @@ class AssessmentResultsExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($assessment->get_id()));
 
         $complex_questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             new DataClassRetrievesParameters($condition));
 
         while ($complex_question = $complex_questions_resultset->next_result())

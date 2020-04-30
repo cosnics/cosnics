@@ -132,7 +132,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
                 return null;
             }
 
-            $this->currentGroup = DataManager::retrieve_by_id(Group::class_name(), $groupId);
+            $this->currentGroup = DataManager::retrieve_by_id(Group::class, $groupId);
         }
 
         return $this->currentGroup;
@@ -197,7 +197,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
             $group = DataManager::retrieve(
                 Group::class_name(), new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0)
                     )
                 )

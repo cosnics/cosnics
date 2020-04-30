@@ -166,16 +166,16 @@ class UsersFeedComponent extends Manager
     {
         $condition = $this->getCondition();
 
-        $this->userCount = DataManager::count(User::class_name(), new DataClassCountParameters($condition));
+        $this->userCount = DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->getOffset(), array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
             )
         );
 
-        return DataManager::retrieves(User::class_name(), $parameters);
+        return DataManager::retrieves(User::class, $parameters);
     }
 
     public function set_user_count($userCount)

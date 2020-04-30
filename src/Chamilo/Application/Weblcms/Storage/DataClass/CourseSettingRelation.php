@@ -132,7 +132,7 @@ abstract class CourseSettingRelation extends DataClass
      */
     function get_course_setting()
     {
-        return DataManager::retrieve_by_id(CourseSetting::class_name(), $this->get_course_setting_id());
+        return DataManager::retrieve_by_id(CourseSetting::class, $this->get_course_setting_id());
     }
 
     /**

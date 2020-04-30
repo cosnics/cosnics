@@ -88,10 +88,10 @@ class RequestForm extends FormValidator
             {
                 $order = array();
                 $order[] = new OrderBy(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
                 );
                 $order[] = new OrderBy(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), SORT_ASC
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
                 );
 
                 $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(

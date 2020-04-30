@@ -135,10 +135,10 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         if (! isset($this->question_count))
         {
             $this->question_count = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($this->get_id()), 
                     ComplexContentObjectItem::get_table_name()));
@@ -153,12 +153,12 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::class, 
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($this->get_id()), 
                 ComplexContentObjectItem::get_table_name());
             $this->questions = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 $condition);
         }
         return $this->questions;
@@ -171,13 +171,13 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
         
         $clo_questions = DataManager::retrieve_complex_content_object_items(
             $this->get_type_name(), 
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             $condition);
         
         $maxscore = 0;

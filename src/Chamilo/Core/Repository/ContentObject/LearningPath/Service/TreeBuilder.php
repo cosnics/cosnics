@@ -117,10 +117,10 @@ class TreeBuilder
         $contentObjectIds = array_keys($this->treeNodesPerContentObjectId);
 
         $contentObjects = $this->contentObjectRepository->findAll(
-            ContentObject::class_name(),
+            ContentObject::class,
             new DataClassRetrievesParameters(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIds)));
 
         while ($contentObject = $contentObjects->next_result())

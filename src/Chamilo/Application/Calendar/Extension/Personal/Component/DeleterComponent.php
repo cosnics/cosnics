@@ -34,7 +34,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
+                $publication = DataManager::retrieve_by_id(Publication::class, $id);
 
                 if (!$this->getRightsService()->isAllowedToDeletePublication($publication, $this->getUser()))
                 {

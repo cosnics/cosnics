@@ -43,7 +43,7 @@ class CopierComponent extends Manager
         foreach ($complexContentObjectItemIdentifiers as $complexContentObjectItemIdentifier)
         {
             $complexContentObjectItem = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 $complexContentObjectItemIdentifier);
             
             try
@@ -54,7 +54,7 @@ class CopierComponent extends Manager
                 }
                 
                 $contentObject = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
+                    ContentObject::class,
                     $complexContentObjectItem->get_ref());
                 
                 if (! $contentObject instanceof ContentObject)
@@ -103,7 +103,7 @@ class CopierComponent extends Manager
                     }
                     
                     $copiedContentObjectType = DataManager::determineDataClassType(
-                        ContentObject::class_name(), 
+                        ContentObject::class,
                         $copiedContentObjectId);
                     
                     $complexContentObjectItem = ComplexContentObjectItem::factory(

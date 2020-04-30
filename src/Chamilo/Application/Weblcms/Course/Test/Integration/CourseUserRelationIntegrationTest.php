@@ -97,7 +97,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // */
     // private static function retrieveCourseUserRelation($id)
     // {
-    // return self :: retrieveEntity(CourseUserRelation :: class_name(), $id);
+    // return self :: retrieveEntity(CourseUserRelation ::class, $id);
     // }
     //
     // /******************************************************************************************************************/
@@ -160,7 +160,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     //
     // $message = self :: createErrorMessage('$id', $original->get_id(), $read->get_id());
     // $this->assertSame($original->get_id(), $read->get_id(), $message);
@@ -204,7 +204,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->update());
@@ -221,7 +221,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_id(null);
     //
@@ -239,7 +239,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_user_id(null);
     //
@@ -257,7 +257,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_course_id(null);
     //
@@ -275,7 +275,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_status(null);
     //
@@ -293,7 +293,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // if ($method !== null)
     // {
@@ -302,7 +302,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->assertTrue($read->update());
     //
     // $reread = self :: retrieveCourseUserRelation($read->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $reread);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $reread);
     //
     // $message = self :: createErrorMessage('$id', $read->get_id(), $reread->get_id());
     // $this->assertSame($read->get_id(), $reread->get_id(), $message);
@@ -387,7 +387,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     //
     // $this->assertTrue($read->save());
@@ -404,7 +404,7 @@ class CourseUserRelationIntegrationTest extends DataClassIntegrationTestCase
     // $this->registerPersistedEntity($original);
     //
     // $read = self :: retrieveCourseUserRelation($original->get_id());
-    // $this->assertInstanceOf(CourseUserRelation :: class_name(), $read);
+    // $this->assertInstanceOf(CourseUserRelation ::class, $read);
     // self :: modifyEntity($read, false);
     // $read->set_id(null);
     //

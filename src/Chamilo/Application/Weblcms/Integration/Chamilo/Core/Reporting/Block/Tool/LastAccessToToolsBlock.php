@@ -133,7 +133,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($this->getCourseId())
         );
 

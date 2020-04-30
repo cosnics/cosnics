@@ -22,11 +22,11 @@ class DirectSubscribedPlatformGroupBrowserTableColumnModel extends RecordTableCo
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
         
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS));
+            new DataClassPropertyTableColumn(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS));
     }
 }

@@ -89,24 +89,24 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ), new StaticConditionVariable($entityType)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($entityId)
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($courseId)
         );
 
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class_name(), new DataClassRetrieveParameters($condition)
+            CourseEntityRelation::class, new DataClassRetrieveParameters($condition)
         );
     }
 

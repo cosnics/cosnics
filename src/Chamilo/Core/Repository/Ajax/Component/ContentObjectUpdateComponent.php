@@ -31,7 +31,7 @@ class ContentObjectUpdateComponent extends Manager
     {
         $content_object_id = $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID);
         $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class, 
             $content_object_id);
         $modification_date = $this->getPostDataValue(self::PARAM_MODIFICATION_DATE);
         $allow_update = ($modification_date >= $content_object->get_modification_date());

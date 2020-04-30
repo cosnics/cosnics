@@ -46,10 +46,10 @@ class UpdaterComponent extends Manager implements DelegateComponent
         );
 
         $complex_content_object_item = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $complex_content_object_item_id
+            ComplexContentObjectItem::class, $complex_content_object_item_id
         );
         $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $complex_content_object_item->get_ref()
+            ContentObject::class, $complex_content_object_item->get_ref()
         );
 
         if (!$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->get_id()))
@@ -91,10 +91,10 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $complex_content_object_item->set_ref($new_id);
 
                 $children = DataManager::retrieve_complex_content_object_items(
-                    ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters(
+                    ComplexContentObjectItem::class, new DataClassRetrievesParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                             ), new StaticConditionVariable($old_id)
                         )
                     )

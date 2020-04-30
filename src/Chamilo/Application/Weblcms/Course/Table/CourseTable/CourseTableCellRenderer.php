@@ -96,7 +96,7 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
                     }
                     break;
                 }
-                case CourseType::class_name() :
+                case CourseType::class :
                 {
                     if ($column->get_name() == CourseType::PROPERTY_TITLE)
                     {

@@ -100,7 +100,7 @@ class Workspace extends DataClass implements WorkspaceInterface
     {
         if (! isset($this->creator))
         {
-            $this->creator = DataManager::retrieve_by_id(User::class_name(), $this->getCreatorId());
+            $this->creator = DataManager::retrieve_by_id(User::class, $this->getCreatorId());
         }
         
         return $this->creator;

@@ -93,7 +93,7 @@ class ViewerComponent extends Manager implements TableSupport
     public function get_condition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id())
         );
     }

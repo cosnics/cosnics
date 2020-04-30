@@ -38,7 +38,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         );
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group->get_id())
         );
         $users = $this->get_component()->retrieve_group_rel_users($condition);

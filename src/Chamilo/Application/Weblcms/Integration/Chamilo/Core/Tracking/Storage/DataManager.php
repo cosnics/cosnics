@@ -101,7 +101,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_tools_access_summary_data($course_id = null, $user_id = null)
     {
-        $course_tool_name_variable = new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_NAME);
+        $course_tool_name_variable = new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_NAME);
 
         $properties = self::get_course_visit_summary_select_properties();
         $properties->add($course_tool_name_variable);
@@ -110,7 +110,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseVisit::class_name(), CourseVisit::PROPERTY_TOOL_ID),
-            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_ID)
+            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID)
         );
 
         if ($course_id)
@@ -132,7 +132,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $join_condition = new AndCondition($join_conditions);
 
         $joins = new Joins();
-        $joins->add(new Join(CourseTool::class_name(), $join_condition, Join::TYPE_RIGHT));
+        $joins->add(new Join(CourseTool::class, $join_condition, Join::TYPE_RIGHT));
 
         $group_by = new GroupBy();
         $group_by->add($course_tool_name_variable);
@@ -411,9 +411,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = new DataClassProperties();
 
         $properties->add(new PropertiesConditionVariable(AssessmentAttempt::class_name()));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
 
         $parameters = new RecordRetrievesParameters(
             $properties,
@@ -458,13 +458,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID)
+            new PropertyConditionVariable(User::class, User::PROPERTY_ID)
         );
 
         $join_condition = new AndCondition($join_conditions);
 
         $joins = new Joins();
-        $joins->add(new Join(User::class_name(), $join_condition));
+        $joins->add(new Join(User::class, $join_condition));
 
         return $joins;
     }

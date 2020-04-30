@@ -317,19 +317,19 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::class,
                 CourseTypeRelCourseSetting::PROPERTY_COURSE_SETTING_ID), 
             new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID]));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::class,
                 CourseTypeRelCourseSetting::PROPERTY_COURSE_TYPE_ID), 
             new StaticConditionVariable($this->get_id()));
         
         $condition = new AndCondition($conditions);
         
         return DataManager::retrieve(
-            CourseTypeRelCourseSetting::class_name(), 
+            CourseTypeRelCourseSetting::class,
             new DataClassRetrieveParameters($condition));
     }
 

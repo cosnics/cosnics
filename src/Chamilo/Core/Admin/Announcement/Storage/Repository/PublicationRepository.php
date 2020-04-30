@@ -84,7 +84,7 @@ class PublicationRepository
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID), $publicationIdentifiers
         );
 
         $conditions[] = $this->getTimeConditions();
@@ -109,7 +109,7 @@ class PublicationRepository
 
         $timeConditions = array();
         $timeConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_HIDDEN),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_HIDDEN),
             new StaticConditionVariable(0)
         );
 
@@ -292,7 +292,7 @@ class PublicationRepository
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), $publicationIdentifiers
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID), $publicationIdentifiers
         );
 
         $conditions[] = $this->getTimeConditions();

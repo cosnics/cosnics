@@ -21,10 +21,10 @@ class DoublesTableColumnModel extends DataClassTableColumnModel implements Table
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
         if (!$this->get_table()->is_detail())

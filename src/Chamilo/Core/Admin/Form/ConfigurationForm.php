@@ -575,11 +575,11 @@ class ConfigurationForm extends FormValidator
 
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
+                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
                         new StaticConditionVariable($setting->get_id())
                     );
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
+                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
                         new StaticConditionVariable(Session::get_user_id())
                     );
                     $condition = new AndCondition($conditions);

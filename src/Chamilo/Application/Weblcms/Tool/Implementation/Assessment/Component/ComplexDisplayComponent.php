@@ -70,7 +70,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
 
             $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $this->publication_id);
 
             if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
@@ -368,9 +368,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     {
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         return $assessment_publication->get_configuration();
     }

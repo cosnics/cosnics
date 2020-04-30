@@ -31,7 +31,7 @@ class VersionReverterComponent extends Manager
             if ($version_object_id)
             {
                 $version_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $version_object_id
+                    ContentObject::class, $version_object_id
                 );
                 if ($version_object && $version_object->get_object_number() == $wiki_page->get_object_number())
                 {

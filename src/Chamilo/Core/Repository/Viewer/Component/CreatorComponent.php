@@ -163,7 +163,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_editing_form($content_object_id)
     {
-        $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
+        $content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(

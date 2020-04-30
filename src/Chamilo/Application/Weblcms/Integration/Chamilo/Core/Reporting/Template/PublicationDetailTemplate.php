@@ -98,7 +98,7 @@ class PublicationDetailTemplate extends ReportingTemplate
                         $this->tool ? $this->tool : Request::get('tool')))));
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->pid);
 
         if (! isset($publication))

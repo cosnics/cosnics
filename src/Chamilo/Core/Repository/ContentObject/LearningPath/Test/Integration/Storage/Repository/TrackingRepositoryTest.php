@@ -207,7 +207,7 @@ class TrackingRepositoryTest extends ChamiloFixturesBasedTestCase
 //            ->will($this->returnValue([2, 3]));
 //
 //        $condition = new EqualityCondition(
-//            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
+//            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
 //            new StaticConditionVariable('Kiana')
 //        );
 //
@@ -238,7 +238,7 @@ class TrackingRepositoryTest extends ChamiloFixturesBasedTestCase
 //            ->will($this->returnValue([2, 3]));
 //
 //        $condition = new EqualityCondition(
-//            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
+//            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
 //            new StaticConditionVariable('Kiana')
 //        );
 //

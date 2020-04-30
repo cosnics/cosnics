@@ -279,7 +279,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if (count($members_to_add) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $members_to_add
+                new PropertyConditionVariable(User::class, User::PROPERTY_ID), $members_to_add
             );
             $parameters = new DataClassRetrievesParameters($condition);
             $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(

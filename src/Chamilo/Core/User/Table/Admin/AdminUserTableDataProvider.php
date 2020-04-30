@@ -43,6 +43,6 @@ class AdminUserTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count(User::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(User::class, new DataClassCountParameters($condition));
     }
 }

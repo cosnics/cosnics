@@ -54,7 +54,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
         $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
         try
         {
-            $this->content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
+            $this->content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
 
             if (! RightsService::getInstance()->canEditContentObject(
                 $this->get_user(),

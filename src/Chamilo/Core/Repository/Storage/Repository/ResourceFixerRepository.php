@@ -57,15 +57,15 @@ class ResourceFixerRepository
     {
         $conditions = [
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*<resource*'),
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*data-co-id*')];
 
         $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
 
-        return $this->dataClassRepository->retrieves(ContentObject::class_name(), $parameters);
+        return $this->dataClassRepository->retrieves(ContentObject::class, $parameters);
     }
 
     /**
@@ -77,15 +77,15 @@ class ResourceFixerRepository
     {
         $conditions = [
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*<resource*'),
             new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*data-co-id*')];
 
         $parameters = new DataClassCountParameters(new OrCondition($conditions));
 
-        return $this->dataClassRepository->count(ContentObject::class_name(), $parameters);
+        return $this->dataClassRepository->count(ContentObject::class, $parameters);
     }
 
     /**
@@ -362,7 +362,7 @@ class ResourceFixerRepository
     public function findContentObjectById($contentObjectId)
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $contentObjectId);
     }
 }

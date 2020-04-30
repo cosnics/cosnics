@@ -100,13 +100,13 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
         if (count($selectedContentObjectIds) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $selectedContentObjectIds
             );
             $parameters = new DataClassRetrievesParameters($condition);
 
             return DataManager::retrieve_active_content_objects(
-                ContentObject::class_name(), $parameters
+                ContentObject::class, $parameters
             )->as_array();
         }
 

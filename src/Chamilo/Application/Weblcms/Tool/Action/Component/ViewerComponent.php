@@ -53,7 +53,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     {
         // check if the content object has indeed been published for the user
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->get_publication_id()
         );
 

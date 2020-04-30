@@ -61,7 +61,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
             ), new StaticConditionVariable($this->get_user_id())
         );
 

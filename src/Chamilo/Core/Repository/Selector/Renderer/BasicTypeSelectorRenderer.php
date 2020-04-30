@@ -113,7 +113,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
         if (!$this->get_use_general_statistics())
         {
             $statistics_condition = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parent()->get_user_id())
             );
         }
@@ -138,7 +138,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObject::class_name(), ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID
+                        ContentObject::class, ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID
                     ), new StaticConditionVariable($option->get_template_registration_id())
                 );
                 $condition = new AndCondition($conditions);

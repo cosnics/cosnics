@@ -37,7 +37,7 @@ class CourseTableColumnModel extends RecordTableColumnModel implements TableColu
         
         $this->add_column(
             new DataClassPropertyTableColumn(
-                CourseType::class_name(), 
+                CourseType::class,
                 CourseType::PROPERTY_TITLE, 
                 Translation::get('CourseType')));
     }

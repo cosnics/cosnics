@@ -218,13 +218,13 @@ class CourseSettingsConnector
         $users[0] = Translation::get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
+            new PropertyConditionVariable(User::class, User::PROPERTY_STATUS),
             new StaticConditionVariable(User::STATUS_TEACHER)
         );
 
         $order = array(
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME))
+            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
+            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
         );
 
         $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));

@@ -41,12 +41,12 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
         if ($order_property == null)
         {
             $order_property = new OrderBy(
-                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_DISPLAY_ORDER));
+                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER));
         }
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves(CourseType::class_name(), $parameters);
+        return DataManager::retrieves(CourseType::class, $parameters);
     }
 
     /**
@@ -56,6 +56,6 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition = null)
     {
-        return DataManager::count(CourseType::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseType::class, new DataClassCountParameters($condition));
     }
 }

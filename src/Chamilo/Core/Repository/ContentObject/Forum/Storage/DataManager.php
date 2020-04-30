@@ -138,7 +138,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($forum_id));
 
@@ -153,11 +153,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins->add(
             new Join(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(ForumTopic::class_name(), ForumTopic::PROPERTY_ID),
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_REF))));
 
         $joins->add(
@@ -165,7 +165,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 Forum::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new PropertyConditionVariable(Forum::class_name(), Forum::PROPERTY_ID))));
 
@@ -194,7 +194,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = new DataClassProperties();
 
         $properties->add(
-            new PropertyConditionVariable(ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_ID));
+            new PropertyConditionVariable(ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID));
 
         $properties->add(new PropertyConditionVariable(Forum::class_name(), Forum::PROPERTY_LAST_POST));
 
@@ -202,7 +202,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($forum_id));
 
@@ -221,7 +221,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 Forum::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_REF),
                     new PropertyConditionVariable(Forum::class_name(), Forum::PROPERTY_ID))));
 
@@ -236,7 +236,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            return self::record(ComplexContentObjectItem::class_name(), $parameters);
+            return self::record(ComplexContentObjectItem::class, $parameters);
         }
         catch (DataClassNoResultException $ex)
         {

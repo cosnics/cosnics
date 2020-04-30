@@ -32,15 +32,15 @@ class ViewerComponent extends Manager
         if ($id)
         {
             $complex_content_object_item = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $id);
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $complex_content_object_item->get_ref());
             if (DataManager::is_helper_type($content_object->get_type()))
             {
                 $content_object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $content_object->get_additional_property('reference_id'));
             }
 

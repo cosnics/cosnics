@@ -28,10 +28,10 @@ class QuestionSelecterComponent extends Manager
         if ($assessment_id)
         {
             $clois = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($assessment_id),
                     ComplexContentObjectItem::get_table_name()));
@@ -74,7 +74,7 @@ class QuestionSelecterComponent extends Manager
         foreach ($question_ids as $question_id)
         {
             $question = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $question_id);
 
             $contentObjectClassName = $question->package() . '\Storage\DataClass\\' .

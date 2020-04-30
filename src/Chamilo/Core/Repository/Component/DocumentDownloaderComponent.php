@@ -36,7 +36,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
                     Utilities::COMMON_LIBRARIES));
         }
 
-        $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+        $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
         $valid_types = array(
             'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File',
             'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage',

@@ -581,7 +581,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             if ($type == self::TYPE_FILE)
             {
                 $object =
-                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
                 if ($object->is_image())
                 {
                     $mailFiles[] = new MailFile(

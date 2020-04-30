@@ -123,20 +123,20 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->get_tool_id())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->get_course_id())
         );
 
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class_name(), new DataClassCountParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
         );
     }
 
@@ -367,7 +367,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         return new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
             )
         );
     }
@@ -392,14 +392,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
                     ), new StaticConditionVariable($publisher_id)
                 );
 
             case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
                     ), new StaticConditionVariable($this->get_course_id())
                 );
 
@@ -407,7 +407,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TOOL
+                            ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
                         ), new StaticConditionVariable($this->get_tool_id())
                     );
                 }
@@ -420,7 +420,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_CATEGORY_ID
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CATEGORY_ID
                     ), new StaticConditionVariable($category_id)
                 );
 
@@ -428,18 +428,18 @@ class BrowserComponent extends Manager implements DelegateComponent
             default :
 
                 $from_date_variables = new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_FROM_DATE
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_FROM_DATE
                 );
 
                 $to_date_variable = new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_TO_DATE
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TO_DATE
                 );
 
                 $time_conditions = array();
 
                 $time_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_HIDDEN
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_HIDDEN
                     ), new StaticConditionVariable(0)
                 );
 
@@ -475,7 +475,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
             $this->get_allowed_types()
         );
 
@@ -602,12 +602,12 @@ class BrowserComponent extends Manager implements DelegateComponent
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                 '*' . $query . '*'
             );
 
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $query . '*'
             );
 
@@ -627,18 +627,18 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->get_course_id())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->get_tool_id())
         );
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 new DataClassCountParameters(new AndCondition($conditions))
             ) > 0;
     }
@@ -814,26 +814,26 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_ID
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_ID
             ), new StaticConditionVariable($category_id)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_COURSE
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
             ), new StaticConditionVariable($this->get_parent()->get_course_id())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_TOOL
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
             ), new StaticConditionVariable($this->get_parent()->get_tool_id())
         );
 
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
         return $objects->next_result();

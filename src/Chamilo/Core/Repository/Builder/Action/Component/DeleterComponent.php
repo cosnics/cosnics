@@ -37,7 +37,7 @@ class DeleterComponent extends Manager
             foreach ($ids as $complex_content_object_item_id)
             {
                 $complex_content_object_item = DataManager::retrieve_by_id(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     $complex_content_object_item_id);
 
                 // if ($complex_content_object_item->get_user_id() == $this->get_user_id())

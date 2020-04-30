@@ -81,8 +81,8 @@ class CourseEntityHelper
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ORIGIN));
+        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN));
         $properties->add(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE));
         $properties->add(new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE));
         $properties->add(
@@ -96,7 +96,7 @@ class CourseEntityHelper
             $order_property,
             self::get_joins());
 
-        return DataManager::records(Admin::class_name(), $parameters);
+        return DataManager::records(Admin::class, $parameters);
     }
 
     /**
@@ -115,9 +115,9 @@ class CourseEntityHelper
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ID)))));
+                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)))));
 
-        return DataManager::count(Admin::class_name(), $parameters);
+        return DataManager::count(Admin::class, $parameters);
     }
 
     private static function get_joins()
@@ -125,7 +125,7 @@ class CourseEntityHelper
         $join = new Join(
             Course::class_name(),
             new EqualityCondition(
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_ID),
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_ID),
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID)));
         return new Joins(array($join));
     }

@@ -223,7 +223,7 @@ class ContentObjectPublicationCategory extends PlatformCategory implements
             if ($this->get_parent() != 0)
             {
                 $parent_category = DataManager::retrieve_by_id(
-                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::class,
                     $this->get_parent());
 
                 return $parent_category->is_recursive_visible();
@@ -287,14 +287,14 @@ class ContentObjectPublicationCategory extends PlatformCategory implements
         $id = $this->get_id();
 
         return array(
-            ContentObjectPublicationCategory::class_name() => new EqualityCondition(
+            ContentObjectPublicationCategory::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::class,
                     ContentObjectPublicationCategory::PROPERTY_PARENT),
                 new StaticConditionVariable($id)),
-            ContentObjectPublication::class_name() => new EqualityCondition(
+            ContentObjectPublication::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_CATEGORY_ID),
                 new StaticConditionVariable($id)));
     }

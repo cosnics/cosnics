@@ -86,7 +86,7 @@ class SearcherComponent extends Manager
             }
             
             $publications = DataManager::retrieves(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 new DataClassRetrievesParameters($this->get_retrieve_publications_condition()));
             
             $tools = array();
@@ -206,10 +206,10 @@ class SearcherComponent extends Manager
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                 '*' . $query . '*');
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             return new OrCondition($conditions);
         }
@@ -238,31 +238,31 @@ class SearcherComponent extends Manager
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->get_course_id()));
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     ContentObjectPublication::PROPERTY_TOOL), 
                 new StaticConditionVariable('home')));
         
         if (! $this->get_course()->is_course_admin($this->get_user()))
         {
             $from_date_variables = new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_FROM_DATE);
             
             $to_date_variable = new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_TO_DATE);
             
             $time_conditions = array();
             
             $time_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     ContentObjectPublication::PROPERTY_HIDDEN), 
                 new StaticConditionVariable(0));
             

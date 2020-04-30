@@ -211,7 +211,7 @@ class WeblcmsRights extends RightsUtil
                         foreach ($entity_ids as $course_group_id)
                         {
                             $course_group = CourseGroupDataManager::retrieve_by_id(
-                                CourseGroup::class_name(),
+                                CourseGroup::class,
                                 $course_group_id);
 
                             if ($course_group)

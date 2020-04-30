@@ -31,7 +31,7 @@ class MoverComponent extends Manager
         if (! empty($id))
         {
             $course_section = DataManager::retrieve_by_id(
-                CourseSection::class_name(),
+                CourseSection::class,
                 $id);
             $course_section->set_display_order($course_section->get_display_order() + $direction);
             $success = $course_section->update();

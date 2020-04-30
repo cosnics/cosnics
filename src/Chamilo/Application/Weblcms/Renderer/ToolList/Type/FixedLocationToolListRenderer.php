@@ -153,19 +153,19 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseToolRelCourseSection::class_name(), CourseToolRelCourseSection::PROPERTY_TOOL_ID
+                CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_TOOL_ID
             ), new StaticConditionVariable($tool->get_id())
         );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                CourseToolRelCourseSection::class_name(), CourseToolRelCourseSection::PROPERTY_SECTION_ID
+                CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
             ), $section_types_map
         );
 
         $condition = new AndCondition($conditions);
 
         $course_tool_rel_course_section = DataManager::retrieves(
-            CourseToolRelCourseSection::class_name(), new DataClassRetrievesParameters($condition)
+            CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
         );
 
         if ($course_tool_rel_course_section->size() > 0)
@@ -185,18 +185,18 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($parent->get_course_id())
             );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE
                 ), new StaticConditionVariable(1)
             );
             $condition = new AndCondition($conditions);
 
             $this->publication_links = DataManager::retrieves(
-                ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
+                ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
             );
         }
 
@@ -470,16 +470,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $section_types_map = array();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->course->get_id())
         );
         $order_property = array(
             new OrderBy(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)
+                new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
             )
         );
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_property);
-        $sections = DataManager::retrieves(CourseSection::class_name(), $parameters);
+        $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
         while ($section = $sections->next_result())
         {

@@ -86,7 +86,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id
         );
 
@@ -207,7 +207,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $embedded_content_object_id
             );
         }

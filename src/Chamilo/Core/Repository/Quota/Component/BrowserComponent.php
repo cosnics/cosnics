@@ -339,7 +339,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $type_counts = array();
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
         $most_used = null;
@@ -387,11 +387,11 @@ class BrowserComponent extends Manager implements TableSupport
         );
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
         $oldest_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            ContentObject::class_name(), new DataClassRetrievesParameters($condition)
+            ContentObject::class, new DataClassRetrievesParameters($condition)
         )->next_result();
 
         if ($oldest_object instanceof ContentObject)

@@ -153,7 +153,7 @@ class CourseUserCategoryForm extends FormValidator
         if ($course_type_id != 0)
         {
             $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
-                CourseType::class_name(), $course_type_id
+                CourseType::class, $course_type_id
             );
 
             $selected_course_type['id'] = 'coursetype_' . $course_type->get_id();
@@ -204,12 +204,12 @@ class CourseUserCategoryForm extends FormValidator
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategory::class_name(), CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
+                    CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
                 ), new StaticConditionVariable($course_user_category->get_id())
             );
 
             $courseTypeUserCategories = DataManager::retrieves(
-                CourseTypeUserCategory::class_name(), new DataClassRetrievesParameters($condition)
+                CourseTypeUserCategory::class, new DataClassRetrievesParameters($condition)
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
@@ -250,12 +250,12 @@ class CourseUserCategoryForm extends FormValidator
         // get the existing course types
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(), CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
+                CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
             ), new StaticConditionVariable($course_user_category->get_id())
         );
 
         $existing_types = DataManager::retrieves(
-            CourseTypeUserCategory::class_name(), new DataClassRetrievesParameters($condition)
+            CourseTypeUserCategory::class, new DataClassRetrievesParameters($condition)
         );
 
         if ($existing_types)

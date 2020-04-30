@@ -96,7 +96,7 @@ class Group extends NestedSet
             else
             {
                 $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
                 );
                 $this->subgroup_count[(int) $recursive] = DataManager::count(
@@ -122,7 +122,7 @@ class Group extends NestedSet
             if (!$include_subgroups)
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_GROUP_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupReluser::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($this->get_id())
                 );
                 $parameters = new DataClassCountParameters(
@@ -130,7 +130,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -141,19 +141,19 @@ class Group extends NestedSet
             {
                 $join = new Join(
                     Group::class_name(), new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
-                        new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID)
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
                 );
                 $joins = new Joins(array($join));
 
                 $conditions = array();
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_LEFT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
                 );
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_RIGHT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
                     InequalityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($this->get_right_value())
                 );
                 $condition = new AndCondition($conditions);
@@ -163,7 +163,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -174,19 +174,19 @@ class Group extends NestedSet
             {
                 $join = new Join(
                     Group::class_name(), new EqualityCondition(
-                        new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
-                        new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID)
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
                 );
                 $joins = new Joins(array($join));
 
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
                 );
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
                     new StaticConditionVariable($this->get_id())
                 );
                 $condition = new OrCondition($conditions);
@@ -196,7 +196,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class_name(), GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -205,7 +205,7 @@ class Group extends NestedSet
             }
 
             $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager::count(
-                GroupRelUser::class_name(), $parameters
+                GroupRelUser::class, $parameters
             );
         }
 
@@ -272,11 +272,11 @@ class Group extends NestedSet
             {
                 $childrenCondition = array();
                 $childrenCondition[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_LEFT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
                 );
                 $childrenCondition[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_RIGHT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
                     InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
                 );
                 $childrenCondition = new AndCondition($childrenCondition);
@@ -284,7 +284,7 @@ class Group extends NestedSet
             else
             {
                 $childrenCondition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
                 );
             }
@@ -437,11 +437,11 @@ class Group extends NestedSet
             {
                 $children_conditions = array();
                 $children_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_LEFT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
                 );
                 $children_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_RIGHT_VALUE),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
                     InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
                 );
                 $children_condition = new AndCondition($children_conditions);
@@ -449,12 +449,12 @@ class Group extends NestedSet
             else
             {
                 $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
                 );
             }
 
-            $groups = DataManager::retrieves(Group::class_name(), $children_condition);
+            $groups = DataManager::retrieves(Group::class, $children_condition);
 
             $subgroups = array();
 
@@ -495,7 +495,7 @@ class Group extends NestedSet
         $groups[] = $this->get_id();
 
         return new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupReluser::PROPERTY_GROUP_ID), $groups
+            new PropertyConditionVariable(GroupRelUser::class, GroupReluser::PROPERTY_GROUP_ID), $groups
         );
     }
 
@@ -512,7 +512,7 @@ class Group extends NestedSet
         {
             $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
             $users = DataManager::distinct(
-                GroupRelUser::class_name(), new DataClassDistinctParameters(
+                GroupRelUser::class, new DataClassDistinctParameters(
                     $condition, new DataClassProperties(
                         array(new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID))
                     )
@@ -614,10 +614,10 @@ class Group extends NestedSet
     public function truncate()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_id())
         );
 
-        return DataManager::deletes(GroupRelUser::class_name(), $condition);
+        return DataManager::deletes(GroupRelUser::class, $condition);
     }
 }

@@ -59,18 +59,18 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                 $userCondition = array();
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), $q
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $q
                 );
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), $q
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $q
                 );
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), $q
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $q
                 );
                 $user_conditions[] = new OrCondition($userCondition);
 
                 $group_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), $q
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $q
                 );
             }
 
@@ -93,7 +93,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                     {
                         $condition = new NotCondition(
                             new EqualityCondition(
-                                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                                new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                                 new StaticConditionVariable($id[1])
                             )
                         );
@@ -102,7 +102,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                     {
                         $condition = new NotCondition(
                             new EqualityCondition(
-                                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
+                                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_ID),
                                 new StaticConditionVariable($id[1])
                             )
                         );
@@ -131,7 +131,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             {
                 // $group_condition = null;
                 $group_condition = new EqualityCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
                     new StaticConditionVariable($this->course->get_id())
                 );
             }
@@ -139,12 +139,12 @@ class XmlCourseUserGroupFeedComponent extends Manager
             $userConditions = array();
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($this->course->getId())
             );
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
             );
 
@@ -158,7 +158,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 )
             );
 
-            $user_ids = DataManager::distinct(CourseEntityRelation::class_name(), $parameters);
+            $user_ids = DataManager::distinct(CourseEntityRelation::class, $parameters);
 
             // Add users from subscribed platform groups to user ids array
             $group_relations = $this->course->get_subscribed_groups();
@@ -170,7 +170,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 foreach ($group_relations as $group_relation)
                 {
                     // var_dump($group_relation);
-                    $group = DataManager::retrieve_by_id(Group::class_name(), $group_relation->getEntityId());
+                    $group = DataManager::retrieve_by_id(Group::class, $group_relation->getEntityId());
                     // var_dump($group);
 
                     if ($group instanceof Group)
@@ -188,7 +188,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             if (count($user_conditions) > 0)
             {
                 $user_conditions[] = new InCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids
                 );
                 $user_condition = new AndCondition($user_conditions);
             }
@@ -197,7 +197,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 if (count($user_ids) > 0)
                 {
                     $user_condition = new InCondition(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $user_ids
+                        new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids
                     );
                 }
                 else
@@ -209,8 +209,8 @@ class XmlCourseUserGroupFeedComponent extends Manager
             // Order the users alphabetically
             $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
             $order = array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), SORT_ASC)
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
             );
 
             // Users want to see their students ordered by last name, always, even if the last name is shown first.
@@ -234,10 +234,10 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 $groups = array();
 
                 $group_result_set = DataManager::retrieves(
-                    CourseGroup::class_name(), new DataClassRetrievesParameters(
+                    CourseGroup::class, new DataClassRetrievesParameters(
                         $group_condition, null, null, array(
                             new OrderBy(
-                                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME)
+                                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
                             )
                         )
                     )

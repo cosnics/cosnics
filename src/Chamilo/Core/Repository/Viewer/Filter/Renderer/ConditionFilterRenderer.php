@@ -34,7 +34,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $excludedContentObjectIds
                 )
             );

@@ -304,7 +304,7 @@ class Renderer extends CourseListRenderer
             if ($selected_course_type_id > 0)
             {
                 $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
-                    CourseType::class_name(), $selected_course_type_id
+                    CourseType::class, $selected_course_type_id
                 );
 
                 if (!$course_type || !$course_type->is_active())

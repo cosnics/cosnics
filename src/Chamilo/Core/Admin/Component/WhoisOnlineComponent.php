@@ -108,12 +108,12 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
         if (! empty($userIds))
         {
-            return new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds);
+            return new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIds);
         }
         else
         {
             return new EqualityCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                 new StaticConditionVariable(- 1));
         }
     }

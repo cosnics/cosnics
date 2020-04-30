@@ -41,7 +41,7 @@ class ReverterComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+                $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
                 
                 if (! RightsService::getInstance()->canEditContentObject(
                     $this->get_user(), 

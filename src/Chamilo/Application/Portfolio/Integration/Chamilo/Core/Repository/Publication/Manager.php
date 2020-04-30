@@ -51,10 +51,10 @@ class Manager implements PublicationInterface
     public static function areContentObjectsPublished($object_ids)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
             $object_ids);
         $parameters = new DataClassCountParameters($condition);
-        return DataManager::count(Publication::class_name(), $parameters) > 0;
+        return DataManager::count(Publication::class, $parameters) > 0;
     }
 
     /*
@@ -64,10 +64,10 @@ class Manager implements PublicationInterface
     public static function isContentObjectPublished($object_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
         $parameters = new DataClassCountParameters($condition);
-        return DataManager::count(Publication::class_name(), $parameters) > 0;
+        return DataManager::count(Publication::class, $parameters) > 0;
     }
 
     /*
@@ -80,12 +80,12 @@ class Manager implements PublicationInterface
         {
             case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($identifier));
                 break;
             case PublicationInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($identifier));
                 break;
             default :
@@ -103,7 +103,7 @@ class Manager implements PublicationInterface
 
         $parameters = new DataClassCountParameters($condition, self::get_content_object_publication_joins());
 
-        return DataManager::count(Publication::class_name(), $parameters);
+        return DataManager::count(Publication::class, $parameters);
     }
 
     /**
@@ -140,7 +140,7 @@ class Manager implements PublicationInterface
 
     public static function delete_content_object_publication($publication_id)
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $publication_id);
+        $publication = DataManager::retrieve_by_id(Publication::class, $publication_id);
 
         if ($publication instanceof Publication && $publication->delete())
         {
@@ -155,11 +155,11 @@ class Manager implements PublicationInterface
     public static function deleteContentObjectPublications($object_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
         $parameters = new DataClassRetrievesParameters($condition);
 
-        $publications = DataManager::retrieves(Publication::class_name(), $parameters);
+        $publications = DataManager::retrieves(Publication::class, $parameters);
 
         while ($publication = $publications->next_result())
         {
@@ -175,12 +175,12 @@ class Manager implements PublicationInterface
     public static function get_content_object_publication_attribute($publication_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID),
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
             new StaticConditionVariable($publication_id));
         $record = self::record(
             Publication::class_name(),
             new RecordRetrieveParameters(
-                new DataClassProperties(new PropertiesConditionVariable(Publication::class_name())),
+                new DataClassProperties(new PropertiesConditionVariable(Publication::class)),
                 $condition));
 
         return self::create_publication_attributes_from_record($record);
@@ -193,12 +193,12 @@ class Manager implements PublicationInterface
         {
             case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($object_id));
                 break;
             case PublicationInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($object_id));
                 break;
             default :
@@ -236,10 +236,10 @@ class Manager implements PublicationInterface
         $joins = array();
 
         $joins[] = new Join(
-            ContentObject::class_name(),
+            ContentObject::class,
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_CONTENT_OBJECT_ID),
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)));
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)));
 
         return new Joins($joins);
     }
@@ -268,26 +268,26 @@ class Manager implements PublicationInterface
     {
         $data_class_properties = array();
 
-        $data_class_properties[] = new PropertiesConditionVariable(Publication::class_name());
+        $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class_name(),
+            ContentObject::class,
             ContentObject::PROPERTY_TITLE);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class_name(),
+            ContentObject::class,
             ContentObject::PROPERTY_DESCRIPTION);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class_name(),
+            ContentObject::class,
             ContentObject::PROPERTY_TYPE);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class_name(),
+            ContentObject::class,
             ContentObject::PROPERTY_CURRENT);
 
         $data_class_properties[] = new PropertyConditionVariable(
-            ContentObject::class_name(),
+            ContentObject::class,
             ContentObject::PROPERTY_OWNER_ID);
 
         $properties = new DataClassProperties($data_class_properties);
@@ -300,7 +300,7 @@ class Manager implements PublicationInterface
             $order_by,
             self::get_content_object_publication_joins());
 
-        return DataManager::records(Publication::class_name(), $parameters);
+        return DataManager::records(Publication::class, $parameters);
     }
 
     /*
@@ -309,7 +309,7 @@ class Manager implements PublicationInterface
 
     public static function update_content_object_publication_id($publication_attributes)
     {
-        $publication = DataManager::retrieve_by_id(Publication::class_name(), $publication_attributes->get_id());
+        $publication = DataManager::retrieve_by_id(Publication::class, $publication_attributes->get_id());
 
         if ($publication instanceof Publication)
         {

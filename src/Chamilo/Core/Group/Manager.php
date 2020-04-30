@@ -111,14 +111,14 @@ abstract class Manager extends Application
     {
         $parameters = new DataClassCountParameters($condition);
 
-        return DataManager::count(GroupRelUser::class_name(), $parameters);
+        return DataManager::count(GroupRelUser::class, $parameters);
     }
 
     public function count_groups($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
 
-        return DataManager::count(Group::class_name(), $parameters);
+        return DataManager::count(Group::class, $parameters);
     }
 
     /**
@@ -259,7 +259,7 @@ abstract class Manager extends Application
                 throw new NoObjectSelectedException(Translation::get('Group'));
             }
 
-            $group = DataManager::retrieve_by_id(Group::class_name(), $group_id);
+            $group = DataManager::retrieve_by_id(Group::class, $group_id);
             if (!$group)
             {
                 throw new ObjectNotExistException(Translation::get('Group', $group_id));
@@ -276,23 +276,23 @@ abstract class Manager extends Application
      */
     public function retrieve_group($id)
     {
-        return DataManager::retrieve_by_id(Group::class_name(), $id);
+        return DataManager::retrieve_by_id(Group::class, $id);
     }
 
     public static function retrieve_group_rel_user($user_id, $group_id)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id)
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(GroupRelUser::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(GroupRelUser::class, new DataClassRetrieveParameters($condition));
     }
 
     public static function retrieve_group_rel_users(
@@ -300,7 +300,7 @@ abstract class Manager extends Application
     )
     {
         return DataManager::retrieves(
-            GroupRelUser::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            GroupRelUser::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 

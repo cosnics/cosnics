@@ -22,11 +22,11 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
             array(Translation::get('MostActiveUser'), Translation::get('NumberOfContributions')));
         
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         
         $wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $complex_content_object_item->get_ref());
         $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
         

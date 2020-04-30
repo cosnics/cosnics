@@ -89,7 +89,7 @@ class WorkspaceCategoryRelation extends DataClass
     {
         if (! isset($this->category))
         {
-            $this->category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $this->getCategoryId());
+            $this->category = DataManager::retrieve_by_id(RepositoryCategory::class, $this->getCategoryId());
         }
         
         return $this->category;

@@ -56,18 +56,18 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
             ),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
         $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassDistinctParameters(
                 new AndCondition($conditions),
                 new DataClassProperties(

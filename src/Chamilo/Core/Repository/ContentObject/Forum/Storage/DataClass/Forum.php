@@ -112,20 +112,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->add_last_post($last_post);
@@ -227,14 +227,14 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
                     {
                         $cond = new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(),
+                                ComplexContentObjectItem::class,
                                 ComplexContentObjectItem::PROPERTY_REF
                             ),
                             new StaticConditionVariable($lasttop->get_id())
                         );
 
                         $wrap = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                            ComplexContentObjectItem::class_name(),
+                            ComplexContentObjectItem::class,
                             $cond
                         );
 
@@ -264,13 +264,13 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF
                 ),
                 new StaticConditionVariable($this->get_id())
             );
             $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $condition
             );
             $lasttopid = 0;
@@ -282,7 +282,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             while ($item = $wrappers->next_result())
             {
                 $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $item->get_parent()
                 );
                 $lo->recalculate_last_post(true, $hulp_last_changed, $lasttopid);
@@ -299,13 +299,13 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
         if ($email_notificator)
@@ -320,7 +320,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->notify_subscribed_users($email_notificator);
@@ -379,20 +379,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->add_post($posts, $email_notificator, $last_changed_cloi, $last_post_id);
@@ -406,20 +406,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->remove_post($posts);
@@ -433,20 +433,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->add_topic($topics);
@@ -460,20 +460,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $wrappers = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($item = $wrappers->next_result())
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_parent()
             );
             $lo->remove_topic($topics);
@@ -500,11 +500,11 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         foreach ($link_ids as $link_id)
         {
             $item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $link_id
             );
             $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $item->get_ref()
             );
 
@@ -548,20 +548,20 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF
             ),
             new StaticConditionVariable($this->get_id())
         );
         $parents = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition
         );
 
         while ($parent = $parents->next_result())
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $parent->get_parent()
             );
 

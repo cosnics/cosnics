@@ -64,14 +64,14 @@ class GroupRelUser extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_group_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::deletes(GroupRelUser::class_name(), $condition);
+        return DataManager::deletes(GroupRelUser::class, $condition);
     }
 }

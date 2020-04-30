@@ -51,14 +51,14 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_parent()),
                 ComplexContentObjectItem::get_table_name());
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_ID),
                     new StaticConditionVariable($this->get_id()),
                     ComplexContentObjectItem::get_table_name()));
@@ -66,7 +66,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
 
             $children = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 $parameters);
 
             while ($child = $children->next_result())

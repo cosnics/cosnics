@@ -88,7 +88,7 @@ class PublicationAccessBlock extends ToolBlock
     {
         $content_object_publication_id = $this->getPublicationId();
         $content_object_publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $content_object_publication_id
         );
 

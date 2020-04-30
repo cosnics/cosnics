@@ -85,7 +85,7 @@ class CourseUserEntity extends UserEntity
         if ($this->limited_users)
         {
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
+                new PropertyConditionVariable(User::class, User::PROPERTY_ID), 
                 $this->limited_users);
         }
         
@@ -93,7 +93,7 @@ class CourseUserEntity extends UserEntity
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID), 
                     $this->excluded_users));
         }
         

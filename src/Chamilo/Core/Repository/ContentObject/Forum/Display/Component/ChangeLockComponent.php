@@ -18,7 +18,7 @@ class ChangeLockComponent extends Manager
     {
         $wrapper = $this->get_selected_complex_content_object_item();
         $object = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $wrapper->get_ref());
 
         if ($object->invert_locked())

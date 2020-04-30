@@ -262,7 +262,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             case self::ACTION_PAGE_STATISTICS :
                 $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
                 $complex_wiki_page = DataManager::retrieve_by_id(
-                    ComplexContentObjectItem::class_name(), $complex_wiki_page_id
+                    ComplexContentObjectItem::class, $complex_wiki_page_id
                 );
                 $wiki_page = $complex_wiki_page->get_ref_object();
                 $trail->add(new Breadcrumb(null, $wiki_page->get_title()));
@@ -347,11 +347,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     private function get_content_object_from_complex_id($complex_id)
     {
         $complex_content_object_item = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), $complex_id
+            ComplexContentObjectItem::class, $complex_id
         );
 
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(), $complex_content_object_item->get_ref()
+            ContentObject::class, $complex_content_object_item->get_ref()
         );
     }
 
@@ -364,7 +364,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($wiki_id)
         );
         $conditions[] = new EqualityCondition(
@@ -381,7 +381,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public static function is_wiki_locked($wiki_id)
     {
-        $wiki = DataManager::retrieve_by_id(ContentObject::class_name(), $wiki_id);
+        $wiki = DataManager::retrieve_by_id(ContentObject::class, $wiki_id);
 
         return $wiki->get_locked() == 1;
     }

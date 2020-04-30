@@ -27,11 +27,11 @@ class ComplexForum extends ComplexContentObjectItem
         $success = parent::create();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
 
         $email_notificator = new SubforumEmailNotificator();
@@ -66,11 +66,11 @@ class ComplexForum extends ComplexContentObjectItem
         $succes = parent::delete();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
 
         $parent->remove_topic($lo->get_total_topics());

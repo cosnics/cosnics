@@ -257,53 +257,53 @@ class ContentObject extends CompositeDataClass
         // {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
-            ContentObject::class_name(), new EqualityCondition(
+            ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
 
-        return DataManager::count(ContentObjectAttachment::class_name(), $parameters);
+        return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
 
     public function count_attachments()
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
-            ContentObject::class_name(), new EqualityCondition(
+            ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
 
-        return DataManager::count(ContentObjectAttachment::class_name(), $parameters);
+        return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
 
     public function count_children()
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition);
+        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, $condition);
     }
 
     public function count_includers($only_version = false)
@@ -317,10 +317,10 @@ class ContentObject extends CompositeDataClass
         );
 
         $join = new Join(
-            ContentObject::class_name(), new EqualityCondition(
+            ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
@@ -338,10 +338,10 @@ class ContentObject extends CompositeDataClass
         );
 
         $join = new Join(
-            ContentObject::class_name(), new EqualityCondition(
+            ContentObject::class, new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
@@ -354,7 +354,7 @@ class ContentObject extends CompositeDataClass
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
 
@@ -368,7 +368,7 @@ class ContentObject extends CompositeDataClass
             );
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
                 ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID), null,
                 $subselect_condition
             );
@@ -376,7 +376,7 @@ class ContentObject extends CompositeDataClass
 
         $condition = new OrCondition($conditions);
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition);
+        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, $condition);
     }
 
     public function count_publications()
@@ -437,12 +437,12 @@ class ContentObject extends CompositeDataClass
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER
+                            ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
                         ), new StaticConditionVariable($content_object->get_object_number())
                     );
                     $conditions[] = new NotCondition(
                         new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                             new StaticConditionVariable($content_object->get_id())
                         )
                     );
@@ -572,12 +572,12 @@ class ContentObject extends CompositeDataClass
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
                     ), new StaticConditionVariable($assisting_object->get_id())
                 );
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                     ), new StaticConditionVariable($assisting_object->get_id()),
                     ComplexContentObjectItem::get_table_name()
                 );
@@ -585,7 +585,7 @@ class ContentObject extends CompositeDataClass
                 $condition = new OrCondition($conditions);
 
                 $items = DataManager::retrieve_complex_content_object_items(
-                    ComplexContentObjectItem::class_name(), $condition
+                    ComplexContentObjectItem::class, $condition
                 );
                 while ($item = $items->next_result())
                 {
@@ -631,11 +631,11 @@ class ContentObject extends CompositeDataClass
         // Delete attachment links of the object
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
-        if (!DataManager::deletes(ContentObjectAttachment::class_name(), $condition))
+        if (!DataManager::deletes(ContentObjectAttachment::class, $condition))
         {
             return false;
         }
@@ -643,18 +643,18 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), new StaticConditionVariable($this->get_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
 
         $condition = new OrCondition($conditions);
 
-        $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition);
+        $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
         while ($item = $items->next_result())
         {
             if (!$item->delete())
@@ -695,23 +695,23 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
             ), new StaticConditionVariable($id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_TYPE
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
             ), new StaticConditionVariable($type)
         );
         $condition = new AndCondition($conditions);
 
         $attachment = DataManager::retrieve(
-            ContentObjectAttachment::class_name(), new DataClassRetrieveParameters($condition)
+            ContentObjectAttachment::class, new DataClassRetrieveParameters($condition)
         );
 
         if ($attachment instanceof ContentObjectAttachment)
@@ -876,7 +876,7 @@ class ContentObject extends CompositeDataClass
 
         while ($categoryId != 0)
         {
-            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $categoryId);
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class, $categoryId);
             $categoryId = $category->get_parent();
             array_unshift($virtual_path, Filesystem::create_safe_name($category->get_name()));
         }
@@ -930,7 +930,7 @@ class ContentObject extends CompositeDataClass
         $aid = $this->get_parent_id();
         while ($aid > 0)
         {
-            $ancestor = DataManager::retrieve_by_id(ContentObject::class_name(), $aid);
+            $ancestor = DataManager::retrieve_by_id(ContentObject::class, $aid);
             $ancestors[] = $ancestor;
             $aid = $ancestor->get_parent_id();
         }
@@ -950,14 +950,14 @@ class ContentObject extends CompositeDataClass
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
                 ), new StaticConditionVariable($this->get_id())
             );
             if ($type != self::ATTACHMENT_ALL)
             {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_TYPE
+                        ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
                     ), new StaticConditionVariable($type)
                 );
             }
@@ -972,7 +972,7 @@ class ContentObject extends CompositeDataClass
                     )
                 )
             );
-            $this->attachment_ids[$type] = DataManager::distinct(ContentObjectAttachment::class_name(), $parameters);
+            $this->attachment_ids[$type] = DataManager::distinct(ContentObjectAttachment::class, $parameters);
         }
 
         return $this->attachment_ids[$type];
@@ -982,21 +982,21 @@ class ContentObject extends CompositeDataClass
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
         $join = new Join(
-            ContentObjectAttachment::class_name(), new EqualityCondition(
+            ContentObjectAttachment::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
 
-        return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
+        return DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
     }
 
     /**
@@ -1015,15 +1015,15 @@ class ContentObject extends CompositeDataClass
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                    ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
                 ), new StaticConditionVariable($this->get_id())
             );
 
             $join = new Join(
-                ContentObjectAttachment::class_name(), new EqualityCondition(
+                ContentObjectAttachment::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
-                    ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                        ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                    ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
                 )
             );
 
@@ -1031,7 +1031,7 @@ class ContentObject extends CompositeDataClass
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
             $this->attachments[$type] =
-                DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
+                DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
         }
 
         return $this->attachments[$type];
@@ -1045,19 +1045,19 @@ class ContentObject extends CompositeDataClass
      */
     public static function get_by_id($content_object_id)
     {
-        return DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
+        return DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
     }
 
     public function get_children($order_by = array(), $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
 
-        return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class_name(), $parameters);
+        return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
     }
 
     /**
@@ -1188,7 +1188,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_difference($id)
     {
-        $version = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+        $version = DataManager::retrieve_by_id(ContentObject::class, $id);
 
         return ContentObjectDifference::factory($this, $version);
     }
@@ -1254,13 +1254,13 @@ class ContentObject extends CompositeDataClass
             ContentObjectInclude::class_name(), new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
-                ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
 
-        return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
+        return DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
     }
 
     /**
@@ -1285,7 +1285,7 @@ class ContentObject extends CompositeDataClass
                 ContentObjectInclude::class_name(), new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectInclude::class_name(), ContentObjectInclude::PROPERTY_INCLUDE_ID
-                    ), new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID)
+                    ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
                 )
             );
 
@@ -1293,7 +1293,7 @@ class ContentObject extends CompositeDataClass
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
             $this->includes =
-                DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
+                DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
         }
 
         return $this->includes;
@@ -1415,7 +1415,7 @@ class ContentObject extends CompositeDataClass
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), new StaticConditionVariable($this->get_id())
         );
 
@@ -1429,7 +1429,7 @@ class ContentObject extends CompositeDataClass
             );
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
                 ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID), null,
                 $subselect_condition
             );
@@ -1438,7 +1438,7 @@ class ContentObject extends CompositeDataClass
         $condition = new OrCondition($conditions);
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
 
-        return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class_name(), $parameters);
+        return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
     }
 
     public function get_publications($count, $offset, $order_by)
@@ -1592,7 +1592,7 @@ class ContentObject extends CompositeDataClass
             {
                 return true;
             }
-            $ancestor = DataManager::retrieve_by_id(ContentObject::class_name(), $aid);
+            $ancestor = DataManager::retrieve_by_id(ContentObject::class, $aid);
             $aid = $ancestor->get_parent_id();
         }
 
@@ -1703,22 +1703,22 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
             ), new StaticConditionVariable($object_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_TYPE
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
             ), new StaticConditionVariable($type)
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectAttachment::class_name(), new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(ContentObjectAttachment::class, new DataClassCountParameters($condition)) > 0;
     }
 
     /**
@@ -2024,12 +2024,12 @@ class ContentObject extends CompositeDataClass
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_TYPE
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
             ), new StaticConditionVariable($type)
         );
         $condition = new AndCondition($conditions);
@@ -2173,11 +2173,11 @@ class ContentObject extends CompositeDataClass
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment::class_name(), ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($this->get_id())
         );
 
-        if (!DataManager::deletes(ContentObjectAttachment::class_name(), $condition))
+        if (!DataManager::deletes(ContentObjectAttachment::class, $condition))
         {
             return false;
         }

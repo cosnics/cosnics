@@ -176,7 +176,7 @@ class PersonalBlogLayout extends BlogLayout
 
         $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
 
-        $author = DataManager::retrieve_by_id(User::class_name(), (int) $blogItem->get_owner_id());
+        $author = DataManager::retrieve_by_id(User::class, (int) $blogItem->get_owner_id());
         $userPictureProvider = $this->getUserPictureProvider();
 
         $html[] =

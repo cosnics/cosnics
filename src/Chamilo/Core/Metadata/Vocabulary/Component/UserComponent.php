@@ -97,10 +97,10 @@ class UserComponent extends Manager implements TableSupport
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), 
-                new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)));
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), 
+                new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE)));
         
         if ($searchCondition)
         {

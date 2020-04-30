@@ -35,7 +35,7 @@ class UpdaterComponent extends Manager
         if (! empty($id))
         {
             $course_section = DataManager::retrieve_by_id(
-                CourseSection::class_name(),
+                CourseSection::class,
                 (int) $id);
 
             $form = new CourseSectionForm(

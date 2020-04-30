@@ -53,7 +53,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
 
         $this->publication = $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publication_id);
 
         if (! $this->publication instanceof ContentObjectPublication ||

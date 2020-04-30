@@ -128,7 +128,7 @@ class ContentObjectOwnerChanger
 
         if (in_array($co->get_type(), DataManager::get_active_helper_types()))
         {
-            $co = DataManager::retrieve_by_id(ContentObject::class_name(), $co->get_reference());
+            $co = DataManager::retrieve_by_id(ContentObject::class, $co->get_reference());
             if ($co)
             {
                 $this->change_content_object_owner($co);
@@ -166,15 +166,15 @@ class ContentObjectOwnerChanger
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($co->get_id()),
             ComplexContentObjectItem::get_table_name());
 
-        $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition);
+        $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
         while ($item = $items->next_result())
         {
-            $co = DataManager::retrieve_by_id(ContentObject::class_name(), $item->get_ref());
+            $co = DataManager::retrieve_by_id(ContentObject::class, $item->get_ref());
             $this->change_content_object_owner($co);
 
             $item->set_user_id($this->target_repository);
@@ -193,7 +193,7 @@ class ContentObjectOwnerChanger
 
         foreach ($includes as $include)
         {
-            $include = DataManager::retrieve_by_id(ContentObject::class_name(), $include->get_id());
+            $include = DataManager::retrieve_by_id(ContentObject::class, $include->get_id());
             $this->change_content_object_owner($include);
         }
     }
@@ -209,7 +209,7 @@ class ContentObjectOwnerChanger
 
         foreach ($attachments as $attachment)
         {
-            $attachment = DataManager::retrieve_by_id(ContentObject::class_name(), $attachment->get_id());
+            $attachment = DataManager::retrieve_by_id(ContentObject::class, $attachment->get_id());
             $this->change_content_object_owner($attachment);
         }
     }

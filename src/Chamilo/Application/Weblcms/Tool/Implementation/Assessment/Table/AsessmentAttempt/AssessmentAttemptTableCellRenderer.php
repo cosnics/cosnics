@@ -47,7 +47,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
     public function get_actions($assessment_attempt)
     {
         $pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $assessment_attempt[AssessmentAttempt::PROPERTY_ASSESSMENT_ID]
+            ContentObjectPublication::class, $assessment_attempt[AssessmentAttempt::PROPERTY_ASSESSMENT_ID]
         );
 
         $assessment_attempt_status = $assessment_attempt[AssessmentAttempt::PROPERTY_STATUS];
@@ -57,11 +57,11 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
 
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($pub->get_id())
             )
         );
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         $toolbar = new Toolbar();
 

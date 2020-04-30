@@ -33,14 +33,14 @@ class AssignmentSubmissions extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLISHER_ID
             ),
             new StaticConditionVariable($user_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL
             ),
             new StaticConditionVariable('Assignment')
@@ -49,7 +49,7 @@ class AssignmentSubmissions extends Block
         $condition = new AndCondition($conditions);
 
         $assignment_publications_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             new DataClassRetrievesParameters($condition)
         );
 

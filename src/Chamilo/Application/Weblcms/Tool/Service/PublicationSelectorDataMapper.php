@@ -34,7 +34,7 @@ class PublicationSelectorDataMapper
         $order_by = array();
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
             )
         );
 
@@ -80,7 +80,7 @@ class PublicationSelectorDataMapper
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
             )
         );
 

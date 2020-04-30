@@ -36,7 +36,7 @@ class RenditionImplementationComponent extends Manager
              * @var ContentObject $object
              */
             $object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID)
+                ContentObject::class, $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID)
             );
 
             $security_code = $this->getPostDataValue(self::PARAM_SECURITY_CODE);

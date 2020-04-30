@@ -27,7 +27,7 @@ class ContentObjectUpdaterComponent extends Manager
             $pid = Request::get('pid') ? Request::get('pid') : $_POST['pid'];
 
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $pid
+                ContentObject::class, $pid
             );
 
             $content_object->set_default_property(ContentObject::PROPERTY_OWNER_ID, $this->get_user_id());

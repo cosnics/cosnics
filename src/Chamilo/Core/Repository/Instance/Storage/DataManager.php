@@ -50,9 +50,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_synchronization_data($condition)
     {
         $join = new Join(
-            ContentObject::class_name(), 
+            ContentObject::class,
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
                     SynchronizationData::class_name(), 
                     SynchronizationData::PROPERTY_CONTENT_OBJECT_ID)));
@@ -66,9 +66,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_synchronization_data_set($condition = null, $count = null, $offset = null, $order_by = array())
     {
         $join = new Join(
-            ContentObject::class_name(), 
+            ContentObject::class,
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new PropertyConditionVariable(
                     SynchronizationData::class_name(), 
                     SynchronizationData::PROPERTY_CONTENT_OBJECT_ID)));
@@ -133,9 +133,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $name = new PropertyConditionVariable(
             SynchronizationData::class_name(), 
             SynchronizationData::PROPERTY_CONTENT_OBJECT_ID);
-        $value = new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID);
+        $value = new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID);
         $sub_select_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
         $condition = new AndCondition($conditions);
@@ -163,9 +163,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $name = new PropertyConditionVariable(
             SynchronizationData::class_name(), 
             SynchronizationData::PROPERTY_CONTENT_OBJECT_ID);
-        $value = new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID);
+        $value = new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID);
         $sub_select_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
         $condition = new AndCondition($conditions);

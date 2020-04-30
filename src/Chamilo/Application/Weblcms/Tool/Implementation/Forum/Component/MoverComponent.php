@@ -28,7 +28,7 @@ class MoverComponent extends Manager
             }
             
             $forum_publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 Request::get(self::PARAM_PUBLICATION_ID));
             
             if ($forum_publication->move($move))

@@ -55,7 +55,7 @@ abstract class Manager extends Application
 
         $content_object_id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), $content_object_id
+            ContentObject::class, $content_object_id
         );
 
         if (!$this->content_object instanceof ContentObject)
@@ -210,7 +210,7 @@ abstract class Manager extends Application
         if (!$contentObject instanceof ContentObject && is_numeric($contentObject))
         {
             $contentObject = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $contentObject
+                ContentObject::class, $contentObject
             );
         }
 

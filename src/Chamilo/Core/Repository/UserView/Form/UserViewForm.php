@@ -97,10 +97,10 @@ class UserViewForm extends FormValidator
         {
 
             $relations = DataManager::retrieves(
-                UserViewRelContentObject::class_name(), new DataClassRetrievesParameters(
+                UserViewRelContentObject::class, new DataClassRetrievesParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
-                            UserViewRelContentObject::class_name(), UserViewRelContentObject::PROPERTY_USER_VIEW_ID
+                            UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
                         ), new StaticConditionVariable($this->get_user_view()->get_id())
                     )
                 )
@@ -168,12 +168,12 @@ class UserViewForm extends FormValidator
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                UserViewRelContentObject::class_name(), UserViewRelContentObject::PROPERTY_USER_VIEW_ID
+                UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
             ), new StaticConditionVariable($user_view->get_id())
         );
 
         $types = DataManager::retrieves(
-            UserViewRelContentObject::class_name(), new DataClassRetrievesParameters($condition)
+            UserViewRelContentObject::class, new DataClassRetrievesParameters($condition)
         );
         $existing_types = array();
         while ($type = $types->next_result())

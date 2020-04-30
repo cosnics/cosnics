@@ -101,7 +101,7 @@ class RightsEditorComponent extends Manager
                 foreach ($publication_ids as $publication_id)
                 {
                     $publication = DataManager::retrieve_by_id(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         $publication_id);
 
                     if ($publication)
@@ -149,7 +149,7 @@ class RightsEditorComponent extends Manager
                     {
                         // get the given category
                         $category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class_name(),
+                            ContentObjectPublicationCategory::class,
                             $category_id);
 
                         if ($category)
@@ -173,7 +173,7 @@ class RightsEditorComponent extends Manager
 
                                 // parent
                                 $category = DataManager::retrieve_by_id(
-                                    ContentObjectPublicationCategory::class_name(),
+                                    ContentObjectPublicationCategory::class,
                                     $category->get_parent());
                             }
                         }

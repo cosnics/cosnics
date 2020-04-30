@@ -191,7 +191,7 @@ abstract class Manager extends Application
 
     public function count_categories($conditions = null)
     {
-        return DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($conditions));
+        return DataManager::count(RepositoryCategory::class, new DataClassCountParameters($conditions));
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class Manager extends Application
     {
         $parameters = new DataClassCountParameters($this->get_current_user_recycle_bin_conditions());
 
-        return DataManager::count_active_content_objects(ContentObject::class_name(), $parameters) > 0;
+        return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
     }
 
     /**
@@ -576,11 +576,11 @@ abstract class Manager extends Application
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable(ContentObject::STATE_RECYCLED)
         );
 
@@ -597,7 +597,7 @@ abstract class Manager extends Application
         if (!$securityCode)
         {
             $contentObject = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $documentId
+                ContentObject::class, $documentId
             );
 
             if ($contentObject)

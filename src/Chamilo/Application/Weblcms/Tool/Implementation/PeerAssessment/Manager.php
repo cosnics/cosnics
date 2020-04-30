@@ -70,7 +70,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         {
             $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
             $this->publication = WeblcmsDataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $publication_id);
         }
 
@@ -499,10 +499,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $object = $this->get_root_content_object($this);
 
             $children = RepositoryDataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(),
+                        ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($object->get_id())));
 
@@ -511,7 +511,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 // TODO check this ???
                 // $this->indicators[] = $child;
                 $this->indicators[] = RepositoryDataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $child->get_ref());
             }
         }

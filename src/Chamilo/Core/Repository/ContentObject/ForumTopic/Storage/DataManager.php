@@ -328,14 +328,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new Join(
                 ForumPostAttachment::class_name(),
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     new PropertyConditionVariable(
                         ForumPostAttachment::class_name(),
                         ForumPostAttachment::PROPERTY_ATTACHMENT_ID))));
 
         $parameters = new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by, $joins);
 
-        return self::retrieves(ContentObject::class_name(), $parameters);
+        return self::retrieves(ContentObject::class, $parameters);
     }
 
     /**

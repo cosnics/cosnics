@@ -80,7 +80,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             {
                 /** @var ContentObject $object */
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $object_id);
 
                 $learningPathService = $this->getLearningPathService();

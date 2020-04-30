@@ -45,7 +45,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
         if (isset($id))
         {
-            $this->content_object = $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+            $this->content_object = $content_object = DataManager::retrieve_by_id(ContentObject::class, $id);
             $html[] = ContentObjectRenditionImplementation::launch(
                 $content_object,
                 ContentObjectRendition::FORMAT_HTML,
@@ -79,11 +79,11 @@ class DoublesViewerComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
         return new AndCondition($conditions);
     }
@@ -103,10 +103,10 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $conditions[] = $this->get_full_condition();
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 new StaticConditionVariable($this->content_object->get_id())));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
             new StaticConditionVariable($this->content_object->get_content_hash()));
 
         return new AndCondition($conditions);

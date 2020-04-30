@@ -269,7 +269,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $this->set_modification_date($now);
 
             $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_forum_topic_id()
             );
             $email_notificator = new PostEmailNotificator();
@@ -315,7 +315,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $this->set_modification_date($now);
 
             $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_forum_topic_id()
             );
             $first_post = $forum_topic->is_first_post($this);
@@ -377,7 +377,7 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         $delete_attachments = DataManager::retrieve_attached_objects($this->get_id())->as_array();
         $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_forum_topic_id()
         );
         $first_post = $forum_topic->is_first_post($this);

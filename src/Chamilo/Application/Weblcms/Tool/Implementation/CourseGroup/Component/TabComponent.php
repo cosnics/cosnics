@@ -193,7 +193,7 @@ abstract class TabComponent extends Manager
             }
             else
             {
-                $this->currentCourseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
+                $this->currentCourseGroup = DataManager::retrieve_by_id(CourseGroup::class, $id);
             }
         }
 

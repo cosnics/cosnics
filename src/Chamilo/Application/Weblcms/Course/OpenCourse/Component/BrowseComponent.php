@@ -87,6 +87,6 @@ class BrowseComponent extends Manager implements TableSupport
             array(
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE),
-                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE)));
+                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)));
     }
 }

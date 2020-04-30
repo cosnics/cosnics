@@ -19,14 +19,14 @@ class PlatformGroupRelUserTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieves(
-            GroupRelUser::class_name(),
+            GroupRelUser::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
         return DataManager::count(
-            GroupRelUser::class_name(),
+            GroupRelUser::class,
             new DataClassCountParameters($condition));
     }
 }

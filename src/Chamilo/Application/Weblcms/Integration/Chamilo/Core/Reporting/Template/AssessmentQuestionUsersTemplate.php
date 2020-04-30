@@ -69,11 +69,11 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
     protected function add_breadcrumbs()
     {
         $assessment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->publication_id)->get_content_object();
         
         $question = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             $this->question_id);
         
         $trail = BreadcrumbTrail::getInstance();

@@ -211,7 +211,7 @@ abstract class ToolInstaller extends Installer
      */
     protected function install_tool_for_existing_course_types()
     {
-        $course_types = CourseTypeDataManager::retrieves(CourseType::class_name(), new DataClassRetrievesParameters());
+        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new DataClassRetrievesParameters());
         while ($course_type = $course_types->next_result())
         {
             if (!$this->install_static_tool_setting_relations_for_object(

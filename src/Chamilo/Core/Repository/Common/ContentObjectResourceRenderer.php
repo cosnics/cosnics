@@ -133,7 +133,7 @@ class ContentObjectResourceRenderer
             try
             {
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $source);
 
                 if (! $object instanceof ContentObject)

@@ -81,7 +81,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
                 User::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_USER_ID),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID))));
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
             User::class_name(),

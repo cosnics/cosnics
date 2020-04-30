@@ -72,7 +72,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
             foreach ($objects as $content_object_id)
             {
                 $type = DataManager::determineDataClassType(
-                    ContentObject::class_name(), $content_object_id
+                    ContentObject::class, $content_object_id
                 );
 
                 if (method_exists($this->get_parent(), 'get_helper_object'))
@@ -87,7 +87,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
                 // gets the type of the helper object
                 $type = DataManager::determineDataClassType(
-                    ContentObject::class_name(), $content_object_id
+                    ContentObject::class, $content_object_id
                 );
 
                 $this->create_complex_content_object_item($type, $content_object_id);
@@ -208,9 +208,9 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
         $items = array();
 
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), new EqualityCondition(
+            ComplexContentObjectItem::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                 ), new StaticConditionVariable($parent), ComplexContentObjectItem::get_table_name()
             )
         );

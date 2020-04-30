@@ -11,14 +11,14 @@ class ObjectTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieve_active_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $condition);
     }
 
     public function count_data($condition)
     {
         return DataManager::count_active_content_objects(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $condition);
     }
 }

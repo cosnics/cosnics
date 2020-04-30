@@ -294,18 +294,18 @@ class MigrationService
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT
             ),
             new StaticConditionVariable($parentId)
         );
 
         return $this->contentObjectRepository->findAll(
-            ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
                 $condition, null, null, array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem::class_name(),
+                            ComplexContentObjectItem::class,
                             ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                         )
                     )

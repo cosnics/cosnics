@@ -50,7 +50,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publicationId
         )->get_content_object();
 

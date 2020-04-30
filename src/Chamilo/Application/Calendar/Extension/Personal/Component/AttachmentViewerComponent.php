@@ -63,7 +63,7 @@ class AttachmentViewerComponent extends Manager
         }
 
         $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class_name(), $attachment_id
+            ContentObject::class, $attachment_id
         );
         if (!$contentObject)
         {

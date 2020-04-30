@@ -46,7 +46,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
              *
              * @var CourseRequest $request
              */
-            $request = DataManager::retrieve_by_id(CourseRequest::class_name(), (int) $requestId);
+            $request = DataManager::retrieve_by_id(CourseRequest::class, (int) $requestId);
             if (! CourseDataManager::subscribe_user_to_course($request->get_course_id(), '5', $request->get_user_id()))
             {
                 $failures ++;

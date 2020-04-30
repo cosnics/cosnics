@@ -120,7 +120,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             return;
         }
 
-        $document = DataManager::retrieve_by_id(ContentObject::class_name(), $answer);
+        $document = DataManager::retrieve_by_id(ContentObject::class, $answer);
 
         $html[] = '<br />';
 

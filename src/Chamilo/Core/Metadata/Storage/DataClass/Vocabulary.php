@@ -119,7 +119,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
             return null;
         }
         
-        return DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
     }
 
     /**

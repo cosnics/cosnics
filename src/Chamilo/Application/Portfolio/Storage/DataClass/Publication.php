@@ -67,7 +67,7 @@ class Publication extends DataClass
         if (! isset($this->content_object))
         {
             $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $this->get_content_object_id());
         }
 

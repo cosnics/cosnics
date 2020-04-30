@@ -73,7 +73,7 @@ class HotspotQuestion extends ContentObject implements Versionable
 
         if (isset($image) && $image != 0)
         {
-            return DataManager::retrieve_by_id(ContentObject::class_name(), $image);
+            return DataManager::retrieve_by_id(ContentObject::class, $image);
         }
         else
         {

@@ -42,7 +42,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
         }
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $pid);
 
         if (! $publication instanceof ContentObjectPublication)

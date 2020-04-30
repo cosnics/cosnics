@@ -20,7 +20,7 @@ class WikiHomepageSetterComponent extends Manager
     public function run()
     {
         $page = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class_name(), Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+            ComplexContentObjectItem::class, Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
         );
 
         if (!empty($page))

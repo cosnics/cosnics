@@ -67,14 +67,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
             User::class_name(),
-            $this->getTargetBaseVariable(User::class_name())
+            $this->getTargetBaseVariable(User::class)
         );
     }
 
@@ -96,14 +96,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityTypeWithEntries(
             Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class_name(), $userIds, $condition),
+            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForUser(),
             User::class_name(),
-            $this->getTargetBaseVariable(User::class_name())
+            $this->getTargetBaseVariable(User::class)
         );
     }
 
@@ -113,9 +113,9 @@ class AssignmentRepository
     protected function getDataClassPropertiesForUser()
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
 
         return $properties;
     }
@@ -139,14 +139,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(CourseGroup::class, $groupIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForCourseGroup(),
-            CourseGroup::class_name(),
-            $this->getTargetBaseVariable(CourseGroup::class_name())
+            CourseGroup::class,
+            $this->getTargetBaseVariable(CourseGroup::class)
         );
     }
 
@@ -168,14 +168,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityTypeWithEntries(
             Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class_name(), $courseGroupIds, $condition),
+            $this->getTargetEntitiesCondition(CourseGroup::class, $courseGroupIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForCourseGroup(),
-            CourseGroup::class_name(),
-            $this->getTargetBaseVariable(CourseGroup::class_name())
+            CourseGroup::class,
+            $this->getTargetBaseVariable(CourseGroup::class)
         );
     }
 
@@ -185,7 +185,7 @@ class AssignmentRepository
     protected function getDataClassPropertiesForCourseGroup()
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
+        $properties->add(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
 
         return $properties;
     }
@@ -209,14 +209,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityType(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class_name(), $groupIds, $condition),
+            $this->getTargetEntitiesCondition(Group::class, $groupIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForPlatformGroups(),
             Group::class_name(),
-            $this->getTargetBaseVariable(Group::class_name())
+            $this->getTargetBaseVariable(Group::class)
         );
     }
 
@@ -238,14 +238,14 @@ class AssignmentRepository
     {
         return $this->findTargetsForEntityTypeWithEntries(
             Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class_name(), $platformGroupIds, $condition),
+            $this->getTargetEntitiesCondition(Group::class, $platformGroupIds, $condition),
             $this->getContentObjectPublicationCondition($contentObjectPublication),
             $offset,
             $count,
             $orderBy,
             $this->getDataClassPropertiesForPlatformGroups(),
             Group::class_name(),
-            $this->getTargetBaseVariable(Group::class_name())
+            $this->getTargetBaseVariable(Group::class)
         );
     }
 
@@ -255,7 +255,7 @@ class AssignmentRepository
     protected function getDataClassPropertiesForPlatformGroups()
     {
         $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME));
+        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
         return $properties;
     }

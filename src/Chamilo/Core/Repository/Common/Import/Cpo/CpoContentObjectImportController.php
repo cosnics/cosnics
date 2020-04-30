@@ -131,18 +131,18 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function set_content_object_id_cache_id($old_id, $new_id)
     {
-        $this->set_cache_id(ContentObject::class_name(), ContentObject::PROPERTY_ID, $old_id, $new_id);
+        $this->set_cache_id(ContentObject::class, ContentObject::PROPERTY_ID, $old_id, $new_id);
     }
 
     public function set_category_id_cache_id($old_id, $new_id)
     {
-        $this->set_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id, $new_id);
+        $this->set_cache_id(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID, $old_id, $new_id);
     }
 
     public function set_content_object_object_number_cache_id($old_object_number, $new_object_number)
     {
         $this->set_cache_id(
-            ContentObject::class_name(), 
+            ContentObject::class, 
             ContentObject::PROPERTY_OBJECT_NUMBER, 
             $old_object_number, 
             $new_object_number);
@@ -151,7 +151,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_complex_content_object_item_id_cache_id($old_item_id, $new_item_id)
     {
         $this->set_cache_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             ComplexContentObjectItem::PROPERTY_ID, 
             $old_item_id, 
             $new_item_id);
@@ -183,19 +183,19 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function get_content_object_id_cache_id($old_id)
     {
-        return $this->get_cache_id(ContentObject::class_name(), ContentObject::PROPERTY_ID, $old_id);
+        return $this->get_cache_id(ContentObject::class, ContentObject::PROPERTY_ID, $old_id);
     }
 
     public function get_category_id_cache_id($old_id)
     {
-        $cachedCategory = $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        $cachedCategory = $this->get_cache_id(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID, $old_id);
         return empty($cachedCategory) ? 0 : $cachedCategory;
     }
 
     public function get_content_object_object_number_cache_id($old_object_number)
     {
         return $this->get_cache_id(
-            ContentObject::class_name(), 
+            ContentObject::class, 
             ContentObject::PROPERTY_OBJECT_NUMBER, 
             $old_object_number);
     }
@@ -203,7 +203,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function get_complex_content_object_item_id_cache_id($old_item_id)
     {
         return $this->get_cache_id(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             ComplexContentObjectItem::PROPERTY_ID, 
             $old_item_id);
     }
@@ -278,7 +278,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 self::TYPE_ERROR);
         }
         
-        return $this->get_cache_ids(ContentObject::class_name(), ContentObject::PROPERTY_ID);
+        return $this->get_cache_ids(ContentObject::class, ContentObject::PROPERTY_ID);
     }
 
     public function process_categories()

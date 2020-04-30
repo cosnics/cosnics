@@ -254,7 +254,7 @@ class GroupRepository
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentIdentifier)
         );
 
@@ -263,7 +263,7 @@ class GroupRepository
         return $this->getNestedSetDataClassRepository()->retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         );
     }

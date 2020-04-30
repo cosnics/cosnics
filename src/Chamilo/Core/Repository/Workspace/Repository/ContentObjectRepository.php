@@ -80,7 +80,7 @@ class ContentObjectRepository
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($personalWorkspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
@@ -157,7 +157,7 @@ class ContentObjectRepository
     protected function getWorkspaceJoins()
     {
         $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation::class_name(),
                 WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID));
@@ -201,7 +201,7 @@ class ContentObjectRepository
     public function findById($contentObjectId)
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $contentObjectId);
     }
 
@@ -263,7 +263,7 @@ class ContentObjectRepository
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CURRENT),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CURRENT),
                 new StaticConditionVariable(ContentObject::CURRENT_OLD)));
 
         $conditions[] = $this->getStateCondition(ContentObject::STATE_NORMAL);
@@ -285,7 +285,7 @@ class ContentObjectRepository
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                     new StaticConditionVariable($type)));
         }
 
@@ -301,7 +301,7 @@ class ContentObjectRepository
     protected function getStateCondition($state)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable($state));
     }
 }

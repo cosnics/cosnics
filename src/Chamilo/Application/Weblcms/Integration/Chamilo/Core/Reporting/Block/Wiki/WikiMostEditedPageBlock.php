@@ -24,16 +24,16 @@ class WikiMostEditedPageBlock extends ToolBlock
         $reporting_data->set_rows(array(Translation::get('MostEditedPage'), Translation::get('NumberOfEdits')));
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         
         $wiki = $publication->get_content_object();
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($wiki->get_id()))))->as_array();
         
@@ -49,7 +49,7 @@ class WikiMostEditedPageBlock extends ToolBlock
             foreach ($complex_content_object_items as $complex_content_object_item)
             {
                 $page_edits = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), 
+                    ContentObject::class, 
                     $complex_content_object_item->get_ref())->get_version_count();
                 
                 if ($page_edits >= $most_edits)

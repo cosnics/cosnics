@@ -27,14 +27,14 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
             new StaticConditionVariable($username));
 
         if (! is_null($currentUsername))
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new StaticConditionVariable($currentUsername)));
         }
 

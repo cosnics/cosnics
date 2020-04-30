@@ -115,11 +115,11 @@ abstract class Manager extends Application
         $selected_type = Request::get(self::PARAM_ENTITY_TYPE, UserEntity::ENTITY_TYPE);
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($selected_type)
         );
 
-        if (DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassCountParameters($condition)) == 0 &&
             $selected_type == UserEntity::ENTITY_TYPE)
         {
             return PlatformGroupEntity::ENTITY_TYPE;
@@ -147,21 +147,21 @@ abstract class Manager extends Application
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->get_selected_entity_type())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($this->get_selected_entity_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE),
+            new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
             new StaticConditionVariable($selected_type)
         );
 
         $condition = new AndCondition($conditions);
 
-        if (DataManager::count(Admin::class_name(), new DataClassCountParameters($condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassCountParameters($condition)) == 0 &&
             $selected_type == CourseEntity::ENTITY_TYPE)
         {
             return CourseCategoryEntity::ENTITY_TYPE;
@@ -185,7 +185,7 @@ abstract class Manager extends Application
             )
         );
 
-        $count = DataManager::count(Admin::class_name());
+        $count = DataManager::count(Admin::class);
 
         if ($count > 0)
         {

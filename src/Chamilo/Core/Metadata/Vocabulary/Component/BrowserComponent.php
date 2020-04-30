@@ -106,7 +106,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($userId != 0)
         {
-            $user = DataManager::retrieve_by_id(User::class_name(), $userId);
+            $user = DataManager::retrieve_by_id(User::class, $userId);
             $breadcrumbTitle = $user->get_fullname();
         }
         else

@@ -79,9 +79,9 @@ abstract class Manager extends Application
         $course_type_ids = $this->get_selected_course_type_ids();
         
         $condition = new InCondition(
-            new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID), 
+            new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID),
             $course_type_ids);
-        $result_set = DataManager::retrieves(CourseType::class_name(), new DataClassRetrievesParameters($condition));
+        $result_set = DataManager::retrieves(CourseType::class, new DataClassRetrievesParameters($condition));
         
         if ($result_set->size() == 0)
         {

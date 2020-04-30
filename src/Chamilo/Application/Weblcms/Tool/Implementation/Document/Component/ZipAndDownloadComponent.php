@@ -68,7 +68,7 @@ class ZipAndDownloadComponent extends Manager
         else
         {
             $category = WeblcmsDataManager::retrieve_by_id(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 $category_id);
 
             $this->zip_name .= ' -_' . $category->get_name();
@@ -93,31 +93,31 @@ class ZipAndDownloadComponent extends Manager
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_COURSE_ID),
                     new StaticConditionVariable($this->get_course_id()));
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_TOOL),
                     new StaticConditionVariable($this->get_tool_id()));
 
                 $conditions[] = new InCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_CATEGORY_ID),
                     $category_id);
 
                 $subselect_condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                     array(File::class_name(), Webpage::class_name()));
 
                 $conditions[] = new SubselectCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     ContentObject::get_table_name(),
                     $subselect_condition);
 
@@ -147,7 +147,7 @@ class ZipAndDownloadComponent extends Manager
                 // Only retrieve visible publications
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication::class_name(),
+                        ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_HIDDEN),
                     new StaticConditionVariable(0));
 
@@ -176,7 +176,7 @@ class ZipAndDownloadComponent extends Manager
                     $count ++;
 
                     $document = DataManager::retrieve_by_id(
-                        ContentObject::class_name(),
+                        ContentObject::class,
                         $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
 
                     if (! $document instanceof File && ! $document instanceof Webpage)
@@ -228,19 +228,19 @@ class ZipAndDownloadComponent extends Manager
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_COURSE),
             new StaticConditionVariable($this->get_course_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_TOOL),
             new StaticConditionVariable($this->get_tool_id()));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::class,
                 ContentObjectPublicationCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_cat));
 
@@ -248,7 +248,7 @@ class ZipAndDownloadComponent extends Manager
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::class,
                     ContentObjectPublicationCategory::PROPERTY_VISIBLE),
                 new StaticConditionVariable(true));
         }
@@ -256,7 +256,7 @@ class ZipAndDownloadComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $categories = WeblcmsDataManager::retrieves(
-            ContentObjectPublicationCategory::class_name(),
+            ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition));
 
         while ($category = $categories->next_result())

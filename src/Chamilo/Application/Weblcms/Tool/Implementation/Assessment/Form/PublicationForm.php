@@ -51,11 +51,11 @@ class PublicationForm extends ContentObjectPublicationForm
 
             $parameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                     new StaticConditionVariable($first_publication->get_id())
                 )
             );
-            $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+            $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
             $configuration = $assessment_publication->get_configuration();
         }
         else
@@ -149,7 +149,7 @@ class PublicationForm extends ContentObjectPublicationForm
                                 ), new StaticConditionVariable($publication->get_id())
                             )
                         );
-                        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+                        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
                         $assessment_publication->set_allow_hints($allow_hints);
                         $assessment_publication->set_show_score($show_score);

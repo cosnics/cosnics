@@ -31,7 +31,7 @@ class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render()));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, false)
         );
 
         $glyph = new FontAwesomeGlyph('comment', array(), Translation::get(self::PROPERTY_FEEDBACK_TYPE));

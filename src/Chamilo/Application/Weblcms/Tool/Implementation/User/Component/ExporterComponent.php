@@ -96,8 +96,8 @@ class ExporterComponent extends Manager
         $user_records = CourseDataManager::retrieve_all_course_users(
             $this->get_course_id(), null, null, null, array(
                 new OrderBy(new StaticConditionVariable('subscription_status', false)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         );
 
@@ -105,7 +105,7 @@ class ExporterComponent extends Manager
 
         while ($user_record = $user_records->next_result())
         {
-            $users[] = DataClass::factory(User::class_name(), $user_record);
+            $users[] = DataClass::factory(User::class, $user_record);
         }
 
         $filename = Translation::getInstance()->getTranslation(
@@ -125,7 +125,7 @@ class ExporterComponent extends Manager
     protected function exportIndividualSubscribedUsers()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticColumnConditionVariable($this->get_course_id())
         );
 
@@ -133,11 +133,11 @@ class ExporterComponent extends Manager
             $condition, null, null, array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS
                     )
                 ),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
         )->as_array();
 
@@ -145,7 +145,7 @@ class ExporterComponent extends Manager
         foreach ($individualUsers as $individualUserRecord)
         {
             $individualUserRecordCopy = $individualUserRecord;
-            $user = DataClass::factory(User::class_name(), $individualUserRecordCopy);
+            $user = DataClass::factory(User::class, $individualUserRecordCopy);
 
             $user->set_optional_property(
                 CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS,
@@ -183,7 +183,7 @@ class ExporterComponent extends Manager
             return $this->exportAllUsers();
         }
 
-        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $groupId);
 
         if (!$group instanceof Group)
         {
@@ -201,11 +201,11 @@ class ExporterComponent extends Manager
         else
         {
             $condition =
-                new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $groupUsersIds);
+                new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $groupUsersIds);
 
             $orderBy = array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             );
 
             $groupUsers = DataManager::retrieves(
@@ -251,7 +251,7 @@ class ExporterComponent extends Manager
         }
 
         $condition = new InCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             $parentIds
         );
 

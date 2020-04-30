@@ -77,7 +77,7 @@ class ContentObjectResourceParser
         try
         {
             $contentObject = DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $contentObjectId);
 
             if (! $contentObject instanceof ContentObject)

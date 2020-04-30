@@ -46,7 +46,7 @@ class RestorerComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+                $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
 
                 if (RightsService::getInstance()->canDestroyContentObject(
                     $this->get_user(),
@@ -147,9 +147,9 @@ class RestorerComponent extends Manager
     public function repository_category_exists($id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
             new StaticConditionVariable($id));
-        return (DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition)) > 0);
+        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

@@ -229,7 +229,7 @@ class Assignment extends ContentObject implements AttachmentSupport
     {
         $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
         $contentObjects = DataManager::retrieves(
-            ContentObject::class_name(), new InCondition(
+            ContentObject::class, new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 explode(',', $automaticFeedbackContentObjectIds)
             )

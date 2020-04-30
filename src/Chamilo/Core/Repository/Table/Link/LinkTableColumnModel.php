@@ -25,12 +25,12 @@ class LinkTableColumnModel extends DataClassTableColumnModel implements TableCol
         else
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TYPE, null, false));
+                new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE, null, false));
             $this->add_column(
-                new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, null, false));
+                new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, null, false));
             $this->add_column(
                 new DataClassPropertyTableColumn(
-                    ContentObject::class_name(), 
+                    ContentObject::class,
                     ContentObject::PROPERTY_DESCRIPTION, 
                     null, 
                     false));

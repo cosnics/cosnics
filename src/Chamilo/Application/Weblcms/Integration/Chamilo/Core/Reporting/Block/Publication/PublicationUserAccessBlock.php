@@ -18,7 +18,7 @@ class PublicationUserAccessBlock extends ToolBlock
         $reporting_data = new ReportingData();
         $content_object_publication_id = $this->getPublicationId();
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $content_object_publication_id);
         
         $reporting_data->set_categories(
@@ -30,7 +30,7 @@ class PublicationUserAccessBlock extends ToolBlock
         
         $reporting_data->set_rows(array(Translation::get('count')));
         
-        $user = DataManager::retrieve_by_id(User::class_name(), $this->get_user_id());
+        $user = DataManager::retrieve_by_id(User::class, $this->get_user_id());
         
         $reporting_data->add_data_category_row(
             Translation::get('User', null, Manager::context()),

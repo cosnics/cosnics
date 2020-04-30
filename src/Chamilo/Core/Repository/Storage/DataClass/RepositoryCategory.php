@@ -107,10 +107,10 @@ class RepositoryCategory extends PlatformCategory
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
                 new StaticConditionVariable($this->get_parent())
             );
-            $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
+            $count = DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition));
             if ($count == 0)
             {
                 $this->add_error(Translation::get('ParentDoesNotExist'));
@@ -132,31 +132,31 @@ class RepositoryCategory extends PlatformCategory
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID),
+                    new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
                     new StaticConditionVariable($this->get_id())
                 )
             );
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME),
             new StaticConditionVariable($this->get_name())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_parent())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
             new StaticConditionVariable($this->get_type_id())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
             new StaticConditionVariable($this->get_type())
         );
 
         $condition = new AndCondition($conditions);
-        $count = DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition));
+        $count = DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition));
 
         if ($count > 0)
         {
@@ -329,7 +329,7 @@ class RepositoryCategory extends PlatformCategory
             new StaticConditionVariable($this->get_id())
         );
 
-        return DataManager::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0;
     }
 
     public function get_children_ids($recursive = true)
@@ -371,7 +371,7 @@ class RepositoryCategory extends PlatformCategory
         }
         else
         {
-            $parent = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $this->get_parent());
+            $parent = DataManager::retrieve_by_id(RepositoryCategory::class, $this->get_parent());
 
             $parent_ids = array();
             $parent_ids[] = $parent->get_id();

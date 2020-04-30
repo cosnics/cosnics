@@ -41,7 +41,7 @@ class DeleterComponent extends Manager implements DelegateComponent
         foreach ($publication_ids as $pid)
         {
             $publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 $pid);
 
             if (! $publication instanceof ContentObjectPublication)

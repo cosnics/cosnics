@@ -167,15 +167,15 @@ class DocumentSaverComponent extends Manager
     protected function retrieve_open_document_question_ids($publication_id)
     {
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $publication_id);
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($publication->get_content_object_id()));
         $complex_questions = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $condition)->as_array();
         // Array of open question ids in the publication that permit documents
         // to be submitted.

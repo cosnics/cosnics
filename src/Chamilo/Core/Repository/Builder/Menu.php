@@ -174,25 +174,25 @@ class Menu extends HtmlMenu
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::get_table_name()
         );
         $parameters = new DataClassRetrievesParameters($condition);
         $clois = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $parameters
+            ComplexContentObjectItem::class, $parameters
         );
 
         while ($cloi = $clois->next_result())
         {
             $lo = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $cloi->get_ref()
+                ContentObject::class, $cloi->get_ref()
             );
             $url = null;
 
             if (in_array($lo->get_type(), DataManager::get_active_helper_types()))
             {
                 $lo = DataManager::retrieve_by_id(
-                    ContentObject::class_name(), $lo->get_reference()
+                    ContentObject::class, $lo->get_reference()
                 );
                 $url = $this->get_build_complex_url($lo);
             }

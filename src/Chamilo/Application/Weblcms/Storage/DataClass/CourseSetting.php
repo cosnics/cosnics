@@ -192,7 +192,7 @@ class CourseSetting extends DataClass
     {
         return $this->get_foreign_property(
             self::FOREIGN_PROPERTY_TOOL, 
-            CourseTool::class_name());
+            CourseTool::class);
     }
 
     /**

@@ -111,13 +111,13 @@ class Connector
         
         $subconditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(), 
+                CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_USER_ID), 
             new StaticConditionVariable(Session::get_user_id()));
         
         $subconditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(), 
+                CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_COURSE_TYPE_ID), 
             new StaticConditionVariable($course_type_id));
         
@@ -126,7 +126,7 @@ class Connector
         $condition = new SubselectCondition(
             new PropertyConditionVariable(CourseUserCategory::class_name(), CourseUserCategory::PROPERTY_ID), 
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class_name(), 
+                CourseTypeUserCategory::class,
                 CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID), 
             CourseTypeUserCategory::get_table_name(), 
             $subcondition);

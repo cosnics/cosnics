@@ -36,7 +36,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
         $this->publicationId = Request::get(Manager::PARAM_PUBLICATION);
 
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->publicationId
         )->get_content_object();
 

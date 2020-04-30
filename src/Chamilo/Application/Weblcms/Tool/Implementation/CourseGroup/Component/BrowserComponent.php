@@ -53,8 +53,8 @@ class BrowserComponent extends TabComponent implements TableSupport
         $conditions = array();
 
         $properties = array();
-        $properties[] = new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME);
-        $properties[] = new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_DESCRIPTION);
+        $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME);
+        $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION);
         $query_condition = $this->buttonToolbarRenderer->getConditions($properties);
 
         $root_course_group = $this->rootCourseGroup;
@@ -65,13 +65,13 @@ class BrowserComponent extends TabComponent implements TableSupport
         {
             $root_course_group_id = $root_course_group->get_id();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($root_course_group_id));
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($course_group_id));
         }
 

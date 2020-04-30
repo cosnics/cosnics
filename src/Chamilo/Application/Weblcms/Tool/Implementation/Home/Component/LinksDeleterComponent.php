@@ -15,7 +15,7 @@ class LinksDeleterComponent extends Manager
         $pub_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $pub_id);
         
         $publication->set_show_on_homepage(0);

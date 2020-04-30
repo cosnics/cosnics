@@ -46,7 +46,7 @@ class DeleterComponent extends Manager
         {
             /** @var ContentObjectPublication $publication */
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), $pid
+                ContentObjectPublication::class, $pid
             );
 
             if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication) ||

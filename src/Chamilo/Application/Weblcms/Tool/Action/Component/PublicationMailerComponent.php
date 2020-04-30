@@ -32,7 +32,7 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
              * @var ContentObjectPublication $publication
              */
             $publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 $publication_id);
             
             // currently: publications only sent once! Maybe this is not necessary...

@@ -26,16 +26,16 @@ class WikiMostVisitedPageBlock extends ToolBlock
         $reporting_data->set_rows(array(Translation::get('MostVisitedPage'), Translation::get('NumberOfVisits')));
         
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         $wiki = $publication->get_content_object();
         
         $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($wiki->get_id()))))->as_array();
         

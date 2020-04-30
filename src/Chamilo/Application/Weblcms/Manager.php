@@ -198,7 +198,7 @@ abstract class Manager extends Application
      */
     public function get_category($id)
     {
-        return DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $id);
+        return DataManager::retrieve_by_id(ContentObjectPublication::class, $id);
     }
 
     /**
@@ -224,10 +224,10 @@ abstract class Manager extends Application
         // if (! is_null($this->get_course_id()))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+                new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
                 new StaticConditionVariable(Request::get(self::PARAM_COURSE)));
             $sections = DataManager::retrieves(
-                CourseSection::class_name(),
+                CourseSection::class,
                 new DataClassRetrievesParameters($condition));
 
             while ($section = $sections->next_result())
@@ -251,7 +251,7 @@ abstract class Manager extends Application
 
     public function count_requests($condition = null)
     {
-        return DataManager::count(CourseRequest::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseRequest::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -276,7 +276,7 @@ abstract class Manager extends Application
      */
     public function retrieve_course_category($course_category)
     {
-        return DataManager::retrieve_by_id(CourseCategory::class_name(), $course_category);
+        return DataManager::retrieve_by_id(CourseCategory::class, $course_category);
     }
 
     /**

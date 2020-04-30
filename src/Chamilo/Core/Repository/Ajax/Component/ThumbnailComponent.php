@@ -30,7 +30,7 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function run()
     {
         $contentObject = DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class,
             $this->getPostDataValue(Manager::PARAM_CONTENT_OBJECT_ID));
         
         if ($contentObject instanceof File)

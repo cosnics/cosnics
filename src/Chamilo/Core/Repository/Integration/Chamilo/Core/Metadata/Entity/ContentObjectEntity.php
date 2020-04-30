@@ -24,7 +24,7 @@ class ContentObjectEntity extends DataClassEntity
      */
     public function getDataClassObject($dataClassName, $dataClassIdentifier)
     {
-        return DataManager::retrieve_by_id(ContentObject::class_name(), $dataClassIdentifier);
+        return DataManager::retrieve_by_id(ContentObject::class, $dataClassIdentifier);
     }
 
     /**

@@ -34,9 +34,9 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
         
         $this->add_column(
             new DataClassPropertyTableColumn(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_START_TIME));
@@ -50,9 +50,9 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
         $publication = $this->get_component()->get_publication();
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
         
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) ||
              $assessment_publication->get_configuration()->show_score())

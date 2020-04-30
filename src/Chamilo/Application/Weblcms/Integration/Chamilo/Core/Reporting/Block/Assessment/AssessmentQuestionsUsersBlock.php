@@ -66,16 +66,16 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $this->reporting_data = new ReportingData();
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::class, 
                 ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($publication->get_content_object_id()));
         $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
+            ComplexContentObjectItem::class, 
             new DataClassRetrievesParameters($condition))->as_array();
         
         /**

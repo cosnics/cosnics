@@ -42,7 +42,7 @@ class DeleterComponent extends Manager
         {
             /** @var ContentObjectPublication $publication */
             $publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), $pid
+                ContentObjectPublication::class, $pid
             );
 
             if (!empty($publication) && $this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))

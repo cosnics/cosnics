@@ -122,7 +122,7 @@ abstract class ToolAccessBlock extends ToolBlock
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable($tool_name));
     }

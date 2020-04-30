@@ -36,10 +36,10 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, false)
         );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION, false)
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION, false)
         );
     }
 

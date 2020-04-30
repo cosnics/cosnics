@@ -107,10 +107,10 @@ class FileContentObjectImportController extends ContentObjectImportController
             $hash = md5_file($file->get_path());
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parameters()->get_user()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH), 
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
                 new StaticConditionVariable($hash));
             $condition = new AndCondition($conditions);
             $parameters = new DataClassRetrievesParameters($condition);

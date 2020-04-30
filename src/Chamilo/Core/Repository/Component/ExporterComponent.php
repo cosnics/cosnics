@@ -180,7 +180,7 @@ class ExporterComponent extends Manager
     private function export_table($content_object_ids)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $content_object_ids
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
         $parameters = new DataClassDistinctParameters(
             $condition, new DataClassProperties(
@@ -188,7 +188,7 @@ class ExporterComponent extends Manager
             )
         );
 
-        $types = DataManager::distinct(ContentObject::class_name(), $parameters);
+        $types = DataManager::distinct(ContentObject::class, $parameters);
 
         $this->is_exportable = array();
 
@@ -210,11 +210,11 @@ class ExporterComponent extends Manager
 
             $conditions = array();
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $content_object_ids
             );
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
                 new StaticConditionVariable($type)
             );
             $condition = new AndCondition($conditions);
@@ -224,7 +224,7 @@ class ExporterComponent extends Manager
                     array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
                 )
             );
-            $ids = DataManager::distinct(ContentObject::class_name(), $parameters);
+            $ids = DataManager::distinct(ContentObject::class, $parameters);
             $table_row[] = count($ids);
 
             foreach (ContentObjectExport::get_types() as $export_type)

@@ -147,13 +147,13 @@ class SorterComponent extends Manager
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class_name(), CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
+                    CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($course_id)
             );
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class_name(),
+                    CourseTypeUserCategoryRelCourse::class,
                     CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID
                 ), new StaticConditionVariable($course_type_user_category_id)
             );
@@ -161,7 +161,7 @@ class SorterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $course_type_user_category_rel_course = DataManager::retrieves(
-                CourseTypeUserCategoryRelCourse::class_name(), new DataClassRetrievesParameters($condition)
+                CourseTypeUserCategoryRelCourse::class, new DataClassRetrievesParameters($condition)
             )->next_result();
         }
 
@@ -206,7 +206,7 @@ class SorterComponent extends Manager
         $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
 
         $course_type_user_category = DataManager::retrieve_by_id(
-            CourseTypeUserCategory::class_name(), $course_type_user_category_id
+            CourseTypeUserCategory::class, $course_type_user_category_id
         );
 
         $success = $course_type_user_category->delete();
@@ -230,7 +230,7 @@ class SorterComponent extends Manager
     {
         $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
         $course_type_user_category = DataManager::retrieve_by_id(
-            CourseTypeUserCategory::class_name(), $course_type_user_category_id
+            CourseTypeUserCategory::class, $course_type_user_category_id
         );
 
         $course_user_category = DataManager::retrieve_by_id(
@@ -501,7 +501,7 @@ class SorterComponent extends Manager
     public function move_category($course_type_user_category_id, $direction)
     {
         $move_category = DataManager::retrieve_by_id(
-            CourseTypeUserCategory::class_name(), $course_type_user_category_id
+            CourseTypeUserCategory::class, $course_type_user_category_id
         );
 
         $sort = $move_category->get_sort();
@@ -554,13 +554,13 @@ class SorterComponent extends Manager
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(), CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
+                CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
             ), new StaticConditionVariable($course_id)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class_name(),
+                CourseTypeUserCategoryRelCourse::class,
                 CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID
             ), new StaticConditionVariable($course_type_user_category_id)
         );
@@ -568,7 +568,7 @@ class SorterComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $course_type_user_category_rel_course = DataManager::retrieve(
-            CourseTypeUserCategoryRelCourse::class_name(), new DataClassRetrieveParameters($condition)
+            CourseTypeUserCategoryRelCourse::class, new DataClassRetrieveParameters($condition)
         );
 
         $sort_factor = $direction == 'up' ? - 1 : 1;
@@ -614,7 +614,7 @@ class SorterComponent extends Manager
         if (isset($selected_course_type_id) && $selected_course_type_id != 0)
         {
             $selected_course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
-                CourseType::class_name(), $selected_course_type_id
+                CourseType::class, $selected_course_type_id
             );
 
             if (!$selected_course_type)
@@ -633,7 +633,7 @@ class SorterComponent extends Manager
                     $this->get_user_id()
                 );
 
-                DataClassCache::truncate(CourseTypeUserOrder::class_name());
+                DataClassCache::truncate(CourseTypeUserOrder::class);
 
                 $selected_course_type_user_order =
                     \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_user_order_for_course_type(

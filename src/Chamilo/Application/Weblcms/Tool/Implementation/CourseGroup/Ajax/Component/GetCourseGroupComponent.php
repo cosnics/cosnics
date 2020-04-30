@@ -40,7 +40,7 @@ class GetCourseGroupComponent extends Manager
     public function get_course_group()
     {
         $id = $this->getPostDataValue(self::PARAM_COURSE_GROUP_ID);
-        return DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
+        return DataManager::retrieve_by_id(CourseGroup::class, $id);
     }
 
     public function getRequiredPostParameters()

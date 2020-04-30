@@ -248,10 +248,10 @@ class GroupImportForm extends FormValidator
     public function get_group($code)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_CODE), new StaticConditionVariable($code)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($code)
         );
 
-        $groups = DataManager::retrieves(Group::class_name(), new DataClassRetrievesParameters($condition));
+        $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
 
         return $groups->next_result();
     }

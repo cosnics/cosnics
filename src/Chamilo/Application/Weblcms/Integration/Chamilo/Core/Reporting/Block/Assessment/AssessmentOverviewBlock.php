@@ -66,7 +66,7 @@ class AssessmentOverviewBlock extends ToolBlock
             foreach ($user_attempts as $key => $pub_attempts)
             {
                 $pub = DataManager::retrieve_by_id(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     $key);
                 
                 if (! $pub instanceof ContentObjectPublication)

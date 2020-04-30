@@ -74,13 +74,13 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
 
     public function count_categories($condition = null)
     {
-        return DataManager::count(CourseCategory::class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseCategory::class, new DataClassCountParameters($condition));
     }
 
     public function retrieve_categories($condition, $offset, $count, $order_property)
     {
         return DataManager::retrieves(
-            CourseCategory::class_name(),
+            CourseCategory::class,
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 

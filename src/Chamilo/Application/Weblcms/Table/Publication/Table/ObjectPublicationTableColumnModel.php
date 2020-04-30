@@ -40,22 +40,22 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
         $this->add_column(new StaticTableColumn(self::COLUMN_STATUS, '', null, 'publication_table_status_column'));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLICATION_DATE));
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
+            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE));
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLISHER_ID));
 
         $this->add_column(
@@ -65,7 +65,7 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                ContentObjectPublication::class_name(),
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX,
                 null,
                 true,

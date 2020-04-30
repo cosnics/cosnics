@@ -52,7 +52,7 @@ class GetContentObjectsComponent extends Manager
         $filterConditionRenderer = new ConditionFilterRenderer($filterData, $workspace);
 
         $contentObjects = $service->getContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
+            ContentObject::class,
             $workspace, $filterConditionRenderer
         );
 

@@ -88,7 +88,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $object->get_decision_icon();
             case Request::PROPERTY_CATEGORY_ID :
                 $category = DataManager::retrieve_by_id(
-                    CourseCategory::class_name(), $object->get_category_id()
+                    CourseCategory::class, $object->get_category_id()
                 );
                 if (!$category)
                 {

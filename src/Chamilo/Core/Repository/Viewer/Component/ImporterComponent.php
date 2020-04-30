@@ -228,10 +228,10 @@ class ImporterComponent extends Manager implements DelegateComponent
     {
         $conditions = array();
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), $content_object_ids
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), $this->get_types()
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE), $this->get_types()
         );
         $condition = new AndCondition($conditions);
 
@@ -241,7 +241,7 @@ class ImporterComponent extends Manager implements DelegateComponent
             )
         );
 
-        return DataManager::distinct(ContentObject::class_name(), $parameters);
+        return DataManager::distinct(ContentObject::class, $parameters);
     }
 
     public function getWorkspace()

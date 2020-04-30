@@ -178,17 +178,17 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $pid = $this->getPublicationId();
 
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), $pid
+            ContentObjectPublication::class, $pid
         );
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
 
         $questions = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), new DataClassRetrievesParameters($condition)
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
         );
 
         $questions_arr = array();

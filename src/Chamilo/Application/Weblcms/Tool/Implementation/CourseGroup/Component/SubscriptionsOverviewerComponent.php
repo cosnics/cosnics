@@ -187,19 +187,19 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
                 $conditions = array();
 
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE), '*' . $query . '*'
+                    new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), '*' . $query . '*'
                 );
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), '*' . $query . '*'
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
                 );
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
                 );
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), '*' . $query . '*'
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
                 );
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL), '*' . $query . '*'
+                    new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), '*' . $query . '*'
                 );
 
                 return new OrCondition($conditions);

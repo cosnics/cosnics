@@ -172,7 +172,7 @@ class Rights extends RightsUtil
             
             self::$target_users[$user->get_id()] = array();
             
-            DataClassCache::truncate(Group::class_name());
+            DataClassCache::truncate(Group::class);
             
             if (count($allowed_groups) > 0)
             {

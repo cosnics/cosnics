@@ -128,14 +128,14 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
     {
         $sub_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($selected_assessment->get_id())
         );
         $condition = new SubselectCondition(
 
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), ComplexContentObjectItem::get_table_name(), $sub_condition, ContentObject::get_table_name()
         );
 

@@ -81,19 +81,19 @@ class PlatformGroupEntityHelper
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
                     Group::class_name(),
                     Group::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $properties = new DataClassProperties();
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
-                new PropertiesConditionVariable(Group::class_name())));
+                new PropertiesConditionVariable(Group::class)));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
 
@@ -112,12 +112,12 @@ class PlatformGroupEntityHelper
     public function count_table_data($condition)
     {
         $join = new Join(
-            Admin::class_name(),
+            Admin::class,
             new EqualityCondition(
                 new PropertyConditionVariable(
                     Group::class_name(),
                     Group::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID)));
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
         $parameters = new DataClassCountParameters(

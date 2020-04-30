@@ -22,7 +22,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     public function get_tree_menu_data()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable(0));
         $group = DataManager::retrieves(
             Group::class_name(),
@@ -30,7 +30,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
                 $condition,
                 1,
                 null,
-                new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))))->next_result();
+                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))->next_result();
 
         $menu_item = new TreeMenuItem();
         $menu_item->set_title($group->get_name());
@@ -55,7 +55,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     private function get_menu_items($parent_menu_item, $parentId = 0)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentId));
         $groups = DataManager::retrieves(
             Group::class_name(),
@@ -63,7 +63,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
                 $condition,
                 null,
                 null,
-                new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))));
+                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))));
 
         while ($group = $groups->next_result())
         {

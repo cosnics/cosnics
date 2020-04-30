@@ -42,12 +42,12 @@ class AssessmentUserScoresBlock extends ToolBlock
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable(
                 ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true)));
@@ -56,11 +56,11 @@ class AssessmentUserScoresBlock extends ToolBlock
         $order_by = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::class, 
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE)));
         
         $publication_resultset = DataManager::retrieves(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             new DataClassRetrievesParameters($condition, null, null, $order_by));
         
         $publications = array();

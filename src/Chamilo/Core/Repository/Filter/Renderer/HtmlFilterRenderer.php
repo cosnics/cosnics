@@ -124,7 +124,7 @@ class HtmlFilterRenderer extends FilterRenderer
                 }
                 else
                 {
-                    $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+                    $category = DataManager::retrieve_by_id(RepositoryCategory::class, $category_id);
 
                     if ($category instanceof RepositoryCategory)
                     {
@@ -150,7 +150,7 @@ class HtmlFilterRenderer extends FilterRenderer
                 }
                 else
                 {
-                    $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
+                    $category = DataManager::retrieve_by_id(RepositoryCategory::class, $category_id);
 
                     if ($category instanceof RepositoryCategory)
                     {

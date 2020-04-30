@@ -91,14 +91,14 @@ class AttemptResultViewerComponent extends Manager
         }
 
         $this->assessment_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class,
             $this->assessment_attempt->get_assessment_id());
 
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->assessment_publication))
         {
@@ -376,9 +376,9 @@ class AttemptResultViewerComponent extends Manager
     {
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
-                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
         return $assessment_publication->get_configuration();
     }

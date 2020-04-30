@@ -741,7 +741,7 @@ abstract class AssignmentRepository
             new Join(
                 User::class_name(),
                 new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID)
                 )
             )
@@ -749,9 +749,9 @@ abstract class AssignmentRepository
 
         $joins->add(
             new Join(
-                ContentObject::class_name(),
+                ContentObject::class,
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_ID)
                 )
             )
@@ -771,12 +771,12 @@ abstract class AssignmentRepository
         $properties = new DataClassProperties();
 
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
 
-        $properties->add(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
+        $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
         $properties->add(
-            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION)
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED));
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID));
@@ -784,7 +784,7 @@ abstract class AssignmentRepository
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_ID));
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_USER_ID));
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_IP_ADDRESS));
-        $properties->add(new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE));
+        $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $orderProperty, $joins);
 

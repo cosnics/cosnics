@@ -34,10 +34,10 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $reporting_data->set_categories($categories);
         
         $user_id = Request::get('users');
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $user_id);
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         
         $this->add_category_from_array(

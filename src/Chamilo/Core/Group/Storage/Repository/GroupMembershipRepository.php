@@ -59,7 +59,7 @@ class GroupMembershipRepository
     public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             $groupIdentifiers
         );
 
@@ -153,7 +153,7 @@ class GroupMembershipRepository
     public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers)
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             $groupIdentifiers
         );
 

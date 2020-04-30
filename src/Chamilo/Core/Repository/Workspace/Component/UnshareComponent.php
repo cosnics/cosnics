@@ -59,7 +59,7 @@ class UnshareComponent extends Manager
         
         foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
         {
-            $contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $selectedContentObjectIdentifier);
+            $contentObject = DataManager::retrieve_by_id(ContentObject::class, $selectedContentObjectIdentifier);
             
             $contentObjectRelationService->deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(
                 $this->getCurrentWorkspace(), 

@@ -27,7 +27,7 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         $counter = 0;
         
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->getPublicationId());
         
         $assessment = $publication->get_content_object();

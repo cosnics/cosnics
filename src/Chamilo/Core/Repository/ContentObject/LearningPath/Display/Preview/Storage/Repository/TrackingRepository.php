@@ -462,7 +462,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
     )
     {
-        return new DataClassIterator(User::class_name(), array());
+        return new DataClassIterator(User::class, array());
     }
 
     /**

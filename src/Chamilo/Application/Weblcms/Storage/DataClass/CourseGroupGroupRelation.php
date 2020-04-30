@@ -257,17 +257,17 @@ class CourseGroupGroupRelation extends DataClass
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class, 
                 ContentObjectPublicationCategory::PROPERTY_NAME), 
             new StaticConditionVariable($this->get_name()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class, 
                 ContentObjectPublicationCategory::PROPERTY_COURSE), 
             new StaticConditionVariable($this->get_course_code()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::class, 
                 ContentObjectPublicationCategory::PROPERTY_TOOL), 
             new StaticConditionVariable($tool));
         $condition = new AndCondition($conditions);
@@ -285,10 +285,10 @@ class CourseGroupGroupRelation extends DataClass
     function get_course_groups_by_group_id()
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID), 
             new StaticConditionVariable($this->get_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE), 
             new StaticConditionVariable($this->get_course_code()));
         $condition = new AndCondition($conditions);
         
@@ -300,10 +300,10 @@ class CourseGroupGroupRelation extends DataClass
     function count_course_groups()
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID), 
             new StaticConditionVariable($this->get_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE), 
             new StaticConditionVariable($this->get_course_code()));
         $condition = new AndCondition($conditions);
         
@@ -313,10 +313,10 @@ class CourseGroupGroupRelation extends DataClass
     function check_before_saving()
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID), 
             new StaticConditionVariable($this->get_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE), 
             new StaticConditionVariable($this->get_course_code()));
         $condition = new AndCondition($conditions);
         $qty_course_groups = DataManager::count_course_groups($condition);

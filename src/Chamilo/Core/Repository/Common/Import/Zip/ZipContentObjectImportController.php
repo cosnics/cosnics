@@ -220,7 +220,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         else
         {
             $category = DataManager::retrieve_by_id(
-                RepositoryCategory::class_name(), 
+                RepositoryCategory::class,
                 $this->get_parameters()->get_category());
         }
         

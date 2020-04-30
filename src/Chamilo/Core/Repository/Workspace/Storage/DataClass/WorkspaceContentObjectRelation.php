@@ -109,7 +109,7 @@ class WorkspaceContentObjectRelation extends DataClass
     {
         if (! isset($this->contentObject))
         {
-            $this->contentObject = DataManager::retrieve_by_id(ContentObject::class_name(), $this->getContentObjectId());
+            $this->contentObject = DataManager::retrieve_by_id(ContentObject::class, $this->getContentObjectId());
         }
         
         return $this->contentObject;

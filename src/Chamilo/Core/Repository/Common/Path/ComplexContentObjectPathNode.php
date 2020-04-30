@@ -671,7 +671,7 @@ abstract class ComplexContentObjectPathNode
     public function forms_cycle_with($content_object_id)
     {
         $content_object = DataManager::retrieve_by_id(
-            ContentObject::class_name(), 
+            ContentObject::class, 
             $content_object_id);
         
         if ($content_object->is_complex_content_object())

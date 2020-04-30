@@ -185,7 +185,7 @@ abstract class BlogLayout
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_blog()->get_id())
         );
 
@@ -193,14 +193,14 @@ abstract class BlogLayout
             $condition, null, null, array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_ADD_DATE
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
                     )
                 )
             )
         );
 
         return DataManager::retrieves(
-            ComplexContentObjectItem::class_name(), $parameters
+            ComplexContentObjectItem::class, $parameters
         );
     }
 }

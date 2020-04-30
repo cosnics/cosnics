@@ -117,7 +117,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
 
         if ($this->category)
         {
-            $category = DataManager::retrieve_by_id(CourseCategory::class_name(), $this->category);
+            $category = DataManager::retrieve_by_id(CourseCategory::class, $this->category);
             $breadcrumbtrail->add(new Breadcrumb($this->get_url(), $category->get_name()));
         }
     }
@@ -153,11 +153,11 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_MOTIVATION),
+                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION),
                 '*' . $query . '*'
             );
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_SUBJECT),
+                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT),
                 '*' . $query . '*'
             );
 
@@ -173,19 +173,19 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             case self::PENDING_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::NO_DECISION)
                 );
                 break;
             case self::ALLOWED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::ALLOWED_DECISION)
                 );
                 break;
             case self::DENIED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                     new StaticConditionVariable(CourseRequest::DENIED_DECISION)
                 );
                 break;

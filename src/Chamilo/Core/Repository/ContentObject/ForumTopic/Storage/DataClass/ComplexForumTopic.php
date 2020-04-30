@@ -40,11 +40,11 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $email_notificator = new TopicEmailNotificator();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
 
         $email_notificator->set_forum($parent);
@@ -72,11 +72,11 @@ class ComplexForumTopic extends ComplexContentObjectItem
         parent::delete();
 
         $lo = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_ref());
 
         $parent = DataManager::retrieve_by_id(
-            ContentObject::class_name(),
+            ContentObject::class,
             $this->get_parent());
         $parent->remove_topic();
         $parent->remove_post($lo->get_total_posts());

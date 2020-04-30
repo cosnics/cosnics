@@ -241,43 +241,43 @@ class Course extends DataClass
         $id = $this->get_id();
 
         return array(
-            ContentObjectPublicationCategory::class_name() => new EqualityCondition(
+            ContentObjectPublicationCategory::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class_name(),
+                    ContentObjectPublicationCategory::class,
                     ContentObjectPublicationCategory::PROPERTY_COURSE),
                 new StaticConditionVariable($id)),
-            ContentObjectPublication::class_name() => new EqualityCondition(
+            ContentObjectPublication::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
+                    ContentObjectPublication::class,
                     ContentObjectPublication::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
-            CourseSection::class_name() => new EqualityCondition(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+            CourseSection::class => new EqualityCondition(
+                new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
-            CourseModuleLastAccess::class_name() => new EqualityCondition(
+            CourseModuleLastAccess::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseModuleLastAccess::class_name(),
+                    CourseModuleLastAccess::class,
                     CourseModuleLastAccess::PROPERTY_COURSE_CODE),
                 new StaticConditionVariable($id)),
-            CourseEntityRelation::class_name() => new EqualityCondition(
+            CourseEntityRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(),
+                    CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
-            CourseRequest::class_name() => new EqualityCondition(
-                new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_COURSE_ID),
+            CourseRequest::class => new EqualityCondition(
+                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
-            CourseGroup::class_name() => new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            CourseGroup::class => new EqualityCondition(
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
                 new StaticConditionVariable($id)),
-            CourseRelCourseSetting::class_name() => new EqualityCondition(
+            CourseRelCourseSetting::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseRelCourseSetting::class_name(),
+                    CourseRelCourseSetting::class,
                     CourseRelCourseSetting::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
-            CourseTypeUserCategoryRelCourse::class_name() => new EqualityCondition(
+            CourseTypeUserCategoryRelCourse::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class_name(),
+                    CourseTypeUserCategoryRelCourse::class,
                     CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)));
     }
@@ -505,19 +505,19 @@ class Course extends DataClass
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseRelCourseSetting::class_name(),
+                CourseRelCourseSetting::class,
                 CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID),
             new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID]));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseRelCourseSetting::class_name(),
+                CourseRelCourseSetting::class,
                 CourseRelCourseSetting::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(CourseRelCourseSetting::class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -604,7 +604,7 @@ class Course extends DataClass
         }
 
         // Create a location for each tool
-        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
         while ($tool = $tools->next_result())
         {
             if (! CourseManagementRights::getInstance()->create_location_in_courses_subtree(
@@ -793,15 +793,15 @@ class Course extends DataClass
     {
         $relationConditions = array();
         $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(),
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
 
-        return DataManager::count(CourseEntityRelation::class_name(), new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
+        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
     }
 
     /**
@@ -813,16 +813,16 @@ class Course extends DataClass
     {
         $relationConditions = array();
         $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(),
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
 
         return DataManager::retrieves(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
     }
 
@@ -835,15 +835,15 @@ class Course extends DataClass
     {
         $relationConditions = array();
         $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(),
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
 
-        return DataManager::count(CourseEntityRelation::class_name(), new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
+        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
     }
 
     /**
@@ -855,16 +855,16 @@ class Course extends DataClass
     {
         $relationConditions = array();
         $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class_name(),
+                CourseEntityRelation::class,
                 CourseEntityRelation::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
 
         return DataManager::retrieves(
-            CourseEntityRelation::class_name(),
+            CourseEntityRelation::class,
             new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
     }
 
@@ -876,16 +876,16 @@ class Course extends DataClass
     public function get_course_groups($as_array = true)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->get_id()));
         $result = DataManager::retrieves(
-            CourseGroup::class_name(),
+            CourseGroup::class,
             new DataClassRetrievesParameters(
                 $condition,
                 null,
                 null,
                 array(
-                    new OrderBy(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME)))));
+                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)))));
 
         return ($as_array ? $result->as_array() : $result);
     }
@@ -1130,7 +1130,7 @@ class Course extends DataClass
         if ($this->get_category_id())
         {
             return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                CourseCategory::class_name(),
+                CourseCategory::class,
                 $this->get_category_id());
         }
     }
@@ -1202,7 +1202,7 @@ class Course extends DataClass
             return null;
         }
 
-        return DataManager::retrieve_by_id(CourseType::class_name(), $this->get_course_type_id());
+        return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
     }
 
     /**

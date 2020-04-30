@@ -317,12 +317,12 @@ class AssignmentForm extends ContentObjectForm
             {
                 $contentObjectIdentifiers = $object->get_automatic_feedback_co_ids();
                 $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIdentifiers
                 );
 
                 $attachments = DataManager::retrieve_active_content_objects(
-                    ContentObject::class_name(), new DataClassRetrievesParameters($condition)
+                    ContentObject::class, new DataClassRetrievesParameters($condition)
                 )->as_array();
 
                 $defaultAttachments = new AdvancedElementFinderElements();

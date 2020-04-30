@@ -81,20 +81,20 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_COURSE_ID
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($this->getCourse()->getId())
             );
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(), ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_SHOW_ON_HOMEPAGE
                 ), new StaticConditionVariable(1)
             );
 
             $condition = new AndCondition($conditions);
 
             $this->publicationLinks = DataManager::retrieves(
-                ContentObjectPublication::class_name(), new DataClassRetrievesParameters($condition)
+                ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
             )->as_array();
         }
 
@@ -131,12 +131,12 @@ class PanelToolListRenderer extends ToolListRenderer
         {
             $condition = new InCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class_name(), CourseToolRelCourseSection::PROPERTY_SECTION_ID
+                    CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
                 ), $this->getSectionTypes()
             );
 
             $toolSectionRelations = DataManager::retrieves(
-                CourseToolRelCourseSection::class_name(), new DataClassRetrievesParameters($condition)
+                CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
             )->as_array();
 
             foreach ($toolSectionRelations as $toolSectionRelation)
@@ -181,18 +181,18 @@ class PanelToolListRenderer extends ToolListRenderer
             $this->sections = array();
 
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID),
+                new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->getCourse()->get_id())
             );
 
             $orderProperty = array(
                 new OrderBy(
-                    new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_DISPLAY_ORDER)
+                    new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
                 )
             );
 
             $this->sections = DataManager::retrieves(
-                CourseSection::class_name(), new DataClassRetrievesParameters($condition, null, null, $orderProperty)
+                CourseSection::class, new DataClassRetrievesParameters($condition, null, null, $orderProperty)
             )->as_array();
         }
 

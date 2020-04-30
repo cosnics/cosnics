@@ -68,7 +68,7 @@ class RawExportResultsComponent extends Manager
     protected function get_assessments()
     {
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class, 
             $this->get_publication_id());
         
         return array($publication->get_content_object());

@@ -20,7 +20,7 @@ class NoOfUsersBlock extends Block
         $reporting_data->add_data_category_row(
             Translation::get('GetNumberOfUsers'),
             Translation::get('Count'),
-            DataManager::count(User::class_name()));
+            DataManager::count(User::class));
 
         return $reporting_data;
     }

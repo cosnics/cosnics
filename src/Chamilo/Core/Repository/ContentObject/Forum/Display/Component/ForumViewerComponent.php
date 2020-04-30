@@ -217,13 +217,13 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $order_property = array();
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_ADD_DATE));
 
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->getForum()->get_id())),
             null,
@@ -231,7 +231,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $order_property);
 
         $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::class,
             $parameters);
 
         $this->topics = array();
@@ -240,7 +240,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         while ($child = $children->next_result())
         {
             $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class_name(),
+                ContentObject::class,
                 $child->get_ref());
             $child->set_ref($contentObject);
 
@@ -593,7 +593,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderAuthor(ComplexForumTopic $topic)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $topic->get_user_id());
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $topic->get_user_id());
         $name = "";
 
         if (! $user)

@@ -124,7 +124,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
 
         if ($course_type_id > 0)
         {
-            $course_type = CourseTypeDataManager::retrieve_by_id(CourseType::class_name(), $course_type_id);
+            $course_type = CourseTypeDataManager::retrieve_by_id(CourseType::class, $course_type_id);
 
             if ($course_type)
             {

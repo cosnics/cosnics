@@ -127,9 +127,9 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     protected function get_dependencies()
     {
         return array(
-            CourseTypeUserCategoryRelCourse::class_name() => new EqualityCondition(
+            CourseTypeUserCategoryRelCourse::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class_name(),
+                    CourseTypeUserCategoryRelCourse::class,
                     CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID
                 ), new StaticConditionVariable($this->get_id())
             )

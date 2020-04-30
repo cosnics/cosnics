@@ -100,7 +100,7 @@ class RequestsTreeRenderer extends HtmlMenu
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::PENDING_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                        new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                         new StaticConditionVariable(CourseRequest::NO_DECISION)
                     );
                     break;
@@ -110,7 +110,7 @@ class RequestsTreeRenderer extends HtmlMenu
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::ALLOWED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                        new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                         new StaticConditionVariable(CourseRequest::ALLOWED_DECISION)
                     );
                     break;
@@ -120,7 +120,7 @@ class RequestsTreeRenderer extends HtmlMenu
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::DENIED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CourseRequest::class_name(), CourseRequest::PROPERTY_DECISION),
+                        new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
                         new StaticConditionVariable(CourseRequest::DENIED_DECISION)
                     );
                     break;

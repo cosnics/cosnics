@@ -397,7 +397,7 @@ class WorkspaceService
     {
         if ($type == self::TYPE_PERSONAL)
         {
-            $user = DataManager::retrieve_by_id(User::class_name(), $typeIdentifier);
+            $user = DataManager::retrieve_by_id(User::class, $typeIdentifier);
             
             return $this->getPersonalWorkspaceForUser($user);
         }

@@ -99,7 +99,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
     private function get_publication_from_complex_content_object_item($clo_item)
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class_name(), $clo_item->get_ref()
+            ContentObject::class, $clo_item->get_ref()
         );
     }
 

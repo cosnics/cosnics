@@ -28,7 +28,7 @@ class ViewerComponent extends Manager
         if ($contentObjectIdentifier)
         {
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $contentObjectIdentifier
+                ContentObject::class, $contentObjectIdentifier
             );
 
             $canEditContentObject = RightsService::getInstance()->canEditContentObject(

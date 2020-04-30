@@ -73,7 +73,7 @@ class PublisherComponent extends Manager
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
                 $contentObject = DataManager::retrieve_by_id(
-                    ContentObject::class_name(),
+                    ContentObject::class,
                     $selectedContentObjectIdentifier);
 
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
@@ -132,10 +132,10 @@ class PublisherComponent extends Manager
                             WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID)))));
 
         return DataManager::distinct(
-            ContentObject::class_name(),
+            ContentObject::class,
             new DataClassDistinctParameters(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER),
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
                     $contentObjectNumbers),
                 new DataClassProperties(
                     array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)))));

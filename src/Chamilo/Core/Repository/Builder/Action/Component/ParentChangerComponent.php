@@ -63,7 +63,7 @@ class ParentChangerComponent extends Manager
                 else
                 {
                     $parent = DataManager::retrieve_by_id(
-                        ComplexContentObjectItem::class_name(), $selected_parent
+                        ComplexContentObjectItem::class, $selected_parent
                     );
                     $parent = $parent->get_ref();
                 }
@@ -75,9 +75,9 @@ class ParentChangerComponent extends Manager
                     $parent_complex_content_object_item != $selected_parent)
                 {
                     $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                        ComplexContentObjectItem::class_name(), new InCondition(
+                        ComplexContentObjectItem::class, new InCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_ID
+                                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
                             ), $complex_content_object_item_ids
                         )
                     );
@@ -180,20 +180,20 @@ class ParentChangerComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id)
         );
         $parameters = new DataClassRetrievesParameters(
             $condition, null, null, array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                     )
                 )
             )
         );
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $parameters
+            ComplexContentObjectItem::class, $parameters
         );
 
         $i = 1;
@@ -210,18 +210,18 @@ class ParentChangerComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_PARENT
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($content_object_id)
         );
         $children = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), $condition
+            ComplexContentObjectItem::class, $condition
         );
 
         while ($child = $children->next_result())
         {
             $ref_id = $child->get_ref();
             $ref_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $ref_id
+                ContentObject::class, $ref_id
             );
 
             if (!$ref_object instanceof ComplexContentObjectSupport)

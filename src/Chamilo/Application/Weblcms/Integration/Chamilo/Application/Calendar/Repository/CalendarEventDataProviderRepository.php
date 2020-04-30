@@ -50,7 +50,7 @@ abstract class CalendarEventDataProviderRepository
         
         return $this->publicationRepository->getPublicationsWithContentObjects(
             $parameters, 
-            ContentObjectPublication::class_name(), 
+            ContentObjectPublication::class,
             $this->getContentObjectClassName());
     }
 
@@ -75,13 +75,13 @@ abstract class CalendarEventDataProviderRepository
         
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             $courseIds);
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable($this->getToolName()));
         

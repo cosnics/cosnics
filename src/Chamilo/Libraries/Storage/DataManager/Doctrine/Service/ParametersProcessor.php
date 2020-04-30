@@ -107,7 +107,7 @@ class ParametersProcessor
 
             foreach ($parameters->getJoins()->get() as $join)
             {
-                if (is_subclass_of($join->get_data_class(), CompositeDataClass::class_name()))
+                if (is_subclass_of($join->get_data_class(), CompositeDataClass::class))
                 {
                     if (is_subclass_of($dataClassName, $join->get_data_class()))
                     {

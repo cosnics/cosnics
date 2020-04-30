@@ -58,7 +58,7 @@ class ContentObjectAttachment extends DataClass
         if (! isset($this->attachment_object))
         {
             $this->attachment_object = DataManager::retrieve_by_id(
-                ContentObject::class_name(), 
+                ContentObject::class, 
                 $this->get_attachment_id());
         }
         return $this->attachment_object;

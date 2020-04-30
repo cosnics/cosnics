@@ -150,7 +150,7 @@ class LearningPathService
         $contentObjectType, LearningPath $learningPath, TreeNode $currentTreeNode, User $user, $title = '...'
     )
     {
-        if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class_name()))
+        if (!class_exists($contentObjectType) || !is_subclass_of($contentObjectType, ContentObject::class))
         {
             throw new InvalidArgumentException(
                 sprintf('The given ContentObject type %s is not a valid content object', $contentObjectType)

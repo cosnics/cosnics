@@ -42,7 +42,7 @@ class DeleterComponent extends Manager
         foreach ($publication_ids as $pid)
         {
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 $pid);
             
             $content_object = $publication->get_content_object();
@@ -62,7 +62,7 @@ class DeleterComponent extends Manager
                                 Publication::class_name(), 
                                 Publication::PROPERTY_PUBLICATION_ID), 
                             new StaticConditionVariable($publication->get_id())));
-                    $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
+                    $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
                     if (! $assessment_publication->delete())
                     {
                         $failures ++;

@@ -252,7 +252,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $joinCondition = new AndCondition($joinConditions);
 
         $joins = new Joins();
-        $joins->add(new Join(User::class_name(), $joinCondition, $joinType));
+        $joins->add(new Join(User::class, $joinCondition, $joinType));
 
         return $joins;
     }
@@ -266,10 +266,10 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     {
         $properties = new DataClassProperties();
 
-        $properties->add(new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, 'user_id'));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+        $properties->add(new FixedPropertyConditionVariable(User::class, User::PROPERTY_ID, 'user_id'));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL));
 
         $properties->add(
             new FunctionConditionVariable(
@@ -326,7 +326,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
 
-        return $this->dataClassRepository->count(User::class_name(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count(User::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -344,7 +344,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $conditions = array();
 
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+            new PropertyConditionVariable(User::class, User::PROPERTY_ID),
             $targetUserIds);
 
         if ($condition instanceof Condition)
@@ -363,7 +363,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     protected function getConditionForTreeNodeAttemptWithUser()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+            new PropertyConditionVariable(User::class, User::PROPERTY_ID),
             new PropertyConditionVariable(
                 $this->trackingParameters->getTreeNodeAttemptClassName(),
                 TreeNodeAttempt::PROPERTY_USER_ID));
@@ -538,6 +538,6 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      */
     protected function getGroupByUserId(): GroupBy
     {
-        return new GroupBy(array(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID)));
+        return new GroupBy(array(new PropertyConditionVariable(User::class, User::PROPERTY_ID)));
     }
 }

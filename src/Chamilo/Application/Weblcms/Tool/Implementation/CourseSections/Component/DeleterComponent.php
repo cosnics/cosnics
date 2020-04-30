@@ -40,7 +40,7 @@ class DeleterComponent extends Manager
             {
                 /** @var CourseSection $course_section */
                 $course_section = DataManager::retrieve_by_id(
-                    CourseSection::class_name(),
+                    CourseSection::class,
                     $id);
 
                 if ($course_section->get_type() != CourseSection::TYPE_CUSTOM || ! $course_section->delete())

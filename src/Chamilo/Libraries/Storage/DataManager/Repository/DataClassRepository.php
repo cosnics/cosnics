@@ -251,7 +251,7 @@ class DataClassRepository
             $parameters = DataClassCountParameters::generate($parameters);
         }
 
-        if (is_subclass_of($dataClassName, CompositeDataClass::class_name()))
+        if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
             return $this->countCompositeDataClass($dataClassName, $parameters);
         }
@@ -971,9 +971,9 @@ class DataClassRepository
         }
 
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
+            new DataClassProperties(array(new PropertiesConditionVariable($CompositeDataClass::class))),
             new EqualityCondition(
-                new PropertyConditionVariable($compositeDataClass::class_name(), $compositeDataClass::PROPERTY_ID),
+                new PropertyConditionVariable($CompositeDataClass::class, $compositeDataClass::PROPERTY_ID),
                 new StaticConditionVariable($compositeDataClass->getId())
             )
         );

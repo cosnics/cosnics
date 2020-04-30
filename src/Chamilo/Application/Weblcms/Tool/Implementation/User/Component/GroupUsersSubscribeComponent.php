@@ -66,10 +66,10 @@ class GroupUsersSubscribeComponent extends Manager
     public function subscribe_group($group_id, $course)
     {
         $group_users = DataManager::retrieves(
-            GroupRelUser::class_name(),
+            GroupRelUser::class,
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($group_id))));
 
         while ($user = $group_users->next_result())
@@ -90,7 +90,7 @@ class GroupUsersSubscribeComponent extends Manager
             Group::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($group_id))));
 
         while ($group = $groups->next_result())

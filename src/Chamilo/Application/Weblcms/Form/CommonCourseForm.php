@@ -328,24 +328,24 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $settings_conditions = array();
 
         $settings_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_GLOBAL_SETTING),
+            new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_GLOBAL_SETTING),
             new StaticConditionVariable(0)
         );
 
         $settings_conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_NAME),
+            new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_NAME),
             CourseSetting::get_static_tool_settings()
         );
 
         $settings_condition = new NotCondition(new AndCondition($settings_conditions));
 
         $tools_condition = new SubselectCondition(
-            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_ID),
-            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_TOOL_ID),
+            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID),
+            new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID),
             CourseSetting::get_table_name(), $settings_condition
         );
 
-        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters($tools_condition));
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
 
         $toolsArray = $tools->as_array();
         usort(
@@ -413,12 +413,12 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $tools_condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_SECTION_TYPE),
+                new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_SECTION_TYPE),
                 new StaticConditionVariable(CourseSection::TYPE_CUSTOM)
             )
         );
 
-        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters($tools_condition));
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
 
         $toolsArray = $tools->as_array();
         usort(

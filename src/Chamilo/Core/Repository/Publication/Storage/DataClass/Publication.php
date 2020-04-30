@@ -30,7 +30,7 @@ abstract class Publication extends DataClass
         if (is_null($this->contentObject))
         {
             $this->contentObject = DataManager::retrieve_by_id(
-                ContentObject::class_name(), $this->get_content_object_id()
+                ContentObject::class, $this->get_content_object_id()
             );
         }
 

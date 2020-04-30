@@ -139,7 +139,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_management_rights = CourseManagementRights::getInstance();
 
-        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
 
         $tool_names = array();
 

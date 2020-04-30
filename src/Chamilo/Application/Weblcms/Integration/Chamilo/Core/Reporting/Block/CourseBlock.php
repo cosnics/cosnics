@@ -108,13 +108,13 @@ abstract class CourseBlock extends ReportingBlock
         
         $publication_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_PUBLISHER_ID), 
             new StaticConditionVariable($user_id));
         
         $publication_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         

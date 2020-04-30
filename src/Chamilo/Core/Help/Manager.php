@@ -62,7 +62,7 @@ abstract class Manager extends Application
     private static function get_help_item_by_name($context, $identifier)
     {
         $user_id = Session::get_user_id();
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $user_id);
 
         $language = LocalSetting::getInstance()->get('platform_language');
 
