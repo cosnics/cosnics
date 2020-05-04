@@ -23,7 +23,7 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
-    import Category from '../../Domain/Category';
+    import Category from '../Domain/Category';
     import NameInput from './NameInput.vue';
     import Swatches from 'vue-swatches';
 

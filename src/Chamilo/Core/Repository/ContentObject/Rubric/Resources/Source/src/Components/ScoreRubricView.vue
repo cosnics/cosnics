@@ -67,16 +67,16 @@
 
 <script lang="ts">
 	import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
-	import TreeNode from '../../Domain/TreeNode';
-	import Rubric from '../../Domain/Rubric';
-	import Cluster from '../../Domain/Cluster';
-	import Category from '../../Domain/Category';
-	import Criterium from '../../Domain/Criterium';
-	import Choice from '../../Domain/Choice';
+	import TreeNode from '../Domain/TreeNode';
+	import Rubric from '../Domain/Rubric';
+	import Cluster from '../Domain/Cluster';
+	import Category from '../Domain/Category';
+	import Criterium from '../Domain/Criterium';
+	import Choice from '../Domain/Choice';
 	import RubricPane from './RubricPane.vue';
     import CriteriumDetailsView from './CriteriumDetailsView.vue';
 	import RemoveDialog from './RemoveDialog.vue';
-	import DataConnector from '../../Connector/DataConnector';
+	import DataConnector from '../Connector/DataConnector';
 
 	@Component({
 		name: 'score-rubric-view',

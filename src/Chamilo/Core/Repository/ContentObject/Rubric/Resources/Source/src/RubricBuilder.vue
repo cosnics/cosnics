@@ -34,10 +34,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import ScoreRubricView from './Components/View/ScoreRubricView.vue';
-    import CriteriumDetailsView from './Components/View/CriteriumDetailsView.vue';
+    import ScoreRubricView from './Components/ScoreRubricView.vue';
+    import CriteriumDetailsView from './Components/CriteriumDetailsView.vue';
     import Criterium from './Domain/Criterium';
-    import LevelsView from './Components/View/LevelsView.vue';
+    import LevelsView from './Components/LevelsView.vue';
     import APIConfiguration from './Connector/APIConfiguration';
     import Rubric, {RubricJsonObject} from './Domain/Rubric';
     import DataConnector from './Connector/DataConnector';

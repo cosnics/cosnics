@@ -36,7 +36,7 @@
 <script lang="ts">
     import {Component, Prop, Vue} from "vue-property-decorator";
     import debounce from 'debounce';
-    import Level from '../../Domain/Level';
+    import Level from '../Domain/Level';
 
     @Component({
         name: 'level-details',

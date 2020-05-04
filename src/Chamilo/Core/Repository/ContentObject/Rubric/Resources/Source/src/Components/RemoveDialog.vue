@@ -13,9 +13,9 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
-    import Cluster from '../../Domain/Cluster';
-    import Category from '../../Domain/Category';
-    import Criterium from '../../Domain/Criterium';
+    import Cluster from '../Domain/Cluster';
+    import Category from '../Domain/Category';
+    import Criterium from '../Domain/Criterium';
 
     @Component({
         name: 'remove-dialog'

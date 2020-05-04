@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Category from '../../Domain/Category';
+    import Category from '../Domain/Category';
     import NameInput from './NameInput.vue';
 
     @Component({

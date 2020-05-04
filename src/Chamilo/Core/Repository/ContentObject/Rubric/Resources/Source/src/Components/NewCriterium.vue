@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
-    import Criterium from '../../Domain/Criterium';
+    import Criterium from '../Domain/Criterium';
     import NameInput from './NameInput.vue';
 
     @Component({

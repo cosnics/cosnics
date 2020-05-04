@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Cluster from '../../Domain/Cluster';
+    import Cluster from '../Domain/Cluster';
     import NameInput from './NameInput.vue';
 
     @Component({

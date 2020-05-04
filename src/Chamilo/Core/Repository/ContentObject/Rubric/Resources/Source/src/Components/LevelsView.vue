@@ -58,10 +58,10 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Rubric from '../../Domain/Rubric';
-    import Level from '../../Domain/Level';
+    import Rubric from '../Domain/Rubric';
+    import Level from '../Domain/Level';
     import LevelDetails from './LevelDetails.vue';
-    import DataConnector from '../../Connector/DataConnector';
+    import DataConnector from '../Connector/DataConnector';
 
     @Component({
         name: 'levels-view',

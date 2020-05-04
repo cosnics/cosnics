@@ -24,9 +24,9 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Rubric from '../../Domain/Rubric';
-    import Criterium from '../../Domain/Criterium';
-    import Choice from '../../Domain/Choice';
+    import Rubric from '../Domain/Rubric';
+    import Criterium from '../Domain/Criterium';
+    import Choice from '../Domain/Choice';
     import CriteriumLevelView from './CriteriumLevelView.vue';
 
     function updateHeight(elem: HTMLElement) {
