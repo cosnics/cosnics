@@ -2,7 +2,7 @@
     <div class="levels-container" :class="{'container-lc-list': !editMode}" @click="(editMode || newLevel) ? null : selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div v-if="editMode" class="lc-edit" :class="{'new-level': newLevel !== null}">
             <form>
-                <level-details :edit-mode="true" :level="selectedLevel" :level-index="0" :new-level="newLevel" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
+                <level-details :edit-mode="true" :level="selectedLevel" :level-index="0" :new-level="newLevel" @change="onLevelChange" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
             </form>
             <div v-if="!newLevel" class="lc-return">
                 <a role="button" @click.stop="editMode=false">Terug naar overzicht niveaus.</a>
@@ -18,7 +18,7 @@
                 <form>
                 <ul class="lc-levels" @click.stop="">
                     <li v-for="(level, levelIndex) in levels" :key="`level_${levelIndex}`" class="levels-list-item" :class="`${isSelected(level) ? 'selected' : 'not-selected'} ${isLabelHidden(level) ? 'labels-hide' : ''} ${newLevel === level ? 'new-level' : ''}`" >
-                        <level-details :level="level" :level-index="levelIndex" :new-level="newLevel" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
+                        <level-details :level="level" :level-index="levelIndex" :new-level="newLevel" @change="onLevelChange" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
                         <div v-if="level === newLevel" class="actions">
                             <button class="btn-name-input btn-ok" @click.prevent="addLevel">Voeg toe</button>
                             <button class="btn-name-input btn-cancel" @click.prevent="cancelLevel">Annuleer</button>
@@ -77,6 +77,10 @@
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
+
+        onLevelChange(level: Level) {
+            this.dataConnector?.updateLevel(level);
+        }
 
         addLevel() {
             if (this.newLevel!.isDefault) {
