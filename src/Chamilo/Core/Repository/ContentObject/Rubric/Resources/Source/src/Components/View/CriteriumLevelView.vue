@@ -5,7 +5,7 @@
               @input="onFeedbackChange"></textarea>
         <div v-if="rubric.useScores" class="criterium-level-score">
             <div v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore"><i class="fa fa-lock" /><i class="fa fa-unlock" /></div>
-            <input class="fixed-score input-detail" type="number" step="0.1" v-if="choice.hasFixedScore" v-model="choice.fixedScore" @input="updateFeedback" />
+            <input class="fixed-score input-detail" type="number" step="0.1" v-if="choice.hasFixedScore" v-model="choice.fixedScore" @input="onChange" />
             <input type="number" class="input-detail" step="0.1" v-else v-model="rubric.getChoiceScore(criterium, level)" @input="changeChoiceScore" />
         </div>
     </div>
@@ -29,7 +29,7 @@
 
         constructor() {
             super();
-            this.updateFeedback = debounce(this.updateFeedback, 750);
+            this.onChange = debounce(this.onChange, 750);
         }
 
         get choice() : Choice {
@@ -39,7 +39,7 @@
         removeFixedScore() {
             this.choice.hasFixedScore = false;
             this.choice.fixedScore = Choice.FIXED_SCORE;
-            this.updateFeedback();
+            this.onChange();
             this.$forceUpdate();
         }
 
@@ -48,18 +48,18 @@
             if (!isNaN(value)) {
                 this.choice.hasFixedScore = true;
                 this.choice.fixedScore = value;
-                this.updateFeedback();
+                this.onChange();
                 this.$forceUpdate();
             }
         }
 
-        updateFeedback() {
+        onChange() {
             this.$emit('change', this.choice);
         }
 
         onFeedbackChange(e: InputEvent) {
             this.$emit("input", e);
-            this.updateFeedback();
+            this.onChange();
         }
     }
 </script>
