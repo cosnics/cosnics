@@ -120,6 +120,8 @@
     $cluster-color-border-selected: hsla(190, 30%, 70%, 0.55);
     $fixed-score-color: hsla(100, 55%, 75%, 1);
 
+    $criterium-color-border-selected: hsla(240, 15%, 80%, 1);
+
     $btn-color: hsla(200, 100%, 48%, 1);
     $btn-color-lightened: hsla(200, 100%, 57%, 1);
     $btn-color-darkened: hsla(200, 100%, 40%, 1);
@@ -1447,6 +1449,12 @@
         .criterium {
             font-size: 1.3rem;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
+
+            &.selected {
+                border: 2px solid $criterium-color-border-selected;
+                border-radius: $border-radius;
+                margin: -2px;
+            }
 
             .item-header-bar {
                 width: 100%;

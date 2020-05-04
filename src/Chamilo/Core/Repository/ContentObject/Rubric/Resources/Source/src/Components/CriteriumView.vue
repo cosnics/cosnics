@@ -1,6 +1,6 @@
 <template>
     <li :id="id" class="criterium-list-item handle criterium-handle">
-        <div class="criterium " :class="{ selected }">
+        <div class="criterium" :class="{ selected }">
             <div class="item-header-bar">
                 <div @click="$emit('criterium-selected', criterium)" class="criterium-title">
                     <h3 class="title">{{ criterium.title }}</h3>
