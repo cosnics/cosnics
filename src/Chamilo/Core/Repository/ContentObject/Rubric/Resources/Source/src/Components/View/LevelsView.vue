@@ -34,11 +34,11 @@
             </div>
             <div v-if="newLevel === null && rubric.levels.length > 1 && selectedLevel !== null" class="level-updown" @click.stop="">
                 <button class="lc-btn btn-updown"
-                        @click.stop="rubric.moveLevelUp(selectedLevel)"
+                        @click.stop="moveLevelUp(selectedLevel)"
                         :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) <= 0"><i
                         class="fa fa-arrow-up" aria-hidden="true"></i></button>
                 <button class="lc-btn btn-updown"
-                        @click.stop="rubric.moveLevelDown(selectedLevel)"
+                        @click.stop="moveLevelDown(selectedLevel)"
                         :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) >= rubric.levels.length - 1"><i
                         class="fa fa-arrow-down" aria-hidden="true"></i></button>
             </div>
@@ -57,6 +57,7 @@
 
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
+    import debounce from 'debounce';
     import Rubric from '../../Domain/Rubric';
     import Level from '../../Domain/Level';
     import LevelDetails from './LevelDetails.vue';
@@ -78,8 +79,28 @@
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
+        constructor() {
+            super();
+            this.onLevelMove = debounce(this.onLevelMove, 750);
+        }
+
         onLevelChange(level: Level) {
             this.dataConnector?.updateLevel(level);
+        }
+
+        onLevelMove(level: Level) {
+            const index = this.rubric.levels.indexOf(level);
+            this.dataConnector?.moveLevel(level, index);
+        }
+
+        moveLevelUp(level: Level) {
+            this.rubric.moveLevelUp(level);
+            this.onLevelMove(level);
+        }
+
+        moveLevelDown(level: Level) {
+            this.rubric.moveLevelDown(level);
+            this.onLevelMove(level);
         }
 
         addLevel() {
