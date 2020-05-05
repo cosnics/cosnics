@@ -1,5 +1,5 @@
 <template>
-    <div id="app-wrapper" class="container-fluid">
+    <div id="rubric-builder-wrapper" class="container-fluid">
         <rubric-builder :api-config="config" :rubric-data="rubricData" :version="version"></rubric-builder>
     </div>
 </template>
@@ -13,7 +13,7 @@ import RubricBuilder from './RubricBuilder.vue';
         RubricBuilder
     },
 })
-export default class AppWrapper extends Vue {
+export default class RubricBuilderWrapper extends Vue {
     private version = 0;
 
     private config: any = {
