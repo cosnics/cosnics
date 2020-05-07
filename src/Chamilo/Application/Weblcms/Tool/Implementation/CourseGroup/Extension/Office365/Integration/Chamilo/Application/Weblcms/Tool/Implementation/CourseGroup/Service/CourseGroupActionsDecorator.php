@@ -92,7 +92,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
                 IntegrationLauncherComponent::PARAM_BASE_CONTEXT =>
-                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365',
+                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
                 Manager::PARAM_ACTION => Manager::ACTION_SYNC_COURSE_GROUP
             ]
         );
