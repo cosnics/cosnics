@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import RubricBuilderWrapper from './RubricBuilderWrapper.vue';
+import RubricEntryWrapper from './RubricEntryWrapper.vue';
 import ScoreRubric from './plugin';
 
 import BootstrapVue from 'bootstrap-vue';
@@ -13,5 +13,5 @@ Vue.config.productionTip = false;
 Vue.use(ScoreRubric);
 
 new Vue({
-  render: h => h(RubricBuilderWrapper)
+  render: h => h(RubricEntryWrapper)
 }).$mount('#app');
