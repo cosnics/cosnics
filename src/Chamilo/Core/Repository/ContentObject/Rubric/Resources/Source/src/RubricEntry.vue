@@ -7,6 +7,8 @@
                 <li class="app-header-item"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>-->
             </ul>
             <ul class="app-header-tools">
+                <li class="app-header-item" @click.prevent="showDefaultFeedbackFields = !showDefaultFeedbackFields"><a>DF</a></li>
+                <li class="app-header-item" @click.prevent="showCustomFeedbackFields = !showCustomFeedbackFields"><a>CF</a></li>
                 <!--<li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>-->
             </ul>
             <div class="save-state">
@@ -23,19 +25,19 @@
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div :style="`--num-levels: ${ rubric.levels.length }`">
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters">
-                    <li v-for="cluster in populatedClusters" class="cluster-list-item">
+                <ul class="clusters" :class="{showDefaultFeedbackFields, showCustomFeedbackFields}">
+                    <li v-for="cluster in rubric.clusters" class="cluster-list-item">
                         <div class="cluster">
                             <h2 class="cluster-title">{{ cluster.title}}</h2>
                             <ul class="categories">
                                 <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${category.color}`">
                                     <div class="category">
-                                        <div class="category-title">{{ category.title }}</div>
+                                        <div class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
                                             <li v-for="(criterium, index) in category.criteria" class="criterium-list-item">
                                                 <div class="criterium">
-                                                    <div class="criterium-header"><h4 class="criterium-title">{{ criterium.title }}</h4></div>
-                                                    <div></div>
+                                                    <div class="criterium-header"><h4 class="criterium-title category-indicator">{{ criterium.title }}</h4></div>
+                                                    <div class="default-feedback"></div>
                                                     <template v-for="level in rubric.levels" class="score">
                                                         <div class="score-header" tabindex="0" @keyup.enter.space.stop="setScore(criterium, level)" @click="setScore(criterium, level)" :class="{ selected:getCriteriumSelectedLevel(criterium)===level }">
                                                             <div class="score-number">{{ rubric.getChoiceScore(criterium, level) }}</div>
@@ -50,7 +52,7 @@
                                                     <div class="final-score-header">
                                                         <div class="score-number">{{ getCriteriumScore(criterium) }}</div>
                                                     </div>
-                                                    <div></div>
+                                                    <div class="default-feedback"></div>
                                                 </div>
                                                 <div class="custom-feedback" style="">
                                                     <textarea placeholder="Geef Feedback"></textarea>
@@ -58,14 +60,20 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="category-total">
-                                        <div class="txt">Totaal {{ category.title }}:</div><div class="score-number">{{ getCategoryScore(category) }}</div>
+                                    <div class="subtotal category-total">
+                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-number">{{ getCategoryScore(category) }}</div>
                                     </div>
                                 </li>
                             </ul>
+                            <div class="subtotal cluster-total">
+                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-number">{{ getClusterScore(cluster) }}</div>
+                            </div>
                         </div>
                     </li>
                 </ul>
+                <div class="subtotal rubric-total">
+                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-number">{{ getRubricScore() }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -91,6 +99,8 @@
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
         private scores: Map<Criterium, Level> = new Map<Criterium, Level>();
+        private showDefaultFeedbackFields = true;
+        private showCustomFeedbackFields = true;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
@@ -107,7 +117,15 @@
         }
 
         getCategoryScore(category: Category) : number {
-            return category.criteria.map(criterium => this.getCriteriumScore(criterium)).reduce((v1, v2) => v1 + v2);
+            return category.criteria.map(criterium => this.getCriteriumScore(criterium)).reduce((v1, v2) => v1 + v2, 0);
+        }
+
+        getClusterScore(cluster: Cluster) : number {
+            return cluster.categories.map(category => this.getCategoryScore(category)).reduce((v1, v2) => v1 + v2, 0);
+        }
+
+        getRubricScore() : number {
+            return this.rubric.clusters.map(cluster => this.getClusterScore(cluster)).reduce((v1, v2) => v1 + v2, 0);
         }
 
         setScore(criterium: Criterium, level: Level) {
@@ -147,217 +165,163 @@
     * {
         outline-width: thin;
     }
-    .category-total {
-        display: flex;
-        justify-content: flex-end;
-        font-size: 1.3rem;
-        .txt {
-            /*border-bottom: 1px solid hsla(191, 20%, 78%, 0.5);*/
-            &:before {
-                content: '';
-                display: inline-block;
-                width: .6em;
-                background: var(--category-color);
-                height: .7em;
-                margin-right: 0.35em;
-            }
 
-        }
-        .score-number {
-            border-right: none;
-            padding-right: 0.1em;
-        }
-        /*border-top: 1px solid hsla(191, 20%, 78%, 0.5);*/
-        /*margin-left: 22.5em;*/
+    #app {
+        color: #555;
     }
-/*    .criterium-list-item:last-child {
-        border-bottom: 1px solid hsla(191, 20%, 78%, 0.5);
-    }*/
+
     .rubric {
         margin: 1em 1.5em;
-    }
-    .clusters, .categories, .criteria, .choices {
-        list-style: none;
-        margin: 0;
-        padding: 0;
     }
 
     .rubric-title {
         font-size: 2.4rem;
         margin: 0 0 1em 0;
-    }
-
-    .cluster-title {
-        font-size: 2rem;
-        margin: 1em 0 0 0;
-    }
-
-    .cluster-title {
         display: none;
     }
-    .category-title {
-        font-size: 1.5rem;
-        margin: .25em 0 .5em 0;
-        color: hsla(203, 38%, 33%, 1);
-        &:before {
-            content: '';
-            display: inline-block;
-            width: .8em;
-            background: var(--category-color);
-            height: .8em;
-            margin-right: 0.35em;
-        }
+
+    .clusters, .categories, .criteria {
+        list-style: none;
+        margin: 0;
+        padding: 0;
     }
+
+    .cluster-title {
+        font-size: 1.8rem;
+        margin: 1em 0 0 0;
+        color: hsla(203, 38%, 33%, .7);
+        font-weight: bold;
+        /*padding-bottom: .3em;*/
+        /*border-bottom: 2px solid hsla(190, 40%, 40%, 1);*/
+        /*display: none;*/
+    }
+
     .category {
         margin-top: 1em;
         margin-bottom: 1em;
     }
+
+    .category-indicator:before {
+        content: '';
+        display: inline-block;
+        background: var(--category-color);
+        margin-right: 0.35em;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+        margin: .25em 0 .5em 0;
+        color: hsla(203, 38%, 33%, 1);
+
+        &.category-indicator:before {
+            width: .8em;
+            height: .8em;
+        }
+    }
+
+    .category-total {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 1.3rem;
+        margin-right: 1.5em;
+
+        .category-indicator:before {
+            width: .6em;
+            height: .7em;
+        }
+    }
+
+    .cluster-total {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 1.3rem;
+        margin-top: 1em;
+        margin-right: 1.5em;
+    }
+
+    .cluster-total-title {
+        font-weight: 700;
+        color: hsla(203, 38%, 33%, 1);
+    }
+
+    .rubric-total {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 1.3rem;
+        margin-top: 1em;
+        margin-right: 1.5em;
+        padding-top: .3em;
+        padding-bottom: .3em;
+        border-top: 1px solid hsla(190, 20%, 78%, .5);
+    }
+
+    .rubric-total-title {
+        font-weight: 700;
+        color: hsla(190, 40%, 35%, 1);
+    }
+
     .criterium {
         margin-bottom: 1em;
         margin-left: 1.3em;
         display: grid;
-        grid-template-columns: 18em repeat(var(--num-levels), 1fr) 2em;
-        grid-template-rows: repeat(2, auto);
+        grid-template-columns: 18em repeat(var(--num-levels), 1fr) 2.4em;
         grid-auto-flow: column;
         grid-gap: .5em;
         color: #666;
+        margin-right: 1.5em;
     }
-    .criterium-1 {
-        width: 200px;
-        font-size: 1.1rem;
-        /*text-align: center;*/
-        /*padding-left: 1em;*/
-        /*border-left: 4px solid var(--category-color);*/
-        /*padding-left: .5em;*/
-        .criterium-1-category {
-            /*border-bottom: 1px solid black;*/
-            &:before {
-                content: '';
-                display: block;
-                width: 90%;
-                height: 2px;
-                /*background-color: var(--category-color);*/
-            }
-        }
+
+    .showDefaultFeedbackFields .criterium {
+        grid-template-rows: repeat(2, auto);
     }
-    /*.criterium-1:before {
-        content: '';
-        display: inline-block;
-        width: 4px;
-        height: 1em;
-        background-color: var(--category-color);
-    }*/
-.criterium-header {
-    width: 100%;
-    /*text-align:right;*/
-    align-content: flex-end;
-}
-    .criterium-title {
-        /*width: 100%;*/
-        font-size: 1.4rem;
-        margin-bottom: 0em;
-        /*margin: 0 0 .35em 0;*/
-        margin-top: 0.5em;
-        /*min-width: 12em;*/
-        color: black;
-        /*color: hsla(203, 38%, 33%, 1);*/
-        /*font-weight: 700;*/
-        align-self: flex-end;
-        padding-right: 1em;
-        &:before {
-            content: '';
-            display: inline-block;
-            width: .6em;
-            background: var(--category-color);
-            height: .7em;
-            margin-right: 0.35em;
-        }
 
-    }
-    .choices {
-        display: grid;
-        /*grid-auto-columns: min-content max-content auto;*/
-        margin-bottom: 1em;
-        /*border-bottom: 1px solid #ddd;*/
-
-        > div {
-            border: 1px solid transparent;
-            border-radius: 3px;
-
-            &:hover {
-                /*border: 1px solid #b1abd0;*/
-            }
-        }
-
-    }
     .criterium-header {
-        border-bottom: 1px solid hsla(190, 20%, 78%, .5);
-        /*border-right: 1px solid hsla(190, 20%, 78%, .5);*/
+        width: 100%;
+        align-content: flex-end;
         border-radius: 3px;
+        padding-top: .3em;
         padding-bottom: .35em;
         display: flex;
     }
-    .score-header {
-        line-height:1.4em;
-        margin-bottom: 0;
-        display:flex;
-        align-items:center;
-        /*align-self: end;*/
-        /*background: hsla(190, 20%, 88%, 1);*/
-/*        border: 1px solid hsla(190, 20%, 78%, .5);*/
-        border: 1px solid transparent;
-        border-bottom-color: hsla(190, 20%, 78%, .5);
-        color: #000;
-        border-radius: 3px;
-        padding-bottom: .35em;
-        cursor: pointer;
-        &:hover, &:focus, &.selected {
-            background: hsla(200, 90%, 50%, 1);
-            border: 1px solid transparent;
-            div {
-                color: white;
-            }
-            .score-number {
-                border-right-color: white;
-            }
-        }
-        &.selected, &.selected:focus {
-            background: hsla(204, 38%, 55%, 1);
-        }
+
+    .showDefaultFeedbackFields .criterium-header {
+        border-bottom: 1px solid hsla(190, 20%, 78%, .5);
     }
+
     .final-score-header {
         line-height:1.4em;
         margin-bottom: 0;
         display:flex;
         padding-bottom: .35em;
-        .score-number {
-            border-right: none;
+        /*border: 1px solid hsla(190, 20%, 78%, .5);*/
+        border-radius: 3px;
+        background: hsla(190, 20%, 78%, .2);
 
-        }
+    }
+
+    .criterium-title {
+        font-size: 1.4rem;
+        margin-bottom: 0em;
+        margin-top: 0.5em;
+        color: black;
+        align-self: flex-end;
+        padding-right: 1em;
 
     }
-    .score-number {
-        width: 1.7em;
-        min-width: 1.7em;
-        font-size: 1.8rem;
-        padding-right: .35em;
-        text-align: right;
-        border-right: 1px solid #bbb;
-        align-self: flex-end;
+
+    .criterium-title.category-indicator:before {
+        width: .6em;
+        height: .7em;
     }
-    .level-title {
-        margin-left: .5em;
-        font-size:1.4rem;
-        align-self: flex-end;
-    }
+
     .score {
         cursor: pointer;
         align-self: start;
 
         > div {
-            /* justify-content: flex-end; */
             margin-left: .3em;
             margin-top: .3em;
+
             > div {
                 color: #333;
             }
@@ -367,42 +331,124 @@
                 }
             }
         }
-
-        &:hover {
-            .score-number {
-                border-right: 1px solid white;
-            }
-        }
-
     }
 
-    .choices .score:hover {
-        background: #76addc;
-        div {
-            color: white;
-            &:first-child > div:first-child {
+    .score-header {
+        white-space: nowrap;
+        overflow: hidden;
+        line-height:1.4em;
+        margin-bottom: 0;
+        display:flex;
+        align-items:center;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        color: #555;
+        padding-bottom: .35em;
+        cursor: pointer;
+        transition: background 200ms;
+
+        &:hover, &:focus, &.selected {
+            outline: none;
+            border: 1px solid hsla(204, 38%, 55%, 1);
+        }
+
+        &.selected {
+            &, &:focus {
+                background: hsla(204, 38%, 55%, 1);
+                color: white;
+            }
+            &:hover, &:focus {
+                border-color: hsla(204, 65%, 35%, 1);
             }
         }
+    }
+
+    .showDefaultFeedbackFields .score-header {
+        &:not(:hover) {
+            border-bottom: 1px solid hsla(190, 20%, 78%, .5);
+        }
+        &:focus {
+            border-bottom: 1px solid hsla(204, 38%, 55%, 1);
+        }
+        &.selected:focus {
+            border-bottom: 1px solid hsla(204, 65%, 35%, 1);
+        }
+    }
+
+    .score-number {
+        width: 1.7em;
+        min-width: 1.7em;
+        font-size: 1.8rem;
+        padding-right: .35em;
+        text-align: right;
+        border-right: 1px solid #bbb;
+        align-self: flex-end;
+    }
+
+    .score-header.selected {
+        &, &:focus {
+            .score-number {
+                border-right-color: white;
+            }
+        }
+    }
+
+    .final-score-header .score-number {
+        border-right: none;
+    }
+
+    .subtotal .score-number {
+        border-right: none;
+        padding-right: 0.4em;
+        margin-left: .6em;
+        border-radius: 3px;
+    }
+
+    .category-total .score-number {
+        background: hsla(190, 20%, 78%, .5);
+    }
+
+    .cluster-total .score-number {
+        background: hsla(190, 40%, 45%, .75);
+        color: white;
+    }
+
+    .rubric-total .score-number {
+        background: hsla(190, 40%, 35%, 1);
+        color: white;
+    }
+
+    .level-title {
+        margin-left: .5em;
+        font-size:1.4rem;
+        align-self: flex-end;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .default-feedback {
         padding-left: 2.9em;
-        /*display: none;*/
+        display: none;
     }
-    #app {
-        color: #555;
+
+    .showDefaultFeedbackFields .default-feedback {
+        display: block;
     }
+
     .custom-feedback {
-        margin-left: 22.5em; margin-bottom: 1em;
+        margin-left: 2.5em;
+        margin-bottom: 1em;
+        display: none;
 
         textarea {
-            width: 40em; height: 2.2em; max-width: 100%; border: 1px solid transparent; background: transparent;
-            border: 1px solid transparent;
+            width: 40em;
+            height: 2.2em;
+            max-width: 100%;
+            background: transparent;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
             resize: none;
-            &::placeholder {
-                opacity: 1;
-                color: #aaa;
-            }
+
             &:hover, &:focus {
                 border: 1px solid #aaa;
                 background: white;
@@ -411,7 +457,18 @@
                     color: #666;
                 }
             }
+
+            &::placeholder {
+                opacity: 1;
+                color: #aaa;
+            }
         }
+    }
+    .showCustomFeedbackFields .custom-feedback {
+        display: block;
+    }
+    .showDefaultFeedbackFields .custom-feedback {
+        margin-left: 22.5em;
     }
 </style>
 <style lang="scss">
