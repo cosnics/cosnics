@@ -2,14 +2,11 @@
     <div id="app">
         <div class="app-header">
             <ul class="app-header-menu">
-                <li class="app-header-item"><a @click.prevent="">Entry View</a></li>
-                <!--<li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
-                <li class="app-header-item"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>-->
+                <!--<li class="app-header-item"><a @click.prevent="">Entry View</a></li>-->
             </ul>
             <ul class="app-header-tools">
-                <li class="app-header-item" @click.prevent="showDefaultFeedbackFields = !showDefaultFeedbackFields"><a>DF</a></li>
-                <li class="app-header-item" @click.prevent="showCustomFeedbackFields = !showCustomFeedbackFields"><a>CF</a></li>
-                <!--<li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>-->
+                <li class="app-header-item" @click.prevent="toggleDefaultFeedbackFields"><a>DF</a></li>
+                <!--<li class="app-header-item" @click.prevent="showCustomFeedbackFields = !showCustomFeedbackFields"><a>CF</a></li>-->
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving">
@@ -23,56 +20,63 @@
         <div v-if="rubric" class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div :style="`--num-levels: ${ rubric.levels.length }`">
+            <div class="rubric-entry-view">
+                <div class="levels-header-wrap">
+                    <div class="levels-header">
+                        <div v-for="level in rubric.levels" class="criterium-level-title">
+                            {{level.title}}
+                        </div>
+                    </div>
+                </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters" :class="{showDefaultFeedbackFields, showCustomFeedbackFields}">
+                <ul class="clusters" :class="{'show-default-feedback': showDefaultFeedbackFields, 'show-custom-feedback': showDefaultFeedbackFields}">
                     <li v-for="cluster in rubric.clusters" class="cluster-list-item">
                         <div class="cluster">
-                            <h2 class="cluster-title">{{ cluster.title}}</h2>
+                            <h2 class="cluster-title">{{ cluster.title }}</h2>
                             <ul class="categories">
                                 <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${category.color}`">
                                     <div class="category">
                                         <div class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
-                                            <li v-for="(criterium, index) in category.criteria" class="criterium-list-item">
+                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
                                                 <div class="criterium">
-                                                    <div class="criterium-header"><h4 class="criterium-title category-indicator">{{ criterium.title }}</h4></div>
-                                                    <div class="default-feedback"></div>
-                                                    <template v-for="level in rubric.levels" class="score">
-                                                        <div class="score-header" tabindex="0" @keyup.enter.space.stop="setScore(criterium, level)" @click="setScore(criterium, level)" :class="{ selected:getCriteriumSelectedLevel(criterium)===level }">
-                                                            <div class="score-number">{{ rubric.getChoiceScore(criterium, level) }}</div>
-                                                            <div class="level-title">
+                                                    <div class="criterium-title-header">
+                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i class="check fa"/></div>
+                                                    </div>
+                                                    <div v-for="level in criterium.choices" class="criterium-level">
+                                                        <div class="criterium-level-header" tabindex="0" @keyup.enter.space.stop="selectLevel(criterium, level)" @click="selectLevel(criterium, level)" :class="{ selected: level.isSelected }">
+                                                            <div class="criterium-level-title">
                                                                 {{level.title}}
                                                             </div>
+                                                            <div class="score-number"><i class="check fa"/>{{ level.score }}</div>
                                                         </div>
                                                         <div class="default-feedback">
-                                                            {{ rubric.getChoice(criterium, level).feedback }}
+                                                            {{ level.feedback }}
                                                         </div>
-                                                    </template>
-                                                    <div class="final-score-header">
-                                                        <div class="score-number">{{ getCriteriumScore(criterium) }}</div>
                                                     </div>
-                                                    <div class="default-feedback"></div>
+                                                    <div class="subtotal criterium-total">
+                                                        <div class="score-number">{{ criterium.score || 0 }}</div>
+                                                    </div>
                                                 </div>
-                                                <div class="custom-feedback" style="">
+                                                <div class="custom-feedback">
                                                     <textarea placeholder="Geef Feedback"></textarea>
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-number">{{ getCategoryScore(category) }}</div>
+                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }}</div></div>
                                     </div>
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-number">{{ getClusterScore(cluster) }}</div>
+                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap"><div class="score-number">{{ getClusterScore(cluster) }}</div></div>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="subtotal rubric-total">
-                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-number">{{ getRubricScore() }}</div>
+                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }}</div></div>
                 </div>
             </div>
         </div>
@@ -84,36 +88,54 @@
     import APIConfiguration from './Connector/APIConfiguration';
     import TreeNode from './Domain/TreeNode';
     import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import Level from './Domain/Level';
+    import Choice from './Domain/Choice';
     import Cluster from './Domain/Cluster';
     import Category from './Domain/Category';
     import Criterium from './Domain/Criterium';
     import DataConnector from './Connector/DataConnector';
+
+    interface CriteriumExt {
+        choices: any[];
+        score: number|null;
+        showDefaultFeedback: false;
+    }
 
     @Component({
         components: {
         },
     })
     export default class RubricEntry extends Vue {
-        private content: string = 'rubric';
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
-        private scores: Map<Criterium, Level> = new Map<Criterium, Level>();
-        private showDefaultFeedbackFields = true;
-        private showCustomFeedbackFields = true;
+        private scores: Map<Criterium, Choice> = new Map<Criterium, Choice>();
+        private showDefaultFeedbackFields = false;
+        private showCustomFeedbackFields = false;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
 
-        getCriteriumSelectedLevel(criterium: Criterium) : Level|undefined {
-            return this.scores.get(criterium);
+        toggleDefaultFeedbackFields() {
+            this.showDefaultFeedbackFields = !this.showDefaultFeedbackFields;
+            if (!this.showDefaultFeedbackFields) {
+                this.rubric!.getAllCriteria().forEach(criterium => {
+                    const criteriumExt = criterium as unknown as CriteriumExt;
+                    criteriumExt.showDefaultFeedback = false;
+                });
+            }
+        }
+
+        selectLevel(criterium: Criterium, level: any) {
+            const criteriumExt = criterium as unknown as CriteriumExt;
+            criteriumExt.score = level.score;
+            this.scores.set(criterium, level.choice);
+            criteriumExt.choices.forEach(choice => {
+                choice.isSelected = choice === level;
+            });
         }
 
         getCriteriumScore(criterium: Criterium) : number {
-            const level = this.scores.get(criterium);
-            if (!(this.rubric && level)) { return 0; }
-            return this.rubric.getChoiceScore(criterium, level);
+            return (criterium as unknown as CriteriumExt).score || 0;
         }
 
         getCategoryScore(category: Category) : number {
@@ -125,12 +147,8 @@
         }
 
         getRubricScore() : number {
+            if (!this.rubric) { return 0; }
             return this.rubric.clusters.map(cluster => this.getClusterScore(cluster)).reduce((v1, v2) => v1 + v2, 0);
-        }
-
-        setScore(criterium: Criterium, level: Level) {
-            this.scores.set(criterium, level);
-            this.$forceUpdate();
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
@@ -151,9 +169,28 @@
             });
         }
 
+        private initScores(rubric: Rubric) {
+            rubric.getAllCriteria().forEach(criterium => {
+                const criteriumExt = criterium as unknown as CriteriumExt;
+                criteriumExt.choices = [];
+                Vue.set(criteriumExt, 'score', null);
+                Vue.set(criteriumExt, 'showDefaultFeedback', false);
+                rubric.levels.forEach(level => {
+                    const choice = rubric.getChoice(criterium, level);
+                    const score = rubric.getChoiceScore(criterium, level);
+                    const isSelected = level.isDefault;
+                    if (isSelected) {
+                        criteriumExt.score = score;
+                    }
+                    criteriumExt.choices.push({ title: level.title, feedback: choice?.feedback || '', score, isSelected, choice});
+                });
+            });
+        }
+
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
+                this.initScores(this.rubric);
                 // todo: get rubric data id
                 this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }
@@ -171,7 +208,42 @@
     }
 
     .rubric {
-        margin: 1em 1.5em;
+        margin: 0em 1.5em;
+    }
+
+    .rubric-entry-view {
+        position: relative;
+    }
+
+    .levels-header-wrap {
+        background: hsla(165, 5%, 90%, 1);
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        padding-top: .8em;
+        padding-bottom: .4em;
+    }
+
+    .levels-header {
+        display: flex;
+        margin-right: 3.5em;
+        margin-left: 19.8em;
+        align-items: stretch;
+        align-content: center;
+
+        .criterium-level-title {
+            flex: 1;
+            background-color: hsl(191, 31%, 57%);
+            padding: .4em .5em;
+            margin-right: .5em;
+            font-size: 1.4rem;
+            line-height: 1.4em;
+            text-overflow: ellipsis;
+            color: white;
+            border-radius: 3px;
+            box-shadow: 0px 1px 2px #999;
+            min-width: 8.57em;
+        }
     }
 
     .rubric-title {
@@ -188,17 +260,9 @@
 
     .cluster-title {
         font-size: 1.8rem;
-        margin: 1em 0 0 0;
+        margin: .25em 0 0 0;
         color: hsla(203, 38%, 33%, .7);
         font-weight: bold;
-        /*padding-bottom: .3em;*/
-        /*border-bottom: 2px solid hsla(190, 40%, 40%, 1);*/
-        /*display: none;*/
-    }
-
-    .category {
-        margin-top: 1em;
-        margin-bottom: 1em;
     }
 
     .category-indicator:before {
@@ -208,9 +272,13 @@
         margin-right: 0.35em;
     }
 
+    .category {
+        margin: .5em 0 .35em 0;
+    }
+
     .category-title {
         font-size: 1.5rem;
-        margin: .25em 0 .5em 0;
+        margin: .25em 0 0 0;
         color: hsla(203, 38%, 33%, 1);
 
         &.category-indicator:before {
@@ -219,15 +287,175 @@
         }
     }
 
+    .criterium {
+        margin-left: 1.3em;
+        /*margin-right: 1.5em;*/
+        margin-bottom: .5em;
+        display: flex;
+    }
+
+    .show-custom-feedback .criterium {
+        /* margin-bottom: .75em;*/
+    }
+
+    .show-default-feedback .criterium {
+        /*margin-bottom: 1.25em;*/
+    }
+
+    .criterium-title-header {
+        width: 18em;
+        min-width: 18em;
+        margin-right: 0.5em;
+        position: relative;
+
+        .btn-more {
+            position: absolute;
+            top: .3em;
+            right: 0;
+            width: 1.4em;
+            text-align: center;
+            cursor: pointer;
+            color: #bbb;
+
+            .check::before {
+                content: '\f078';
+            }
+            &:hover {
+                color: #999;
+            }
+        }
+    }
+
+    .show-default-feedback .btn-more {
+        /*top: unset;
+        bottom: -2.5em;*/
+        .check::before {
+            content: '\f077';
+        }
+    }
+
+    .criterium-title {
+        font-size: 1.4rem;
+        line-height: 1.4em;
+        margin-top: 0.5em;
+        margin-bottom: 0;
+        display: flex;
+
+        &.category-indicator:before {
+            margin-top: .3em;
+            min-width: .6em;
+            height: .7em;
+        }
+    }
+
+    .criterium-level {
+        flex: 1;
+        margin-right: 0.5em;
+        min-width: 9.23em;
+    }
+
+    .criterium-level-header {
+        background: #ddd;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        border-bottom-color: hsla(190, 20%, 78%, .5);
+        text-align: center;
+        cursor: pointer;
+        transition: 200ms background;
+
+        &:hover, &:focus, &.selected {
+            outline: none;
+            border: 1px solid hsla(204, 38%, 55%, 1);
+        }
+
+        &.selected {
+            &, &:focus {
+                background: hsla(204, 38%, 55%, 1);
+            }
+            &:hover, &:focus {
+                border-color: hsla(204, 65%, 35%, 1);
+            }
+        }
+    }
+
+    .criterium .criterium-level-title {
+        display: none;
+    }
+
+    .score-number {
+        font-size: 1.8rem;
+        line-height: 1.6em;
+        color: #666;
+        border-radius: 3px;
+        padding-right: .3em;
+    }
+
+    .criterium-level-header {
+        .score-number .check {
+            font-size: 1.3rem;
+            margin-right:.4em;
+            vertical-align: center;
+            color: #c9c9c9;
+            transition: 200ms color;
+
+            &::before {
+                content: '\f1db'
+                /*content: '\f111'*/
+            }
+        }
+
+        &:hover .score-number .check {
+            color: #777;
+        }
+
+        &.selected .score-number {
+            &, .check {
+                color: white;
+            }
+        }
+
+        &:hover .score-number, &.selected .score-number {
+            .check::before {
+                content: '\f058'
+            }
+        }
+    }
+
+    .subtotal {
+        .score-wrap {
+            width: 3.5em;
+            margin-left: .5em;
+        }
+
+        .score-number {
+            line-height: 1.2em;
+            text-align: right;
+            border: 1px solid transparent;
+        }
+    }
+
+    .criterium-total {
+        min-width: 3.5em;
+
+        .score-number {
+            line-height: 1.6em;
+            background: hsla(190, 20%, 78%, .2);
+        }
+    }
+
     .category-total {
         display: flex;
         justify-content: flex-end;
         font-size: 1.3rem;
-        margin-right: 1.5em;
+        /*margin-right: 1.5em;*/
 
         .category-indicator:before {
             width: .6em;
             height: .7em;
+        }
+
+        .score-number {
+            background: hsla(190, 20%, 78%, .5);
         }
     }
 
@@ -235,8 +463,13 @@
         display: flex;
         justify-content: flex-end;
         font-size: 1.3rem;
-        margin-top: 1em;
-        margin-right: 1.5em;
+        margin-top: .5em;
+        /*margin-right: 1.5em;*/
+
+        .score-number {
+            background: hsla(190, 40%, 45%, .75);
+            color: white;
+        }
     }
 
     .cluster-total-title {
@@ -248,11 +481,16 @@
         display: flex;
         justify-content: flex-end;
         font-size: 1.3rem;
-        margin-top: 1em;
-        margin-right: 1.5em;
+        margin-top: .25em;
+        /*margin-right: 1.5em;*/
         padding-top: .3em;
         padding-bottom: .3em;
         border-top: 1px solid hsla(190, 20%, 78%, .5);
+
+        .score-number {
+            background: hsla(190, 40%, 35%, 1);
+            color: white;
+        }
     }
 
     .rubric-total-title {
@@ -260,187 +498,23 @@
         color: hsla(190, 40%, 35%, 1);
     }
 
-    .criterium {
-        margin-bottom: 1em;
-        margin-left: 1.3em;
-        display: grid;
-        grid-template-columns: 18em repeat(var(--num-levels), 1fr) 2.4em;
-        grid-auto-flow: column;
-        grid-gap: .5em;
-        color: #666;
-        margin-right: 1.5em;
-    }
-
-    .showDefaultFeedbackFields .criterium {
-        grid-template-rows: repeat(2, auto);
-    }
-
-    .criterium-header {
-        width: 100%;
-        align-content: flex-end;
-        border-radius: 3px;
-        padding-top: .3em;
-        padding-bottom: .35em;
-        display: flex;
-    }
-
-    .showDefaultFeedbackFields .criterium-header {
-        border-bottom: 1px solid hsla(190, 20%, 78%, .5);
-    }
-
-    .final-score-header {
-        line-height:1.4em;
-        margin-bottom: 0;
-        display:flex;
-        padding-bottom: .35em;
-        /*border: 1px solid hsla(190, 20%, 78%, .5);*/
-        border-radius: 3px;
-        background: hsla(190, 20%, 78%, .2);
-
-    }
-
-    .criterium-title {
-        font-size: 1.4rem;
-        margin-bottom: 0em;
-        margin-top: 0.5em;
-        color: black;
-        align-self: flex-end;
-        padding-right: 1em;
-
-    }
-
-    .criterium-title.category-indicator:before {
-        width: .6em;
-        height: .7em;
-    }
-
-    .score {
-        cursor: pointer;
-        align-self: start;
-
-        > div {
-            margin-left: .3em;
-            margin-top: .3em;
-
-            > div {
-                color: #333;
-            }
-            &:first-child {
-                > div:first-child {
-                    width: 1.5em;
-                }
-            }
-        }
-    }
-
-    .score-header {
-        white-space: nowrap;
-        overflow: hidden;
-        line-height:1.4em;
-        margin-bottom: 0;
-        display:flex;
-        align-items:center;
-        border: 1px solid transparent;
-        border-radius: 3px;
-        color: #555;
-        padding-bottom: .35em;
-        cursor: pointer;
-        transition: background 200ms;
-
-        &:hover, &:focus, &.selected {
-            outline: none;
-            border: 1px solid hsla(204, 38%, 55%, 1);
-        }
-
-        &.selected {
-            &, &:focus {
-                background: hsla(204, 38%, 55%, 1);
-                color: white;
-            }
-            &:hover, &:focus {
-                border-color: hsla(204, 65%, 35%, 1);
-            }
-        }
-    }
-
-    .showDefaultFeedbackFields .score-header {
-        &:not(:hover) {
-            border-bottom: 1px solid hsla(190, 20%, 78%, .5);
-        }
-        &:focus {
-            border-bottom: 1px solid hsla(204, 38%, 55%, 1);
-        }
-        &.selected:focus {
-            border-bottom: 1px solid hsla(204, 65%, 35%, 1);
-        }
-    }
-
-    .score-number {
-        width: 1.7em;
-        min-width: 1.7em;
-        font-size: 1.8rem;
-        padding-right: .35em;
-        text-align: right;
-        border-right: 1px solid #bbb;
-        align-self: flex-end;
-    }
-
-    .score-header.selected {
-        &, &:focus {
-            .score-number {
-                border-right-color: white;
-            }
-        }
-    }
-
-    .final-score-header .score-number {
-        border-right: none;
-    }
-
-    .subtotal .score-number {
-        border-right: none;
-        padding-right: 0.4em;
-        margin-left: .6em;
-        border-radius: 3px;
-    }
-
-    .category-total .score-number {
-        background: hsla(190, 20%, 78%, .5);
-    }
-
-    .cluster-total .score-number {
-        background: hsla(190, 40%, 45%, .75);
-        color: white;
-    }
-
-    .rubric-total .score-number {
-        background: hsla(190, 40%, 35%, 1);
-        color: white;
-    }
-
-    .level-title {
-        margin-left: .5em;
-        font-size:1.4rem;
-        align-self: flex-end;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
     .default-feedback {
-        padding-left: 2.9em;
+        padding: .3em .5em;
+        line-height: 1.4em;
         display: none;
     }
 
-    .showDefaultFeedbackFields .default-feedback {
+    .show-default-feedback .default-feedback {
         display: block;
     }
 
     .custom-feedback {
-        margin-left: 2.5em;
+        margin-left: 20em;
         margin-bottom: 1em;
         display: none;
 
         textarea {
+            padding: .2em .4em 0;
             width: 40em;
             height: 2.2em;
             max-width: 100%;
@@ -453,6 +527,7 @@
                 border: 1px solid #aaa;
                 background: white;
                 resize: both;
+
                 &::placeholder {
                     color: #666;
                 }
@@ -464,11 +539,11 @@
             }
         }
     }
-    .showCustomFeedbackFields .custom-feedback {
+    .show-custom-feedback .custom-feedback {
         display: block;
     }
-    .showDefaultFeedbackFields .custom-feedback {
-        margin-left: 22.5em;
+    .show-default-feedback .custom-feedback {
+        margin-left: 20em;
     }
 </style>
 <style lang="scss">
@@ -915,9 +990,9 @@
         /** Override elements **/
 
         body {
-        /*    display: flex;
-            flex-direction: column;
-            max-height: 100vh;*/
+            /*    display: flex;
+                flex-direction: column;
+                max-height: 100vh;*/
         }
 
         .container-breadcrumb + .container-fluid {
