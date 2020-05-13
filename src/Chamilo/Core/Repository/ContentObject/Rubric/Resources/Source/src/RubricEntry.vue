@@ -48,7 +48,7 @@
                                                             <div class="criterium-level-title">
                                                                 {{level.title}}
                                                             </div>
-                                                            <div class="score-number"><i class="check fa"/>{{ level.score }}</div>
+                                                            <div class="score-number"><!--<i class="check fa"/>-->{{ level.score }}</div>
                                                         </div>
                                                         <div class="default-feedback">
                                                             {{ level.feedback }}
@@ -420,7 +420,6 @@
         line-height: 1.6em;
         color: #666;
         border-radius: $border-radius;
-        padding-right: .3em;
     }
 
     .criterium-level-header {
@@ -461,6 +460,7 @@
         }
 
         .score-number {
+            padding-right: .3em;
             line-height: 1.2em;
             text-align: right;
             border: 1px solid transparent;
