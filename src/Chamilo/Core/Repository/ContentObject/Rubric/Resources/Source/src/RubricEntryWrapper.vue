@@ -1,6 +1,6 @@
 <template>
     <div id="rubric-entry-wrapper" class="container-fluid">
-        <rubric-entry :api-config="config" :rubric-data="rubricData" :version="version"></rubric-entry>
+        <rubric-entry :api-config="config" :rubric-data="rubricData" :version="version" :rubric-results="rubricResults"></rubric-entry>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ import RubricEntry from './RubricEntry.vue';
 })
 export default class RubricEntryWrapper extends Vue {
     private version = 0;
+    private rubricResults : any = {};
 
     private config: any = {
         '...URL': 'https://test'

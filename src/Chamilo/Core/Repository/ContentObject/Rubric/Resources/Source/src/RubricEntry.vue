@@ -59,7 +59,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="custom-feedback">
-                                                    <textarea placeholder="Geef Feedback"></textarea>
+                                                    <textarea placeholder="Geef Feedback" v-model="criterium.customFeedback" @input="setFeedback(criterium)"></textarea>
                                                 </div>
                                             </li>
                                         </ul>
@@ -88,7 +88,6 @@
     import APIConfiguration from './Connector/APIConfiguration';
     import TreeNode from './Domain/TreeNode';
     import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import Choice from './Domain/Choice';
     import Cluster from './Domain/Cluster';
     import Category from './Domain/Category';
     import Criterium from './Domain/Criterium';
@@ -97,6 +96,7 @@
     interface CriteriumExt {
         choices: any[];
         score: number|null;
+        customFeedback: string;
         showDefaultFeedback: false;
     }
 
@@ -107,14 +107,13 @@
     export default class RubricEntry extends Vue {
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
-        private scores: Map<Criterium, Choice> = new Map<Criterium, Choice>();
-        private _scores: any = {};
         private showDefaultFeedbackFields = false;
-        private showCustomFeedbackFields = false;
+        //private showCustomFeedbackFields = false;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
+        @Prop({type: Object, required: true}) readonly rubricResults!: any;
 
         toggleDefaultFeedbackFields() {
             this.showDefaultFeedbackFields = !this.showDefaultFeedbackFields;
@@ -126,10 +125,23 @@
             }
         }
 
+        ensureCriteriumData(criterium: Criterium) {
+            if (!this.rubricResults[criterium.id]) {
+                this.rubricResults[criterium.id] = { choice: null, feedback: '' };
+            }
+        }
+
+        setFeedback(criterium: Criterium) {
+            this.ensureCriteriumData(criterium);
+            const criteriumExt = criterium as unknown as CriteriumExt;
+            this.rubricResults[criterium.id].feedback = criteriumExt.customFeedback;
+        }
+
         selectLevel(criterium: Criterium, level: any) {
+            this.ensureCriteriumData(criterium);
             const criteriumExt = criterium as unknown as CriteriumExt;
             criteriumExt.score = level.score;
-            this.scores.set(criterium, level.choice);
+            this.rubricResults[criterium.id].choice = level.choice; // todo: choice has no id yet.
             criteriumExt.choices.forEach(choice => {
                 choice.isSelected = choice === level;
             });
@@ -176,6 +188,7 @@
                 criteriumExt.choices = [];
                 Vue.set(criteriumExt, 'score', null);
                 Vue.set(criteriumExt, 'showDefaultFeedback', false);
+                Vue.set(criteriumExt, 'customFeedback', '');
                 rubric.levels.forEach(level => {
                     const choice = rubric.getChoice(criterium, level);
                     const score = rubric.getChoiceScore(criterium, level);
