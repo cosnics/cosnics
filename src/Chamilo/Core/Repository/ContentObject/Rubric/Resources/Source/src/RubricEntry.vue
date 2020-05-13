@@ -108,6 +108,7 @@
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
         private scores: Map<Criterium, Choice> = new Map<Criterium, Choice>();
+        private _scores: any = {};
         private showDefaultFeedbackFields = false;
         private showCustomFeedbackFields = false;
 
@@ -198,13 +199,30 @@
     }
 </script>
 <style lang="scss">
+
+    /** Colors **/
+
+    $text-color: #555;
     $bg-color: hsla(165, 5%, 90%, 1);
+    $level-header-color: hsla(190, 30%, 55%, 1);
+    $title-color: hsla(203, 38%, 33%, 1);
+    $score-lighter: hsla(190, 20%, 78%, .2);
+    $score-light: hsla(190, 20%, 78%, .5);
+    $score-dark: hsla(190, 40%, 45%, .75);
+    $score-darker: hsla(190, 40%, 35%, 1);
+    $level-selected-color: hsla(204, 38%, 55%, 1);
+    $level-selected-color-dark: hsla(204, 65%, 35%, 1);
+    /** Border **/
+
+    $border-radius: 3px;
+
     * {
         outline-width: thin;
     }
 
     #app {
-        color: #555;
+        color: $text-color;
+        /*min-width: 850px;*/
     }
 
     .rubric {
@@ -216,12 +234,14 @@
     }
 
     .levels-header-wrap {
-        background: hsla(165, 5%, 90%, 1);
+        background: $bg-color;
+        background: linear-gradient(to bottom, $bg-color 0, $bg-color 50%, change_color($bg-color, $alpha: 0) 100%);
         position: -webkit-sticky;
         position: sticky;
         top: 0;
         padding-top: .8em;
         padding-bottom: .4em;
+        z-index: 10;
     }
 
     .levels-header {
@@ -233,16 +253,17 @@
 
         .criterium-level-title {
             flex: 1;
-            background-color: hsl(191, 31%, 57%);
+            background-color: $level-header-color;
             padding: .4em .5em;
             margin-right: .5em;
             font-size: 1.4rem;
             line-height: 1.4em;
             text-overflow: ellipsis;
+            overflow: hidden;
             color: white;
-            border-radius: 3px;
+            border-radius: $border-radius;
             box-shadow: 0px 1px 2px #999;
-            min-width: 8.57em;
+            /*min-width: 8.57em;*/
         }
     }
 
@@ -261,7 +282,7 @@
     .cluster-title {
         font-size: 1.8rem;
         margin: .25em 0 0 0;
-        color: hsla(203, 38%, 33%, .7);
+        color: change-color($title-color, $alpha: 0.7);
         font-weight: bold;
     }
 
@@ -279,7 +300,7 @@
     .category-title {
         font-size: 1.5rem;
         margin: .25em 0 0 0;
-        color: hsla(203, 38%, 33%, 1);
+        color: $title-color;
 
         &.category-indicator:before {
             width: .8em;
@@ -289,17 +310,16 @@
 
     .criterium {
         margin-left: 1.3em;
-        /*margin-right: 1.5em;*/
         margin-bottom: .5em;
         display: flex;
     }
 
     .show-custom-feedback .criterium {
-        /* margin-bottom: .75em;*/
+        margin-bottom: .75em;
     }
 
     .show-default-feedback .criterium {
-        /*margin-bottom: 1.25em;*/
+        margin-bottom: .75em;
     }
 
     .criterium-title-header {
@@ -351,29 +371,29 @@
     .criterium-level {
         flex: 1;
         margin-right: 0.5em;
-        min-width: 9.23em;
+        /*min-width: 9.23em;*/
     }
 
     .criterium-level-header {
         background: #ddd;
         border: 1px solid transparent;
-        border-radius: 3px;
-        border-bottom-color: hsla(190, 20%, 78%, .5);
+        border-radius: $border-radius;
+        border-bottom-color: $score-light;
         text-align: center;
         cursor: pointer;
         transition: 200ms background;
 
         &:hover, &:focus, &.selected {
             outline: none;
-            border: 1px solid hsla(204, 38%, 55%, 1);
+            border: 1px solid $level-selected-color;
         }
 
         &.selected {
             &, &:focus {
-                background: hsla(204, 38%, 55%, 1);
+                background: $level-selected-color;
             }
             &:hover, &:focus {
-                border-color: hsla(204, 65%, 35%, 1);
+                border-color: $level-selected-color-dark;
             }
         }
     }
@@ -386,7 +406,7 @@
         font-size: 1.8rem;
         line-height: 1.6em;
         color: #666;
-        border-radius: 3px;
+        border-radius: $border-radius;
         padding-right: .3em;
     }
 
@@ -439,7 +459,7 @@
 
         .score-number {
             line-height: 1.6em;
-            background: hsla(190, 20%, 78%, .2);
+            background: $score-lighter;
         }
     }
 
@@ -455,7 +475,7 @@
         }
 
         .score-number {
-            background: hsla(190, 20%, 78%, .5);
+            background: $score-light;
         }
     }
 
@@ -467,14 +487,14 @@
         /*margin-right: 1.5em;*/
 
         .score-number {
-            background: hsla(190, 40%, 45%, .75);
+            background: $score-dark;
             color: white;
         }
     }
 
     .cluster-total-title {
         font-weight: 700;
-        color: hsla(203, 38%, 33%, 1);
+        color: darken($score-dark, 20%);
     }
 
     .rubric-total {
@@ -485,17 +505,17 @@
         /*margin-right: 1.5em;*/
         padding-top: .3em;
         padding-bottom: .3em;
-        border-top: 1px solid hsla(190, 20%, 78%, .5);
+        border-top: 1px solid $score-light;
 
         .score-number {
-            background: hsla(190, 40%, 35%, 1);
+            background: $score-darker;
             color: white;
         }
     }
 
     .rubric-total-title {
         font-weight: 700;
-        color: hsla(190, 40%, 35%, 1);
+        color: $score-darker;
     }
 
     .default-feedback {
@@ -520,7 +540,7 @@
             max-width: 100%;
             background: transparent;
             border: 1px solid #d0d0d0;
-            border-radius: 3px;
+            border-radius: $border-radius;
             resize: none;
 
             &:hover, &:focus {
@@ -547,35 +567,6 @@
     }
 </style>
 <style lang="scss">
-
-    /** Mixins **/
-
-    @mixin user-select($property) {
-        -webkit-touch-callout: $property;
-        -webkit-user-select: $property;
-        -moz-user-select: $property;
-        -ms-user-select: $property;
-        user-select: $property;
-    }
-
-    @mixin scrollbar() {
-        &::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        &::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 2px grey;
-            background-color: hsla(200, 50%, 40%, .05);
-            border-radius: 10px;
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: hsla(200, 50%, 40%, .15);
-            border-radius: 10px;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-            background-color: hsla(220, 70%, 40%, .20);
-        }
-    }
 
     /** Colors **/
 
@@ -629,90 +620,6 @@
             margin-bottom: -20px;
             width: 100%;
             position: relative;
-        }
-    }
-
-    /** Loader **/
-
-    .app-container-loading {
-        width: 100%;
-        flex: 1;
-        background-color: $bg-color;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-
-        p {
-            margin: 1.5em 1.5em 0;
-        }
-
-        .lds-ellipsis {
-            margin-left: .9em;
-        }
-    }
-
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 80px;
-        height: 80px;
-
-        div {
-            position: absolute;
-            top: 13px;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: hsla(190, 40%, 45%, 1);
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-
-            &:nth-child(1) {
-                left: 8px;
-                animation: lds-ellipsis1 0.6s infinite;
-            }
-
-            &:nth-child(2) {
-                left: 8px;
-                animation: lds-ellipsis2 0.6s infinite;
-            }
-
-            &:nth-child(3) {
-                left: 32px;
-                animation: lds-ellipsis2 0.6s infinite;
-            }
-
-            &:nth-child(4) {
-                left: 56px;
-                animation: lds-ellipsis3 0.6s infinite;
-            }
-        }
-    }
-
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-    }
-
-    @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(24px, 0);
         }
     }
 
@@ -787,200 +694,6 @@
         }
     }
 
-    /** Action Menu **/
-
-    .item-actions {
-        pointer-events: all;
-        color: #999;
-        display: none;
-        margin: 0 .25em 0 .75em;
-        cursor: pointer;
-    }
-
-    .action-menu {
-        display: flex;
-        align-items: center;
-    }
-
-    .action-menu-list {
-        display: flex;
-        list-style: none;
-        padding: 0;
-        margin-right: 4px;
-
-        span {
-            position: absolute;
-            width: 0;
-            overflow: hidden;
-        }
-    }
-
-    .action-menu-list-item {
-        background-color: transparent;
-        border-radius: $border-radius;
-        padding: 0 5px;
-        color: #999;
-        transition: background-color 200ms, color 200ms;
-        cursor: pointer;
-
-        &:hover, &:focus {
-            background-color: $btn-color;
-            color: #fff;
-        }
-    }
-
-    /** Name Input **/
-
-    .name-input {
-        margin-top: .5em;
-        display: flex;
-
-        .btn-clear {
-            padding: 4px;
-        }
-    }
-
-    .name-input-actions {
-        margin-left: 5px;
-        display: flex;
-    }
-
-    .name-input-title {
-        flex: 1;
-    }
-
-    .name-input-field {
-        padding: 2px 18px 2px 4px;
-        min-height: 36px;
-        color: #333;
-
-        &::placeholder {
-            color: #777;
-            opacity: 1;
-        }
-    }
-
-    .btn-name-input {
-        border-radius: $border-radius;
-        transition: background-color 0.2s ease-in, color 0.1s ease-in;
-        border: 1px solid transparent;
-        color: #666;
-        font-weight: 400;
-
-        &:hover, &:focus {
-            background-color: $btn-color;
-            color: #fff;
-            border: 1px solid transparent;
-        }
-
-        &[disabled] {
-            background-color: transparent;
-            border: 1px solid #cfcfcf;
-            color: #999;
-            cursor: not-allowed;
-        }
-    }
-
-    .btn-ok {
-        background-color: $btn-color-lightened;
-        color: #fff;
-    }
-
-    .btn-cancel {
-        background-color: transparent;
-        border: 1px solid #cdcdcd;
-    }
-
-    /** Modal Content **/
-
-    .modal-bg {
-        position: fixed;
-        background-color: $modal-bg;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 10;
-        animation-name: fade-in;
-        animation-duration: 300ms;
-    }
-
-    .modal-content {
-        background-color: $bg-color;
-        max-width: 90%;
-        width: 420px;
-        height: 150px;
-        margin: 120px auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-radius: $border-radius;
-        box-shadow: 0px 6px 12px #666;
-    }
-
-    .modal-content-title {
-        padding-bottom: 16px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid $panel-border-color;
-        width: 100%;
-        text-align: center;
-    }
-
-    /** Modal Name Input **/
-
-    .edit-title {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 10;
-
-        .cover {
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: $modal-bg;
-            width: 100%;
-            height: 100%;
-            animation-name: fade-in;
-            animation-duration: 300ms;
-        }
-
-        .name-input {
-            position: absolute;
-            background-color: $bg-color;
-            margin: 0;
-            padding: 4px;
-            width: 100%;
-            border-radius: $border-radius;
-        }
-    }
-
-    /** Modal Remove Dialog **/
-
-    .btn-dialog-remove {
-        border-radius: $border-radius;
-        transition: background-color 0.2s ease-in, color 0.1s ease-in;
-        border: 1px solid transparent;
-        color: #666;
-        font-weight: 400;
-
-        &:hover, &:focus {
-            background-color: $btn-color;
-            color: #fff;
-            border: 1px solid transparent;
-        }
-
-        &.btn-ok {
-            margin-right: 8px;
-            color: #fff;
-        }
-    }
-
-    /**  **/
-
     @media only screen and (max-width: 899px) {
 
     }
@@ -1010,101 +723,6 @@
 
         .app-header-tools {
             display: flex;
-        }
-
-        /** Action Menu **/
-
-        .item-actions {
-            width: 1.8em;
-            /*height: 1.8em;*/
-            opacity: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: $border-radius;
-            color: #777;
-            transition: all 200ms;
-            cursor: pointer;
-            font-size: 1.1rem;
-
-            &.show-menu {
-                opacity: 1;
-            }
-
-            i {
-                padding-top: 2px;
-                pointer-events: none;
-
-                &.show-menu {
-                    padding-top: 0;
-                }
-            }
-        }
-
-        .action-menu {
-            display: none;
-            width: 9em;
-            position: absolute;
-            min-width: 100px;
-            background: #fff;
-            z-index: 10;
-
-            &.show-menu {
-                display: flex;
-            }
-        }
-
-        .action-menu-list {
-            position: fixed;
-            background-color: #fff;
-            flex-direction: column;
-            list-style: none;
-            border-radius: $border-radius;
-            box-shadow: 0px 0px 3px #999;
-            overflow: hidden;
-        }
-
-        .action-menu-list-item {
-            margin-right: 0;
-            font-size: 1.3rem;
-            padding: .25em .5em;
-            cursor: pointer;
-            pointer-events: all;
-            border-radius: 0;
-
-            &:hover {
-                background: #ddd;
-            }
-
-            i {
-                margin-right: .3em;
-                color: #666;
-            }
-
-            span {
-                position: initial;
-                width: initial;
-                color: #333;
-                opacity: 1;
-            }
-        }
-
-        /** Name Input **/
-
-        .name-input {
-            margin-top: 0;
-            margin-bottom: 1em;
-        }
-
-        /** Modal Name Input **/
-
-        .edit-title .name-input {
-            width: 104%;
-            margin-left: -2%;
-            margin-top: -1%;
-            box-shadow: 0px 3px 10px #666;
         }
     }
 
