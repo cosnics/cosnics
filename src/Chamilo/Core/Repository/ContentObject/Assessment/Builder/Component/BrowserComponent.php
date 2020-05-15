@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
@@ -17,7 +18,8 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Builder\Action\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
     /*
@@ -31,7 +33,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             self::package(),
             'MergeAssessment',
             $this->get_url(
-                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_MERGE_ASSESSMENT)));
+                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_MERGE_ASSESSMENT)
+            )
+        );
 
         $links[] = new LinkTypeSelectorOption(
             self::package(),
@@ -39,18 +43,36 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->get_url(
                 array(
                     \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER)));
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
+                )
+            )
+        );
+
+        $links[] = new LinkTypeSelectorOption(
+            self::package(),
+            'SelectQuestionsInWorkspaces',
+            $this->get_url(
+                array(
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER,
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES => 1
+                )
+            )
+        );
 
         $links[] = new LinkTypeSelectorOption(
             self::package(),
             'RandomizeQuestionOptions',
-            $this->get_url(array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_RANDOMIZE)));
+            $this->get_url(array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_RANDOMIZE))
+        );
 
         $links[] = new LinkTypeSelectorOption(
             self::package(),
             'AnswerFeedbackType',
             $this->get_url(
-                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE)));
+                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE)
+            )
+        );
 
         return $links;
     }
