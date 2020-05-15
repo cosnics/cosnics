@@ -1,35 +1,16 @@
 <template>
     <div id="app">
-        <div class="app-header">
-            <ul class="app-header-menu">
-                <!--<li class="app-header-item"><a @click.prevent="">Entry View</a></li>-->
-            </ul>
-            <ul class="app-header-tools">
-                <li class="app-header-item" @click.prevent="toggleDefaultFeedbackFields"><a>DF</a></li>
-                <!--<li class="app-header-item" @click.prevent="showCustomFeedbackFields = !showCustomFeedbackFields"><a>CF</a></li>-->
-            </ul>
-            <div class="save-state">
-                <div v-if="dataConnector && dataConnector.isSaving" class="saving">
-                    Processing {{dataConnector.processingSize}} saves...
-                </div>
-                <div v-else-if="dataConnector" class="saved" role="alert">
-                    All changes saved
-                </div>
-            </div>
-        </div>
         <div v-if="rubric" class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-entry-view">
-                <div class="levels-header-wrap">
-                    <div class="levels-header">
-                        <div v-for="level in rubric.levels" class="criterium-level-title">
-                            {{level.title}}
-                        </div>
+            <div class="rubric-results-view">
+                <div class="evaluators-header-wrap">
+                    <div class="evaluators-header">
+                        <div v-for="evaluator in evaluators" class="evaluator-title">{{ evaluator|capitalize }}</div>
                     </div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters" :class="{'show-default-feedback': showDefaultFeedbackFields, 'show-custom-feedback': showDefaultFeedbackFields}">
+                <ul class="clusters">
                     <li v-for="cluster in rubric.clusters" class="cluster-list-item">
                         <div class="cluster">
                             <h2 class="cluster-title">{{ cluster.title }}</h2>
@@ -41,42 +22,38 @@
                                             <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
                                                 <div class="criterium">
                                                     <div class="criterium-title-header">
-                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i class="check fa"/></div>
+                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>
                                                     </div>
-                                                    <div v-for="level in criterium.choices" class="criterium-level">
-                                                        <div class="criterium-level-header" tabindex="0" @keyup.enter.space.stop="selectLevel(criterium, level)" @click="selectLevel(criterium, level)" :class="{ selected: level.isSelected }">
-                                                            <div class="criterium-level-title">
-                                                                {{level.title}}
-                                                            </div>
-                                                            <div class="score-number"><!--<i class="check fa"/>-->{{ level.score }}</div>
-                                                        </div>
-                                                        <div class="default-feedback">
-                                                            {{ level.feedback }}
-                                                        </div>
+                                                    <div v-for="evaluator in evaluators" class="subtotal criterium-total">
+                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{ getCriteriumEvaluation(criterium, evaluator) }}</div>
+                                                        <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
-                                                    <div class="subtotal criterium-total">
-                                                        <div class="score-number">{{ criterium.score || 0 }}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="custom-feedback">
-                                                    <textarea placeholder="Geef Feedback" v-model="criterium.customFeedback" @input="setFeedback(criterium)"></textarea>
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }}</div></div>
+                                        <div class="category-indicator">Totaal {{ category.title }}:</div>
+                                        <div v-for="evaluator in evaluators" class="score-wrap">
+                                            <div class="score-number">{{ getCategoryEvaluation(category, evaluator) }}</div>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap"><div class="score-number">{{ getClusterScore(cluster) }}</div></div>
+                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div>
+                                <div v-for="evaluator in evaluators" class="score-wrap">
+                                    <div class="score-number">{{ getClusterEvaluation(cluster, evaluator) }}</div>
+                                </div>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="subtotal rubric-total">
-                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }}</div></div>
+                    <div class="rubric-total-title">Totaal Rubric:</div>
+                    <div v-for="evaluator in evaluators" class="score-wrap">
+                        <div class="score-number">{{ getRubricEvaluation(evaluator) }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,77 +71,47 @@
     import DataConnector from './Connector/DataConnector';
 
     interface CriteriumExt {
-        choices: any[];
-        score: number|null;
-        customFeedback: string;
         showDefaultFeedback: false;
+        evaluations: any;
     }
 
     @Component({
         components: {
         },
+        filters: {
+            capitalize: function (value: string) {
+                if (!value) return ''
+                value = value.toString()
+                return value.charAt(0).toUpperCase() + value.slice(1)
+            }
+        }
     })
-    export default class RubricEntry extends Vue {
+    export default class RubricResult extends Vue {
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
         private showDefaultFeedbackFields = false;
-        //private showCustomFeedbackFields = false;
+        private evaluators: string[]|null = null;
 
-        @Prop({type: Object, default: null}) readonly rubricData!: object|null;
+        @Prop({type: Object, default: null}) readonly rubricData!: any|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object, required: true}) readonly rubricResults!: any;
 
-        toggleDefaultFeedbackFields() {
-            this.showDefaultFeedbackFields = !this.showDefaultFeedbackFields;
-            if (!this.showDefaultFeedbackFields) {
-                this.rubric!.getAllCriteria().forEach(criterium => {
-                    const criteriumExt = criterium as unknown as CriteriumExt;
-                    criteriumExt.showDefaultFeedback = false;
-                });
-            }
+        getCriteriumEvaluation(criterium: Criterium, evaluator: string) : number {
+            return (criterium as unknown as CriteriumExt).evaluations[evaluator].score || 0;
         }
 
-        ensureCriteriumData(criterium: Criterium) {
-            if (!this.rubricResults[criterium.id]) {
-                this.rubricResults[criterium.id] = { choice: null, feedback: '' };
-            }
+        getCategoryEvaluation(category: Category, evaluator: string) : number {
+            return category.criteria.map(criterium => this.getCriteriumEvaluation(criterium, evaluator)).reduce((v1, v2) => v1 + v2, 0);
         }
 
-        setFeedback(criterium: Criterium) {
-            this.ensureCriteriumData(criterium);
-            const criteriumExt = criterium as unknown as CriteriumExt;
-            this.rubricResults[criterium.id].feedback = criteriumExt.customFeedback;
-            console.log(this.rubricResults);
+        getClusterEvaluation(cluster: Cluster, evaluator: string) : number {
+            return cluster.categories.map(category => this.getCategoryEvaluation(category, evaluator)).reduce((v1, v2) => v1 + v2, 0);
         }
 
-        selectLevel(criterium: Criterium, level: any) {
-            this.ensureCriteriumData(criterium);
-            const criteriumExt = criterium as unknown as CriteriumExt;
-            criteriumExt.score = level.score;
-            this.rubricResults[criterium.id].choice = level.choice; // todo: choice has no id yet.
-            this.rubricResults[criterium.id].level = level.level.id;
-            console.log(this.rubricResults);
-            criteriumExt.choices.forEach(choice => {
-                choice.isSelected = choice === level;
-            });
-        }
-
-        getCriteriumScore(criterium: Criterium) : number {
-            return (criterium as unknown as CriteriumExt).score || 0;
-        }
-
-        getCategoryScore(category: Category) : number {
-            return category.criteria.map(criterium => this.getCriteriumScore(criterium)).reduce((v1, v2) => v1 + v2, 0);
-        }
-
-        getClusterScore(cluster: Cluster) : number {
-            return cluster.categories.map(category => this.getCategoryScore(category)).reduce((v1, v2) => v1 + v2, 0);
-        }
-
-        getRubricScore() : number {
+        getRubricEvaluation(evaluator: string) : number {
             if (!this.rubric) { return 0; }
-            return this.rubric.clusters.map(cluster => this.getClusterScore(cluster)).reduce((v1, v2) => v1 + v2, 0);
+            return this.rubric.clusters.map(cluster => this.getClusterEvaluation(cluster, evaluator)).reduce((v1, v2) => v1 + v2, 0);
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
@@ -177,29 +124,26 @@
             )
         }
 
-        get populatedClusters() {
-            return this.rubric!.clusters.filter((cluster: Cluster) => {
-                const criteria: Criterium[] = [];
-                this.getCriteriaRecursive(cluster, criteria);
-                return criteria.length !== 0;
-            });
-        }
-
-        private initScores(rubric: Rubric) {
+        private initData(rubric: Rubric, results: any) {
+            this.evaluators = results.evaluators;
             rubric.getAllCriteria().forEach(criterium => {
                 const criteriumExt = criterium as unknown as CriteriumExt;
-                criteriumExt.choices = [];
-                Vue.set(criteriumExt, 'score', null);
                 Vue.set(criteriumExt, 'showDefaultFeedback', false);
-                Vue.set(criteriumExt, 'customFeedback', '');
-                rubric.levels.forEach(level => {
-                    const choice = rubric.getChoice(criterium, level);
-                    const score = rubric.getChoiceScore(criterium, level);
-                    const isSelected = level.isDefault;
-                    if (isSelected) {
-                        criteriumExt.score = score;
+                criteriumExt.evaluations = {};
+                /*Vue.set(criteriumExt, 'evaluations', {});*/
+                this.evaluators!.forEach(evaluator => {
+                    const criteriumEvaluation: any = { feedback: '', score: 0, level: null };
+                    const evaluations = results.evaluations[evaluator];
+                    const criteriumEvaluationInput = evaluations.find((o: any) => o.criteriumId === criterium.id);
+                    if (criteriumEvaluationInput) {
+                        const chosenLevel = rubric.levels.find(level => level.id === criteriumEvaluationInput.levelId);
+                        if (chosenLevel) {
+                            criteriumEvaluation.level = chosenLevel;
+                            criteriumEvaluation.score = rubric.getChoiceScore(criterium, chosenLevel);
+                            criteriumEvaluation.feedback = criteriumEvaluationInput.feedback;
+                        }
                     }
-                    criteriumExt.choices.push({ title: level.title, feedback: choice?.feedback || '', score, isSelected, choice, level});
+                    criteriumExt.evaluations[evaluator] = criteriumEvaluation;
                 });
             });
         }
@@ -207,7 +151,7 @@
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
-                this.initScores(this.rubric);
+                this.initData(this.rubric, { evaluators: this.rubricData.evaluators, evaluations: this.rubricData.evaluations });
                 // todo: get rubric data id
                 this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }
@@ -220,6 +164,7 @@
 
     $text-color: #555;
     $bg-color: hsla(165, 5%, 90%, 1);
+    $panel-border-color: hsla(199, 39%, 73%, 1);
     /*$bg-color: rgba(220, 224, 227, 1);*/
     $level-header-color: hsla(190, 30%, 55%, 1);
     $title-color: hsla(203, 38%, 33%, 1);
@@ -239,6 +184,7 @@
 
     #app {
         color: $text-color;
+        border-top: 1px solid $panel-border-color; /** Added this for result view **/
         /*min-width: 850px;*/
     }
 
@@ -246,11 +192,13 @@
         margin: 0em 1.5em;
     }
 
-    .rubric-entry-view {
+    .rubric-results-view {
         position: relative;
+        width: 100%;
+        max-width: 40em;
     }
 
-    .levels-header-wrap {
+    .evaluators-header-wrap {
         background: $bg-color;
         background: linear-gradient(to bottom, $bg-color 0, $bg-color 50%, change_color($bg-color, $alpha: 0) 100%);
         position: -webkit-sticky;
@@ -261,15 +209,16 @@
         z-index: 10;
     }
 
-    .levels-header {
+    .evaluators-header {
         display: flex;
-        margin-right: 3.5em;
-        margin-left: 19.8em;
+        /*margin-right: 3.5em;*/
+        /*margin-left: 19.8em;*/
+        justify-content: flex-end;
         align-items: stretch;
         align-content: center;
 
-        .criterium-level-title {
-            flex: 1;
+        .evaluator-title {
+            width: 4.6em;
             background-color: $level-header-color;
             padding: .4em .5em;
             margin-right: .5em;
@@ -340,8 +289,9 @@
     }
 
     .criterium-title-header {
-        width: 18em;
-        min-width: 18em;
+        /*width: 18em;
+        min-width: 18em;*/
+        flex: 1;
         margin-right: 0.5em;
         position: relative;
 
@@ -470,19 +420,34 @@
         }
     }
 
-    .rubric-entry-view .subtotal {
+    .rubric-results-view .subtotal {
+        margin-right: .5em;
+
         .score-wrap {
-            width: 3.5em;
+            width: 5em;
         }
     }
 
-    .rubric-entry-view .criterium-total {
-        min-width: 3.5em;
+    .rubric-results-view .criterium-total {
+        width: 5em;
+        margin-right: .5em;
+        cursor: default;
+
+        .has-feedback {
+            font-size: 1.1rem;
+            margin-right: .5em;
+            color: #2787ad;
+        }
     }
 
     .criterium-total .score-number {
         line-height: 1.6em;
         background: $score-lighter;
+    }
+
+    .rubric-results-view .criterium-total .score-number:hover {
+        background: $score-light;
+
     }
 
     .category-total {
