@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="rb-app">
         <div class="app-header">
             <ul class="app-header-menu">
                 <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
@@ -244,7 +244,7 @@
 
     /** App **/
 
-    #app {
+    #rb-app {
         font-family: Helvetica, Arial, sans-serif;
         font-size: 1.3rem;
         line-height: 2.3rem;
@@ -580,14 +580,14 @@
 
     /** Clusters **/
 
-    .clusters {
+    .rb-clusters {
         margin-bottom: .5em;
         list-style: none;
         padding: 0;
         @include user-select(none);
     }
 
-    .cluster {
+    .rb-cluster {
         position: relative;
         padding: .5em;
         padding-right: 0;
@@ -617,7 +617,7 @@
         }
     }
 
-    .cluster-list-item:first-child .cluster {
+    .rb-cluster-list-item:first-child .rb-cluster {
         border-top: 1px solid $cluster-color-border;
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;
@@ -631,12 +631,12 @@
         }
     }
 
-    .cluster-list-item:last-child .cluster {
+    .rb-cluster-list-item:last-child .rb-cluster {
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
     }
 
-    .cluster-title {
+    .rb-cluster-title {
         flex: 1;
         cursor: pointer;
     }
@@ -654,13 +654,13 @@
 
     /** Categories **/
 
-    .categories {
+    .rb-categories {
         list-style: none;
         padding: 0;
         @include user-select(none);
     }
 
-    .category {
+    .rb-category {
         margin-bottom: 1.5em;
 
         .title {
@@ -692,7 +692,7 @@
         }
     }
 
-    .category-title {
+    .rb-category-title {
         /*position: relative;*/
         display: flex;
         align-items: center;
@@ -700,13 +700,13 @@
 
     /** Criteria **/
 
-    .criteria {
+    .rb-criteria {
         list-style: none;
         padding: 0;
         @include user-select(none);
     }
 
-    .criterium {
+    .rb-criterium {
         position: relative;
         background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
 
@@ -718,7 +718,7 @@
         }
     }
 
-    .criterium-title {
+    .rb-criterium-title {
         padding: .75em .5em;
         flex: 1;
         cursor: pointer;
@@ -833,11 +833,11 @@
         padding: 0;
     }
 
-    .criterium-level {
+    .rb-criterium-level {
         margin-bottom: 1.5em;
     }
 
-    .criterium-level-title {
+    .rb-criterium-level-title {
         font-weight: 700;
     }
 
@@ -951,7 +951,7 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .criterium-title {
+        .rb-criterium-title {
             pointer-events: none;
         }
 
@@ -1002,7 +1002,7 @@
 
         /** App **/
 
-        #app {
+        #rb-app {
             position: absolute;
             top: 0; bottom: 0; left: 0; right: 0;
             overflow: hidden;
@@ -1049,7 +1049,7 @@
         }
 
         .app-container:not(.dragging) {
-            .cluster-list-item:hover, .criterium:hover, .category-header .item-header-bar:hover {
+            .rb-cluster-list-item:hover, .rb-criterium:hover, .category-header .item-header-bar:hover {
                 .item-actions {
                     opacity: 1;
                 }
@@ -1236,11 +1236,11 @@
             }
         }
 
-        .clusters {
+        .rb-clusters {
             display: flex;
         }
 
-        .cluster-list-item {
+        .rb-cluster-list-item {
             border: 1px solid transparent;
             margin-right: .65em;
 
@@ -1263,7 +1263,7 @@
             }
         }
 
-        .cluster {
+        .rb-cluster {
             /*padding: .6em 0 .6em .8em;*/
             font-size: 1.35rem;
             background-color: $cluster-color;
@@ -1313,7 +1313,7 @@
             }
         }
 
-        .cluster, .cluster-list-item:first-child .cluster {
+        .rb-cluster, .rb-cluster-list-item:first-child .rb-cluster {
             border: 1px solid transparent;
             border-radius: $border-radius;
         }
@@ -1336,11 +1336,11 @@
             @include scrollbar();
         }
 
-        .categories {
+        .rb-categories {
             display: flex;
         }
 
-        .category {
+        .rb-category {
             width: 18em;
             margin-right: 1.2em;
 
@@ -1382,7 +1382,7 @@
                     opacity: 1;
                 }
 
-                .category-title .title {
+                .rb-category-title .title {
                     font-style: oblique;
                     margin-left: .5em;
                 }
@@ -1433,20 +1433,20 @@
 
         /** Criteria **/
 
-        .criteria {
+        .rb-criteria {
             border: 1px solid #dedede;
             border-top: none;
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;
         }
 
-        .criterium-list-item.ghost {
+        .rb-criterium-list-item.ghost {
             background-color: $ghost-bg-color;
             border: 1px dotted $ghost-border;
             color: transparent;
         }
 
-        .criterium {
+        .rb-criterium {
             font-size: 1.3rem;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
 
@@ -1486,11 +1486,11 @@
             }
         }
 
-        .app-container.dragging .criterium .item-actions {
+        .app-container.dragging .rb-criterium .item-actions {
             opacity: 0;
         }
 
-        .criterium-title {
+        .rb-criterium-title {
             padding: .65em .5em;
         }
 

@@ -1,5 +1,5 @@
 <template>
-    <div id="rubric-entry-wrapper" class="container-fluid">
+    <div id="rubric-builder-full-wrapper" class="container-fluid">
         <rubric-builder-full :api-config="config" :rubric-data="rubricData" :version="version"></rubric-builder-full>
     </div>
 </template>

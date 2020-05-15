@@ -1,8 +1,8 @@
 <template>
-    <li :id="id" class="cluster-list-item">
-        <div class="cluster handle cluster-handle" :class="{ selected, 'show-menu': showMenuActions }">
+    <li :id="id" class="rb-cluster-list-item">
+        <div class="rb-cluster handle cluster-handle" :class="{ selected, 'show-menu': showMenuActions }">
             <div class="item-header-bar ">
-                <div class="cluster-title" @click.stop="$emit('cluster-selected', cluster)">
+                <div class="rb-cluster-title" @click.stop="$emit('cluster-selected', cluster)">
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
                     {{cluster.title}}
                 </div>

@@ -279,8 +279,6 @@
     }
 
     .criterium-title-header {
-        width: 18em;
-        min-width: 18em;
         margin-right: 0.5em;
         position: relative;
 
@@ -300,6 +298,11 @@
                 color: #999;
             }
         }
+    }
+
+    #rubric-builder-full-wrapper .criterium-title-header {
+        width: 18em;
+        min-width: 18em;
     }
 
     .show-default-feedback .btn-more {

@@ -1,7 +1,7 @@
 <template>
     <div :id="id" class="category-header handle category-handle">
         <div class="item-header-bar">
-            <div class="category-title">
+            <div class="rb-category-title">
                 <a :style="{'background-color': category.color}" tabindex="0" @click="openColorPickerForCategory(category)" @keyup.enter.space="openColorPickerForCategory(category)"></a>
                 <h2 class="title">{{ category.title || 'Criteria' }}</h2>
             </div>

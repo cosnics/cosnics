@@ -184,8 +184,10 @@
 
     #app {
         color: $text-color;
+    }
+
+    #rubric-result-wrapper #app {
         border-top: 1px solid $panel-border-color; /** Added this for result view **/
-        /*min-width: 850px;*/
     }
 
     .rubric {
@@ -291,7 +293,6 @@
     .criterium-title-header {
         /*width: 18em;
         min-width: 18em;*/
-        flex: 1;
         margin-right: 0.5em;
         position: relative;
 
@@ -311,6 +312,10 @@
                 color: #999;
             }
         }
+    }
+
+    #rubric-result-wrapper .criterium-title-header {
+        flex: 1;
     }
 
     .show-default-feedback .btn-more {

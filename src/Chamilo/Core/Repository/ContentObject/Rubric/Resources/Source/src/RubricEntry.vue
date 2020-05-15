@@ -263,7 +263,6 @@
 
     .levels-header {
         display: flex;
-        margin-right: 3.5em;
         margin-left: 19.8em;
         align-items: stretch;
         align-content: center;
@@ -282,6 +281,10 @@
             box-shadow: 0px 1px 2px #999;
             /*min-width: 8.57em;*/
         }
+    }
+
+    #rubric-entry-wrapper .levels-header {
+        margin-right: 3.5em;
     }
 
     .rubric-title {
@@ -340,8 +343,6 @@
     }
 
     .criterium-title-header {
-        width: 18em;
-        min-width: 18em;
         margin-right: 0.5em;
         position: relative;
 
@@ -361,6 +362,11 @@
                 color: #999;
             }
         }
+    }
+
+    #rubric-entry-wrapper .criterium-title-header {
+        width: 18em;
+        min-width: 18em;
     }
 
     .show-default-feedback .btn-more {

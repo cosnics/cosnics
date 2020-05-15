@@ -1,8 +1,8 @@
 <template>
-    <li :id="id" class="criterium-list-item handle criterium-handle">
-        <div class="criterium" :class="{ selected }">
+    <li :id="id" class="rb-criterium-list-item handle criterium-handle">
+        <div class="rb-criterium" :class="{ selected }">
             <div class="item-header-bar">
-                <div @click="$emit('criterium-selected', criterium)" class="criterium-title">
+                <div @click="$emit('criterium-selected', criterium)" class="rb-criterium-title">
                     <h3 class="title">{{ criterium.title }}</h3>
                 </div>
                 <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
