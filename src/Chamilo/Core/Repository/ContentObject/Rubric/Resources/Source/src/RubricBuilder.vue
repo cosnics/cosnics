@@ -6,7 +6,7 @@
                 <li class="app-header-item"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
             </ul>
             <ul class="app-header-tools">
-                <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="fa fa-check-circle" />Split View</a></li>
+                <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="check fa" />Split View</a></li>
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving">
@@ -277,17 +277,31 @@
 
     .app-header-tools {
         display: none;
+
+        .check::before {
+            content: '\f1db';
+        }
+
         i {
             margin-right: 0.3em;
         }
-        :not(.checked) a {
+
+        a {
             color: #999;
-        }
-        a:hover {
-            color: #666;
+            &:hover {
+                color: #777;
+                .check::before {
+                    color: #999;
+                    content: '\f058';
+                }
+            }
         }
         :focus a, .checked a {
             color: #224e8b;
+            .check::before {
+                color: #3f69a4;
+                content: '\f058';
+            }
         }
     }
 

@@ -6,7 +6,7 @@
     <div v-else class="demo-page">Rubric Demo Page</div>
 </template>
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
     import RubricBuilderWrapper from './RubricBuilderWrapper.vue';
     import RubricBuilderFullWrapper from './RubricBuilderFullWrapper.vue';
     import RubricEntryWrapper from './RubricEntryWrapper.vue';
@@ -18,25 +18,7 @@
         },
     })
     export default class RubricMegaWrapper extends Vue {
-        private content = 'home';
-
-        mounted() {
-            document.getElementById('--rubric-home')?.addEventListener('click', () => {
-                this.content = 'home';
-            });
-            document.getElementById('--rubric-builder')?.addEventListener('click', () => {
-                this.content = 'builder';
-            });
-            document.getElementById('--rubric-builder-full')?.addEventListener('click', () => {
-                this.content = 'builder-full';
-            });
-            document.getElementById('--rubric-entry')?.addEventListener('click', () => {
-                this.content = 'entry';
-            });
-            document.getElementById('--rubric-results')?.addEventListener('click', () => {
-                this.content = 'results';
-            });
-        }
+        @Prop({type: String, required: true}) readonly content!: string;
     }
 </script>
 <style>
@@ -56,13 +38,27 @@
         margin-right: 10px;
     }
 
+    .chamilo-header .builder-list-item.selected {
+        margin-right: 10px;
+    }
+
     .chamilo-header .builder-list-item:not(:first-child) {
         padding-left: 10px;
-        border-left: 1px solid white;
     }
 
     .chamilo-header .builder-list-item a {
+        padding-bottom: 4px;
+        text-decoration: none;
         color: white;
+    }
+
+    .chamilo-header .builder-list-item.selected a {
+        color: white;
+        border-bottom: 1px solid white;
+    }
+
+    .chamilo-header .builder-list-item:hover a {
+        border-bottom: 1px solid yellowgreen;
     }
 
     .chamilo-header {

@@ -647,17 +647,31 @@
 
     .app-header-tools {
         display: none;
+
+        .check::before {
+            content: '\f1db';
+        }
+
         i {
             margin-right: 0.3em;
         }
-        :not(.checked) a {
+
+        a {
             color: #999;
-        }
-        a:hover {
-            color: #666;
+            &:hover {
+                color: #777;
+                .check::before {
+                    color: #999;
+                    content: '\f058';
+                }
+            }
         }
         :focus a, .checked a {
             color: #224e8b;
+            .check::before {
+                color: #3f69a4;
+                content: '\f058';
+            }
         }
     }
 

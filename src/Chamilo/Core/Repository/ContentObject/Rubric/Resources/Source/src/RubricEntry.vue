@@ -5,7 +5,7 @@
                 <!--<li class="app-header-item"><a @click.prevent="">Entry View</a></li>-->
             </ul>
             <ul class="app-header-tools">
-                <li class="app-header-item" @click.prevent="toggleDefaultFeedbackFields"><a>DF</a></li>
+                <li class="app-header-item" :class="{ checked: showDefaultFeedbackFields }"><a role="button" @click.prevent="toggleDefaultFeedbackFields"><i class="check fa" />Feedback</a></li>
                 <!--<li class="app-header-item" @click.prevent="showCustomFeedbackFields = !showCustomFeedbackFields"><a>CF</a></li>-->
             </ul>
             <div class="save-state">
@@ -406,6 +406,10 @@
         cursor: pointer;
         transition: 200ms background;
 
+
+    }
+
+    #rubric-entry-view .criterium-level-header {
         &:hover, &:focus, &.selected {
             outline: none;
             border: 1px solid $level-selected-color;
@@ -420,7 +424,6 @@
             }
         }
     }
-
     .criterium .criterium-level-title {
         display: none;
     }
@@ -686,17 +689,31 @@
 
     .app-header-tools {
         display: none;
+
+        .check::before {
+            content: '\f1db';
+        }
+
         i {
             margin-right: 0.3em;
         }
-        :not(.checked) a {
+
+        a {
             color: #999;
-        }
-        a:hover {
-            color: #666;
+            &:hover {
+                color: #777;
+                .check::before {
+                    color: #999;
+                    content: '\f058';
+                }
+            }
         }
         :focus a, .checked a {
             color: #224e8b;
+            .check::before {
+                color: #3f69a4;
+                content: '\f058';
+            }
         }
     }
 

@@ -22,7 +22,7 @@
                                             <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
                                                 <div class="criterium">
                                                     <div class="criterium-title-header">
-                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>
+                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total">
                                                         <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{ getCriteriumEvaluation(criterium, evaluator) }}</div>
@@ -355,7 +355,7 @@
         cursor: pointer;
         transition: 200ms background;
 
-        &:hover, &:focus, &.selected {
+        /*&:hover, &:focus, &.selected {
             outline: none;
             border: 1px solid $level-selected-color;
         }
@@ -367,7 +367,7 @@
             &:hover, &:focus {
                 border-color: $level-selected-color-dark;
             }
-        }
+        }*/
     }
 
     .criterium .criterium-level-title {
@@ -650,17 +650,31 @@
 
     .app-header-tools {
         display: none;
+
+        .check::before {
+            content: '\f1db';
+        }
+
         i {
             margin-right: 0.3em;
         }
-        :not(.checked) a {
+
+        a {
             color: #999;
-        }
-        a:hover {
-            color: #666;
+            &:hover {
+                color: #777;
+                .check::before {
+                    color: #999;
+                    content: '\f058';
+                }
+            }
         }
         :focus a, .checked a {
             color: #224e8b;
+            .check::before {
+                color: #3f69a4;
+                content: '\f058';
+            }
         }
     }
 
