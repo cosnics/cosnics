@@ -27,37 +27,37 @@
         margin-left: 1em;
     }
 
-    .chamilo-header .builder {
+    .chamilo-header .rubrics-menu {
         display: flex;
         margin-top: 40px;
         list-style: none;
         cursor: pointer;
     }
 
-    .chamilo-header .builder-list-item {
+    .chamilo-header .rubrics-menu-item {
         margin-right: 10px;
     }
 
-    .chamilo-header .builder-list-item.selected {
+    .chamilo-header .rubrics-menu-item.selected {
         margin-right: 10px;
     }
 
-    .chamilo-header .builder-list-item:not(:first-child) {
+    .chamilo-header .rubrics-menu-item:not(:first-child) {
         padding-left: 10px;
     }
 
-    .chamilo-header .builder-list-item a {
+    .chamilo-header .rubrics-menu-item a {
         padding-bottom: 4px;
         text-decoration: none;
         color: white;
     }
 
-    .chamilo-header .builder-list-item.selected a {
+    .chamilo-header .rubrics-menu-item.selected a {
         color: white;
         border-bottom: 1px solid white;
     }
 
-    .chamilo-header .builder-list-item:hover a {
+    .chamilo-header .rubrics-menu-item:hover a {
         border-bottom: 1px solid yellowgreen;
     }
 

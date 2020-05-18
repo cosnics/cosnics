@@ -27,7 +27,7 @@ new Vue({
         }
       }
     })},
-}).$mount('#builder');
+}).$mount('#rubrics-menu');
 
 new Vue({
   data: { content: 'home' },
