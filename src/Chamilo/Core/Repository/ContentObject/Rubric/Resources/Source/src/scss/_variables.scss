@@ -1,0 +1,56 @@
+/** Colors **/
+
+$bg-color: hsla(165, 5%, 90%, 1);
+$bg-color-darkened: darken($bg-color, 10%);
+$panel-border-color: hsla(199, 39%, 73%, 1);
+$panel-border-divider-color: hsla(200, 25%, 80%, 1);
+
+$bg-criterium-details: hsla(200, 13%, 87%, 1);
+$bg-level-selected: hsla(215, 20%, 85%, 1);
+
+$cluster-color: hsla(200, 10%, 80%, 0.5);
+$cluster-color-hover: hsla(190, 20%, 75%, 1);
+$cluster-color-selected: hsla(190, 40%, 45%, 1);
+$cluster-color-border: #ccc;
+$cluster-color-border-selected: hsla(190, 30%, 70%, 0.55);
+$fixed-score-color: hsla(100, 55%, 75%, 1);
+
+$criterium-color-border-selected: hsla(240, 15%, 80%, 1);
+
+$btn-color: hsla(200, 100%, 48%, 1);
+$btn-color-lightened: hsla(200, 100%, 57%, 1);
+$btn-color-darkened: hsla(200, 100%, 40%, 1);
+$input-color: #d6d6d6;
+$input-color-focus: hsla(200, 50%, 50%, 0.8);
+
+$btn-level-delete: hsla(165, 5%, 80%, 1);
+
+$item-actions-bg-color: rgba(0, 0, 0, .1);
+$cluster-item-actions-bg-color: hsla(190, 20%, 60%, 1);
+$cluster-item-actions-bg-color-selected: hsla(190, 40%, 40%, 1);
+
+$ghost-bg-color: rgba(255, 255, 255, 0.45);
+$ghost-border: rgba(28, 110, 164, 0.65);
+
+$modal-bg: rgba(0, 0, 0, 0.31);
+
+$text-color: #555;
+$level-header-color: hsla(190, 30%, 55%, 1);
+$title-color: hsla(203, 38%, 33%, 1);
+$score-lighter: hsla(190, 20%, 78%, .2);
+$score-light: hsla(190, 20%, 78%, .5);
+$score-dark: hsla(190, 40%, 45%, .75);
+$score-darker: hsla(190, 40%, 35%, 1);
+$level-selected-color: hsla(204, 38%, 55%, 1);
+$level-selected-color-dark: hsla(204, 65%, 35%, 1);
+
+/** Border **/
+
+$border-radius: 3px;
+
+/** Animation **/
+
+@keyframes fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}

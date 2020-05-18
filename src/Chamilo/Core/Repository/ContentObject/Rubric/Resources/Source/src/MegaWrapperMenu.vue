@@ -18,6 +18,3 @@
         @Prop({type: String, required: true}) readonly content!: string;
     }
 </script>
-<style>
-
-</style>

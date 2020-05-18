@@ -21,94 +21,45 @@
         @Prop({type: String, required: true}) readonly content!: string;
     }
 </script>
-<style>
+<style lang="scss">
     .demo-page {
         font-size: 1.8rem;
         margin-left: 1em;
     }
 
-    .chamilo-header .rubrics-menu {
-        display: flex;
-        margin-top: 40px;
-        list-style: none;
-        cursor: pointer;
-    }
-
-    .chamilo-header .rubrics-menu-item {
-        margin-right: 10px;
-    }
-
-    .chamilo-header .rubrics-menu-item.selected {
-        margin-right: 10px;
-    }
-
-    .chamilo-header .rubrics-menu-item:not(:first-child) {
-        padding-left: 10px;
-    }
-
-    .chamilo-header .rubrics-menu-item a {
-        padding-bottom: 4px;
-        text-decoration: none;
-        color: white;
-    }
-
-    .chamilo-header .rubrics-menu-item.selected a {
-        color: white;
-        border-bottom: 1px solid white;
-    }
-
-    .chamilo-header .rubrics-menu-item:hover a {
-        border-bottom: 1px solid yellowgreen;
-    }
-
     .chamilo-header {
-        min-height: 78px;
-        display: flex;
-        flex-direction: row;
-        overflow: hidden;
-    }
-    .chamilo-header .start {
-        background-image: url("/images/chamilo-start.png");
-        width: 168px;
-    }
-    .chamilo-header .middle {
-        background-image: url("/images/chamilo-middle.png");
-        flex: 1;
-    }
-    .chamilo-header .end {
-        background-image: url("/images/chamilo-end.png");
-        width: 713px;
-    }
-    @media (max-width: 900px) {
-        .chamilo-header {
-            min-height: 51px;
+        .rubrics-menu {
+            display: flex;
+            margin-top: 40px;
+            list-style: none;
+            cursor: pointer;
         }
-        .chamilo-header .start {
-            background-image: url("/images/chamilo-start-alt.png");
-            width: 176px;
+
+        .rubrics-menu-item {
+            margin-right: 10px;
+
+            &.selected {
+                margin-right: 10px;
+            }
+
+            &:not(:first-child) {
+                padding-left: 10px;
+            }
+
+            a {
+                padding-bottom: 4px;
+                text-decoration: none;
+                color: white;
+            }
+
+            &.selected a {
+                color: white;
+                border-bottom: 1px solid white;
+            }
+
+            &:hover a {
+                border-bottom: 1px solid yellowgreen;
+            }
         }
-        .chamilo-header .middle {
-            background-image: url("/images/chamilo-middle-alt.png");
-        }
-        .chamilo-header .end {
-            background-image: url("/images/chamilo-end-alt.png");
-            width: 70px;
-        }
-    }
-    .container-breadcrumb {
-        background-color: #f5f5f5;
-        margin-bottom: 20px;
-    }
-    .container-breadcrumb ol.breadcrumb {
-        margin-bottom: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    footer.chamilo-footer {
-        margin-top: 20px;
-        padding: 15px 0;
-        font-size: 90%;
-        text-align: right;
-        border-top: 1px solid #dddddd;
     }
 </style>

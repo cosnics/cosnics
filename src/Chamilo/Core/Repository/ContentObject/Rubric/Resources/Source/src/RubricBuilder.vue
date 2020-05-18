@@ -1,5 +1,5 @@
 <template>
-    <div id="rb-app">
+    <div id="app" class="builder-app">
         <div class="app-header">
             <ul class="app-header-menu">
                 <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
@@ -73,260 +73,6 @@
 </script>
 
 <style lang="scss">
-
-    /** Mixins **/
-
-    @mixin user-select($property) {
-        -webkit-touch-callout: $property;
-        -webkit-user-select: $property;
-        -moz-user-select: $property;
-        -ms-user-select: $property;
-        user-select: $property;
-    }
-
-    @mixin scrollbar() {
-        &::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        &::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 2px grey;
-            background-color: hsla(200, 50%, 40%, .05);
-            border-radius: 10px;
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: hsla(200, 50%, 40%, .15);
-            border-radius: 10px;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-            background-color: hsla(220, 70%, 40%, .20);
-        }
-    }
-
-    /** Colors **/
-
-    $bg-color: hsla(165, 5%, 90%, 1);
-    $bg-color-darkened: darken($bg-color, 10%);
-    $panel-border-color: hsla(199, 39%, 73%, 1);
-    $panel-border-divider-color: hsla(200, 25%, 80%, 1);
-
-    $bg-criterium-details: hsla(200, 13%, 87%, 1);
-    $bg-level-selected: hsla(215, 20%, 85%, 1);
-
-    $cluster-color: hsla(200, 10%, 80%, 0.5);
-    $cluster-color-hover: hsla(190, 20%, 75%, 1);
-    $cluster-color-selected: hsla(190, 40%, 45%, 1);
-    $cluster-color-border: #ccc;
-    $cluster-color-border-selected: hsla(190, 30%, 70%, 0.55);
-    $fixed-score-color: hsla(100, 55%, 75%, 1);
-
-    $criterium-color-border-selected: hsla(240, 15%, 80%, 1);
-
-    $btn-color: hsla(200, 100%, 48%, 1);
-    $btn-color-lightened: hsla(200, 100%, 57%, 1);
-    $btn-color-darkened: hsla(200, 100%, 40%, 1);
-    $input-color: #d6d6d6;
-    $input-color-focus: hsla(200, 50%, 50%, 0.8);
-
-    $btn-level-delete: hsla(165, 5%, 80%, 1);
-
-    $item-actions-bg-color: rgba(0, 0, 0, .1);
-    $cluster-item-actions-bg-color: hsla(190, 20%, 60%, 1);
-    $cluster-item-actions-bg-color-selected: hsla(190, 40%, 40%, 1);
-
-    $ghost-bg-color: rgba(255, 255, 255, 0.45);
-    $ghost-border: rgba(28, 110, 164, 0.65);
-
-    $modal-bg: rgba(0, 0, 0, 0.31);
-
-    /** Border **/
-
-    $border-radius: 3px;
-
-    /** Override elements **/
-
-    .container-breadcrumb {
-        margin-bottom: 0;
-
-        + .container-fluid {
-            padding-left: 0;
-            padding-right: 0;
-            margin-top: -20px;
-            margin-bottom: -20px;
-            width: 100%;
-            position: relative;
-        }
-    }
-
-    /** Loader **/
-
-    .app-container-loading {
-        width: 100%;
-        flex: 1;
-        background-color: $bg-color;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-
-        p {
-            margin: 1.5em 1.5em 0;
-        }
-
-        .lds-ellipsis {
-            margin-left: .9em;
-        }
-    }
-
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 80px;
-        height: 80px;
-
-        div {
-            position: absolute;
-            top: 13px;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: hsla(190, 40%, 45%, 1);
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-
-            &:nth-child(1) {
-                left: 8px;
-                animation: lds-ellipsis1 0.6s infinite;
-            }
-
-            &:nth-child(2) {
-                left: 8px;
-                animation: lds-ellipsis2 0.6s infinite;
-            }
-
-            &:nth-child(3) {
-                left: 32px;
-                animation: lds-ellipsis2 0.6s infinite;
-            }
-
-            &:nth-child(4) {
-                left: 56px;
-                animation: lds-ellipsis3 0.6s infinite;
-            }
-        }
-    }
-
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(0);
-        }
-    }
-
-    @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-        100% {
-            transform: translate(24px, 0);
-        }
-    }
-
-    /** App **/
-
-    #rb-app {
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 1.3rem;
-        line-height: 2.3rem;
-        display: flex;
-        flex-direction: column;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: $bg-color;
-        padding-bottom: 1.5em;
-    }
-
-    .app-header {
-        display: flex;
-        border: 1px solid $panel-border-color;
-        border-width: 1px 0;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .app-header-menu, .app-header-tools {
-        list-style: none;
-        display: flex;
-        margin-bottom: 0;
-        padding: 0.6em 0;
-    }
-
-    .app-header-menu {
-        margin-left: 1.5em;
-    }
-
-    .app-header-tools {
-        display: none;
-
-        .check::before {
-            content: '\f1db';
-        }
-
-        i {
-            margin-right: 0.3em;
-        }
-
-        a {
-            color: #999;
-            &:hover {
-                color: #777;
-                .check::before {
-                    color: #999;
-                    content: '\f058';
-                }
-            }
-        }
-        :focus a, .checked a {
-            color: #224e8b;
-            .check::before {
-                color: #3f69a4;
-                content: '\f058';
-            }
-        }
-    }
-
-    .app-header-item {
-        margin-right: 1em;
-        cursor: pointer;
-
-        a, a:hover {
-            text-decoration: none;
-            transition: color 120ms;
-        }
-    }
-
-    .save-state {
-        margin-right: 1.5em;
-        color: #337ab7;
-        width: 144px;
-        text-align: right;
-        transition: opacity 200ms;
-
-        .saved {
-            opacity: 0.6;
-        }
-    }
-
     /** Action Menu **/
 
     .item-actions {
@@ -1002,29 +748,13 @@
 
     @media only screen and (min-width: 900px) {
 
-        /** Override elements **/
-
-        body {
-            display: flex;
-            flex-direction: column;
-            max-height: 100vh;
-        }
-
-        .container-breadcrumb + .container-fluid {
-            height: 100vh;
-        }
-
         /** App **/
 
-        #rb-app {
+        #app.builder-app {
             position: absolute;
             top: 0; bottom: 0; left: 0; right: 0;
             overflow: hidden;
             padding-bottom: 0;
-        }
-
-        .app-header-tools {
-            display: flex;
         }
 
         .no-drop {
@@ -2211,8 +1941,4 @@
         }
     }
 
-    @keyframes fade-in {
-        from { opacity: 0 }
-        to { opacity: 1 }
-    }
 </style>

@@ -1,0 +1,92 @@
+.app-header {
+  display: flex;
+  border: 1px solid $panel-border-color;
+  border-width: 1px 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header-menu, .app-header-tools {
+  list-style: none;
+  display: flex;
+  margin-bottom: 0;
+  padding: 0.6em 0;
+}
+
+.app-header-menu {
+  margin-left: 1.5em;
+}
+
+.app-header-tools {
+  display: none;
+
+  .check::before {
+    content: '\f1db';
+  }
+
+  i {
+    margin-right: 0.3em;
+  }
+
+  a {
+    color: #999;
+
+    &:hover {
+      color: #777;
+
+      .check::before {
+        color: #999;
+        content: '\f058';
+      }
+    }
+  }
+
+  :focus a, .checked a {
+    color: #224e8b;
+
+    .check::before {
+      color: #3f69a4;
+      content: '\f058';
+    }
+  }
+}
+
+.app-header-item {
+  margin-right: 1em;
+  cursor: pointer;
+
+  a, a:hover {
+    text-decoration: none;
+    transition: color 120ms;
+  }
+}
+
+.save-state {
+  margin-right: 1.5em;
+  color: #337ab7;
+  width: 144px;
+  text-align: right;
+  transition: opacity 200ms;
+
+  .saved {
+    opacity: 0.6;
+  }
+}
+
+#app {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1.3rem;
+  line-height: 2.3rem;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $bg-color;
+  padding-bottom: 1.5em;
+}
+
+@media only screen and (min-width: 900px) {
+  .app-header-tools {
+    display: flex;
+  }
+}
