@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Publication;
 
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableColumnModel;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
@@ -44,5 +45,10 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
         $this->add_column(new StaticTableColumn(Publication::PROPERTY_ENTITY_TYPE, ''), 1);
 
         $this->addActionsColumn();
+
+        if(!$this->get_component()->get_tool_browser()->get_parent()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $this->delete_column(7);
+        }
     }
 }
