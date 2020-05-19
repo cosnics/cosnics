@@ -8,13 +8,16 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -28,6 +31,20 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  */
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * @var FilterParametersTranslator
+     */
+    protected $filterParametersTranslator;
+
+    /**
+     * UserRepository constructor.
+     *
+     * @param FilterParametersTranslator $filterParametersTranslator
+     */
+    public function __construct(FilterParametersTranslator $filterParametersTranslator)
+    {
+        $this->filterParametersTranslator = $filterParametersTranslator;
+    }
 
     /**
      * Finds a user by a given id
@@ -276,5 +293,28 @@ class UserRepository implements UserRepositoryInterface
             'Chamilo\Core\User',
             ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
         );
+    }
+
+    /**
+     * @param FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet|User[]
+     */
+    public function findUsersByParameters(FilterParameters $filterParameters)
+    {
+        $searchProperties = new DataClassProperties();
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+
+        $dataClassParameters = new DataClassRetrievesParameters();
+
+        $this->filterParametersTranslator->translateFilterParameters(
+            $filterParameters, $searchProperties, $dataClassParameters
+        );
+
+        return DataManager::retrieves(User::class, $dataClassParameters)->as_array();
     }
 }

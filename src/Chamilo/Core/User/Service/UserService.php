@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 
 /**
  *
@@ -155,6 +156,16 @@ class UserService
     public function isUsernameAvailable($username)
     {
         return !$this->findUserByUsername($username) instanceof User;
+    }
+
+    /**
+     * @param FilterParameters $filterParameters
+     *
+     * @return User[]
+     */
+    public function getUsersByParameters(FilterParameters $filterParameters)
+    {
+        return $this->userRepository->findUsersByParameters($filterParameters);
     }
 
     /**

@@ -127,7 +127,7 @@ class FilterParametersTranslator
      *
      * @return string[]
      */
-    public function splitSearchString(string $searchString = null)
+    protected function splitSearchString(string $searchString = null)
     {
         if(empty($searchString))
         {
