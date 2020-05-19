@@ -25,7 +25,8 @@
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total">
-                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{ getCriteriumEvaluation(criterium, evaluator) }}</div>
+                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
+                                                            getCriteriumScore(criterium, evaluator) }}</div>
                                                         <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
                                                 </div>
@@ -35,7 +36,7 @@
                                     <div class="subtotal category-total">
                                         <div class="category-indicator">Totaal {{ category.title }}:</div>
                                         <div v-for="evaluator in evaluators" class="score-wrap">
-                                            <div class="score-number">{{ getCategoryEvaluation(category, evaluator) }}</div>
+                                            <div class="score-number">{{ getCategoryScore(category, evaluator) }}</div>
                                         </div>
                                     </div>
                                 </li>
@@ -43,7 +44,7 @@
                             <div class="subtotal cluster-total">
                                 <div class="cluster-total-title">Totaal {{ cluster.title }}:</div>
                                 <div v-for="evaluator in evaluators" class="score-wrap">
-                                    <div class="score-number">{{ getClusterEvaluation(cluster, evaluator) }}</div>
+                                    <div class="score-number">{{ getClusterScore(cluster, evaluator) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +53,7 @@
                 <div class="subtotal rubric-total">
                     <div class="rubric-total-title">Totaal Rubric:</div>
                     <div v-for="evaluator in evaluators" class="score-wrap">
-                        <div class="score-number">{{ getRubricEvaluation(evaluator) }}</div>
+                        <div class="score-number">{{ getRubricScore(evaluator) }}</div>
                     </div>
                 </div>
             </div>
@@ -75,6 +76,10 @@
         evaluations: any;
     }
 
+    function add(v1: number, v2: number) {
+        return v1 + v2;
+    }
+
     @Component({
         components: {
         },
@@ -87,31 +92,30 @@
         }
     })
     export default class RubricResult extends Vue {
-        private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
-        private showDefaultFeedbackFields = false;
         private evaluators: string[]|null = null;
+        private dataConnector: DataConnector|null = null;
 
         @Prop({type: Object, default: null}) readonly rubricData!: any|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object, required: true}) readonly rubricResults!: any;
 
-        getCriteriumEvaluation(criterium: Criterium, evaluator: string) : number {
+        getCriteriumScore(criterium: Criterium, evaluator: string) : number {
             return (criterium as unknown as CriteriumExt).evaluations[evaluator].score || 0;
         }
 
-        getCategoryEvaluation(category: Category, evaluator: string) : number {
-            return category.criteria.map(criterium => this.getCriteriumEvaluation(criterium, evaluator)).reduce((v1, v2) => v1 + v2, 0);
+        getCategoryScore(category: Category, evaluator: string) : number {
+            return category.criteria.map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
-        getClusterEvaluation(cluster: Cluster, evaluator: string) : number {
-            return cluster.categories.map(category => this.getCategoryEvaluation(category, evaluator)).reduce((v1, v2) => v1 + v2, 0);
+        getClusterScore(cluster: Cluster, evaluator: string) : number {
+            return cluster.categories.map(category => this.getCategoryScore(category, evaluator)).reduce(add, 0);
         }
 
-        getRubricEvaluation(evaluator: string) : number {
+        getRubricScore(evaluator: string) : number {
             if (!this.rubric) { return 0; }
-            return this.rubric.clusters.map(cluster => this.getClusterEvaluation(cluster, evaluator)).reduce((v1, v2) => v1 + v2, 0);
+            return this.rubric.clusters.map(cluster => this.getClusterScore(cluster, evaluator)).reduce(add, 0);
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
@@ -130,7 +134,6 @@
                 const criteriumExt = criterium as unknown as CriteriumExt;
                 Vue.set(criteriumExt, 'showDefaultFeedback', false);
                 criteriumExt.evaluations = {};
-                /*Vue.set(criteriumExt, 'evaluations', {});*/
                 this.evaluators!.forEach(evaluator => {
                     const criteriumEvaluation: any = { feedback: '', score: 0, level: null };
                     const evaluations = results.evaluations[evaluator];
@@ -151,7 +154,7 @@
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
-                this.initData(this.rubric, { evaluators: this.rubricData.evaluators, evaluations: this.rubricData.evaluations });
+                this.initData(this.rubric, this.rubricResults);
                 // todo: get rubric data id
                 this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }

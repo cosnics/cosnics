@@ -69,6 +69,12 @@
                 this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }
         }
+
+        beforeDestroy() {
+            if (this.rubric) {
+                this.$emit('rubric-updated', this.rubric.toJSON());
+            }
+        }
     }
 </script>
 

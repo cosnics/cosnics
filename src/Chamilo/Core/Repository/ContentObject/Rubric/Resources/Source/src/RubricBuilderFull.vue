@@ -155,6 +155,12 @@
                 });
             }
         }
+
+        beforeDestroy() {
+            if (this.rubric) {
+                this.$emit('rubric-updated', this.rubric.toJSON());
+            }
+        }
     }
 </script>
 <style lang="scss">
