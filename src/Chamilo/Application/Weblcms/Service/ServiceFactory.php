@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
 use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
 use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 
 /**
  * Service factory for Weblcms services
@@ -72,7 +73,7 @@ class ServiceFactory
             $courseService = new CourseService(
                 new CourseRepository(), 
                 $this->getCourseSettingsService(), 
-                new UserRepository());
+                new UserRepository(new FilterParametersTranslator()));
             
             $this->services[self::SERVICE_COURSE] = $courseService;
             

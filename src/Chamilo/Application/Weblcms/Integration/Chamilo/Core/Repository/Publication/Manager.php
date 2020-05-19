@@ -29,6 +29,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -447,7 +448,7 @@ class Manager implements PublicationInterface
                 new CourseRepository(),
                 new PublicationRepository(),
                 new ContentObjectRepository(),
-                new UserRepository()
+                new UserRepository(new FilterParametersTranslator())
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);
