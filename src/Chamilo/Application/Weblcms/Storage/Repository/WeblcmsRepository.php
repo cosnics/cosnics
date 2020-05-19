@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -31,7 +32,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      */
     public function retrieveUserByUsername($username)
     {
-        $userRepository = new UserRepository();
+        $userRepository = new UserRepository(new FilterParametersTranslator());
         
         return $userRepository->findUserByUsername($username);
     }
