@@ -1,9 +1,10 @@
 <template>
-    <div id="app" class="builder-app">
+    <div id="app" :class="{'builder-app': content === 'rubric' || content === 'levels', 'builder-full-app': content === 'rubric-full'}">
         <div class="app-header">
             <ul class="app-header-menu">
                 <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
                 <li class="app-header-item"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
+                <li class="app-header-item"><a @click.prevent="content = 'rubric-full'">Full View</a></li>
             </ul>
             <ul class="app-header-tools">
                 <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="check fa" />Split View</a></li>
@@ -23,6 +24,7 @@
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
                 <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" @criterium-selected="selectCriterium" />
                 <levels-view v-else-if="content === 'levels'" :rubric="rubric" :data-connector="dataConnector"></levels-view>
+                <rubric-builder-full v-else-if="content === 'rubric-full'" :rubric="rubric" :data-connector="dataConnector"></rubric-builder-full>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
@@ -41,9 +43,11 @@
     import APIConfiguration from './Connector/APIConfiguration';
     import Rubric, {RubricJsonObject} from './Domain/Rubric';
     import DataConnector from './Connector/DataConnector';
+    import RubricBuilderFull from "./RubricBuilderFull.vue";
 
     @Component({
         components: {
+            RubricBuilderFull,
             ScoreRubricView, CriteriumDetailsView, LevelsView
         },
     })
@@ -913,7 +917,7 @@
             position: relative;
         }
 
-        .rubrics-wrapper {
+        .builder-app .rubrics-wrapper {
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
         }

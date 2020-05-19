@@ -1,6 +1,5 @@
 <template>
     <rubric-builder-wrapper v-if="content === 'builder'" :rubric-data="rubricData" @rubric-updated="onRubricUpdated"></rubric-builder-wrapper>
-    <rubric-builder-full-wrapper v-else-if="content === 'builder-full'" :rubric-data="rubricData" @rubric-updated="onRubricUpdated"></rubric-builder-full-wrapper>
     <rubric-entry-wrapper v-else-if="content === 'entry'" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-entry-wrapper>
     <rubric-result-wrapper v-else-if="content === 'results'" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
     <div v-else class="demo-page">Rubric Demo Page</div>
@@ -8,13 +7,12 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import RubricBuilderWrapper from './RubricBuilderWrapper.vue';
-    import RubricBuilderFullWrapper from './RubricBuilderFullWrapper.vue';
     import RubricEntryWrapper from './RubricEntryWrapper.vue';
     import RubricResultWrapper from './RubricResultWrapper.vue';
 
     @Component({
         components: {
-            RubricBuilderWrapper, RubricBuilderFullWrapper, RubricEntryWrapper, RubricResultWrapper
+            RubricBuilderWrapper, RubricEntryWrapper, RubricResultWrapper
         },
     })
     export default class RubricMegaWrapper extends Vue {
