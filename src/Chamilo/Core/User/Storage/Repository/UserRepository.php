@@ -41,8 +41,13 @@ class UserRepository implements UserRepositoryInterface
      *
      * @param FilterParametersTranslator $filterParametersTranslator
      */
-    public function __construct(FilterParametersTranslator $filterParametersTranslator)
+    public function __construct(FilterParametersTranslator $filterParametersTranslator = null)
     {
+        if(empty($filterParametersTranslator))
+        {
+            $filterParametersTranslator = new FilterParametersTranslator();
+        }
+
         $this->filterParametersTranslator = $filterParametersTranslator;
     }
 
