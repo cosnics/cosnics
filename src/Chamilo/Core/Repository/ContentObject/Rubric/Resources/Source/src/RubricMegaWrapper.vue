@@ -1,6 +1,6 @@
 <template>
-    <rubric-builder-wrapper v-if="content === 'builder'" :rubric-data="rubricData" @rubric-updated="onRubricUpdated"></rubric-builder-wrapper>
-    <rubric-entry-wrapper v-else-if="content === 'entry'" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-entry-wrapper>
+    <rubric-builder-wrapper v-if="content === 'builder'" :rubric-data="rubricData" @rubric-updated="onRubricUpdated" :ui-state="uiState.builder"></rubric-builder-wrapper>
+    <rubric-entry-wrapper v-else-if="content === 'entry'" :rubric-data="rubricData" :rubric-results="rubricResults" :ui-state="uiState.entry"></rubric-entry-wrapper>
     <rubric-result-wrapper v-else-if="content === 'results'" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
     <div v-else class="demo-page">Rubric Demo Page</div>
 </template>
@@ -17,6 +17,22 @@
     })
     export default class RubricMegaWrapper extends Vue {
         @Prop({type: String, required: true}) readonly content!: string;
+
+        private uiState: any = {
+            builder: {
+                content: 'rubric',
+                showSplitView: false,
+                selectedCriterium: '',
+                selectedClusters: {
+                    selectedClusterView1: '',
+                    selectedClusterView2: ''
+                }
+            },
+            entry: {
+                evaluator: '',
+                showDefaultFeedbackFields: false
+            }
+        };
 
         onRubricUpdated(data: any) {
             for (let member in this.rubricData) {
@@ -241,11 +257,11 @@
 
             &.selected a {
                 color: white;
-                border-bottom: 1px solid white;
+                border-bottom: 2px solid white;
             }
 
             &:hover a {
-                border-bottom: 1px solid yellowgreen;
+                border-bottom: 2px solid yellowgreen;
             }
         }
     }

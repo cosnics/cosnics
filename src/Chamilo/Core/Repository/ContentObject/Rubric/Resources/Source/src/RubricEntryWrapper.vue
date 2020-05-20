@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <rubric-entry :api-config="config" :version="version" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-entry>
+        <rubric-entry :api-config="config" :version="version" :rubric-data="rubricData" :rubric-results="rubricResults" :ui-state="uiState"></rubric-entry>
     </div>
 </template>
 
@@ -21,5 +21,6 @@
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly rubricResults!: object|null;
+        @Prop({type: Object}) readonly uiState!: any;
     }
 </script>

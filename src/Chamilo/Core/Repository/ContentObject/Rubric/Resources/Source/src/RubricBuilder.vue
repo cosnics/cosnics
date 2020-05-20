@@ -22,7 +22,7 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
-                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" @criterium-selected="selectCriterium" />
+                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" :ui-state="uiState.selectedClusters" @criterium-selected="selectCriterium" />
                 <levels-view v-else-if="content === 'levels'" :rubric="rubric" :data-connector="dataConnector"></levels-view>
                 <rubric-builder-full v-else-if="content === 'rubric-full'" :rubric="rubric" :data-connector="dataConnector"></rubric-builder-full>
             </div>
@@ -53,22 +53,48 @@
     })
     export default class RubricBuilder extends Vue {
         private selectedCriterium: Criterium|null = null;
-        private showSplitView: boolean = false;
-        private content: string = 'rubric';
+        //private showSplitView: boolean = false; // Set through uiState
+        //private content: string = 'rubric'; // Set through uiState
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
+        @Prop({type: Object}) readonly uiState!: any;
+
+        get showSplitView() {
+            return this.uiState.showSplitView;
+        }
+
+        set showSplitView(showSplitView: boolean) {
+            this.uiState.showSplitView = showSplitView;
+        }
 
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
+            this.uiState.selectedCriterium = criterium ? criterium.id : '';
+        }
+
+        get content() {
+            return this.uiState.content;
+        }
+
+        set content(content: string) {
+            this.uiState.content = content;
         }
 
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
+                if (this.uiState.selectedCriterium) {
+                    const selectedCriterium = this.rubric.getAllCriteria().find(criterium => criterium.id === this.uiState.selectedCriterium);
+                    if (selectedCriterium) {
+                        this.selectedCriterium = selectedCriterium;
+                    } else {
+                        this.uiState.selectedCriterium = '';
+                    }
+                }
                 // todo: get rubric data id
                 this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
             }

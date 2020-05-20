@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <rubric-builder :api-config="config" :rubric-data="rubricData" :version="version" @rubric-updated="$emit('rubric-updated', $event)"></rubric-builder>
+        <rubric-builder :api-config="config" :rubric-data="rubricData" :version="version" :ui-state="uiState" @rubric-updated="$emit('rubric-updated', $event)"></rubric-builder>
     </div>
 </template>
 
@@ -28,5 +28,6 @@
         private version = 0;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
+        @Prop({type: Object}) readonly uiState!: any;
     }
 </script>

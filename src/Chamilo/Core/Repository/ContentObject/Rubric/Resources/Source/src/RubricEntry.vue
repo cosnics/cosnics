@@ -114,14 +114,23 @@
     export default class RubricEntry extends Vue {
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
-        private showDefaultFeedbackFields = false;
         private evaluators: string[]|null = null;
-        private evaluator = '';
+        //private showDefaultFeedbackFields = false; // Set through uiState
+        //private evaluator = ''; // Set through uiState
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object, required: true}) readonly rubricResults!: any;
+        @Prop({type: Object}) readonly uiState!: any;
+
+        get evaluator() {
+            return this.uiState.evaluator;
+        }
+
+        set evaluator(evaluator: string) {
+            this.uiState.evaluator = evaluator;
+        }
 
         isSelected(criterium: Criterium, level: Level) {
             const isDefaultLevel = level.isDefault;
@@ -131,9 +140,13 @@
             return evaluation.level === level;
         }
 
+        get showDefaultFeedbackFields() : boolean {
+            return this.uiState.showDefaultFeedbackFields;
+        }
+
         toggleDefaultFeedbackFields() {
-            this.showDefaultFeedbackFields = !this.showDefaultFeedbackFields;
-            if (!this.showDefaultFeedbackFields) {
+            this.uiState.showDefaultFeedbackFields = !this.uiState.showDefaultFeedbackFields;
+            if (!this.uiState.showDefaultFeedbackFields) {
                 this.rubric!.getAllCriteria().forEach(criterium => {
                     const criteriumExt = criterium as unknown as CriteriumExt;
                     criteriumExt.showDefaultFeedback = false;

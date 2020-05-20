@@ -103,6 +103,7 @@
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
 		@Prop(Boolean) readonly split!: boolean;
 		@Prop(DataConnector) readonly dataConnector!: DataConnector|null;
+		@Prop({type: Object}) readonly uiState!: any;
 
 		get clusters() {
 			return [...this.rubric.clusters];
@@ -117,8 +118,10 @@
 		onClusterSelected(cluster: Cluster, view: string) {
 			if (view === 'view1') {
 				this.selectedClusterView1 = cluster;
+				this.uiState.selectedClusterView1 = cluster.id;
 			} else if (view === 'view2') {
 				this.selectedClusterView2 = cluster;
+				this.uiState.selectedClusterView2 = cluster.id;
 			}
 		}
 
@@ -198,9 +201,11 @@
 				}
 				if (item === this.selectedClusterView1) {
 					this.selectedClusterView1 = null;
+					this.uiState.selectedClusterView1 = '';
 				}
 				if (item === this.selectedClusterView2) {
 					this.selectedClusterView2 = null;
+					this.uiState.selectedClusterView2 = '';
 				}
 			}
 			item!.parent!.removeChild(item);
@@ -249,6 +254,22 @@
 		}
 
 		mounted() {
+			if (this.uiState.selectedClusterView1) {
+				const cluster = this.rubric.clusters.find(cluster => cluster.id === this.uiState.selectedClusterView1);
+				if (cluster) {
+					this.selectedClusterView1 = cluster;
+				} else {
+					this.uiState.selectedClusterView1 = '';
+				}
+			}
+			if (this.uiState.selectedClusterView2) {
+				const cluster = this.rubric.clusters.find(cluster => cluster.id === this.uiState.selectedClusterView2);
+				if (cluster) {
+					this.selectedClusterView2 = cluster;
+				} else {
+					this.uiState.selectedClusterView2 = '';
+				}
+			}
 			window.addEventListener('resize', this.handleResize);
 		}
 
