@@ -22,17 +22,31 @@ new Vue({
       props: { content: this.content },
       on: {
         onPage: (page: string) => {
-          this.content = page;
           EventBus.$emit('onPage', page)
         }
       }
     })},
+    methods: {
+      setContent(page: string) {
+        this.content = page;
+      }
+    },
+    created: function() {
+      EventBus.$on('onPage', (page: string) => this.content = page);
+    },
 }).$mount('#rubrics-menu');
 
 new Vue({
   data: { content: 'home' },
   render: function(h) {
-    return h(RubricMegaWrapper, { props: { content: this.content } })
+    return h(RubricMegaWrapper, {
+      props: { content: this.content },
+      on: {
+        onPage: (page: string) => {
+          EventBus.$emit('onPage', page);
+        }
+      }
+    })
   },
   methods: {
     setContent(page: string) {

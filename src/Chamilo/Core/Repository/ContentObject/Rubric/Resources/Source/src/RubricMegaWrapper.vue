@@ -2,7 +2,14 @@
     <rubric-builder-wrapper v-if="content === 'builder'" :rubric-data="rubricData" @rubric-updated="onRubricUpdated" :ui-state="uiState.builder"></rubric-builder-wrapper>
     <rubric-entry-wrapper v-else-if="content === 'entry'" :rubric-data="rubricData" :rubric-results="rubricResults" :ui-state="uiState.entry"></rubric-entry-wrapper>
     <rubric-result-wrapper v-else-if="content === 'results'" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
-    <div v-else class="demo-page">Rubric Demo Page</div>
+    <div v-else id="app" class="demo-page">
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <h1>Rubric Demo Page</h1>
+        <div class="rubric-demo-item" @click="$emit('onPage', 'builder')"><i class="fa fa-institution"/>Builder</div>
+        <div class="rubric-demo-item" @click="$emit('onPage', 'entry')"><i class="fa fa-edit"/>Entry</div>
+        <div class="rubric-demo-item" @click="$emit('onPage', 'results')"><i class="fa fa-calculator"/>Results</div>
+    </div>
 </template>
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
@@ -226,8 +233,35 @@
 </script>
 <style lang="scss">
     .demo-page {
-        font-size: 1.8rem;
-        margin-left: 1em;
+        margin-bottom: -20px;
+        margin-top: -20px;
+        padding: 0 1.5em;
+        border-top: 1px solid #d6d6d6;
+        color: #555;
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        .rubric-demo-item {
+            font-size: 1.7rem;
+            margin: .5em 0;
+            background: #e0e0e0;
+            width: 10em;
+            padding: .35em .6em;
+            border-radius: $border-radius;
+            cursor: pointer;
+            transition: 200ms background;
+
+            .fa {
+                font-size: 1.4rem;
+                margin-right: .4em;
+            }
+
+            &:hover {
+                background: #d6d9d7;
+            }
+        }
     }
 
     .chamilo-header {

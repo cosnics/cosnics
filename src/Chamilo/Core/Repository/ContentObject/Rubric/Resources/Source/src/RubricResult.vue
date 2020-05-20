@@ -165,7 +165,7 @@
     .result-app {
         &#app {
             color: $text-color;
-            border-top: 1px solid $panel-border-color; /** Added this for result view **/
+            border-top: 1px solid #d6d6d6; /** Added this for result view **/
         }
 
         .rubric-results-view {
