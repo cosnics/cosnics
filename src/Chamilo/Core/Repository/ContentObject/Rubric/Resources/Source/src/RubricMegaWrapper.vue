@@ -217,7 +217,7 @@
     .chamilo-header {
         .rubrics-menu {
             display: flex;
-            margin-top: 40px;
+            margin-top: 48px;
             list-style: none;
             cursor: pointer;
         }
