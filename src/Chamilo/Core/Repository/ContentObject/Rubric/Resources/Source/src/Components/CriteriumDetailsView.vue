@@ -51,10 +51,18 @@
             updateHeight(e.target as HTMLElement);
         }
 
-        updated() {
+        updateHeightAll() {
             for (let elem of document.getElementsByClassName('criterium-level-feedback')) {
                 updateHeight(elem as HTMLElement);
             }
+        }
+
+        updated() {
+            this.updateHeightAll();
+        }
+
+        mounted() {
+            this.updateHeightAll();
         }
 
         onCriteriumChange() {
