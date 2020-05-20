@@ -61,8 +61,11 @@
 }
 
 .app-header-menu .app-header-item {
-  &:hover, &.selected {
+  &.selected {
     border-bottom: 1px solid darken($panel-border-color, 5%);
+  }
+  &:hover {
+    border-bottom: 1px solid #23527c;
   }
 }
 
