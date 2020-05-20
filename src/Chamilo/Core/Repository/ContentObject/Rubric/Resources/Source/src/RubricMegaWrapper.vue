@@ -257,11 +257,11 @@
 
             &.selected a {
                 color: white;
-                border-bottom: 2px solid white;
+                border-bottom: 2px solid #ccc;
             }
 
             &:hover a {
-                border-bottom: 2px solid yellowgreen;
+                border-bottom: 2px solid white;
             }
         }
     }

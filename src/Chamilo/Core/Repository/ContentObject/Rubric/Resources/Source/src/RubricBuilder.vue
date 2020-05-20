@@ -2,9 +2,9 @@
     <div id="app" :class="{'builder-app': content === 'rubric' || content === 'levels', 'builder-full-app': content === 'rubric-full'}">
         <div class="app-header">
             <ul class="app-header-menu">
-                <li class="app-header-item"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
-                <li class="app-header-item"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
-                <li class="app-header-item"><a @click.prevent="content = 'rubric-full'">Full View</a></li>
+                <li class="app-header-item" :class="{ selected: content === 'rubric' }"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
+                <li class="app-header-item" :class="{ selected: content === 'levels' }"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
+                <li class="app-header-item" :class="{ selected: content === 'rubric-full' }"><a @click.prevent="content = 'rubric-full'">Full View</a></li>
             </ul>
             <ul class="app-header-tools">
                 <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="check fa" />Split View</a></li>

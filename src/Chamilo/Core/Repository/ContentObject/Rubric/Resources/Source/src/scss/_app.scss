@@ -1,7 +1,8 @@
 .app-header {
   display: flex;
-  border: 1px solid $panel-border-color;
-  border-width: 1px 0;
+  border-color: $panel-border-color;
+  border-style: solid;
+  border-width: 1px 0 0 0;
   align-items: center;
   justify-content: space-between;
 }
@@ -42,10 +43,10 @@
   }
 
   :focus a, .checked a {
-    color: #224e8b;
+    color: #337ab7;
 
     .check::before {
-      color: #3f69a4;
+      color: lighten(#337ab7, 10%);
       content: '\f058';
     }
   }
@@ -58,6 +59,12 @@
   a, a:hover {
     text-decoration: none;
     transition: color 120ms;
+  }
+}
+
+.app-header-menu .app-header-item {
+  &:hover, &.selected {
+    border-bottom: 1px solid darken($panel-border-color, 5%);
   }
 }
 
