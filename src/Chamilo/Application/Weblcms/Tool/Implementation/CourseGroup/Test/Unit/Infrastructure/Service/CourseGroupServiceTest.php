@@ -1,8 +1,11 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Test\Infrastructure\Service\CourseGroupDecorator;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepositoryInterface;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
@@ -14,9 +17,14 @@ class CourseGroupServiceTest extends ChamiloTestCase
 {
     /**
      *
-     * @var CourseGroupRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var CourseGroupRepository | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $courseGroupRepositoryMock;
+
+    /**
+     * @var CourseGroupDecoratorsManager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $courseGroupDecoratorsManagerMock;
 
     /**
      * @var CourseGroupService
@@ -24,14 +32,27 @@ class CourseGroupServiceTest extends ChamiloTestCase
     protected $courseGroupService;
 
     /**
+     * @var UserService | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $userServiceMock;
+
+    /**
      * Setup before each test
      */
     public function setUp()
     {
-        $this->courseGroupRepositoryMock = $this->getMockBuilder(CourseGroupRepositoryInterface::class)
+        $this->courseGroupRepositoryMock = $this->getMockBuilder(CourseGroupRepository::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->courseGroupService = new CourseGroupService($this->courseGroupRepositoryMock);
+        $this->courseGroupDecoratorsManagerMock = $this->getMockBuilder(CourseGroupDecoratorsManager::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->userServiceMock = $this->getMockBuilder(UserService::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->courseGroupService = new CourseGroupService(
+            $this->courseGroupRepositoryMock, $this->courseGroupDecoratorsManagerMock, $this->userServiceMock
+        );
     }
 
     /**
@@ -40,6 +61,8 @@ class CourseGroupServiceTest extends ChamiloTestCase
     public function tearDown()
     {
         unset($this->courseGroupRepositoryMock);
+        unset($this->courseGroupDecoratorsManagerMock);
+        unset($this->userServiceMock);
         unset($this->courseGroupService);
     }
 
