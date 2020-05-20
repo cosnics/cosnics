@@ -1,8 +1,6 @@
 .app-header {
   display: flex;
-  border-color: $panel-border-color;
-  border-style: solid;
-  border-width: 1px 0 0 0;
+  border-top: 1px solid #d6d6d6;
   align-items: center;
   justify-content: space-between;
 }

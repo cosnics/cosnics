@@ -1231,9 +1231,10 @@
             background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
 
             &.selected {
-                border: 2px solid $criterium-color-border-selected;
+                border: 1px solid $criterium-color-border-selected;
                 border-radius: $border-radius;
-                margin: -2px;
+                background: #eee;
+                margin: -1px;
             }
 
             .item-header-bar {
@@ -1293,7 +1294,9 @@
         .criterium-details {
             padding: 1em;
             width: 30em;
-            border-left: 1px solid $panel-border-divider-color;
+            border-top: 1px solid lighten($panel-border-divider-color, 3%);
+            border-left: 1px solid lighten($panel-border-divider-color, 2%);
+            border-top-left-radius: $border-radius;
             overflow-x: hidden;
             overflow-y: auto;
             background-color: $bg-criterium-details;

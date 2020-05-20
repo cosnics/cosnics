@@ -1,21 +1,22 @@
 /** Colors **/
 
-$bg-color: hsla(165, 5%, 90%, 1);
+/*$bg-color: hsla(165, 5%, 90%, 1);*/
+$bg-color: hsla(120, 2%, 90%, 1);
 $bg-color-darkened: darken($bg-color, 10%);
 $panel-border-color: hsla(199, 39%, 73%, 1);
 $panel-border-divider-color: hsla(200, 25%, 80%, 1);
 
-$bg-criterium-details: hsla(200, 13%, 87%, 1);
-$bg-level-selected: hsla(215, 20%, 85%, 1);
+$bg-criterium-details: hsla(215, 13%, 87%, 1);
+$bg-level-selected: hsla(215, 13%, 85%, 1);
 
-$cluster-color: hsla(200, 10%, 80%, 0.5);
+$cluster-color: hsla(200, 10%, 80%, 0.4);
 $cluster-color-hover: hsla(190, 20%, 75%, 1);
 $cluster-color-selected: hsla(190, 40%, 45%, 1);
 $cluster-color-border: #ccc;
 $cluster-color-border-selected: hsla(190, 30%, 70%, 0.55);
 $fixed-score-color: hsla(100, 55%, 75%, 1);
 
-$criterium-color-border-selected: hsla(240, 15%, 80%, 1);
+$criterium-color-border-selected: hsla(205, 35%, 60%, 1);
 
 $btn-color: hsla(200, 100%, 48%, 1);
 $btn-color-lightened: hsla(200, 100%, 57%, 1);
