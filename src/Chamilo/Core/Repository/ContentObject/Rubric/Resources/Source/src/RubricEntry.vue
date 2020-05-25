@@ -269,7 +269,7 @@
 
         .table-header {
             margin-left: 19.8em;
-            margin-right: 3.5em;
+            margin-right: 4em;
 
             .table-header-title {
                 flex: 1;
@@ -287,6 +287,10 @@
         .criterium-title-header {
             width: 18em;
             min-width: 18em;
+        }
+
+        .criterium-level:nth-last-child(2) {
+            margin-right: 1em;
         }
 
         .criterium-level-header {
@@ -316,6 +320,7 @@
         .subtotal {
             .score-wrap {
                 width: 3.5em;
+                margin-left: 1em;
             }
         }
 
