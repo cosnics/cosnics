@@ -278,10 +278,12 @@
 
         .btn-score-number {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             width: 100%;
             margin: 0;
             padding: 0;
+            height: 1.58em;
+            outline: none;
         }
 
         .criterium-title-header {
@@ -293,26 +295,18 @@
             margin-right: 1em;
         }
 
-        .criterium-level-header {
-            &:hover, &:focus, &.selected {
-                outline: none;
-            }
-
-            &.selected {
-                &, &:focus {
-                    background: $level-selected-color;
-                }
-            }
+        .criterium-level-header.selected {
+            background: $level-selected-color;
         }
 
         .has-evaluator .criterium-level-header {
-            &:hover, &:focus, &.selected {
+            &:hover .btn-score-number, .btn-score-number:focus {
                 border: 1px solid $level-selected-color;
             }
 
-            &.selected {
+            &.selected .btn-score-number {
                 &:hover, &:focus {
-                    border-color: $level-selected-color-dark;
+                    border-color: white;
                 }
             }
         }
@@ -326,10 +320,18 @@
 
         .criterium-total {
             min-width: 3.5em;
+            background: $score-lighter;
+            border-radius: $border-radius;
+
+            .score-number {
+                padding-top: 1px;
+                margin-bottom: -1px;
+                background: transparent;
+            }
         }
 
         .rubric:not(.has-evaluator) {
-            .criterium-level-header {
+            .btn-score-number {
                 cursor: not-allowed;
             }
             .subtotal .score-number {
