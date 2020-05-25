@@ -476,13 +476,14 @@
         padding: .75em 0;
         background: linear-gradient(to bottom, $bg-color 0px, change-color($bg-color, $alpha: 0) 10px, change-color($bg-color-darkened, $alpha: 0) 19px, change-color($bg-color-darkened, $alpha: 0.25) 33px);
 
-        a {
+        .btn-color {
             display: inline-block;
-            margin-left: .5em;
-            margin-right: .5em;
-            min-width: 14px;
-            min-height: 14px;
-            outline-width: 2px;
+            margin: 0 .5em;
+            padding: 0;
+            width: 14px;
+            height: 14px;
+            outline-width: 1px;
+            border: none;
             box-shadow: 0px 0px 3px #999;
             cursor: pointer;
         }

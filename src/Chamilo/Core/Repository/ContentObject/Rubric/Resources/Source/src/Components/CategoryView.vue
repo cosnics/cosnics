@@ -2,7 +2,7 @@
     <div :id="id" class="category-header handle category-handle">
         <div class="item-header-bar">
             <div class="rb-category-title">
-                <a :style="{'background-color': category.color}" tabindex="0" @click="openColorPickerForCategory(category)" @keyup.enter.space="openColorPickerForCategory(category)"></a>
+                <button :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :style="{'background-color': category.color}" @click="openColorPickerForCategory(category)"></button>
                 <h2 class="title">{{ category.title || 'Criteria' }}</h2>
             </div>
             <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
@@ -13,7 +13,7 @@
                 </ul>
             </div>
         </div>
-        <swatches :colors="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+        <swatches :id="id + '--swatches'" :colors="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
         <div v-if="isEditing" class="edit-title">
             <div class="cover"></div>
             <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor categorie" v-model="newTitle"/>
