@@ -47,11 +47,11 @@
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i class="check fa"/></div>
                                                     </div>
                                                     <div v-for="choice in criterium.choices" class="criterium-level">
-                                                        <div class="criterium-level-header" tabindex="0" @keyup.enter.space.stop="selectLevel(criterium, choice.level)" @click="selectLevel(criterium, choice.level)" :class="{ selected: isSelected(criterium, choice.level) }">
+                                                        <div class="criterium-level-header" :class="{ selected: isSelected(criterium, choice.level) }">
                                                             <div class="criterium-level-title">
                                                                 {{choice.title}}
                                                             </div>
-                                                            <div class="score-number"><!--<i class="check fa"/>-->{{ choice.score }}</div>
+                                                            <button class="btn-score-number score-number" @click="selectLevel(criterium, choice.level)"><!--<i class="check fa"/>-->{{ choice.score }}</button>
                                                         </div>
                                                         <div class="default-feedback">
                                                             {{ choice.feedback }}
@@ -274,6 +274,14 @@
             .table-header-title {
                 flex: 1;
             }
+        }
+
+        .btn-score-number {
+            background: transparent;
+            border: none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         .criterium-title-header {
