@@ -192,6 +192,12 @@
             .score-wrap {
                 width: 5em;
             }
+
+            .score-number {
+                font-size: 1.6rem;
+                line-height: 1.4em;
+                padding-top: .1em;
+            }
         }
 
         .criterium-total {
