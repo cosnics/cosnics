@@ -320,13 +320,13 @@
 
         .criterium-total {
             min-width: 3.5em;
-            background: $score-lighter;
-            border-radius: $border-radius;
+            height: 1.58em;
 
             .score-number {
+                background: $score-lighter;
+                border-radius: $border-radius;
                 padding-top: 1px;
                 margin-bottom: -1px;
-                background: transparent;
             }
         }
 
