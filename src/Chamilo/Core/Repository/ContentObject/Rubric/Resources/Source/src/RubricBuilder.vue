@@ -7,7 +7,7 @@
                 <li class="app-header-item" :class="{ selected: content === 'rubric-full' }"><a @click.prevent="content = 'rubric-full'">Full View</a></li>
             </ul>
             <ul class="app-header-tools">
-                <li class="app-header-item" :class="{ checked: showSplitView }" v-if="content === 'rubric'"><a role="button" @click.prevent="showSplitView = !showSplitView"><i class="check fa" />Split View</a></li>
+                <li class="app-header-item" v-if="content === 'rubric'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" />Split View</span></button></li>
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving">

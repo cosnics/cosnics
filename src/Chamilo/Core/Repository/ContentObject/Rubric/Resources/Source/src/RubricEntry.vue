@@ -9,7 +9,7 @@
                         <option v-for="evaluator in evaluators">{{evaluator}}</option>
                     </select>
                 </li>
-                <li class="app-header-item" :class="{ checked: showDefaultFeedbackFields }"><a role="button" @click.prevent="toggleDefaultFeedbackFields"><i class="check fa" />Feedback</a></li>
+                <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" />Feedback</span></button></li>
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving">
