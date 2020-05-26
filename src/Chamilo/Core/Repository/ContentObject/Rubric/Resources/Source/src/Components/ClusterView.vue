@@ -1,8 +1,8 @@
 <template>
-    <li :id="id" class="rb-cluster-list-item">
-        <div class="rb-cluster handle cluster-handle" :class="{ selected, 'show-menu': showMenuActions }">
-            <div class="item-header-bar ">
-                <div class="rb-cluster-title" @click.stop="$emit('cluster-selected', cluster)">
+    <li :id="id" class="rb-cluster-list-item" tabindex="0" @keydown.enter="$emit('cluster-selected', cluster)" @keyup.space="$emit('cluster-selected', cluster)" @click.stop="$emit('cluster-selected', cluster)">
+        <div class="rb-cluster handle cluster-handle" tabindex="-1" :class="{ selected, 'show-menu': showMenuActions }">
+            <div class="item-header-bar">
+                <div class="rb-cluster-title" >
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
                     {{cluster.title}}
                 </div>

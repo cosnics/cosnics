@@ -284,12 +284,21 @@
             }
 
             a {
-                outline-color: white;
-                outline-width: 1px;
-                outline-offset: 1px;
                 padding-bottom: 4px;
                 text-decoration: none;
                 color: white;
+
+                span {
+                    padding: 2px;
+                    outline: none;
+                }
+
+                &:focus {
+                    outline: none;
+                    span {
+                        box-shadow: 0 0 0 1px white;
+                    }
+                }
             }
 
             &.selected a {

@@ -45,6 +45,9 @@ $score-darker: hsla(190, 40%, 35%, 1);
 $level-selected-color: hsla(204, 38%, 55%, 1);
 $level-selected-color-dark: hsla(204, 65%, 35%, 1);
 
+$outline-color: #337ab7;
+$outline-color-light: lighten($outline-color, 10%);
+
 /** Border **/
 
 $border-radius: 3px;

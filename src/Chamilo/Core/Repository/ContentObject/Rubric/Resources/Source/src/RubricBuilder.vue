@@ -2,9 +2,9 @@
     <div id="app" :class="{'builder-app': content === 'rubric' || content === 'levels', 'builder-full-app': content === 'rubric-full'}">
         <div class="app-header">
             <ul class="app-header-menu">
-                <li class="app-header-item"><a :class="{ selected: content === 'rubric' }" @click.prevent="content = 'rubric'" href="#">Edit Rubric</a></li>
-                <li class="app-header-item"><a :class="{ selected: content === 'levels' }" @click.prevent="content = 'levels'" href="#">Edit Niveaus</a></li>
-                <li class="app-header-item"><a :class="{ selected: content === 'rubric-full' }" @click.prevent="content = 'rubric-full'" href="#">Full View</a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'rubric' }" @click.prevent="content = 'rubric'" href="#"><span tabindex="-1">Edit Rubric</span></a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'levels' }" @click.prevent="content = 'levels'" href="#"><span tabindex="-1">Edit Niveaus</span></a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'rubric-full' }" @click.prevent="content = 'rubric-full'" href="#"><span tabindex="-1">Full View</span></a></li>
             </ul>
             <ul class="app-header-tools">
                 <li class="app-header-item" v-if="content === 'rubric'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" />Split View</span></button></li>
@@ -430,6 +430,23 @@
     .rb-cluster-list-item:last-child .rb-cluster {
         border-bottom-left-radius: $border-radius;
         border-bottom-right-radius: $border-radius;
+    }
+
+    .rb-cluster-list-item {
+        outline: none;
+
+        .rb-cluster:focus {
+            outline: none;
+        }
+
+        &:focus .rb-cluster {
+            box-shadow: inset 0 0 0 1px $input-color-focus;
+            z-index: 10;
+
+            &.selected {
+                box-shadow: inset 0 0 0 2px white;
+            }
+        }
     }
 
     .rb-cluster-title {
