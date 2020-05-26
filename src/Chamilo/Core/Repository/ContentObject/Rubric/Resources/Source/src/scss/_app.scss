@@ -35,6 +35,7 @@
     border: none;
     margin: 0;
     padding: 0;
+    cursor: default;
 
     span {
       border: 1px solid transparent;
@@ -64,22 +65,24 @@
   }
 }
 
-.app-header-item {
+.app-header-menu .app-header-item {
   margin-right: 1em;
   cursor: pointer;
 
-  a, a:hover {
-    text-decoration: none;
+  a {
+    display: inline-block;
     transition: color 120ms;
-  }
-}
+    border-bottom: 1px solid transparent;
 
-.app-header-menu .app-header-item {
-  &.selected {
-    border-bottom: 1px solid darken($panel-border-color, 5%);
-  }
-  &:hover {
-    border-bottom: 1px solid #23527c;
+    &.selected {
+      border-bottom: 1px solid darken($panel-border-color, 5%);
+    }
+
+    &:hover, &:focus {
+      outline-width: thin;
+      text-decoration: none;
+      border-bottom: 1px solid #23527c;
+    }
   }
 }
 

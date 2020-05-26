@@ -2,9 +2,9 @@
     <div id="app" :class="{'builder-app': content === 'rubric' || content === 'levels', 'builder-full-app': content === 'rubric-full'}">
         <div class="app-header">
             <ul class="app-header-menu">
-                <li class="app-header-item" :class="{ selected: content === 'rubric' }"><a @click.prevent="content = 'rubric'">Edit Rubric</a></li>
-                <li class="app-header-item" :class="{ selected: content === 'levels' }"><a @click.prevent="content = 'levels'">Edit Niveaus</a></li>
-                <li class="app-header-item" :class="{ selected: content === 'rubric-full' }"><a @click.prevent="content = 'rubric-full'">Full View</a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'rubric' }" @click.prevent="content = 'rubric'" href="#">Edit Rubric</a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'levels' }" @click.prevent="content = 'levels'" href="#">Edit Niveaus</a></li>
+                <li class="app-header-item"><a :class="{ selected: content === 'rubric-full' }" @click.prevent="content = 'rubric-full'" href="#">Full View</a></li>
             </ul>
             <ul class="app-header-tools">
                 <li class="app-header-item" v-if="content === 'rubric'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" />Split View</span></button></li>
