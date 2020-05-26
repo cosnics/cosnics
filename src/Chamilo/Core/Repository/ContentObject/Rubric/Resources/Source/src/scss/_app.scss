@@ -80,6 +80,7 @@
 
     &:hover, &:focus {
       outline-width: thin;
+      outline-offset: 1px;
       text-decoration: none;
       border-bottom: 1px solid #23527c;
     }

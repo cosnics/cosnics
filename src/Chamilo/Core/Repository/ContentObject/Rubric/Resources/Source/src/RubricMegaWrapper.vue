@@ -284,6 +284,9 @@
             }
 
             a {
+                outline-color: white;
+                outline-width: 1px;
+                outline-offset: 1px;
                 padding-bottom: 4px;
                 text-decoration: none;
                 color: white;
