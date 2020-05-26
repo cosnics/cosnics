@@ -3,7 +3,7 @@
 		<div class="name-input-title">
 			<input type="text" class="name-input-field" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">
             <button v-if="hasInput" class="btn-clear fa fa-times-circle" @click="clearInput" />
-			<button v-else class="btn-clear fa fa-times-circle muted" />
+			<button v-else class="btn-clear fa fa-times-circle muted" disabled="disabled" />
 		</div>
         <div class="name-input-actions">
             <button class="btn-name-input btn-ok" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
