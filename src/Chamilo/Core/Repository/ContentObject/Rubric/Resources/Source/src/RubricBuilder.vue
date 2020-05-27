@@ -313,6 +313,12 @@
         color: #777;
         transition: background-color 200ms, color 200ms;
 
+        &.collapse-open {
+            background-color: darken($cluster-color-selected, 5%);
+            color: #fff;
+            border-color: transparent;
+        }
+
         i {
             padding-left: 2px;
         }
@@ -329,29 +335,6 @@
         }
     }
 
-    .clusters-wrapper.open .btn-collapse {
-        background-color: darken($cluster-color-selected, 5%);
-        color: #fff;
-        border-color: transparent;
-    }
-
-    .clusters-collapse {
-        position: absolute;
-        overflow: hidden;
-
-        .clusters-view {
-            transform: translateY(-100%);
-            transition: transform 300ms;
-        }
-    }
-
-    .clusters-wrapper.open .clusters-collapse {
-        position: initial;
-
-        .clusters-view, &.editing .clusters-view {
-            transform: unset;
-        }
-    }
 
     /** Rubric Editor **/
 
@@ -765,6 +748,24 @@
     }
 
     @media only screen and (max-width: 899px) {
+        .clusters-collapse {
+            overflow: hidden;
+        }
+
+        .clusters-view.collapse-closed {
+            display: none;
+        }
+
+        .clusters-slide {
+            &-enter-active, &-leave-active {
+                transition: transform 300ms;
+            }
+
+            &-enter, &-leave-to {
+                transform: translateY(-100%);
+            }
+        }
+
         .rb-criterium-title {
             pointer-events: none;
         }

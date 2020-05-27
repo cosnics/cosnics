@@ -1,16 +1,18 @@
 <template>
-    <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ open: showClusters, 'category-dragging': categoryDragging }">
-        <button class="btn-collapse" @click="showClusters = !showClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
+    <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ 'category-dragging': categoryDragging }">
+        <button class="btn-collapse" :class="{ 'collapse-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
         <div class="clusters-collapse">
-            <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters` }">
-                <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
-                        :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
-                    <cluster-view v-for="cluster in clusters"
-                        :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
-                        @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(cluster)" @finish-edit="onFinishEdit(cluster, ...arguments)"></cluster-view>
-                </draggable>
-                <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
-            </div>
+            <transition name="clusters-slide">
+                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'collapse-closed': !showClusters }" :key="showClusters ? 'open' : 'closed'">
+                    <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
+                            :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
+                        <cluster-view v-for="cluster in clusters"
+                            :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
+                            @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(cluster)" @finish-edit="onFinishEdit(cluster, ...arguments)"></cluster-view>
+                    </draggable>
+                    <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
+                </div>
+            </transition>
         </div>
         <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
         <div class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
@@ -96,6 +98,11 @@
         }
 
         // Selection
+
+        toggleShowClusters() {
+            this.showClusters = !this.showClusters;
+            this.$emit('dialog-new-cluster', '');
+        }
 
         isSelected(item: Cluster|Criterium) : boolean {
             if (item instanceof Cluster) {
