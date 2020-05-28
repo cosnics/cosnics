@@ -3,7 +3,7 @@
         <name-input ref="name-input" ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
     </div>
     <div v-else class="actions" :class="{criteriumDragging}">
-        <button class="btn-criterium-add" :disabled="!actionsEnabled" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Nieuw criterium</button>
+        <button class="btn-criterium-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Nieuw criterium</button>
     </div>
 </template>
 
@@ -17,8 +17,8 @@
         components: { NameInput }
     })
     export default class NewCriterium extends Vue {
-
         private newCriterium: Criterium|null = null;
+        private blockKeyUpEnter = false;
 
         @Prop({type: Boolean, default: false}) readonly criteriumDragging!: boolean;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
@@ -31,7 +31,20 @@
             this.newCriterium = new Criterium();
         }
 
+        blockEnterUp() {
+            this.blockKeyUpEnter = true;
+        }
+
+        checkAndReleaseBlockEnterUp() {
+            if (this.blockKeyUpEnter) {
+                this.blockKeyUpEnter = false;
+                return true;
+            }
+            return false;
+        }
+
         addNewCriterium() {
+            if (this.checkAndReleaseBlockEnterUp()) { return; }
             this.$emit('criterium-added', this.newCriterium);
             this.cancel();
         }

@@ -3,7 +3,7 @@
         <div v-if="inputFormShown">
             <name-input ok-title="Voeg Toe" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancel" placeholder="Titel voor nieuwe onderverdeling" v-model="newCluster.title" />
         </div>
-        <button v-else class="btn-cluster-add" :disabled="!actionsEnabled" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
+        <button v-else class="btn-cluster-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
     </div>
 </template>
 
@@ -17,8 +17,8 @@
         components: { NameInput }
     })
     export default class NewCluster extends Vue {
-
         private newCluster: Cluster|null = null;
+        private blockKeyUpEnter = false;
 
         @Prop({type: String, default: null}) readonly viewId!: string|null;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
@@ -32,7 +32,20 @@
             this.emit(this.viewId);
         }
 
+        blockEnterUp() {
+            this.blockKeyUpEnter = true;
+        }
+
+        checkAndReleaseBlockEnterUp() {
+            if (this.blockKeyUpEnter) {
+                this.blockKeyUpEnter = false;
+                return true;
+            }
+            return false;
+        }
+
         addNewCluster() {
+            if (this.checkAndReleaseBlockEnterUp()) { return; }
             this.$emit('cluster-added', this.newCluster);
             this.cancel();
         }

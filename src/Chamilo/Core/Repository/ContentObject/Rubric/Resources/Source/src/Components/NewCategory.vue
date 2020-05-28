@@ -3,7 +3,7 @@
         <name-input ok-title="Voeg Toe" allow-empty="true" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
     </div>
     <div v-else class="actions">
-        <button :disabled="!actionsEnabled" class="btn-category-add" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
+        <button :disabled="!actionsEnabled" class="btn-category-add" @keydown.enter="blockEnterUp" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
     </div>
 </template>
 
@@ -17,8 +17,8 @@
         components: { NameInput }
     })
     export default class NewCategory extends Vue {
-
         private newCategory: Category|null = null;
+        private blockKeyUpEnter = false;
 
         @Prop({type: String, default: null}) readonly viewId!: string|null;
         @Prop({type: Boolean, default: true}) readonly actionsEnabled!: boolean;
@@ -33,7 +33,20 @@
             this.emit(this.viewId);
         }
 
+        blockEnterUp() {
+            this.blockKeyUpEnter = true;
+        }
+
+        checkAndReleaseBlockEnterUp() {
+            if (this.blockKeyUpEnter) {
+                this.blockKeyUpEnter = false;
+                return true;
+            }
+            return false;
+        }
+
         addNewCategory() {
+            if (this.checkAndReleaseBlockEnterUp()) { return; }
             this.$emit('category-added', this.newCategory);
             this.cancel();
         }
