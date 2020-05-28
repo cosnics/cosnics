@@ -81,7 +81,7 @@
     .btn-clear {
         position: absolute;
         background: none;
-        border: none;
+        border: 1px solid transparent;
         font-size: 16px;
         height: 100%;
         top: 0;

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="inputFormShown" class="category newcategory">
+    <div v-if="inputFormShown" class="category-name-input">
         <name-input ok-title="Voeg Toe" allow-empty="true" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
     </div>
     <div v-else class="actions">

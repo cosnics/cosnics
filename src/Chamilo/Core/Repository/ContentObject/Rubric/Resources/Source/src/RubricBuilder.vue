@@ -146,6 +146,7 @@
         cursor: pointer;
 
         &:hover, &:focus {
+            outline: none;
             background-color: $btn-color;
             color: #fff;
         }
@@ -211,6 +212,21 @@
     .btn-cancel {
         background-color: transparent;
         border: 1px solid #cdcdcd;
+    }
+
+    .actions button, .category-new button, .criterium-new button {
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+
+        &:focus {
+            outline: none;
+            border: 1px solid $input-color-focus;
+        }
+
+        &.btn-ok:focus, &.btn-cancel:focus {
+            border: 1px solid transparent;
+            box-shadow: inset 0 0 0 1px white;
+        }
     }
 
     /** Modal Content **/
@@ -486,6 +502,12 @@
             border: none;
             box-shadow: 0px 0px 3px #999;
             cursor: pointer;
+
+            &:focus {
+                outline: none;
+                box-shadow: 0px 0px 4px #333;
+                border: 2px solid hsla(0, 0%, 100%, 0.8);
+            }
         }
     }
 
@@ -575,6 +597,12 @@
 
         i.fa-close {
             top: 20px;
+        }
+
+        .input-detail {
+            &:focus {
+                outline: none;
+            }
         }
     }
 
@@ -797,6 +825,10 @@
                 i {
                     color: #fff;
                 }
+            }
+
+            &:focus {
+                box-shadow: inset 0 0 0 1px white;
             }
         }
     }
@@ -1240,6 +1272,11 @@
             transition-delay: 300ms;
         }
 
+        .category-name-input {
+            width: 18em;
+            margin-top: .1em;
+        }
+
         /** Criteria **/
 
         .rb-criteria {
@@ -1337,6 +1374,10 @@
 
             .criterium-weight .input-detail {
                 border: 1px solid darken($input-color, 5%);
+
+                &:focus {
+                    border: 1px solid $input-color-focus;
+                }
             }
 
             .btn-close {
