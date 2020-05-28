@@ -5,11 +5,11 @@
                 <button :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :style="{'background-color': category.color}" @click="openColorPickerForCategory(category)"></button>
                 <h2 class="title">{{ category.title || 'Criteria' }}</h2>
             </div>
-            <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+            <button class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
             <div class="action-menu" :class="{'show-menu': showMenuActions}">
                 <ul class="action-menu-list">
-                    <li @click.stop="startEditing" class="action-menu-list-item"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
-                    <li @click.stop="$emit('remove', category)" class="action-menu-list-item"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                    <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                    <li @click.stop="$emit('remove', category)" @keyup.space.enter="$emit('remove', category)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" /><span>Verwijder</span></li>
                 </ul>
             </div>
         </div>

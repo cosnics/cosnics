@@ -5,12 +5,12 @@
                 <div @click="$emit('criterium-selected', criterium)" class="rb-criterium-title">
                     <h3 class="title">{{ criterium.title }}</h3>
                 </div>
-                <div class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></div>
+                <button class="item-actions" :class="{'show-menu': showMenuActions}" @keyup.space.stop="" @keydown.enter.stop="" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
                 <div class="action-menu" :class="{'show-menu': showMenuActions}">
                     <ul class="action-menu-list">
-                        <li @click="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details"><i class="fa fa-search"></i><span>Details</span></li>
-                        <li @click.stop="startEditing" class="action-menu-list-item"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
-                        <li @click.stop="$emit('remove', criterium)" class="action-menu-list-item"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                        <li @click="$emit('criterium-selected', criterium)" @keyup.space.enter="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details" tabindex="0"><i class="fa fa-search"></i><span>Details</span></li>
+                        <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', criterium)" @keyup.space.enter="$emit('remove', criterium)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" /><span>Verwijder</span></li>
                     </ul>
                 </div>
             </div>

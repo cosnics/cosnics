@@ -833,6 +833,12 @@
             cursor: pointer;
             font-size: 1.1rem;
 
+            &:focus {
+                outline: none;
+                border: 1px solid $input-color-focus;
+                opacity: 1;
+            }
+
             &.show-menu {
                 opacity: 1;
             }
@@ -904,6 +910,14 @@
                 width: initial;
                 color: #333;
                 opacity: 1;
+            }
+
+            &:focus {
+                background: $btn-color;
+
+                i, span {
+                    color: white;
+                }
             }
         }
 
@@ -1029,10 +1043,6 @@
             display: flex;
             align-items: baseline;
             margin-top: 1em;
-
-            .actions {
-                margin-bottom: 0;
-            }
         }
 
         .rb-clusters {

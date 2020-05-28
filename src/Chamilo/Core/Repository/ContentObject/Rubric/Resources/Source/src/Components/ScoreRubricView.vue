@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container" :class="mainClass">
 		<div class="rubric-panes-wrapper">
-			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu">
+			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu" @keyup.esc="hideMenu">
 				<rubric-pane id="view1"
 							 :rubric="rubric"
 							 :data-connector="dataConnector"
