@@ -2,8 +2,8 @@
     <li :id="id" class="rb-criterium-list-item handle criterium-handle">
         <div class="rb-criterium" :class="{ selected }">
             <div class="item-header-bar">
-                <div @click="$emit('criterium-selected', criterium)" class="rb-criterium-title">
-                    <h3 class="title">{{ criterium.title }}</h3>
+                <div @click="$emit('criterium-selected', criterium)" @keyup.space.enter="$emit('criterium-selected', criterium)" class="rb-criterium-title" tabindex="0">
+                    <h3 class="title" tabindex="-1">{{ criterium.title }}</h3>
                 </div>
                 <button class="item-actions" :class="{'show-menu': showMenuActions}" @keyup.space.stop="" @keydown.enter.stop="" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
                 <div class="action-menu" :class="{'show-menu': showMenuActions}">

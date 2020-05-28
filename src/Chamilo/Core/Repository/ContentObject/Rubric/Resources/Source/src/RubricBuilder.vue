@@ -541,6 +541,19 @@
         padding: .75em .5em;
         flex: 1;
         cursor: pointer;
+
+        .title:focus {
+            outline: none;
+        }
+
+        &:focus {
+            outline: none;
+
+            .title {
+                outline: 1px solid $input-color-focus;
+                outline-offset: 5px;
+            }
+        }
     }
 
     /** Rubric buttons **/
@@ -1297,9 +1310,9 @@
             background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
 
             &.selected {
-                border: 1px solid $criterium-color-border-selected;
+                border: 1px solid darken($bg-criterium-details, 10%);
                 border-radius: $border-radius;
-                background: #eee;
+                background: $bg-criterium-details;
                 margin: -1px;
             }
 
