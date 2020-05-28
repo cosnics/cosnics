@@ -1351,7 +1351,18 @@
         }
 
         .rb-criterium-title {
-            padding: .65em .5em;
+            display: flex;
+            padding: 0;
+
+            .title {
+                flex: 1;
+                padding: .7em .5em;
+            }
+
+            &:focus .title {
+                outline-offset: 0;
+                z-index: 10;
+            }
         }
 
         /** Vue Swatches **/
