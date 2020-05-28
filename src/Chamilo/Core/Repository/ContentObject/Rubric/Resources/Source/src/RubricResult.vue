@@ -25,9 +25,9 @@
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total">
-                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
+                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`" :tabindex="criterium.evaluations[evaluator].feedback ? 0 : -1"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
                                                             getCriteriumScore(criterium, evaluator) }}</div>
-                                                        <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>
+                                                        <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
                                                 </div>
                                             </li>
