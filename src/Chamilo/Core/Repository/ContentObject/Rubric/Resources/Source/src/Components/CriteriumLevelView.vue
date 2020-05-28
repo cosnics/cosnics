@@ -4,7 +4,7 @@
               placeholder="Geef feedback"
               @input="onFeedbackChange"></textarea>
         <div v-if="rubric.useScores" class="criterium-level-score">
-            <div v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore"><i class="fa fa-lock" /><i class="fa fa-unlock" /></div>
+            <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>
             <input class="fixed-score input-detail" type="number" step="0.1" v-if="choice.hasFixedScore" v-model="choice.fixedScore" @input="onChange" />
             <input type="number" class="input-detail" step="0.1" v-else v-model="rubric.getChoiceScore(criterium, level)" @input="changeChoiceScore" />
         </div>

@@ -741,13 +741,22 @@
         align-items: center;
         justify-content: center;
         color: $btn-color-darkened;
+        padding: 0;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: $border-radius;
 
-        > .fa + .fa, &:hover > .fa {
+        > .fa + .fa, &:hover > .fa, &:focus > .fa {
             display: none;
         }
 
-        &:hover > .fa + .fa {
+        &:hover > .fa + .fa, &:focus > .fa + .fa {
             display: inherit;
+        }
+
+        &:focus {
+            outline: none;
+            border: 1px solid $input-color-focus;
         }
     }
 
