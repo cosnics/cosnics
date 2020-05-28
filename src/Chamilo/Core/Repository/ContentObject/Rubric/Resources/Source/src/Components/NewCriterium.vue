@@ -3,7 +3,7 @@
         <name-input ref="name-input" ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
     </div>
     <div v-else class="actions" :class="{criteriumDragging}">
-        <button class="btn-criterium-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Nieuw criterium</button>
+        <button class="btn-criterium-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCriterium"><i class="fa fa-plus" aria-hidden="true"/>Criterium toevoegen</button>
     </div>
 </template>
 

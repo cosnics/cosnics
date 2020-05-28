@@ -3,7 +3,7 @@
         <div v-if="inputFormShown">
             <name-input ok-title="Voeg Toe" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancel" placeholder="Titel voor nieuwe onderverdeling" v-model="newCluster.title" />
         </div>
-        <button v-else class="btn-cluster-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Nieuw</button>
+        <button v-else class="btn-cluster-add" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCluster"><i class="fa fa-plus" aria-hidden="true"/>Onderdeel toevoegen</button>
     </div>
 </template>
 
