@@ -311,4 +311,22 @@
             }
         }
     }
+    @media only screen and (max-width: 899px) {
+        .chamilo-header {
+            position: relative;
+        }
+        .rubrics-menu {
+            position: absolute;
+            top: 18px;
+            margin-top: 0px!important;
+        }
+    }
+    @media only screen and (max-width: 500px) {
+        .chamilo-header .start {
+            display: none;
+        }
+        .rubrics-menu {
+            left: -25px;
+        }
+    }
 </style>
