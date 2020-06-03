@@ -1936,6 +1936,10 @@
     }
 
     @media only screen and (max-width: 899px) {
+        .builder-app .app-header-tools {
+            display: none;
+        }
+
         .levels-container {
             margin-left: 0;
 

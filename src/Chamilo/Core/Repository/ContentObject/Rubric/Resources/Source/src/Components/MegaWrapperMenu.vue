@@ -4,7 +4,7 @@
             <li class="rubrics-menu-item" :class="{ selected: $route.name === 'Home' }"><router-link :to="{ name: 'Home' }"><span tabindex="-1">Home</span></router-link></li>
             <li class="rubrics-menu-item" :class="{ selected: $route.path.startsWith('/builder') }"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Builder</span></router-link></li>
             <li class="rubrics-menu-item" :class="{ selected: $route.name === 'Entry' }"><router-link :to="{ name: 'Entry' }"><span tabindex="-1">Entry</span></router-link></li>
-            <li class="rubrics-menu-item" :class="{ selected: $route.name === 'Results' }"><router-link :to="{ name: 'Results' }"><span tabindex="-1">Builder</span></router-link></li>
+            <li class="rubrics-menu-item" :class="{ selected: $route.name === 'Results' }"><router-link :to="{ name: 'Results' }"><span tabindex="-1">Results</span></router-link></li>
         </ul>
     </nav>
 </template>

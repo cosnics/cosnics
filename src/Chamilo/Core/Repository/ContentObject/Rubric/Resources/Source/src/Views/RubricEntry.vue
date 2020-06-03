@@ -377,4 +377,70 @@
     .show-default-feedback .custom-feedback {
         margin-left: 20em;
     }
+
+    @media only screen and (max-width: 899px) {
+        .entry-app {
+            .table-header-wrap {
+                display: none;
+            }
+
+            .criterium {
+                flex-direction: column;
+                margin-bottom: 2em;
+
+                .criterium-level-title {
+                    display: block;
+                    flex: 1;
+                    line-height: 2.4em;
+                }
+            }
+
+            .criterium-title-header {
+                width: unset;
+                min-width: unset;
+                max-width: 40em;
+            }
+
+            .criterium-level-header {
+                display: flex;
+                text-align: left;
+                align-content: center;
+                justify-items: center;
+                justify-content: center;
+                padding: 0 .25em;
+                margin-top: .5em;
+                max-width: 40em;
+
+                &.selected .criterium-level-title {
+                    color: white;
+                }
+            }
+
+            .criterium-level:nth-last-child(2) {
+                margin-right: .5em;
+            }
+
+            .btn-score-number.score-number {
+                flex: 0;
+            }
+
+            .subtotal {
+                max-width: 41.25em;
+                margin-right: .5em;
+            }
+
+            .criterium-total {
+                display: none;
+            }
+
+            .default-feedback {
+                max-width: 40em;
+            }
+            
+            .custom-feedback {
+                margin-top: 1.5em;
+                margin-left: 1.5em;
+            }
+        }
+    }
 </style>

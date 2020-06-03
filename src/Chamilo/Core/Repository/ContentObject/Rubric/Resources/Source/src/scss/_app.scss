@@ -17,7 +17,7 @@
 }
 
 .app-header-tools {
-  display: none;
+  display: flex;
 
   .check::before {
     content: '\f096';
@@ -137,8 +137,3 @@
   padding-bottom: 1.5em;
 }
 
-@media only screen and (min-width: 900px) {
-  .app-header-tools {
-    display: flex;
-  }
-}
