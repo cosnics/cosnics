@@ -860,10 +860,11 @@
         /** App **/
 
         #app.builder-app {
-            position: absolute;
-            top: 0; bottom: 0; left: 0; right: 0;
+            /*position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;*/
             overflow: hidden;
             padding-bottom: 0;
+            height: calc(100vh - 166px);
         }
 
         .no-drop {

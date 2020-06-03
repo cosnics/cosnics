@@ -10,9 +10,9 @@
 </template>
 <style lang="scss">
     .demo-page {
-        margin-bottom: -20px;
-        margin-top: -20px;
-        padding: 0 1.5em;
+        /*margin-bottom: -20px;
+        margin-top: -20px;*/
+        padding: 0 2.5em;
         border-top: 1px solid #d6d6d6;
         color: #555;
 

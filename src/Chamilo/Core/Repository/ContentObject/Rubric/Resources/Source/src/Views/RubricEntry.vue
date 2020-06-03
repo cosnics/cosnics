@@ -436,7 +436,7 @@
             .default-feedback {
                 max-width: 40em;
             }
-            
+
             .custom-feedback {
                 margin-top: 1.5em;
                 margin-left: 1.5em;
