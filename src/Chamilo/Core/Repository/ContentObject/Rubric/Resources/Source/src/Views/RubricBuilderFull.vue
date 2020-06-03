@@ -50,14 +50,14 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import APIConfiguration from './Connector/APIConfiguration';
-    import TreeNode from './Domain/TreeNode';
-    import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import Choice from './Domain/Choice';
-    import Cluster from './Domain/Cluster';
-    import Criterium from './Domain/Criterium';
-    import FeedbackField from './Components/FeedbackField.vue';
-    import DataConnector from './Connector/DataConnector';
+    import APIConfiguration from '../Connector/APIConfiguration';
+    import TreeNode from '../Domain/TreeNode';
+    import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import Choice from '../Domain/Choice';
+    import Cluster from '../Domain/Cluster';
+    import Criterium from '../Domain/Criterium';
+    import FeedbackField from '../Components/FeedbackField.vue';
+    import DataConnector from '../Connector/DataConnector';
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';

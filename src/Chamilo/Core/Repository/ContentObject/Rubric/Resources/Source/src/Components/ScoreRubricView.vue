@@ -30,7 +30,7 @@
 							 @end-drag="endDrag"
 							 @over-element="dragOverElement"
 				></rubric-pane>
-				<rubric-pane id="view2" v-if="split"
+				<rubric-pane id="view2" v-if="uiState.showSplitView"
 							 :rubric="rubric"
 							 :data-connector="dataConnector"
 							 :selected-cluster="selectedClusterView2"
@@ -84,8 +84,8 @@
 	})
 	export default class ScoreRubricView extends Vue {
 
-		private selectedClusterView1: Cluster|null = this.clusters.length && this.clusters[0] || null;
-		private selectedClusterView2: Cluster|null = this.clusters.length && this.clusters[0] || null;
+		private selectedClusterView1: Cluster|null = null;
+		private selectedClusterView2: Cluster|null = null;
 		private menuActionsId: string = '';
 		private newClusterDialogView: string = '';
 		private newCategoryDialogView: string = '';
@@ -101,7 +101,6 @@
 
 		@Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;
-		@Prop(Boolean) readonly split!: boolean;
 		@Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 		@Prop({type: Object}) readonly uiState!: any;
 
@@ -261,6 +260,8 @@
 				} else {
 					this.uiState.selectedClusterView1 = '';
 				}
+			} else {
+				this.selectedClusterView1 = this.clusters.length && this.clusters[0] || null;
 			}
 			if (this.uiState.selectedClusterView2) {
 				const cluster = this.rubric.clusters.find(cluster => cluster.id === this.uiState.selectedClusterView2);
@@ -269,6 +270,8 @@
 				} else {
 					this.uiState.selectedClusterView2 = '';
 				}
+			} else {
+				this.selectedClusterView2 = this.clusters.length && this.clusters[0] || null;
 			}
 			window.addEventListener('resize', this.handleResize);
 		}
@@ -285,7 +288,7 @@
 			return {
 				'dragging': this.initiatedDrag !== '',
 				'not-allowed': this.bannedForDrop !== '' && this.overElementId === this.bannedForDrop,
-				'split-view': this.split
+				'split-view': this.uiState.showSplitView
 			};
 		}
 

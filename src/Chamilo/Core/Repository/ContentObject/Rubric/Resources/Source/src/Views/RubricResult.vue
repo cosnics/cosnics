@@ -63,13 +63,13 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import APIConfiguration from './Connector/APIConfiguration';
-    import TreeNode from './Domain/TreeNode';
-    import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import Cluster from './Domain/Cluster';
-    import Category from './Domain/Category';
-    import Criterium from './Domain/Criterium';
-    import DataConnector from './Connector/DataConnector';
+    import APIConfiguration from '../Connector/APIConfiguration';
+    import TreeNode from '../Domain/TreeNode';
+    import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import Cluster from '../Domain/Cluster';
+    import Category from '../Domain/Category';
+    import Criterium from '../Domain/Criterium';
+    import DataConnector from '../Connector/DataConnector';
 
     interface CriteriumExt {
         showDefaultFeedback: false;

@@ -1,13 +1,15 @@
 <template>
-    <div id="app" :class="{'builder-app': content === 'rubric' || content === 'levels', 'builder-full-app': content === 'rubric-full'}">
+    <div id="app" :class="{'builder-app': $route.name === 'Builder' || $route.name === 'BuilderLevels', 'builder-full-app': $route.name === 'BuilderFull'}">
         <div class="app-header">
-            <ul class="app-header-menu">
-                <li class="app-header-item"><a :class="{ selected: content === 'rubric' }" @click.prevent="content = 'rubric'" href="#"><span tabindex="-1">Edit Rubric</span></a></li>
-                <li class="app-header-item"><a :class="{ selected: content === 'levels' }" @click.prevent="content = 'levels'" href="#"><span tabindex="-1">Edit Niveaus</span></a></li>
-                <li class="app-header-item"><a :class="{ selected: content === 'rubric-full' }" @click.prevent="content = 'rubric-full'" href="#"><span tabindex="-1">Full View</span></a></li>
-            </ul>
+            <nav role="navigation">
+                <ul class="app-header-menu">
+                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Edit Rubric</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Edit Niveaus</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Full View</span></router-link></li>
+                </ul>
+            </nav>
             <ul class="app-header-tools">
-                <li class="app-header-item" v-if="content === 'rubric'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" />Split View</span></button></li>
+                <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" />Split View</span></button></li>
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving">
@@ -21,10 +23,8 @@
         <div class="rubrics">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': content === 'levels' }">
-                <score-rubric-view v-if="content === 'rubric'" :rubric="rubric" :split="showSplitView" :selected-criterium="selectedCriterium" :data-connector="dataConnector" :ui-state="uiState.selectedClusters" @criterium-selected="selectCriterium" />
-                <levels-view v-else-if="content === 'levels'" :rubric="rubric" :data-connector="dataConnector"></levels-view>
-                <rubric-builder-full v-else-if="content === 'rubric-full'" :rubric="rubric" :data-connector="dataConnector"></rubric-builder-full>
+            <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
+                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="uiState" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
@@ -36,13 +36,13 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import ScoreRubricView from './Components/ScoreRubricView.vue';
-    import CriteriumDetailsView from './Components/CriteriumDetailsView.vue';
-    import Criterium from './Domain/Criterium';
-    import LevelsView from './Components/LevelsView.vue';
-    import APIConfiguration from './Connector/APIConfiguration';
-    import Rubric, {RubricJsonObject} from './Domain/Rubric';
-    import DataConnector from './Connector/DataConnector';
+    import ScoreRubricView from '../Components/ScoreRubricView.vue';
+    import CriteriumDetailsView from '../Components/CriteriumDetailsView.vue';
+    import Criterium from '../Domain/Criterium';
+    import LevelsView from '../Components/LevelsView.vue';
+    import APIConfiguration from '../Connector/APIConfiguration';
+    import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import DataConnector from '../Connector/DataConnector';
     import RubricBuilderFull from "./RubricBuilderFull.vue";
 
     @Component({

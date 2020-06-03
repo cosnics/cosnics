@@ -1,12 +1,13 @@
 <template>
     <div class="container-fluid">
-        <rubric-result :api-config="config" :version="version" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result>
+        <rubric-result :api-config="config" :version="version" :rubric-data="store.rubricData" :rubric-results="store.rubricResults"></rubric-result>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import RubricResult from './RubricResult.vue';
+    import store from '../store';
 
     @Component({
         components: {
@@ -18,8 +19,6 @@
             '...URL': 'https://test'
         };
         private version = 0;
-
-        @Prop({type: Object, default: null}) readonly rubricData!: object|null;
-        @Prop({type: Object, default: null}) readonly rubricResults!: object|null;
+        private store: any = store;
     }
 </script>

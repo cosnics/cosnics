@@ -99,7 +99,7 @@
       outline-offset: 2px;
     }
 
-    &.selected {
+    &.active-link {
       border-bottom: 1px solid darken($panel-border-color, 5%);
     }
 
