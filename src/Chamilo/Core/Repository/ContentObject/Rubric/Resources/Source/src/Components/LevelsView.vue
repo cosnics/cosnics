@@ -14,7 +14,21 @@
         </div>
         <div v-else class="lc-list" :class="{'add-mode': newLevel !== null}">
             <div>
-                <h1>Niveaus</h1>
+                <div class="lc-list-header">
+                    <h1>Niveaus</h1>
+                    <div v-if="newLevel === null && rubric.levels.length > 1 && selectedLevel !== null" class="level-updown" @click.stop="">
+                        <div>
+                            <button class="lc-btn btn-updown"
+                                    @click.stop="moveLevelUp(selectedLevel)"
+                                    :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) <= 0"><i
+                                    class="fa fa-arrow-up" aria-hidden="true"></i></button>
+                            <button class="lc-btn btn-updown"
+                                    @click.stop="moveLevelDown(selectedLevel)"
+                                    :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) >= rubric.levels.length - 1"><i
+                                    class="fa fa-arrow-down" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
                 <form>
                 <ul class="lc-levels" @click.stop="">
                     <li v-for="(level, levelIndex) in levels" :key="`level_${levelIndex}`" class="levels-list-item" :class="`${isSelected(level) ? 'selected' : 'not-selected'} ${isLabelHidden(level) ? 'labels-hide' : ''} ${newLevel === level ? 'new-level' : ''}`" >
@@ -31,16 +45,6 @@
                         class="fa fa-plus" aria-hidden="true"></i> Voeg niveau toe
                     <div class="btn-level-add-cover" @click.stop="createNewLevel(true)"></div>
                 </button>
-            </div>
-            <div v-if="newLevel === null && rubric.levels.length > 1 && selectedLevel !== null" class="level-updown" @click.stop="">
-                <button class="lc-btn btn-updown"
-                        @click.stop="moveLevelUp(selectedLevel)"
-                        :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) <= 0"><i
-                        class="fa fa-arrow-up" aria-hidden="true"></i></button>
-                <button class="lc-btn btn-updown"
-                        @click.stop="moveLevelDown(selectedLevel)"
-                        :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) >= rubric.levels.length - 1"><i
-                        class="fa fa-arrow-down" aria-hidden="true"></i></button>
             </div>
         </div>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">

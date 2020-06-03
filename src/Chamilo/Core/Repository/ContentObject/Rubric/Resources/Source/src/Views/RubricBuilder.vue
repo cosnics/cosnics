@@ -1477,12 +1477,16 @@
     }
 
     .level-updown {
-        margin-left: .55em;
-        align-self: center;
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        border-radius: 3px;
+        padding: 1.1em 0 0 0;
+        margin-right:.55em;
     }
 
     .btn-updown {
-        font-size: 2rem;
+        font-size: 1.9rem;
         outline-width: thin;
         background: transparent;
 
@@ -1532,6 +1536,10 @@
                 pointer-events: none;
             }
         }
+    }
+
+    .lc-list-header {
+        display: flex;
     }
 
     .ld-description {
@@ -1831,6 +1839,7 @@
 
         .label-level-default {
             border: 1px solid transparent;
+            color: #aaa;
 
             i {
                 margin-right: .3em;
@@ -1839,6 +1848,10 @@
 
             &.checked {
                 color: #406e8d;
+            }
+
+            &:hover:not(.checked) {
+                color: #777;
             }
         }
 
@@ -1963,11 +1976,7 @@
         }
 
         .lc-list {
-            flex: 1
-        }
-
-        .level-updown {
-            margin-right: .55em;
+            flex: 1;
         }
 
         .level-details .level-detail {
