@@ -181,4 +181,44 @@
             }
         }
     }
+
+    @media only screen and (max-width: 899px) {
+        .builder-full-app {
+            .rubric {
+                margin: 0;
+            }
+
+            .table-header-wrap {
+                display: none;
+            }
+
+            .criterium {
+                flex-direction: column;
+                margin-bottom: 2em;
+
+                .criterium-level-title {
+                    display: block;
+                    flex: 1;
+                    line-height: 2.4em;
+                    color: darken($title-color, 5%);
+                }
+            }
+
+            .criterium-level {
+               margin-bottom: .5em;
+            }
+
+            .criterium-level-header {
+                display: flex;
+                text-align: left;
+                background: none;
+                margin: .3em .5em -.1em 1em;
+            }
+            
+            .default-feedback {
+                margin-top: -.25em;
+                margin-left: .75em;
+            }
+        }
+    }
 </style>
