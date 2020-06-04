@@ -168,10 +168,14 @@
             border-top: 1px solid #d6d6d6; /** Added this for result view **/
         }
 
+        .rubric {
+            overflow-x: auto;
+        }
+
         .rubric-results-view {
+            width: 40em;
+            /*max-width: 60em;*/
             position: relative;
-            width: 100%;
-            max-width: 40em;
         }
 
         .table-header {
