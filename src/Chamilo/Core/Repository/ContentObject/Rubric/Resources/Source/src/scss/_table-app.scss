@@ -98,26 +98,42 @@
 
   .btn-more {
     position: absolute;
-    top: .3em;
+    top: .5em;
     right: 0;
     width: 1.4em;
-    text-align: center;
     cursor: pointer;
     color: #bbb;
+    border: 1px solid transparent;
+    display: flex;
+    justify-content: center;
+
+    .check {
+      transition: transform 200ms;
+    }
+    .check:focus {
+      outline: none;
+    }
+
+    &:focus {
+      outline: none;
+
+      .check {
+        border: 1px solid $input-color-focus;
+      }
+    }
 
     .check::before {
       content: '\f078';
     }
+
     &:hover {
       color: #999;
     }
   }
 }
 
-.show-default-feedback .btn-more {
-  .check::before {
-    content: '\f077';
-  }
+.show-default-feedback .btn-more .check {
+  transform: rotate(-180deg);
 }
 
 .criterium-title {
