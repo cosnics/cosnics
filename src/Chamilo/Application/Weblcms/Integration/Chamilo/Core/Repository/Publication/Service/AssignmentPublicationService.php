@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Public
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
@@ -134,7 +135,16 @@ abstract class AssignmentPublicationService implements AssignmentPublicationServ
             }
 
             $course = $this->courseService->getCourseById($publication->get_course_id());
-            $treeNode = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
+
+            try
+            {
+                $treeNode = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
+            }
+            catch(TreeNodeNotFoundException $ex)
+            {
+                return;
+            }
+
             $treeNodeContentObject = $this->contentObjectRepository->findById($treeNode->getContentObjectId());
 
             $location = $prefix . $course->get_title() . ' > ' . $publication->get_content_object()->get_title() . ' > '
