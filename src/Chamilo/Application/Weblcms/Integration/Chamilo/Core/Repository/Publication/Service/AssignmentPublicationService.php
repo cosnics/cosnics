@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
 
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Service\AssignmentService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
@@ -98,6 +99,11 @@ abstract class AssignmentPublicationService implements AssignmentPublicationServ
         if($entry instanceof \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry)
         {
             $publication = $this->publicationService->getPublication($entry->getContentObjectPublicationId());
+            if(!$publication instanceof ContentObjectPublication)
+            {
+                return;
+            }
+
             $course = $this->courseService->getCourseById($publication->get_course_id());
 
             $location = $prefix . $course->get_title() . ' > ' . $publication->get_content_object()->get_title();
@@ -122,6 +128,11 @@ abstract class AssignmentPublicationService implements AssignmentPublicationServ
         elseif($entry instanceof \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry)
         {
             $publication = $this->publicationService->getPublication($entry->getContentObjectPublicationId());
+            if(!$publication instanceof ContentObjectPublication)
+            {
+                return;
+            }
+
             $course = $this->courseService->getCourseById($publication->get_course_id());
             $treeNode = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
             $treeNodeContentObject = $this->contentObjectRepository->findById($treeNode->getContentObjectId());
