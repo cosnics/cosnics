@@ -47,12 +47,12 @@
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i class="check fa"/></div>
                                                     </div>
                                                     <div v-for="choice in criterium.choices" class="criterium-level">
-                                                        <div class="criterium-level-header" :class="{ selected: isSelected(criterium, choice.level) }">
+                                                        <button class="criterium-level-header btn-score-number" :class="{ selected: isSelected(criterium, choice.level) }" @click="selectLevel(criterium, choice.level)">
                                                             <div class="criterium-level-title">
                                                                 {{choice.title}}
                                                             </div>
-                                                            <button class="btn-score-number score-number" @click="selectLevel(criterium, choice.level)"><!--<i class="check fa"/>-->{{ choice.score }}</button>
-                                                        </div>
+                                                            <span class="score-number"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                                                        </button>
                                                         <div class="default-feedback">
                                                             {{ choice.feedback }}
                                                         </div>
@@ -276,16 +276,6 @@
             }
         }
 
-        .btn-score-number {
-            background: transparent;
-            border: 1px solid transparent;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            height: 1.58em;
-            outline: none;
-        }
-
         .criterium-title-header {
             width: 18em;
             min-width: 18em;
@@ -295,18 +285,26 @@
             margin-right: 1em;
         }
 
+        .criterium-level-header {
+            width: 100%;
+        }
+
         .criterium-level-header.selected {
             background: $level-selected-color;
         }
 
-        .has-evaluator .criterium-level-header {
-            &:hover .btn-score-number, .btn-score-number:focus {
+        .btn-score-number {
+            outline: none;
+        }
+
+        .has-evaluator .btn-score-number {
+            &:hover, &:focus {
                 border: 1px solid $level-selected-color;
             }
 
-            &.selected .btn-score-number {
+            &.selected {
                 &:hover, &:focus {
-                    border-color: white;
+                    box-shadow: inset 0 0 0 1px white;
                 }
             }
         }
