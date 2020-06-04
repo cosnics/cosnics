@@ -24,7 +24,7 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
-                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="uiState" @criterium-selected="selectCriterium"></router-view>
+                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="$route.name === 'Builder' ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
@@ -600,13 +600,17 @@
 
     /** Criterium Details Editor **/
 
+    .criterium-details-wrapper {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .criterium-details {
         position: relative;
         padding-top: 10px;
         padding-bottom: 10px;
         color: #333;
         width: 100%;
-        @include scrollbar();
 
         i.fa-close {
             top: 20px;
@@ -852,6 +856,28 @@
             &:focus {
                 box-shadow: inset 0 0 0 1px white;
             }
+        }
+
+        .criterium-details-wrapper {
+            display: flex;
+            position: absolute;
+            background: change_color($modal-bg, $alpha: 0.66);
+            height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .criterium-details {
+            background-color: $bg-color;
+            border-radius: $border-radius;
+            width: 95%;
+            max-width: 50em;
+            padding: 1.2em;
+            margin-top: 1.5em;
         }
     }
 
@@ -1391,6 +1417,11 @@
 
         /** Criterium Details Editor **/
 
+        .criterium-details-wrapper {
+            @include scrollbar();
+            background-color: $bg-criterium-details;
+        }
+
         .criterium-details {
             padding: 1em;
             width: 30em;
@@ -1399,7 +1430,6 @@
             border-top-left-radius: $border-radius;
             overflow-x: hidden;
             overflow-y: auto;
-            background-color: $bg-criterium-details;
 
             .input-detail {
                 background-color: transparent;

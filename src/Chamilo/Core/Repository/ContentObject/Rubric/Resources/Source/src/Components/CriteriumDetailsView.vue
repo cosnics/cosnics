@@ -1,22 +1,24 @@
 <template>
-    <div class="criterium-details" v-if="criterium !== null">
-        <div v-if="criterium">
-            <div class="criterium-details-header" style="">
-                <div class="criterium-details-title">
-                    <label for="title">Criterium: </label>
-                    <input type="text" v-model="criterium.title" id="title" name="title" autocomplete="off" class="input-detail" @input="onCriteriumChange"/>
+    <div class="criterium-details-wrapper">
+        <div class="criterium-details" v-if="criterium !== null">
+            <div v-if="criterium">
+                <div class="criterium-details-header" style="">
+                    <div class="criterium-details-title">
+                        <label for="title">Criterium: </label>
+                        <input type="text" v-model="criterium.title" id="title" name="title" autocomplete="off" class="input-detail" @input="onCriteriumChange"/>
+                    </div>
+                    <button class="btn-close" @click="$emit('close')"><i class="fa fa fa-close" /><span>Sluit</span></button>
                 </div>
-                <button class="btn-close" @click="$emit('close')"><i class="fa fa fa-close" /><span>Sluit</span></button>
+                <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} <span v-if="criterium.parent.color !== ''"> > {{ criterium.parent.title }}</span></div>
+                <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
+                <ul class="criterium-levels">
+                    <li v-for="level in rubric.levels" :key="level.id" class="rb-criterium-level">
+                        <div class="rb-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></div>
+                        <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange"></criterium-level-view>
+                    </li>
+                </ul>
+                <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> Terug naar rubric</a>
             </div>
-            <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} <span v-if="criterium.parent.color !== ''"> > {{ criterium.parent.title }}</span></div>
-            <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
-            <ul class="criterium-levels">
-                <li v-for="level in rubric.levels" :key="level.id" class="rb-criterium-level">
-                    <div class="rb-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></div>
-                    <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange"></criterium-level-view>
-                </li>
-            </ul>
-            <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> Terug naar rubric</a>
         </div>
     </div>
 </template>
