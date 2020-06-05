@@ -13,7 +13,7 @@
                 </ul>
             </div>
         </div>
-        <swatches :id="id + '--swatches'" :colors="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+        <swatches :id="id + '--swatches'" :swatches="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
         <div v-if="isEditing" class="edit-title">
             <div class="cover"></div>
             <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor categorie" v-model="newTitle"/>
