@@ -625,34 +625,36 @@
 
     .criterium-details-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: .75em;
     }
 
     .criterium-details-title {
         display: flex;
-        align-items: center;
-        font-size: 1.6rem;
-        margin-top: 0;
+        flex-direction: column;
+        align-items: flex-start;
         width: 100%;
-        margin-left: -.1em;
-        margin-right: .25em;
+        margin: 0 .25em .5em -.1em;
 
         label {
+            font-size: 1.3rem;
             font-weight: 400;
             margin-bottom: 0;
             border: 1px solid transparent;
         }
 
         .input-detail {
+            font-size: 1.6rem;
             height: 1.9em;
             padding-left: .25em;
             width: 100%;
+            margin-left: -.3em;
         }
     }
 
     .criterium-path {
         font-size: 1.2rem;
+        display: none;
     }
 
     .criterium-weight {
@@ -661,6 +663,7 @@
 
         label {
             font-weight: 400;
+            font-size: 1.3rem;
         }
 
         .input-detail {
@@ -721,15 +724,17 @@
         border: 1px solid $input-color;
         border-radius: $border-radius;
 
-        &:hover, &:focus {
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        &:focus {
             background-color: #fff;
             border: 1px solid $input-color-focus;
         }
 
         &.fixed-score {
-            background-color: $fixed-score-color;
-
-            &:hover, &:focus {
+            &, &:hover, &:focus {
                 background-color: $fixed-score-color;
             }
         }
@@ -1432,17 +1437,17 @@
             overflow-y: auto;
 
             .input-detail {
-                background-color: transparent;
+                background-color: rgba(255, 255, 255, 0.1);
                 border: 1px solid transparent;
             }
 
-            .criterium-weight .input-detail {
+            /*.criterium-weight .input-detail {
                 border: 1px solid darken($input-color, 5%);
 
                 &:focus {
                     border: 1px solid $input-color-focus;
                 }
-            }
+            }*/
 
             .btn-close {
                 background-color: darken($bg-criterium-details, 5%);
