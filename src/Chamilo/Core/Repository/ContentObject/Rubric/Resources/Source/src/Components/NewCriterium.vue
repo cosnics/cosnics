@@ -46,7 +46,7 @@
         addNewCriterium() {
             if (this.checkAndReleaseBlockEnterUp()) { return; }
             this.$emit('criterium-added', this.newCriterium);
-            this.cancel();
+            this.createNewCriterium();
         }
 
         cancel() {

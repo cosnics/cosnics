@@ -177,6 +177,11 @@
         min-height: 36px;
         color: #333;
 
+        &:focus {
+            outline: 1px solid $input-color-focus;
+            border-color: transparent;
+        }
+
         &::placeholder {
             color: #777;
             opacity: 1;
