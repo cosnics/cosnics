@@ -245,6 +245,17 @@ class SubmissionService
 
     /**
      * @param string $submissionId
+     * @param bool $hardDelete
+     *
+     * @throws \Exception
+     */
+    public function deleteSubmission(string $submissionId, bool $hardDelete = false)
+    {
+        $this->turnitinRepository->deleteSubmission($submissionId, $hardDelete);
+    }
+
+    /**
+     * @param string $submissionId
      * @param \Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings $similarityReportSettings
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
