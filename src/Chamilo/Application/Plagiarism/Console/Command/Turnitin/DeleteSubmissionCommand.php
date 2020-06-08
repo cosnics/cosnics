@@ -55,7 +55,7 @@ class DeleteSubmissionCommand extends Command
     {
         $submissionId = $input->getArgument(self::ARG_SUBMISSION_ID);
 
-        $this->submissionService->deleteSubmission($submissionId);
+        $this->submissionService->deleteSubmission($submissionId, true);
     }
 
 }
