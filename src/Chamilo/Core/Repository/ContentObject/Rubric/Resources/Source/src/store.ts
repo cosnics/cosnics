@@ -4,7 +4,8 @@ export default {
             showSplitView: false,
             selectedCriterium: '',
             selectedClusterView1: '',
-            selectedClusterView2: ''
+            selectedClusterView2: '',
+            showLevelDescriptions: false
         },
         entry: {
             evaluator: '',

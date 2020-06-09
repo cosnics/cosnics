@@ -1,51 +1,14 @@
 <template>
-    <div class="levels-container" :class="{'container-lc-list': !editMode}" @click="(editMode || newLevel) ? null : selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
-        <div v-if="editMode" class="lc-edit" :class="{'new-level': newLevel !== null}">
-            <form>
-                <level-details :edit-mode="true" :level="selectedLevel" :level-index="0" :new-level="newLevel" @change="onLevelChange" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
-            </form>
-            <div v-if="!newLevel" class="lc-return">
-                <a role="button" @click.stop="editMode=false">Terug naar overzicht niveaus.</a>
-            </div>
-            <div v-else class="actions">
-                <button class="btn-name-input btn-ok" @click.prevent="addLevel">Voeg toe</button>
-                <button class="btn-name-input btn-cancel" @click.prevent="cancelLevel">Annuleer</button>
-            </div>
-        </div>
-        <div v-else class="lc-list" :class="{'add-mode': newLevel !== null}">
-            <div>
-                <div class="lc-list-header">
-                    <h1>Niveaus</h1>
-                    <div v-if="newLevel === null && rubric.levels.length > 1 && selectedLevel !== null" class="level-updown" @click.stop="">
-                        <div>
-                            <button class="lc-btn btn-updown"
-                                    @click.stop="moveLevelUp(selectedLevel)"
-                                    :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) <= 0"><i
-                                    class="fa fa-arrow-up" aria-hidden="true"></i></button>
-                            <button class="lc-btn btn-updown"
-                                    @click.stop="moveLevelDown(selectedLevel)"
-                                    :disabled="!selectedLevel || rubric.levels.indexOf(selectedLevel) >= rubric.levels.length - 1"><i
-                                    class="fa fa-arrow-down" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <form>
-                <ul class="lc-levels" @click.stop="">
-                    <li v-for="(level, levelIndex) in levels" :key="`level_${levelIndex}`" class="levels-list-item" :class="`${isSelected(level) ? 'selected' : 'not-selected'} ${isLabelHidden(level) ? 'labels-hide' : ''} ${newLevel === level ? 'new-level' : ''}`" >
-                        <level-details :level="level" :level-index="levelIndex" :new-level="newLevel" @change="onLevelChange" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" @level-edit="editLevel"></level-details>
-                        <div v-if="level === newLevel" class="actions">
-                            <button class="btn-name-input btn-ok" @click.prevent="addLevel">Voeg toe</button>
-                            <button class="btn-name-input btn-cancel" @click.prevent="cancelLevel">Annuleer</button>
-                        </div>
-                    </li>
-                </ul>
-                </form>
-                <button v-if="!newLevel" style="position: relative" class="lc-btn btn-level-add"
-                        @click.stop="createNewLevel(false)"><i
-                        class="fa fa-plus" aria-hidden="true"></i> Voeg niveau toe
-                    <div class="btn-level-add-cover" @click.stop="createNewLevel(true)"></div>
-                </button>
-            </div>
+    <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
+        <div class="levels-container" :class="{ 'has-new': !!newLevel, 'show-description': showLevelDescriptions }">
+            <h1>Niveaus</h1>
+            <ul class="levels-list">
+                <level-details v-for="(level, index) in rubric.levels" :show-level-descriptions="showLevelDescriptions" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
+                <li v-if="!newLevel" style="list-style: none;">
+                    <button class="btn-level-add" @click.stop="createNewLevel"><i class="fa fa-plus" aria-hidden="true" /> Niveau toevoegen</button>
+                </li>
+                <level-details v-else :selected-level="newLevel" :show-level-descriptions="showLevelDescriptions" :has-new="true" :is-new="true" :rubric="rubric" :level="newLevel" tag="li" :key="`level_${rubric.levels.length}`" @new-level-added="addLevel" @new-level-canceled="cancelLevel" @level-default="setDefault"></level-details>
+            </ul>
         </div>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
             <div class="modal-content" @click.stop="">
@@ -58,9 +21,8 @@
         </div>
     </div>
 </template>
-
 <script lang="ts">
-    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Rubric from '../Domain/Rubric';
     import Level from '../Domain/Level';
@@ -77,10 +39,9 @@
         private newLevel: Level|null = null;
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
-        private editMode: boolean = false;
-        private isCompact: boolean = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
+        @Prop({type: Boolean, default: false }) readonly showLevelDescriptions!: boolean;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         constructor() {
@@ -88,23 +49,12 @@
             this.onLevelMove = debounce(this.onLevelMove, 750);
         }
 
-        onLevelChange(level: Level) {
-            this.dataConnector?.updateLevel(level);
-        }
-
-        onLevelMove(level: Level) {
-            const index = this.rubric.levels.indexOf(level);
-            this.dataConnector?.moveLevel(level, index);
-        }
-
-        moveLevelUp(level: Level) {
-            this.rubric.moveLevelUp(level);
-            this.onLevelMove(level);
-        }
-
-        moveLevelDown(level: Level) {
-            this.rubric.moveLevelDown(level);
-            this.onLevelMove(level);
+        createNewLevel() {
+            this.selectLevel(null);
+            this.newLevel = this.getDefaultLevel();
+            this.$nextTick(() => {
+                (document.querySelector(`#level_title_${this.rubric.levels.length}`)! as HTMLElement).focus();
+            });
         }
 
         addLevel() {
@@ -116,64 +66,44 @@
             this.rubric.addLevel(this.newLevel!);
             this.dataConnector?.addLevel(this.newLevel!, this.rubric.levels.length);
             this.newLevel = null;
-            this.editMode = false;
         }
 
         cancelLevel() {
             this.newLevel = null;
-            this.editMode = false;
             this.selectLevel(null);
         }
 
-        get levels() {
-            if (this.newLevel) {
-                return [...this.rubric.levels, this.newLevel];
-            } else {
-                return this.rubric.levels;
-            }
-        }
-
-        isLabelHidden(level: Level) : boolean {
+        onLevelMove(level: Level) {
             const index = this.rubric.levels.indexOf(level);
-            return !this.isSelected(level) && index > 0;
+            this.dataConnector?.moveLevel(level, index);
         }
 
-        isSelected(level: Level) : boolean {
-            return this.selectedLevel === level;
+        moveLevelUp() {
+            if (!this.selectedLevel) { return; }
+            this.rubric.moveLevelUp(this.selectedLevel);
+            this.onLevelMove(this.selectedLevel);
+            this.$nextTick(() => {
+                (document.querySelector(`#level_move_up_${this.selectedLevel!.id}`)! as HTMLElement).focus();
+            });
+        }
+
+        moveLevelDown() {
+            if (!this.selectedLevel) { return; }
+            this.rubric.moveLevelDown(this.selectedLevel);
+            this.onLevelMove(this.selectedLevel);
+            this.$nextTick(() => {
+                (document.querySelector(`#level_move_down_${this.selectedLevel!.id}`)! as HTMLElement).focus();
+            });
+        }
+
+        onLevelChange(level: Level) {
+            this.dataConnector?.updateLevel(level);
         }
 
         selectLevel(level: Level|null) {
+            if (this.newLevel) { return false; }
             this.selectedLevel = level;
             return false;
-        }
-
-        editLevel(level: Level) {
-            this.selectLevel(level);
-            this.editMode = true;
-        }
-
-        createNewLevel(editMode: boolean = false) {
-            this.newLevel = this.getDefaultLevel();
-            this.selectLevel(this.newLevel);
-            if (editMode) {
-                this.editMode = true;
-            }
-        }
-
-        showRemoveLevelDialog(level: Level|null) {
-            this.removingLevel = level;
-        }
-
-        hideRemoveLevelDialog() {
-            this.showRemoveLevelDialog(null);
-        }
-
-        removeLevel(level: Level) {
-            this.editMode = false;
-            this.removingLevel = null;
-            this.rubric.removeLevel(level);
-            this.dataConnector?.deleteLevel(level);
-            this.selectLevel(null);
         }
 
         setDefault(defaultLevel: Level) {
@@ -190,67 +120,355 @@
             return new Level('');
         }
 
-        mounted() {
-            window.addEventListener('resize', this.handleResize);
-            this.handleResize();
+        showRemoveLevelDialog(level: Level|null) {
+            this.removingLevel = level;
         }
 
-        beforeDestroy() {
-            window.removeEventListener('resize', this.handleResize);
+        hideRemoveLevelDialog() {
+            this.showRemoveLevelDialog(null);
         }
 
-        handleResize() {
-            this.isCompact = window.innerWidth < 900;
+        removeLevel(level: Level) {
+            this.removingLevel = null;
+            this.rubric.removeLevel(level);
+            this.dataConnector?.deleteLevel(level);
+            this.selectLevel(null);
         }
 
-        @Watch('rubric.levels.length')
-        onLevelsChanged(newLength: Number, oldLength: Number) {
-            window.setTimeout(() => {
-                if (newLength > oldLength) {
-                    this.selectLevel(this.rubric.levels[this.rubric.levels.length - 1]);
-                } else if (newLength < oldLength) {
-                    (document.activeElement as HTMLElement).blur();
-                }
-            }, 50);
+    }
+</script>
+<style lang="scss">
+    .rubrics-wrapper-levels {
+        margin-left: -1.5em;
+    }
+
+    .levels-container {
+        position: relative;
+        width: 100%;
+        margin-left: .75em;
+
+        h1 {
+            font-size: 2.2rem;
+            margin-left: .5em;
+            margin-top: .3em;
+            color: #666;
+        }
+    }
+
+    @media only screen and (min-width: 900px) {
+        .rubrics-wrapper-levels {
+            margin-left: 0;
         }
 
-        @Watch('newLevel')
-        onNewLevel() {
-            if (this.newLevel) {
-                window.setTimeout(() => {
-                    const elem = document.querySelector('.new-level .level-title-input');
-                    (elem as HTMLElement).focus();
-                }, 50);
+        .levels-container {
+            width: 50em;
+        }
+    }
+
+    .levels-list {
+        margin: 2.5em 0 0 0;
+        padding: 0;
+    }
+
+    .level-details {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content:space-between;
+        padding-left:.5em;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border: 1px solid transparent;
+        border-top-color: hsla(214, 20%, 85%, 1);
+        transition: background-color 200ms;
+
+        .input-detail {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid transparent;
+        }
+
+        &.selected {
+            background-color: #d4d8de;
+            border-color: hsla(214, 20%, 80%, 1);
+
+            .input-detail {
+                background: white;
+            }
+
+            + .level-details {
+                border-top-color: transparent;
+            }
+
+            .btn-more:not(:hover) {
+                color: #aaa;
+            }
+
+            .btn-more:hover {
+                color: #888;
             }
         }
 
-        @Watch('removingLevel')
-        onRemovingLevelChanged(level: Level|null) {
-            if (level) {
-                this.$nextTick(() => {
-                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
-                });
+        &:not(:first-child) .label-hidden {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+    }
+
+    .level-details-text {
+        flex: 1;
+        margin-right: .5em;
+    }
+
+    .level-details-text-1 {
+        display: flex;
+    }
+
+    .btn-more {
+        width: 1.4em;
+        cursor: pointer;
+        color: #bbb;
+        background: none;
+        border: 1px solid transparent;
+        display: flex;
+        justify-content: center;
+        align-self: flex-end;margin-bottom:.3em;
+
+        .check {
+            transition: transform 200ms;
+        }
+
+        .check:focus {
+            outline: none;
+        }
+
+        &:focus {
+            outline: none;
+
+            .check {
+                border: 1px solid $input-color-focus;
             }
         }
 
-        @Watch('isCompact')
-        onDetectEditMode(newisCompact: boolean, oldIsCompact: boolean) {
-            if (document.activeElement && !this.editMode && !oldIsCompact && newisCompact) {
-                if (document.activeElement.classList.contains('input-detail')) {
-                    const parentClass = document.activeElement.parentElement?.classList[1];
-                    this.editMode = true;
-                    window.setTimeout(() => {
-                        const elem = document.querySelector(`.${parentClass} .input-detail`);
-                        (elem as HTMLElement).focus();
-                    }, 50);
+        .check::before {
+            content: '\f078';
+        }
+
+        &:hover {
+            color: #999;
+        }
+    }
+
+    .levels-container.has-new .level-details:not(.new-level) {
+        pointer-events: none;
+    }
+
+    .show-description .btn-more .check {
+        transform: rotate(-180deg);
+    }
+
+    .input-detail {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+        padding: 2px 5px;
+
+        &:hover {
+            background: white;
+            border-color: lighten($input-color-focus, 15%);
+        }
+
+        &:focus {
+            outline: none;
+            background: white;
+            border-color: $input-color-focus;
+        }
+    }
+
+    .level-label {
+        color: lighten($title-color, 10%);
+    }
+
+    .ld-title {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-right: .5em;
+
+        .level-label {
+            margin-left: 5px;
+            position: absolute;
+            transform: translateY(-2.3em);
+        }
+
+        .input-detail {
+            font-size: 1.4rem;
+            color: #555;
+            background: lighten($btn-level-delete, 9%);
+        }
+    }
+
+    .ld-description {
+        display: none;
+        flex-direction: column;
+        margin-top: .25em;
+        position: relative;
+        margin-left: .5em;
+
+        .level-label {
+            position: absolute;
+            font-size: 1.2rem;
+            left: 5px;
+            color: #707070;
+        }
+
+        .input-detail {
+            resize: none;
+            padding-top: 1.3em;
+            margin-right: 1.8em;
+        }
+    }
+
+    .selected .ld-description {
+        margin-left: 0;
+        margin-top: .5em;
+    }
+
+    .show-description .ld-description {
+        display: flex;
+    }
+
+    .ld-score {
+        display: flex;
+        flex-direction: column;
+        width: 5em;
+
+        .level-label {
+            position: absolute;
+            transform: translate(.75em, -2.3em);
+        }
+
+        .input-detail {
+            font-size: 2rem;
+            text-align: right;
+        }
+    }
+
+    .ld-default {
+        display: flex;
+        flex-direction: column;
+        width: 6em;
+        align-items: center;
+
+        .level-label {
+            position: absolute;
+            transform: translateY(-2.3em);
+        }
+
+        .input-detail {
+            display:block;
+            opacity: 0;
+            transform: translateY(2px);
+
+            & + label::before {
+                transform: translateY(-10px);
+                font-size: 1.4rem;
+                content: '\f1db';
+                display: block;
+                color: #bbb;
+                height: 0;
+            }
+
+            &:focus + label::before, &:hover + label::before {
+                color: #999;
+            }
+
+            + label.checked::before {
+                content: '\f00c';
+                color: lighten(#406e8d, 10%);
+            }
+
+            &:focus + label::before {
+                color: #406e8d;
+            }
+        }
+    }
+
+    .level-actions {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        .btn-level-action {
+            background: transparent;
+            border: 1px solid transparent;
+            font-size: 1.9rem;
+
+            &:focus {
+                outline: none;
+                border: 1px solid $input-color-focus;
+                border-radius: $border-radius;
+            }
+
+            &:not(:last-child) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .selected:not(.new-level) .level-actions {
+        display: block;
+
+        .btn-level-action {
+            i {
+                color: #aaa;
+                transition: color 240ms;
+            }
+
+            &:hover i, &:focus i {
+                color: $btn-color;
+            }
+
+            &.btn-delete:hover i, &.btn-delete:focus i {
+                color: #d9534f;
+            }
+
+            &[disabled] {
+                & i, &:hover i, &:focus i {
+                    color: #ccc;
                 }
             }
         }
     }
-</script>
 
-<style scoped>
-    * {
-        outline-width: thin;
+    .btn-level-add {
+        background-color: transparent;
+        border: none;
+        font-size: 1.25rem;
+        color: #777;
+        margin-left: .5em;
+
+        i {
+            margin-right: .1em;
+            font-size: 1.1rem;
+            color: #999;
+        }
+
+        &:hover, &:hover i {
+            color: $btn-color-darkened;
+        }
+    }
+
+    .level-details .actions {
+        margin-top: .5em;
+
+        .btn-ok {
+            margin-right: .5em;
+        }
     }
 </style>

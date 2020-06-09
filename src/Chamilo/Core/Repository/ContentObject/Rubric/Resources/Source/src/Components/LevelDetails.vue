@@ -1,56 +1,86 @@
 <template>
-    <div>
-        <div class="level-details">
-            <div class="level-detail ld-level" @click.stop="selectLevel">
-                <label :for="`level_title_${levelIndex}`" class="lc-label" :class="`${editMode ? 'label-level-title' : 'label-maybe-hide'}`">Niveau</label>
-                <input :id="`level_title_${levelIndex}`" tabindex="0" type="text" autocomplete="off" v-model="level.title" placeholder="Vul hier een niveau in" @input="onChange" @focus="selectLevel" @keydown.enter.prevent="" class="input-detail level-title-input">
-                <div class="ld-cover"></div>
+    <component :is="tag" class="level-details" :class="{ 'show-description': showDescription, selected: selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
+        <div class="level-details-text">
+            <div class="level-details-text-1">
+                <div class="ld-title" @click.stop="selectLevel">
+                    <label :for="`level_title_${index}`" class="level-label label-hidden">Niveau</label>
+                    <input :id="`level_title_${index}`" :tabindex="tabIndex" type="text" autocomplete="off" v-model="level.title" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" placeholder="Vul hier een niveau in" class="input-detail" >
+                </div>
+                <button class="btn-more" v-if="!showLevelDescriptions":tabindex="tabIndex" @click.stop="showDescription = !showDescription"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
             </div>
-            <div class="level-detail ld-description" :class="{ empty: level.description.length === 0 }">
-                <label :for="`level_description_${levelIndex}`" class="lc-label" :class="`${editMode ? 'label-level-description' : 'label-maybe-hide'}`">Beschrijving</label>
-                <textarea :id="`level_description_${levelIndex}`" tabindex="0" v-model="level.description" placeholder="Vul hier een beschrijving in" @input="onChange" @focus="selectLevel" class="input-detail ta-description"></textarea>
+            <div class="ld-description" @click.stop="selectLevel">
+                <label :for="`level_description_${index}`" class="level-label">Beschrijving</label>
+                <textarea :id="`level_description_${index}`" :tabindex="tabIndex" v-model="level.description" placeholder="Vul hier een beschrijving in" @input="onChange" @focus="selectLevel" class="input-detail"></textarea>
             </div>
-            <div class="level-detail ld-weight" @click.stop="selectLevel">
-                <label :for="`level_score_${levelIndex}`" class="lc-label" :class="`${editMode ? 'label-level-weight' : 'label-maybe-hide'}`">Punten</label>
-                <input :id="`level_score_${levelIndex}`" tabindex="0" type="number" name="Weight" maxlength="3" v-model="level.score" @input="onChange" @focus="selectLevel" @keydown.enter.prevent="" class="input-detail level-weight-input">
-                <div class="ld-cover"></div>
-            </div>
-            <div class="level-detail ld-default">
-                <label v-if="!editMode" :for="`level_default_${levelIndex}`" class="lc-label label-maybe-hide">Standaard</label>
-                <input :id="`level_default_${levelIndex}`" tabindex="0" type="radio" :checked="level.isDefault" @click.stop="setDefault" @keydown.space.prevent="setDefault" @keydown.enter.prevent="" class="input-detail level-default-input">
-                <label class="lc-label label-level-default" :class="`${level.isDefault ? 'checked' : 'not-checked'} ${newLevel && newLevel !== level && newLevel.isDefault && level.isDefault ? 'old-default' : ''}`" @click.stop="" :for="`level_default_${levelIndex}`"><i class="fa fa-fw fa-check"></i><span v-if="editMode">Standaard keuze</span></label>
-            </div>
-            <div v-if="!editMode || !newLevel" class="level-detail ld-delete" :class="{'ld-delete-hide': level === newLevel}">
-                <button class="lc-btn btn-level-delete" :disabled="newLevel !== null" @click.prevent="removeLevel"><!--    v-b-popover.hover.top="'Verwijder'">-->
-                    <i class="fa fa-fw fa-minus-circle" aria-hidden="true"></i><span v-if="editMode">Verwijder niveau</span>
+        </div>
+        <div class="ld-score" @click.stop="selectLevel">
+            <label :for="`level_score_${index}`" class="level-label label-hidden">Punten</label>
+            <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model="level.score" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" class="input-detail">
+        </div>
+        <div class="ld-default" @click.stop="">
+            <label :for="`level_default_${index}`" class="level-label label-hidden">Standaard</label>
+            <input :id="`level_default_${index}`" :tabindex="tabIndex" type="radio" :checked="level.isDefault" @click.stop="setDefault" class="input-detail">
+            <label :for="`level_default_${index}`" :class="`${level.isDefault ? 'checked' : 'not-checked'}`" class="fa" aria-hidden="true"></label>
+        </div>
+        <span style="flex-basis: 100%; height: 0"></span>
+        <div v-if="isNew" class="actions">
+            <button class="btn-name-input btn-ok" @click.prevent="addNewLevel">Voeg toe</button>
+            <button class="btn-name-input btn-cancel" @click.prevent="cancelNewLevel">Annuleer</button>
+        </div>
+        <div class="level-actions" @click.stop="" >
+            <div style="">
+                <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" @click.stop="$emit('level-move-up')">
+                    <i class="fa fa-arrow-up" aria-hidden="true" />
                 </button>
-            </div>
-            <div v-if="!editMode" class="level-detail ld-edit">
-                <button class="lc-btn btn-level-edit" :disabled="newLevel !== null" @click.prevent="editLevel">
-                    <i class="fa fa-fw fa-edit"></i>
+                <button :id="`level_move_down_${level.id}`" class="btn-level-action" :disabled="isNew || index >= rubric.levels.length - 1" @click.stop="$emit('level-move-down')">
+                    <i class="fa fa-arrow-down" aria-hidden="true" />
+                </button>
+                <button class="btn-level-action btn-delete" :disabled="isNew" @click.prevent="removeLevel">
+                    <i class="fa fa-minus-circle" aria-hidden="true" />
                 </button>
             </div>
         </div>
-    </div>
+    </component>
 </template>
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
-    import debounce from 'debounce';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import Rubric from '../Domain/Rubric';
     import Level from '../Domain/Level';
+    import debounce from 'debounce';
 
     @Component({
         name: 'level-details',
-
+        components: {
+        },
     })
     export default class LevelDetails extends Vue {
+        private showDescription = false;
+
+        @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop({type: Level, required: true}) readonly level!: Level;
-        @Prop({type: Level}) readonly newLevel!: Level|null;
-        @Prop({type: Number, required: true}) readonly levelIndex!: number;
-        @Prop({type: Boolean, default: false}) readonly editMode!: boolean;
+        @Prop({type: Level, default: null}) readonly selectedLevel!: Level|null;
+        @Prop({type: String, default: 'div'}) readonly tag!: String;
+        @Prop({type: Boolean, default: false }) readonly isNew!: boolean;
+        @Prop({type: Boolean, default: false }) readonly hasNew!: boolean;
+        @Prop({type: Boolean, default: false }) readonly showLevelDescriptions!: boolean;
 
         constructor() {
             super();
             this.onChange = debounce(this.onChange, 750);
+        }
+
+        get focusable() : boolean {
+            if (this.isNew) { return true; }
+            return !this.hasNew;
+        }
+
+        get tabIndex() : number {
+            return this.focusable ? 0 : -1;
+        }
+
+        get index() : number {
+            if (this.isNew) { return this.rubric.levels.length; }
+            return this.rubric.levels.indexOf(this.level);
         }
 
         selectLevel() {
@@ -62,16 +92,21 @@
             this.onChange();
         }
 
-        removeLevel() {
-            this.$emit('level-remove', this.level);
-        }
-
-        editLevel() {
-            this.$emit('level-edit', this.level);
-        }
-
         onChange() {
             this.$emit('change', this.level);
         }
+
+        addNewLevel() {
+            this.$emit('new-level-added');
+        }
+
+        cancelNewLevel() {
+            this.$emit('new-level-canceled');
+        }
+
+        removeLevel() {
+            this.$emit('level-remove', this.level);
+        }
     }
+
 </script>
