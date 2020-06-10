@@ -79,17 +79,28 @@ class PlatformGroupTeamService
      * @param string $teamName
      * @param array $groupIds
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     * @throws \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException
+     * @param bool $isStandardTeam
+     *
+     * @throws AzureUserNotExistsException
+     * @throws GraphException
+     * @throws TooManyUsersException
      */
-    public function createTeamForSelectedGroups(User $owner, Course $course, string $teamName, $groupIds = [])
+    public function createTeamForSelectedGroups(
+        User $owner, Course $course, string $teamName, $groupIds = [], bool $isStandardTeam = true
+    )
     {
         $groups = $this->groupService->findGroupsByIds($groupIds);
 
         $this->validateUserCount();
 
-        $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
+        if($isStandardTeam)
+        {
+            $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
+        }
+        else
+        {
+            $teamId = $this->teamService->createClassTeam($teamName, $teamName, $owner);
+        }
 
         $platformGroupTeam = new PlatformGroupTeam();
         $platformGroupTeam->setCourseId($course->getId());
@@ -123,7 +134,7 @@ class PlatformGroupTeamService
         $this->validateUserCount();
 
         $team = $this->getTeam($platformGroupTeam);
-        if(!$team instanceof Team)
+        if (!$team instanceof Team)
         {
             return;
         }
@@ -190,6 +201,7 @@ class PlatformGroupTeamService
 
     /**
      * @param PlatformGroupTeam $platformGroupTeam
+     *
      * @throws AzureUserNotExistsException
      * @throws UnknownAzureUserIdException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
@@ -200,7 +212,7 @@ class PlatformGroupTeamService
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
 
-        if(!$team)
+        if (!$team)
         {
             throw new TeamNotFoundException($platformGroupTeam->getTeamId());
         }
@@ -221,7 +233,7 @@ class PlatformGroupTeamService
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
 
-        if(!$team)
+        if (!$team)
         {
             throw new TeamNotFoundException($platformGroupTeam->getTeamId());
         }
@@ -276,7 +288,7 @@ class PlatformGroupTeamService
 
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $groupsArray[] = [
                 'id' => $group->getId(),
@@ -305,22 +317,22 @@ class PlatformGroupTeamService
     {
         $course = $this->courseService->getCourseById($platformGroupTeam->getCourseId());
         $isTeacher = $this->courseService->isUserTeacherInCourse($user, $course);
-        if(!$isTeacher)
+        if (!$isTeacher)
         {
             $allowed = false;
 
             $groupIds = $user->get_groups(true);
             $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
-            foreach($groups as $group)
+            foreach ($groups as $group)
             {
-                if(in_array($group->getId(), $groupIds))
+                if (in_array($group->getId(), $groupIds))
                 {
                     $allowed = true;
                     break;
                 }
             }
 
-            if(!$allowed)
+            if (!$allowed)
             {
                 throw new NotAllowedException();
             }
@@ -333,7 +345,7 @@ class PlatformGroupTeamService
             throw new TeamNotFoundException($platformGroupTeam->getTeamId());
         }
 
-        if($isTeacher)
+        if ($isTeacher)
         {
             $this->teamService->addOwner($user, $team);
         }
@@ -357,7 +369,7 @@ class PlatformGroupTeamService
     {
         $isTeacher = $this->courseService->isUserTeacherInCourse($user, $course);
         $groupIds = [];
-        if(!$isTeacher)
+        if (!$isTeacher)
         {
             $groupIds = $user->get_groups(true);
         }
@@ -373,9 +385,9 @@ class PlatformGroupTeamService
 
             if (!array_key_exists($id, $data))
             {
-                if(!$isTeacher)
+                if (!$isTeacher)
                 {
-                    if(!in_array($row[PlatformGroupTeamRepository::ALIAS_GROUP_ID], $groupIds))
+                    if (!in_array($row[PlatformGroupTeamRepository::ALIAS_GROUP_ID], $groupIds))
                     {
                         continue;
                     }
@@ -418,7 +430,7 @@ class PlatformGroupTeamService
         {
             $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
         }
-        catch(GraphException $ex)
+        catch (GraphException $ex)
         {
             $team = null;
         }
@@ -452,7 +464,7 @@ class PlatformGroupTeamService
         {
             return $this->teamService->getTeam($platformGroupTeam->getTeamId());
         }
-        catch(GraphException $exception)
+        catch (GraphException $exception)
         {
             return null;
         }
@@ -487,12 +499,12 @@ class PlatformGroupTeamService
             catch (AzureUserNotExistsException $exception)
             {
             }
-            catch(UnknownAzureUserIdException $ex)
+            catch (UnknownAzureUserIdException $ex)
             {
                 $exception = $ex;
             }
         }
-        if($exception instanceof UnknownAzureUserIdException)
+        if ($exception instanceof UnknownAzureUserIdException)
         {
             throw $exception;
         }

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\PlatformGroupTeamType;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormHandler;
@@ -87,9 +88,11 @@ class CreatePlatformGroupTeamFormHandler extends FormHandler
 
         $teamName = $data[PlatformGroupTeamType::ELEMENT_NAME];
         $platformGroupIds = json_decode($data[PlatformGroupTeamType::ELEMENT_PLATFORM_GROUPS]);
+        $teamType = $data[CreatePlatformGroupTeamType::ELEMENT_TYPE];
+        $isStandardTeam = $teamType == CreatePlatformGroupTeamType::TYPE_STANDARD;
 
         $this->platformGroupTeamService->createTeamForSelectedGroups(
-            $this->user, $this->course, $teamName, $platformGroupIds
+            $this->user, $this->course, $teamName, $platformGroupIds, $isStandardTeam
         );
 
         return true;

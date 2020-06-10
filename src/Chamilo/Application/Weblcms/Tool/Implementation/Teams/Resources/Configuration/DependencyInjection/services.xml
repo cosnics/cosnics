@@ -9,6 +9,10 @@
             <tag name="form.type" />
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\EditPlatformGroupTeamFormHandler" autowire="true" />
     </services>

@@ -40,3 +40,6 @@ DeleteTeamDescription = "Deze actie zal het team niet verwijderen in Microsoft. 
 DeleteTeamConfirm = "Ben je zeker dat je de koppeling met het team wilt verwijderen?"
 TeamRemoved = "De link met het team in Microsoft werd verwijderd. Ga naar Microsoft Teams om het team volledig te verwijderen."
 TeamNotRemoved = "De link met het team in Microsoft kon niet verwijderd worden."
+PlatformGroupTeamType = "Team type"
+StandardTeam = "Standaard team"
+ClassTeam = "Klas team"

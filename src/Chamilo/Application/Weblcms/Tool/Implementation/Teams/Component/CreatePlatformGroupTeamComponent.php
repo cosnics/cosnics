@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
 use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\PlatformGroupTeamType;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Core\Group\Ajax\Component\GetGroupChildrenJSONComponent;
@@ -30,7 +31,7 @@ class CreatePlatformGroupTeamComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = $this->getForm()->create(PlatformGroupTeamType::class);
+        $form = $this->getForm()->create(CreatePlatformGroupTeamType::class);
 
         $handler = $this->getFormHandler();
         $handler->setUser($this->getUser());

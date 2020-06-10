@@ -40,3 +40,6 @@ DeleteTeamDescription = "This will not remove the team in Microsoft. This action
 DeleteTeamConfirm = "Are you sure you wish to remove the link with the Team? This will not remove the Team in Microsoft but will make sure the team is no longer listed below."
 TeamRemoved = "The link with the team in Microsoft has been removed. Go to microsoft teams if you want to remove the entire team."
 TeamNotRemoved = "The link with the team in Microsoft could not be removed."
+PlatformGroupTeamType = "Team type"
+StandardTeam = "Standard team"
+ClassTeam = "Class team"

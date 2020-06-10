@@ -1,7 +1,7 @@
 {{ HEADER|raw }}
 
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
-{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme FORM 'chamilo_bootstrap_3_horizontal_layout.html.twig' %}
 
 {{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
 {{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
@@ -38,6 +38,9 @@
     {{ form_row(FORM.name, {'attr': {"v-model": 'teamName'}}) }}
     {{ form_row(FORM.platform_groups, {'attr': {':value': 'selectedPlatformGroupIds'}}) }}
 
+    {%- if not EDIT_MODE -%}
+        {{ form_row(FORM.type) }}
+    {% endif %}
 
     <div class="form-group">
         <div class="col-sm-10 col-sm-push-2">

@@ -81,7 +81,7 @@ class CourseTeamService
         }
 
         $teamName = $course->get_title() . ' (' . $course->get_visual_code() . ')';
-        $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
+        $teamId = $this->teamService->createClassTeam($teamName, $teamName, $owner);
 
         $courseTeamRelation = new CourseTeamRelation();
         $courseTeamRelation->setCourseId($course->getId());
