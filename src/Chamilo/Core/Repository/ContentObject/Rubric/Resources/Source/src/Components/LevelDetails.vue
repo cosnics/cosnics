@@ -29,13 +29,13 @@
         </div>
         <div class="level-actions" @click.stop="" >
             <div style="">
-                <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" @click.stop="$emit('level-move-up')">
+                <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" aria-label="Verplaats niveau naar boven" @click.stop="$emit('level-move-up')">
                     <i class="fa fa-arrow-up" aria-hidden="true" />
                 </button>
-                <button :id="`level_move_down_${level.id}`" class="btn-level-action" :disabled="isNew || index >= rubric.levels.length - 1" @click.stop="$emit('level-move-down')">
+                <button :id="`level_move_down_${level.id}`" class="btn-level-action" :disabled="isNew || index >= rubric.levels.length - 1" aria-label="Verplaats niveau naar beneden" @click.stop="$emit('level-move-down')">
                     <i class="fa fa-arrow-down" aria-hidden="true" />
                 </button>
-                <button class="btn-level-action btn-delete" :disabled="isNew" @click.prevent="removeLevel">
+                <button class="btn-level-action btn-delete" :disabled="isNew" aria-label="Verwijder niveau" @click.prevent="removeLevel">
                     <i class="fa fa-minus-circle" aria-hidden="true" />
                 </button>
             </div>

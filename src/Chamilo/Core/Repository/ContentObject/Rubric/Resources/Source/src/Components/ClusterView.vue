@@ -6,11 +6,11 @@
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
                     {{cluster.title}}
                 </div>
-                <button class="item-actions" :class="{'show-menu': showMenuActions}" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
+                <button class="item-actions" :class="{'show-menu': showMenuActions}" aria-label="Klap menu uit" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
                 <div class="action-menu" :class="{'show-menu': showMenuActions}">
                     <ul class="action-menu-list">
-                        <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
-                        <li @click.stop="$emit('remove', cluster)" @keyup.space.enter="$emit('remove', cluster)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                        <li @click.stop="startEditing" role="button" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" aria-hidden="true" /><span>Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', cluster)" role="button" @keyup.space.enter="$emit('remove', cluster)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" aria-hidden="true" /><span>Verwijder</span></li>
                     </ul>
                 </div>
             </div>

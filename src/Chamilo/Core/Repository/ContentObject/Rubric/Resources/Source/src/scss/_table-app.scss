@@ -166,8 +166,15 @@
   transition: 200ms background;
 }
 
-.criterium .criterium-level-title {
-  display: none;
+@media only screen and (min-width: 900px) {
+  .criterium .criterium-level-title {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
 }
 
 .score-number {

@@ -12,10 +12,10 @@
                 <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Feedback</span></button></li>
             </ul>
             <div class="save-state">
-                <div v-if="dataConnector && dataConnector.isSaving" class="saving">
+                <div v-if="dataConnector && dataConnector.isSaving" class="saving" lang="en">
                     Processing {{dataConnector.processingSize}} saves...
                 </div>
-                <div v-else-if="dataConnector" class="saved" role="alert">
+                <div v-else-if="dataConnector" class="saved" role="alert" lang="en">
                     All changes saved
                 </div>
             </div>
@@ -24,10 +24,10 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-entry-view">
-                <div class="table-header-wrap">
+                <div class="table-header-wrap" aria-hidden="true">
                     <div class="table-header">
                         <div v-for="level in rubric.levels" class="table-header-title">
-                            {{level.title}}
+                            {{ level.title }}
                         </div>
                     </div>
                 </div>
@@ -42,23 +42,23 @@
                                         <div class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
                                             <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
-                                                <div class="criterium">
+                                                <div class="criterium" role="radiogroup" :aria-labelledby="`criterium-${criterium.id}-title`">
                                                     <div class="criterium-title-header">
-                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i tabindex="-1" class="check fa"/></button>
+                                                        <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="criterium.showDefaultFeedback ? 'true' : 'false'" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
                                                     </div>
                                                     <div v-for="choice in criterium.choices" class="criterium-level">
-                                                        <button class="criterium-level-header btn-score-number" :class="{ selected: isSelected(criterium, choice.level) }" @click="selectLevel(criterium, choice.level)">
+                                                        <button role="radio" :aria-checked="isSelected(criterium, choice.level)" class="criterium-level-header btn-score-number" :class="{ selected: isSelected(criterium, choice.level) }" @click="selectLevel(criterium, choice.level)">
                                                             <div class="criterium-level-title">
                                                                 {{choice.title}}
                                                             </div>
-                                                            <span class="score-number"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                                                            <span class="score-number" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                                                         </button>
                                                         <div class="default-feedback">
                                                             {{ choice.feedback }}
                                                         </div>
                                                     </div>
                                                     <div class="subtotal criterium-total">
-                                                        <div class="score-number">{{ getCriteriumScore(criterium) }}</div>
+                                                        <div class="score-number" role="text" :aria-label="`Totaal: ${ getCriteriumScore(criterium) } punten`">{{ getCriteriumScore(criterium) }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="custom-feedback">
@@ -68,18 +68,18 @@
                                         </ul>
                                     </div>
                                     <div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }}</div></div>
+                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap" role="text" :aria-label="`${ getCategoryScore(category) } punten`"><div class="score-number">{{ getCategoryScore(category) }}</div></div>
                                     </div>
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap"><div class="score-number">{{ getClusterScore(cluster) }}</div></div>
+                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap" role="text" :aria-label="`${ getClusterScore(cluster) } punten`"><div class="score-number">{{ getClusterScore(cluster) }}</div></div>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="subtotal rubric-total">
-                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }}</div></div>
+                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap" role="text" :aria-label="`${ getRubricScore() } punten`"><div class="score-number">{{ getRubricScore() }}</div></div>
                 </div>
             </div>
         </div>

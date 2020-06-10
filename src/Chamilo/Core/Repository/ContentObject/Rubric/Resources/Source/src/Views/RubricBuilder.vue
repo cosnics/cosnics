@@ -9,14 +9,14 @@
                 </ul>
             </nav>
             <ul class="app-header-tools">
-                <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-label="Open split panel" :aria-expanded="showSplitView ? 'true' : 'false'" aria-controls="clusters-wrapper-view2" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Split View</span></button></li>
+                <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-hidden="true" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Split View</span></button></li>
                 <li class="app-header-item" v-else-if="$route.name === 'BuilderLevels'"><button class="btn-check" aria-label="Toon beschrijvingen" :aria-expanded="showLevelDescriptions ? 'true' : 'false'" :class="{ checked: showLevelDescriptions }" @click.prevent="showLevelDescriptions = !showLevelDescriptions"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Beschrijvingen</span></button></li>
             </ul>
             <div class="save-state">
-                <div v-if="dataConnector && dataConnector.isSaving" class="saving">
-                    Processing {{dataConnector.processingSize}} saves...
+                <div v-if="dataConnector && dataConnector.isSaving" class="saving" lang="en">
+                    Processing {{ dataConnector.processingSize }} saves...
                 </div>
-                <div v-else-if="dataConnector" class="saved" role="alert">
+                <div v-else-if="dataConnector" class="saved" role="alert" lang="en">
                     All changes saved
                 </div>
             </div>
@@ -29,7 +29,7 @@
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
-                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
     </div>
@@ -964,9 +964,17 @@
             }
         }
 
-        /*.app-container:not(.dragging) .criterium:hover .item-actions, .app-container:not(.dragging) .handle-area-category:hover .item-actions, .app-container:not(.dragging) .cluster-list-item:hover .item-actions {
-            opacity: 1;
-        }*/
+        .rb-cluster {
+            &.selected, &:not(.selected):hover, &.show-menu {
+                .item-actions:focus {
+                    border-color: white;
+                }
+            }
+        }
+
+            /*.app-container:not(.dragging) .criterium:hover .item-actions, .app-container:not(.dragging) .handle-area-category:hover .item-actions, .app-container:not(.dragging) .cluster-list-item:hover .item-actions {
+                opacity: 1;
+            }*/
 
         .action-menu {
             display: none;
@@ -1187,10 +1195,11 @@
             }*/
 
             .item-actions {
-                opacity: 0.5;
+                opacity: 1;
+
                 &.show-menu, &:hover {
-                    background: $cluster-item-actions-bg-color;
-                    color: #fff;
+                    background: change_color($cluster-item-actions-bg-color, $alpha: 0.5);
+                    color: white;
                 }
             }
 
