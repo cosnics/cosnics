@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 
 /**
@@ -146,6 +147,17 @@ class UserService
     public function getUserByUsernameOrEmail($usernameOrEmail)
     {
         return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    /**
+     * @param string $usernameOfficialCodeOrEmail
+     *
+     * @return DataClass|User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function getUserByUsernameOfficialCodeOrEmail(string $usernameOfficialCodeOrEmail)
+    {
+        return $this->userRepository->findUserByUsernameOfficialCodeOrEmail($usernameOfficialCodeOrEmail);
     }
 
     /**

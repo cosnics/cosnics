@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -88,5 +90,41 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     protected function getCourseSubscriptionService()
     {
         return $this->getService(CourseSubscriptionService::class);
+    }
+
+    protected function addGroupDetailsBreadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url(
+                    [self::PARAM_ACTION => self::ACTION_BROWSE],
+                    [self::PARAM_COURSE_GROUP]
+                ),
+                $this->getTranslator()->trans('DetailsComponent', [], Manager::context())
+            )
+        );
+
+        $currentGroup = $this->getCourseGroupFromRequest();
+        $availableGroups = [];
+        while(!$currentGroup->is_root())
+        {
+            array_unshift($availableGroups, $currentGroup);
+            $currentGroup = $currentGroup->get_parent();
+        }
+
+        foreach($availableGroups as $currentGroup)
+        {
+            $breadcrumbtrail->add(
+                new Breadcrumb(
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
+                            self::PARAM_COURSE_GROUP => $currentGroup->getId()
+                        ]
+                    ),
+                    $currentGroup->get_name()
+                )
+            );
+        }
     }
 }

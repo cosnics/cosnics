@@ -65,13 +65,17 @@ class CourseGroupService
     /**
      * @param CourseGroup $courseGroup
      * @param array $users
+     * @param bool $recalculateMembers
      */
-    public function subscribeUsers(CourseGroup $courseGroup, array $users)
+    public function subscribeUsersWithoutMaxCapacityCheck(
+        CourseGroup $courseGroup, array $users, bool $recalculateMembers = true
+    )
     {
         $currentMemberUserIds = $this->courseGroupRepository->getUserIdsDirectlySubscribedInGroup($courseGroup);
-        foreach($users as $user)
+
+        foreach ($users as $user)
         {
-            if(in_array($user->getId(), $currentMemberUserIds))
+            if (in_array($user->getId(), $currentMemberUserIds))
             {
                 continue;
             }
@@ -79,14 +83,20 @@ class CourseGroupService
             $this->createCourseGroupUserRelation($courseGroup, $user);
         }
 
-        $this->recalculateMaxMembers($courseGroup);
+        if ($recalculateMembers)
+        {
+            $this->recalculateMaxMembers($courseGroup);
+        }
     }
 
     /**
      * @param CourseGroup $courseGroup
      * @param array $userIds
+     * @param bool $recalculateMembers
      */
-    public function subscribeUsersById(CourseGroup $courseGroup, array $userIds)
+    public function subscribeUsersWithoutMaxCapacityCheckById(
+        CourseGroup $courseGroup, array $userIds, bool $recalculateMembers = true
+    )
     {
         $currentMemberUserIds = $this->courseGroupRepository->getUserIdsDirectlySubscribedInGroup($courseGroup);
         $userIdsToSubscribe = array_diff($userIds, $currentMemberUserIds);
@@ -97,7 +107,10 @@ class CourseGroupService
             $this->createCourseGroupUserRelation($courseGroup, $userToSubscribe);
         }
 
-        $this->recalculateMaxMembers($courseGroup);
+        if($recalculateMembers)
+        {
+            $this->recalculateMaxMembers($courseGroup);
+        }
     }
 
     /**
@@ -162,7 +175,7 @@ class CourseGroupService
     /**
      * @param CourseGroup $courseGroup
      */
-    protected function recalculateMaxMembers(CourseGroup $courseGroup): void
+    public function recalculateMaxMembers(CourseGroup $courseGroup): void
     {
         $numberOfGroupMembers = $this->countMembersDirectlySubscribedInGroup($courseGroup);
         if ($courseGroup->get_max_number_of_members() < $numberOfGroupMembers)

@@ -88,6 +88,20 @@ class ManageSubscriptionsComponent extends TabComponent
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
+
+            $buttonToolbar->addItem(
+                new Button(
+                    $this->getTranslator()->trans('QuickUsersSubscriberComponent', [], Manager::context()),
+                    new FontAwesomeGlyph('superpowers'),
+                    $this->get_url(
+                        array(
+                            self::PARAM_ACTION => self::ACTION_QUICK_USERS_SUBSCRIBER,
+                            self::PARAM_COURSE_GROUP => $this->getCurrentCourseGroup()->getId()
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
 
         $this->getCourseGroupDecoratorsManager()->addCourseGroupSubscriptionActions(

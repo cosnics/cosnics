@@ -3,29 +3,27 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Handler\SubscribePlatformGroupUsersFormHandler;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Type\SubscribePlatformGroupUsersFormType;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Domain\QuickUserSubscriberStatus;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Handler\QuickUsersSubscribeFormHandler;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Type\QuickUsersSubscribeFormType;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
-use Chamilo\Core\Group\Ajax\Component\GetGroupChildrenJSONComponent;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- * Class SubscribePlatformGroupUsersComponent
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
+ *
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
-class SubscribePlatformGroupUsersComponent extends Manager
+class QuickUsersSubscriberComponent extends Manager
 {
     /**
-     * @return string|void
+     * @return string|null
      * @throws NotAllowedException
+     * @throws UserException
+     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function run()
     {
@@ -36,29 +34,38 @@ class SubscribePlatformGroupUsersComponent extends Manager
 
         $courseGroup = $this->getCourseGroupFromRequest();
 
-        $form = $this->getForm()->create(SubscribePlatformGroupUsersFormType::class);
+        $form = $this->getForm()->create(QuickUsersSubscribeFormType::class);
 
         $handler = $this->getFormHandler();
         $handler->setCourseGroup($courseGroup);
+        $handler->setCourse($this->get_course());
 
         try
         {
             if ($handler->handle($form, $this->getRequest()))
             {
-                $message = 'PlatformGroupUsersSubscribed';
-                $success = true;
+                $statuses = $handler->getStatuses();
+//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_USER_NOT_FOUND, null, $courseGroup);
+//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_USER_NOT_SUBSCRIBED_IN_COURSE, $this->getUser(), $courseGroup);
+//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_COURSE_GROUP_NOT_FOUND, $this->getUser());
+//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_UNKNOWN_ERROR, $this->getUser(), $courseGroup);
+
+                return $this->getTwig()->render(
+                    Manager::context() . ':UserSubscriberStatus.html.twig',
+                    [
+                        'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
+                        'SUBSCRIBE_STATUSES' => $statuses,
+                        'DETAILS_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_GROUP_DETAILS])
+                    ]
+                );
             }
             else
             {
                 return $this->getTwig()->render(
-                    Manager::context() . ':SubscribePlatformGroupUsers.html.twig',
+                    Manager::context() . ':QuickUsersSubscriber.html.twig',
                     [
                         'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-                        'PLATFORM_GROUPS_JSON' => $this->getSerializer()->serialize(
-                            $this->getDirectlySubscribedPlatformGroups(), 'json'
-                        ),
-                        'GET_GROUP_CHILDREN_URL' => GetGroupChildrenJSONComponent::getAjaxUrl(),
-                        'FORM' => $form->createView(),
+                        'FORM' => $form->createView(), 'COURSE_GROUP_NAME' => $courseGroup->get_name()
                     ]
                 );
             }
@@ -69,27 +76,18 @@ class SubscribePlatformGroupUsersComponent extends Manager
         }
         catch (\Exception $ex)
         {
-            $message = 'PlatformGroupUsersNotSubscribed';
-            $success = false;
             $this->getExceptionLogger()->logException($ex);
         }
-
-        $this->redirect(
-            $this->getTranslator()->trans(
-                $message, [], \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager::context()
-            ), !$success,
-            [self::PARAM_ACTION => self::ACTION_GROUP_DETAILS]
-        );
 
         return null;
     }
 
     /**
-     * @return SubscribePlatformGroupUsersFormHandler
+     * @return QuickUsersSubscribeFormHandler
      */
     protected function getFormHandler()
     {
-        return $this->getService(SubscribePlatformGroupUsersFormHandler::class);
+        return $this->getService(QuickUsersSubscribeFormHandler::class);
     }
 
     /**

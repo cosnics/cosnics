@@ -105,6 +105,7 @@ abstract class Manager extends Application
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
     const ACTION_SUBSCRIBE_PLATFORM_GROUP_USERS = 'SubscribePlatformGroupUsers';
+    const ACTION_QUICK_USERS_SUBSCRIBER = 'QuickUsersSubscriber';
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**

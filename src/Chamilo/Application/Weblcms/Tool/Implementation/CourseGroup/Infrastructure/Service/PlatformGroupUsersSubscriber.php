@@ -50,6 +50,6 @@ class PlatformGroupUsersSubscriber
 
         $groupUserIds = array_unique($groupUserIds);
 
-        $this->courseGroupService->subscribeUsersById($courseGroup, $groupUserIds);
+        $this->courseGroupService->subscribeUsersWithoutMaxCapacityCheckById($courseGroup, $groupUserIds);
     }
 }
