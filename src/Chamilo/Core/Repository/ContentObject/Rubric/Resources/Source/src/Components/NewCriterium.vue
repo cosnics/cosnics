@@ -29,6 +29,7 @@
 
         createNewCriterium() {
             this.newCriterium = new Criterium();
+            this.$emit('criterium-adding', true);
         }
 
         blockEnterUp() {
@@ -46,11 +47,13 @@
         addNewCriterium() {
             if (this.checkAndReleaseBlockEnterUp()) { return; }
             this.$emit('criterium-added', this.newCriterium);
+            this.$emit('criterium-adding', false);
             this.createNewCriterium();
         }
 
         cancel() {
             this.newCriterium = null;
+            this.$emit('criterium-adding', false);
         }
 
         @Watch('newCriterium')

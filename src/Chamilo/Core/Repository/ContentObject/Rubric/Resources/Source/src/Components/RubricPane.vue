@@ -21,13 +21,14 @@
                 <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="rb-category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
                     <category-view :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" :category="category" :menu-actions-id="menuActionsId" :edit-category-color-id="editCategoryColorId"
                                    @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(category)" @finish-edit="onFinishEdit(category, ...arguments)" @change-color="$emit('change-color', category)"></category-view>
+                <div v-if="category.criteria.length === 0 && !categoriesAddingCriterium[category.id]" class="criteria-empty-list">Nog geen criteria toegevoegd...</div>
                     <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
                                :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="rb-criteria">
                         <criterium-view v-for="criterium in category.criteria" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
                                         :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
                                         @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(criterium)" @finish-edit="onFinishEdit(criterium, ...arguments)"></criterium-view>
                     </draggable>
-                    <new-criterium :criterium-dragging="criteriumDragging" @criterium-added="addCriterium(category, $event)"></new-criterium>
+                    <new-criterium :criterium-dragging="criteriumDragging" @criterium-adding="addingCriteriumForCategory(category, $event)" @criterium-added="addCriterium(category, $event)"></new-criterium>
                 </li>
                 <li v-if="criteriumDragging" slot="footer" class="rb-category null-category">
                     <div class="category-header">
@@ -43,7 +44,11 @@
                 <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
             </draggable>
             <!-- todo: 'rubric' cluster, v-if="selectedCluster" can then be removed -->
-            <new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
+            <div v-if="selectedCluster" class="actions">
+                <button :disabled="!categoryActionsEnabled" class="btn-category-add" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuwe lijst</button>
+            </div>
+
+            <!--<new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>-->
         </div>
     </div>
 </template>
@@ -87,6 +92,13 @@
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         private showClusters: boolean = false;
+        private categoriesAddingCriterium: any = {};
+
+        createNewCategory() {
+            const newCategory = new Category();
+            newCategory.color = '';
+            this.addCategory(newCategory);
+        }
 
         get clusters() : Cluster[] {
             return [...this.rubric.clusters];
@@ -119,6 +131,14 @@
 
         selectCriterium(criterium: Criterium|null) : void {
             this.$emit('criterium-selected', criterium);
+        }
+
+        addingCriteriumForCategory(category: Category, adding: boolean) {
+            if (typeof this.categoriesAddingCriterium[category.id] === 'undefined') {
+                Vue.set(this.categoriesAddingCriterium, category.id, adding);
+            } else {
+                this.categoriesAddingCriterium[category.id] = adding;
+            }
         }
 
         @Watch('categoryActionsEnabled')

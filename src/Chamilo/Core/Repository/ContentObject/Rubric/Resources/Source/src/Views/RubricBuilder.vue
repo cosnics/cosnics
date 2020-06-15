@@ -1263,6 +1263,14 @@
             @include scrollbar();
         }
 
+        .criteria-empty-list {
+            border-left: 1px solid hsla(193, 14%, 82%, 1);
+            border-right: 1px solid hsla(193, 14%, 82%, 1);
+            color: hsla(204, 45%, 25%, 0.6);
+            padding: .5em .5em 0;
+            font-style: italic;
+        }
+
         .rb-categories {
             display: flex;
         }
@@ -1297,6 +1305,18 @@
                 > * {
                     visibility: hidden;
                 }
+            }
+
+            .rb-category-title .title {
+                font-size: 1.33rem;
+                /*font-weight: bold;*/
+                /*color: hsla(190, 50%, 35%, 1);*/
+            }
+
+            .category-header.null-category .rb-category-title .title {
+                margin-left: .5em;
+                opacity: 0.8;
+                font-style: italic;
             }
 
             &.null-category {

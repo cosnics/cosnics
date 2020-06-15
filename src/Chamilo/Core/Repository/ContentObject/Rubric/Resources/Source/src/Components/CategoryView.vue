@@ -1,14 +1,14 @@
 <template>
-    <div :id="id" class="category-header handle category-handle">
+    <div :id="id" class="category-header handle category-handle" :class="{ 'null-category': !category.title }">
         <div class="item-header-bar">
             <div class="rb-category-title">
-                <button :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :style="{'background-color': category.color}" @click="openColorPickerForCategory(category)"></button>
-                <h2 class="title">{{ category.title || 'Criteria' }}</h2>
+                <button v-if="category.title" :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :style="{'background-color': category.color}" @click="openColorPickerForCategory(category)"></button>
+                <h2 class="title">{{ category.title || 'Lijst met criteria' }}</h2>
             </div>
             <button class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
             <div class="action-menu" :class="{'show-menu': showMenuActions}">
                 <ul class="action-menu-list">
-                    <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
+                    <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>{{ category.title ? 'Wijzig naam' : 'Wijzig naar categorie' }}</span></li>
                     <li @click.stop="$emit('remove', category)" @keyup.space.enter="$emit('remove', category)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" /><span>Verwijder</span></li>
                 </ul>
             </div>
