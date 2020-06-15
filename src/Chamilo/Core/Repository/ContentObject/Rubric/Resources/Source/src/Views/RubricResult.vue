@@ -33,12 +33,12 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="subtotal category-total">
+                                    <!--<div class="subtotal category-total">
                                         <div class="category-indicator">Totaal {{ category.title }}:</div>
                                         <div v-for="evaluator in evaluators" class="score-wrap">
                                             <div class="score-number">{{ getCategoryScore(category, evaluator) }}</div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">

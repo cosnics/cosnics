@@ -67,7 +67,9 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <!--<div class="subtotal category-total">
                                         <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }} <span class="text-hidden">punten</span></div></div>
+                                    </div>-->
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
