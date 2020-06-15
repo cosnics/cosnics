@@ -10,7 +10,7 @@
             </nav>
             <ul class="app-header-tools">
                 <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-hidden="true" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Split View</span></button></li>
-                <li class="app-header-item" v-else-if="$route.name === 'BuilderLevels'"><button class="btn-check" aria-label="Toon beschrijvingen" :aria-expanded="showLevelDescriptions ? 'true' : 'false'" :class="{ checked: showLevelDescriptions }" @click.prevent="showLevelDescriptions = !showLevelDescriptions"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Beschrijvingen</span></button></li>
+                <!--<li class="app-header-item" v-else-if="$route.name === 'BuilderLevels'"><button class="btn-check" aria-label="Toon beschrijvingen" :aria-expanded="showLevelDescriptions ? 'true' : 'false'" :class="{ checked: showLevelDescriptions }" @click.prevent="showLevelDescriptions = !showLevelDescriptions"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Beschrijvingen</span></button></li>-->
             </ul>
             <div class="save-state">
                 <div v-if="dataConnector && dataConnector.isSaving" class="saving" lang="en">
@@ -25,7 +25,7 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
-                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="$route.name === 'Builder' ? uiState : null" :show-level-descriptions="$route.name === 'BuilderLevels' ? showLevelDescriptions : null" @criterium-selected="selectCriterium"></router-view>
+                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="$route.name === 'Builder' ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>

@@ -1,13 +1,13 @@
 <template>
     <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
-        <div class="levels-container" :class="{ 'has-new': !!newLevel, 'show-description': showLevelDescriptions }">
+        <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1>Niveaus</h1>
             <ul class="levels-list">
-                <level-details v-for="(level, index) in rubric.levels" :show-level-descriptions="showLevelDescriptions" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
+                <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
                 <li v-if="!newLevel" style="list-style: none;">
                     <button class="btn-level-add" @click.stop="createNewLevel"><i class="fa fa-plus" aria-hidden="true" /> Niveau toevoegen</button>
                 </li>
-                <level-details v-else :selected-level="newLevel" :show-level-descriptions="showLevelDescriptions" :has-new="true" :is-new="true" :rubric="rubric" :level="newLevel" tag="li" :key="`level_${rubric.levels.length}`" @new-level-added="addLevel" @new-level-canceled="cancelLevel" @level-default="setDefault"></level-details>
+                <level-details v-else :selected-level="newLevel" :has-new="true" :is-new="true" :rubric="rubric" :level="newLevel" tag="li" :key="`level_${rubric.levels.length}`" @new-level-added="addLevel" @new-level-canceled="cancelLevel" @level-default="setDefault"></level-details>
             </ul>
         </div>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
@@ -41,7 +41,7 @@
         private removingLevel: Level|null = null;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
-        @Prop({type: Boolean, default: false }) readonly showLevelDescriptions!: boolean;
+        /*@Prop({type: Boolean, default: false }) readonly showLevelDescriptions!: boolean;*/
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         constructor() {
@@ -200,16 +200,16 @@
                 border-top-color: transparent;
             }
 
-            .btn-more:not(:hover) {
+            /*.btn-more:not(:hover) {
                 color: #aaa;
             }
 
             .btn-more:hover {
                 color: #888;
-            }
+            }*/
         }
 
-        &:not(:first-child) .label-hidden {
+        &:not(:first-child) .label-hidden, .ld-description .label-hidden {
             position: absolute;
             left: -10000px;
             top: auto;
@@ -228,7 +228,7 @@
         display: flex;
     }
 
-    .btn-more {
+    /*.btn-more {
         width: 1.4em;
         cursor: pointer;
         color: #bbb;
@@ -262,15 +262,15 @@
         &:hover {
             color: #999;
         }
-    }
+    }*/
 
     .levels-container.has-new .level-details:not(.new-level) {
         pointer-events: none;
     }
 
-    .show-description .btn-more .check {
+    /*.show-description .btn-more .check {
         transform: rotate(-180deg);
-    }
+    }*/
 
     .input-detail {
         background: rgba(255,255,255,0.2);
@@ -320,17 +320,17 @@
         position: relative;
         margin-left: .5em;
 
-        .level-label {
+        /*.level-label {
             position: absolute;
             font-size: 1.2rem;
             left: 5px;
             color: #707070;
-        }
+        }*/
 
         .input-detail {
             resize: none;
-            padding-top: 1.3em;
-            margin-right: 1.8em;
+            /*padding-top: 1.3em;*/
+            margin-right: .5em;
         }
     }
 
@@ -339,7 +339,7 @@
         margin-top: .5em;
     }
 
-    .show-description .ld-description {
+    .ld-description {
         display: flex;
     }
 

@@ -1,15 +1,15 @@
 <template>
-    <component :is="tag" class="level-details" :class="{ 'show-description': showDescription, selected: selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
+    <component :is="tag" class="level-details" :class="{ /*'show-description': showDescription,*/ selected: selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
         <div class="level-details-text">
             <div class="level-details-text-1">
                 <div class="ld-title" @click.stop="selectLevel">
                     <label :for="`level_title_${index}`" class="level-label label-hidden">Niveau</label>
                     <input :id="`level_title_${index}`" :tabindex="tabIndex" type="text" autocomplete="off" v-model="level.title" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" placeholder="Vul hier een niveau in" class="input-detail" >
                 </div>
-                <button class="btn-more" v-if="!showLevelDescriptions":tabindex="tabIndex" @click.stop="showDescription = !showDescription"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
+                <!--<button class="btn-more" v-if="!showLevelDescriptions":tabindex="tabIndex" @click.stop="showDescription = !showDescription"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>-->
             </div>
             <div class="ld-description" @click.stop="selectLevel">
-                <label :for="`level_description_${index}`" class="level-label">Beschrijving</label>
+                <label :for="`level_description_${index}`" class="level-label label-hidden">Beschrijving</label>
                 <textarea :id="`level_description_${index}`" :tabindex="tabIndex" v-model="level.description" placeholder="Vul hier een beschrijving in" @input="onChange" @focus="selectLevel" class="input-detail"></textarea>
             </div>
         </div>
