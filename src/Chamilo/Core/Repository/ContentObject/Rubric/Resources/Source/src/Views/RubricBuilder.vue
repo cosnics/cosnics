@@ -574,13 +574,13 @@
         background-color: transparent;
         border: none;
         font-size: 1.25rem;
-        color: #777;
+        color: darken($btn-color, 25%);
         transition: color 200ms;
 
         i {
             margin-right: .4em;
             font-size: 1.1rem;
-            color: #999;
+            color: darken($btn-color, 17%);;
             transition: color 200ms;
         }
 
@@ -986,7 +986,7 @@
             display: none;
             width: 9em;
             position: absolute;
-            min-width: 100px;
+            min-width: 120px;
             background: #fff;
             z-index: 10;
 
@@ -996,7 +996,7 @@
         }
 
         .action-menu-list {
-            position: fixed;
+            position: absolute;
             background-color: #fff;
             flex-direction: column;
             list-style: none;
@@ -1276,7 +1276,7 @@
         }
 
         .rb-category {
-            width: 18em;
+            width: 19em;
             margin-right: 1.2em;
 
             .item-header-bar {
@@ -1288,7 +1288,11 @@
             }
 
             .actions {
-                padding-top: .3em;
+                border: 1px solid hsla(193, 14%, 82%, 1);
+                border-top: none;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+                padding: .238em 0;
             }
 
             .action-menu {
@@ -1338,11 +1342,15 @@
 
         .category-header {
             padding: 0;
-            border: 1px solid #dedede;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
+            border: 1px solid hsla(193, 14%, 82%, 1);
+            border-top-left-radius: $border-radius;
+            border-top-right-radius: $border-radius;
             border-bottom: none;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0) 10px, rgba(0, 0, 0, 0) 19px, rgba(0, 0, 0, 0.08) 36px);
+            background: linear-gradient(to bottom,
+                    hsla(60, 2%, 91%, 0.6) 0px,
+                    hsla(60, 2%, 91%, 0) 14px,
+                    hsla(204, 38%, 40%, 0) 0px,
+                    hsla(204, 38%, 40%, 0.12) 36px);
 
             .item-header-bar {
                 padding: .65em 0;
@@ -1386,27 +1394,36 @@
         /** Criteria **/
 
         .rb-criteria {
-            border: 1px solid #dedede;
-            border-top: none;
-            border-bottom-left-radius: 4px;
-            border-bottom-right-radius: 4px;
         }
 
         .rb-criterium-list-item.ghost {
             background-color: $ghost-bg-color;
             border: 1px dotted $ghost-border;
-            color: transparent;
+
+            .title {
+                color: transparent;
+            }
         }
 
         .rb-criterium {
             font-size: 1.3rem;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
+            background: none;
+            border-bottom: 1px solid hsla(193, 14%, 85%, 1);
+            border-left: 1px solid hsla(193, 14%, 82%, 1);
+            border-right: 1px solid hsla(193, 14%, 82%, 1);
+            /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
 
             &.selected {
-                border: 1px solid darken($bg-criterium-details, 10%);
-                border-radius: $border-radius;
+                border: 1px solid hsla(193, 14%, 75%, 1);
+                margin-top: -1px;
+/*                border: 1px solid darken($bg-criterium-details, 10%);*/
+                /*border-radius: $border-radius;*/
                 background: $bg-criterium-details;
-                margin: -1px;
+                /*margin: -1px;*/
+            }
+
+            .title {
+                color: hsla(204, 45%, 25%, 1);
             }
 
             .item-header-bar {
@@ -1462,6 +1479,7 @@
 
         .vue-swatches {
             margin-bottom: 0;
+            width: 90%;
         }
 
         .vue-swatches__container {
