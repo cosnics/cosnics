@@ -51,7 +51,7 @@
 
 .cluster-title {
   font-size: 1.8rem;
-  margin: .25em 0 0 0;
+  margin: .25em 0 0 .85em;
   color: change-color($title-color, $alpha: 0.7);
   font-weight: 700;
 }
@@ -64,7 +64,7 @@
 }
 
 .category {
-  margin: .5em 0 .35em 0;
+  margin: .75em 0 1.2em 0;
 }
 
 .category-title {
@@ -79,8 +79,9 @@
 }
 
 .criterium {
-  margin-left: 1.3em;
+  margin-left: .3em;
   margin-bottom: .5em;
+  margin-top: .15em;
   display: flex;
 }
 
@@ -149,7 +150,7 @@
   &.category-indicator:before {
     margin-top: .3em;
     min-width: .6em;
-    height: .7em;
+    height: .65em;
   }
 }
 

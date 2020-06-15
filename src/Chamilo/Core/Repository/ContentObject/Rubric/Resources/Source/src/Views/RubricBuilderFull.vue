@@ -151,8 +151,8 @@
         }
 
         .criterium-title-header {
-            width: 18em;
-            min-width: 18em;
+            width: 19em;
+            min-width: 19em;
         }
 
         .criterium .criterium-level {
