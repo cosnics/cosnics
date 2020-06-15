@@ -447,6 +447,18 @@
         }
     }
 
+    @media only screen and (min-width: 660px) {
+        .level-actions {
+            top: 13em;
+            right: -3em;
+
+            > div {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+
     .btn-level-add {
         background-color: transparent;
         border: none;
