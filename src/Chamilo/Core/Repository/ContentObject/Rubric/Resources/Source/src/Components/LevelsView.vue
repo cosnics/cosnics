@@ -239,6 +239,7 @@
         align-self: flex-end;margin-bottom:.3em;
 
         .check {
+            transform: rotate(0deg);
             transition: transform 200ms;
         }
 
