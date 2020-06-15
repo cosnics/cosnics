@@ -14,9 +14,9 @@
                     <div class="cluster">
                         <h2 class="cluster-title">{{ cluster.title }}</h2>
                         <ul class="categories">
-                            <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${category.color}`">
+                            <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`">
                                 <div class="category">
-                                    <div class="category-title category-indicator">{{ category.title }}</div>
+                                    <div v-if="category.title" class="category-title category-indicator">{{ category.title }}</div>
                                     <ul class="criteria">
                                         <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
                                             <div class="criterium">
