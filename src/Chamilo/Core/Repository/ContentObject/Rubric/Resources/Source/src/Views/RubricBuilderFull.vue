@@ -30,7 +30,7 @@
                                                         </div>
                                                         <div class="score-number"><!--<i class="check fa"/>-->{{ level.score }}</div>
                                                     </div>
-                                                    <div class="default-feedback">
+                                                    <div class="default-feedback" @click="focusTextField">
                                                         <feedback-field :choice="level.choice" @input="updateHeight" @change="updateFeedback(level.choice)"></feedback-field>
                                                         <!--<textarea v-model="level.feedback" class="ta-feedback" @input="updateFeedback"></textarea>-->
                                                     </div>
@@ -50,9 +50,8 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import APIConfiguration from '../Connector/APIConfiguration';
     import TreeNode from '../Domain/TreeNode';
-    import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import Rubric from '../Domain/Rubric';
     import Choice from '../Domain/Choice';
     import Cluster from '../Domain/Cluster';
     import Criterium from '../Domain/Criterium';
@@ -79,11 +78,19 @@
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         updateHeight(e: InputEvent) {
-            updateHeight(e.target as HTMLElement);
+            this.$nextTick(() => {
+                updateHeight(e.target as HTMLElement);
+            });
         }
 
         updateFeedback(choice: Choice) {
             this.dataConnector?.updateChoice(choice);
+        }
+
+        focusTextField(elem: any) {
+            if (elem.target.className === 'default-feedback') {
+                elem.target.querySelector('.ta-feedback').focus();
+            }
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
@@ -161,23 +168,26 @@
         .default-feedback {
             padding: 0;
             flex: 1;
+            border: 1px solid #ccc;
             border-radius: 3px;
+            background-color: transparent;
+
+            &:hover, &:focus-within {
+                border: 1px solid $score-dark;
+                background-color: rgba(255,255,255,1);
+            }
         }
 
         .ta-feedback {
             padding: .3em;
             width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            background: transparent;
+            border: none;
             resize: none;
             overflow: hidden;
-            outline: none;
-            min-height: 100%;
-            background: transparent;
 
-            &:hover, &:focus {
-                border: 1px solid $score-dark;
-                background: white;
+            &:focus {
+                outline: none;
             }
         }
     }
