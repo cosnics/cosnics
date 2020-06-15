@@ -924,7 +924,7 @@
         .item-actions {
             width: 1.8em;
             /*height: 1.8em;*/
-            opacity: 0;
+            /*opacity: 0;*/
             display: flex;
             justify-content: center;
             align-items: center;
@@ -953,6 +953,12 @@
                 &.show-menu {
                     padding-top: 0;
                 }
+            }
+        }
+
+        @media (any-hover: hover) {
+            .item-actions {
+                opacity: 0;
             }
         }
 
