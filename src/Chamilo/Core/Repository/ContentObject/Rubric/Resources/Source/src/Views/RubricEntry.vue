@@ -41,12 +41,12 @@
                                     <div class="category">
                                         <div v-if="category.title" class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
-                                                <div class="criterium" role="radiogroup" :aria-labelledby="`criterium-${criterium.id}-title`">
-                                                    <div class="criterium-title-header">
+                                            <li v-for="criterium in category.criteria" role="grid" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
+                                                <div class="criterium" role="row" >
+                                                    <div class="criterium-title-header" role="gridcell">
                                                         <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="criterium.showDefaultFeedback ? 'true' : 'false'" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
                                                     </div>
-                                                    <div v-for="choice in criterium.choices" class="criterium-level">
+                                                    <div v-for="choice in criterium.choices" class="criterium-level" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
                                                         <button role="radio" :aria-checked="isSelected(criterium, choice.level)" class="criterium-level-header btn-score-number" :class="{ selected: isSelected(criterium, choice.level) }" @click="selectLevel(criterium, choice.level)">
                                                             <div class="criterium-level-title">
                                                                 {{choice.title}}
@@ -57,8 +57,8 @@
                                                             {{ choice.feedback }}
                                                         </div>
                                                     </div>
-                                                    <div class="subtotal criterium-total">
-                                                        <div class="score-number" role="text" :aria-label="`Totaal: ${ getCriteriumScore(criterium) } punten`">{{ getCriteriumScore(criterium) }}</div>
+                                                    <div class="subtotal criterium-total" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
+                                                        <div class="score-number"><span class="text-hidden">Totaal:</span> {{ getCriteriumScore(criterium) }} <span class="text-hidden">punten</span></div>
                                                     </div>
                                                 </div>
                                                 <div class="custom-feedback">
@@ -67,19 +67,17 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap" role="text" :aria-label="`${ getCategoryScore(category) } punten`"><div class="score-number">{{ getCategoryScore(category) }}</div></div>
-                                    </div>
+                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }} <span class="text-hidden">punten</span></div></div>
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap" role="text" :aria-label="`${ getClusterScore(cluster) } punten`"><div class="score-number">{{ getClusterScore(cluster) }}</div></div>
+                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap"><div class="score-number">{{ getClusterScore(cluster) }} <span class="text-hidden">punten</span></div></div>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="subtotal rubric-total">
-                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap" role="text" :aria-label="`${ getRubricScore() } punten`"><div class="score-number">{{ getRubricScore() }}</div></div>
+                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
             </div>
         </div>
@@ -258,6 +256,15 @@
     }
 </script>
 <style lang="scss">
+    .text-hidden {
+        position: absolute;
+        top: auto;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
     .entry-app {
         &#app {
             color: $text-color;
