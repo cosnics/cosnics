@@ -36,7 +36,9 @@ class QuickUsersSubscriber
      * @param UserService $userService
      * @param CourseService $courseService
      */
-    public function __construct(CourseGroupService $courseGroupService, UserService $userService, CourseService $courseService)
+    public function __construct(
+        CourseGroupService $courseGroupService, UserService $userService, CourseService $courseService
+    )
     {
         $this->courseGroupService = $courseGroupService;
         $this->userService = $userService;
@@ -48,6 +50,7 @@ class QuickUsersSubscriber
      * @param CourseGroup $courseGroup
      * @param string $userIdentifiersCSV
      *
+     * @return QuickUserSubscriberStatus[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function subscribeUsersFromCSVFormat(Course $course, CourseGroup $courseGroup, string $userIdentifiersCSV)
@@ -57,7 +60,7 @@ class QuickUsersSubscriber
 
         foreach ($userIdentifiers as $userIdentifier)
         {
-            $this->prepareUser($userIdentifier, $course, $usersToSubscribe, $userStatuses);
+            $this->prepareUser($userIdentifier, $course, $courseGroup, $usersToSubscribe, $userStatuses);
         }
 
         foreach ($usersToSubscribe as $userIdentifier => $userToSubscribe)
@@ -86,20 +89,23 @@ class QuickUsersSubscriber
     /**
      * @param string $userIdentifier
      * @param Course $course
+     * @param CourseGroup $courseGroup
      * @param array $usersToSubscribe
      * @param array $userStatuses
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function prepareUser(
-        string $userIdentifier, Course $course, array &$usersToSubscribe, array &$userStatuses
+        string $userIdentifier, Course $course, CourseGroup $courseGroup, array &$usersToSubscribe, array &$userStatuses
     )
     {
         $user = $this->userService->getUserByUsernameOfficialCodeOrEmail($userIdentifier);
         if (!$user instanceof User)
         {
             $userStatuses[] =
-                new QuickUserSubscriberStatus($userIdentifier, QuickUserSubscriberStatus::STATUS_USER_NOT_FOUND);
+                new QuickUserSubscriberStatus(
+                    $userIdentifier, QuickUserSubscriberStatus::STATUS_USER_NOT_FOUND, null, $courseGroup
+                );
 
             return;
         }
@@ -107,7 +113,7 @@ class QuickUsersSubscriber
         if (!$this->courseService->isUserSubscribedToCourse($user, $course))
         {
             $userStatuses[] = new QuickUserSubscriberStatus(
-                $userIdentifier, QuickUserSubscriberStatus::STATUS_USER_NOT_SUBSCRIBED_IN_COURSE
+                $userIdentifier, QuickUserSubscriberStatus::STATUS_USER_NOT_SUBSCRIBED_IN_COURSE, $user, $courseGroup
             );
 
             return;
