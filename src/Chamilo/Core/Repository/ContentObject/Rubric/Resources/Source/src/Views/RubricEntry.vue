@@ -11,14 +11,7 @@
                 </li>
                 <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Feedback</span></button></li>
             </ul>
-            <div class="save-state">
-                <div v-if="dataConnector && dataConnector.isSaving" class="saving" lang="en">
-                    Processing {{dataConnector.processingSize}} saves...
-                </div>
-                <div v-else-if="dataConnector" class="saved" role="alert" lang="en">
-                    All changes saved
-                </div>
-            </div>
+            <save-area :data-connector="dataConnector"></save-area>
         </div>
         <div v-if="rubric" class="rubric" :class="{'has-evaluator': evaluator !== ''}">
             <link rel="stylesheet"
@@ -95,6 +88,7 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import SaveArea from '../Components/SaveArea.vue';
     import DataConnector from '../Connector/DataConnector';
 
     interface CriteriumExt {
@@ -109,6 +103,7 @@
 
     @Component({
         components: {
+            SaveArea
         },
     })
     export default class RubricEntry extends Vue {

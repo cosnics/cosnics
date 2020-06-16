@@ -12,14 +12,7 @@
                 <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-hidden="true" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Split View</span></button></li>
                 <!--<li class="app-header-item" v-else-if="$route.name === 'BuilderLevels'"><button class="btn-check" aria-label="Toon beschrijvingen" :aria-expanded="showLevelDescriptions ? 'true' : 'false'" :class="{ checked: showLevelDescriptions }" @click.prevent="showLevelDescriptions = !showLevelDescriptions"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Beschrijvingen</span></button></li>-->
             </ul>
-            <div class="save-state">
-                <div v-if="dataConnector && dataConnector.isSaving" class="saving" lang="en">
-                    Processing {{ dataConnector.processingSize }} saves...
-                </div>
-                <div v-else-if="dataConnector" class="saved" role="alert" lang="en">
-                    All changes saved
-                </div>
-            </div>
+            <save-area :data-connector="dataConnector"></save-area>
         </div>
         <div class="rubrics">
             <link rel="stylesheet"
@@ -40,15 +33,15 @@
     import ScoreRubricView from '../Components/ScoreRubricView.vue';
     import CriteriumDetailsView from '../Components/CriteriumDetailsView.vue';
     import Criterium from '../Domain/Criterium';
-    import APIConfiguration from '../Connector/APIConfiguration';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import RubricBuilderFull from './RubricBuilderFull.vue';
+    import SaveArea from '../Components/SaveArea.vue';
+    import APIConfiguration from '../Connector/APIConfiguration';
     import DataConnector from '../Connector/DataConnector';
-    import RubricBuilderFull from "./RubricBuilderFull.vue";
 
     @Component({
         components: {
-            RubricBuilderFull,
-            ScoreRubricView, CriteriumDetailsView
+            ScoreRubricView, CriteriumDetailsView, RubricBuilderFull, SaveArea
         },
     })
     export default class RubricBuilder extends Vue {
