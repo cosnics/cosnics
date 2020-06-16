@@ -3,9 +3,9 @@
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-menu">
-                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Edit Rubric</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Edit Niveaus</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Full View</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Rubric opbouwen</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Niveaus opbouwen</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Snel invoeren</span></router-link></li>
                 </ul>
             </nav>
             <ul class="app-header-tools">
