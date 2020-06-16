@@ -788,6 +788,7 @@
         width: 2em;
         height: 2em;
         margin-left: .25em;
+        padding: 0;
         background-color: darken($bg-color, 5%);
         color: #777;
         border: 1px solid transparent;
@@ -803,12 +804,6 @@
 
         &:focus {
             border: 1px solid $input-color-focus;
-        }
-
-        span {
-            position: absolute;
-            width: 0;
-            overflow: hidden;
         }
     }
 
