@@ -7,7 +7,7 @@
                         <label for="criterium-title">Criterium: </label>
                         <input type="text" v-model="criterium.title" id="criterium-title" name="title" autocomplete="off" class="input-detail" @input="onCriteriumChange"/>
                     </div>
-                    <button class="btn-close" @click="$emit('close')"><i class="fa fa fa-close" /><span>Sluit</span></button>
+                    <button class="btn-close" @click="$emit('close')"><i class="fa fa fa-close" aria-hidden="true" /><span>Sluiten</span></button>
                 </div>
                 <div class="criterium-path">{{ criterium.parent.parent.parent.title}} > {{ criterium.parent.parent.title}} <span v-if="criterium.parent.color !== ''"> > {{ criterium.parent.title }}</span></div>
                 <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
