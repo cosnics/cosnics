@@ -1240,6 +1240,16 @@
 
         /** Categories **/
 
+        .selected-fade {
+            &-leave-active, &-enter-active {
+                transition: opacity 200ms;
+            }
+
+            &-enter, &-leave-to {
+                opacity: 0;
+            }
+        }
+
         .cluster-content {
             display: flex;
             margin-top: 1.3em;
