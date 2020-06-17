@@ -3,7 +3,7 @@
         <button class="btn-collapse" :class="{ 'collapse-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
         <div class="clusters-collapse">
             <transition name="clusters-slide">
-                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'collapse-closed': !showClusters }" :key="showClusters ? 'open' : 'closed'">
+                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'collapse-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
                     <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
                             :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
                         <cluster-view v-for="cluster in clusters"

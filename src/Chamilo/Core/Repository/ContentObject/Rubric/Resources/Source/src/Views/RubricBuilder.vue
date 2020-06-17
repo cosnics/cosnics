@@ -135,6 +135,7 @@
             position: absolute;
             width: 0;
             overflow: hidden;
+            font-weight: 400;
         }
     }
 
@@ -175,12 +176,13 @@
 
     .name-input-field {
         padding: 2px 18px 2px 4px;
-        min-height: 36px;
+        min-height: 34px;
         color: #333;
+        border: 1px solid #c0c0c0;
 
         &:focus {
-            outline: 1px solid $input-color-focus;
-            border-color: transparent;
+            outline: none;
+            border-color: $input-color-focus;
         }
 
         &::placeholder {
@@ -220,7 +222,7 @@
         border: 1px solid #cdcdcd;
     }
 
-    .actions button, .category-new button, .criterium-new button {
+    .item-new button {
         border: 1px solid transparent;
         border-radius: $border-radius;
 
@@ -229,7 +231,7 @@
             border: 1px solid $input-color-focus;
         }
 
-        &.btn-ok:focus, &.btn-cancel:focus {
+        &.btn-name-input:focus {
             border: 1px solid transparent;
             box-shadow: inset 0 0 0 1px white;
         }
@@ -425,9 +427,9 @@
             box-shadow: inset 0 0 0 1px $input-color-focus;
             z-index: 10;
 
-            &.selected {
+/*            &.selected {
                 box-shadow: inset 0 0 0 2px white;
-            }
+            }*/
         }
     }
 
@@ -441,10 +443,6 @@
         border-bottom: 2px solid $cluster-color-border-selected;
         margin-top: 0.5em;
         padding: 0 0.15em 0.1em;
-    }
-
-    .clusters-view .actions {
-        margin-bottom: .75em;
     }
 
     /** Categories **/
@@ -542,7 +540,9 @@
     /** Rubric buttons **/
     .btn-cluster-add, .btn-category-add, .btn-criterium-add {
         background-color: transparent;
-        border: none;
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+        margin-left: -1px;
         font-size: 1.25rem;
         color: darken($btn-color, 25%);
         transition: color 200ms;
@@ -550,12 +550,17 @@
         i {
             margin-right: .4em;
             font-size: 1.1rem;
-            color: darken($btn-color, 17%);;
+            color: darken($btn-color, 15%);;
             transition: color 200ms;
         }
 
         &:hover, &:hover i {
             color: $btn-color-darkened;
+        }
+
+        &:focus {
+            outline:none;
+            border: 1px solid $input-color-focus;
         }
     }
 
@@ -830,6 +835,10 @@
             }
         }
 
+        .rb-cluster-list-item.selected {
+            box-shadow: inset 0 0 0 2px white;
+        }
+
         .rb-cluster-list-item:last-child .rb-cluster {
             border-bottom-left-radius: $border-radius;
             border-bottom-right-radius: $border-radius;
@@ -871,6 +880,10 @@
             &:focus {
                 box-shadow: inset 0 0 0 1px white;
             }
+        }
+
+        .clusters-view .actions {
+            margin-bottom: .75em;
         }
 
         .criterium-details-wrapper {
@@ -966,7 +979,7 @@
         .rb-cluster {
             &.selected, &:not(.selected):hover, &.show-menu {
                 .item-actions:focus {
-                    border-color: white;
+                    /*border-color: white;*/
                 }
             }
         }
@@ -1152,11 +1165,20 @@
         .clusters-view {
             display: flex;
             align-items: baseline;
-            margin-top: 1em;
+            margin-top: .5em;
+            margin-left: -1em;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom-color 200ms;
+        }
+
+        .clusters-view.mod-separator {
+            border-bottom: 1px solid hsla(194, 15%, 77%, 1);
         }
 
         .rb-clusters {
             display: flex;
+            margin-bottom: -1px;
+            margin-left: 1em;
         }
 
         .rb-cluster-list-item {
@@ -1190,9 +1212,11 @@
 
         .rb-cluster {
             font-size: 1.35rem;
-            background-color: $cluster-color;
-            border: 1px solid transparent;
+            background-color: hsla(160, 6%, 90%, 1);
+            border: 1px solid hsla(197, 10%, 86%, 1);
+            color: #707070;
             border-radius: $border-radius;
+            padding: .3em 0 .4em .5em;
 
             /*.title i {
                 font-size: 1.2rem;
@@ -1218,11 +1242,16 @@
                 right: -7.4em;
             }
 
-            &.selected {
-                box-shadow: 0px 2px 4px #999;
-                border-color: $cluster-color-selected;
 
-                .item-actions {
+            &.selected {
+                /*box-shadow: 0px 2px 4px #999;*/
+                /*border-color: $cluster-color-selected!important;*/
+                border-color: hsla(194, 15%, 77%, 1);
+                background: $bg-color;
+                color: hsla(190, 45%, 38%, 1);
+                font-weight: bold;
+
+                /*.item-actions {
                     i {
                         color: #ddd;
                     }
@@ -1232,12 +1261,29 @@
                     }
                 }
 
+
                 &:hover .item-actions {
                     color: #fff;
                     i {
                         color: #fff;
                     }
-                }
+                }*/
+            }
+            &:hover {
+                background: hsla(210, 30%, 75%, .3);
+            }
+
+        }
+
+        .clusters-view.mod-separator .rb-cluster {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-color: transparent;
+
+            &.selected {
+                height: 3.6rem;
+                margin-bottom: -1px;
+                border-bottom-color: $bg-color;
             }
         }
 
