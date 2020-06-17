@@ -392,19 +392,15 @@
         position: relative;
         padding: .5em;
         padding-right: 0;
-        border: 1px solid $cluster-color-border;
-        border-top-width: 0px;
         transition: background-color 200ms, border-color 200ms, color 200ms;
-        /*.title i {
-            display: none;
-        }*/
+
         &:hover, &.show-menu {
             background-color: $cluster-color-hover;
             border-color: $cluster-color-hover;
             color: #222;
         }
+
         &.selected {
-            border-color: $cluster-color-selected;
             background-color: $cluster-color-selected;
             color: #fff;
 
@@ -416,25 +412,6 @@
                 }
             }
         }
-    }
-
-    .rb-cluster-list-item:first-child .rb-cluster {
-        border-top: 1px solid $cluster-color-border;
-        border-top-left-radius: $border-radius;
-        border-top-right-radius: $border-radius;
-
-        &.selected {
-            border-top: 1px solid $cluster-color-selected;
-        }
-
-        &:not(.selected):hover {
-            border-top: 1px solid $cluster-color-hover;
-        }
-    }
-
-    .rb-cluster-list-item:last-child .rb-cluster {
-        border-bottom-left-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
     }
 
     .rb-cluster-list-item {
@@ -830,6 +807,34 @@
             }
         }
 
+        .rb-cluster {
+            border: 1px solid $cluster-color-border;
+            border-top-width: 0;
+
+            &.selected {
+                border-color: $cluster-color-selected;
+            }
+        }
+
+        .rb-cluster-list-item:first-child .rb-cluster {
+            border-top-width: 1px;
+            border-top-left-radius: $border-radius;
+            border-top-right-radius: $border-radius;
+
+            &:hover {
+                border-top-color: $cluster-color-hover;
+            }
+
+            &.selected {
+                border-top-color: $cluster-color-selected;
+            }
+        }
+
+        .rb-cluster-list-item:last-child .rb-cluster {
+            border-bottom-left-radius: $border-radius;
+            border-bottom-right-radius: $border-radius;
+        }
+
         .rb-criterium-title {
             pointer-events: none;
         }
@@ -1155,8 +1160,14 @@
         }
 
         .rb-cluster-list-item {
+            /* A border is needed here so the ghost item can show the dotted border without flicking the content below */
             border: 1px solid transparent;
             margin-right: .65em;
+
+            &:first-child {
+                /* Offsetting the transparent pixel border so the items line up */
+                margin-left: -1px;
+            }
 
             &.ghost {
                 background: $ghost-bg-color;
@@ -1178,9 +1189,10 @@
         }
 
         .rb-cluster {
-            /*padding: .6em 0 .6em .8em;*/
             font-size: 1.35rem;
             background-color: $cluster-color;
+            border: 1px solid transparent;
+            border-radius: $border-radius;
 
             /*.title i {
                 font-size: 1.2rem;
@@ -1208,6 +1220,7 @@
 
             &.selected {
                 box-shadow: 0px 2px 4px #999;
+                border-color: $cluster-color-selected;
 
                 .item-actions {
                     i {
@@ -1226,11 +1239,6 @@
                     }
                 }
             }
-        }
-
-        .rb-cluster, .rb-cluster-list-item:first-child .rb-cluster {
-            border: 1px solid transparent;
-            border-radius: $border-radius;
         }
 
         .cluster-selected {
