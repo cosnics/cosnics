@@ -1218,7 +1218,7 @@
             font-size: 1.35rem;
             background-color: hsla(160, 6%, 90%, 1);
             border: 1px solid hsla(197, 10%, 86%, 1);
-            color: #707070;
+            color: hsla(200, 10%, 38%, 1);
             border-radius: $border-radius;
             padding: .3em 0 .4em .5em;
 
@@ -1300,7 +1300,7 @@
 
         .selected-fade {
             &-leave-active, &-enter-active {
-                transition: opacity 200ms;
+                transition: opacity 200ms ease-in-out;
             }
 
             &-enter, &-leave-to {
@@ -1310,7 +1310,7 @@
 
         .cluster-content {
             display: flex;
-            margin-top: 1.3em;
+            margin-top: 1em;
             padding-top: .2em;
             margin-left: -.5em;
             padding-left: .5em;
@@ -1527,6 +1527,7 @@
             .title {
                 flex: 1;
                 padding: .7em .5em;
+                min-height: 3.419rem;
             }
 
             &:focus .title {
@@ -1555,14 +1556,14 @@
         .criterium-details-wrapper {
             @include scrollbar();
             background-color: $bg-criterium-details;
+            border-top: 1px solid hsla(194, 15%, 77%, 1);
+            border-left: 1px solid hsla(194, 15%, 77%, 1);
+            border-top-left-radius: $border-radius;
         }
 
         .criterium-details {
             padding: 1em;
             width: 30em;
-            border-top: 1px solid lighten($panel-border-divider-color, 3%);
-            border-left: 1px solid lighten($panel-border-divider-color, 2%);
-            border-top-left-radius: $border-radius;
             overflow-x: hidden;
             overflow-y: auto;
 
