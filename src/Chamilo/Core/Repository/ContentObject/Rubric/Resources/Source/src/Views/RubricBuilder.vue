@@ -794,6 +794,10 @@
             display: none;
         }
 
+        .app-container.split-view #clusters-wrapper-view2 {
+            display: none;
+        }
+
         .clusters-collapse {
             overflow: hidden;
         }
