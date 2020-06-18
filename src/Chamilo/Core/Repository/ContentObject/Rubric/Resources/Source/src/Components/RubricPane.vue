@@ -16,7 +16,7 @@
         </div>
         <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
         <transition name="selected-fade" mode="out-in">
-            <div :key="selectedCluster.id" class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
+            <div :key="selectedCluster ? selectedCluster.id : 'none'" class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
                 <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="ul" class="rb-categories" group="categories" handle=".category-handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
                            @start="startDrag($event, 'category')" @end="endDrag" @change="onChangeCategory">
                     <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="rb-category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
