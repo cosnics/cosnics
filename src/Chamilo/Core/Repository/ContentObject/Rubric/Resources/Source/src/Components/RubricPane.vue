@@ -46,7 +46,7 @@
                 </draggable>
                 <!-- todo: 'rubric' cluster, v-if="selectedCluster" can then be removed -->
                 <div v-if="selectedCluster" class="actions">
-                    <button :disabled="!categoryActionsEnabled" class="btn-category-add" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuwe lijst</button>
+                    <button :disabled="!categoryActionsEnabled" ref="btn-category-add" class="btn-category-add" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuwe lijst</button>
                 </div>
                 <!--<new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>-->
             </div>
@@ -142,11 +142,11 @@
             }
         }
 
-        @Watch('categoryActionsEnabled')
-        onCategoryAddingChanged() {
+        onCategoryAdded() {
             this.$nextTick(()=> {
                 const clusterContent = this.$refs['cluster-content'] as HTMLElement;
                 clusterContent.scrollTo(clusterContent.scrollWidth, 0);
+                (this.$refs['btn-category-add'] as HTMLElement).blur();
             });
         }
 
@@ -182,6 +182,7 @@
         addCategory(category: Category) {
             this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
             this.dataConnector?.addTreeNode(category, this.selectedCluster!, this.selectedCluster!.categories.length);
+            this.onCategoryAdded();
         }
 
         addCriterium(category: Category, criterium: Criterium) {

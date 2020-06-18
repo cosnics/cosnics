@@ -1443,6 +1443,10 @@
             margin-top: .1em;
         }
 
+        .btn-category-add {
+            margin-top: .4em;
+        }
+
         /** Criteria **/
 
         .rb-criteria {
