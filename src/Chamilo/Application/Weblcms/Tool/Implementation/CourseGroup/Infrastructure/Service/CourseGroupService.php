@@ -161,6 +161,7 @@ class CourseGroupService
         $courseGroupRelation = new CourseGroupUserRelation();
         $courseGroupRelation->set_course_group($courseGroup->getId());
         $courseGroupRelation->set_user($user->getId());
+        $courseGroupRelation->set_subscription_time(time());
 
         if (!$this->courseGroupRepository->createCourseGroupUserRelation($courseGroupRelation))
         {
