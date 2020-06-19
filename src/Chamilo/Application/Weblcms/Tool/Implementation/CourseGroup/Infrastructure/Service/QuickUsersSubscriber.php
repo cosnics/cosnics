@@ -83,7 +83,15 @@ class QuickUsersSubscriber
         $delimiters = [',', ';', PHP_EOL];
         $userIdentifiersCSV = str_replace($delimiters, ',', $userIdentifiersCSV);
 
-        return explode(',', $userIdentifiersCSV);
+        $userIdentifierParts = explode(',', $userIdentifiersCSV);
+        $userIdentifiers = [];
+
+        foreach($userIdentifierParts as $userIdentifierPart)
+        {
+            $userIdentifiers[] = trim($userIdentifierPart);
+        }
+
+        return $userIdentifiers;
     }
 
     /**
