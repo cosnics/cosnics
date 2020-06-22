@@ -3,7 +3,7 @@
 }
 
 .rubric {
-  margin: 0 1.5em;
+  margin: 0 1em;
 }
 
 .table-header-wrap {
@@ -81,7 +81,7 @@
 .criterium {
   margin-left: .3em;
   margin-bottom: .5em;
-  margin-top: .15em;
+  margin-top: .10em;
   display: flex;
 }
 
@@ -110,8 +110,8 @@
     justify-content: center;
 
     .check {
-      transform: rotate(0deg);
-      transition: transform 200ms;
+      transform: scaleY(1);
+      transition: transform 300ms;
     }
 
     .check:focus {
@@ -137,7 +137,7 @@
 }
 
 .show-default-feedback .btn-more .check {
-  transform: rotate(-180deg);
+  transform: scaleY(-1);
 }
 
 .criterium-title {
@@ -173,15 +173,19 @@
 }
 
 @media only screen and (min-width: 900px) {
-  .criterium .criterium-level-title {
-    position: absolute;
-    left: -10000px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
+ .criterium {
+  align-items: baseline;
+   .criterium-level-title {
+     position: absolute;
+     left: -10000px;
+     top: auto;
+     width: 1px;
+     height: 1px;
+     overflow: hidden;
+   }
+ }
 }
+
 
 .score-number {
   font-size: 1.8rem;
