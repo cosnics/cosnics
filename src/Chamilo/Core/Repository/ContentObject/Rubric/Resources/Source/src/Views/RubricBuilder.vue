@@ -496,6 +496,7 @@
         /*position: relative;*/
         display: flex;
         align-items: center;
+        flex: 1;
     }
 
     /** Criteria **/
@@ -1370,6 +1371,7 @@
 
             .rb-category-title .title {
                 font-size: 1.33rem;
+                flex: 1;
                 /*font-weight: bold;*/
                 /*color: hsla(190, 50%, 35%, 1);*/
             }
