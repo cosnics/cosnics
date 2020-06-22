@@ -74,6 +74,9 @@
                 <div class="subtotal rubric-total">
                     <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
+                <div class="subtotal rubric-total-max">
+                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number">{{ maximumScore }} <span class="text-hidden">punten</span></div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -192,6 +195,19 @@
         getRubricScore() : number {
             if (!this.rubric) { return 0; }
             return this.rubric.clusters.map(cluster => this.getClusterScore(cluster)).reduce(add, 0);
+        }
+
+        get maximumScore() : number {
+            if (!this.rubric) { return 0; }
+            let maxScore = 0;
+            this.rubric.getAllCriteria(this.rubric).forEach(criterium => {
+                const levelScores = this.rubric!.levels.map(level => this.rubric!.getChoiceScore(criterium, level));
+                const max = levelScores.reduce(function(a, b) {
+                    return Math.max(a, b);
+                });
+                maxScore += max;
+            });
+            return maxScore;
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {

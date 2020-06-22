@@ -276,7 +276,7 @@
   color: darken($score-dark, 20%);
 }
 
-.rubric-total {
+.rubric-total, .rubric-total-max {
   display: flex;
   justify-content: flex-end;
   font-size: 1.3rem;
@@ -284,11 +284,21 @@
   /*margin-right: 1.5em;*/
   padding-top: .3em;
   padding-bottom: .3em;
+
+}
+
+.rubric-total {
   border-top: 1px solid $score-light;
 
   .score-number {
     background: $score-darker;
     color: white;
+  }
+}
+
+.rubric-total-max {
+  .score-number {
+    background: $score-light;
   }
 }
 

@@ -56,6 +56,12 @@
                         <div class="score-number">{{ getRubricScore(evaluator) }}</div>
                     </div>
                 </div>
+                <div class="subtotal rubric-total-max">
+                    <div class="rubric-total-title">Maximum score:</div>
+                    <div v-for="evaluator in evaluators" class="score-wrap">
+                        <div class="score-number">{{ maximumScore }}</div>
+                    </div>
+                </div>
             </div>
             <div v-if="selectedCriterium" style="width: 40%; border-left: 1px solid hsla(191, 21%, 80%, 1); margin-left: 1.5em;padding-left: 1.5em; margin-top: 1em;">
                 <div style="color: hsla(191, 41%, 38%, 1); margin-left: .25em;margin-bottom: .5em;font-weight: 700;line-height:1.3em">
@@ -144,6 +150,19 @@
         getRubricScore(evaluator: string) : number {
             if (!this.rubric) { return 0; }
             return this.rubric.clusters.map(cluster => this.getClusterScore(cluster, evaluator)).reduce(add, 0);
+        }
+
+        get maximumScore() : number {
+            if (!this.rubric) { return 0; }
+            let maxScore = 0;
+            this.rubric.getAllCriteria(this.rubric).forEach(criterium => {
+                const levelScores = this.rubric!.levels.map(level => this.rubric!.getChoiceScore(criterium, level));
+                const max = levelScores.reduce(function(a, b) {
+                    return Math.max(a, b);
+                });
+                maxScore += max;
+            });
+            return maxScore;
         }
 
         private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
