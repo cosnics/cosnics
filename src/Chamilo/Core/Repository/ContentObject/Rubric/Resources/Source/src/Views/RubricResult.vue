@@ -285,8 +285,13 @@
     }
 
     @media only screen and (min-width: 900px) {
-        .rubric {
-            display: flex;
+        .result-app {
+            .rubric {
+                display: flex;
+            }
+            .criterium {
+                align-items: baseline;
+            }
         }
     }
 </style>

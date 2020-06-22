@@ -173,19 +173,15 @@
 }
 
 @media only screen and (min-width: 900px) {
- .criterium {
-  align-items: baseline;
-   .criterium-level-title {
+  .criterium .criterium-level-title {
      position: absolute;
      left: -10000px;
      top: auto;
      width: 1px;
      height: 1px;
      overflow: hidden;
-   }
- }
+  }
 }
-
 
 .score-number {
   font-size: 1.8rem;

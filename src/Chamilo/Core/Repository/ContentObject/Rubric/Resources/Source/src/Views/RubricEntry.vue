@@ -460,5 +460,11 @@
                 margin-left: 1.5em;
             }
         }
+
+        @media only screen and (min-width: 900px) {
+            .entry-app .criterium {
+                align-items: baseline;
+            }
+        }
     }
 </style>
