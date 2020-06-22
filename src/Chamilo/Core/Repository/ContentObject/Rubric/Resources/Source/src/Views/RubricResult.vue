@@ -19,7 +19,7 @@
                                     <div class="category">
                                         <div v-if="category.title" class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
+                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}" @click="selectedCriterium = criterium">
                                                 <div class="criterium">
                                                     <div class="criterium-title-header">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
@@ -56,6 +56,33 @@
                         <div class="score-number">{{ getRubricScore(evaluator) }}</div>
                     </div>
                 </div>
+            </div>
+            <div v-if="selectedCriterium" style="width: 40%; border-left: 1px solid hsla(191, 21%, 80%, 1); margin-left: 1.5em;padding-left: 1.5em; margin-top: 1em;">
+                <div style="color: hsla(191, 41%, 38%, 1); margin-left: .25em;margin-bottom: .5em;font-weight: 700;line-height:1.3em">
+                    <span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right" style="margin: 0 .3em"/></span>
+                    <span v-if="selectedCriterium.parent.title.trim().length !== 0">{{ selectedCriterium.parent.title }}<i class="fa fa-angle-right" style="margin: 0 .3em"/></span>
+                    <span>{{ selectedCriterium.title }}</span>
+                </div>
+
+                <div v-for="evaluator in evaluators" style="background: #d0dddd; margin-bottom: 1em; border-radius: 3px">
+                    <p style="margin:0;padding:.25em" v-if="selectedCriterium.evaluations[evaluator].level !== null">{{ evaluator|capitalize }} gaf score {{ getCriteriumScore(selectedCriterium, evaluator) }} ({{selectedCriterium.evaluations[evaluator].level.title}})</p>
+                    <p style="margin:0;padding:.25em" v-else>{{ evaluator|capitalize }} gaf nog geen score.</p>
+                    <p style="margin:0;padding: 0 .25em .25em" v-if="selectedCriterium.evaluations[evaluator].feedback">
+                        Extra feedback: {{selectedCriterium.evaluations[evaluator].feedback}}
+                    </p>
+<!--                    <div class="score-number" :id="`${criterium.id}-${evaluator}`" :tabindex="criterium.evaluations[evaluator].feedback ? 0 : -1"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
+                        getCriteriumScore(criterium, evaluator) }}</div>
+                    <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>-->
+                </div>
+
+                <div style="font-size: 1.4rem; color: hsla(191, 41%, 38%, 1); margin-left:.15em;margin-top: 2em;margin-bottom:.5em;font-weight:bold">Overzicht niveaus:</div>
+                <ul style="list-style: none; margin: 0; padding: 0">
+                    <li v-for="level in rubric.levels" style="background: #e3e3e3; border-radius: 3px">
+                        <div style="padding: .25em .25em 0; font-weight: 700">{{ level.title }} - {{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
+
+                        <p style="padding: 0em .25em .25em .25em">{{ rubric.getChoice(selectedCriterium, level).feedback }}</p>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -95,6 +122,7 @@
         private rubric: Rubric|null = null;
         private evaluators: string[]|null = null;
         private dataConnector: DataConnector|null = null;
+        private selectedCriterium: Criterium|null = null;
 
         @Prop({type: Object, default: null}) readonly rubricData!: any|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
@@ -218,6 +246,28 @@
 
         .criterium-total .score-number:hover {
             background: $score-light;
+        }
+
+        .criterium-list-item {
+            border: 1px solid transparent;
+            border-radius: $border-radius;
+        }
+
+        .criterium-list-item:hover {
+            background: darken($score-lighter, 10%);
+            cursor: pointer;
+            border: 1px solid darken($score-lighter, 20%);
+
+            .score-number {
+                background: none;
+                cursor: pointer;
+            }
+        }
+    }
+
+    @media only screen and (min-width: 900px) {
+        .rubric {
+            display: flex;
         }
     }
 </style>
