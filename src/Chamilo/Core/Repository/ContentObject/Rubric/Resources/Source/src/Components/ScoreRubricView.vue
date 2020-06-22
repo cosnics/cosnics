@@ -63,7 +63,7 @@
 			</div>
 		</div>
 		<transition name="selected-fade" mode="out-in">
-	        <criterium-details-view :key="selectedCriterium ? selectedCriterium.id : 'none'" v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)" @change-criterium="onChangeCriterium" @change-choice="onChangeChoice"></criterium-details-view>
+	        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)" @change-criterium="onChangeCriterium" @change-choice="onChangeChoice"></criterium-details-view>
 		</transition>
 		<remove-dialog :remove-item="removeItem" @remove="onRemoveItem" @cancel="hideRemoveDialog"></remove-dialog>
 	</div>

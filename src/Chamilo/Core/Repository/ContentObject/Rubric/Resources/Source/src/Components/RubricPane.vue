@@ -15,7 +15,7 @@
             </transition>
         </div>
         <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
-        <transition name="selected-fade" mode="out-in">
+        <transition :name="categoriesTransitionName" mode="out-in">
             <div :key="selectedCluster ? selectedCluster.id : 'none'" class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
                 <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="ul" class="rb-categories" group="categories" handle=".category-handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
                            @start="startDrag($event, 'category')" @end="endDrag" @change="onChangeCategory">
@@ -92,8 +92,15 @@
         @Prop(Criterium) readonly selectedCriterium!: Criterium | null;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
+        private categoriesTransitionName = '';
         private showClusters: boolean = false;
         private categoriesAddingCriterium: any = {};
+
+        mounted() {
+            window.setTimeout(() => {
+                this.categoriesTransitionName = 'selected-fade';
+            }, 100);
+        }
 
         createNewCategory() {
             const newCategory = new Category();

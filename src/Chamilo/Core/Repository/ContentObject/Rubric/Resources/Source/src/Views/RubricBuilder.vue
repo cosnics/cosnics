@@ -1300,11 +1300,12 @@
 
         .selected-fade {
             &-leave-active, &-enter-active {
-                transition: opacity 200ms ease-in-out;
+                transition: opacity 200ms ease-in-out;/*, transform 200ms;*/
             }
 
             &-enter, &-leave-to {
                 opacity: 0;
+                /*transform: scale(.95);*/
             }
         }
 
