@@ -54,14 +54,15 @@ export default class Rubric extends TreeNode {
         this.levels.forEach(level => {
             //choice already exists for criterium? Could be through json bootstrapping.
             let choice = this.findChoice(criterium, level);
-            if(!choice)
+            if (!choice) {
                 choice = new Choice(false, "");
+            }
             this.addChoice(choice, criterium.id, level.id);
         });
     }
 
     protected notifyRemoveChild(parent: TreeNode, treeNode: TreeNode): void {
-        let criteriaToBeRemoved = this.getAllCriteria(treeNode);
+        const criteriaToBeRemoved = this.getAllCriteria(treeNode);
         criteriaToBeRemoved.forEach(criterium => this.removeChoicesByCriterium(criterium));
     }
 

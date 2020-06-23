@@ -76,14 +76,15 @@ export default abstract class TreeNode implements TreeNodeInterface {
             this.parent.notifyRemoveChild(treeNodeContainer, treeNode);
     }
 
-    removeChild(treeNode: TreeNode): void {
+    removeChild(treeNode: TreeNode, notify= true): void {
         if(treeNode.parent !== this) {
             throw new Error("treeNode: " + treeNode.title + " not part of treeNode: " + this.title);
         }
         const index = this._children.indexOf(treeNode);
         this._children.splice(index, 1);
-        if(this.parent)
+        if (notify && this.parent) {
             this.parent.notifyRemoveChild(this, treeNode);
+        }
         treeNode.parent = null;
     }
 

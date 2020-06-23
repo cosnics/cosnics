@@ -270,7 +270,9 @@
                     throw new Error(''); // Todo: meaningful message
                 }
                 const { element, newIndex } = event.added;
-                this.otherSelectedCluster!.removeChild(element);
+                // Notify false prevents the choices of the category's criteria to be removed at the root level.
+                // Is there a better way?
+                this.otherSelectedCluster!.removeChild(element, false);
                 this.selectedCluster!.addChild(element, newIndex);
                 this.dataConnector?.moveTreeNode(element, this.selectedCluster!, newIndex);
             } else if (event.moved) {
