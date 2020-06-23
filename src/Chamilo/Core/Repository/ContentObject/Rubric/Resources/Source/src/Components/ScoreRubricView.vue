@@ -3,6 +3,7 @@
 		<div class="rubric-panes-wrapper">
 			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu" @keyup.esc="hideMenu">
 				<rubric-pane id="view1"
+							 :show-split-view="uiState.showSplitView"
 							 :rubric="rubric"
 							 :data-connector="dataConnector"
 							 :selected-cluster="selectedClusterView1"
@@ -16,6 +17,7 @@
 							 :drag-item-type="dragItemType"
 							 :draggable-disabled="draggableDisabled"
 							 :banned-for-drop="bannedForDrop"
+							 @split-view-changed="uiState.showSplitView = $event"
 							 @cluster-selected="onClusterSelected($event, 'view1')"
 							 @criterium-selected="selectCriterium"
 							 @dialog-new-cluster="newClusterDialogView = $event"

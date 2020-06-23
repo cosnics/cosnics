@@ -4,6 +4,7 @@
         <div class="clusters-collapse">
             <transition name="clusters-slide">
                 <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'collapse-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
+                    <split-view-button v-if="id === 'view1'" :show-split-view="showSplitView" @changed="$emit('split-view-changed', $event)"></split-view-button>
                     <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
                             :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
                         <cluster-view v-for="cluster in clusters"
@@ -69,11 +70,12 @@
     import NewCategory from './NewCategory.vue';
     import NewCriterium from './NewCriterium.vue';
     import NameInput from './NameInput.vue';
+    import SplitViewButton from './SplitViewButton.vue';
     import DataConnector from '../Connector/DataConnector';
 
     @Component({
         name: 'rubric-pane',
-        components: { ClusterView, CategoryView, CriteriumView, NewCluster, NewCategory, NewCriterium, NameInput, draggable }
+        components: { ClusterView, CategoryView, CriteriumView, NewCluster, NewCategory, NewCriterium, NameInput, SplitViewButton, draggable }
     })
     export default class RubricPane extends Vue {
 
@@ -89,6 +91,7 @@
         @Prop({type: Boolean, required: true}) readonly draggableDisabled!: boolean;
         @Prop({type: Boolean, required: true}) readonly isEditing!: boolean;
         @Prop({type: String, default: ''}) readonly dragItemType!: string;
+        @Prop({type: Boolean, default: false}) readonly showSplitView!: boolean;
         @Prop(Criterium) readonly selectedCriterium!: Criterium | null;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
