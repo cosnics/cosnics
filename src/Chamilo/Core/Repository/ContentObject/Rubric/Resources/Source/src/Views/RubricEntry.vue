@@ -1,23 +1,19 @@
 <template>
     <div id="app" class="entry-app">
-        <div class="app-header">
-            <div class="app-header-menu"></div>
-            <ul class="app-header-tools">
-                <li class="app-header-item">Ik ben
-                    <select v-model="evaluator">
-                        <option disabled value="">Selecteer</option>
-                        <option v-for="evaluator in evaluators">{{evaluator}}</option>
-                    </select>
-                </li>
-                <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Feedback</span></button></li>
-            </ul>
-            <save-area :data-connector="dataConnector"></save-area>
-        </div>
         <div v-if="rubric" class="rubric" :class="{'has-evaluator': evaluator !== ''}">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-entry-view">
                 <div class="table-header-wrap" aria-hidden="true">
+                    <ul class="app-header-tools">
+                        <li class="app-header-item">Ik ben
+                            <select v-model="evaluator">
+                                <option disabled value="">Selecteer</option>
+                                <option v-for="evaluator in evaluators">{{evaluator}}</option>
+                            </select>
+                        </li>
+                        <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Feedback</span></button></li>
+                    </ul>
                     <div class="table-header">
                         <div v-for="level in rubric.levels" class="table-header-title">
                             {{ level.title }}
@@ -281,15 +277,30 @@
     .entry-app {
         &#app {
             color: $text-color;
+            border-top: 1px solid #d6d6d6; /** Added this for result view **/
         }
 
         .rubric-entry-view {
             position: relative;
         }
 
+        .table-header-wrap {
+            display: flex;
+
+            .app-header-tools {
+                width: 18.8em;
+                min-width: 18.8em;
+                background-color: hsla(190, 35%, 75%, 0.2);
+                padding-left: 1.2em;
+                margin-right: 1em;
+            }
+        }
+
         .table-header {
-            margin-left: 19.8em;
+            /*margin-left: 19.8em;*/
+            margin-left: 0;
             margin-right: 4em;
+            width: 100%;
 
             .table-header-title {
                 flex: 1;
@@ -398,7 +409,7 @@
 
     @media only screen and (max-width: 899px) {
         .entry-app {
-            .table-header-wrap {
+            .table-header {
                 display: none;
             }
 
