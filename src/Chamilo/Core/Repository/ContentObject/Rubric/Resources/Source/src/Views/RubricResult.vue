@@ -72,7 +72,6 @@
 
                 <div v-for="evaluator in evaluators" style="background: #d0dddd; margin-bottom: 1em; border-radius: 3px">
                     <p style="margin:0;padding:.25em" v-if="selectedCriterium.evaluations[evaluator].level !== null">{{ evaluator|capitalize }} gaf score {{ getCriteriumScore(selectedCriterium, evaluator) }} ({{selectedCriterium.evaluations[evaluator].level.title}})</p>
-                    <p style="margin:0;padding:.25em" v-else>{{ evaluator|capitalize }} gaf nog geen score.</p>
                     <p style="margin:0;padding: 0 .25em .25em" v-if="selectedCriterium.evaluations[evaluator].feedback">
                         Extra feedback: {{selectedCriterium.evaluations[evaluator].feedback}}
                     </p>
