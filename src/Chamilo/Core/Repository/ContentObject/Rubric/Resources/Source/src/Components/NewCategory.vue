@@ -1,6 +1,6 @@
 <template>
     <div v-if="inputFormShown" class="category-name-input">
-        <name-input ok-title="Voeg Toe" allow-empty="true" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
+        <name-input ok-title="Voeg Toe" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
     </div>
     <div v-else class="actions">
         <button :disabled="!actionsEnabled" class="btn-category-add" @keydown.enter="blockEnterUp" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Categorie toevoegen</button>

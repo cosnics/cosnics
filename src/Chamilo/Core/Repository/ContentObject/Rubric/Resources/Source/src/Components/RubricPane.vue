@@ -45,11 +45,7 @@
                     </li>
                     <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
                 </draggable>
-                <!-- todo: 'rubric' cluster, v-if="selectedCluster" can then be removed -->
-                <div v-if="selectedCluster" class="actions">
-                    <button :disabled="!categoryActionsEnabled" ref="btn-category-add" class="btn-category-add" @click="createNewCategory"><i class="fa fa-plus" aria-hidden="true"/>Nieuwe lijst</button>
-                </div>
-                <!--<new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>-->
+                <new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
             </div>
         </transition>
     </div>
@@ -105,12 +101,6 @@
             }, 100);
         }
 
-        createNewCategory() {
-            const newCategory = new Category();
-            newCategory.color = '';
-            this.addCategory(newCategory);
-        }
-
         get clusters() : Cluster[] {
             return [...this.rubric.clusters];
         }
@@ -144,20 +134,54 @@
             this.$emit('criterium-selected', criterium);
         }
 
+        // Add TreeNodes
+
+        addCluster(cluster: Cluster) {
+            this.rubric.addChild(cluster, this.rubric.clusters.length);
+            this.dataConnector?.addTreeNode(cluster, this.rubric, this.rubric.clusters.length);
+            const category = new Category();
+            category.color = '';
+            cluster.addChild(category, 0);
+            this.dataConnector?.addTreeNode(category, cluster, 0);
+            this.selectCluster(cluster);
+        }
+
+        addCategory(category: Category) {
+            this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
+            this.dataConnector?.addTreeNode(category, this.selectedCluster!, this.selectedCluster!.categories.length);
+            this.updateFirstCategoryIfNeeded();
+        }
+
+        updateFirstCategoryIfNeeded() {
+            if (this.selectedCluster!.categories.length === 2) {
+                const firstCategory = this.selectedCluster!.categories[0];
+                if (firstCategory.title === '') {
+                    firstCategory.title = 'Categorie';
+                    this.dataConnector?.updateTreeNode(firstCategory);
+                }
+            }
+        }
+
+        @Watch('categoryActionsEnabled')
+        onCategoryAddingChanged() {
+            this.$nextTick(()=> {
+                const clusterContent = this.$refs['cluster-content'] as HTMLElement;
+                clusterContent.scrollTo(clusterContent.scrollWidth, 0);
+                //(this.$refs['btn-category-add'] as HTMLElement).blur();
+            });
+        }
+
+        addCriterium(category: Category, criterium: Criterium) {
+            category.addChild(criterium, category.criteria.length);
+            this.dataConnector?.addTreeNode(criterium, category, category.criteria.length);
+        }
+
         addingCriteriumForCategory(category: Category, adding: boolean) {
             if (typeof this.categoriesAddingCriterium[category.id] === 'undefined') {
                 Vue.set(this.categoriesAddingCriterium, category.id, adding);
             } else {
                 this.categoriesAddingCriterium[category.id] = adding;
             }
-        }
-
-        onCategoryAdded() {
-            this.$nextTick(()=> {
-                const clusterContent = this.$refs['cluster-content'] as HTMLElement;
-                clusterContent.scrollTo(clusterContent.scrollWidth, 0);
-                (this.$refs['btn-category-add'] as HTMLElement).blur();
-            });
         }
 
         /*@Watch('isEditing')
@@ -176,29 +200,6 @@
                 });
             }
         }*/
-
-        // Add TreeNodes
-
-        addCluster(cluster: Cluster) {
-            this.rubric.addChild(cluster, this.rubric.clusters.length);
-            this.dataConnector?.addTreeNode(cluster, this.rubric, this.rubric.clusters.length);
-            const category = new Category();
-            category.color = '';
-            cluster.addChild(category, 0);
-            this.dataConnector?.addTreeNode(category, cluster, 0);
-            this.selectCluster(cluster);
-        }
-
-        addCategory(category: Category) {
-            this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
-            this.dataConnector?.addTreeNode(category, this.selectedCluster!, this.selectedCluster!.categories.length);
-            this.onCategoryAdded();
-        }
-
-        addCriterium(category: Category, criterium: Criterium) {
-            category.addChild(criterium, category.criteria.length);
-            this.dataConnector?.addTreeNode(criterium, category, category.criteria.length);
-        }
 
         // Menu Actions
 
