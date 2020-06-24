@@ -1354,8 +1354,9 @@
             }
 
             .action-menu {
+                width: 12em;
                 top: 4.8em;
-                right: -7.35em;
+                right: -10.35em;
             }
 
             &.ghost {
@@ -1510,6 +1511,7 @@
             }
 
             .action-menu {
+                width: 9em;
                 top: 4.8em;
                 right: -7.35em;
             }
