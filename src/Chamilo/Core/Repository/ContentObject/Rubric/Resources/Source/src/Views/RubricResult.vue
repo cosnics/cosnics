@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="result-app">
+    <div id="app" class="result-app" @click="selectedCriterium = null">
         <div v-if="rubric" class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,13 +19,13 @@
                                     <div class="category">
                                         <div v-if="category.title" class="category-title category-indicator">{{ category.title }}</div>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}" @click="selectedCriterium = criterium">
+                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback, selected: selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
                                                 <div class="criterium">
                                                     <div class="criterium-title-header">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total">
-                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`" :tabindex="criterium.evaluations[evaluator].feedback ? 0 : -1"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
+                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
                                                             getCriteriumScore(criterium, evaluator) }}</div>
                                                         <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
@@ -238,6 +238,7 @@
 
         .subtotal {
             margin-right: .5em;
+            align-items: baseline;
 
             .score-wrap {
                 width: 5em;
@@ -262,23 +263,28 @@
             }
         }
 
-        .criterium-total .score-number:hover {
-            background: $score-light;
-        }
-
         .criterium-list-item {
             border: 1px solid transparent;
             border-radius: $border-radius;
+
+            &.selected {
+                background: darken($score-lighter, 10%);
+                .score-number {
+                    background: none;
+                    border-bottom: 1px solid darken($score-lighter, 20%);
+                }
+            }
         }
 
         .criterium-list-item:hover {
-            background: darken($score-lighter, 10%);
+            background: darken($score-lighter, 20%);
             cursor: pointer;
             border: 1px solid darken($score-lighter, 20%);
 
             .score-number {
                 background: none;
                 cursor: pointer;
+                border-bottom: 1px solid darken($score-lighter, 20%);
             }
         }
     }
