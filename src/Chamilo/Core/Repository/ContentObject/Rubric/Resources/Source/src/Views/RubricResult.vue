@@ -1,9 +1,9 @@
 <template>
-    <div id="app" class="result-app" @click="selectedCriterium = null">
+    <div id="app" class="result-app" >
         <div v-if="rubric" class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-results-view">
+            <div class="rubric-results-view" @click="selectedCriterium = null">
                 <div class="table-header-wrap">
                     <div class="table-header">
                         <div v-for="evaluator in evaluators" class="table-header-title">{{ evaluator|capitalize }}</div>
@@ -63,36 +63,38 @@
                     </div>
                 </div>
             </div>
-            <div v-if="selectedCriterium" style="width: 40%; border-left: 1px solid hsla(191, 21%, 80%, 1); margin-left: 1.5em;padding-left: 1.5em; margin-top: 1em;">
-                <div style="color: hsla(191, 41%, 38%, 1); margin-left: .25em;margin-bottom: .5em;font-weight: 700;line-height:1.3em">
-                    <span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right" style="margin: 0 .3em"/></span>
-                    <span v-if="selectedCriterium.parent.title.trim().length !== 0">{{ selectedCriterium.parent.title }}<i class="fa fa-angle-right" style="margin: 0 .3em"/></span>
-                    <span>{{ selectedCriterium.title }}</span>
+            <div v-if="selectedCriterium" class="rr-selected-criterium" @click.stop="">
+                <div class="rr-selected-criterium-results">
+                    <div class="title">
+                        <span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right separator" /></span>
+                        <span v-if="selectedCriterium.parent.title.trim().length !== 0">{{ selectedCriterium.parent.title }}<i class="fa fa-angle-right separator" /></span>
+                        <span>{{ selectedCriterium.title }}</span>
+                    </div>
+                    <div class="rr-selected-result" v-for="evaluator in evaluators">
+                        <p v-if="selectedCriterium.evaluations[evaluator].level !== null"><span>{{ evaluator|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{selectedCriterium.evaluations[evaluator].level.title}}</span>)</p>
+                        <p v-if="selectedCriterium.evaluations[evaluator].feedback">
+                            Extra feedback: {{selectedCriterium.evaluations[evaluator].feedback}}
+                        </p>
+                    </div>
                 </div>
-
-                <div v-for="evaluator in evaluators" style="background: #d0dddd; margin-bottom: 1em; border-radius: 3px">
-                    <p style="margin:0;padding:.25em" v-if="selectedCriterium.evaluations[evaluator].level !== null">{{ evaluator|capitalize }} gaf score {{ getCriteriumScore(selectedCriterium, evaluator) }} ({{selectedCriterium.evaluations[evaluator].level.title}})</p>
-                    <p style="margin:0;padding: 0 .25em .25em" v-if="selectedCriterium.evaluations[evaluator].feedback">
-                        Extra feedback: {{selectedCriterium.evaluations[evaluator].feedback}}
-                    </p>
-<!--                    <div class="score-number" :id="`${criterium.id}-${evaluator}`" :tabindex="criterium.evaluations[evaluator].feedback ? 0 : -1"><i v-if="criterium.evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
-                        getCriteriumScore(criterium, evaluator) }}</div>
-                    <b-tooltip v-if="criterium.evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ criterium.evaluations[evaluator].feedback }}</b-tooltip>-->
+                <div class="rr-selected-criterium-levels">
+                    <div class="title">Niveaus:</div>
+                    <ul class="levels-list">
+                        <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
+                            <div class="levels-list-item-header">
+                                <div class="title">{{ level.title }}</div>
+                                <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
+                            </div>
+                            <div class="choice-feedback">
+                                {{ rubric.getChoice(selectedCriterium, level).feedback }}
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-
-                <div style="font-size: 1.4rem; color: hsla(191, 41%, 38%, 1); margin-left:.15em;margin-top: 2em;margin-bottom:.5em;font-weight:bold">Overzicht niveaus:</div>
-                <ul style="list-style: none; margin: 0; padding: 0">
-                    <li v-for="level in rubric.levels" style="background: #e3e3e3; border-radius: 3px">
-                        <div style="padding: .25em .25em 0; font-weight: 700">{{ level.title }} - {{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
-
-                        <p style="padding: 0em .25em .25em .25em">{{ rubric.getChoice(selectedCriterium, level).feedback }}</p>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
 </template>
-
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import APIConfiguration from '../Connector/APIConfiguration';
@@ -113,8 +115,6 @@
     }
 
     @Component({
-        components: {
-        },
         filters: {
             capitalize: function (value: string) {
                 if (!value) return ''
@@ -285,6 +285,95 @@
                 background: none;
                 cursor: pointer;
                 border-bottom: 1px solid darken($score-lighter, 20%);
+            }
+        }
+    }
+
+    .rr-selected-criterium {
+        width: 40%;
+        border-left: 1px solid hsla(191, 21%, 80%, 1);
+        margin-left: 1.5em;
+        padding-left: 1.5em;
+        margin-top: 1em;
+    }
+
+    .rr-selected-criterium-results {
+        background: #e4e3e3;
+        padding: .5em;
+        border-radius: $border-radius;
+
+        .title {
+            color: hsla(191, 41%, 38%, 1);
+            margin-bottom: .5em;
+            font-weight: 700;
+            line-height: 1.3em;
+
+            .separator {
+                margin: 0 .3em;
+            }
+        }
+    }
+
+    .rr-selected-result {
+        margin-bottom: 1em;
+        border-radius: $border-radius;
+
+        p {
+            margin:0;
+        }
+
+        span {
+            font-weight: bold;
+
+            &.score-title {
+                color: hsla(191, 41%, 33%, 1);
+            }
+        }
+    }
+
+    .rr-selected-criterium-levels {
+        background: #e4e3e3;
+        padding: .5em;
+        margin-top: 1.5em;
+
+        .title {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+
+        > .title {
+            color: hsla(191, 41%, 38%, 1);
+        }
+
+        .levels-list {
+            list-style: none;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .levels-list-item {
+            margin-bottom: .75em;
+        }
+
+        .levels-list-item-header {
+            display: flex;
+            width: 100%;
+            align-items: baseline;
+            border-bottom: 1px solid lightgrey;
+
+            .title {
+                flex: 1;
+                font-weight: 700;
+            }
+
+            .choice-score {
+                text-align: right;
+                font-size: 2rem;
+            }
+            .choice-feedback {
+                margin: .25em 1.5em 1.25em 0;
             }
         }
     }
