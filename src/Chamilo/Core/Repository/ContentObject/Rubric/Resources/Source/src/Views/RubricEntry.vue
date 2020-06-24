@@ -6,7 +6,7 @@
             <div class="rubric-entry-view">
                 <div class="table-header-wrap" aria-hidden="true">
                     <ul class="app-header-tools">
-                        <li class="app-header-item">Ik ben
+                        <li class="app-header-item">Demo:
                             <select v-model="evaluator">
                                 <option disabled value="">Selecteer</option>
                                 <option v-for="evaluator in evaluators">{{evaluator}}</option>
