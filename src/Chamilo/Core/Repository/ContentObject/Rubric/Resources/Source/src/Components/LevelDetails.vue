@@ -8,10 +8,10 @@
                 </div>
                 <!--<button class="btn-more" v-if="!showLevelDescriptions":tabindex="tabIndex" @click.stop="showDescription = !showDescription"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>-->
             </div>
-            <div class="ld-description" @click.stop="selectLevel">
+            <!--<div class="ld-description" @click.stop="selectLevel">
                 <label :for="`level_description_${index}`" class="level-label label-hidden">Beschrijving</label>
                 <textarea :id="`level_description_${index}`" :tabindex="tabIndex" v-model="level.description" placeholder="Vul hier een beschrijving in" @input="onChange" @focus="selectLevel" class="input-detail"></textarea>
-            </div>
+            </div>-->
         </div>
         <div class="ld-score" @click.stop="selectLevel">
             <label :for="`level_score_${index}`" class="level-label label-hidden">Punten</label>
