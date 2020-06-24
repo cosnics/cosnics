@@ -359,13 +359,29 @@
             }
         }
 
+        .btn-check,
+        .table-header,
+        .criterium-level,
+        .btn-more,
+        .subtotal {
+            transition: opacity 200ms;
+        }
+
         .rubric:not(.has-evaluator) {
-            .btn-score-number {
+            .btn-check,
+            .table-header,
+            .criterium-level,
+            .btn-more,
+            .subtotal {
+                opacity: 0;
+                pointer-events: none;
+            }
+            /*.btn-score-number {
                 cursor: not-allowed;
             }
             .subtotal .score-number {
                 color: transparent;
-            }
+            }*/
         }
     }
 
