@@ -1,8 +1,8 @@
 <template>
     <div class="criterium-details-wrapper">
-        <div class="criterium-details" v-if="criterium !== null">
-            <transition name="selected-fade" mode="out-in">
-                <div :key="criterium ? criterium.id : 'none'" v-if="criterium">
+        <transition name="border-flash" mode="out-in">
+            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" v-if="criterium !== null">
+                <div v-if="criterium">
                     <div class="criterium-details-header" style="">
                         <div class="criterium-details-title">
                             <label for="criterium-title">Criterium: </label>
@@ -19,8 +19,8 @@
                     </ul>
                     <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> Terug naar rubric</a>
                 </div>
-            </transition>
-        </div>
+            </div>
+        </transition>
     </div>
 </template>
 

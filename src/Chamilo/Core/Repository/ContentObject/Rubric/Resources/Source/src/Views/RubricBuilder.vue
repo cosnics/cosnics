@@ -1304,10 +1304,48 @@
                 transition: opacity 200ms ease-in-out;/*, transform 200ms;*/
             }
 
+            &-enter-active .criterium-details {
+                border: 2px solid $btn-color;
+                height: 100%;
+            }
+
             &-enter, &-leave-to {
                 opacity: 0;
-                /*transform: scale(.95);*/
             }
+        }
+
+        .border-flash {
+            &-enter-active, &-leave-active {
+                animation-duration: 200ms;
+                height: 100%;
+
+                transition-duration: 200ms;
+                > div {
+                    transition: opacity 200ms ease-in-out;
+                }
+            }
+
+            &-enter, &-leave-to {
+                > div {
+                    opacity: 0;
+                }
+            }
+            &-enter-active {
+                animation-name: bf-in;
+            }
+            &-leave-active {
+                animation-name: bf-out;
+            }
+        }
+
+        @keyframes bf-in {
+            0% { border-color: $btn-color; }
+            100% { border-color: transparent; }
+        }
+
+        @keyframes bf-out {
+            0% { border-color: transparent; }
+            100% { border-color: $btn-color; }
         }
 
         .cluster-content {
@@ -1567,10 +1605,11 @@
         }
 
         .criterium-details {
-            padding: 1em;
+            padding: calc(1em - 2px);
             width: 30em;
             overflow-x: hidden;
             overflow-y: auto;
+            border: 2px solid transparent;
 
             .input-detail {
                 background-color: rgba(255, 255, 255, 0.1);
