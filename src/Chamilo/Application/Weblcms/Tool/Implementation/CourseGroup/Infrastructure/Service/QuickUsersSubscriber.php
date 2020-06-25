@@ -56,16 +56,32 @@ class QuickUsersSubscriber
     public function subscribeUsersFromCSVFormat(Course $course, CourseGroup $courseGroup, string $userIdentifiersCSV)
     {
         $userIdentifiers = $this->parseUserIdentifiersFromCSV($userIdentifiersCSV);
+
+        /** @var User[] $usersToSubscribe */
         $usersToSubscribe = $userStatuses = [];
+
+        $processedUserIds = [];
 
         foreach ($userIdentifiers as $userIdentifier)
         {
             $this->prepareUser($userIdentifier, $course, $courseGroup, $usersToSubscribe, $userStatuses);
         }
 
+        // preparation and subscription was splitted because users could be retrieved in batch using extensive methods
+        // however every user has to be logged so every user has to be prepared seperatly and these two loops could
+        // be refactored into one
+
         foreach ($usersToSubscribe as $userIdentifier => $userToSubscribe)
         {
+            // yes people subscribe others with several different user identifiers twice or three times
+            if(array_key_exists($userToSubscribe->getId(), $processedUserIds))
+            {
+                continue;
+            }
+
             $this->subscribeUser($userToSubscribe, $courseGroup, $userIdentifier, $userStatuses);
+
+            $processedUserIds[$userToSubscribe->getId()] = true;
         }
 
         $this->courseGroupService->recalculateMaxMembers($courseGroup);
@@ -98,7 +114,7 @@ class QuickUsersSubscriber
      * @param string $userIdentifier
      * @param Course $course
      * @param CourseGroup $courseGroup
-     * @param array $usersToSubscribe
+     * @param User[] $usersToSubscribe
      * @param array $userStatuses
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
