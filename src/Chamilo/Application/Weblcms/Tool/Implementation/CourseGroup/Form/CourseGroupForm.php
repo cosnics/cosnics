@@ -428,14 +428,14 @@ class CourseGroupForm extends FormValidator
                         }
                     }
 
-                    if ($parent_course_group->get_max_number_of_members() < $total_size)
-                    {
-                        $this->course_group->add_error(
-                            Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
-                        );
-
-                        return false;
-                    }
+//                    if ($parent_course_group->get_max_number_of_members() < $total_size)
+//                    {
+//                        $this->course_group->add_error(
+//                            Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
+//                        );
+//
+//                        return false;
+//                    }
                 }
             }
             $counter = 0;
@@ -958,10 +958,10 @@ class CourseGroupForm extends FormValidator
         {
             case self::OPTION_PARENT_GROUP_NONE :
                 $parent_course_group = DataManager::retrieve_course_group_root($course_code);
-                if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
-                {
-                    return false;
-                }
+//                if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
+//                {
+//                    return false;
+//                }
 
                 $parent_group_id = $parent_course_group->getId();
                 $values[CourseGroup::PROPERTY_PARENT_ID] = $parent_group_id;
@@ -972,10 +972,10 @@ class CourseGroupForm extends FormValidator
 
                 /** @var CourseGroup $parent_course_group */
                 $parent_course_group = DataManager::retrieve_by_id(CourseGroup::class_name(), $parent_group_id);
-                if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
-                {
-                    return false;
-                }
+//                if (!$this->check_parent_max_members($parent_course_group, $new_max_size))
+//                {
+//                    return false;
+//                }
                 $groups = $this->construct_course_groups($new_titles, $course_code, $values);
                 break;
             case self::OPTION_PARENT_GROUP_NEW :
