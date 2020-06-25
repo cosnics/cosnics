@@ -392,17 +392,17 @@ class CourseGroupForm extends FormValidator
                     $total_size += $course_group->get_max_number_of_members();
                 }
 
-                $parent_group_form_max_number_of_members = $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . '0'];
+//                $parent_group_form_max_number_of_members = $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . '0'];
 
-                if ($parent_group_form_max_number_of_members > 0 &&
-                    $total_size > $parent_group_form_max_number_of_members)
-                {
-                    $this->course_group->add_error(
-                        Translation::getInstance()->getTranslation('MaxMembersFromChildrenTooBigForParentCourseGroup')
-                    );
-
-                    return false;
-                }
+//                if ($parent_group_form_max_number_of_members > 0 &&
+//                    $total_size > $parent_group_form_max_number_of_members)
+//                {
+//                    $this->course_group->add_error(
+//                        Translation::getInstance()->getTranslation('MaxMembersFromChildrenTooBigForParentCourseGroup')
+//                    );
+//
+//                    return false;
+//                }
             }
             else
             {
