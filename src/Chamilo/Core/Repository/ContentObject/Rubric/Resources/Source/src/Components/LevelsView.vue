@@ -309,7 +309,7 @@
         .input-detail {
             font-size: 1.4rem;
             color: #555;
-            background: lighten($btn-level-delete, 9%);
+            /*background: lighten($btn-level-delete, 9%);*/
         }
     }
 
@@ -449,12 +449,16 @@
 
     @media only screen and (min-width: 660px) {
         .level-actions {
-            top: 13em;
+            top: 0;
             right: -3em;
+            height: 100%;
 
             > div {
                 display: flex;
                 flex-direction: column;
+                margin-top: 3em;
+                height: calc(100% - 3em);
+                justify-content: center;
             }
         }
     }
