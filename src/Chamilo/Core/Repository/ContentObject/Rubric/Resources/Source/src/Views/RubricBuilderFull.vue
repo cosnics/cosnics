@@ -170,18 +170,17 @@
             flex: 1;
             border: 1px solid #ccc;
             border-radius: 3px;
-            background-color: transparent;
+            background-color: white;
 
             &:hover, &:focus-within {
                 border: 1px solid $score-dark;
-                background-color: rgba(255,255,255,1);
             }
         }
 
         .ta-feedback {
             padding: .3em;
             width: 100%;
-            background: transparent;
+            /*background: transparent;*/
             border: none;
             resize: none;
             overflow: hidden;

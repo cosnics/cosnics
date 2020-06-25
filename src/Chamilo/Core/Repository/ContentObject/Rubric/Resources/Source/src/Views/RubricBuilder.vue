@@ -547,6 +547,7 @@
         font-size: 1.25rem;
         color: darken($btn-color, 25%);
         transition: color 200ms;
+        white-space: nowrap;
 
         i {
             margin-right: .4em;
@@ -1094,6 +1095,7 @@
             }
         }
 
+
         /** Rubric Editor **/
 
         .rubrics {
@@ -1222,6 +1224,8 @@
             color: hsla(200, 10%, 38%, 1);
             border-radius: $border-radius;
             padding: .3em 0 .4em .5em;
+            white-space: nowrap;
+
 
             /*.title i {
                 font-size: 1.2rem;
@@ -1612,8 +1616,17 @@
             border: 2px solid transparent;
 
             .input-detail {
-                background-color: rgba(255, 255, 255, 0.1);
-                border: 1px solid transparent;
+                background-color: rgba(255, 255, 255, 0.35);
+                border: 1px solid #ccc;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 1);
+                    border: 1px solid #aaa;
+                }
+
+                &:focus {
+                    border: 1px solid $input-color-focus;
+                }
             }
 
             /*.criterium-weight .input-detail {

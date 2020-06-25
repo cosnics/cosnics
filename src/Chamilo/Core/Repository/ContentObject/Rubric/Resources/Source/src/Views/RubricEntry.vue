@@ -395,19 +395,22 @@
             width: 40em;
             height: 2.2em;
             max-width: 100%;
-            background: transparent;
             border: 1px solid #d0d0d0;
             border-radius: $border-radius;
             resize: none;
 
             &:hover, &:focus {
                 border: 1px solid #aaa;
-                background: white;
                 resize: both;
+                outline: none;
 
                 &::placeholder {
                     color: #666;
                 }
+            }
+
+            &:focus {
+                border: 1px solid $input-color-focus;
             }
 
             &::placeholder {
@@ -484,7 +487,7 @@
 
             .custom-feedback {
                 margin-top: 1.5em;
-                margin-left: 1.5em;
+                margin-left: .3em;
             }
         }
 
