@@ -45,21 +45,20 @@
         outline: none;
         width: 1.3rem;
         height: 1.3rem;
-        transform: translate(.1rem, .2rem)scale(2, 1.1);
+        transform: translate(.1rem, .2rem)scale(1.75, 1);
         margin-right: .2rem;
     }
-    #path-1 {
-        fill: $cluster-color-selected;
+    #path-1, #path-2 {
         transition: fill 200ms;
+    }
+    #path-1 {
+        fill: hsla(191, 26%, 53%, 1);
     }
     #path-2 {
-        fill: $cluster-color-selected;
-        transition: fill 200ms;
+        fill: hsla(220, 20%, 85%, 1);
     }
-    .btn-show-split-view.checked {
-        #path-2 {
-            fill: $cluster-color;
-        }
+    .btn-show-split-view.checked #path-2 {
+        fill: hsla(191, 26%, 53%, 1);
     }
     /*.btn-show-split-view:not(.checked):hover {
         #path-2 {

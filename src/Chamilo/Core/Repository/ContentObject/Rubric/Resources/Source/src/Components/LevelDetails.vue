@@ -22,10 +22,10 @@
             <input :id="`level_default_${index}`" :tabindex="tabIndex" type="radio" :checked="level.isDefault" @click.stop="setDefault" class="input-detail">
             <label :for="`level_default_${index}`" :class="`${level.isDefault ? 'checked' : 'not-checked'}`" class="fa" aria-hidden="true"></label>
         </div>
-        <span style="flex-basis: 100%; height: 0"></span>
+        <!--<span style="flex-basis: 100%; height: 0"></span>-->
         <div v-if="isNew" class="actions">
-            <button class="btn-name-input btn-ok" @click.prevent="addNewLevel">Voeg toe</button>
-            <button class="btn-name-input btn-cancel" @click.prevent="cancelNewLevel">Annuleer</button>
+            <button class="btn-strong mod-confirm" @click.prevent="addNewLevel">Voeg toe</button>
+            <button class="btn-strong" @click.prevent="cancelNewLevel">Annuleer</button>
         </div>
         <div class="level-actions" @click.stop="" >
             <div style="">
@@ -108,5 +108,4 @@
             this.$emit('level-remove', this.level);
         }
     }
-
 </script>

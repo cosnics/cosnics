@@ -28,7 +28,7 @@
                             <ul class="categories">
                                 <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`">
                                     <div class="category">
-                                        <div v-if="category.title" class="category-title category-indicator">{{ category.title }}</div>
+                                        <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
                                             <li v-for="criterium in category.criteria" role="grid" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
                                                 <div class="criterium" role="row" >
@@ -373,8 +373,11 @@
             .criterium-level,
             .btn-more,
             .subtotal {
-                opacity: 0;
+                /*opacity: 0;*/
                 pointer-events: none;
+            }
+            .table-header, .btn-check, .clusters {
+                opacity: 0;
             }
             /*.btn-score-number {
                 cursor: not-allowed;

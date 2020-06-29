@@ -126,6 +126,7 @@
 
         beforeDestroy() {
             if (this.rubric) {
+                console.log(this.rubric);
                 this.$emit('rubric-updated', this.rubric.toJSON());
             }
         }
@@ -133,6 +134,76 @@
 </script>
 
 <style lang="scss">
+
+    /** Buttons **/
+
+    .btn-strong {
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+        color: #666;
+        font-weight: 400;
+        transition: background-color 0.2s ease-in, color 0.1s ease-in;
+
+        &.mod-confirm {
+            background-color: $btn-color-lightened;
+            color: #fff;
+            margin-right: .4em;
+        }
+
+        &:hover, &:focus {
+            background-color: $btn-color;
+            border: 1px solid transparent;
+            color: #fff;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 1px #fff;
+        }
+
+        &[disabled] {
+            background-color: transparent;
+            border: 1px solid #cfcfcf;
+            color: #999;
+            cursor: not-allowed;
+        }
+    }
+
+    .btn-clear-text {
+        background: none;
+        border: 1px solid transparent;
+        color: darkgrey;
+        opacity: 1;
+        transition: opacity 200ms, color 200ms;
+
+        &::before {
+            font-family: FontAwesome;
+            font-size: 1.4rem;
+            content: '\f057'
+        }
+
+        &.is-empty-field {
+            opacity: 0;
+        }
+
+        &:hover {
+            color: #666;
+        }
+
+        &:focus {
+            outline: 1px solid $input-color-focus;
+        }
+
+        &.mod-textfield {
+            height: 100%;
+            padding: .4em .3em;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+
     /** Action Menu **/
 
     .item-actions {
@@ -182,10 +253,6 @@
     .name-input {
         margin-top: .5em;
         display: flex;
-
-        .btn-clear {
-            padding: 4px;
-        }
     }
 
     .name-input-actions {
@@ -195,6 +262,7 @@
 
     .name-input-title {
         flex: 1;
+        position: relative;
     }
 
     .name-input-field {
@@ -202,6 +270,11 @@
         min-height: 34px;
         color: #333;
         border: 1px solid #c0c0c0;
+
+        &.mod-textfield {
+            padding-right: 1.6em;
+            width: 100%;
+        }
 
         &:focus {
             outline: none;
@@ -211,52 +284,6 @@
         &::placeholder {
             color: #777;
             opacity: 1;
-        }
-    }
-
-    .btn-name-input {
-        border-radius: $border-radius;
-        transition: background-color 0.2s ease-in, color 0.1s ease-in;
-        border: 1px solid transparent;
-        color: #666;
-        font-weight: 400;
-
-        &:hover, &:focus {
-            background-color: $btn-color;
-            color: #fff;
-            border: 1px solid transparent;
-        }
-
-        &[disabled] {
-            background-color: transparent;
-            border: 1px solid #cfcfcf;
-            color: #999;
-            cursor: not-allowed;
-        }
-    }
-
-    .btn-ok {
-        background-color: $btn-color-lightened;
-        color: #fff;
-    }
-
-    .btn-cancel {
-        background-color: transparent;
-        border: 1px solid #cdcdcd;
-    }
-
-    .item-new button {
-        border: 1px solid transparent;
-        border-radius: $border-radius;
-
-        &:focus {
-            outline: none;
-            border: 1px solid $input-color-focus;
-        }
-
-        &.btn-name-input:focus {
-            border: 1px solid transparent;
-            box-shadow: inset 0 0 0 1px white;
         }
     }
 
@@ -324,27 +351,6 @@
             padding: 4px;
             width: 100%;
             border-radius: $border-radius;
-        }
-    }
-
-    /** Modal Remove Dialog **/
-
-    .btn-dialog-remove {
-        border-radius: $border-radius;
-        transition: background-color 0.2s ease-in, color 0.1s ease-in;
-        border: 1px solid transparent;
-        color: #666;
-        font-weight: 400;
-
-        &:hover, &:focus {
-            background-color: $btn-color;
-            color: #fff;
-            border: 1px solid transparent;
-        }
-
-        &.btn-ok {
-            margin-right: 8px;
-            color: #fff;
         }
     }
 
@@ -562,30 +568,30 @@
     }
 
     /** Rubric buttons **/
-    .btn-cluster-add, .btn-category-add, .btn-criterium-add {
+    .btn-new {
         background-color: transparent;
         border: 1px solid transparent;
         border-radius: $border-radius;
-        margin-left: -1px;
-        font-size: 1.25rem;
         color: darken($btn-color, 25%);
+        font-size: 1.25rem;
         transition: color 200ms;
         white-space: nowrap;
 
-        i {
-            margin-right: .4em;
+        &::before {
+            color: darken($btn-color, 15%);
+            content: '\f067';
+            font-family: FontAwesome;
             font-size: 1.1rem;
-            color: darken($btn-color, 15%);;
-            transition: color 200ms;
+            margin-right: .4em;
         }
 
-        &:hover, &:hover i {
+        &:hover, &:hover::before {
             color: $btn-color-darkened;
         }
 
         &:focus {
-            outline:none;
-            border: 1px solid $input-color-focus;
+            border-color: $input-color-focus;
+            outline: none;
         }
     }
 
@@ -877,31 +883,31 @@
             pointer-events: none;
         }
 
-        .btn-category-add {
+        .btn-new.mod-category-add {
             background-color: darken($bg-color, 5%);
             border-color: transparent;
-            width: 100%;
             border-radius: $border-radius;
-            text-align: left;
-            padding: .5em;
-            transition: background-color 200ms, color 200ms;
-            font-size: 1.4rem;
             color: #444;
+            font-size: 1.4rem;
+            padding: .5em;
+            text-align: left;
+            transition: background-color 200ms, color 200ms;
+            width: 100%;
 
-            i {
-                margin-right: .35em;
-                font-size: 1.2rem;
+            &::before {
                 color: #666;
+                font-size: 1.2rem;
+                margin-right: .35em;
                 transition: color 200ms;
             }
 
             &:hover, &:focus {
                 background-color: $btn-color;
                 border-color: transparent;
-                font-weight: 600;
                 color: #fff;
+                font-weight: 600;
 
-                i {
+                &::before {
                     color: #fff;
                 }
             }
@@ -1005,18 +1011,6 @@
             }
         }
 
-        .rb-cluster {
-            &.selected, &:not(.selected):hover, &.show-menu {
-                .item-actions:focus {
-                    /*border-color: white;*/
-                }
-            }
-        }
-
-            /*.app-container:not(.dragging) .criterium:hover .item-actions, .app-container:not(.dragging) .handle-area-category:hover .item-actions, .app-container:not(.dragging) .cluster-list-item:hover .item-actions {
-                opacity: 1;
-            }*/
-
         .action-menu {
             display: none;
             width: 9em;
@@ -1081,6 +1075,7 @@
 
             &:not(.cluster-new) {
                 flex-direction: column;
+
                 .name-input-actions {
                     margin-top: .4em;
                     margin-left: 0;
@@ -1241,20 +1236,13 @@
         }
 
         .rb-cluster {
-            font-size: 1.35rem;
             background-color: hsla(160, 6%, 90%, 1);
             border: 1px solid hsla(197, 10%, 86%, 1);
-            color: hsla(200, 10%, 38%, 1);
             border-radius: $border-radius;
+            color: hsla(200, 10%, 38%, 1);
+            font-size: 1.35rem;
             padding: .3em 0 .4em .5em;
             white-space: nowrap;
-
-
-            /*.title i {
-                font-size: 1.2rem;
-                margin-right: .5em;
-                display: inline-block;
-            }*/
 
             .item-actions {
                 opacity: 1;
@@ -1270,41 +1258,20 @@
             }
 
             .action-menu {
-                top: 4.6em;
                 right: -7.4em;
+                top: 4.6em;
             }
-
 
             &.selected {
-                /*box-shadow: 0px 2px 4px #999;*/
-                /*border-color: $cluster-color-selected!important;*/
-                border-color: hsla(194, 15%, 77%, 1);
                 background: $bg-color;
+                border-color: hsla(194, 15%, 77%, 1);
                 color: hsla(190, 45%, 38%, 1);
                 font-weight: bold;
-
-                /*.item-actions {
-                    i {
-                        color: #ddd;
-                    }
-
-                    &.show-menu, &:hover {
-                        background: $cluster-item-actions-bg-color-selected;
-                    }
-                }
-
-
-                &:hover .item-actions {
-                    color: #fff;
-                    i {
-                        color: #fff;
-                    }
-                }*/
             }
+
             &:hover {
                 background: hsla(210, 30%, 75%, .3);
             }
-
         }
 
         .clusters-view.mod-separator .rb-cluster {
@@ -1484,11 +1451,9 @@
 
             .item-header-bar {
                 padding: .65em 0;
-                /*&:hover .item-actions {
-                    opacity: 1;
-                }*/
 
                 .item-actions {
+                    height: 1.8em;
                     padding: 2px 0;
 
                     i {
@@ -1521,8 +1486,8 @@
             margin-top: .1em;
         }
 
-        .btn-category-add {
-            margin-top: .4em;
+        .cluster-content > .actions {
+            padding-top: .4em;
         }
 
         /** Criteria **/
@@ -1562,11 +1527,8 @@
 
             .item-header-bar {
                 width: 100%;
-                align-items: center;
+                align-items: baseline;
 
-                /*&:hover .item-actions {
-                    opacity: 1;
-                }*/
                 .item-actions {
                     padding: 2px 0;
 

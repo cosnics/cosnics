@@ -1,140 +1,142 @@
-.app-header {
-  display: flex;
-  border-top: 1px solid #d6d6d6;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.app-header-menu, .app-header-tools {
-  list-style: none;
-  display: flex;
-  margin-bottom: 0;
-  padding: 0.6em 0;
-}
-
-.app-header-menu {
-  margin-left: 1.5em;
-}
-
-.app-header-tools {
-  display: flex;
-
-  .check::before {
-    content: '\f096';
+@mixin app {
+  .app-header {
+    display: flex;
+    border-top: 1px solid #d6d6d6;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  i {
-    margin-right: 0.3em;
-    width: 1em;
+  .app-header-menu, .app-header-tools {
+    list-style: none;
+    display: flex;
+    margin-bottom: 0;
+    padding: 0.6em 0;
   }
 
-  .btn-check {
-    outline: none;
-    background: none;
-    color: #888;
-    border: none;
-    margin: 0;
-    padding: 0;
-    cursor: default;
+  .app-header-menu {
+    margin-left: 1.5em;
+  }
 
-    span {
-      border: 1px solid transparent;
-      border-radius: $border-radius;
+  .app-header-tools {
+    display: flex;
 
-      &:focus {
-        outline: none;
+    .check::before {
+      content: '\f096';
+    }
+
+    i {
+      margin-right: 0.3em;
+      width: 1em;
+    }
+
+    .btn-check {
+      outline: none;
+      background: none;
+      color: #888;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: default;
+
+      span {
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &:focus span {
+        box-shadow: 0 0 0 1px $input-color-focus;
+      }
+
+      &.checked {
+        color: $outline-color;
+
+        .check::before {
+          content: '\f046';
+        }
+      }
+
+      &:hover, &:focus {
+        color: darken($outline-color, 20%);
       }
     }
-
-    &:focus span {
-      box-shadow: 0 0 0 1px $input-color-focus;
-    }
-
-    &.checked {
-      color: $outline-color;
-
-      .check::before {
-        content: '\f046';
-      }
-    }
-
-    &:hover, &:focus {
-      color: darken($outline-color, 20%);
-    }
   }
-}
 
-.app-header-item select {
-  margin-right: .5em;
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 1px $outline-color-light;
-  }
-}
-
-.app-header-menu .app-header-item {
-  margin-right: 1em;
-  cursor: pointer;
-
-  a {
-    display: inline-block;
-    transition: color 120ms;
-    border-bottom: 1px solid transparent;
+  .app-header-item select {
+    margin-right: .5em;
 
     &:focus {
       outline: none;
+      box-shadow: 0 0 0 1px $outline-color-light;
     }
+  }
 
-    span {
-      border-radius: $border-radius;
+  .app-header-menu .app-header-item {
+    margin-right: 1em;
+    cursor: pointer;
+
+    a {
+      display: inline-block;
+      transition: color 120ms;
+      border-bottom: 1px solid transparent;
 
       &:focus {
         outline: none;
       }
-    }
 
-    &:focus span {
-      outline: 1px solid $input-color-focus;
-      outline-offset: 2px;
-    }
+      span {
+        border-radius: $border-radius;
 
-    &.active-link {
-      border-bottom: 1px solid darken($panel-border-color, 5%);
-    }
+        &:focus {
+          outline: none;
+        }
+      }
 
-    &:hover, &:focus {
-      text-decoration: none;
-    }
+      &:focus span {
+        outline: 1px solid $input-color-focus;
+        outline-offset: 2px;
+      }
 
-    &:hover {
-      border-bottom: 1px solid #23527c;
+      &.active-link {
+        border-bottom: 1px solid darken($panel-border-color, 5%);
+      }
+
+      &:hover, &:focus {
+        text-decoration: none;
+      }
+
+      &:hover {
+        border-bottom: 1px solid #23527c;
+      }
     }
   }
-}
 
-.save-state {
-  margin-right: 1.5em;
-  color: #337ab7;
-  width: 144px;
-  text-align: right;
-  transition: opacity 200ms;
+  .save-state {
+    margin-right: 1.5em;
+    color: #337ab7;
+    width: 144px;
+    text-align: right;
+    transition: opacity 200ms;
 
-  .saved {
-    opacity: 0.6;
+    .saved {
+      opacity: 0.6;
+    }
   }
-}
 
-#app {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 1.3rem;
-  line-height: 2.3rem;
-  display: flex;
-  flex-direction: column;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: $bg-color;
-  padding-bottom: 1.5em;
-  margin: -20px -15px -20px -15px;
+  #app {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.3rem;
+    line-height: 2.3rem;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: $bg-color;
+    padding-bottom: 1.5em;
+    margin: -20px -15px -20px -15px;
+  }
 }
 

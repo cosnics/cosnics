@@ -4,8 +4,8 @@
             <div class="modal-content-title" v-if="removeItem.constructor.name === 'Category' && removeItem.color === ''">Criteria verwijderen?</div>
             <div class="modal-content-title" v-else>{{ removeItem.constructor.name }} '{{ removeItem.title }}' verwijderen?</div>
             <div>
-                <button class="btn-dialog-remove btn-ok" ref="btn-remove" @click.stop="$emit('remove')">Verwijder</button>
-                <button class="btn-dialog-remove btn-cancel" @click.stop="$emit('cancel')">Annuleer</button>
+                <button class="btn-strong mod-confirm" ref="btn-remove" @click.stop="$emit('remove')">Verwijder</button>
+                <button class="btn-strong" @click.stop="$emit('cancel')">Annuleer</button>
             </div>
         </div>
     </div>

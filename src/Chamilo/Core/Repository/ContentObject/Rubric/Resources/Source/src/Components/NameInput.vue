@@ -1,13 +1,12 @@
 <template>
     <div class="name-input" @click.stop="">
 		<div class="name-input-title">
-			<input type="text" class="name-input-field" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">
-            <button v-if="hasInput" class="btn-clear fa fa-times-circle" @click="clearInput" />
-			<button v-else class="btn-clear fa fa-times-circle muted" disabled="disabled" />
+			<input type="text" class="name-input-field mod-textfield" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">
+            <button class="btn-clear-text mod-textfield" :class="{ 'is-empty-field': !hasInput }" :disabled="!hasInput" @click="clearInput"><span class="sr-only">Maak tekstveld leeg</span></button>
 		</div>
         <div class="name-input-actions">
-            <button class="btn-name-input btn-ok" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
-            <button class="btn-name-input btn-cancel" @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
+            <button class="btn-strong mod-confirm" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
+            <button class="btn-strong" @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
         </div>
     </div>
 </template>
@@ -62,6 +61,7 @@
                 this.hasInput = (this.$refs['name-input'] as any).value !== '';
             }
         }
+
         mounted() {
             if (this.value) {
                 this.hasInput = true;
@@ -73,34 +73,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .name-input-title {
-        position: relative;
-    }
-    .btn-clear {
-        position: absolute;
-        background: none;
-        border: 1px solid transparent;
-        font-size: 16px;
-        height: 100%;
-        top: 0;
-        right: 0;
-        color: darkgrey;
-        opacity: 1;
-        transition: opacity 200ms, color 200ms;
-    }
-    .btn-clear.muted {
-        opacity: 0;
-    }
-    .btn-clear:hover {
-        color: #666;
-    }
-    .name-input-field {
-        width: 100%;
-        padding-right: 18px;
-    }
-    .btn-ok {
-        margin-right: 5px;
-    }
-</style>

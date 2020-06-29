@@ -4,8 +4,8 @@
             <h1>Niveaus</h1>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
-                <li v-if="!newLevel" style="list-style: none;">
-                    <button class="btn-level-add" @click.stop="createNewLevel"><i class="fa fa-plus" aria-hidden="true" /> Niveau toevoegen</button>
+                <li v-if="!newLevel" class="level-new">
+                    <button class="btn-new" @click.stop="createNewLevel">Niveau toevoegen</button>
                 </li>
                 <level-details v-else :selected-level="newLevel" :has-new="true" :is-new="true" :rubric="rubric" :level="newLevel" tag="li" :key="`level_${rubric.levels.length}`" @new-level-added="addLevel" @new-level-canceled="cancelLevel" @level-default="setDefault"></level-details>
             </ul>
@@ -14,15 +14,15 @@
             <div class="modal-content" @click.stop="">
                 <div class="modal-content-title">Niveau '{{ removingLevel.title }}' verwijderen?</div>
                 <div>
-                    <button class="btn-dialog-remove btn-ok" ref="btn-remove-level" @click.stop="removeLevel(removingLevel)">Verwijder</button>
-                    <button class="btn-dialog-remove btn-cancel" @click.stop="hideRemoveLevelDialog">Annuleer</button>
+                    <button class="btn-strong mod-confirm" ref="btn-remove-level" @click.stop="removeLevel(removingLevel)">Verwijder</button>
+                    <button class="btn-strong" @click.stop="hideRemoveLevelDialog">Annuleer</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Rubric from '../Domain/Rubric';
     import Level from '../Domain/Level';
@@ -135,6 +135,14 @@
             this.selectLevel(null);
         }
 
+        @Watch('removingLevel')
+        onRemoveItemChanged() {
+            if (this.removingLevel) {
+                this.$nextTick(() => {
+                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
+                });
+            }
+        }
     }
 </script>
 <style lang="scss">
@@ -166,12 +174,12 @@
     }
 
     .levels-list {
+        list-style: none;
         margin: 2.5em 0 0 0;
         padding: 0;
     }
 
     .level-details {
-        list-style: none;
         display: flex;
         flex-wrap: wrap;
         width: 100%;
@@ -382,6 +390,7 @@
                 display: block;
                 color: #bbb;
                 height: 0;
+                cursor: pointer;
             }
 
             &:focus + label::before, &:hover + label::before {
@@ -463,29 +472,11 @@
         }
     }
 
-    .btn-level-add {
-        background-color: transparent;
-        border: none;
-        font-size: 1.25rem;
-        color: #777;
-        margin-left: .5em;
-
-        i {
-            margin-right: .1em;
-            font-size: 1.1rem;
-            color: #999;
-        }
-
-        &:hover, &:hover i {
-            color: $btn-color-darkened;
-        }
+    .level-new {
+        padding-left: .5em;
     }
 
     .level-details .actions {
         margin-top: .5em;
-
-        .btn-ok {
-            margin-right: .5em;
-        }
     }
 </style>

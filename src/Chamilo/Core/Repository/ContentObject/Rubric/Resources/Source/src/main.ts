@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import RubricMegaWrapper from './Views/RubricDemoWrapper.vue';
+import RubricDemoWrapper from './Views/RubricDemoWrapper.vue';
 import MegaWrapperMenu from './Components/MegaWrapperMenu.vue';
 import ScoreRubric from './plugin';
 import router from './Router/router';
@@ -28,6 +28,6 @@ new Vue({
 new Vue({
   router,
   render: function(h) {
-    return h(RubricMegaWrapper)
+    return h(RubricDemoWrapper)
   }
 }).$mount('#app');
