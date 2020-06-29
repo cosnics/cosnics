@@ -1,11 +1,30 @@
+<i18n>
+{
+    "en": {
+        "builder": "Rubric",
+        "levels": "Levels",
+        "builderfull": "Quick Feedback"
+    },
+    "fr": {
+        "builder": "Rubrique",
+        "levels": "Niveaux",
+        "builderfull": "Rétroaction Rapide"
+    },
+    "nl": {
+        "builder": "Rubric",
+        "levels": "Niveaus",
+        "builderfull": "Snelle Feedback"
+    }
+}
+</i18n>
 <template>
     <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels', 'builder-full-app': $route.name === 'BuilderFull'}">
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-menu">
-                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Rubric</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Niveaus</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Quick Feedback</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">{{ $t('builder') }}</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">{{ $t('levels') }}</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
                 </ul>
             </nav>
             <!--<ul class="app-header-tools">
@@ -83,6 +102,10 @@
 
         set content(content: string) {
             this.uiState.content = content;
+        }
+
+        created() {
+            this.$i18n.locale = document.documentElement.lang;
         }
 
         mounted() {

@@ -8,6 +8,8 @@ import router from './Router/router';
 import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(BootstrapVue);
+import VueI18n from 'vue-i18n';
+Vue.use(VueI18n);
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
