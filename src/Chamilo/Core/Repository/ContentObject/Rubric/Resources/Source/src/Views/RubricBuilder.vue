@@ -1443,6 +1443,7 @@
                     hsla(60, 2%, 91%, 0) 14px,
                     hsla(204, 38%, 40%, 0) 0px,
                     hsla(204, 38%, 40%, 0.12) 36px);
+            background: hsla(204, 38%, 40%, 0.12);
 
             .btn-color {
                 width: 6px;
@@ -1513,7 +1514,8 @@
             /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
 
             &.selected {
-                border: 1px solid hsla(193, 14%, 75%, 1);
+                /*border: 1px solid hsla(193, 14%, 75%, 1);*/
+                border: 2px solid $btn-color;
                 margin-top: -1px;
 /*                border: 1px solid darken($bg-criterium-details, 10%);*/
                 /*border-radius: $border-radius;*/

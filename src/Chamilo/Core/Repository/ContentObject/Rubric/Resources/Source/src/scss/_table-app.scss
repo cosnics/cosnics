@@ -50,6 +50,10 @@
     padding: 0;
   }
 
+  .cluster {
+    margin-bottom: 2em;
+  }
+
   .cluster-title {
     font-size: 1.8rem;
     margin: .25em 0 0 .85em;
@@ -66,17 +70,27 @@
 
   .category {
     margin: .75em 0 1.2em 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
+
 
   .category-title {
     font-size: 1.5rem;
-    margin: .25em 0 0 0;
+    /*margin: .25em 0 0 0;*/
+    margin: .75em 0;
     color: $title-color;
-    line-height: unset;
+    line-height: 1.3em;
+    display: flex;
+    align-items: baseline;
 
     &.category-indicator:before {
-      width: .8em;
-      height: .8em;
+      min-width: 12px;
+      height: 12px;
+      margin-left: .05em;
+      margin-right: .35em;
     }
   }
 
@@ -151,8 +165,8 @@
 
     &.category-indicator:before {
       margin-top: .3em;
-      min-width: .6em;
-      height: .65em;
+      min-width: 8px;
+      height: 8px;
       border-radius: 50%;
       margin-left: -.15em;
       margin-right: .5em;

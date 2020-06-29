@@ -384,7 +384,7 @@
                 display: flex;
             }
             .criterium {
-                align-items: baseline;
+                align-items: center;
             }
         }
     }

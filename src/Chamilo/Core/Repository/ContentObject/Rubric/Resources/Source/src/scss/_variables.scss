@@ -1,7 +1,8 @@
 /** Colors **/
 
 /*$bg-color: hsla(165, 5%, 90%, 1);*/
-$bg-color: hsla(120, 2%, 91%, 1);
+/*$bg-color: hsla(120, 2%, 91%, 1);*/
+$bg-color: rgba(240, 240, 240, 1);
 $bg-color-darkened: darken($bg-color, 10%);
 $panel-border-color: hsla(199, 39%, 73%, 1);
 $panel-border-divider-color: hsla(200, 25%, 80%, 1);
@@ -38,7 +39,7 @@ $modal-bg: rgba(0, 0, 0, 0.31);
 $text-color: #555;
 $level-header-color: hsla(190, 30%, 55%, 1);
 $title-color: hsla(203, 38%, 33%, 1);
-$score-lighter: hsla(190, 20%, 78%, .2);
+$score-lighter: hsla(190, 20%, 78%, .4);
 $score-light: hsla(190, 20%, 78%, .5);
 $score-dark: hsla(190, 40%, 45%, .75);
 $score-darker: hsla(190, 40%, 35%, 1);
