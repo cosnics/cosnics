@@ -191,18 +191,18 @@
         border-top-color: hsla(214, 20%, 85%, 1);
         transition: background-color 200ms;
 
-        .input-detail {
+        /*.input-detail {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid transparent;
-        }
+        }*/
 
         &.selected {
             background-color: #d4d8de;
             border-color: hsla(214, 20%, 80%, 1);
 
-            .input-detail {
+            /*.input-detail {
                 background: white;
-            }
+            }*/
 
             + .level-details {
                 border-top-color: transparent;
@@ -280,7 +280,7 @@
         transform: rotate(-180deg);
     }*/
 
-    .input-detail {
+    /*.input-detail {
         background: rgba(255,255,255,0.2);
         border: 1px solid transparent;
         border-radius: $border-radius;
@@ -296,7 +296,28 @@
             background: white;
             border-color: $input-color-focus;
         }
+    }*/
+
+    .input-detail {
+        background-color: hsla(180, 50%, 94%, 1);
+        border: 1px solid #d0d0d0;
+        border-radius: $border-radius;
+        padding: 2px 5px;
+
+        &:hover, &:focus {
+            background-color: #fff;
+        }
+
+        &:hover {
+            border: 1px solid #aaa;
+        }
+
+        &:focus {
+            outline: none;
+            border: 1px solid $input-color-focus;
+        }
     }
+
 
     .level-label {
         color: lighten($title-color, 10%);
@@ -379,7 +400,7 @@
         }
 
         .input-detail {
-            display:block;
+            display: block;
             opacity: 0;
             transform: translateY(2px);
 
