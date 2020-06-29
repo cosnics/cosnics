@@ -1443,7 +1443,7 @@
             }
 
             .category-header.null-category .rb-category-title .title {
-                margin-left: .5em;
+                margin-left: 1.5em;
                 opacity: 0.8;
                 font-style: italic;
             }
@@ -1476,6 +1476,11 @@
                     hsla(60, 2%, 91%, 0) 14px,
                     hsla(204, 38%, 40%, 0) 0px,
                     hsla(204, 38%, 40%, 0.12) 36px);
+
+            .btn-color {
+                width: 6px;
+                height: 100%;
+            }
 
             .item-header-bar {
                 padding: .65em 0;
@@ -1596,7 +1601,7 @@
 
             .title {
                 flex: 1;
-                padding: .7em .5em;
+                padding: .7em .5em .7em 1.5em;
                 min-height: 3.419rem;
             }
 
