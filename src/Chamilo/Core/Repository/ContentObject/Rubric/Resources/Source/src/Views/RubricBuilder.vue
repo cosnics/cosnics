@@ -1366,6 +1366,7 @@
             color: hsla(204, 45%, 25%, 0.6);
             padding: .5em .5em 0;
             font-style: italic;
+            text-align: center;
         }
 
         .rb-categories {
