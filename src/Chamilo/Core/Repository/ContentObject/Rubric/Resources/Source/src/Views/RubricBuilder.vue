@@ -1105,14 +1105,19 @@
         }
 
         .clusters-collapse {
-            position: initial;
             overflow: unset;
+            overflow-x: auto;
+            position: initial;
+            @include scrollbar();
+
+            &::-webkit-scrollbar {
+                height: 6px;
+            }
 
             .clusters-view {
                 transform: unset;
             }
         }
-
 
         /** Rubric Editor **/
 
@@ -1198,6 +1203,8 @@
 
         .clusters-view.mod-separator {
             border-bottom: 1px solid hsla(194, 15%, 77%, 1);
+            width: fit-content;
+            min-width: 100%;
         }
 
         .rb-clusters {
