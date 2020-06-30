@@ -22,16 +22,16 @@
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
                 <ul class="clusters" :class="{'show-default-feedback': showDefaultFeedbackFields, 'show-custom-feedback': showDefaultFeedbackFields}">
-                    <li v-for="cluster in rubric.clusters" class="cluster-list-item">
+                    <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                         <div class="cluster">
                             <h2 class="cluster-title">{{ cluster.title }}</h2>
                             <ul class="categories">
-                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`">
+                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`" v-if="rubric.getAllCriteria(category).length > 0">
                                     <div class="category">
                                         <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
                                             <li v-for="criterium in category.criteria" role="grid" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
-                                                <div class="criterium" role="row" >
+                                                <div class="criterium" role="row">
                                                     <div class="criterium-title-header" role="gridcell">
                                                         <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="criterium.showDefaultFeedback ? 'true' : 'false'" @click.prevent="criterium.showDefaultFeedback = !criterium.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
                                                     </div>
@@ -56,9 +56,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <!--<div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div><div class="score-wrap"><div class="score-number">{{ getCategoryScore(category) }} <span class="text-hidden">punten</span></div></div>
-                                    </div>-->
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">

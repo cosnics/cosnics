@@ -11,11 +11,11 @@
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
                 <ul class="clusters">
-                    <li v-for="cluster in rubric.clusters" class="cluster-list-item">
+                    <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                         <div class="cluster">
                             <h2 class="cluster-title">{{ cluster.title }}</h2>
                             <ul class="categories">
-                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`">
+                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? category.color : 'none' }`"  v-if="rubric.getAllCriteria(category).length > 0">
                                     <div class="category">
                                         <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
@@ -33,12 +33,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <!--<div class="subtotal category-total">
-                                        <div class="category-indicator">Totaal {{ category.title }}:</div>
-                                        <div v-for="evaluator in evaluators" class="score-wrap">
-                                            <div class="score-number">{{ getCategoryScore(category, evaluator) }}</div>
-                                        </div>
-                                    </div>-->
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total">
