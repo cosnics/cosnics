@@ -435,12 +435,6 @@
             .criterium {
                 flex-direction: column;
                 margin-bottom: 2em;
-
-                .criterium-level-title {
-                    display: block;
-                    flex: 1;
-                    line-height: 2.4em;
-                }
             }
 
             .criterium-title-header {

@@ -189,13 +189,21 @@
   }
 
   @media only screen and (min-width: 900px) {
-    .criterium .criterium-level-title {
+    .criterium-level-title {
       position: absolute;
       left: -10000px;
       top: auto;
       width: 1px;
       height: 1px;
       overflow: hidden;
+    }
+  }
+
+  @media only screen and (max-width: 899px) {
+    .criterium-level-title {
+      display: block;
+      flex: 1;
+      line-height: 2.4em;
     }
   }
 
