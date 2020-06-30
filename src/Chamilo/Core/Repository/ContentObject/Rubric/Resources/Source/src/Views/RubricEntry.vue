@@ -493,10 +493,13 @@
                 margin-left: .3em;
             }
         }
+    }
+    @media only screen and (min-width: 900px) {
+        .entry-app .criterium {
+            align-items: baseline;
 
-        @media only screen and (min-width: 900px) {
-            .entry-app .criterium {
-                align-items: baseline;
+            .criterium-title {
+                margin-right: 1.5em;
             }
         }
     }
