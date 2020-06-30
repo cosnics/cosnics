@@ -1,5 +1,5 @@
 <template>
-    <div v-if="rubric" class="rubric">
+    <div class="rubric">
         <div class="rubric-builder-full-view">
             <div class="table-header-wrap">
                 <div class="table-header">
@@ -18,12 +18,12 @@
                                 <div class="category">
                                     <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                     <ul class="criteria">
-                                        <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': criterium.showDefaultFeedback, 'show-custom-feedback': criterium.showDefaultFeedback}">
+                                        <li v-for="criterium in category.criteria" class="criterium-list-item">
                                             <div class="criterium">
                                                 <div class="criterium-title-header">
                                                     <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                 </div>
-                                                <div v-for="level in criterium.choices" class="criterium-level">
+                                                <div v-for="level in getCriteriumData(criterium).choices" class="criterium-level">
                                                     <div class="criterium-level-header">
                                                         <div class="criterium-level-title">
                                                             {{level.title}}
@@ -50,11 +50,9 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import TreeNode from '../Domain/TreeNode';
     import Rubric from '../Domain/Rubric';
-    import Choice from '../Domain/Choice';
-    import Cluster from '../Domain/Cluster';
     import Criterium from '../Domain/Criterium';
+    import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
     import DataConnector from '../Connector/DataConnector';
 
@@ -64,8 +62,8 @@
     }
 
     interface CriteriumExt {
+        criterium: Criterium;
         choices: any[];
-        score: number|null;
     }
 
     @Component({
@@ -76,6 +74,7 @@
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
+        private criteriaData: CriteriumExt[] = [];
 
         updateHeight(e: InputEvent) {
             this.$nextTick(() => {
@@ -93,46 +92,37 @@
             }
         }
 
-        private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
-            treeNode.children.filter(child => (child instanceof Criterium)).forEach(
-                criterium => criteria.push(criterium as Criterium)
-            );
-
-            treeNode.children.filter(child => child.hasChildren()).forEach(
-                child => this.getCriteriaRecursive(child, criteria)
-            )
-        }
-
-        get populatedClusters() {
-            return this.rubric!.clusters.filter((cluster: Cluster) => {
-                const criteria: Criterium[] = [];
-                this.getCriteriaRecursive(cluster, criteria);
-                return criteria.length !== 0;
-            });
+        getCriteriumData(criterium: Criterium) : CriteriumExt {
+            const criteriumExt = this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium);
+            if (!criteriumExt) { throw new Error(`No data found for criterium: ${criterium}`); }
+            return criteriumExt;
         }
 
         private initScores(rubric: Rubric) {
             rubric.getAllCriteria().forEach(criterium => {
-                const criteriumExt = criterium as unknown as CriteriumExt;
-                Vue.set(criteriumExt, 'choices', []);
+                const criteriumExt: CriteriumExt = { criterium: criterium, choices: [] };
                 rubric.levels.forEach(level => {
                     const choice = rubric.getChoice(criterium, level);
                     const score = rubric.getChoiceScore(criterium, level);
                     criteriumExt.choices.push({ title: level.title, choice, score});
                 });
+                this.criteriaData.push(criteriumExt);
             });
         }
 
-        mounted() {
+        created() {
             if (this.rubric) {
                 this.initScores(this.rubric);
                 // todo: get rubric data id
-                this.$nextTick(() => {
-                    document.querySelectorAll('.ta-feedback').forEach(el => {
-                        updateHeight(el as HTMLElement);
-                    });
-                });
             }
+        }
+
+        mounted() {
+            this.$nextTick(() => {
+                document.querySelectorAll('.ta-feedback').forEach(el => {
+                    updateHeight(el as HTMLElement);
+                });
+            });
         }
     }
 </script>
