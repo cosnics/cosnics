@@ -53,7 +53,7 @@
                 <div class="subtotal rubric-total-max">
                     <div class="rubric-total-title">Maximum score:</div>
                     <div v-for="evaluator in evaluators" class="score-wrap">
-                        <div class="score-number">{{ maximumScore }}</div>
+                        <div class="score-number">{{ rubric.getMaximumScore() }}</div>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
                         <p v-if="selectedCriterium.evaluations[evaluator].level !== null"><span>{{ evaluator|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{selectedCriterium.evaluations[evaluator].level.title}}</span>)</p>
                         <p v-if="selectedCriterium.evaluations[evaluator].feedback">
-                            Extra feedback: {{selectedCriterium.evaluations[evaluator].feedback}}
+                            Extra feedback: {{ selectedCriterium.evaluations[evaluator].feedback }}
                         </p>
                     </div>
                 </div>
@@ -133,39 +133,18 @@
         }
 
         getCategoryScore(category: Category, evaluator: string) : number {
-            return category.criteria.map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
+            if (!this.rubric) { return 0; }
+            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
         getClusterScore(cluster: Cluster, evaluator: string) : number {
-            return cluster.categories.map(category => this.getCategoryScore(category, evaluator)).reduce(add, 0);
+            if (!this.rubric) { return 0; }
+            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
         getRubricScore(evaluator: string) : number {
             if (!this.rubric) { return 0; }
-            return this.rubric.clusters.map(cluster => this.getClusterScore(cluster, evaluator)).reduce(add, 0);
-        }
-
-        get maximumScore() : number {
-            if (!this.rubric) { return 0; }
-            let maxScore = 0;
-            this.rubric.getAllCriteria(this.rubric).forEach(criterium => {
-                const levelScores = this.rubric!.levels.map(level => this.rubric!.getChoiceScore(criterium, level));
-                const max = levelScores.reduce(function(a, b) {
-                    return Math.max(a, b);
-                });
-                maxScore += max;
-            });
-            return maxScore;
-        }
-
-        private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
-            treeNode.children.filter(child => (child instanceof Criterium)).forEach(
-                criterium => criteria.push(criterium as Criterium)
-            );
-
-            treeNode.children.filter(child => child.hasChildren()).forEach(
-                child => this.getCriteriaRecursive(child, criteria)
-            )
+            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
         private initData(rubric: Rubric, results: any) {

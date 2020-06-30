@@ -207,6 +207,16 @@ export default class Rubric extends TreeNode {
             .reduce((accumulator, currentTreeNode) => accumulator + currentTreeNode.getScore(), 0);
     }
 
+    public getMaximumScore() : number {
+        let maxScore = 0;
+        this.getAllCriteria().forEach(criterium => {
+            const levelScores = this.levels.map(level => this.getChoiceScore(criterium, level));
+            const max = levelScores.reduce((curr, score) => Math.max(curr, score), 0);
+            maxScore += max;
+        });
+        return maxScore;
+    }
+
     public getAllCriteria(treeNode: TreeNode = this) {
         const criteria: Criterium[] = [];
         this.getCriteriaRecursive(treeNode, criteria);

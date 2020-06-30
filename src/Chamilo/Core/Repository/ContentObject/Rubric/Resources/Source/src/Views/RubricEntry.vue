@@ -68,7 +68,7 @@
                     <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
                 <div class="subtotal rubric-total-max">
-                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number">{{ maximumScore }} <span class="text-hidden">punten</span></div></div>
+                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
             </div>
         </div>
@@ -178,47 +178,18 @@
         }
 
         getCategoryScore(category: Category) : number {
-            return category.criteria.map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
+            if (!this.rubric) { return 0; }
+            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
         getClusterScore(cluster: Cluster) : number {
-            return cluster.categories.map(category => this.getCategoryScore(category)).reduce(add, 0);
+            if (!this.rubric) { return 0; }
+            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
         getRubricScore() : number {
             if (!this.rubric) { return 0; }
-            return this.rubric.clusters.map(cluster => this.getClusterScore(cluster)).reduce(add, 0);
-        }
-
-        get maximumScore() : number {
-            if (!this.rubric) { return 0; }
-            let maxScore = 0;
-            this.rubric.getAllCriteria(this.rubric).forEach(criterium => {
-                const levelScores = this.rubric!.levels.map(level => this.rubric!.getChoiceScore(criterium, level));
-                const max = levelScores.reduce(function(a, b) {
-                    return Math.max(a, b);
-                });
-                maxScore += max;
-            });
-            return maxScore;
-        }
-
-        private getCriteriaRecursive(treeNode: TreeNode, criteria: Criterium[]) {
-            treeNode.children.filter(child => (child instanceof Criterium)).forEach(
-                criterium => criteria.push(criterium as Criterium)
-            );
-
-            treeNode.children.filter(child => child.hasChildren()).forEach(
-                child => this.getCriteriaRecursive(child, criteria)
-            )
-        }
-
-        get populatedClusters() {
-            return this.rubric!.clusters.filter((cluster: Cluster) => {
-                const criteria: Criterium[] = [];
-                this.getCriteriaRecursive(cluster, criteria);
-                return criteria.length !== 0;
-            });
+            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
         private initData(rubric: Rubric, results: any) {
