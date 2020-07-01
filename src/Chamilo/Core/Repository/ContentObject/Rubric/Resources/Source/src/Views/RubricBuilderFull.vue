@@ -205,10 +205,12 @@
             }
 
             .criterium-level-header {
+                background: #ddd;
                 display: flex;
+                margin: .3em 0 -.1em .75em;
+                padding-left: .25em;
+                padding-right: .3em;
                 text-align: left;
-                background: none;
-                margin: .3em .5em -.1em 1em;
             }
             
             .default-feedback {

@@ -266,6 +266,10 @@
                 /*border-bottom: 1px solid darken($score-lighter, 20%);*/
             }
         }
+
+        .criterium {
+            align-items: center;
+        }
     }
 
     .rr-selected-criterium {
@@ -368,9 +372,6 @@
         .result-app {
             .rubric {
                 display: flex;
-            }
-            .criterium {
-                align-items: center;
             }
         }
     }
