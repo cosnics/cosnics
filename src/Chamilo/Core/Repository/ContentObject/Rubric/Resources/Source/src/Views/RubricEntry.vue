@@ -401,6 +401,10 @@
 
     @media only screen and (max-width: 899px) {
         .entry-app {
+            .rubric-entry-view {
+                width: 40em;
+            }
+
             .table-header {
                 display: none;
             }
@@ -408,6 +412,10 @@
             .criterium {
                 flex-direction: column;
                 margin-bottom: 2em;
+            }
+
+            .criterium-title {
+                margin-right: 1.1em;
             }
 
             .criterium-title-header {
@@ -429,6 +437,10 @@
                 &.selected .criterium-level-title {
                     color: white;
                 }
+            }
+
+            .criterium-level {
+                margin-left: .8em;
             }
 
             .criterium-level:nth-last-child(2) {
@@ -453,8 +465,7 @@
             }
 
             .custom-feedback {
-                margin-top: 1.5em;
-                margin-left: .3em;
+                margin: -1.5em 1em 1em 1.3em;
             }
         }
     }
@@ -465,6 +476,9 @@
             .criterium-title {
                 margin-right: 1.5em;
             }
+        }
+        .entry-app .criterium-title-header {
+            border-top: 1px solid $score-light;
         }
     }
 </style>
