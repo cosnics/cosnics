@@ -499,5 +499,6 @@
 
     .level-details .actions {
         margin-top: .5em;
+        width: 100%;
     }
 </style>
