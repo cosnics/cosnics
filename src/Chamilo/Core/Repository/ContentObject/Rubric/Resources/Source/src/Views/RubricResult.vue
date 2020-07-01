@@ -247,33 +247,40 @@
             border-radius: $border-radius;
 
             &.selected {
-                background: darken($score-lighter, 10%);
-                .score-number {
+                background: hsla(224, 20%, 68%, 0.3);
+                /*.score-number {
                     background: none;
                     border-bottom: 1px solid darken($score-lighter, 20%);
-                }
+                }*/
             }
         }
 
         .criterium-list-item:hover {
-            background: darken($score-lighter, 20%);
+            background: hsla(224, 20%, 68%, 0.4);
             cursor: pointer;
             border: 1px solid darken($score-lighter, 20%);
 
             .score-number {
-                background: none;
+                /*background: none;*/
                 cursor: pointer;
-                border-bottom: 1px solid darken($score-lighter, 20%);
+                /*border-bottom: 1px solid darken($score-lighter, 20%);*/
             }
         }
     }
 
     .rr-selected-criterium {
-        width: 40%;
-        border-left: 1px solid hsla(191, 21%, 80%, 1);
-        margin-left: 1.5em;
-        padding-left: 1.5em;
         margin-top: 1em;
+        width: 40em;
+    }
+    @media only screen and (min-width: 900px) {
+        .result-app {
+            .rr-selected-criterium {
+                border-left: 1px solid hsla(191, 21%, 80%, 1);
+                width: 40%;
+                margin-left: 1.5em;
+                padding-left: 1.5em;
+            }
+        }
     }
 
     .rr-selected-criterium-results {
