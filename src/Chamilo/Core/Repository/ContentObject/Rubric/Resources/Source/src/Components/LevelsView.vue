@@ -299,7 +299,7 @@
     }*/
 
     .input-detail {
-        background-color: hsla(180, 50%, 94%, 1);
+        background-color: hsla(190, 50%, 96%, 1);
         border: 1px solid #d0d0d0;
         border-radius: $border-radius;
         padding: 2px 5px;
