@@ -2,7 +2,7 @@
     <div :id="id" class="category-header handle category-handle" :class="{ 'null-category': !category.title }">
         <div class="item-header-bar">
             <div class="rb-category-title">
-                <button v-if="category.title" :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :class="{ 'vue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color}" @click="openColorPickerForCategory(category)"></button>
+                <button v-if="category.title" :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-color" :class="{ 'xvue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color || 'transparent'}" @click="openColorPickerForCategory(category)"></button>
                 <h2 class="title" @dblclick.stop="startEditing">{{ category.title || 'Lijst met criteria' }}</h2>
             </div>
             <button class="item-actions" :class="{'show-menu': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
