@@ -11,12 +11,26 @@ export default class Choice {
     public selected: boolean;
     public feedback: string;
     public hasFixedScore: boolean = false;
-    public fixedScore: number = 10;
+    private fixedScore_: number = 10;
     public static readonly FIXED_SCORE = 10;
 
     constructor(selected: boolean = false, feedback: string = '') {
         this.selected = selected;
         this.feedback = feedback;
+    }
+
+    // @ts-ignore
+    get fixedScore() : number {
+        return this.fixedScore_;
+    }
+
+    // @ts-ignore
+    set fixedScore(v: number|string) {
+        if (typeof v === 'number') {
+            this.fixedScore_ = v;
+        } else {
+            this.fixedScore_ = parseFloat(v);
+        }
     }
 
     toJSON(criteriumId: string, levelId: string): ChoiceJsonObject {
