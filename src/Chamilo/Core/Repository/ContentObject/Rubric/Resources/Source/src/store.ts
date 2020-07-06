@@ -844,23 +844,23 @@ export default {
         ]
     },
     rubricResults: {
-        "evaluators": ["student", "docent", "coach"],
+        "evaluators": ["Bob", "Alice", "Fred"],
         "evaluations": {
-            "docent": [
+            "Alice": [
                 {"criteriumId":"fufp9nyhm59tpv834p7s5","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Uitstekend!"},
                 {"criteriumId":"yjz8854ozprzhr2hw45wup","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Flink gedaan!"},
                 {"criteriumId":"bw5jbflbi7nkg78120bu","levelId":"ll1mno0a18hjedwy6w3jt","feedback":""},
                 {"criteriumId":"pqkx9h654qyix2dz78hok","levelId":"ewl5t7raruutqf4gudx15","feedback":"Hier had ik toch meer van verwacht"},
                 {"criteriumId":"9ec44j2au3v1nl9sigksrq","levelId":"icoz2ha4bahqvqfi71slz","feedback":""}
             ],
-            "student": [
+            "Bob": [
                 {"criteriumId":"fufp9nyhm59tpv834p7s5","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Ik vond het best moeilijk maar uiteindelijk lukte het wel."},
                 {"criteriumId":"yjz8854ozprzhr2hw45wup","levelId":"ll1mno0a18hjedwy6w3jt","feedback":""},
                 {"criteriumId":"bw5jbflbi7nkg78120bu","levelId":"icoz2ha4bahqvqfi71slz","feedback":""},
                 {"criteriumId":"pqkx9h654qyix2dz78hok","levelId":"icoz2ha4bahqvqfi71slz","feedback":""},
                 {"criteriumId":"9ec44j2au3v1nl9sigksrq","levelId":"icoz2ha4bahqvqfi71slz","feedback":""}
             ],
-            "coach": []
+            "Fred": []
         }
     }
 };
