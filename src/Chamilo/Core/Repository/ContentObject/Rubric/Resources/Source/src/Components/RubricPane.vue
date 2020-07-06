@@ -194,9 +194,16 @@
         onCategoryAddingChanged() {
             this.$nextTick(()=> {
                 const clusterContent = this.$refs['cluster-content'] as HTMLElement;
-                clusterContent.scrollTo(clusterContent.scrollWidth, 0);
+                if (clusterContent) {
+                    clusterContent.scrollTo(clusterContent.scrollWidth, 0);
+                }
                 //(this.$refs['btn-category-add'] as HTMLElement).blur();
             });
+        }
+
+        @Watch('selectedCluster')
+        onSelectedClusterChanged() {
+            this.$emit('dialog-new-category', '');
         }
 
         addCriterium(category: Category, criterium: Criterium) {
