@@ -7,6 +7,7 @@
                 <div class="table-header-wrap">
                     <div class="table-header">
                         <div v-for="evaluator in evaluators" class="table-header-title">{{ evaluator|capitalize }}</div>
+                        <div class="table-header-title mod-max">Max.</div>
                     </div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
@@ -29,6 +30,9 @@
                                                             getCriteriumScore(criterium, evaluator) }}</div>
                                                         <b-tooltip v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ getCriteriumData(criterium).evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
+                                                    <div class="subtotal criterium-total">
+                                                        <div class="score-number mod-max">{{ getCriteriumMaxScore(criterium) }}</div>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -40,6 +44,9 @@
                                 <div v-for="evaluator in evaluators" class="score-wrap">
                                     <div class="score-number">{{ getClusterScore(cluster, evaluator) }}</div>
                                 </div>
+                                <div class="score-wrap">
+                                    <div class="score-number mod-max">{{ getClusterMaxScore(cluster) }}</div>
+                                </div>
                             </div>
                         </div>
                     </li>
@@ -49,11 +56,8 @@
                     <div v-for="evaluator in evaluators" class="score-wrap">
                         <div class="score-number">{{ getRubricScore(evaluator) }}</div>
                     </div>
-                </div>
-                <div class="subtotal rubric-total-max">
-                    <div class="rubric-total-title">Maximum score:</div>
-                    <div v-for="evaluator in evaluators" class="score-wrap">
-                        <div class="score-number">{{ rubric.getMaximumScore() }}</div>
+                    <div class="score-wrap">
+                        <div class="score-number mod-max">{{ rubric.getMaximumScore() }}</div>
                     </div>
                 </div>
             </div>
@@ -129,6 +133,21 @@
         @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object, required: true}) readonly rubricResults!: any;
 
+        getCriteriumMaxScore(criterium: Criterium) : number {
+            const scores : number[] = [0];
+            const iterator = this.rubric!.choices.get(criterium.id);
+            iterator!.forEach((choice, levelId) => {
+                const level = this.rubric!.levels.find(level => level.id === levelId);
+                scores.push(this.rubric!.getChoiceScore(criterium, level!));
+            })
+            return Math.max.apply(null, scores);
+        }
+
+        getClusterMaxScore(cluster: Cluster) : number {
+            if (!this.rubric) { return 0; }
+            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
+        }
+
         getCriteriumScore(criterium: Criterium, evaluator: string) : number {
             return this.getCriteriumData(criterium).evaluations[evaluator].score || 0;
         }
@@ -198,7 +217,7 @@
         }
 
         .rubric-results-view {
-            width: 40em;
+            width: 46em;
             /*max-width: 60em;*/
             position: relative;
         }
@@ -270,12 +289,24 @@
         .criterium {
             align-items: center;
         }
+
+        .table-header-title.mod-max, .cluster-total .score-number.mod-max {
+            background: hsla(203, 33%, 60%, 1);
+        }
+
+        .criterium .score-number.mod-max {
+            background: hsla(197, 15%, 90%, 1);
+        }
+        .rubric-total .score-number.mod-max {
+            background: hsla(207, 40%, 35%, 1);
+        }
     }
 
     .rr-selected-criterium {
         margin-top: 1em;
         width: 40em;
     }
+
     @media only screen and (min-width: 900px) {
         .result-app {
             .rr-selected-criterium {

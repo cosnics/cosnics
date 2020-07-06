@@ -68,7 +68,7 @@
                     <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
                 <div class="subtotal rubric-total-max">
-                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
+                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number mod-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
                 </div>
             </div>
         </div>
@@ -329,6 +329,11 @@
             }
         }
 
+        .rubric-total-max .score-number.mod-max {
+            background: hsla(207, 40%, 35%, 1);
+            color: #fff;
+        }
+
         .btn-check,
         .table-header,
         .criterium-level,
@@ -346,7 +351,7 @@
                 /*opacity: 0;*/
                 pointer-events: none;
             }
-            .table-header, .btn-check, .clusters {
+            .table-header, .btn-check, .clusters, .subtotal {
                 opacity: 0;
             }
             /*.btn-score-number {
