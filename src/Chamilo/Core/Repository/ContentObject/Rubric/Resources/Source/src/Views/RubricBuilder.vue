@@ -262,7 +262,7 @@
 
     .name-input-title {
         flex: 1;
-        position: relative;
+        /*position: relative;*/
     }
 
     .name-input-field {
@@ -273,6 +273,14 @@
 
         &.mod-textfield {
             padding-right: 1.6em;
+            width: 100%;
+        }
+
+        &.mod-textarea {
+            display: block;
+            line-height: 1.3em;
+            resize: none;
+            overflow: hidden;
             width: 100%;
         }
 
@@ -443,6 +451,11 @@
                 }
             }
         }
+
+    }
+
+    .rb-clusters .name-input {
+        position: fixed;
     }
 
     .rb-cluster-list-item {
@@ -1074,22 +1087,29 @@
         /** Name Input **/
 
         .name-input {
+            flex-direction: column;
             margin-top: 0;
             margin-bottom: 1em;
+            font-weight: 400;
 
-            &:not(.cluster-new) {
-                flex-direction: column;
-
-                .name-input-actions {
-                    margin-top: .4em;
-                    margin-left: 0;
-                }
+            .name-input-actions {
+                margin-top: .4em;
+                margin-left: 0;
             }
 
             &.cluster-new {
                 margin-bottom: 0;
-                width: 29em;
-                height: 34px;
+                position: absolute;
+                width: 18em;
+                box-shadow: 0 2px 10px #999;
+                padding: .25em .25em .4em .25em;
+                top: .25em;
+
+                .name-input-field.mod-textarea {
+                    height: 35px;
+                    margin-top: .1em;
+                    padding-top: .6em;
+                }
             }
         }
 
@@ -1098,7 +1118,7 @@
         .edit-title .name-input {
             width: 104%;
             margin-left: -2%;
-            margin-top: -1%;
+            margin-top: -.25em;
             box-shadow: 0px 3px 10px #666;
         }
 
@@ -1435,6 +1455,10 @@
                 flex: 1;
                 /*font-weight: bold;*/
                 /*color: hsla(190, 50%, 35%, 1);*/
+            }
+
+            .name-input .name-input-field.mod-textarea {
+                font-size: 1.33rem;
             }
 
             .category-header.null-category .rb-category-title .title {

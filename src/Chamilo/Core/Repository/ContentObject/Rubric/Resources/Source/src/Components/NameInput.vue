@@ -1,8 +1,8 @@
 <template>
     <div class="name-input" @click.stop="">
 		<div class="name-input-title">
-			<input type="text" class="name-input-field mod-textfield" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">
-            <button class="btn-clear-text mod-textfield" :class="{ 'is-empty-field': !hasInput }" :disabled="!hasInput" @click="clearInput"><span class="sr-only">Maak tekstveld leeg</span></button>
+            <!--<input type="text" class="name-input-field mod-textfield" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keyup.enter="ok" @keyup.esc="cancel" :value="value" @input="$emit('input', $event.target.value)">-->
+            <textarea class="name-input-field mod-textarea" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keydown.enter.prevent="ok" @keyup.esc="cancel" :value="value" @input="onInput"></textarea>
 		</div>
         <div class="name-input-actions">
             <button class="btn-strong mod-confirm" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
@@ -13,6 +13,11 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+
+    function updateHeight(elem: HTMLElement) {
+        elem.style.height = '';
+        elem.style.height = `${elem.scrollHeight}px`;
+    }
 
     @Component({
         name: 'name-input',
@@ -56,6 +61,11 @@
             }
         }
 
+        onInput(event: any) {
+            this.$emit('input', event.target.value);
+            updateHeight(event.target);
+        }
+
         onChange() {
             if (this.$refs['name-input']) {
                 this.hasInput = (this.$refs['name-input'] as any).value !== '';
@@ -67,8 +77,10 @@
                 this.hasInput = true;
             }
             if (this.$refs['name-input']) {
-                //@ts-ignore
-                this.$refs['name-input'].focus();
+                (this.$refs['name-input'] as HTMLElement).focus();
+                /*if (this.value !== '') {
+                    updateHeight(this.$refs['name-input'] as HTMLElement);
+                }*/
             }
         }
     }
