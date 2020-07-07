@@ -2,12 +2,12 @@
     <li :id="id" class="rb-cluster-list-item" tabindex="0" @keydown.enter="$emit('cluster-selected', cluster)" @keyup.space="$emit('cluster-selected', cluster)" @click.stop="$emit('cluster-selected', cluster)">
         <div class="rb-cluster handle cluster-handle" tabindex="-1" :class="{ selected, 'show-menu': showMenuActions }">
             <div class="item-header-bar">
-                <div class="rb-cluster-title" @dblclick="startEditing">
+                <div class="rb-cluster-title" @dblclick="startEditing" :title="cluster.title">
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
                     {{cluster.title}}
                 </div>
-                <button class="item-actions" :class="{'show-menu': showMenuActions}" aria-label="Klap menu uit" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
-                <div class="action-menu" :class="{'show-menu': showMenuActions}">
+                <button class="item-actions" :class="{'show-menu': showMenuActions}" aria-label="Klap menu uit" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="onItemActions"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
+                <div class="action-menu mod-menu-fixed" :class="{'show-menu': showMenuActions }" :style="{ left: `${menuX}px`, top: `${menuY}px`}">
                     <ul class="action-menu-list">
                         <li @click.stop="startEditing" role="button" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" aria-hidden="true" /><span>Wijzig naam</span></li>
                         <li @click.stop="$emit('remove', cluster)" role="button" @keyup.space.enter="$emit('remove', cluster)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" aria-hidden="true" /><span>Verwijder</span></li>
@@ -35,6 +35,8 @@
         private isEditing: boolean = false;
         private oldTitle: string = '';
         private newTitle: string = '';
+        private menuX = 0;
+        private menuY = 0;
 
         @Prop({type: String, required: true}) readonly id!: string;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
@@ -43,6 +45,13 @@
 
         mounted() {
             this.resetTitle();
+        }
+
+        onItemActions(event: any) {
+            this.$emit('item-actions', this.id);
+            const rect = event.target.getBoundingClientRect();
+            this.menuX = rect.x;
+            this.menuY = rect.bottom + 36;
         }
 
         resetTitle() {

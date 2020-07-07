@@ -1022,6 +1022,10 @@
             &.show-menu {
                 display: flex;
             }
+
+            &.mod-menu-fixed {
+                position: fixed;
+            }
         }
 
         .action-menu-list {
@@ -1105,8 +1109,7 @@
         }
 
         .clusters-collapse {
-            overflow: unset;
-            overflow-x: auto;
+            overflow: hidden;
             position: initial;
             @include scrollbar();
 
@@ -1202,21 +1205,32 @@
         }
 
         .clusters-view.mod-separator {
-            border-bottom: 1px solid hsla(194, 15%, 77%, 1);
-            width: fit-content;
-            min-width: 100%;
+            position: relative;
+
+            &::before {
+                background: hsla(194, 15%, 77%, 1);
+                bottom: 0;
+                content: '';
+                display: block;
+                height: 1px;
+                position: absolute;
+                width: 100%;
+            }
         }
 
         .rb-clusters {
             display: flex;
             margin-bottom: -1px;
             margin-left: 1em;
+            max-width: calc(100% - 16em);
         }
 
         .rb-cluster-list-item {
             /* A border is needed here so the ghost item can show the dotted border without flicking the content below */
             border: 1px solid transparent;
+            flex: 1;
             margin-right: .65em;
+            overflow: hidden;
 
             &:first-child {
                 /* Offsetting the transparent pixel border so the items line up */
@@ -1276,9 +1290,15 @@
                 font-weight: bold;
             }
 
-            &:hover {
+            &:hover, &.show-menu {
                 background: hsla(210, 30%, 75%, .3);
             }
+        }
+
+        .rb-cluster-title {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .clusters-view.mod-separator .rb-cluster {
@@ -1288,7 +1308,7 @@
 
             &.selected {
                 height: 3.6rem;
-                margin-bottom: -1px;
+                margin-bottom: 0;
                 border-bottom-color: $bg-color;
             }
         }
