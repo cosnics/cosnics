@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --dest ./../Javascript/Builder/ --name cosnics-rubric src/plugin.ts",
+    "build": "vue-cli-service build --target lib --dest ./../Javascript/Builder/ --name cosnics-rubric src/plugin.ts && node post-build.js",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
