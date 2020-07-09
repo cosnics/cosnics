@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RubricDemoHome from '../Views/RubricDemoHome.vue';
-import RubricBuilderWrapper from '../Views/RubricBuilderWrapper.vue';
+import RubricBuilderDemoWrapper from '../Views/RubricBuilderDemoWrapper.vue';
 import RubricEntryWrapper from '../Views/RubricEntryWrapper.vue';
 import RubricResultWrapper from '../Views/RubricResultWrapper.vue';
 import ScoreRubricView from '../Components/ScoreRubricView.vue';
@@ -11,7 +11,25 @@ import RubricBuilderFull from '../Views/RubricBuilderFull.vue';
 
 Vue.use(VueRouter);
 
-const routes = [
+const builderRoutes = [
+  {
+    path: '/',
+    name: 'Builder',
+    component: ScoreRubricView,
+  },
+  {
+    path: '/levels',
+    name: 'BuilderLevels',
+    component: LevelsView,
+  },
+  {
+    path: '/full-view',
+    name: 'BuilderFull',
+    component: RubricBuilderFull,
+  }
+];
+
+const demoRoutes = [
   {
     path: '/',
     name: 'Home',
@@ -20,7 +38,7 @@ const routes = [
   },
   {
     path: '/builder',
-    component: RubricBuilderWrapper,
+    component: RubricBuilderDemoWrapper,
     children: [
       {
         path: '',
@@ -53,10 +71,17 @@ const routes = [
   }
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  linkExactActiveClass: 'active-link',
-  routes
-});
+const routers = {
+  getRouter: (name: string, mode: string = 'hash') => {
+    if (['demo', 'builder'].indexOf(name) === -1) {
+      throw new Error(`No router with name '${name}' available.`);
+    }
+    return new VueRouter({
+      mode,
+      linkExactActiveClass: 'active-link',
+      routes: (name === 'builder') ? builderRoutes : demoRoutes
+    });
+  }
+};
 
-export default router;
+export default routers;
