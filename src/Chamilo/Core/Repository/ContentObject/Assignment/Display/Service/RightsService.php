@@ -92,6 +92,17 @@ class RightsService
     }
 
     /**
+     * @param User $user
+     * @param Assignment $assignment
+     *
+     * @return bool
+     */
+    public function canUserEditAssignment(User $user, Assignment $assignment)
+    {
+        return $this->assignmentServiceBridge->canEditAssignment();
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param int $entityType

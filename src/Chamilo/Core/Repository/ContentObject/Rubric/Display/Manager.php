@@ -11,10 +11,10 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const PARAM_ACTION = 'RubricAction';
-
     const ACTION_BUILDER = 'Builder';
-
     const DEFAULT_ACTION = self::ACTION_BUILDER;
+
+    const PARAM_RUBRIC_CONTENT_OBJECT = 'RubricContentObject';
 
     /**
      * @return RubricService
@@ -29,6 +29,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function getRubric()
     {
+        $rubricContentObject = $this->getApplicationConfiguration()->get(self::PARAM_RUBRIC_CONTENT_OBJECT);
+        if($rubricContentObject instanceof Rubric)
+        {
+            return $rubricContentObject;
+        }
+
         return $this->get_root_content_object();
     }
 }

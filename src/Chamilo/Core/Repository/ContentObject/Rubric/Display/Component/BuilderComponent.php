@@ -6,13 +6,14 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * Class BuilderComponent
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Display\Component
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
-class BuilderComponent extends Manager
+class BuilderComponent extends Manager implements DelegateComponent
 {
 
     /**

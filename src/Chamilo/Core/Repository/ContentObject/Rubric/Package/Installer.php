@@ -9,4 +9,6 @@ use Chamilo\Core\Repository\Common\Action\ContentObjectInstaller;
  */
 class Installer extends ContentObjectInstaller
 {
+    //TODO: install doctrine ORM entities with this package
 }
+

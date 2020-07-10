@@ -268,6 +268,11 @@ abstract class Application
 
         if ($this->get_application())
         {
+            if($this->getApplicationConfiguration()->isEmbeddedApplication())
+            {
+                return null;
+            }
+
             return $this->get_application()->render_header($pageTitle);
         }
 
@@ -377,6 +382,11 @@ abstract class Application
     {
         if ($this->get_application())
         {
+            if($this->getApplicationConfiguration()->isEmbeddedApplication())
+            {
+                return null;
+            }
+
             return $this->get_application()->render_footer();
         }
 

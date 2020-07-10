@@ -276,7 +276,7 @@ abstract class Manager extends Application
      *
      * @return boolean
      */
-    public function any_object_selected()
+    public static function any_object_selected()
     {
         return !is_null(self::get_selected_objects());
     }

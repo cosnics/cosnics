@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      name="repository_rubric_result",
  *      indexes={
  *          @ORM\Index(name="rrr_context", columns={"context_class", "context_id"}),
- *          @ORM\Index(name="rrr_attempt", columns={"attempt_id"}),
+ *          @ORM\Index(name="rrr_attempt", columns={"result_id"}),
  *          @ORM\Index(name="rrr_target_user", columns={"target_user_id"})
  *      }
  * )

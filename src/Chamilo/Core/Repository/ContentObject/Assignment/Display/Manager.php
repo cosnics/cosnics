@@ -11,9 +11,13 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\N
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Assignment\Service\AssignmentRubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
@@ -52,6 +56,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_AJAX = 'Ajax';
     const ACTION_EPHORUS = 'Ephorus';
     const ACTION_EXTENSION = 'Extension';
+    const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
+    const ACTION_BUILD_RUBRIC = 'BuildRubric';
+    const ACTION_EMBED = 'Embed';
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -402,5 +409,56 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getContentObjectRepository()
     {
         return $this->getService(ContentObjectRepository::class);
+    }
+
+    /**
+     * @return AssignmentRubricService
+     */
+    protected function getAssignmentRubricService()
+    {
+        return $this->getService(AssignmentRubricService::class);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function supportsRubrics()
+    {
+        return $this->getRegistrationConsulter()->isContextRegistered(
+            'Chamilo\\Core\\Repository\\ContentObject\\Rubric'
+        );
+    }
+
+    /**
+     * @param string $action
+     *
+     * @param bool $embedded
+     *
+     * @return string|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     */
+    protected function runRubricComponent(string $action, bool $embedded = true): string
+    {
+        $rubric = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
+        if (!$rubric instanceof Rubric)
+        {
+            throw new NotAllowedException();
+        }
+
+        $applicationConfiguration =
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this, [], $embedded);
+
+        $applicationConfiguration->set(
+            \Chamilo\Core\Repository\ContentObject\Rubric\Display\Manager::PARAM_RUBRIC_CONTENT_OBJECT, $rubric
+        );
+
+        $application =
+            $this->getApplicationFactory()->getApplication(
+                'Chamilo\Core\Repository\ContentObject\Rubric\Display', $applicationConfiguration, $action
+            );
+
+        return $application->run();
     }
 }

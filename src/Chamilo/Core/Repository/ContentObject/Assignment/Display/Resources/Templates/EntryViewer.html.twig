@@ -142,9 +142,15 @@
                                                 style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
                                         {{ form_end(SCORE_FORM) }}
                                     {% endif %}
-
-
-
+                            {% endif %}
+                            {% if HAS_RUBRIC %}
+                                <div style="margin-top: 20px;">
+                                    <a href="{{ RUBRIC_ENTRY_URL }}" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                                    <a href="{{ RUBRIC_RESULTS_URL }}" class="btn btn-default">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    {{ RUBRIC_VIEW|raw }}
+                                </div>
                             {% endif %}
                         </div>
                     </div>

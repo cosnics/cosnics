@@ -71,7 +71,7 @@ class CategoryNode extends TreeNode
     public function toJSONModel(): TreeNodeJSONModel
     {
         return new TreeNodeJSONModel(
-            $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_RUBRIC, $this->getParentNodeId(),
+            $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_CATEGORY, $this->getParentNodeId(),
             $this->getColor()
         );
     }
