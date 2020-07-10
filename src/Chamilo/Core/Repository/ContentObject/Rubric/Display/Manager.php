@@ -12,6 +12,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const PARAM_ACTION = 'RubricAction';
     const ACTION_BUILDER = 'Builder';
+    const ACTION_ENTRY = 'Entry';
+    const ACTION_RESULT = 'Result';
+    const ACTION_AJAX = 'Ajax';
+
     const DEFAULT_ACTION = self::ACTION_BUILDER;
 
     const PARAM_RUBRIC_CONTENT_OBJECT = 'RubricContentObject';

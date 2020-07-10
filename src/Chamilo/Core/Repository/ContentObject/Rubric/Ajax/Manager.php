@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 abstract class Manager extends AjaxManager
 {
+    const PARAM_ACTION = 'RubricAjaxAction';
+
     const ACTION_ADD_LEVEL = 'AddLevel';
     const ACTION_ADD_TREE_NODE = 'AddTreeNode';
     const ACTION_DELETE_LEVEL = 'DeleteLevel';

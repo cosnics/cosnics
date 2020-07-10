@@ -68,7 +68,14 @@ class BuilderComponent extends Manager implements DelegateComponent
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricBuilder.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-                'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json')
+                'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
+                'ADD_LEVEL_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_ADD_LEVEL
+                    ]
+                )
             ]
         );
     }
