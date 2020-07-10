@@ -22,9 +22,9 @@
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-menu">
-                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">{{ $t('builder') }}</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">{{ $t('levels') }}</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Rubric{{ /*$t('builder')*/ }}</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Niveaus{{ /*$t('levels')*/ }}</span></router-link></li>
+                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Snelle Feedback{{ /*$t('builderfull')*/ }}</span></router-link></li>
                 </ul>
             </nav>
             <!--<ul class="app-header-tools">
@@ -105,7 +105,7 @@
         }
 
         created() {
-            this.$i18n.locale = document.documentElement.lang;
+            /*this.$i18n.locale = document.documentElement.lang;*/
         }
 
         mounted() {
