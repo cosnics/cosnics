@@ -3,6 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use JMS\Serializer\Annotation\Type;
 
@@ -49,21 +51,37 @@ class ChoiceJSONModel
     protected $fixedScore;
 
     /**
+     * @var int
+     */
+    protected $levelId;
+
+    /**
+     * @var int
+     */
+    protected $criteriumId;
+
+    /**
      * ChoiceJSONModel constructor.
      *
      * @param int $id
+     * @param int $levelId
+     * @param int $criteriumId
      * @param bool $selected
      * @param string $feedback
      * @param bool $hasFixedScore
      * @param int $fixedScore
      */
-    public function __construct(int $id, bool $selected, string $feedback, bool $hasFixedScore, int $fixedScore)
+    public function __construct(
+        int $id, int $levelId, int $criteriumId, bool $selected, string $feedback, bool $hasFixedScore, int $fixedScore
+    )
     {
         $this->id = $id;
         $this->selected = $selected;
         $this->feedback = $feedback;
         $this->hasFixedScore = $hasFixedScore;
         $this->fixedScore = $fixedScore;
+        $this->levelId = $levelId;
+        $this->criteriumId = $criteriumId;
     }
 
     /**
@@ -107,6 +125,46 @@ class ChoiceJSONModel
     }
 
     /**
+     * @return int
+     */
+    public function getLevelId(): ?int
+    {
+        return $this->levelId;
+    }
+
+    /**
+     * @param int $levelId
+     *
+     * @return ChoiceJSONModel
+     */
+    public function setLevelId(int $levelId): ChoiceJSONModel
+    {
+        $this->levelId = $levelId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCriteriumId(): ?int
+    {
+        return $this->criteriumId;
+    }
+
+    /**
+     * @param int $criteriumId
+     *
+     * @return ChoiceJSONModel
+     */
+    public function setCriteriumId(int $criteriumId): ChoiceJSONModel
+    {
+        $this->criteriumId = $criteriumId;
+
+        return $this;
+    }
+
+    /**
      * @param RubricData $rubricData
      *
      * @return Choice
@@ -143,9 +201,12 @@ class ChoiceJSONModel
      */
     public static function fromChoice(Choice $choice)
     {
+        $levelId = $choice->getLevel() instanceof Level ? $choice->getLevel()->getId() : 0;
+        $criteriumId = $choice->getCriterium() instanceof CriteriumNode ? $choice->getCriterium()->getId() : 0;
+
         return new self(
-            $choice->getId(), $choice->isSelected(), $choice->getFeedback(), $choice->hasFixedScore(),
-            $choice->getFixedScore()
+            $choice->getId(), $levelId, $criteriumId, $choice->isSelected(), $choice->getFeedback(),
+            $choice->hasFixedScore(), $choice->getFixedScore()
         );
     }
 }

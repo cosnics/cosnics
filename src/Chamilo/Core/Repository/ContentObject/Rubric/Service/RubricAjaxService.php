@@ -322,7 +322,10 @@ class RubricAjaxService
         $choiceJSONModel = $this->parseChoiceJSONModel($choiceJSONData);
         $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
 
-        $choice = $rubricData->getChoiceById($choiceJSONModel->getId());
+        $choice = $rubricData->getChoiceByLevelAndCriteriumId(
+            $choiceJSONModel->getLevelId(), $choiceJSONModel->getCriteriumId()
+        );
+
         $choiceJSONModel->updateChoice($choice);
 
         $this->rubricService->saveRubric($rubricData);
