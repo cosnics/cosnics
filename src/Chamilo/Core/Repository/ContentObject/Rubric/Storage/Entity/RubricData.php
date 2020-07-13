@@ -229,6 +229,11 @@ class RubricData
             return $this;
         }
 
+        if($levelToAdd->isDefault())
+        {
+            $this->setCurrentDefaultLevelNoLongerDefault();
+        }
+
         $this->levels->add($levelToAdd);
         $levelToAdd->setRubricData($this);
         $levelToAdd->setSort(count($this->levels));
@@ -303,7 +308,7 @@ class RubricData
             $this->removeChoice($choice);
         }
 
-        $this->removedEntities->add($levelToRemove);
+        $this->getRemovedEntities()->add($levelToRemove);
 
         return $this;
     }
@@ -323,6 +328,17 @@ class RubricData
 
         $this->removeLevel($level);
         $this->insertLevel($level, $newSort);
+    }
+
+    public function setCurrentDefaultLevelNoLongerDefault()
+    {
+        foreach($this->levels as $level)
+        {
+            if($level->isDefault())
+            {
+                $level->setIsDefault(false);
+            }
+        }
     }
 
     /**
@@ -359,7 +375,7 @@ class RubricData
         $choice->setRubricData(null);
         $choice->setCriterium(null);
         $choice->setLevel(null);
-        $this->removedEntities->add($choice);
+        $this->getRemovedEntities()->add($choice);
 
         return $this;
     }
@@ -423,7 +439,7 @@ class RubricData
             $this->removeTreeNode($child);
         }
 
-        $this->removedEntities->add($treeNode);
+        $this->getRemovedEntities()->add($treeNode);
 
         return $this;
     }
@@ -607,6 +623,11 @@ class RubricData
      */
     public function getRemovedEntities(): ?ArrayCollection
     {
+        if(!$this->removedEntities instanceof ArrayCollection)
+        {
+            $this->removedEntities = new ArrayCollection();
+        }
+
         return $this->removedEntities;
     }
 
