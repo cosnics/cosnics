@@ -15,6 +15,10 @@ export default class Criterium extends TreeNode {
         return String(this.weight * 100);
     }
 
+    public getType(): string {
+        return 'criterium';
+    }
+
     public getScore(): number {
         return 0;
     }

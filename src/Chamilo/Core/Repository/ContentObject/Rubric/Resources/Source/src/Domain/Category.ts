@@ -7,6 +7,7 @@ export interface CategoryJsonObject {
     color: string,
     criteria: CriteriumJsonObject[]
 }
+
 export default class Category extends TreeNode {
 
     public color: string = 'blue';
@@ -19,6 +20,10 @@ export default class Category extends TreeNode {
         var g = (hex & 0x00ff00) >> 8;
         var b = hex & 0x0000ff;
         return [r, g, b, opacity].join(',');
+    }
+
+    public getType(): string {
+        return 'category';
     }
 
     public getScore(): number {

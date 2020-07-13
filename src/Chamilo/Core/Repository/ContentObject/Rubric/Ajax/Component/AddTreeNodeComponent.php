@@ -22,7 +22,7 @@ class AddTreeNodeComponent extends Manager
     {
         return $this->getRubricAjaxService()->addTreeNode(
             $this->getRubricDataId(), $this->getVersion(), $this->getTreeNodeData(),
-            $this->getRequest()->getFromPost(self::PARAM_NEW_PARENT_ID)
+            (int) $this->getRequest()->getFromPost(self::PARAM_NEW_PARENT_ID)
         );
     }
 
