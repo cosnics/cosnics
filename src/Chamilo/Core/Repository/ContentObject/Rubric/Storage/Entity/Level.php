@@ -229,6 +229,26 @@ class Level
     }
 
     /**
+     * @return $this
+     */
+    public function decrementSort()
+    {
+        $this->setSort($this->getSort() - 1);
+
+        return $this;
+    }
+
+    /**
+     * return $this
+     */
+    public function incrementSort()
+    {
+        $this->setSort($this->getSort() + 1);
+
+        return $this;
+    }
+
+    /**
      * @return RubricData
      */
     public function getRubricData(): ?RubricData

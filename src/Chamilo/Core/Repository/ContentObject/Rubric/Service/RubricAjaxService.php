@@ -28,6 +28,7 @@ class RubricAjaxService
      * RubricAjaxService constructor.
      *
      * @param RubricService $rubricService
+     * @param Serializer $serializer
      */
     public function __construct(RubricService $rubricService, Serializer $serializer)
     {

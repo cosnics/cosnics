@@ -314,20 +314,41 @@ class RubricData
     }
 
     /**
-     * @param Level $level
+     * @param Level $levelToMove
      * @param int $newSort
      */
-    public function moveLevel(Level $level, int $newSort)
+    public function moveLevel(Level $levelToMove, int $newSort)
     {
-        if (!$this->levels->contains($level))
+        if (!$this->levels->contains($levelToMove))
         {
             throw new \InvalidArgumentException(
-                sprintf('The given level %s is not available in rubric data %s', $level->getId(), $this->getId())
+                sprintf('The given level %s is not available in rubric data %s', $levelToMove->getId(), $this->getId())
             );
         }
 
-        $this->removeLevel($level);
-        $this->insertLevel($level, $newSort);
+        $oldSort = $levelToMove->getSort();
+
+        foreach($this->levels as $level)
+        {
+            if($level == $levelToMove)
+            {
+                continue;
+            }
+
+            if($level->getSort() >= $oldSort)
+            {
+                $level->decrementSort();
+            }
+
+            if($level->getSort() >= $newSort)
+            {
+                $level->incrementSort();
+            }
+        }
+
+        $levelToMove->setSort($newSort);
+
+        return $this;
     }
 
     public function setCurrentDefaultLevelNoLongerDefault()

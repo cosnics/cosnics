@@ -188,7 +188,14 @@ class TreeNodeJSONModel
      */
     public static function getTypeStringForTreeNode(TreeNode $treeNode)
     {
-        $class = get_class($treeNode);
-        return array_search($class, self::TYPES);
+        foreach(self::TYPES as $typeString => $type)
+        {
+            if($treeNode instanceof $type)
+            {
+                return $typeString;
+            }
+        }
+
+        return null;
     }
 }

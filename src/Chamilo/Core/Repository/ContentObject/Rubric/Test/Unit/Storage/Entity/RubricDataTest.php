@@ -263,6 +263,20 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertEquals(4, $level4->getSort());
     }
 
+    public function testMoveLevelSetsCorrectSort2()
+    {
+        new Level($this->rubricData); // Level 1
+        $level2 = new Level($this->rubricData); // Level 2
+        $level3 = new Level($this->rubricData);
+        $level4 = new Level($this->rubricData);
+
+        $this->rubricData->moveLevel($level3, 1);
+
+        $this->assertEquals(3, $level2->getSort());
+        $this->assertEquals(1, $level3->getSort());
+        $this->assertEquals(4, $level4->getSort());
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
