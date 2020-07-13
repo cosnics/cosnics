@@ -24,6 +24,10 @@ export default class Rubric extends TreeNode {
         this.isRoot = true;
     }
 
+    public getType(): string {
+        return 'rubric';
+    }
+
     get clusters():Cluster[] {
         return this.children as Cluster[]; //invariant garded at addChild
     }

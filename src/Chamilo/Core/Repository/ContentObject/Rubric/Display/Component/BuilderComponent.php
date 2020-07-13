@@ -104,6 +104,13 @@ class BuilderComponent extends Manager implements DelegateComponent
                             \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_MOVE_LEVEL
                     ]
                 ),
+                'MOVE_TREE_NODE_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_MOVE_TREE_NODE
+                    ]
+                ),
                 'UPDATE_CHOICE_AJAX_URL' => $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_AJAX,

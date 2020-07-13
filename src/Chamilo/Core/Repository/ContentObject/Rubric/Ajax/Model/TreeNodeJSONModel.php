@@ -156,11 +156,6 @@ class TreeNodeJSONModel
             throw new ValueNotInArrayException('type', $this->type, $allowedTypes);
         }
 
-        if (empty($this->title))
-        {
-            throw new \InvalidArgumentException('Title can not be empty');
-        }
-
         if (!empty($this->weight) && ($this->weight < 0 || $this->weight > 100))
         {
             throw new OutOfRangeException('Weight must be between 0 and 100');

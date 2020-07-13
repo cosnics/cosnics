@@ -90,8 +90,7 @@ class RubricAjaxService
         $this->rubricService->saveRubric($rubricData);
 
         return [
-            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
-            'tree_node' => $treeNode->toJSONModel()
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()]
         ];
     }
 
@@ -227,8 +226,7 @@ class RubricAjaxService
         $this->rubricService->saveRubric($rubricData);
 
         return [
-            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
-            'level' => LevelJSONModel::fromLevel($level)
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()]
         ];
     }
 

@@ -13,6 +13,10 @@ export interface ClusterJsonObject {
 export default class Cluster extends TreeNode {
     public collapsed: boolean = false;
 
+    public getType(): string {
+        return 'cluster';
+    }
+
     public getScore(): number {
         return 0;
     }

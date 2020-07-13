@@ -4,26 +4,19 @@ export interface TreeNodeInterface {
     readonly children: ReadonlyArray<TreeNode>;
     parent: TreeNode | null;
     title: string;
+    isRoot: boolean;
+    getType(): string;
     getScore(): number;
     hasChildren(): boolean;
     canHaveChildren(): boolean;
-}
-
-export interface TreeNodeInterface {
-    readonly children: ReadonlyArray<TreeNode>;
-    parent: TreeNode | null;
-    title: string;
-    isRoot: boolean;
-    getScore(): number;
-    hasChildren(): boolean;
 }
 
 export default abstract class TreeNode implements TreeNodeInterface {
     public parent: TreeNode|null;
     public title: string = '';
     public id: string;
-    protected _children:TreeNode[] = [];
-    public isRoot:boolean = false;
+    protected _children: TreeNode[] = [];
+    public isRoot: boolean = false;
 
     constructor(title: string = '', id?:string) {
         this.parent = null;
@@ -32,6 +25,8 @@ export default abstract class TreeNode implements TreeNodeInterface {
         else this.id = id;
         this.title = title;
     }
+
+    abstract getType(): string;
 
     abstract getScore(): number;
 
