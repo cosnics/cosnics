@@ -120,13 +120,12 @@
                     }
                 }
                 // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
+                this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 30, this.version!);
             }
         }
 
         beforeDestroy() {
             if (this.rubric) {
-                console.log(this.rubric);
                 this.$emit('rubric-updated', this.rubric.toJSON());
             }
         }

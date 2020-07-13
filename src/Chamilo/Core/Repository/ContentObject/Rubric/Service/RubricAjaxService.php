@@ -29,9 +29,10 @@ class RubricAjaxService
      *
      * @param RubricService $rubricService
      */
-    public function __construct(RubricService $rubricService)
+    public function __construct(RubricService $rubricService, Serializer $serializer)
     {
         $this->rubricService = $rubricService;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -293,10 +294,10 @@ class RubricAjaxService
      */
     protected function parseLevelJSONModel(string $levelJSONData)
     {
+        //var_dump($levelJSONData);
         $levelJSONModel = $this->serializer->deserialize(
             $levelJSONData, LevelJSONModel::class, 'json'
         );
-
         if (!$levelJSONModel instanceof LevelJSONModel)
         {
             throw new \RuntimeException('Could not parse the level JSON model');

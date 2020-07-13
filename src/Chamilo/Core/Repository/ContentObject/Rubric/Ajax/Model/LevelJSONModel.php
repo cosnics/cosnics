@@ -46,7 +46,7 @@ class LevelJSONModel
      *
      * @Type("bool")
      */
-    protected $isDefault;
+    protected $isDefault = false;
 
     /**
      * LevelJSONModel constructor.

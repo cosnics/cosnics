@@ -4,7 +4,6 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
-
     <div id="builder">
         <rubric-builder-wrapper v-if="rubricData" :api-config="apiConfig" :version="version" :rubric-data="rubricData"></rubric-builder-wrapper>
     </div>
@@ -108,15 +107,15 @@
             el: '#builder',
             data: {
                 apiConfig: {
-                    'addLevelURL': 'https://test',
-                    'addTreeNodeURL': 'https://test',
-                    'deleteLevelURL': 'https://test',
-                    'deleteTreeNodeURL': 'https://test',
-                    'moveLevelURL': 'https://test',
-                    'moveTreeNodeURL': 'https://test',
-                    'updateChoiceURL': 'https://test',
-                    'updateLevelURL': 'https://test',
-                    'updateTreeNodeURL': 'https://test'
+                    'addLevelURL': '{{ ADD_LEVEL_AJAX_URL|raw }}',
+                    'addTreeNodeURL': '{{ ADD_TREE_NODE_AJAX_URL|raw }}',
+                    'deleteLevelURL': '{{ DELETE_LEVEL_AJAX_URL|raw }}',
+                    'deleteTreeNodeURL': '{{ DELETE_TREE_NODE_AJAX_URL|raw }}',
+                    'moveLevelURL': '{{ MOVE_LEVEL_AJAX_URL|raw }}',
+                    'moveTreeNodeURL': '{{ MOVE_TREE_NODE_AJAX_URL|raw }}',
+                    'updateChoiceURL': '{{ UPDATE_CHOICE_AJAX_URL|raw }}',
+                    'updateLevelURL': '{{ UPDATE_LEVEL_AJAX_URL|raw }}',
+                    'updateTreeNodeURL': '{{ UPDATE_TREE_NODE_AJAX_URL|raw }}'
                 },
                 version: data.version,
                 rubricData: data

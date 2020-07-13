@@ -28,15 +28,15 @@ class BuilderComponent extends Manager implements DelegateComponent
      */
     function run()
     {
-        /*$rubric = $this->getRubric();
-        $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());*/
+        $rubric = $this->getRubric();
+        $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
 
-        $rubricData = new RubricData('Een tweede rubric', true);
-        $rubricData->setId(30);
-        $rubricData->setVersion(1);
-        $rubricData->getRootNode()->setId(40);
+        //$rubricData = new RubricData('Een tweede rubric', true);
+        //$rubricData->setId(30);
+        //$rubricData->setVersion(1);
+        //$rubricData->getRootNode()->setId(40);
 
-        $node1 = new ClusterNode('test cluster', $rubricData);
+        /*$node1 = new ClusterNode('test cluster', $rubricData);
         $node1->setId(38);
 
         $node2 = new ClusterNode('test cluster 2', $rubricData);
@@ -58,7 +58,7 @@ class BuilderComponent extends Manager implements DelegateComponent
 
         $level = new Level($rubricData);
         $level->setId(5);
-        $level->setTitle('Bad');
+        $level->setTitle('Bad');*/
 
         echo '<pre>';
         print_r($this->getSerializer()->serialize($rubricData, 'json'));
@@ -75,7 +75,56 @@ class BuilderComponent extends Manager implements DelegateComponent
                         \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
                             \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_ADD_LEVEL
                     ]
-                )
+                ),
+                'ADD_TREE_NODE_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_ADD_TREE_NODE
+                    ]
+                ),
+                'DELETE_LEVEL_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_DELETE_LEVEL
+                    ]
+                ),
+                'DELETE_TREE_NODE_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_DELETE_TREE_NODE
+                    ]
+                ),
+                'MOVE_LEVEL_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_MOVE_LEVEL
+                    ]
+                ),
+                'UPDATE_CHOICE_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_UPDATE_CHOICE
+                    ]
+                ),
+                'UPDATE_LEVEL_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_UPDATE_LEVEL
+                    ]
+                ),
+                'UPDATE_TREE_NODE_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_UPDATE_TREE_NODE
+                    ]
+                ),
             ]
         );
     }

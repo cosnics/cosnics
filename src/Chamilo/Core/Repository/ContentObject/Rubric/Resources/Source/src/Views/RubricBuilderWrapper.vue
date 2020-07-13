@@ -1,12 +1,14 @@
 <template>
     <div class="container-fluid">
-        <rubric-builder :api-config="config" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
+        <rubric-builder :api-config="apiConfig" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
+        <div id="innerhtml"></div>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import RubricBuilder from './RubricBuilder.vue';
+    import 'vue-swatches/dist/vue-swatches.css';
 
     function sortFn(v1: any, v2: any) {
         return (v1.sort > v2.sort) ? 1 : -1;
@@ -46,7 +48,7 @@
                 "score": level.score,
                 "isDefault": level.is_default
             }));
-            const clusters = (d.root_node.children || []).filter((v: any) => v.type === 'Cluster');
+            const clusters = (d.root_node.children || []).filter((v: any) => v.type === 'cluster');
             clusters.sort(sortFn);
             data.clusters = clusters.map((c: any) => {
                 const cluster: any = {
@@ -54,7 +56,7 @@
                     "title": c.title,
                     "criteria": []
                 };
-                const categories = (c.children || []).filter((v: any) => v.type === 'Category');
+                const categories = (c.children || []).filter((v: any) => v.type === 'category');
                 categories.sort(sortFn);
                 cluster.categories = categories.map((c: any) => {
                     const category: any = {
@@ -62,7 +64,7 @@
                         "title": c.title,
                         "color": c.color || ''
                     };
-                    const criteria = (c.children || []).filter((v: any) => v.type === 'Criterium');
+                    const criteria = (c.children || []).filter((v: any) => v.type === 'criterium');
                     criteria.sort(sortFn);
                     category.criteria = criteria.map((c: any) => {
                         const criterium = {

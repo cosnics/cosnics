@@ -24,6 +24,8 @@ abstract class Manager extends AjaxManager
     const ACTION_DELETE_TREE_NODE = 'DeleteTreeNode';
     const ACTION_MOVE_LEVEL = 'MoveLevel';
     const ACTION_MOVE_TREE_NODE = 'MoveTreeNode';
+    const ACTION_UPDATE_CHOICE = 'UpdateChoice';
+    const ACTION_UPDATE_LEVEL = 'UpdateLevel';
     const ACTION_UPDATE_TREE_NODE = 'UpdateTreeNode';
 
     const PARAM_RUBRIC_DATA_ID = 'rubricDataId';
@@ -36,7 +38,7 @@ abstract class Manager extends AjaxManager
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if ($applicationConfiguration->getApplication() instanceof AjaxComponent)
+        if (!$applicationConfiguration->getApplication() instanceof AjaxComponent)
         {
             throw new \RuntimeException(
                 'This component can only be run through the ajax component from the rubric complex display'

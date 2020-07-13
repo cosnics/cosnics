@@ -19,10 +19,10 @@ use OutOfRangeException;
  */
 class TreeNodeJSONModel
 {
-    const TYPE_CRITERIUM = 'Criterium';
-    const TYPE_CATEGORY = 'Category';
-    const TYPE_CLUSTER = 'Cluster';
-    const TYPE_RUBRIC = 'Rubric';
+    const TYPE_CRITERIUM = 'criterium';
+    const TYPE_CATEGORY = 'category';
+    const TYPE_CLUSTER = 'cluster';
+    const TYPE_RUBRIC = 'rubric';
 
     const TYPES = [
         self::TYPE_CRITERIUM => CriteriumNode::class, self::TYPE_RUBRIC => RubricNode::class,
