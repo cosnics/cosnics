@@ -568,6 +568,36 @@ class RubricData
     }
 
     /**
+     * @param int $levelId
+     * @param int $criteriumId
+     *
+     * @return Choice|mixed
+     * @throws ObjectNotExistException
+     */
+    public function getChoiceByLevelAndCriteriumId(int $levelId, int $criteriumId)
+    {
+        $choice = $this->choices->filter(function(Choice $choice) use ($levelId, $criteriumId) {
+            $criterium = $choice->getCriterium();
+            $level = $choice->getLevel();
+
+            if(!$choice instanceof Choice || !$criterium instanceof CriteriumNode)
+            {
+                return false;
+            }
+
+            return $criterium->getId() == $criteriumId && $level->getId() == $levelId;
+
+        })->first();
+
+        if (!$choice instanceof Choice)
+        {
+            throw new ObjectNotExistException('choice', $levelId . '-' . $criteriumId);
+        }
+
+        return $choice;
+    }
+
+    /**
      * @param int|null $parentNodeId
      *
      * @return TreeNode|null
