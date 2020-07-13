@@ -50,16 +50,20 @@ export default class DataConnector {
     }
 
     async addTreeNode(treeNode: TreeNode, parentTreeNode: TreeNode, index: number) {
-        let treeNodeJSObject = Object.assign({ type: treeNode.constructor.name.toLowerCase() }, treeNode);
+        let instance = this;
 
-        const parameters = {
-            'treeNodeData': JSON.stringify(treeNodeJSObject),
-            'newParentId': parentTreeNode.id,
-            'newSort': index + 1
-        }
+        await this.addToQueue(function() {
+            let treeNodeJSObject = Object.assign({ type: treeNode.constructor.name.toLowerCase() }, treeNode);
 
-        const data = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
-        console.log(data);
+            const parameters = {
+                'treeNodeData': JSON.stringify(treeNodeJSObject),
+                'newParentId': parentTreeNode.id,
+                'newSort': index + 1
+            }
+
+            const result = instance.executeAPIRequest(instance.apiConfiguration.addTreeNodeURL, parameters);
+            result.then(function(data) { data.treeNode.id });
+        });
     }
 
     async deleteLevel(level: Level) {
@@ -112,12 +116,16 @@ export default class DataConnector {
     }
 
     async updateLevel(level: Level) {
-        const parameters = {
-            'levelData': JSON.stringify(Object.assign({}, level, { 'is_default': level.isDefault}))
-        }
+        let instance = this;
 
-        const data = await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters);
-        console.log(data);
+        await this.addToQueue(function() {
+            const parameters = {
+                'levelData': JSON.stringify(Object.assign({}, level, { 'is_default': level.isDefault}))
+            }
+
+            const data = instance.executeAPIRequest(instance.apiConfiguration.updateLevelURL, parameters);
+            console.log(data);
+        });
     }
 
     async updateTreeNode(treeNode: TreeNode) {
@@ -131,14 +139,21 @@ export default class DataConnector {
         console.log(data);
     }
 
+    protected async addToQueue(callback: Function) {
+        await this.queue.add(async () => {
+            callback();
+            this.queue.onIdle().then(this.endSaving.bind(this));
+        })
+    }
+
     protected async executeAPIRequest(apiURL: string, parameters: any) {
-        return new Promise((resolve, reject) => {
+
 
             /*function timeout(ms: number) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }*/
 
-            this.queue.add(async () => {
+            //this.queue.add(async () => {
                 console.log(parameters);
                 this.beginSaving();
                 parameters['rubricDataId'] = this.rubricDataId;
@@ -156,15 +171,15 @@ export default class DataConnector {
                     document.getElementById('innerhtml')!.innerHTML = res.data;
                     this.rubricDataId = res.data.rubric.id;
                     this.currentVersion = res.data.rubric.version;
-                    resolve(res.data);
                     /*await timeout(300); // simulate a save
                     resolve({});*/
+                    return res.data;
                 } catch (err) {
                     console.log('error', err);
-                    reject(err);
+                    return err;
                 }
-            });
-            this.queue.onIdle().then(this.endSaving.bind(this));
-        });
+            //});
+            //this.queue.onIdle().then(this.endSaving.bind(this));
+        //});
     }
 }
