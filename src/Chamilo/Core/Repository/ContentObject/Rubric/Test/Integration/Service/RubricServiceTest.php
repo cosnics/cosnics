@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Integration\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator;
@@ -11,8 +12,10 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResult;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\DoctrineORMFixturesBasedTestCase;
 use function sprintf;
 
@@ -64,11 +67,15 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         /** @var RubricDataRepository $rubricDataRepository */
         $rubricDataRepository = $this->getTestEntityManager()->getRepository(RubricData::class);
 
+        /** @var RubricResultRepository $rubricResultRepository */
+        $rubricResultRepository = $this->getTestEntityManager()->getRepository(RubricResult::class);
+
         $rubricValidator = new RubricValidator();
         $rubricTreeBuilder = new RubricTreeBuilder($rubricDataRepository);
+        $rubricResultService = new RubricResultService($rubricResultRepository);
 
         $this->rubricService =
-            new RubricService($rubricDataRepository, $rubricValidator, $rubricTreeBuilder);
+            new RubricService($rubricDataRepository, $rubricValidator, $rubricTreeBuilder, $rubricResultService);
 
         $this->createTestData();
     }
