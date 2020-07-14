@@ -19,12 +19,15 @@ class InvalidRubricDataException extends RubricStructureException
      * @param RubricData $expectedRubricData
      * @param RubricData $givenRubricData
      */
-    public function __construct(string $type, int $id, RubricData $expectedRubricData, RubricData $givenRubricData)
+    public function __construct(
+        string $type, int $id, RubricData $expectedRubricData, RubricData $givenRubricData = null
+    )
     {
         parent::__construct(
             sprintf(
-               'The %s with id %s was expected to have rubric data %s instead rubric data %s was given',
-                $type, $id, $expectedRubricData->getId(), $givenRubricData->getId()
+                'The %s with id %s was expected to have rubric data %s instead rubric data %s was given',
+                $type, $id, $expectedRubricData->getId(),
+                $givenRubricData instanceof RubricData ? $givenRubricData->getId() : 'null'
             )
         );
     }

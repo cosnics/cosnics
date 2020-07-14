@@ -204,9 +204,13 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
 
     public function testDeleteLevelDeletesChoicesForLevel()
     {
-        $level = $this->rubricData->getLevelById(1);
-        $this->rubricData->removeLevel($level);
-        $this->rubricService->saveRubric($this->rubricData);
+        $this->getTestEntityManager()->clear();
+
+        $rubricData = $this->rubricService->getRubric(1);
+
+        $level = $rubricData->getLevelById(1);
+        $rubricData->removeLevel($level);
+        $this->rubricService->saveRubric($rubricData);
 
         $countChoices = $this->getTestEntityManager()
             ->createQueryBuilder()

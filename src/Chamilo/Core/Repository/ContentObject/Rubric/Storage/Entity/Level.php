@@ -76,7 +76,7 @@ class Level
     /**
      * @var Choice[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="level")
      *
      * @Exclude
      */

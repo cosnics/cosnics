@@ -393,6 +393,7 @@ class RubricData
         }
 
         $this->choices->removeElement($choice);
+
         $choice->setRubricData(null);
         $choice->setCriterium(null);
         $choice->setLevel(null);
