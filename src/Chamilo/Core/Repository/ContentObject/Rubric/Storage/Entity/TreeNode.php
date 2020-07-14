@@ -389,7 +389,15 @@ abstract class TreeNode
      */
     public function isChildTypeValid(TreeNode $child)
     {
-        return in_array(get_class($child), $this->getAllowedChildTypes());
+        foreach($this->getAllowedChildTypes() as $allowedChildType)
+        {
+            if($child instanceof $allowedChildType)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
