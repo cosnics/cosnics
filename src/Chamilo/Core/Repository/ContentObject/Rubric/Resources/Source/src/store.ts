@@ -21,28 +21,28 @@ export default {
                 "title": "Overstijgt de verwachtingen",
                 "description": "",
                 "score": 10,
-                "isDefault": false
+                "is_default": false
             },
             {
                 "id": "icoz2ha4bahqvqfi71slz",
                 "title": "Voldoet aan de verwachtingen",
                 "description": "",
                 "score": 7,
-                "isDefault": false
+                "is_default": false
             },
             {
                 "id": "ewl5t7raruutqf4gudx15",
                 "title": "Voldoet bijna aan de verwachtingen",
                 "description": "",
                 "score": 4,
-                "isDefault": false
+                "is_default": true
             },
             {
                 "id": "fcd66dsoj78g8jq0diks3b",
                 "title": "Voldoet niet aan de verwachtingen",
                 "description": "",
                 "score": 0,
-                "isDefault": false
+                "is_default": false
             }
         ],
         "clusters": [
@@ -236,610 +236,610 @@ export default {
             {
                 "selected": false,
                 "feedback": "Student geeft steeds volledige en betrouwbare informatie. Alle informatie is opgenomen in de antwoorden.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "fufp9nyhm59tpv834p7s5",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "fufp9nyhm59tpv834p7s5",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "Student geeft vaker wel dan niet volledige en betrouwbare informatie. Bijna alle informatie is opgenomen in de antwoorden.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "fufp9nyhm59tpv834p7s5",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "fufp9nyhm59tpv834p7s5",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "Student geeft vrij vaak onvolledige en twijfelachtige informatie, die vragen oproept. Niet alle informatie is opgenomen in de antwoorden.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "fufp9nyhm59tpv834p7s5",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "fufp9nyhm59tpv834p7s5",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "Student geeft zo goed als altijd onvolledige en twijfelachtige informatie die vragen oproept. De antwoorden bevatten amper informatie.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "fufp9nyhm59tpv834p7s5",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "fufp9nyhm59tpv834p7s5",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "De student geeft zijn mening onderbouwd en overtuigend.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "yjz8854ozprzhr2hw45wup",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "yjz8854ozprzhr2hw45wup",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "De student geeft zijn mening, maar onderbouwt deze niet altijd even goed.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "yjz8854ozprzhr2hw45wup",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "yjz8854ozprzhr2hw45wup",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "De student geeft zijn mening, maar neemt daarbij vooral de mening over van anderen (bv. filosofen die aan bod kwamen, medestudenten) of onderbouwt deze niet",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "yjz8854ozprzhr2hw45wup",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "yjz8854ozprzhr2hw45wup",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "De student geeft geen eigen mening.",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "yjz8854ozprzhr2hw45wup",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "yjz8854ozprzhr2hw45wup",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "9ec44j2au3v1nl9sigksrq",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "9ec44j2au3v1nl9sigksrq",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "9ec44j2au3v1nl9sigksrq",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "9ec44j2au3v1nl9sigksrq",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "9ec44j2au3v1nl9sigksrq",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "9ec44j2au3v1nl9sigksrq",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "9ec44j2au3v1nl9sigksrq",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "9ec44j2au3v1nl9sigksrq",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xzcorbibce20cm5g54xemi",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xzcorbibce20cm5g54xemi",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xzcorbibce20cm5g54xemi",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xzcorbibce20cm5g54xemi",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xzcorbibce20cm5g54xemi",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xzcorbibce20cm5g54xemi",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xzcorbibce20cm5g54xemi",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xzcorbibce20cm5g54xemi",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "aas2bl49lrnfl4i1m7uwho",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "aas2bl49lrnfl4i1m7uwho",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "aas2bl49lrnfl4i1m7uwho",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "aas2bl49lrnfl4i1m7uwho",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "aas2bl49lrnfl4i1m7uwho",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "aas2bl49lrnfl4i1m7uwho",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "aas2bl49lrnfl4i1m7uwho",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "aas2bl49lrnfl4i1m7uwho",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "b6fxxz8q2nq21595ncj6od",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "b6fxxz8q2nq21595ncj6od",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "b6fxxz8q2nq21595ncj6od",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "b6fxxz8q2nq21595ncj6od",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "b6fxxz8q2nq21595ncj6od",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "b6fxxz8q2nq21595ncj6od",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "b6fxxz8q2nq21595ncj6od",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "b6fxxz8q2nq21595ncj6od",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "m6aub4lk7xb3j3njnqf63c",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "m6aub4lk7xb3j3njnqf63c",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "m6aub4lk7xb3j3njnqf63c",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "m6aub4lk7xb3j3njnqf63c",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "m6aub4lk7xb3j3njnqf63c",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "m6aub4lk7xb3j3njnqf63c",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "m6aub4lk7xb3j3njnqf63c",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "m6aub4lk7xb3j3njnqf63c",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ws20lmnw5kk56h4mxnque",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ws20lmnw5kk56h4mxnque",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ws20lmnw5kk56h4mxnque",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ws20lmnw5kk56h4mxnque",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ws20lmnw5kk56h4mxnque",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ws20lmnw5kk56h4mxnque",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ws20lmnw5kk56h4mxnque",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ws20lmnw5kk56h4mxnque",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6h2a07o2caeqeypvf1n8nj",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6h2a07o2caeqeypvf1n8nj",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6h2a07o2caeqeypvf1n8nj",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6h2a07o2caeqeypvf1n8nj",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6h2a07o2caeqeypvf1n8nj",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6h2a07o2caeqeypvf1n8nj",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6h2a07o2caeqeypvf1n8nj",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6h2a07o2caeqeypvf1n8nj",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xkisqg35b4897yv42v0uwh",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xkisqg35b4897yv42v0uwh",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xkisqg35b4897yv42v0uwh",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xkisqg35b4897yv42v0uwh",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xkisqg35b4897yv42v0uwh",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xkisqg35b4897yv42v0uwh",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "xkisqg35b4897yv42v0uwh",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "xkisqg35b4897yv42v0uwh",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "npq74gmgw7gykpvuyzai",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "npq74gmgw7gykpvuyzai",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "npq74gmgw7gykpvuyzai",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "npq74gmgw7gykpvuyzai",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "npq74gmgw7gykpvuyzai",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "npq74gmgw7gykpvuyzai",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "npq74gmgw7gykpvuyzai",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "npq74gmgw7gykpvuyzai",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6m1j1p07g5yb4jn8rxfds",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6m1j1p07g5yb4jn8rxfds",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6m1j1p07g5yb4jn8rxfds",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6m1j1p07g5yb4jn8rxfds",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6m1j1p07g5yb4jn8rxfds",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6m1j1p07g5yb4jn8rxfds",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "6m1j1p07g5yb4jn8rxfds",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "6m1j1p07g5yb4jn8rxfds",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ckexyst4tadt2vppdqhbct",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ckexyst4tadt2vppdqhbct",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ckexyst4tadt2vppdqhbct",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ckexyst4tadt2vppdqhbct",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ckexyst4tadt2vppdqhbct",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ckexyst4tadt2vppdqhbct",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "0ckexyst4tadt2vppdqhbct",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "0ckexyst4tadt2vppdqhbct",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "hwdfiaeimmqk6tg4xv9d4",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "hwdfiaeimmqk6tg4xv9d4",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "hwdfiaeimmqk6tg4xv9d4",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "hwdfiaeimmqk6tg4xv9d4",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "hwdfiaeimmqk6tg4xv9d4",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "hwdfiaeimmqk6tg4xv9d4",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "hwdfiaeimmqk6tg4xv9d4",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "hwdfiaeimmqk6tg4xv9d4",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "odvm3c1nde9gslxuas5q1m",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "odvm3c1nde9gslxuas5q1m",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "odvm3c1nde9gslxuas5q1m",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "odvm3c1nde9gslxuas5q1m",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "odvm3c1nde9gslxuas5q1m",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "odvm3c1nde9gslxuas5q1m",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "odvm3c1nde9gslxuas5q1m",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "odvm3c1nde9gslxuas5q1m",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "a9rm6of2j6ox13skroxg6",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "a9rm6of2j6ox13skroxg6",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "a9rm6of2j6ox13skroxg6",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "a9rm6of2j6ox13skroxg6",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "a9rm6of2j6ox13skroxg6",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "a9rm6of2j6ox13skroxg6",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "a9rm6of2j6ox13skroxg6",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "a9rm6of2j6ox13skroxg6",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "7yh29o4t4zbuwdezsqiy08",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "7yh29o4t4zbuwdezsqiy08",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "7yh29o4t4zbuwdezsqiy08",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "7yh29o4t4zbuwdezsqiy08",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "7yh29o4t4zbuwdezsqiy08",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "7yh29o4t4zbuwdezsqiy08",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "7yh29o4t4zbuwdezsqiy08",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "7yh29o4t4zbuwdezsqiy08",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "3bypc8f2th99zqdvfl5r9",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "3bypc8f2th99zqdvfl5r9",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "3bypc8f2th99zqdvfl5r9",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "3bypc8f2th99zqdvfl5r9",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "3bypc8f2th99zqdvfl5r9",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "3bypc8f2th99zqdvfl5r9",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "3bypc8f2th99zqdvfl5r9",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "3bypc8f2th99zqdvfl5r9",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "tua60ec3j5oas4ki7sbkqk",
-                "levelId": "ll1mno0a18hjedwy6w3jt"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "tua60ec3j5oas4ki7sbkqk",
+                "level_id": "ll1mno0a18hjedwy6w3jt"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "tua60ec3j5oas4ki7sbkqk",
-                "levelId": "icoz2ha4bahqvqfi71slz"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "tua60ec3j5oas4ki7sbkqk",
+                "level_id": "icoz2ha4bahqvqfi71slz"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "tua60ec3j5oas4ki7sbkqk",
-                "levelId": "ewl5t7raruutqf4gudx15"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "tua60ec3j5oas4ki7sbkqk",
+                "level_id": "ewl5t7raruutqf4gudx15"
             },
             {
                 "selected": false,
                 "feedback": "",
-                "hasFixedScore": false,
-                "fixedScore": 10,
-                "criteriumId": "tua60ec3j5oas4ki7sbkqk",
-                "levelId": "fcd66dsoj78g8jq0diks3b"
+                "has_fixed_score": false,
+                "fixed_score": 10,
+                "criterium_id": "tua60ec3j5oas4ki7sbkqk",
+                "level_id": "fcd66dsoj78g8jq0diks3b"
             }
         ]
     },
