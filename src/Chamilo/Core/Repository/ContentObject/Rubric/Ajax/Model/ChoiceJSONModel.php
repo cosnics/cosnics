@@ -52,11 +52,15 @@ class ChoiceJSONModel
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $levelId;
 
     /**
      * @var int
+     *
+     * @Type("integer")
      */
     protected $criteriumId;
 
