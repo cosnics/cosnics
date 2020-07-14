@@ -14,7 +14,7 @@
                     <div class="criterium-weight"><label for="weight">Gewicht:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
                     <ul class="criterium-levels">
                         <li v-for="level in rubric.levels" :key="level.id" class="rb-criterium-level">
-                            <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange"></criterium-level-view>
+                            <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
                         </li>
                     </ul>
                     <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> Terug naar rubric</a>
@@ -28,6 +28,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Rubric from '../Domain/Rubric';
+    import Level from '../Domain/Level';
     import Criterium from '../Domain/Criterium';
     import Choice from '../Domain/Choice';
     import CriteriumLevelView from './CriteriumLevelView.vue';
@@ -74,8 +75,8 @@
             this.$emit('change-criterium', this.criterium);
         }
 
-        onChoiceChange(choice: Choice) {
-            this.$emit('change-choice', choice);
+        onChoiceChange(choice: Choice, criterium: Criterium, level: Level) {
+            this.$emit('change-choice', choice, criterium, level);
         }
     }
 </script>

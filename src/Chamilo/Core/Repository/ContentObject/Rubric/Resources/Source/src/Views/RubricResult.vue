@@ -200,7 +200,7 @@
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
                 this.initData(this.rubric, this.rubricResults);
                 // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 0, this.version!);
+                this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version!);
             }
         }
     }

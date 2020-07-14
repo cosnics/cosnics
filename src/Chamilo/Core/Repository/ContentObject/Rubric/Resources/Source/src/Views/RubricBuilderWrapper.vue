@@ -34,6 +34,7 @@
 
         private convertData(d: any) {
             const data: any = {
+                "rubric_data_id": d.id,
                 "id": String(d.root_node.id),
                 "useScores": d.use_scores,
                 "title": d.root_node.title,
@@ -46,7 +47,7 @@
                 "title": level.title,
                 "description": level.description || '',
                 "score": level.score,
-                "isDefault": level.is_default
+                "is_default": level.is_default
             }));
             const clusters = (d.root_node.children || []).filter((v: any) => v.type === 'cluster');
             clusters.sort(sortFn);
@@ -76,12 +77,12 @@
                         choices.sort(sortFn);
                         choices.forEach((choice: any) => {
                             data.choices.push({
-                                "criteriumId": criterium.id,
-                                "levelId": String(choice.level.id),
+                                "criterium_id": String(criterium.id),
+                                "level_id": String(choice.level.id),
                                 "selected": choice.selected,
                                 "feedback": choice.feedback || '',
-                                "hasFixedScore": choice.has_fixed_score,
-                                "fixedScore": choice.fixed_score
+                                "has_fixed_score": choice.has_fixed_score,
+                                "fixed_score": choice.fixed_score
                             });
                         });
                         return criterium;

@@ -1,10 +1,10 @@
 export interface ChoiceJsonObject {
     selected: boolean,
     feedback: string,
-    hasFixedScore: boolean,
-    fixedScore: number,
-    criteriumId: string,
-    levelId: string
+    has_fixed_score: boolean,
+    fixed_score: number,
+    criterium_id: string,
+    level_id: string
 }
 
 export default class Choice {
@@ -37,10 +37,10 @@ export default class Choice {
         return {
             selected: this.selected,
             feedback: this.feedback,
-            hasFixedScore: this.hasFixedScore,
-            fixedScore: this.fixedScore,
-            criteriumId: criteriumId,
-            levelId: levelId
+            has_fixed_score: this.hasFixedScore,
+            fixed_score: this.fixedScore,
+            criterium_id: criteriumId,
+            level_id: levelId
         }
     }
 
@@ -56,8 +56,8 @@ export default class Choice {
             choiceObject.selected,
             choiceObject.feedback
         );
-        newChoice.hasFixedScore = choiceObject.hasFixedScore;
-        newChoice.fixedScore = choiceObject.fixedScore;
+        newChoice.hasFixedScore = choiceObject.has_fixed_score;
+        newChoice.fixedScore = choiceObject.fixed_score;
 
         return newChoice;
     }}

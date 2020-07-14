@@ -75,6 +75,7 @@
 	import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
 	import TreeNode from '../Domain/TreeNode';
 	import Rubric from '../Domain/Rubric';
+	import Level from '../Domain/Level';
 	import Cluster from '../Domain/Cluster';
 	import Category from '../Domain/Category';
 	import Criterium from '../Domain/Criterium';
@@ -176,8 +177,8 @@
 			this.dataConnector?.updateTreeNode(criterium);
 		}
 
-		onChangeChoice(choice: Choice) {
-			this.dataConnector?.updateChoice(choice);
+		onChangeChoice(choice: Choice, criterium: Criterium, level: Level) {
+			this.dataConnector?.updateChoice(choice, criterium, level);
 		}
 
 		showRemoveDialog(item: Cluster|Category|Criterium|null) {

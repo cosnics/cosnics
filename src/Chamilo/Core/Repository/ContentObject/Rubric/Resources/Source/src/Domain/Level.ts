@@ -13,7 +13,7 @@ export interface LevelJsonObject {
     title: string,
     description: string,
     score: number,
-    isDefault: boolean
+    is_default: boolean
 }
 export default class Level {
     public id: LevelId;
@@ -35,6 +35,10 @@ export default class Level {
             this.id = id;
     }
 
+    get is_default() {
+        return this.isDefault;
+    }
+
     public toString(): string {
         return `Level (id: ${this.id}, title: ${this.title})`;
     }
@@ -45,7 +49,7 @@ export default class Level {
             title: this.title,
             description: this.description,
             score: this.score,
-            isDefault: this.isDefault
+            is_default: this.isDefault
         }
     }
 
@@ -62,7 +66,7 @@ export default class Level {
             levelObject.description,
             levelObject.score,
             );
-        newLevel.isDefault = levelObject.isDefault;
+        newLevel.isDefault = levelObject.is_default;
         newLevel.id = levelObject.id;
 
         return newLevel;

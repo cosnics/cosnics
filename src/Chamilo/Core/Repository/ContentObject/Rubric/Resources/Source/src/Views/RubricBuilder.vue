@@ -120,7 +120,7 @@
                     }
                 }
                 // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.apiConfig as APIConfiguration, 30, this.version!);
+                this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version!);
             }
         }
 

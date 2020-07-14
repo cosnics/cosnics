@@ -108,8 +108,8 @@ export default class Rubric extends TreeNode {
         rubricObject.choices.forEach(rubricChoiceJsonObject => {
             newRubric.addChoice(
                 Choice.fromJSON(rubricChoiceJsonObject),
-                rubricChoiceJsonObject.criteriumId,
-                rubricChoiceJsonObject.levelId,
+                rubricChoiceJsonObject.criterium_id,
+                rubricChoiceJsonObject.level_id,
                 )
         });
 
@@ -136,6 +136,27 @@ export default class Rubric extends TreeNode {
 
     protected removeChoicesByCriterium(criterium: Criterium) {
         this.choices.delete(criterium.id);
+    }
+
+    public setChoicesCriteriumId(oldId: CriteriumId, newId: CriteriumId) {
+        const criteriumChoices = this.choices.get(oldId);
+        if (criteriumChoices) {
+            this.choices.delete(oldId);
+            this.choices.set(newId, criteriumChoices);
+        }
+    }
+
+    public setChoicesLevelId(oldId: LevelId, newId: LevelId) {
+        this.getAllCriteria().forEach(criterium => {
+            const criteriumChoices = this.choices.get(criterium.id);
+            if (criteriumChoices) {
+                const choice = criteriumChoices.get(oldId);
+                if (choice) {
+                    criteriumChoices.delete(oldId);
+                    criteriumChoices.set(newId, choice);
+                }
+            }
+        });
     }
 
     protected removeChoicesByLevel(level: Level) {

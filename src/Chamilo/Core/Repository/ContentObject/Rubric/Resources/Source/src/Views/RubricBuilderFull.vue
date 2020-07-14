@@ -23,15 +23,15 @@
                                                 <div class="criterium-title-header">
                                                     <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                 </div>
-                                                <div v-for="level in getCriteriumData(criterium).choices" class="criterium-level">
+                                                <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level">
                                                     <div class="criterium-level-header">
                                                         <div class="criterium-level-title">
-                                                            {{level.title}}
+                                                            {{data.level.title}}
                                                         </div>
-                                                        <div class="score-number"><!--<i class="check fa"/>-->{{ level.score }}</div>
+                                                        <div class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                                     </div>
                                                     <div class="default-feedback" @click="focusTextField">
-                                                        <feedback-field :choice="level.choice" @input="updateHeight" @change="updateFeedback(level.choice)"></feedback-field>
+                                                        <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
                                                         <!--<textarea v-model="level.feedback" class="ta-feedback" @input="updateFeedback"></textarea>-->
                                                     </div>
                                                 </div>
@@ -52,6 +52,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
     import Criterium from '../Domain/Criterium';
+    import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
     import DataConnector from '../Connector/DataConnector';
@@ -82,8 +83,8 @@
             });
         }
 
-        updateFeedback(choice: Choice) {
-            this.dataConnector?.updateChoice(choice);
+        updateFeedback(choice: Choice, criterium: Criterium, level: Level) {
+            this.dataConnector?.updateChoice(choice, criterium, level);
         }
 
         focusTextField(elem: any) {
@@ -104,7 +105,7 @@
                 rubric.levels.forEach(level => {
                     const choice = rubric.getChoice(criterium, level);
                     const score = rubric.getChoiceScore(criterium, level);
-                    criteriumExt.choices.push({ title: level.title, choice, score});
+                    criteriumExt.choices.push({ level, choice, score});
                 });
                 this.criteriaData.push(criteriumExt);
             });

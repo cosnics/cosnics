@@ -1,8 +1,10 @@
 import axios from 'axios';
 import APIConfiguration from './APIConfiguration';
 import PQueue from 'p-queue';
+import Rubric from '../Domain/Rubric';
 import Level from '../Domain/Level';
 import TreeNode from '../Domain/TreeNode';
+import Criterium from '../Domain/Criterium';
 import Choice from '../Domain/Choice';
 (window as unknown as any).axios = axios;
 
@@ -14,9 +16,11 @@ export default class DataConnector {
     protected rubricDataId: number;
     protected currentVersion: number;
 
+    private rubric: Rubric;
     private _isSaving: boolean = false;
 
-    public constructor(apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number) {
+    public constructor(rubric: Rubric, apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number) {
+        this.rubric = rubric;
         this.rubricDataId = rubricDataId;
         this.currentVersion = currentVersion;
         this.apiConfiguration = apiConfiguration;
@@ -42,11 +46,13 @@ export default class DataConnector {
         this.addToQueue(async () => {
             const parameters = {
                 'newSort': index + 1,
-                'levelData': JSON.stringify({ 'is_default': level.isDefault, ...level })
+                'levelData': JSON.stringify(level)
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters);
+            const oldId = level.id;
             level.id = String(res.level.id);
+            this.rubric.setChoicesLevelId(oldId, level.id);
         });
     }
 
@@ -59,7 +65,11 @@ export default class DataConnector {
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
+            const oldId = treeNode.id;
             treeNode.id = String(res.tree_node.id);
+            if (res.tree_node.type === 'criterium') {
+                this.rubric.setChoicesCriteriumId(oldId, treeNode.id);
+            }
         });
     }
 
@@ -102,19 +112,21 @@ export default class DataConnector {
         });
     }
 
-    async updateChoice(choice: Choice) {
-        const parameters = {
-            'choiceData': JSON.stringify(choice),
-        }
-
-        const data = await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
-        console.log(data);
+    updateChoice(choice: Choice, criterium: Criterium, level: Level) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'choiceData': JSON.stringify(choice.toJSON(criterium.id, level.id)),
+            };
+            console.log(parameters);
+            const data = await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
+            console.log(data);
+        });
     }
 
     updateLevel(level: Level) {
         this.addToQueue(async () => {
             const parameters = {
-                'levelData': JSON.stringify(Object.assign({}, level, { 'is_default': level.isDefault}))
+                'levelData': JSON.stringify(level)
             };
             await this.executeAPIRequest(this.apiConfiguration.updateLevelURL, parameters);
         });

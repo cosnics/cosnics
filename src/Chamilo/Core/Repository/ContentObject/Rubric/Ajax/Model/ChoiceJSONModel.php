@@ -189,7 +189,7 @@ class ChoiceJSONModel
      */
     public function updateChoice(Choice $choice)
     {
-        $choice->setId($this->id);
+        //$choice->setId($this->id);
         $choice->setSelected($this->selected);
         $choice->setFeedback($this->feedback);
         $choice->setHasFixedScore($this->hasFixedScore);
