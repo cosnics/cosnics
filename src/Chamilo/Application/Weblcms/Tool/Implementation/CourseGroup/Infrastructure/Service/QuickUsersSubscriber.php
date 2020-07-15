@@ -68,7 +68,7 @@ class QuickUsersSubscriber
         }
 
         // preparation and subscription was splitted because users could be retrieved in batch using extensive methods
-        // however every user has to be logged so every user has to be prepared seperatly and these two loops could
+        // however every user has to be logged so every user has to be prepared separately and these two loops could
         // be refactored into one
 
         foreach ($usersToSubscribe as $userIdentifier => $userToSubscribe)
