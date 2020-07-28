@@ -720,8 +720,15 @@ abstract class ContentObjectPublicationListRenderer
 
     public static function factory($type, $tool_browser)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
-            'ContentObjectPublicationListRenderer';
+        if(!self::isCustomType($type))
+        {
+            $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
+                'ContentObjectPublicationListRenderer';
+        }
+        else
+        {
+            $class = $type;
+        }
 
         if (!class_exists($class))
         {
@@ -731,6 +738,16 @@ abstract class ContentObjectPublicationListRenderer
         }
 
         return new $class($tool_browser);
+    }
+
+    /**
+     * @param $type
+     *
+     * @return bool
+     */
+    public static function isCustomType($type)
+    {
+        return class_exists($type);
     }
 
     public function get_tool_browser()

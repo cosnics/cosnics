@@ -153,4 +153,11 @@ interface PublicationRepositoryInterface
      * @return array
      */
     public function findPublicationTargetUsers(ContentObjectPublication $contentObjectPublication);
+
+    /**
+     * @param ContentObjectPublication $publication
+     *
+     * @return bool
+     */
+    public function createPublication(ContentObjectPublication $publication);
 }

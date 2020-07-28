@@ -461,4 +461,14 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         return DataManager::get_publication_target_users($contentObjectPublication);
     }
+
+    /**
+     * @param ContentObjectPublication $publication
+     *
+     * @return bool
+     */
+    public function createPublication(ContentObjectPublication $publication)
+    {
+        return $publication->create();
+    }
 }
