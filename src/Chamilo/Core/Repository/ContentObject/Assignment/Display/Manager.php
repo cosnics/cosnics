@@ -444,7 +444,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $rubric = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
         if (!$rubric instanceof Rubric)
         {
-            throw new NotAllowedException();
+            return '';
         }
 
         $applicationConfiguration =
