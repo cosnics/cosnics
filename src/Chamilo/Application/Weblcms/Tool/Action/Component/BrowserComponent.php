@@ -173,6 +173,12 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = array();
 
+        if (method_exists($this->get_application(), 'hasCustomCategoryRenderer') &&
+            $this->get_application()->hasCustomCategoryRenderer())
+        {
+            return $renderedPublications;
+        }
+
         if ($this->hasCategories())
         {
 

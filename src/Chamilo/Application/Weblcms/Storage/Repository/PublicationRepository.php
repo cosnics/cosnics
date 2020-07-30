@@ -7,11 +7,13 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\PublicationRepositoryInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\DataClassRecordResultSet;
@@ -435,7 +437,15 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {
-        return DataManager::retrieves(ContentObjectPublicationCategory::class_name(), $condition)->as_array();
+        $parameters = new DataClassRetrievesParameters(
+            $condition, null, null, new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+
+        return DataManager::retrieves(ContentObjectPublicationCategory::class_name(), $parameters)->as_array();
     }
 
     /**

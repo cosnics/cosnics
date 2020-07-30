@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -66,7 +67,7 @@ abstract class ContentObjectPublicationListRenderer
     /**
      * Constructor.
      *
-     * @param $tool_browser PublicationBrowser The tool_browser to associate this list renderer with.
+     * @param $tool_browser BrowserComponent The tool_browser to associate this list renderer with.
      * @param $parameters array The parameters to pass to the renderer.
      */
     public function __construct($tool_browser, $parameters = array())
@@ -750,6 +751,9 @@ abstract class ContentObjectPublicationListRenderer
         return class_exists($type);
     }
 
+    /**
+     * @return BrowserComponent
+     */
     public function get_tool_browser()
     {
         return $this->tool_browser;
