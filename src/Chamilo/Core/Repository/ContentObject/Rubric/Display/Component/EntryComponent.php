@@ -23,6 +23,13 @@ class EntryComponent extends Manager implements DelegateComponent
      */
     function run()
     {
-        return 'Entry';
+        $rubric = $this->getRubric();
+        $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
+        return $this->getTwig()->render(
+            'Chamilo\Core\Repository\ContentObject\Rubric:RubricEntry.html.twig',
+            [
+                'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json')
+            ]
+        );
     }
 }
