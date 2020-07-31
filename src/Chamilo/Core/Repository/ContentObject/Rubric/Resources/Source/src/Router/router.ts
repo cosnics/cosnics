@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import RubricDemoHome from '../Views/RubricDemoHome.vue';
 import RubricBuilderDemoWrapper from '../Views/RubricBuilderDemoWrapper.vue';
+import RubricPreviewDemoWrapper from '../Views/RubricPreviewDemoWrapper.vue';
 import RubricEntryWrapper from '../Views/RubricEntryWrapper.vue';
 import RubricResultWrapper from '../Views/RubricResultWrapper.vue';
 import ScoreRubricView from '../Components/ScoreRubricView.vue';
@@ -56,6 +57,12 @@ const demoRoutes = [
         component: RubricBuilderFull,
       }
     ]
+  },
+  {
+    path: '/preview',
+    name: 'Preview',
+    component: RubricPreviewDemoWrapper,
+    props: true
   },
   {
     path: '/entry',

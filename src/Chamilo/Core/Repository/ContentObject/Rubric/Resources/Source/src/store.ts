@@ -6,6 +6,9 @@ export default {
             selectedClusterView1: '',
             selectedClusterView2: ''
         },
+        preview: {
+            showDefaultFeedbackFields: false
+        },
         entry: {
             evaluator: '',
             showDefaultFeedbackFields: false

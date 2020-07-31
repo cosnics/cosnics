@@ -1,0 +1,24 @@
+<div>
+    {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+
+    {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
+    {{ getCss('cosnics-rubric.css', appContext) }}
+    <div id="rubric-entry">
+        <rubric-preview-wrapper v-if="rubricData" :rubric-data="rubricData"></rubric-preview-wrapper>
+    </div>
+
+    <script>
+        Vue.use(BootstrapVue);
+        Vue.use(this['cosnics-rubric'].default);
+
+        var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
+        var data = JSON.parse(rubricDataJSON);
+
+        new Vue({
+                el: '#rubric-entry',
+                data: {
+                    rubricData: data
+                }
+        });
+    </script>
+</div>

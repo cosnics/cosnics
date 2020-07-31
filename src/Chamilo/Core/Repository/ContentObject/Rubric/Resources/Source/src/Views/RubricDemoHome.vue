@@ -4,6 +4,7 @@
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <h1>Rubric Demo Page</h1>
         <router-link class="rubric-demo-item" :to="{ name: 'Builder' }"><i class="fa fa-institution"/>Builder</router-link>
+        <router-link class="rubric-demo-item" :to="{ name: 'Preview' }"><i class="fa fa-institution"/>Preview</router-link>
         <router-link class="rubric-demo-item" :to="{ name: 'Entry' }"><i class="fa fa-edit"/>Entry</router-link>
         <router-link class="rubric-demo-item" :to="{ name: 'Results' }"><i class="fa fa-calculator"/>Results</router-link>
     </div>
