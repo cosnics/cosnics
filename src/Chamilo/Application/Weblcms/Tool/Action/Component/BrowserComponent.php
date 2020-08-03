@@ -176,7 +176,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if (method_exists($this->get_application(), 'hasCustomCategoryRenderer') &&
             $this->get_application()->hasCustomCategoryRenderer())
         {
-            return $renderedPublications;
+            return '<div class="col-sm-12">' . $renderedPublications . '</div>';
         }
 
         if ($this->hasCategories())

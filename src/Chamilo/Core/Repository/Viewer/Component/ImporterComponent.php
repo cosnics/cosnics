@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactories;
 use Chamilo\Core\Repository\Common\Import\ImportFormParameters;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
@@ -41,7 +43,7 @@ class ImporterComponent extends Manager implements DelegateComponent
     {
         $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
 
-        if($this->get_maximum_select() == 1)
+        if ($this->get_maximum_select() == 1)
         {
             throw new NotAllowedException();
         }
@@ -50,6 +52,8 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         if ($type)
         {
+            $importFactory = $this->getImportFactories()->getImportFactoryByAlias($type);
+
             $importFormParameters = new ImportFormParameters(
                 $type,
                 $this->getWorkspace(),
@@ -57,9 +61,11 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)),
                 'post',
                 true,
-                $this->get_maximum_select());
+                $this->get_maximum_select()
+            );
 
-            $importForm = ContentObjectImportForm::factory($importFormParameters);
+//            $importForm = ContentObjectImportForm::factory($importFormParameters);
+            $importForm = $importFactory->getImportForm($importFormParameters);
 
             $this->addPublishButtonToImportForm($importForm);
 
@@ -69,7 +75,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $parent_id = $values[ContentObject::PROPERTY_PARENT_ID];
                 $new_category_name = $values[ContentObjectImportForm::NEW_CATEGORY];
 
-                if (! StringUtilities::getInstance()->isNullOrEmpty($new_category_name, true))
+                if (!StringUtilities::getInstance()->isNullOrEmpty($new_category_name, true))
                 {
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
@@ -77,7 +83,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $new_category->set_type_id($this->getWorkspace()->getId());
                     $new_category->set_type($this->getWorkspace()->getWorkspaceType());
 
-                    if (! $new_category->create())
+                    if (!$new_category->create())
                     {
                         throw new \Exception(Translation::get('CategoryCreationFailed'));
                     }
@@ -100,15 +106,25 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $file = null;
                 }
 
+                /*
                 $parameters = ImportParameters::factory(
                     $importForm->exportValue(ContentObjectImportForm::PROPERTY_TYPE),
                     $this->get_user_id(),
                     $this->getWorkspace(),
                     $category_id,
                     $file,
-                    $values);
+                    $values);*/
 
-                $controller = ContentObjectImportController::factory($parameters);
+                $parameters = $importFactory->getImportParameters(
+                    $this->get_user_id(),
+                    $this->getWorkspace(),
+                    $category_id,
+                    $file,
+                    $values
+                );
+
+//                $controller = ContentObjectImportController::factory($parameters);
+                $controller = $importFactory->getImportController($parameters);
                 $content_object_ids = $controller->run();
 
                 $filtered_content_object_ids = $this->filter_content_object_ids($content_object_ids);
@@ -116,7 +132,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
                 Session::register(Application::PARAM_MESSAGES, $messages);
 
-                if (! $controller->has_messages(ContentObjectImportController::TYPE_ERROR))
+                if (!$controller->has_messages(ContentObjectImportController::TYPE_ERROR))
                 {
                     if (count($filtered_content_object_ids) == 1)
                     {
@@ -124,7 +140,8 @@ class ImporterComponent extends Manager implements DelegateComponent
                         {
                             $messages = Session::retrieve(Application::PARAM_MESSAGES);
                             $messages[Application::PARAM_MESSAGE][] = Translation::get(
-                                'MultipleObjectsImportedButOneUseable');
+                                'MultipleObjectsImportedButOneUseable'
+                            );
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
                             Session::register(Application::PARAM_MESSAGES, $messages);
                         }
@@ -136,7 +153,8 @@ class ImporterComponent extends Manager implements DelegateComponent
                         if (count($content_object_ids) > 0)
                         {
                             $messages = Session::retrieve(Application::PARAM_MESSAGES);
-                            $message = (count($content_object_ids) == 1 ? 'ObjectImportedButNoneUseable' : 'ObjectsImportedButNoneUseable');
+                            $message = (count($content_object_ids) == 1 ? 'ObjectImportedButNoneUseable' :
+                                'ObjectsImportedButNoneUseable');
                             $messages[Application::PARAM_MESSAGE][] = Translation::get($message);
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
                             Session::register(Application::PARAM_MESSAGES, $messages);
@@ -153,13 +171,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                 {
                     $this->simple_redirect();
                 }
-
-            /**
-             * TODO: Do something with the result here 1.
-             * If the import produces no errors AND only 1 object was
-             * returned: select it 2. If the import produces no errors AND results in multiple objects: show selection
-             * table ALWAYS filter on allowed types (since CPO can result in multiple objects of multiple types)
-             */
+                /**
+                 * TODO: Do something with the result here 1.
+                 * If the import produces no errors AND only 1 object was
+                 * returned: select it 2. If the import produces no errors AND results in multiple objects: show selection
+                 * table ALWAYS filter on allowed types (since CPO can result in multiple objects of multiple types)
+                 */
             }
             else
             {
@@ -172,8 +189,13 @@ class ImporterComponent extends Manager implements DelegateComponent
                                 'TYPE' => Translation::get(
                                     'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(),
                                     null,
-                                    \Chamilo\Core\Repository\Manager::context())),
-                            \Chamilo\Core\Repository\Manager::context())));
+                                    $importFactory->getImportContext()
+                                )
+                            ),
+                            \Chamilo\Core\Repository\Manager::context()
+                        )
+                    )
+                );
 
                 $html = array();
 
@@ -187,7 +209,8 @@ class ImporterComponent extends Manager implements DelegateComponent
         else
         {
             BreadcrumbTrail::getInstance()->add(
-                new Breadcrumb($this->get_url(), Translation::get('ChooseImportFormat')));
+                new Breadcrumb($this->get_url(), Translation::get('ChooseImportFormat'))
+            );
 
             $html = array();
 
@@ -195,13 +218,15 @@ class ImporterComponent extends Manager implements DelegateComponent
 
             foreach ($this->get_import_types() as $type => $name)
             {
+                $importFactory = $this->getImportFactories()->getImportFactoryByAlias($type);
 
                 $html[] = '<a href="' . $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)) . '">';
                 $html[] = '<div class="create_block" style="background-image: url(' .
-                     Theme::getInstance()->getImagePath(
-                        \Chamilo\Core\Repository\Manager::context(),
-                        'Import/' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString()) .
-                     ');">';
+                    Theme::getInstance()->getImagePath(
+                        $importFactory->getImportContext(),
+                        'Import/' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString()
+                    ) .
+                    ');">';
                 $html[] = $name;
                 $html[] = '</div>';
                 $html[] = '</a>';
@@ -228,14 +253,17 @@ class ImporterComponent extends Manager implements DelegateComponent
             Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
             array('id' => 'publish-button', 'class' => 'hidden'),
             null,
-            'plus');
+            'plus'
+        );
 
         $buttons->setElements($buttonElements);
 
         $importForm->addElement(
             'html',
             ResourceManager::getInstance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(self::package(), true) . 'ImporterComponent.js'));
+                Path::getInstance()->getJavascriptPath(self::package(), true) . 'ImporterComponent.js'
+            )
+        );
     }
 
     public function get_import_types()
@@ -245,17 +273,21 @@ class ImporterComponent extends Manager implements DelegateComponent
         foreach ($this->get_types() as $type)
         {
             $object_import_types = ContentObjectImportImplementation::get_types_for_object(
-                ClassnameUtilities::getInstance()->getNamespaceParent($type, 3));
+                ClassnameUtilities::getInstance()->getNamespaceParent($type, 3)
+            );
 
             foreach ($object_import_types as $object_import_type)
             {
-                if (! array_key_exists($object_import_type, $import_types))
+                if (!array_key_exists($object_import_type, $import_types))
                 {
+                    $importFactory = $this->getImportFactories()->getImportFactoryByAlias($object_import_type);
+
                     $import_types[$object_import_type] = Translation::get(
                         'ImportType' .
-                             (string) StringUtilities::getInstance()->createString($object_import_type)->upperCamelize(),
-                            null,
-                            \Chamilo\Core\Repository\Manager::context());
+                        (string) StringUtilities::getInstance()->createString($object_import_type)->upperCamelize(),
+                        null,
+                        $importFactory->getImportContext()
+                    );
                 }
             }
         }
@@ -268,26 +300,39 @@ class ImporterComponent extends Manager implements DelegateComponent
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-            $content_object_ids);
+            $content_object_ids
+        );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            $this->get_types());
+            $this->get_types()
+        );
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassDistinctParameters(
             $condition,
             new DataClassProperties(
-                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
+                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
+            )
+        );
+
         return \Chamilo\Core\Repository\Storage\DataManager::distinct(ContentObject::class_name(), $parameters);
     }
 
     public function getWorkspace()
     {
-        if (! isset($this->currentWorkspace))
+        if (!isset($this->currentWorkspace))
         {
             $this->currentWorkspace = new PersonalWorkspace($this->get_user());
         }
 
         return $this->currentWorkspace;
+    }
+
+    /**
+     * @return ImportFactories
+     */
+    protected function getImportFactories()
+    {
+        return $this->getService(ImportFactories::class);
     }
 }

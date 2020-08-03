@@ -928,6 +928,11 @@ abstract class Manager extends Application
 
     public static function get_tool_type_namespace($type)
     {
+        // temp fix for HOGENT code, better solution is needed
+        if($type == 'LectureCapture')
+        {
+            return 'Hogent\Application\Weblcms\Tool\Implementation\\' . $type;
+        }
         return 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $type;
     }
 

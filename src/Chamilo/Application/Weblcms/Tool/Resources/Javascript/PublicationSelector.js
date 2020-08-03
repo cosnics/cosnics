@@ -93,8 +93,17 @@ $(function(){
 
     var addTool = function(toolName, list) {
         var node = {};
-        var iconUrl = webPath + "/Chamilo/Application/Weblcms/Tool/Implementation/" + toolName +
-            "/Resources/Images/Aqua/Logo/22.png";
+        var iconUrl = '';
+
+        if(toolName === 'LectureCapture')
+        {
+            iconUrl = webPath + "/Hogent/Application/Weblcms/Tool/Implementation/" + toolName +
+                "/Resources/Images/Aqua/Logo/22.png";
+        }
+        else {
+            iconUrl = webPath + "/Chamilo/Application/Weblcms/Tool/Implementation/" + toolName +
+                "/Resources/Images/Aqua/Logo/22.png";
+        }
 
         node.id = getToolNodeId(toolName);
         node.icon = iconUrl;
