@@ -9,7 +9,7 @@
                 </div>
             </div>
             <h1 class="rubric-title">{{ rubric.title }}</h1>
-            <ul class="clusters" :class="{'show-default-feedback': true }">
+            <ul class="clusters" :class="{'is-feedback-visible': true }">
                 <li v-for="cluster in rubric.clusters" class="cluster-list-item">
                     <div class="cluster">
                         <h2 class="cluster-title">{{ cluster.title }}</h2>

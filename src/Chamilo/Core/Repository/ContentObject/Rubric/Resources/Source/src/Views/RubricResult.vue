@@ -20,7 +20,7 @@
                                     <div class="category">
                                         <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'show-default-feedback': getCriteriumData(criterium).showDefaultFeedback, 'show-custom-feedback': getCriteriumData(criterium).showDefaultFeedback, selected: selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
+                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{selected: selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
                                                 <div class="criterium">
                                                     <div class="criterium-title-header">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->

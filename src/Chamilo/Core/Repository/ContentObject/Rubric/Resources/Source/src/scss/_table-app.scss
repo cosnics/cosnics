@@ -101,11 +101,7 @@
     display: flex;
   }
 
-  .show-custom-feedback .criterium {
-    margin-bottom: .75em;
-  }
-
-  .show-default-feedback .criterium {
+  .is-feedback-visible .criterium {
     margin-bottom: .75em;
   }
 
@@ -152,7 +148,7 @@
     }
   }
 
-  .show-default-feedback .btn-more .check {
+  .is-feedback-visible .btn-more .check {
     transform: scaleY(-1);
   }
 
@@ -184,7 +180,6 @@
     border-radius: $border-radius;
     border-bottom-color: $score-light;
     text-align: center;
-    cursor: pointer;
     transition: 200ms background;
   }
 
@@ -335,7 +330,7 @@
     display: none;
   }
 
-  .show-default-feedback .default-feedback {
+  .is-feedback-visible .default-feedback {
     display: block;
   }
 }

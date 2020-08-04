@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters" :class="{'show-default-feedback': showDefaultFeedbackFields, 'show-custom-feedback': showDefaultFeedbackFields}">
+                <ul class="clusters" :class="{'is-feedback-visible': showDefaultFeedbackFields}">
                     <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                         <div class="cluster">
                             <h2 class="cluster-title">{{ cluster.title }}</h2>
@@ -24,7 +24,7 @@
                                     <div class="category">
                                         <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" role="grid" class="criterium-list-item" :class="{'show-default-feedback': getCriteriumData(criterium).showDefaultFeedback, 'show-custom-feedback': getCriteriumData(criterium).showDefaultFeedback}">
+                                            <li v-for="criterium in category.criteria" role="grid" class="criterium-list-item" :class="{'is-feedback-visible': getCriteriumData(criterium).showDefaultFeedback}">
                                                 <div class="criterium" role="row">
                                                     <div class="criterium-title-header" role="gridcell">
                                                         <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="criterium.showDefaultFeedback ? 'true' : 'false'" @click.prevent="getCriteriumData(criterium).showDefaultFeedback = !getCriteriumData(criterium).showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
@@ -214,10 +214,9 @@
             }
         }
     }
-    .show-custom-feedback .custom-feedback {
+
+    .is-feedback-visible .custom-feedback {
         display: block;
-    }
-    .show-default-feedback .custom-feedback {
         margin-left: 20em;
     }
 
