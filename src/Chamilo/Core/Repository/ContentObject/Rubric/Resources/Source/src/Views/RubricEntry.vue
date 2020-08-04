@@ -63,7 +63,7 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
-    import {CriteriumEvaluation, CriteriumExt} from '../Domain/util';
+    import {CriteriumEvaluation, CriteriumExt} from '../Util/interfaces';
     import CriteriumEntry from '../Components/CriteriumEntry.vue';
 
     function add(v1: number, v2: number) {

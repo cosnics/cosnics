@@ -16,12 +16,12 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import RubricEntry from './RubricEntry.vue';
-    import store from '../store';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
-    import {CriteriumEvaluation} from '../Domain/util';
+    import Level from '../Domain/Level';
+    import Criterium from '../Domain/Criterium';
+    import RubricEntry from './RubricEntry.vue';
+    import {CriteriumEvaluation} from '../Util/interfaces';
+    import store from '../store';
 
     interface EvaluatorEvaluations {
         name: string;
