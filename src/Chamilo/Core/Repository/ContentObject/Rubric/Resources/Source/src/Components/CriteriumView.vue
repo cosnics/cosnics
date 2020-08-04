@@ -1,6 +1,6 @@
 <template>
-    <li :id="id" class="rb-criterium-list-item handle criterium-handle">
-        <div class="rb-criterium" :class="{ selected }">
+    <component :is="tag" :id="id" class="handle criterium-handle">
+        <div class="rb-criterium" :class="{ 'is-selected': selected }">
             <div class="item-header-bar">
                 <div @click="$emit('criterium-selected', criterium)" @dblclick.stop="startEditing" @keyup.space.enter="$emit('criterium-selected', criterium)" class="rb-criterium-title" tabindex="0">
                     <h3 class="title" tabindex="-1">{{ criterium.title }}</h3>
@@ -19,7 +19,7 @@
                 <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="newTitle"/>
             </div>
         </div>
-    </li>
+    </component>
 </template>
 
 <script lang="ts">
@@ -37,6 +37,7 @@
         private newTitle: string = '';
 
         @Prop({type: String, required: true}) readonly id!: string;
+        @Prop({type: String, default: 'div'}) readonly tag!: String;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: Boolean, required: true}) readonly selected!: boolean;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;

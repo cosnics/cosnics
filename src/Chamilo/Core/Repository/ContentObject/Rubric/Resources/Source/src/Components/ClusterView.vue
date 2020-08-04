@@ -1,6 +1,6 @@
 <template>
-    <li :id="id" class="rb-cluster-list-item" tabindex="0" @keydown.enter="$emit('cluster-selected', cluster)" @keyup.space="$emit('cluster-selected', cluster)" @click.stop="$emit('cluster-selected', cluster)">
-        <div class="rb-cluster handle cluster-handle" tabindex="-1" :class="{ selected, 'show-menu': showMenuActions }">
+    <component :is="tag" :id="id" tabindex="0" @keydown.enter="$emit('cluster-selected', cluster)" @keyup.space="$emit('cluster-selected', cluster)" @click.stop="$emit('cluster-selected', cluster)">
+        <div class="rb-cluster handle cluster-handle" tabindex="-1" :class="{ 'is-selected': selected, 'show-menu': showMenuActions }">
             <div class="item-header-bar">
                 <div class="rb-cluster-title" @dblclick="startEditing" :title="cluster.title">
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
@@ -19,7 +19,7 @@
                 <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor onderverdeling" v-model="newTitle" />
             </div>
         </div>
-    </li>
+    </component>
 </template>
 
 <script lang="ts">
@@ -38,6 +38,7 @@
         private menuX = 0;
         private menuY = 0;
 
+        @Prop({type: String, default: 'div'}) readonly tag!: String;
         @Prop({type: String, required: true}) readonly id!: string;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
         @Prop({type: Boolean, required: true}) readonly selected!: boolean;

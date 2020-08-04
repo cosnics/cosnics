@@ -438,7 +438,7 @@
             color: #222;
         }
 
-        &.selected {
+        &.is-selected {
             background-color: $cluster-color-selected;
             color: #fff;
 
@@ -457,20 +457,28 @@
         position: fixed;
     }
 
+    .rb-cluster:focus {
+        outline: none;
+    }
+
     .rb-cluster-list-item {
         outline: none;
-
-        .rb-cluster:focus {
-            outline: none;
-        }
 
         &:focus .rb-cluster {
             box-shadow: inset 0 0 0 1px $input-color-focus;
             z-index: 10;
+        }
+    }
 
-/*            &.selected {
-                box-shadow: inset 0 0 0 2px white;
-            }*/
+    @media only screen and (max-width: 899px) {
+        .rb-cluster-list-item:focus .rb-cluster.is-selected {
+            box-shadow: inset 0 0 0 2px white;
+        }
+    }
+
+    @media only screen and (min-width: 899px) {
+        .rb-cluster-list-item:focus .rb-cluster {
+            border-color: transparent;
         }
     }
 
@@ -863,7 +871,7 @@
             border: 1px solid $cluster-color-border;
             border-top-width: 0;
 
-            &.selected {
+            &.is-selected {
                 border-color: $cluster-color-selected;
             }
         }
@@ -877,13 +885,9 @@
                 border-top-color: $cluster-color-hover;
             }
 
-            &.selected {
+            &.is-selected {
                 border-top-color: $cluster-color-selected;
             }
-        }
-
-        .rb-cluster-list-item.selected {
-            box-shadow: inset 0 0 0 2px white;
         }
 
         .rb-cluster-list-item:last-child .rb-cluster {
@@ -1223,7 +1227,7 @@
             transition: border-bottom-color 200ms;
         }
 
-        .clusters-view.mod-separator {
+        .clusters-view {
             position: relative;
 
             &::before {
@@ -1250,11 +1254,6 @@
             flex: 1;
             margin-right: .65em;
             overflow: hidden;
-
-            &:first-child {
-                /* Offsetting the transparent pixel border so the items line up */
-                margin-left: -1px;
-            }
 
             &.ghost {
                 background: $ghost-bg-color;
@@ -1302,7 +1301,7 @@
                 top: 4.6em;
             }
 
-            &.selected {
+            &.is-selected {
                 background: $bg-color;
                 border-color: hsla(194, 15%, 77%, 1);
                 color: hsla(190, 45%, 38%, 1);
@@ -1320,12 +1319,12 @@
             text-overflow: ellipsis;
         }
 
-        .clusters-view.mod-separator .rb-cluster {
+        .rb-cluster {
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             border-bottom-color: transparent;
 
-            &.selected {
+            &.is-selected {
                 height: 3.6rem;
                 margin-bottom: 0;
                 border-bottom-color: $bg-color;
@@ -1449,6 +1448,9 @@
                 }
             }
 
+            .rb-category-title {
+                align-items: stretch;
+            }
             .rb-category-title .title {
                 font-size: 1.33rem;
                 flex: 1;
@@ -1498,7 +1500,8 @@
 
             .btn-color {
                 width: 6px;
-                height: 100%;
+                height: unset;
+                /*height: 100%;*/
             }
 
             .item-header-bar {
@@ -1564,7 +1567,7 @@
             border-right: 1px solid hsla(193, 14%, 82%, 1);
             /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
 
-            &.selected {
+            &.is-selected {
                 /*border: 1px solid hsla(193, 14%, 75%, 1);*/
                 border: 2px solid $btn-color;
                 margin-top: -1px;

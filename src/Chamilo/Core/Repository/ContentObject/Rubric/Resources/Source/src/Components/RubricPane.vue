@@ -7,8 +7,8 @@
                     <split-view-button v-if="id === 'view1'" :show-split-view="showSplitView" @changed="$emit('split-view-changed', $event)"></split-view-button>
                     <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
                             :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
-                        <cluster-view v-for="cluster in clusters"
-                            :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
+                        <cluster-view v-for="(cluster, index) in clusters"
+                            tag="li" class="rb-cluster-list-item" :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
                             @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(cluster)" @finish-edit="onFinishEdit(cluster, ...arguments)"></cluster-view>
                     </draggable>
                     <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
@@ -26,7 +26,7 @@
                         <div v-if="category.criteria.length === 0 && !categoriesAddingCriterium[category.id] && !criteriumDragging" class="criteria-empty-list">Nog geen criteria toegevoegd</div>
                         <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
                                    :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="rb-criteria">
-                            <criterium-view v-for="criterium in category.criteria" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
+                            <criterium-view v-for="criterium in category.criteria" tag="li" class="rb-criterium-list-item" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
                                             :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
                                             @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(criterium)" @finish-edit="onFinishEdit(criterium, ...arguments)"></criterium-view>
                         </draggable>

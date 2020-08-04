@@ -25,6 +25,8 @@
         border: 1px solid lighten($cluster-color-border, 7%);
         border-radius: $border-radius;
         padding: 2px 8px;
+        align-items: center;
+        height: 2.9rem;
         /*border-color: transparent;*/
 
         &:focus {
@@ -38,15 +40,14 @@
     }
     @media only screen and (min-width: 900px) {
         .btn-show-split-view {
-            display: block;
+            display: flex;
         }
     }
     .svg.show-split-view {
         outline: none;
         width: 1.3rem;
         height: 1.3rem;
-        transform: translate(.1rem, .2rem)scale(1.75, 1);
-        margin-right: .2rem;
+        transform: scale(1.75, 1);
     }
     #path-1, #path-2 {
         transition: fill 200ms;

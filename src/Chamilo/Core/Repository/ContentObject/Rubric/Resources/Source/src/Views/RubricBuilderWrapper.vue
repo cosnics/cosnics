@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid">
         <rubric-builder :api-config="apiConfig" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
-        <div id="innerhtml"></div>
     </div>
 </template>
 
