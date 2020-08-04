@@ -23,6 +23,8 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\FeedbackServiceBridge;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -441,7 +443,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @return string|\Symfony\Component\HttpFoundation\Response
      *
-     * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
     protected function runRubricComponent(string $action, bool $embedded = true)
@@ -464,6 +465,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 'Chamilo\Core\Repository\ContentObject\Rubric\Display', $applicationConfiguration, $action
             );
 
-        return $application->run();
+        $response = $application->run();
+
+        if($embedded && ($response instanceof JsonResponse || $response instanceof RedirectResponse))
+        {
+            $response->send();
+            exit;
+        }
+
+        return $response;
     }
 }
