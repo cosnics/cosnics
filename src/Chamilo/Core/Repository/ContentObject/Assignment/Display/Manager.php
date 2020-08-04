@@ -444,7 +444,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
-    protected function runRubricComponent(string $action, bool $embedded = true): string
+    protected function runRubricComponent(string $action, bool $embedded = true)
     {
         $rubric = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
         if (!$rubric instanceof Rubric)
