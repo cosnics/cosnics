@@ -8,5 +8,11 @@
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService" autowire="true" />
 
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler\EntryFormHandler" autowire="true" />
+
     </services>
 </container>

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\E
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\RubricBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
@@ -85,9 +86,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $feedbackServiceBridge =
             new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
 
+        $rubricBridge = new RubricBridge($this->getAssignmentServiceBridge());
+
         if($this->getEntry() instanceof Entry)
         {
             $feedbackServiceBridge->setEntry($this->getEntry());
+            $rubricBridge->setEntry($this->getEntry());
         }
 
         $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
@@ -102,6 +106,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $this->getBridgeManager()->addBridge($feedbackServiceBridge);
         $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
         $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
+        $this->getBridgeManager()->addBridge($rubricBridge);
     }
 
     /**

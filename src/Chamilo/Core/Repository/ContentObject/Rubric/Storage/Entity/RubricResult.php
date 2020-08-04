@@ -74,7 +74,7 @@ class RubricResult
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string")
+     * @ORM\Column(name="comment", type="string", nullable=true)
      */
     protected $comment;
 

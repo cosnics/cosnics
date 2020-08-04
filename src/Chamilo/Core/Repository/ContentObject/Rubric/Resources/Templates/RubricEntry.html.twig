@@ -1,1 +1,8 @@
-Entry
+<div>
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+
+    {{ form_start(FORM) }}
+    {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
+    {{ form_end(FORM) }}
+
+</div>
