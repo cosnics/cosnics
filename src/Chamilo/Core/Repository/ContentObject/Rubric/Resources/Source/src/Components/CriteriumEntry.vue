@@ -35,7 +35,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Level from '../Domain/Level';
     import Criterium from '../Domain/Criterium';
-    import {CriteriumEvaluation, CriteriumExt} from '../Domain/util';
+    import {CriteriumEvaluation, CriteriumExt} from '../Util/interfaces';
 
     @Component({})
     export default class CriteriumEntry extends Vue {

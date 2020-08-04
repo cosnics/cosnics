@@ -2,13 +2,12 @@
     <router-view></router-view>
 </template>
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Vue} from 'vue-property-decorator';
 
     @Component({
         name: 'rubric-demo-wrapper'
     })
     export default class RubricDemoWrapper extends Vue {
-
     }
 </script>
 <style lang="scss">
