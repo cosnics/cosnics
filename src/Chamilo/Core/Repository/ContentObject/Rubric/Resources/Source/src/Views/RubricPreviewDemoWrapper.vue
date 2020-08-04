@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <rubric-entry v-if="rubric" :rubric="rubric" :ui-state="store.uiState.preview"></rubric-entry>
+        <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="store.uiState.preview"></rubric-entry>
     </div>
 </template>
 

@@ -1,12 +1,13 @@
 <template>
     <div class="container-fluid">
-        <rubric-preview :rubric-data="convertedRubricData" :ui-state="uiState"></rubric-preview>
+        <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="uiState"></rubric-entry>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import RubricPreview from './RubricPreview.vue';
+    import RubricEntry from './RubricEntry.vue';
+    import Rubric, {RubricJsonObject} from "../Domain/Rubric";
 
     function sortFn(v1: any, v2: any) {
         return (v1.sort > v2.sort) ? 1 : -1;
@@ -14,10 +15,11 @@
 
     @Component({
         components: {
-            RubricPreview
+            RubricEntry
         },
     })
     export default class RubricPreviewWrapper extends Vue {
+        private rubric: Rubric | undefined;
         private uiState = {
             showDefaultFeedbackFields: false
         };
@@ -89,6 +91,7 @@
 
         created() {
             this.convertedRubricData = this.convertData(this.rubricData);
+            this.rubric = Rubric.fromJSON(this.convertedRubricData as RubricJsonObject);
         }
     }
 </script>
