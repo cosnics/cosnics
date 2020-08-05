@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import RubricDemoHome from '../Views/RubricDemoHome.vue';
 import RubricBuilderDemoWrapper from '../Views/RubricBuilderDemoWrapper.vue';
 import RubricPreviewDemoWrapper from '../Views/RubricPreviewDemoWrapper.vue';
-import RubricEntryWrapper from '../Views/RubricEntryWrapper.vue';
+import RubricEntryDemoWrapper from '../Views/RubricEntryDemoWrapper.vue';
 import RubricResultWrapper from '../Views/RubricResultWrapper.vue';
 import ScoreRubricView from '../Components/ScoreRubricView.vue';
 import LevelsView from '../Components/LevelsView.vue';
@@ -67,7 +67,7 @@ const demoRoutes = [
   {
     path: '/entry',
     name: 'Entry',
-    component: RubricEntryWrapper,
+    component: RubricEntryDemoWrapper,
     props: true
   },
   {

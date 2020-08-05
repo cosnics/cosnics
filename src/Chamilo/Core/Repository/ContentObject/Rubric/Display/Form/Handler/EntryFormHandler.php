@@ -72,7 +72,7 @@ class EntryFormHandler extends FormHandler
 
         $data = $form->getData();
 
-//        $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '[{"criterium_tree_node_id": 50, "choice_id": 7, "comment": "meh"}]';
+//        $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '[{"criterium_tree_node_id": 50, "level_id": 7, "comment": "meh"}]';
 
         $resultJSONModels = $this->serializer->deserialize(
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . CriteriumResultJSONModel::class . '>', 'json'

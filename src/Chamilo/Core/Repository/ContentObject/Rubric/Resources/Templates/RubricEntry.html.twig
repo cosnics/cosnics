@@ -1,8 +1,43 @@
 <div>
-{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+    {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
 
-    {{ form_start(FORM) }}
-    {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
-    {{ form_end(FORM) }}
+    {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
+    {{ getCss('cosnics-rubric.css', appContext) }}
+
+    <div id="rubric-entry">
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-entry-wrapper>
+        {{ form_start(FORM) }}
+        {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
+        {{ form_end(FORM) }}
+        <button class="btn btn-primary" @click="saveRubric">Rubric Opslaan</button>
+    </div>
+    <script>
+        Vue.use(BootstrapVue);
+        Vue.use(this['cosnics-rubric'].default);
+
+        var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
+        var data = JSON.parse(rubricDataJSON);
+
+        new Vue({
+            el: '#rubric-entry',
+            data: {
+                rubricData: data,
+                rubricResults: { results: [] }
+            },
+            computed: {
+                rubricResultsJSON: function() {
+                    var res = JSON.stringify(this.rubricResults.results);
+                    return res;
+                }
+            },
+            methods: {
+                saveRubric: function() {
+                    var form = document.querySelector('[name=entry_form]');
+                    // todo: validate (make sure levels are not null)
+                    form.submit();
+                }
+            }
+        });
+    </script>
 
 </div>

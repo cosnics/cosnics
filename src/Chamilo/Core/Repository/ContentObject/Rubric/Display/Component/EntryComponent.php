@@ -40,9 +40,12 @@ class EntryComponent extends Manager implements DelegateComponent
                 $this->getRubricBridge()->getTargetUsers()
             )
         );
+        //var_dump($this->getRubricBridge()->getContextIdentifier());
+        //var_dump($this->getRubricBridge()->getEntityName());
+        //var_dump($this->getRubricBridge()->getTargetUsers()[0]);
 
         $formHandled = $formHandler->handle($form, $this->getRequest());
-
+        //var_dump($form->createView()->children['rubric_results']);
         if ($formHandled)
         {
             return '';

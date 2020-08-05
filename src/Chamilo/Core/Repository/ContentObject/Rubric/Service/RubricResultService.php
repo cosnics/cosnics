@@ -59,9 +59,10 @@ class RubricResultService
         foreach ($criteriumResultJSONModels as $criteriumResultJSONModel)
         {
             $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getCriteriumTreeNodeId());
-            $choice = $rubricData->getChoiceById($criteriumResultJSONModel->getChoiceId());
+            //$choice = $rubricData->getChoiceById($criteriumResultJSONModel->getChoiceId());
+            $choice = $rubricData->getChoiceByLevelAndCriteriumId($criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getCriteriumTreeNodeId());
 
-            if ($treeNode !== $choice->getCriterium())
+            /*if ($treeNode !== $choice->getCriterium())
             {
                 throw new \InvalidArgumentException(
                     sprintf(
@@ -69,7 +70,7 @@ class RubricResultService
                         $treeNode->getId()
                     )
                 );
-            }
+            }*/
 
             $calculatedScore = $choice->calculateScore();
 

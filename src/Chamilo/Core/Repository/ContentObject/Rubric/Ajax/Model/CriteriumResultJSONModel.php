@@ -23,7 +23,7 @@ class CriteriumResultJSONModel
      *
      * @Type("integer")
      */
-    protected $choiceId;
+    protected $levelId;
 
     /**
      * @var string
@@ -36,13 +36,13 @@ class CriteriumResultJSONModel
      * CriteriumResultJSONModel constructor.
      *
      * @param int $criteriumTreeNodeId
-     * @param int $choiceId
+     * @param int $levelId
      * @param string|null $comment
      */
-    public function __construct(int $criteriumTreeNodeId, int $choiceId, string $comment = null)
+    public function __construct(int $criteriumTreeNodeId, int $levelId, string $comment = null)
     {
         $this->criteriumTreeNodeId = $criteriumTreeNodeId;
-        $this->choiceId = $choiceId;
+        $this->levelId = $levelId;
         $this->comment = $comment;
     }
 
@@ -57,9 +57,9 @@ class CriteriumResultJSONModel
     /**
      * @return int
      */
-    public function getChoiceId(): ?int
+    public function getLevelId(): ?int
     {
-        return $this->choiceId;
+        return $this->levelId;
     }
 
     /**
