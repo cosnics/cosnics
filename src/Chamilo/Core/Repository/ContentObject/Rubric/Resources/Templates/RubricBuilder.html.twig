@@ -4,6 +4,15 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
+    <style type="text/css">
+        /*.col-xs-12 h3#page-title {
+            transform: translateY(-15px);
+        }*/
+        .col-xs-12 #builder {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+    </style>
     <div id="builder">
         <rubric-builder-wrapper v-if="rubricData" :api-config="apiConfig" :version="version" :rubric-data="rubricData"></rubric-builder-wrapper>
     </div>

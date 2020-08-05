@@ -31,14 +31,14 @@ class BuilderComponent extends Manager implements DelegateComponent
         $rubric = $this->getRubric();
         $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
 
-        echo '<pre>';
+        /*echo '<pre>';
         print_r($this->getSerializer()->serialize($rubricData, 'json'));
-        echo '</pre>';
+        echo '</pre>';*/
 
         return $this->getTwig()->render(
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricBuilder.html.twig',
             [
-                'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
+                'HEADER' => $this->render_header(''), 'FOOTER' => $this->render_footer(),
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
                 'ADD_LEVEL_AJAX_URL' => $this->get_url(
                     [
