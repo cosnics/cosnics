@@ -33,6 +33,7 @@
                                                  :preview="preview"
                                                  :ext="getCriteriumData(criterium)"
                                                  :evaluation="getCriteriumEvaluation(criterium)"
+                                                 :show-errors="showErrors"
                                                  @level-selected="selectLevel" @feedback-changed="onCriteriumFeedbackChanged">
                                             </criterium-entry>
                                         </ul>
@@ -81,6 +82,7 @@
         @Prop({type: Object}) readonly uiState!: any;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
+        @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
 
         get showDefaultFeedbackFields() : boolean {
             return this.uiState.showDefaultFeedbackFields;
@@ -325,9 +327,18 @@
             }
         }
     }
+
     .is-feedback-visible .custom-feedback {
         display: block;
         margin-left: 20em;
+    }
+
+    .rubric-entry-error {
+      border-bottom: 2px solid red;
+      color: red;
+      margin-left: 19.8em;
+      margin-right: 4.5em;
+      padding: 0 .25em;
     }
 
     @media only screen and (max-width: 899px) {

@@ -1,6 +1,7 @@
 <template>
     <component :is="tag" role="grid" :class="{'is-feedback-visible': ext.showDefaultFeedback }">
-        <div class="criterium" role="row">
+      <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">Selecteer een score</div>
+      <div class="criterium" role="row">
             <div class="criterium-title-header" role="gridcell">
                 <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
             </div>
@@ -45,6 +46,7 @@
         @Prop({type: Object}) readonly ext!: CriteriumExt;
         @Prop({type: Object}) readonly evaluation!: CriteriumEvaluation|null;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
+        @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
 
         get criteriumScore() : number {
             if (!this.evaluation) { return 0; }
@@ -54,6 +56,11 @@
         isSelected(level: Level) : boolean {
             if (!this.evaluation) { return level.isDefault; }
             return this.evaluation.level === level;
+        }
+
+        hasSelection() : boolean {
+            if (!this.evaluation) { return false; }
+            return !!this.evaluation.level;
         }
 
         selectLevel(level: Level) : void {

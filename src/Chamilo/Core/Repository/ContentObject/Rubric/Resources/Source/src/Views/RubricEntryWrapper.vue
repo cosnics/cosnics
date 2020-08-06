@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <rubric-entry v-if="rubric" :rubric="rubric" :criterium-evaluations="criteriumEvaluations" :ui-state="uiState"
+        <rubric-entry v-if="rubric" :rubric="rubric" :criterium-evaluations="criteriumEvaluations" :ui-state="uiState" :show-errors="showErrors"
                       @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
         </rubric-entry>
     </div>
@@ -28,6 +28,7 @@
 
         @Prop({type: Object, required: true}) readonly rubricData!: object;
         @Prop({type: Object, default: null}) readonly rubricResults!: any|null;
+        @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
 
         updateRubricResults() {
           if (this.rubricResults !== null) {
@@ -46,6 +47,7 @@
           this.criteriumEvaluations = rubric.getAllCriteria().map(criterium =>
               ({ criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' })
           );
+          this.updateRubricResults();
         }
 
         created() {

@@ -5,7 +5,7 @@
     {{ getCss('cosnics-rubric.css', appContext) }}
 
     <div id="rubric-entry">
-        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-entry-wrapper>
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors"></rubric-entry-wrapper>
         {{ form_start(FORM) }}
         {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
         {{ form_end(FORM) }}
@@ -22,6 +22,7 @@
             el: '#rubric-entry',
             data: {
                 rubricData: data,
+                hasErrors: false,
                 rubricResults: { results: [] }
             },
             computed: {
@@ -31,10 +32,24 @@
                 }
             },
             methods: {
-                saveRubric: function() {
+                saveRubric: function(event) {
+                    event.preventDefault();
+                    var i, results = this.rubricResults.results;
+                    if (results.length === 0) {
+                        this.hasErrors = true;
+                        return;
+                    }
+                    for (i = 0; i < results.length; i++) {
+                        if (typeof results[i].level_id !== 'number') {
+                            this.hasErrors = true;
+                            return;
+                        }
+                    }
+                    this.hasErrors = false;
                     var form = document.querySelector('[name=entry_form]');
-                    // todo: validate (make sure levels are not null)
-                    form.submit();
+                    if (form) {
+                        form.submit();
+                    }
                 }
             }
         });
