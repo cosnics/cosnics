@@ -209,36 +209,6 @@
     border-radius: $border-radius;
   }
 
-  .criterium-level-header {
-    .score-number .check {
-      font-size: 1.3rem;
-      margin-right: .4em;
-      vertical-align: center;
-      color: #c9c9c9;
-      transition: 200ms color;
-
-      &::before {
-        content: '\f1db'
-      }
-    }
-
-    &:hover .score-number .check {
-      color: #777;
-    }
-
-    &.selected .score-number {
-      &, .check {
-        color: white;
-      }
-    }
-
-    &:hover .score-number, &.selected .score-number {
-      .check::before {
-        content: '\f058'
-      }
-    }
-  }
-
   .subtotal {
     align-items: baseline;
 

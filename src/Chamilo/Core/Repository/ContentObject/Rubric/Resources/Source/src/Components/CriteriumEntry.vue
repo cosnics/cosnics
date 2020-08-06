@@ -3,20 +3,21 @@
       <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">Selecteer een score</div>
       <div class="criterium" role="row">
             <div class="criterium-title-header" role="gridcell">
-                <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4><button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
+                <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title category-indicator">{{ criterium.title }}</h4>
+              <button v-if="!showDefaultFeedbackFields" class="btn-more" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>
             </div>
             <div v-for="choice in ext.choices" class="criterium-level" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
-                <div v-if="preview" :aria-checked="choice.level.isDefault" class="criterium-level-header" :class="{ selected: choice.level.isDefault }">
+                <div v-if="preview" :aria-checked="choice.level.isDefault" class="criterium-level-header" :class="{ 'is-selected': isSelected(choice.level) }">
                     <div class="criterium-level-title">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                 </div>
-                <button v-else role="radio" :aria-checked="isSelected(choice.level)" class="criterium-level-header btn-score-number" :class="{ selected: isSelected(choice.level) }" @click="selectLevel(choice.level)">
+                <button v-else role="radio" :aria-checked="isSelected(choice.level)" class="criterium-level-header btn-score-number" :class="{ 'is-selected': isSelected(choice.level) }" @click="selectLevel(choice.level)">
                     <div class="criterium-level-title">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                 </button>
                 <div class="default-feedback">
                     {{ choice.feedback }}
@@ -54,7 +55,7 @@
         }
 
         isSelected(level: Level) : boolean {
-            if (!this.evaluation) { return level.isDefault; }
+            if (this.preview || !this.evaluation) { return level.isDefault; }
             return this.evaluation.level === level;
         }
 

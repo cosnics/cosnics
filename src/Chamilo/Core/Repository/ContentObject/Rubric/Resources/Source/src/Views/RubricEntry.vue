@@ -219,10 +219,14 @@
 
         .criterium-level-header {
             width: 100%;
+
+            &.is-selected {
+              background: $level-selected-color;
+            }
         }
 
-        .criterium-level-header.selected {
-            background: $level-selected-color;
+        .score-number.is-selected {
+            color: #fff;
         }
 
         .btn-score-number {
@@ -233,7 +237,7 @@
                 border: 1px solid $level-selected-color;
             }
 
-            &.selected {
+            &.is-selected {
                 &:hover, &:focus {
                     box-shadow: inset 0 0 0 1px white;
                 }
