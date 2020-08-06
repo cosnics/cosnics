@@ -95,12 +95,10 @@
 </template>
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import APIConfiguration from '../Connector/APIConfiguration';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
-    import DataConnector from '../Connector/DataConnector';
 
     interface CriteriumExt {
         criterium: Criterium,
@@ -124,13 +122,10 @@
     export default class RubricResult extends Vue {
         private rubric: Rubric|null = null;
         private evaluators: string[]|null = null;
-        private dataConnector: DataConnector|null = null;
         private selectedCriterium: Criterium|null = null;
         private criteriaData: CriteriumExt[] = [];
 
         @Prop({type: Object, default: null}) readonly rubricData!: any|null;
-        @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
-        @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object, required: true}) readonly rubricResults!: any;
 
         getCriteriumMaxScore(criterium: Criterium) : number {
@@ -199,8 +194,6 @@
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
                 this.initData(this.rubric, this.rubricResults);
-                // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version!);
             }
         }
     }

@@ -65,8 +65,6 @@
     })
     export default class RubricBuilder extends Vue {
         private selectedCriterium: Criterium|null = null;
-        //private showSplitView: boolean = false; // Set through uiState
-        //private content: string = 'rubric'; // Set through uiState
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
 
@@ -119,8 +117,7 @@
                         this.uiState.selectedCriterium = '';
                     }
                 }
-                // todo: get rubric data id
-                this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version!);
+                this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version);
             }
         }
 

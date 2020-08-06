@@ -8,22 +8,30 @@ import Criterium from '../Domain/Criterium';
 import Choice from '../Domain/Choice';
 (window as unknown as any).axios = axios;
 
+function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export default class DataConnector {
 
     protected apiConfiguration: APIConfiguration;
     protected queue = new PQueue({concurrency: 1});
 
     protected rubricDataId: number;
-    protected currentVersion: number;
+    protected currentVersion: number|null;
 
     private rubric: Rubric;
     private _isSaving: boolean = false;
 
-    public constructor(rubric: Rubric, apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number) {
+    public constructor(rubric: Rubric, apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number|null) {
         this.rubric = rubric;
         this.rubricDataId = rubricDataId;
         this.currentVersion = currentVersion;
         this.apiConfiguration = apiConfiguration;
+    }
+
+    get isDummyRequest() {
+        return this.currentVersion === null;
     }
 
     get processingSize() {
@@ -50,6 +58,7 @@ export default class DataConnector {
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters);
+            if (this.isDummyRequest) { return; }
             const oldId = level.id;
             level.id = String(res.level.id);
             this.rubric.setChoicesLevelId(oldId, level.id);
@@ -65,6 +74,7 @@ export default class DataConnector {
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
+            if (this.isDummyRequest) { return; }
             const oldId = treeNode.id;
             treeNode.id = String(res.tree_node.id);
             if (res.tree_node.type === 'criterium') {
@@ -117,7 +127,6 @@ export default class DataConnector {
             const parameters = {
                 'choiceData': JSON.stringify(choice.toJSON(criterium.id, level.id)),
             };
-            console.log(parameters);
             const data = await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
             console.log(data);
         });
@@ -148,31 +157,37 @@ export default class DataConnector {
         this.queue.onIdle().then(this.endSaving.bind(this));
     }
 
+    logResponse(data: any) {
+        const responseEl = document.getElementById('server-response');
+        if (responseEl) {
+            responseEl.innerHTML = JSON.stringify(data, null,4);
+        }
+    }
+
     protected async executeAPIRequest(apiURL: string, parameters: any) {
-        /*function timeout(ms: number) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }*/
 
         this.beginSaving();
-        parameters['rubricDataId'] = this.rubricDataId;
-        parameters['version'] = this.currentVersion;
-        const formData = new FormData();
-        for (const [key, value] of Object.entries(parameters)) {
-            formData.set(key, value as any);
-        }
+        if (this.isDummyRequest) {
+            await timeout(300); // Simulate a save
+            return {};
+        } else {
+            parameters['rubricDataId'] = this.rubricDataId;
+            parameters['version'] = this.currentVersion;
 
-        try {
-            const res = await axios.post(apiURL, formData);
-            console.log('res', res);
-            document.getElementById('innerhtml')!.innerHTML = res.data;
-            this.rubricDataId = res.data.rubric.id;
-            this.currentVersion = res.data.rubric.version;
-            /*await timeout(300); // simulate a save
-            resolve({});*/
-            return res.data;
-        } catch (err) {
-            console.log('error', err);
-            return err;
+            const formData = new FormData();
+            for (const [key, value] of Object.entries(parameters)) {
+                formData.set(key, value as any);
+            }
+
+            try {
+                const res = await axios.post(apiURL, formData);
+                this.logResponse(res.data);
+                this.rubricDataId = res.data.rubric.id;
+                this.currentVersion = res.data.rubric.version;
+                return res.data;
+            } catch (err) {
+                return err;
+            }
         }
     }
 }

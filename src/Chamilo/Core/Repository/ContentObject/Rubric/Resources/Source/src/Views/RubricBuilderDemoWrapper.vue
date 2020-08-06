@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <rubric-builder :api-config="config" :rubric-data="store.rubricData" :version="version" :ui-state="store.uiState.builder" @rubric-updated="onRubricUpdated"></rubric-builder>
+        <rubric-builder :api-config="config" :version="null" :rubric-data="store.rubricData"  :ui-state="store.uiState.builder" @rubric-updated="onRubricUpdated"></rubric-builder>
     </div>
 </template>
 
@@ -26,7 +26,6 @@
             'updateLevelURL': 'https://test',
             'updateTreeNodeURL': 'https://test'
         };
-        private version = 0;
         private store: any = store;
 
         onRubricUpdated(data: any) {
