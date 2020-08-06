@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="entry-app">
-        <div v-if="rubric" class="rubric" :class="{'is-demo': options.isDemo, 'is-evaluator-selected': options.evaluator !== ''}">
+        <div class="rubric" :class="{'is-demo': options.isDemo, 'is-evaluator-selected': options.evaluator !== ''}">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-entry-view">
@@ -89,9 +89,9 @@
         }
 
         toggleDefaultFeedbackFields() {
-            this.uiState.showDefaultFeedbackFields = !this.uiState.showDefaultFeedbackFields;
-            if (!this.uiState.showDefaultFeedbackFields) {
-                this.rubric!.getAllCriteria().forEach(criterium => {
+            const show = this.uiState.showDefaultFeedbackFields = !this.uiState.showDefaultFeedbackFields;
+            if (!show) {
+                this.rubric.getAllCriteria().forEach(criterium => {
                     this.getCriteriumData(criterium)!.showDefaultFeedback = false;
                 });
             }
@@ -141,20 +141,17 @@
         }
 
         getCriteriumData(criterium: Criterium) : CriteriumExt|null {
-            const criteriumExt = this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium);
-            return criteriumExt || null;
+            return this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium) || null;
         }
 
         getCriteriumEvaluation(criterium: Criterium) : CriteriumEvaluation|null {
-            const criteriumEvaluation = this.criteriumEvaluations.find((_ : CriteriumEvaluation) => _.criterium === criterium);
-            return criteriumEvaluation || null;
+            return this.criteriumEvaluations.find((_ : CriteriumEvaluation) => _.criterium === criterium) || null;
         }
 
         private initData() {
             const rubric = this.rubric;
-            const levels = rubric.levels;
             this.criteriaData = rubric.getAllCriteria().map(criterium => {
-                const choices = levels.map(level => {
+                const choices = rubric.levels.map(level => {
                     const choice = rubric.getChoice(criterium, level);
                     const score = rubric.getChoiceScore(criterium, level);
                     return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
@@ -231,9 +228,7 @@
         .btn-score-number {
             outline: none;
             cursor: pointer;
-        }
 
-        .rubric.is-demo.is-evaluator-selected .btn-score-number {
             &:hover, &:focus {
                 border: 1px solid $level-selected-color;
             }
@@ -245,11 +240,9 @@
             }
         }
 
-        .subtotal {
-            .score-wrap {
-                width: 3.5em;
-                margin-left: 1em;
-            }
+        .subtotal .score-wrap {
+            width: 3.5em;
+            margin-left: 1em;
         }
 
         .criterium-total {
