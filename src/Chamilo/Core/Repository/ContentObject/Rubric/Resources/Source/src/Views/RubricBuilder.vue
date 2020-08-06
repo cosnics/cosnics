@@ -121,9 +121,11 @@
             }
         }
 
+        //@Watch('rubric', {deep: true}) // Unfortunately, changes in choices are not being picked up.
+        //rubricChanged() {
         beforeDestroy() {
             if (this.rubric) {
-                this.$emit('rubric-updated', this.rubric.toJSON());
+                this.$emit('rubric-updated', this.rubric);
             }
         }
     }
@@ -447,7 +449,6 @@
                 }
             }
         }
-
     }
 
     .rb-clusters .name-input {

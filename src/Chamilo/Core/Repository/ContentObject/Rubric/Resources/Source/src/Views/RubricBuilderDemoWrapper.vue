@@ -6,6 +6,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
+    import Rubric from '../Domain/Rubric';
     import RubricBuilder from './RubricBuilder.vue';
     import store from '../store';
 
@@ -28,11 +29,11 @@
         };
         private store: any = store;
 
-        onRubricUpdated(data: any) {
+        onRubricUpdated(rubric: Rubric) {
             for (let member in this.store.rubricData) {
                 delete this.store.rubricData[member];
             }
-            Object.assign(this.store.rubricData, data);
+            Object.assign(this.store.rubricData, rubric.toJSON());
         }
     }
 </script>
