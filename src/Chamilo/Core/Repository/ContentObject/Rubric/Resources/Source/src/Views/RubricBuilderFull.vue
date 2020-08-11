@@ -1,50 +1,47 @@
 <template>
-    <div class="rubric">
-        <div class="rubric-builder-full-view">
-            <div class="table-header-wrap">
-                <div class="table-header">
-                    <div v-for="level in rubric.levels" class="table-header-title">
-                        {{level.title}}
-                    </div>
+    <div class="rubric mod-builder-full-view">
+        <div class="rubric-table-header mod-builder-full-view">
+            <div class="levels-table-header mod-builder-full-view">
+                <div v-for="level in rubric.levels" class="level-table-header-title">
+                    {{level.title}}
                 </div>
             </div>
-            <h1 class="rubric-title">{{ rubric.title }}</h1>
-            <ul class="clusters" :class="{'is-feedback-visible': true }">
-                <li v-for="cluster in rubric.clusters" class="cluster-list-item">
-                    <div class="cluster">
-                        <h2 class="cluster-title">{{ cluster.title }}</h2>
-                        <ul class="categories">
-                            <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`">
-                                <div class="category">
-                                    <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
-                                    <ul class="criteria">
-                                        <li v-for="criterium in category.criteria" class="criterium-list-item">
-                                            <div class="criterium">
-                                                <div class="criterium-title-header">
-                                                    <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
+        </div>
+        <h1 class="rubric-title">{{ rubric.title }}</h1>
+        <ul class="clusters">
+            <li v-for="cluster in rubric.clusters" class="cluster-list-item">
+                <div class="cluster">
+                    <h2 class="cluster-title">{{ cluster.title }}</h2>
+                    <ul class="categories">
+                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`">
+                            <div class="category">
+                                <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
+                                <ul class="criteria">
+                                    <li v-for="criterium in category.criteria" class="criterium-list-item">
+                                        <div class="criterium mod-responsive">
+                                            <div class="criterium-title-header mod-responsive">
+                                                <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
+                                            </div>
+                                            <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
+                                                <div class="criterium-level-header mod-builder-full-view">
+                                                    <div class="criterium-level-title">
+                                                        {{data.level.title}}
+                                                    </div>
+                                                    <div class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                                 </div>
-                                                <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level">
-                                                    <div class="criterium-level-header">
-                                                        <div class="criterium-level-title">
-                                                            {{data.level.title}}
-                                                        </div>
-                                                        <div class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
-                                                    </div>
-                                                    <div class="default-feedback" @click="focusTextField">
-                                                        <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
-                                                        <!--<textarea v-model="level.feedback" class="ta-feedback" @input="updateFeedback"></textarea>-->
-                                                    </div>
+                                                <div class="default-feedback-full-view" @click="focusTextField">
+                                                    <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
                                                 </div>
                                             </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -89,7 +86,7 @@
 
         focusTextField(elem: any) {
             if (elem.target.className === 'default-feedback') {
-                elem.target.querySelector('.ta-feedback').focus();
+                elem.target.querySelector('.ta-default-feedback').focus();
             }
         }
 
@@ -120,7 +117,7 @@
 
         mounted() {
             this.$nextTick(() => {
-                document.querySelectorAll('.ta-feedback').forEach(el => {
+                document.querySelectorAll('.ta-default-feedback').forEach(el => {
                     updateHeight(el as HTMLElement);
                 });
             });
@@ -128,84 +125,63 @@
     }
 </script>
 <style lang="scss">
-    .builder-full-app {
-        &#app {
-            color: $text-color;
-        }
-
-        .table-header {
+    .mod-builder-full-view {
+        &.levels-table-header {
             margin-left: 19.8em;
-
-            .table-header-title {
-                flex: 1;
-            }
         }
 
-        .criterium-title-header {
-            width: 19em;
-            min-width: 19em;
-        }
-
-        .criterium .criterium-level {
+        &.criterium-level {
             display: flex;
             flex-direction: column;
         }
 
-        .criterium-level-header {
-            cursor: text;
+        &.criterium-level-header {
             border-color: transparent;
+            cursor: text;
         }
+    }
 
-        .default-feedback {
-            padding: 0;
-            flex: 1;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background-color: white;
+    .default-feedback-full-view {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        flex: 1;
+        line-height: 1.4em;
+        padding: 0;
 
-            &:hover, &:focus-within {
-                border: 1px solid $score-dark;
-            }
+        &:hover, &:focus-within {
+            border: 1px solid $score-dark;
         }
+    }
 
-        .ta-feedback {
-            padding: .3em;
-            width: 100%;
-            /*background: transparent;*/
-            border: none;
-            resize: none;
-            overflow: hidden;
+    .ta-default-feedback {
+        /*background: transparent;*/
+        border: none;
+        overflow: hidden;
+        padding: .3em;
+        resize: none;
+        width: 100%;
 
-            &:focus {
-                outline: none;
-            }
+        &:focus {
+            outline: none;
         }
     }
 
     @media only screen and (max-width: 899px) {
-        .builder-full-app {
-            .rubric {
+        .mod-builder-full-view {
+            &.rubric {
                 margin: 0;
             }
 
-            .table-header-wrap {
+            &.rubric-table-header {
                 display: none;
             }
 
-            .criterium {
-                flex-direction: column;
-                margin-bottom: 2em;
+            &.criterium-level {
+                margin-bottom: .5em;
             }
 
-            .criterium-level-title {
-                color: darken($title-color, 5%);
-            }
-
-            .criterium-level {
-               margin-bottom: .5em;
-            }
-
-            .criterium-level-header {
+            &.criterium-level-header {
                 background: #ddd;
                 display: flex;
                 margin: .3em 0 -.1em .75em;
@@ -213,11 +189,11 @@
                 padding-right: .3em;
                 text-align: left;
             }
-            
-            .default-feedback {
-                margin-top: -.25em;
-                margin-left: .75em;
-            }
+        }
+
+        .default-feedback-full-view {
+            margin-left: .75em;
+            margin-top: -.25em;
         }
     }
 </style>

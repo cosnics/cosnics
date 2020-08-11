@@ -34,8 +34,3 @@
         }
     }
 </script>
-<style lang="scss">
-    @include loader();
-    @include app();
-    @include table-app();
-</style>

@@ -3,45 +3,49 @@
     outline-width: thin;
   }
 
+  #app.mod-sep {
+    border-top: 1px solid #d6d6d6;
+  }
+
   .rubric {
     margin: 0 1em;
   }
 
-  .table-header-wrap {
+  .rubric-table-header {
     background: $bg-color;
     background: linear-gradient(to bottom, $bg-color 0, $bg-color 50%, change_color($bg-color, $alpha: 0) 100%);
+    padding-bottom: .4em;
+    padding-top: .8em;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    padding-top: .8em;
-    padding-bottom: .4em;
     z-index: 10;
   }
 
-  .table-header {
-    display: flex;
-    align-items: stretch;
+  .levels-table-header, .evaluators-table-header {
     align-content: center;
+    align-items: stretch;
+    display: flex;
+  }
 
-    .table-header-title {
-      background-color: $level-header-color;
-      padding: .4em .5em;
-      margin-right: .5em;
-      font-size: 1.4rem;
-      line-height: 1.4em;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      color: white;
-      border-radius: $border-radius;
-      box-shadow: 0px 1px 2px #999;
-      /*min-width: 8.57em;*/
-    }
+  .level-table-header-title, .evaluator-table-header-title {
+    background-color: $level-header-color;
+    border-radius: $border-radius;
+    box-shadow: 0px 1px 2px #999;
+    color: white;
+    flex: 1;
+    font-size: 1.4rem;
+    line-height: 1.4em;
+    margin-right: .5em;
+    overflow: hidden;
+    padding: .4em .5em;
+    text-overflow: ellipsis;
   }
 
   .rubric-title {
+    display: none;
     font-size: 2.4rem;
     margin: 0 0 1em 0;
-    display: none;
   }
 
   .clusters, .categories, .criteria {
@@ -55,16 +59,16 @@
   }
 
   .cluster-title {
-    font-size: 1.8rem;
-    margin: .25em 0 0 .85em;
     color: change-color($title-color, $alpha: 0.7);
+    font-size: 1.8rem;
     font-weight: 700;
+    margin: .25em 0 0 .85em;
   }
 
   .category-indicator:before {
+    background: var(--category-color);
     content: '';
     display: inline-block;
-    background: var(--category-color);
     margin-right: 0.35em;
   }
 
@@ -76,94 +80,92 @@
     }
   }
 
-
   .category-title {
-    font-size: 1.5rem;
-    /*margin: .25em 0 0 0;*/
-    margin: .75em 0;
-    color: $title-color;
-    line-height: 1.3em;
-    display: flex;
     align-items: baseline;
+    color: $title-color;
+    display: flex;
+    font-size: 1.5rem;
+    line-height: 1.3em;
+    margin: .75em 0;
 
     &.category-indicator:before {
-      min-width: 12px;
       height: 12px;
       margin-left: .05em;
       margin-right: .35em;
+      min-width: 12px;
     }
   }
 
   .criterium {
-    margin-left: .3em;
-    margin-bottom: .5em;
-    margin-top: .10em;
     display: flex;
-  }
+    margin-bottom: .5em;
+    margin-left: .3em;
+    margin-top: .10em;
 
-  .is-feedback-visible .criterium {
-    margin-bottom: .75em;
+    &.is-feedback-visible {
+      margin-bottom: .75em;
+    }
   }
 
   .criterium-title-header {
     margin-right: 0.5em;
     position: relative;
+  }
 
-    .btn-more {
-      position: absolute;
-      top: .5em;
-      right: 0;
-      width: 1.4em;
-      cursor: pointer;
-      color: #bbb;
-      background: none;
-      border: 1px solid transparent;
-      display: flex;
-      justify-content: center;
+  .btn-show-feedback {
+    background: none;
+    border: 1px solid transparent;
+    color: #bbb;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: .5em;
+    width: 1.4em;
 
-      .check {
-        transform: scaleY(1);
-        transition: transform 300ms;
-      }
+    &:hover {
+      color: #999;
+    }
 
-      .check:focus {
-        outline: none;
-      }
+    &:focus {
+      outline: none;
 
-      &:focus {
-        outline: none;
-
-        .check {
-          border: 1px solid $input-color-focus;
-        }
-      }
-
-      .check::before {
-        content: '\f078';
-      }
-
-      &:hover {
-        color: #999;
+      .btn-icon-show-feedback {
+        border: 1px solid $input-color-focus;
       }
     }
   }
 
-  .is-feedback-visible .btn-more .check {
-    transform: scaleY(-1);
+  .btn-icon-show-feedback {
+    transform: scaleY(1);
+    transition: transform 300ms;
+
+    &.is-feedback-visible {
+      transform: scaleY(-1);
+    }
+
+    &::before {
+      content: '\f078';
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .criterium-title {
+    display: flex;
     font-size: 1.4rem;
     line-height: 1.4em;
-    margin-top: 0.5em;
     margin-bottom: 0;
-    display: flex;
+    margin-top: 0.5em;
 
     &.category-indicator:before {
+      border-radius: 50%;
+      height: 8px;
       margin-top: .3em;
       min-width: 8px;
-      height: 8px;
-      border-radius: 50%;
       margin-left: -.15em;
       margin-right: .5em;
     }
@@ -177,130 +179,118 @@
   .criterium-level-header {
     background: #ddd;
     border: 1px solid transparent;
-    border-radius: $border-radius;
     border-bottom-color: $score-light;
+    border-radius: $border-radius;
     text-align: center;
     transition: 200ms background;
   }
 
   @media only screen and (min-width: 900px) {
+    .criterium-title-header.mod-responsive {
+      width: 19em;
+      min-width: 19em;
+    }
+
     .criterium-level-title {
-      position: absolute;
+      height: 1px;
       left: -10000px;
+      overflow: hidden;
+      position: absolute;
       top: auto;
       width: 1px;
-      height: 1px;
-      overflow: hidden;
     }
   }
 
   @media only screen and (max-width: 899px) {
+    .criterium.mod-responsive {
+      flex-direction: column;
+      margin-bottom: 2em;
+    }
+
+    .criterium-title-header.mod-responsive {
+      max-width: 40em;
+    }
+
     .criterium-level-title {
+      color: darken($title-color, 5%);
       display: block;
       flex: 1;
       line-height: 2.4em;
     }
   }
 
-  .score-number {
-    font-size: 1.8rem;
-    line-height: 1.6em;
-    color: #666;
-    border-radius: $border-radius;
-  }
-
   .subtotal {
     align-items: baseline;
-
-    .score-wrap {
-      margin-left: .5em;
-    }
-
-    .score-number {
-      padding-right: .3em;
-      line-height: 1.2em;
-      text-align: right;
-      border: 1px solid transparent;
-    }
   }
 
-  .criterium-total .score-number {
+  .score-number {
+    border-radius: $border-radius;
+    color: #666;
+    font-size: 1.8rem;
     line-height: 1.6em;
-    background: $score-lighter;
   }
 
-  .category-total {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 1.3rem;
-    /*margin-right: 1.5em;*/
+  .score-number-calc {
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+    color: #666;
+    font-size: 1.8rem;
+    line-height: 1.2em;
+    padding-right: .3em;
+    text-align: right;
 
-    .category-indicator:before {
-      width: .6em;
-      height: .7em;
+    &.mod-cluster {
+      background: $score-dark;
+      color: #fff;
     }
 
-    .score-number {
-      background: $score-light;
+    &.mod-rubric {
+      background: $score-darker;
+      color: #fff;
+    }
+
+    &.mod-criterium-max {
+      background: hsla(197, 15%, 90%, 1);
+    }
+
+    &.mod-cluster-max {
+      background: hsla(203, 33%, 60%, 1);
+      color: #fff;
+    }
+
+    &.mod-rubric-max {
+      background: hsla(207, 40%, 35%, 1);
+      color: #fff;
     }
   }
 
   .cluster-total {
     display: flex;
-    justify-content: flex-end;
     font-size: 1.3rem;
+    justify-content: flex-end;
     margin-top: .5em;
-    /*margin-right: 1.5em;*/
-
-    .score-number {
-      background: $score-dark;
-      color: white;
-    }
   }
 
   .cluster-total-title {
-    font-weight: 700;
     color: darken($score-dark, 20%);
+    font-weight: 700;
   }
 
   .rubric-total, .rubric-total-max {
     display: flex;
-    justify-content: flex-end;
     font-size: 1.3rem;
+    justify-content: flex-end;
     margin-top: .25em;
-    /*margin-right: 1.5em;*/
-    padding-top: .3em;
     padding-bottom: .3em;
-
+    padding-top: .3em;
   }
 
   .rubric-total {
     border-top: 1px solid $score-light;
-
-    .score-number {
-      background: $score-darker;
-      color: white;
-    }
-  }
-
-  .rubric-total-max {
-    .score-number {
-      background: $score-light;
-    }
   }
 
   .rubric-total-title {
-    font-weight: 700;
     color: $score-darker;
-  }
-
-  .default-feedback {
-    padding: .3em .5em;
-    line-height: 1.4em;
-    display: none;
-  }
-
-  .is-feedback-visible .default-feedback {
-    display: block;
+    font-weight: 700;
   }
 }

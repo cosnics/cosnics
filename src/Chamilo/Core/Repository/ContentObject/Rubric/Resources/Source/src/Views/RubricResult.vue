@@ -1,13 +1,13 @@
 <template>
-    <div id="app" class="result-app" >
-        <div v-if="rubric" class="rubric">
+    <div id="app" class="mod-sep" >
+        <div v-if="rubric" class="rubric mod-result-view">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-results-view" @click="selectedCriterium = null">
-                <div class="table-header-wrap">
-                    <div class="table-header">
-                        <div v-for="evaluator in evaluators" class="table-header-title">{{ evaluator|capitalize }}</div>
-                        <div class="table-header-title mod-max">Max.</div>
+                <div class="rubric-table-header">
+                    <div class="evaluators-table-header">
+                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title">{{ evaluator|capitalize }}</div>
+                        <div class="evaluator-table-header-title mod-max">Max.</div>
                     </div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
@@ -20,18 +20,20 @@
                                     <div class="category">
                                         <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                         <ul class="criteria">
-                                            <li v-for="criterium in category.criteria" class="criterium-list-item" :class="{'is-selected': selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
-                                                <div class="criterium">
-                                                    <div class="criterium-title-header">
+                                            <li v-for="criterium in category.criteria" class="criterium-list-item mod-result-view" :class="{'is-selected': selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
+                                                <div class="criterium mod-result-view">
+                                                    <div class="criterium-title-header mod-result-view">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
                                                     </div>
-                                                    <div v-for="evaluator in evaluators" class="subtotal criterium-total">
-                                                        <div class="score-number" :id="`${criterium.id}-${evaluator}`"><i v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" class="has-feedback fa fa-info"/>{{
-                                                            getCriteriumScore(criterium, evaluator) }}</div>
+                                                    <div v-for="evaluator in evaluators" class="subtotal criterium-total mod-result-view">
+                                                        <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-${evaluator}`">
+                                                            <i v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" class="icon-score-feedback fa fa-info"/>
+                                                            {{ getCriteriumScore(criterium, evaluator) }}
+                                                        </div>
                                                         <b-tooltip v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ getCriteriumData(criterium).evaluations[evaluator].feedback }}</b-tooltip>
                                                     </div>
-                                                    <div class="subtotal criterium-total">
-                                                        <div class="score-number mod-max">{{ getCriteriumMaxScore(criterium) }}</div>
+                                                    <div class="subtotal criterium-total mod-result-view">
+                                                        <div class="score-number-calc mod-result-view mod-criterium-max">{{ getCriteriumMaxScore(criterium) }}</div>
                                                     </div>
                                                 </div>
                                             </li>
@@ -39,25 +41,25 @@
                                     </div>
                                 </li>
                             </ul>
-                            <div class="subtotal cluster-total">
+                            <div class="subtotal cluster-total mod-result-view">
                                 <div class="cluster-total-title">Totaal {{ cluster.title }}:</div>
-                                <div v-for="evaluator in evaluators" class="score-wrap">
-                                    <div class="score-number">{{ getClusterScore(cluster, evaluator) }}</div>
+                                <div v-for="evaluator in evaluators" class="score-result-view">
+                                    <div class="score-number-calc mod-result-view mod-cluster">{{ getClusterScore(cluster, evaluator) }}</div>
                                 </div>
-                                <div class="score-wrap">
-                                    <div class="score-number mod-max">{{ getClusterMaxScore(cluster) }}</div>
+                                <div class="score-result-view">
+                                    <div class="score-number-calc mod-result-view mod-cluster-max">{{ getClusterMaxScore(cluster) }}</div>
                                 </div>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="subtotal rubric-total">
+                <div class="subtotal rubric-total mod-result-view">
                     <div class="rubric-total-title">Totaal Rubric:</div>
-                    <div v-for="evaluator in evaluators" class="score-wrap">
-                        <div class="score-number">{{ getRubricScore(evaluator) }}</div>
+                    <div v-for="evaluator in evaluators" class="score-result-view">
+                        <div class="score-number-calc mod-result-view mod-rubric">{{ getRubricScore(evaluator) }}</div>
                     </div>
-                    <div class="score-wrap">
-                        <div class="score-number mod-max">{{ rubric.getMaximumScore() }}</div>
+                    <div class="score-result-view">
+                        <div class="score-number-calc mod-result-view mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
                     </div>
                 </div>
             </div>
@@ -112,10 +114,10 @@
 
     @Component({
         filters: {
-            capitalize: function (value: string) {
-                if (!value) return ''
-                value = value.toString()
-                return value.charAt(0).toUpperCase() + value.slice(1)
+            capitalize: function (value: any) {
+                if (!value) { return ''; }
+                value = value.toString();
+                return value.charAt(0).toUpperCase() + value.slice(1);
             }
         }
     })
@@ -199,62 +201,33 @@
     }
 </script>
 <style lang="scss">
-    .result-app {
-        &#app {
-            color: $text-color;
-            border-top: 1px solid #d6d6d6; /** Added this for result view **/
-        }
+    .rubric-results-view {
+        /*max-width: 60em;*/
+        position: relative;
+        width: 46em;
+    }
 
-        .rubric {
+    .evaluators-table-header {
+        justify-content: flex-end;
+    }
+
+    .evaluator-table-header-title {
+        flex: initial;
+        width: 4.6em;
+
+        &.mod-max {
+            background: hsla(203, 33%, 60%, 1);
+            color: #fff;
+        }
+    }
+
+    .mod-result-view {
+        /*.rubric {
+            // Why did i put this here? Setting it removes the sticky
             overflow-x: auto;
-        }
+        }*/
 
-        .rubric-results-view {
-            width: 46em;
-            /*max-width: 60em;*/
-            position: relative;
-        }
-
-        .table-header {
-            justify-content: flex-end;
-
-            .table-header-title {
-                width: 4.6em;
-            }
-        }
-
-        .criterium-title-header {
-            flex: 1;
-        }
-
-        .subtotal {
-            margin-right: .5em;
-            align-items: baseline;
-
-            .score-wrap {
-                width: 5em;
-            }
-
-            .score-number {
-                font-size: 1.6rem;
-                line-height: 1.4em;
-                padding-top: .1em;
-            }
-        }
-
-        .criterium-total {
-            width: 5em;
-            margin-right: .5em;
-            cursor: default;
-
-            .has-feedback {
-                font-size: 1.1rem;
-                margin-right: .5em;
-                color: #2787ad;
-            }
-        }
-
-        .criterium-list-item {
+        &.criterium-list-item {
             border: 1px solid transparent;
             border-radius: $border-radius;
 
@@ -265,34 +238,58 @@
                     border-bottom: 1px solid darken($score-lighter, 20%);
                 }*/
             }
-        }
 
-        .criterium-list-item:hover {
-            background: hsla(224, 20%, 68%, 0.4);
-            cursor: pointer;
-            border: 1px solid darken($score-lighter, 20%);
-
-            .score-number {
-                /*background: none;*/
+            &:hover {
+                background: hsla(224, 20%, 68%, 0.4);
+                border: 1px solid darken($score-lighter, 20%);
                 cursor: pointer;
-                /*border-bottom: 1px solid darken($score-lighter, 20%);*/
+
+                .score-number {
+                    /*background: none;*/
+                    /*border-bottom: 1px solid darken($score-lighter, 20%);*/
+                    cursor: pointer;
+                }
             }
         }
 
-        .criterium {
+        &.criterium {
             align-items: center;
         }
 
-        .table-header-title.mod-max, .cluster-total .score-number.mod-max {
-            background: hsla(203, 33%, 60%, 1);
+        &.criterium-title-header {
+            flex: 1;
         }
 
-        .criterium .score-number.mod-max {
-            background: hsla(197, 15%, 90%, 1);
+        &.subtotal {
+            margin-right: .5em;
         }
-        .rubric-total .score-number.mod-max {
-            background: hsla(207, 40%, 35%, 1);
+
+        &.criterium-total {
+            cursor: default;
+            margin-right: .5em;
+            width: 5em;
         }
+
+        &.score-number-calc {
+            font-size: 1.6rem;
+            line-height: 1.4em;
+            padding-top: .1em;
+
+            &.mod-criterium {
+                background: $score-lighter;
+            }
+        }
+    }
+
+    .icon-score-feedback {
+      color: #2787ad;
+      font-size: 1.1rem;
+      margin-right: .5em;
+    }
+
+    .score-result-view {
+      margin-left: .5em;
+      width: 5em;
     }
 
     .rr-selected-criterium {
@@ -301,26 +298,24 @@
     }
 
     @media only screen and (min-width: 900px) {
-        .result-app {
-            .rr-selected-criterium {
-                border-left: 1px solid hsla(191, 21%, 80%, 1);
-                width: 40%;
-                margin-left: 1.5em;
-                padding-left: 1.5em;
-            }
+        .rr-selected-criterium {
+            border-left: 1px solid hsla(191, 21%, 80%, 1);
+            margin-left: 1.5em;
+            padding-left: 1.5em;
+            width: 40%;
         }
     }
 
     .rr-selected-criterium-results {
         background: #e4e3e3;
-        padding: .5em;
         border-radius: $border-radius;
+        padding: .5em;
 
         .title {
             color: hsla(191, 41%, 38%, 1);
-            margin-bottom: .5em;
             font-weight: 700;
             line-height: 1.3em;
+            margin-bottom: .5em;
 
             .separator {
                 margin: 0 .3em;
@@ -329,11 +324,11 @@
     }
 
     .rr-selected-result {
-        margin-bottom: 1em;
         border-radius: $border-radius;
+        margin-bottom: 1em;
 
         p {
-            margin:0;
+            margin: 0;
         }
 
         span {
@@ -347,14 +342,14 @@
 
     .rr-selected-criterium-levels {
         background: #e4e3e3;
-        padding: .5em;
         margin-top: 1.5em;
+        padding: .5em;
 
         .title {
             font-size: 1.4rem;
-            margin-top: 0;
-            margin-bottom: 0;
             font-weight: bold;
+            margin-bottom: 0;
+            margin-top: 0;
         }
 
         > .title {
@@ -372,10 +367,10 @@
         }
 
         .levels-list-item-header {
-            display: flex;
-            width: 100%;
             align-items: baseline;
             border-bottom: 1px solid lightgrey;
+            display: flex;
+            width: 100%;
 
             .title {
                 flex: 1;
@@ -383,9 +378,10 @@
             }
 
             .choice-score {
-                text-align: right;
                 font-size: 2rem;
+                text-align: right;
             }
+
             .choice-feedback {
                 margin: .25em 1.5em 1.25em 0;
             }
@@ -393,10 +389,8 @@
     }
 
     @media only screen and (min-width: 900px) {
-        .result-app {
-            .rubric {
-                display: flex;
-            }
+        .rubric.mod-result-view {
+            display: flex;
         }
     }
 </style>

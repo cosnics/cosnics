@@ -1,56 +1,58 @@
 <template>
-    <div id="app" class="entry-app">
-        <div class="rubric" :class="{'is-demo': options.isDemo, 'is-evaluator-selected': options.evaluator !== ''}">
+    <div id="app" class="mod-sep">
+        <div class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-entry-view">
-                <div class="table-header-wrap" aria-hidden="true">
-                    <ul class="app-header-tools">
+                <div class="rubric-table-header mod-entry-view" aria-hidden="true">
+                    <ul class="app-header-tools mod-entry-view">
                         <slot name="demoEvaluator"></slot>
-                        <li class="app-header-item"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />{{ options.isDemo ? 'Feedback' : 'Feedback beschrijvingen'}}</span></button></li>
+                        <li class="app-header-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />{{ options.isDemo ? 'Feedback' : 'Feedback beschrijvingen'}}</span></button></li>
                     </ul>
-                    <div class="table-header">
-                        <div v-for="level in rubric.levels" class="table-header-title">
+                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
+                        <div v-for="level in rubric.levels" class="level-table-header-title">
                             {{ level.title }}
                         </div>
                     </div>
                 </div>
-                <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters" :class="{'is-feedback-visible': showDefaultFeedbackFields}">
-                    <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
-                        <div class="cluster">
-                            <h2 class="cluster-title">{{ cluster.title }}</h2>
-                            <ul class="categories">
-                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
-                                    <div class="category">
-                                        <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
-                                        <ul class="criteria">
-                                            <criterium-entry v-for="criterium in category.criteria"
-                                                 tag="li" class="criterium-list-item"
-                                                 :key="`criterium-${criterium.id}-key`"
-                                                 :show-default-feedback-fields="showDefaultFeedbackFields"
-                                                 :criterium="criterium"
-                                                 :preview="preview"
-                                                 :ext="getCriteriumData(criterium)"
-                                                 :evaluation="getCriteriumEvaluation(criterium)"
-                                                 :show-errors="showErrors"
-                                                 @level-selected="selectLevel" @feedback-changed="onCriteriumFeedbackChanged">
-                                            </criterium-entry>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="subtotal cluster-total">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-wrap"><div class="score-number">{{ getClusterScore(cluster) }} <span class="text-hidden">punten</span></div></div>
+                <div class="rubric-table" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
+                    <h1 class="rubric-title">{{ rubric.title }}</h1>
+                    <ul class="clusters">
+                        <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
+                            <div class="cluster">
+                                <h2 class="cluster-title">{{ cluster.title }}</h2>
+                                <ul class="categories">
+                                    <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
+                                        <div class="category">
+                                            <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
+                                            <ul class="criteria">
+                                                <criterium-entry v-for="criterium in category.criteria"
+                                                    tag="li" class="criterium-list-item"
+                                                    :key="`criterium-${criterium.id}-key`"
+                                                    :show-default-feedback-fields="showDefaultFeedbackFields"
+                                                    :criterium="criterium"
+                                                    :preview="preview"
+                                                    :ext="getCriteriumData(criterium)"
+                                                    :evaluation="getCriteriumEvaluation(criterium)"
+                                                    :show-errors="showErrors"
+                                                    @level-selected="selectLevel" @feedback-changed="onCriteriumFeedbackChanged">
+                                                </criterium-entry>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="subtotal cluster-total mod-entry-view">
+                                    <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-entry-view"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">punten</span></div></div>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="subtotal rubric-total">
-                    <div class="rubric-total-title">Totaal Rubric:</div><div class="score-wrap"><div class="score-number">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
-                </div>
-                <div class="subtotal rubric-total-max">
-                    <div class="rubric-total-title">Maximum:</div><div class="score-wrap"><div class="score-number mod-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
+                        </li>
+                    </ul>
+                    <div class="subtotal rubric-total mod-entry-view">
+                        <div class="rubric-total-title">Totaal Rubric:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
+                    </div>
+                    <div class="subtotal rubric-total-max mod-entry-view">
+                        <div class="rubric-total-title">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,257 +169,216 @@
 </script>
 <style lang="scss">
     .text-hidden {
+        height: 1px;
+        left: -10000px;
+        opacity: 0;
         position: absolute;
         top: auto;
-        left: -10000px;
         width: 1px;
-        height: 1px;
-        opacity: 0;
     }
 
-    .entry-app {
-        &#app {
-            color: $text-color;
-            border-top: 1px solid #d6d6d6; /** Added this for result view **/
-        }
+    .rubric-entry-view {
+        position: relative;
+    }
 
-        .rubric-entry-view {
-            position: relative;
-        }
-
-        .table-header-wrap {
+    .mod-entry-view {
+        &.rubric-table-header {
             display: flex;
-
-            .app-header-tools {
-                width: 18.8em;
-                min-width: 18.8em;
-                background-color: hsla(190, 35%, 75%, 0.2);
-                padding-left: 1.2em;
-                margin-right: 1em;
-            }
         }
 
-        .table-header {
-            /*margin-left: 19.8em;*/
+        &.app-header-tools {
+            background-color: hsla(190, 35%, 75%, 0.2);
+            margin-right: 1em;
+            min-width: 18.8em;
+            padding-left: 1.2em;
+            width: 18.8em;
+        }
+
+        &.levels-table-header {
             margin-left: 0;
             margin-right: 4em;
             width: 100%;
-
-            .table-header-title {
-                flex: 1;
-            }
         }
 
-        .criterium-title-header {
-            width: 19em;
-            min-width: 19em;
+        &.criterium-title-header {
+            border-top: 1px solid $score-light;
         }
 
-        .criterium-level:nth-last-child(2) {
-            margin-right: 1em;
+        &.criterium-title {
+            margin-right: 1.5em;
         }
 
-        .criterium-level-header {
+        &.criterium-level-header {
             width: 100%;
 
             &.is-selected {
-              background: $level-selected-color;
+                background: $level-selected-color;
             }
         }
 
-        .score-number.is-selected {
-            color: #fff;
-        }
-
-        .btn-score-number {
-            outline: none;
-            cursor: pointer;
-
-            &:hover, &:focus {
-                border: 1px solid $level-selected-color;
-            }
-
-            &.is-selected {
-                &:hover, &:focus {
-                    box-shadow: inset 0 0 0 1px white;
-                }
-            }
-        }
-
-        .subtotal .score-wrap {
-            width: 3.5em;
-            margin-left: 1em;
-        }
-
-        .criterium-total {
-            min-width: 3.5em;
+        &.criterium-total {
             height: 1.58em;
-
-            .score-number {
-                background: $score-lighter;
-                border-radius: $border-radius;
-                padding-top: 1px;
-                margin-bottom: -1px;
-            }
+            min-width: 3.5em;
         }
 
-        .rubric-total-max .score-number.mod-max {
-            background: hsla(207, 40%, 35%, 1);
+        &.score-number-calc.mod-criterium {
+            background: $score-lighter;
+            line-height: 1.6em;
+            margin-bottom: -1px;
+            padding-top: 1px;
+        }
+    }
+
+    .levels-table-header, .rubric-table, .app-header-item {
+        transition: opacity 200ms;
+
+        &.is-demo-inactive {
+            max-height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+
+    .btn-score-number {
+        cursor: pointer;
+        outline: none;
+
+        &:hover, &:focus {
+            border: 1px solid $level-selected-color;
+        }
+
+        &.is-selected {
+            &:hover, &:focus {
+                box-shadow: inset 0 0 0 1px white;
+            }
+        }
+    }
+
+    .criterium-level-title, .score-number {
+        &.is-selected {
             color: #fff;
         }
+    }
 
-        .rubric.is-demo {
-            .btn-check,
-            .table-header,
-            .criterium-level,
-            .btn-more,
-            .subtotal {
-                transition: opacity 200ms;
-            }
-        }
+    .score-entry-view {
+        margin-left: 1em;
+        width: 3.5em;
+    }
 
-        .rubric.is-demo:not(.is-evaluator-selected) {
-            .btn-check,
-            .table-header,
-            .criterium-level,
-            .btn-more,
-            .subtotal {
-                pointer-events: none;
-            }
-            .table-header, .btn-check, .clusters, .subtotal {
-                opacity: 0;
-            }
+    .default-feedback-entry-view {
+        display: none;
+        line-height: 1.4em;
+        padding: .3em .5em;
+
+        &.is-feedback-visible {
+            display: block;
         }
     }
 
     .custom-feedback {
-        margin-left: 20em;
-        margin-bottom: 1em;
         display: none;
+        margin-bottom: 1em;
+        margin-left: 20em;
 
-        textarea {
-            padding: .2em .4em 0;
-            width: 40em;
-            height: 2.2em;
-            max-width: 100%;
-            border: 1px solid #d0d0d0;
-            border-radius: $border-radius;
-            resize: none;
-
-            &:hover, &:focus {
-                border: 1px solid #aaa;
-                resize: both;
-                outline: none;
-
-                &::placeholder {
-                    color: #666;
-                }
-            }
-
-            &:focus {
-                border: 1px solid $input-color-focus;
-            }
-
-            &::placeholder {
-                opacity: 1;
-                color: #aaa;
-            }
+        &.is-feedback-visible {
+            display: block;
         }
     }
 
-    .is-feedback-visible .custom-feedback {
-        display: block;
-        margin-left: 20em;
+    .ta-custom-feedback {
+        border: 1px solid #d0d0d0;
+        border-radius: $border-radius;
+        height: 2.2em;
+        max-width: 100%;
+        padding: .2em .4em 0;
+        resize: none;
+        width: 40em;
+
+        &::placeholder {
+            color: #aaa;
+            opacity: 1;
+        }
+
+        &:hover {
+            border: 1px solid #aaa;
+        }
+
+        &:focus {
+            border: 1px solid $input-color-focus;
+        }
+
+        &:hover, &:focus {
+            outline: none;
+            resize: both;
+
+            &::placeholder {
+                color: #666;
+            }
+        }
     }
 
     .rubric-entry-error {
-      border-bottom: 2px solid red;
-      color: red;
-      margin-left: 19.8em;
-      margin-right: 4.5em;
-      padding: 0 .25em;
+        border-bottom: 2px solid red;
+        color: red;
+        margin-left: 19.8em;
+        margin-right: 4.5em;
+        padding: 0 .25em;
     }
 
     @media only screen and (max-width: 899px) {
-        .entry-app {
-            .rubric-entry-view {
-                width: 40em;
-            }
+        .rubric-entry-view {
+            max-width: 100%;
+            width: 40em;
+        }
 
-            .table-header {
+        .mod-entry-view {
+            &.levels-table-header {
                 display: none;
             }
 
-            .criterium {
-                flex-direction: column;
-                margin-bottom: 2em;
-            }
-
-            .criterium-title {
-                margin-right: 1.1em;
-            }
-
-            .criterium-title-header {
-                width: unset;
-                min-width: unset;
-                max-width: 40em;
-            }
-
-            .criterium-level-header {
-                display: flex;
-                text-align: left;
-                align-content: center;
-                justify-items: center;
-                justify-content: center;
-                padding: 0 .25em;
-                margin-top: .5em;
-                max-width: 40em;
-
-                &.selected .criterium-level-title {
-                    color: white;
-                }
-            }
-
-            .criterium-level {
+            &.criterium-level {
                 margin-left: .8em;
             }
 
-            .criterium-level:nth-last-child(2) {
+            &.criterium-level-header {
+                align-content: center;
+                display: flex;
+                justify-content: center;
+                justify-items: center;
+                margin-top: .5em;
+                max-width: 40em;
+                padding: 0 .25em;
+                text-align: left;
+            }
+
+            &.subtotal {
                 margin-right: .5em;
-            }
-
-            .btn-score-number.score-number {
-                flex: 0;
-            }
-
-            .subtotal {
                 max-width: 41.25em;
-                margin-right: .5em;
             }
 
-            .criterium-total {
+            &.criterium-total {
                 display: none;
             }
+        }
 
-            .default-feedback {
-                max-width: 40em;
-            }
+        .default-feedback-entry-view {
+            max-width: 40em;
+        }
 
-            .custom-feedback {
-                margin: -1.5em 1em 1em 1.3em;
-            }
+        .custom-feedback {
+            margin: -1.5em 1em 1em 1.3em;
         }
     }
-    @media only screen and (min-width: 900px) {
-        .entry-app .criterium {
-            align-items: baseline;
 
-            .criterium-title {
-                margin-right: 1.5em;
+    @media only screen and (min-width: 900px) {
+        .mod-entry-view {
+            .criterium {
+                align-items: baseline;
             }
-        }
-        .entry-app .criterium-title-header {
-            border-top: 1px solid $score-light;
+
+            .criterium-level:nth-last-child(2) {
+                margin-right: 1em;
+            }
         }
     }
 </style>
