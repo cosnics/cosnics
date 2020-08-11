@@ -11,17 +11,26 @@
     }
 
     .middle {
-      background-image: url("/images/chamilo-middle.png");
+      align-items: center;
+      background-image: url("/images/chamilo-fill.png");
+      display: flex;
       flex: 1;
+      padding-left: 9px;
+      padding-top: 3px;
     }
 
     .end {
-      background-image: url("/images/chamilo-end.png");
-      width: 713px;
+      align-items: center;
+      background-image: url("/images/chamilo-fill.png");
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      padding-right: 12px;
+      padding-top: 18px;
     }
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 899px) {
     .chamilo-header {
       min-height: 51px;
 
@@ -31,13 +40,38 @@
       }
 
       .middle {
-        background-image: url("/images/chamilo-middle-alt.png");
+        background-image: url("/images/chamilo-fill-alt.png");
+        flex: 1;
+        min-width: 120px;
+        padding-left: 1px;
+        padding-top: 0;
       }
 
       .end {
-        background-image: url("/images/chamilo-end-alt.png");
-        width: 70px;
+        background-image: url("/images/chamilo-fill-alt.png");
+        padding-top: 14px;
       }
+    }
+  }
+
+  @media only screen and (max-width: 690px) {
+    .chamilo-header .start {
+      min-width: 60px;
+      width: 60px;
+    }
+
+    .chamilo-header .middle {
+      padding-left: 4px;
+      padding-top: 1px;
+    }
+  }
+
+  @media only screen and (max-width: 540px) {
+    .chamilo-header .start {
+      display: none;
+    }
+    .chamilo-header .middle {
+      padding-left: 14px;
     }
   }
 

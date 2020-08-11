@@ -12,10 +12,21 @@
 <style lang="scss">
     .chamilo-header {
         .rubrics-menu {
-            display: flex;
-            margin-top: 48px;
-            list-style: none;
             cursor: pointer;
+            display: flex;
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .rubrics-demo-header {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: .11rem;
+            line-height: 2.3rem;
+            /*text-shadow: 0 2px 3px hsl(240, 57%, 33%);*/
+            word-spacing: 2px;
         }
 
         .rubrics-menu-item {
@@ -57,22 +68,14 @@
             }
         }
     }
-    @media only screen and (max-width: 899px) {
-        .chamilo-header {
-            position: relative;
-        }
-        .rubrics-menu {
-            position: absolute;
-            top: 18px;
-            margin-top: 0px!important;
-        }
-    }
-    @media only screen and (max-width: 500px) {
-        .chamilo-header .start {
-            display: none;
-        }
-        .rubrics-menu {
-            left: -25px;
+
+    @media only screen and (max-width: 690px) {
+        .chamilo-header .rubrics-menu-item {
+            margin-right: 2px;
+
+            &.selected {
+                margin-right: 2px;
+            }
         }
     }
 </style>

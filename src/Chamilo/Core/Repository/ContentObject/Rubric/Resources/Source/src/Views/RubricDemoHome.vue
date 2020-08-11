@@ -40,7 +40,6 @@
             &:hover {
                 background: #d6d9d7;
             }
-
         }
     }
 </style>
