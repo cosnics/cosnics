@@ -1,5 +1,5 @@
 <template>
-    <textarea v-model="choice.feedback" placeholder="Geef feedback" class="ta-feedback" @input="onFeedbackChange"></textarea>
+    <textarea v-model="choice.feedback" placeholder="Geef feedback" class="ta-default-feedback" @input="onFeedbackChange"></textarea>
 </template>
 
 <script lang="ts">

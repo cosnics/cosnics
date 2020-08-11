@@ -127,16 +127,17 @@
   }
 
   #app {
+    background-color: $bg-color;
+    color: $text-color;
+    display: flex;
+    flex-direction: column;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 1.3rem;
     line-height: 2.3rem;
-    display: flex;
-    flex-direction: column;
+    margin: -20px -15px -20px -15px;
+    padding-bottom: 1.5em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: $bg-color;
-    padding-bottom: 1.5em;
-    margin: -20px -15px -20px -15px;
   }
 }
 

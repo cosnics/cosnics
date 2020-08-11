@@ -18,7 +18,7 @@
 }
 </i18n>
 <template>
-    <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels', 'builder-full-app': $route.name === 'BuilderFull'}">
+    <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels'}">
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-menu">
@@ -27,10 +27,6 @@
                     <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Snelle Feedback{{ /*$t('builderfull')*/ }}</span></router-link></li>
                 </ul>
             </nav>
-            <!--<ul class="app-header-tools">
-                <li class="app-header-item" v-if="$route.name === 'Builder'"><button id="btn-show-split-view" aria-hidden="true" class="btn-check" :class="{ checked: showSplitView }" @click.prevent="showSplitView = !showSplitView"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Split View</span></button></li>
-                <li class="app-header-item" v-else-if="$route.name === 'BuilderLevels'"><button class="btn-check" aria-label="Toon beschrijvingen" :aria-expanded="showLevelDescriptions ? 'true' : 'false'" :class="{ checked: showLevelDescriptions }" @click.prevent="showLevelDescriptions = !showLevelDescriptions"><span tabindex="-1"><i class="check fa" aria-hidden="true" />Beschrijvingen</span></button></li>-->
-            <!--</ul>-->
             <save-area :data-connector="dataConnector"></save-area>
         </div>
         <div class="rubrics">
@@ -434,6 +430,7 @@
         &:hover, &.show-menu {
             background-color: $cluster-color-hover;
             border-color: $cluster-color-hover;
+            border-bottom-color: transparent;
             color: #222;
         }
 
@@ -839,10 +836,6 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .builder-app .app-header-tools {
-            display: none;
-        }
-
         .app-container.split-view #clusters-wrapper-view2 {
             display: none;
         }
@@ -1544,9 +1537,6 @@
         }
 
         /** Criteria **/
-
-        .rb-criteria {
-        }
 
         .rb-criterium-list-item.ghost {
             background-color: $ghost-bg-color;
