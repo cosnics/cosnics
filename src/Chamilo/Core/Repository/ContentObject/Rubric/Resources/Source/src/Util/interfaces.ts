@@ -13,3 +13,8 @@ export interface CriteriumExt {
     choices: any[];
     showDefaultFeedback: false;
 }
+
+export interface CriteriumResult {
+    criterium: Criterium,
+    evaluations: any;
+}

@@ -23,14 +23,16 @@
                                             <li v-for="criterium in category.criteria" class="criterium-list-item mod-result-view" :class="{'is-selected': selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
                                                 <div class="criterium mod-result-view">
                                                     <div class="criterium-title-header mod-result-view">
-                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4><!--<div v-if="!showDefaultFeedbackFields" class="btn-more" @click.prevent=""><i class="check fa"/></div>-->
+                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-${evaluator}`">
-                                                            <i v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" class="icon-score-feedback fa fa-info"/>
+                                                            <i v-if="getCriteriumEvaluation(criterium, evaluator).feedback" class="icon-score-feedback fa fa-info"/>
                                                             {{ getCriteriumScore(criterium, evaluator) }}
                                                         </div>
-                                                        <b-tooltip v-if="getCriteriumData(criterium).evaluations[evaluator].feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{ getCriteriumData(criterium).evaluations[evaluator].feedback }}</b-tooltip>
+                                                        <b-tooltip v-if="getCriteriumEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{
+                                                            getCriteriumEvaluation(criterium, evaluator).feedback
+                                                          }}</b-tooltip>
                                                     </div>
                                                     <div class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium-max">{{ getCriteriumMaxScore(criterium) }}</div>
@@ -71,9 +73,13 @@
                         <span>{{ selectedCriterium.title }}</span>
                     </div>
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <p v-if="getCriteriumData(selectedCriterium).evaluations[evaluator].level !== null"><span>{{ evaluator|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{ getCriteriumData(selectedCriterium).evaluations[evaluator].level.title}}</span>)</p>
-                        <p v-if="getCriteriumData(selectedCriterium).evaluations[evaluator].feedback">
-                            Extra feedback: {{ getCriteriumData(selectedCriterium).evaluations[evaluator].feedback }}
+                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
+                            getCriteriumEvaluation(selectedCriterium, evaluator).level.title
+                          }}</span>)</p>
+                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).feedback">
+                          Extra feedback: {{
+                            getCriteriumEvaluation(selectedCriterium, evaluator).feedback
+                          }}
                         </p>
                     </div>
                 </div>
@@ -101,10 +107,10 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import {CriteriumEvaluation} from '../Util/interfaces';
 
-    interface CriteriumExt {
+    interface CriteriumResult {
         criterium: Criterium,
-        showDefaultFeedback: false;
         evaluations: any;
     }
 
@@ -122,13 +128,11 @@
         }
     })
     export default class RubricResult extends Vue {
-        private rubric: Rubric|null = null;
-        private evaluators: string[]|null = null;
         private selectedCriterium: Criterium|null = null;
-        private criteriaData: CriteriumExt[] = [];
 
-        @Prop({type: Object, default: null}) readonly rubricData!: any|null;
-        @Prop({type: Object, required: true}) readonly rubricResults!: any;
+        @Prop({type: Rubric}) readonly rubric!: Rubric;
+        @Prop({type: Array, default: () => []}) readonly evaluators!: string[];
+        @Prop({type: Array, default: () => []}) readonly criteriumResults!: CriteriumResult[];
 
         getCriteriumMaxScore(criterium: Criterium) : number {
             const scores : number[] = [0];
@@ -146,7 +150,7 @@
         }
 
         getCriteriumScore(criterium: Criterium, evaluator: string) : number {
-            return this.getCriteriumData(criterium).evaluations[evaluator].score || 0;
+            return this.getCriteriumResult(criterium).evaluations[evaluator].score || 0;
         }
 
         getCategoryScore(category: Category, evaluator: string) : number {
@@ -164,39 +168,14 @@
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
-        getCriteriumData(criterium: Criterium) : CriteriumExt {
-            const criteriumExt = this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium);
-            if (!criteriumExt) { throw new Error(`No data found for criterium: ${criterium}`); }
-            return criteriumExt;
+        getCriteriumResult(criterium: Criterium) : CriteriumResult {
+            const criteriumResult = this.criteriumResults.find((_ : CriteriumResult) => _.criterium === criterium);
+            if (!criteriumResult) { throw new Error(`No data found for criterium: ${criterium}`); }
+            return criteriumResult;
         }
 
-        private initData(rubric: Rubric, results: any) {
-            this.evaluators = results.evaluators;
-            rubric.getAllCriteria().forEach(criterium => {
-                const criteriumExt: CriteriumExt = { criterium: criterium, showDefaultFeedback: false, evaluations: {} };
-                this.evaluators!.forEach(evaluator => {
-                    const criteriumEvaluation: any = { feedback: '', score: 0, level: null };
-                    const evaluations = results.evaluations[evaluator];
-                    const criteriumEvaluationInput = evaluations.find((o: any) => o.criteriumId === criterium.id);
-                    if (criteriumEvaluationInput) {
-                        const chosenLevel = rubric.levels.find(level => level.id === criteriumEvaluationInput.levelId);
-                        if (chosenLevel) {
-                            criteriumEvaluation.level = chosenLevel;
-                            criteriumEvaluation.score = rubric.getChoiceScore(criterium, chosenLevel);
-                            criteriumEvaluation.feedback = criteriumEvaluationInput.feedback;
-                        }
-                    }
-                    criteriumExt.evaluations[evaluator] = criteriumEvaluation;
-                });
-                this.criteriaData.push(criteriumExt);
-            });
-        }
-
-        mounted() {
-            if (this.rubricData) {
-                this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
-                this.initData(this.rubric, this.rubricResults);
-            }
+        getCriteriumEvaluation(criterium: Criterium, evaluator: string) : CriteriumEvaluation {
+            return this.getCriteriumResult(criterium).evaluations[evaluator];
         }
     }
 </script>
