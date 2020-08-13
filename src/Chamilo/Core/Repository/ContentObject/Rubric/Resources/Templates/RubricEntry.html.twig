@@ -18,7 +18,15 @@
         var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
         var data = JSON.parse(rubricDataJSON);
 
+        var lang;
+        try {
+            lang = document.querySelector('html').getAttribute('lang');
+        } catch (err) {
+            lang = undefined;
+        }
+
         new Vue({
+            i18n: Vue.prototype.$createI18nInstance(lang),
             el: '#rubric-entry',
             data: {
                 rubricData: data,

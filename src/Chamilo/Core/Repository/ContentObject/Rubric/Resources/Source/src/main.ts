@@ -19,7 +19,10 @@ Vue.config.productionTip = false;
 Vue.use(ScoreRubric);
 
 const router = routers.getRouter('demo', 'history');
+const lang = document.querySelector('html')!.getAttribute('lang');
+
 new Vue({
+  i18n: new VueI18n({ locale: lang || undefined }),
   router,
   render: function(h) {
     return h(MegaWrapperMenu)
@@ -27,6 +30,7 @@ new Vue({
 }).$mount('#rubrics-menu');
 
 new Vue({
+  i18n: new VueI18n({ locale: lang || undefined }),
   router,
   render: function(h) {
     return h(RubricDemoWrapper)

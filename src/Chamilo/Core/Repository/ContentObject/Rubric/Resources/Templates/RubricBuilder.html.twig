@@ -110,8 +110,14 @@
                 }
             ]
         };*/
-
+        var lang;
+        try {
+            lang = document.querySelector('html').getAttribute('lang');
+        } catch (err) {
+            lang = undefined;
+        }
         new Vue({
+            i18n: Vue.prototype.$createI18nInstance(lang),
             router: Vue.prototype.$getRouter('builder'),
             el: '#builder',
             data: {

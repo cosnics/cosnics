@@ -22,9 +22,9 @@
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-nav">
-                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'Builder' }"><span class="link-text" tabindex="-1">Rubric{{ /*$t('builder')*/ }}</span></router-link></li>
-                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderLevels' }"><span class="link-text" tabindex="-1">Niveaus{{ /*$t('levels')*/ }}</span></router-link></li>
-                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">Snelle Feedback{{ /*$t('builderfull')*/ }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'Builder' }"><span class="link-text" tabindex="-1">{{ $t('builder') }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderLevels' }"><span class="link-text" tabindex="-1">{{ $t('levels') }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
                 </ul>
             </nav>
             <save-area :data-connector="dataConnector"></save-area>
@@ -96,10 +96,6 @@
 
         set content(content: string) {
             this.uiState.content = content;
-        }
-
-        created() {
-            /*this.$i18n.locale = document.documentElement.lang;*/
         }
 
         mounted() {
