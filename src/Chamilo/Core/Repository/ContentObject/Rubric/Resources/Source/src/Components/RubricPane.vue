@@ -1,51 +1,51 @@
 <template>
-    <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ 'category-dragging': categoryDragging }">
-        <button class="btn-collapse" :class="{ 'collapse-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
+    <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ 'is-split': showSplitView, 'category-dragging': categoryDragging }">
+        <button class="btn-collapse" :class="{ 'is-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
         <div class="clusters-collapse">
             <transition name="clusters-slide">
-                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'collapse-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
+                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'is-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
                     <split-view-button v-if="id === 'view1'" :show-split-view="showSplitView" @changed="$emit('split-view-changed', $event)"></split-view-button>
-                    <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="rb-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
+                    <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="b-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
                             :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
                         <cluster-view v-for="(cluster, index) in clusters"
-                            tag="li" class="rb-cluster-list-item" :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
+                            tag="li" class="b-cluster-list-item" :id="`${id}_${cluster.id}`" :key="`${id}_${cluster.id}`" :cluster="cluster" :menu-actions-id="menuActionsId" :selected="isSelected(cluster)"
                             @cluster-selected="selectCluster" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(cluster)" @finish-edit="onFinishEdit(cluster, ...arguments)"></cluster-view>
                     </draggable>
-                    <new-cluster :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
+                    <new-cluster class="rubric-actions" :view-id="id" :actions-enabled="clusterActionsEnabled" @dialog-view="$emit('dialog-new-cluster', $event)" @cluster-added="addCluster"></new-cluster>
                 </div>
             </transition>
         </div>
-        <h1 v-if="selectedCluster" class="cluster-selected">{{ selectedCluster.title }}</h1>
+        <h1 v-if="selectedCluster" class="b-cluster-selected-title">{{ selectedCluster.title }}</h1>
         <transition :name="categoriesTransitionName" mode="out-in">
             <div :key="selectedCluster ? selectedCluster.id : 'none'" class="cluster-content" ref="cluster-content" @mouseover="categoryDragging && dragMouseOver(`${id}_categories`)" @mouseout="categoryDragging && dragMouseOut" :class="{ 'no-drop': categoryDragging && bannedForDrop === `${id}_categories` }">
-                <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="ul" class="rb-categories" group="categories" handle=".category-handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
+                <draggable :disabled="draggableDisabled" :id="`${id}_categories`" tag="ul" class="b-categories" group="categories" handle=".category-handle" ghost-class="ghost" :list="categories" :forceFallback="true" :animation="250" :move="onMoveCategory"
                            @start="startDrag($event, 'category')" @end="endDrag" @change="onChangeCategory">
-                    <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="rb-category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
+                    <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="b-category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
                         <category-view :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" :category="category" :menu-actions-id="menuActionsId" :edit-category-color-id="editCategoryColorId"
                                        @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(category)" @finish-edit="onFinishEdit(category, ...arguments)" @change-color="$emit('change-color', category)"></category-view>
                         <div v-if="category.criteria.length === 0 && !categoriesAddingCriterium[category.id] && !criteriumDragging" class="criteria-empty-list">Nog geen criteria toegevoegd</div>
                         <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
-                                   :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="rb-criteria">
-                            <criterium-view v-for="criterium in category.criteria" tag="li" class="rb-criterium-list-item" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
+                                   :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="b-criteria">
+                            <criterium-view v-for="criterium in category.criteria" tag="li" class="b-criterium-list-item" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
                                             :criterium="criterium" :menu-actions-id="menuActionsId" :selected="isSelected(criterium)"
                                             @criterium-selected="selectCriterium" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(criterium)" @finish-edit="onFinishEdit(criterium, ...arguments)"></criterium-view>
                         </draggable>
-                        <new-criterium :criterium-dragging="criteriumDragging" @criterium-adding="addingCriteriumForCategory(category, $event)" @criterium-added="addCriterium(category, $event)"></new-criterium>
+                        <new-criterium class="category-actions" :criterium-dragging="criteriumDragging" @criterium-adding="addingCriteriumForCategory(category, $event)" @criterium-added="addCriterium(category, $event)"></new-criterium>
                     </li>
-                    <li v-if="criteriumDragging" slot="footer" class="rb-category null-category">
-                        <div class="category-header">
-                            <div class="item-header-bar">
-                                <div class="rb-category-title">
-                                    <h2 class="title">Nieuwe lijst met criteria...</h2>
+                    <li v-if="criteriumDragging" slot="footer" class="b-category">
+                        <div class="b-category-list-item mod-null-category-drag">
+                            <div class="item-header-bar mod-category">
+                                <div class="b-category-title-wrapper">
+                                    <h2 class="b-category-title mod-null-category-drag">Nieuwe lijst met criteria...</h2>
                                 </div>
                             </div>
                         </div>
                         <draggable tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="[]" :forceFallback="true" :animation="250"
-                                   @end="endDrag" @change="onChangeCriteriumInCluster" class="rb-criteria"></draggable>
+                                   @end="endDrag" @change="onChangeCriteriumInCluster" class="b-criteria"></draggable>
                     </li>
                     <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
                 </draggable>
-                <new-category v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
+                <new-category class="cluster-actions" v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
             </div>
         </transition>
     </div>

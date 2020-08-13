@@ -1,138 +1,130 @@
 @mixin app {
   .app-header {
-    display: flex;
-    border-top: 1px solid #d6d6d6;
     align-items: center;
+    border-top: 1px solid #d6d6d6;
+    display: flex;
     justify-content: space-between;
   }
 
-  .app-header-menu, .app-header-tools {
-    list-style: none;
+  .app-header-nav, .app-header-tools {
     display: flex;
+    list-style: none;
     margin-bottom: 0;
     padding: 0.6em 0;
   }
 
-  .app-header-menu {
+  .app-header-nav {
     margin-left: 1.5em;
   }
 
   .app-header-tools {
     display: flex;
+  }
 
-    .check::before {
+  .btn-icon-check {
+    margin-right: 0.3em;
+    width: 1em;
+
+    &::before {
       content: '\f096';
-    }
-
-    i {
-      margin-right: 0.3em;
-      width: 1em;
-    }
-
-    .btn-check {
-      outline: none;
-      background: none;
-      color: #888;
-      border: none;
-      margin: 0;
-      padding: 0;
-      cursor: default;
-
-      span {
-        border: 1px solid transparent;
-        border-radius: $border-radius;
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      &:focus span {
-        box-shadow: 0 0 0 1px $input-color-focus;
-      }
-
-      &.checked {
-        color: $outline-color;
-
-        .check::before {
-          content: '\f046';
-        }
-      }
-
-      &:hover, &:focus {
-        color: darken($outline-color, 20%);
-      }
     }
   }
 
-  .app-header-item select {
-    margin-right: .5em;
+  .lbl-check {
+    border: 1px solid transparent;
+    border-radius: $border-radius;
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 1px $outline-color-light;
     }
   }
 
-  .app-header-menu .app-header-item {
-    margin-right: 1em;
+  .btn-check {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: default;
+    margin: 0;
+    outline: none;
+    padding: 0;
+
+    &.checked {
+      color: $outline-color;
+
+      .btn-icon-check::before {
+        content: '\f046';
+      }
+    }
+
+    &:hover, &:focus {
+      color: darken($outline-color, 20%);
+    }
+
+    &:focus .lbl-check {
+      box-shadow: 0 0 0 1px $input-color-focus;
+    }
+  }
+
+  .app-tool-item select {
+    margin-right: .5em;
+
+    &:focus {
+      box-shadow: 0 0 0 1px $outline-color-light;
+      outline: none;
+    }
+  }
+
+  .app-nav-item {
     cursor: pointer;
+    margin-right: 1em;
+  }
 
-    a {
-      display: inline-block;
-      transition: color 120ms;
-      border-bottom: 1px solid transparent;
+  .app-link {
+    border-bottom: 1px solid transparent;
+    display: inline-block;
+    transition: color 120ms;
 
-      &:focus {
-        outline: none;
-      }
+    &.active-link {
+      border-bottom: 1px solid darken($panel-border-color, 5%);
+    }
 
-      span {
-        border-radius: $border-radius;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
 
-        &:focus {
-          outline: none;
-        }
-      }
+    &:hover {
+      border-bottom: 1px solid #23527c;
+    }
 
-      &:focus span {
-        outline: 1px solid $input-color-focus;
-        outline-offset: 2px;
-      }
+    &:focus, .link-text:focus {
+      outline: none;
+    }
 
-      &.active-link {
-        border-bottom: 1px solid darken($panel-border-color, 5%);
-      }
-
-      &:hover, &:focus {
-        text-decoration: none;
-      }
-
-      &:hover {
-        border-bottom: 1px solid #23527c;
-      }
+    &:focus .link-text {
+      outline: 1px solid $input-color-focus;
+      outline-offset: 2px;
     }
   }
 
   .save-state {
-    margin-right: 1.5em;
     color: #337ab7;
-    width: 144px;
+    margin-right: 1.5em;
     text-align: right;
     transition: opacity 200ms;
+    width: 144px;
+  }
 
-    .saved {
-      opacity: 0.6;
-    }
+  .save-state-saved {
+    opacity: 0.75;
   }
 
   #app {
     background-color: $bg-color;
     color: $text-color;
     display: flex;
-    flex-direction: column;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 1.3rem;
+    flex-direction: column;
     line-height: 2.3rem;
     margin: -20px -15px -20px -15px;
     padding-bottom: 1.5em;
@@ -140,4 +132,3 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
-

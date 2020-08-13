@@ -3,7 +3,7 @@
         <rubric-entry v-if="rubric" :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
                       @level-selected="selectLevel" @criterium-feedback-changed="updateCriteriumFeedback">
             <template v-slot:demoEvaluator>
-                <li class="app-header-item">Demo:
+                <li class="app-tool-item">Demo:
                     <select v-model="evaluator" @change="store.uiState.entry.options.evaluator = $event.target.value">
                         <option disabled value="">Selecteer</option>
                         <option v-for="evaluator in store.rubricResults.evaluators">{{evaluator}}</option>

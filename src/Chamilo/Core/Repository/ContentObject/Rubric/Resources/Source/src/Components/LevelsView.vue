@@ -1,7 +1,7 @@
 <template>
     <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
-            <h1>Niveaus</h1>
+            <h1 class="levels-title">Niveaus</h1>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
                 <li v-if="!newLevel" class="level-new">
@@ -151,16 +151,16 @@
     }
 
     .levels-container {
+        margin-left: .75em;
         position: relative;
         width: 100%;
-        margin-left: .75em;
+    }
 
-        h1 {
-            font-size: 2.2rem;
-            margin-left: .5em;
-            margin-top: .3em;
-            color: #666;
-        }
+    .levels-title {
+        color: #666;
+        font-size: 2.2rem;
+        margin-left: .5em;
+        margin-top: .3em;
     }
 
     @media only screen and (min-width: 900px) {
@@ -180,23 +180,21 @@
     }
 
     .level-details {
-        display: flex;
-        flex-wrap: wrap;
-        width: 100%;
-        justify-content:space-between;
-        padding-left:.5em;
-        padding-top: 7px;
-        padding-bottom: 7px;
         border: 1px solid transparent;
         border-top-color: hsla(214, 20%, 85%, 1);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 7px 0 7px .5em;
         transition: background-color 200ms;
+        width: 100%;
 
         /*.input-detail {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid transparent;
         }*/
 
-        &.selected {
+        &.is-selected {
             background-color: #d4d8de;
             border-color: hsla(214, 20%, 80%, 1);
 
@@ -217,13 +215,13 @@
             }*/
         }
 
-        &:not(:first-child) .label-hidden, .ld-description .label-hidden {
-            position: absolute;
+        &:not(:first-child) .label-hidden /*, .ld-description .label-hidden*/ {
+            height: 1px;
             left: -10000px;
+            overflow: hidden;
+            position: absolute;
             top: auto;
             width: 1px;
-            height: 1px;
-            overflow: hidden;
         }
     }
 
@@ -236,67 +234,9 @@
         display: flex;
     }
 
-    /*.btn-more {
-        width: 1.4em;
-        cursor: pointer;
-        color: #bbb;
-        background: none;
-        border: 1px solid transparent;
-        display: flex;
-        justify-content: center;
-        align-self: flex-end;margin-bottom:.3em;
-
-        .check {
-            transform: rotate(0deg);
-            transition: transform 200ms;
-        }
-
-        .check:focus {
-            outline: none;
-        }
-
-        &:focus {
-            outline: none;
-
-            .check {
-                border: 1px solid $input-color-focus;
-            }
-        }
-
-        .check::before {
-            content: '\f078';
-        }
-
-        &:hover {
-            color: #999;
-        }
-    }*/
-
     .levels-container.has-new .level-details:not(.new-level) {
         pointer-events: none;
     }
-
-    /*.show-description .btn-more .check {
-        transform: rotate(-180deg);
-    }*/
-
-    /*.input-detail {
-        background: rgba(255,255,255,0.2);
-        border: 1px solid transparent;
-        border-radius: $border-radius;
-        padding: 2px 5px;
-
-        &:hover {
-            background: white;
-            border-color: lighten($input-color-focus, 15%);
-        }
-
-        &:focus {
-            outline: none;
-            background: white;
-            border-color: $input-color-focus;
-        }
-    }*/
 
     .input-detail {
         background-color: hsla(190, 50%, 96%, 1);
@@ -313,11 +253,10 @@
         }
 
         &:focus {
-            outline: none;
             border: 1px solid $input-color-focus;
+            outline: none;
         }
     }
-
 
     .level-label {
         color: lighten($title-color, 10%);
@@ -326,8 +265,8 @@
     .ld-title {
         display: flex;
         flex-direction: column;
-        width: 100%;
         margin-right: .5em;
+        width: 100%;
 
         .level-label {
             margin-left: 5px;
@@ -336,34 +275,34 @@
         }
 
         .input-detail {
-            font-size: 1.4rem;
-            color: #555;
             /*background: lighten($btn-level-delete, 9%);*/
+            color: #555;
+            font-size: 1.4rem;
         }
     }
 
     .ld-description {
         display: none;
         flex-direction: column;
+        margin-left: .5em;
         margin-top: .25em;
         position: relative;
-        margin-left: .5em;
 
         /*.level-label {
-            position: absolute;
+            color: #707070;
             font-size: 1.2rem;
             left: 5px;
-            color: #707070;
+            position: absolute;
         }*/
 
         .input-detail {
-            resize: none;
-            /*padding-top: 1.3em;*/
             margin-right: .5em;
+            /*padding-top: 1.3em;*/
+            resize: none;
         }
     }
 
-    .selected .ld-description {
+    .is-selected .ld-description {
         margin-left: 0;
         margin-top: .5em;
     }
@@ -389,10 +328,10 @@
     }
 
     .ld-default {
+        align-items: center;
         display: flex;
         flex-direction: column;
         width: 6em;
-        align-items: center;
 
         .level-label {
             position: absolute;
@@ -405,13 +344,13 @@
             transform: translateY(2px);
 
             & + label::before {
-                transform: translateY(-10px);
-                font-size: 1.4rem;
-                content: '\f1db';
-                display: block;
                 color: #bbb;
-                height: 0;
+                content: '\f1db';
                 cursor: pointer;
+                display: block;
+                font-size: 1.4rem;
+                height: 0;
+                transform: translateY(-10px);
             }
 
             &:focus + label::before, &:hover + label::before {
@@ -419,8 +358,8 @@
             }
 
             + label.checked::before {
-                content: '\f00c';
                 color: lighten(#406e8d, 10%);
+                content: '\f00c';
             }
 
             &:focus + label::before {
@@ -429,67 +368,66 @@
         }
     }
 
-    .level-actions {
+    .level-actions-wrapper {
         display: none;
         position: absolute;
-        top: 0;
         right: 0;
+        top: 0;
 
-        .btn-level-action {
-            background: transparent;
-            border: 1px solid transparent;
-            font-size: 1.9rem;
-
-            &:focus {
-                outline: none;
-                border: 1px solid $input-color-focus;
-                border-radius: $border-radius;
-            }
-
-            &:not(:last-child) {
-                margin-right: 0;
-            }
+        &.is-active {
+            display: block;
         }
     }
 
-    .selected:not(.new-level) .level-actions {
-        display: block;
+    .btn-level-action {
+        background: transparent;
+        border: 1px solid transparent;
+        font-size: 1.9rem;
 
-        .btn-level-action {
-            i {
-                color: #aaa;
-                transition: color 240ms;
-            }
+        &:hover i, &:focus i {
+            color: $btn-color;
+        }
 
-            &:hover i, &:focus i {
-                color: $btn-color;
-            }
+        &.btn-delete:hover i, &.btn-delete:focus i {
+            color: #d9534f;
+        }
 
-            &.btn-delete:hover i, &.btn-delete:focus i {
-                color: #d9534f;
-            }
+        &:focus {
+            border: 1px solid $input-color-focus;
+            border-radius: $border-radius;
+            outline: none;
+        }
 
-            &[disabled] {
-                & i, &:hover i, &:focus i {
-                    color: #ccc;
-                }
+        &:not(:last-child) {
+            margin-right: 0;
+        }
+
+        &[disabled] {
+            & i, &:hover i, &:focus i {
+                color: #ccc;
             }
         }
+
+        i {
+            color: #aaa;
+            transition: color 240ms;
+        }
     }
+
 
     @media only screen and (min-width: 660px) {
-        .level-actions {
-            top: 0;
-            right: -3em;
+        .level-actions-wrapper {
             height: 100%;
+            right: -3em;
+            top: 0;
+        }
 
-            > div {
-                display: flex;
-                flex-direction: column;
-                margin-top: 3em;
-                height: calc(100% - 3em);
-                justify-content: center;
-            }
+        .level-actions {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 3em);
+            justify-content: center;
+            margin-top: 3em;
         }
     }
 

@@ -1,5 +1,5 @@
 <template>
-    <component :is="tag" class="level-details" :class="{ /*'show-description': showDescription,*/ selected: selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
+    <component :is="tag" class="level-details" :class="{ /*'show-description': showDescription,*/ 'is-selected': selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
         <div class="level-details-text">
             <div class="level-details-text-1">
                 <div class="ld-title" @click.stop="selectLevel">
@@ -27,8 +27,8 @@
             <button class="btn-strong mod-confirm" @click.prevent="addNewLevel">Voeg toe</button>
             <button class="btn-strong" @click.prevent="cancelNewLevel">Annuleer</button>
         </div>
-        <div class="level-actions" @click.stop="" >
-            <div style="">
+        <div class="level-actions-wrapper" :class="{ 'is-active': !isNew && selectedLevel === level }" @click.stop="">
+            <div class="level-actions">
                 <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" aria-label="Verplaats niveau naar boven" @click.stop="$emit('level-move-up')">
                     <i class="fa fa-arrow-up" aria-hidden="true" />
                 </button>

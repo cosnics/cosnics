@@ -21,10 +21,10 @@
     <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels'}">
         <div class="app-header">
             <nav role="navigation">
-                <ul class="app-header-menu">
-                    <li class="app-header-item"><router-link :to="{ name: 'Builder' }"><span tabindex="-1">Rubric{{ /*$t('builder')*/ }}</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderLevels' }"><span tabindex="-1">Niveaus{{ /*$t('levels')*/ }}</span></router-link></li>
-                    <li class="app-header-item"><router-link :to="{ name: 'BuilderFull' }"><span tabindex="-1">Snelle Feedback{{ /*$t('builderfull')*/ }}</span></router-link></li>
+                <ul class="app-header-nav">
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'Builder' }"><span class="link-text" tabindex="-1">Rubric{{ /*$t('builder')*/ }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderLevels' }"><span class="link-text" tabindex="-1">Niveaus{{ /*$t('levels')*/ }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">Snelle Feedback{{ /*$t('builderfull')*/ }}</span></router-link></li>
                 </ul>
             </nav>
             <save-area :data-connector="dataConnector"></save-area>
@@ -32,7 +32,7 @@
         <div class="rubrics">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div v-if="rubric" class="rubrics-wrapper" :class="{ 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
+            <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
                 <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="$route.name === 'Builder' ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
@@ -152,8 +152,8 @@
         }
 
         &:focus {
-            outline: none;
             box-shadow: inset 0 0 0 1px #fff;
+            outline: none;
         }
 
         &[disabled] {
@@ -171,10 +171,12 @@
         opacity: 1;
         transition: opacity 200ms, color 200ms;
 
-        &::before {
-            font-family: FontAwesome;
-            font-size: 1.4rem;
-            content: '\f057'
+        &.mod-textfield {
+            height: 100%;
+            padding: .4em .3em;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
 
         &.is-empty-field {
@@ -189,69 +191,77 @@
             outline: 1px solid $input-color-focus;
         }
 
-        &.mod-textfield {
-            height: 100%;
-            padding: .4em .3em;
-            position: absolute;
-            right: 0;
-            top: 0;
+        &::before {
+            font-family: FontAwesome;
+            font-size: 1.4rem;
+            content: '\f057'
         }
     }
 
     /** Action Menu **/
 
-    .item-actions {
-        pointer-events: all;
+    .btn-toggle-menu {
         color: #999;
+        cursor: pointer;
         display: none;
         margin: 0 .25em 0 .75em;
-        cursor: pointer;
+        pointer-events: all;
     }
 
     .action-menu {
-        display: flex;
         align-items: center;
+        display: flex;
     }
 
     .action-menu-list {
         display: flex;
         list-style: none;
-        padding: 0;
         margin-right: 4px;
-
-        span {
-            position: absolute;
-            width: 0;
-            overflow: hidden;
-            font-weight: 400;
-        }
+        padding: 0;
     }
 
     .action-menu-list-item {
         background-color: transparent;
         border-radius: $border-radius;
-        padding: 0 5px;
         color: #999;
-        transition: background-color 200ms, color 200ms;
         cursor: pointer;
+        padding: 0 5px;
+        transition: background-color 200ms, color 200ms;
 
         &:hover, &:focus {
-            outline: none;
             background-color: $btn-color;
             color: #fff;
+            outline: none;
         }
     }
+
+    .action-menu-text {
+        font-weight: 400;
+        overflow: hidden;
+        position: absolute;
+        width: 0;
+    }
+
 
     /** Name Input **/
 
     .name-input {
-        margin-top: .5em;
         display: flex;
+        margin-top: .5em;
+
+        &.mod-edit {
+            background-color: $bg-color;
+            border-radius: $border-radius;
+            margin: 0;
+            padding: 4px;
+            position: absolute;
+            width: 100%;
+        }
     }
 
     .name-input-actions {
-        margin-left: 5px;
         display: flex;
+        margin-left: 5px;
     }
 
     .name-input-title {
@@ -260,27 +270,27 @@
     }
 
     .name-input-field {
-        padding: 2px 18px 2px 4px;
-        min-height: 34px;
-        color: #333;
         border: 1px solid #c0c0c0;
+        color: #333;
+        min-height: 34px;
+        padding: 2px 18px 2px 4px;
+
+        &.mod-textarea {
+            display: block;
+            line-height: 1.3em;
+            overflow: hidden;
+            resize: none;
+            width: 100%;
+        }
 
         &.mod-textfield {
             padding-right: 1.6em;
             width: 100%;
         }
 
-        &.mod-textarea {
-            display: block;
-            line-height: 1.3em;
-            resize: none;
-            overflow: hidden;
-            width: 100%;
-        }
-
         &:focus {
-            outline: none;
             border-color: $input-color-focus;
+            outline: none;
         }
 
         &::placeholder {
@@ -289,72 +299,50 @@
         }
     }
 
+    .edit-title {
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+    }
+
     /** Modal Content **/
 
     .modal-bg {
-        position: fixed;
+        animation-duration: 300ms;
+        animation-name: fade-in;
         background-color: $modal-bg;
-        top: 0;
         bottom: 0;
         left: 0;
+        position: fixed;
         right: 0;
-        z-index: 10;
-        animation-name: fade-in;
-        animation-duration: 300ms;
+        top: 0;
     }
 
     .modal-content {
-        background-color: $bg-color;
-        max-width: 90%;
-        width: 420px;
-        height: 150px;
-        margin: 120px auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        background-color: $bg-color;
         border-radius: $border-radius;
         box-shadow: 0px 6px 12px #666;
+        display: flex;
+        flex-direction: column;
+        height: 150px;
+        justify-content: center;
+        margin: 120px auto;
+        max-width: 90%;
+        padding: 20px;
+        width: 420px;
     }
 
     .modal-content-title {
-        padding-bottom: 16px;
-        margin-bottom: 10px;
         border-bottom: 1px solid $panel-border-color;
-        width: 100%;
+        margin-bottom: 10px;
+        padding-bottom: 16px;
         text-align: center;
-    }
-
-    /** Modal Name Input **/
-
-    .edit-title {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
-        z-index: 10;
-
-        .cover {
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: $modal-bg;
-            width: 100%;
-            height: 100%;
-            animation-name: fade-in;
-            animation-duration: 300ms;
-        }
-
-        .name-input {
-            position: absolute;
-            background-color: $bg-color;
-            margin: 0;
-            padding: 4px;
-            width: 100%;
-            border-radius: $border-radius;
-        }
     }
+
 
     /** Clusters collapse Menu **/
 
@@ -362,16 +350,16 @@
         background-color: darken($bg-color, 5%);
         border-color: transparent;
         border-radius: $border-radius;
-        margin: 1em 0 .2em;
-        font-size: 1.8rem;
-        padding: 4px 6px;
         color: #777;
+        font-size: 1.8rem;
+        margin: 1em 0 .2em;
+        padding: 4px 6px;
         transition: background-color 200ms, color 200ms;
 
-        &.collapse-open {
+        &.is-open {
             background-color: darken($cluster-color-selected, 5%);
-            color: #fff;
             border-color: transparent;
+            color: #fff;
         }
 
         i {
@@ -379,14 +367,14 @@
         }
 
         span {
-            position: absolute;
             opacity: 0;
+            position: absolute;
         }
 
         &:hover {
             background-color: $btn-color;
-            color: #fff;
             border-color: transparent;
+            color: #fff;
         }
     }
 
@@ -394,16 +382,16 @@
     /** Rubric Editor **/
 
     .rubrics {
-        width: 92%;
-        max-width: 580px;
         margin: 0 1.5em;
+        max-width: 580px;
+        width: 92%;
 
         * {
             outline-width: thin;
         }
     }
 
-    .rubric-panes.criterium-selected {
+    .rubric-panes.is-criterium-selected {
         display: none;
     }
 
@@ -414,175 +402,148 @@
 
     /** Clusters **/
 
-    .rb-clusters {
-        margin-bottom: .5em;
+    .b-clusters {
         list-style: none;
+        margin-bottom: .5em;
         padding: 0;
         @include user-select(none);
     }
 
-    .rb-cluster {
-        position: relative;
+    .b-clusters .name-input {
+        position: fixed;
+    }
+
+    .b-cluster-list-item {
+        outline: none;
+    }
+
+    .b-cluster {
         padding: .5em;
         padding-right: 0;
+        position: relative;
         transition: background-color 200ms, border-color 200ms, color 200ms;
 
-        &:hover, &.show-menu {
+        &:hover, &.is-menu-visible {
             background-color: $cluster-color-hover;
             border-color: $cluster-color-hover;
             border-bottom-color: transparent;
             color: #222;
         }
 
-        &.is-selected {
-            background-color: $cluster-color-selected;
-            color: #fff;
-
-            .action-menu-list-item {
-                color: #ccc;
-
-                &:hover, &:focus {
-                    color: #fff;
-                }
-            }
+        &:focus {
+          outline: none;
         }
     }
 
-    .rb-clusters .name-input {
-        position: fixed;
+    .b-cluster-list-item:focus .b-cluster {
+        box-shadow: inset 0 0 0 1px $input-color-focus;
+        z-index: 10;
     }
 
-    .rb-cluster:focus {
-        outline: none;
-    }
-
-    .rb-cluster-list-item {
-        outline: none;
-
-        &:focus .rb-cluster {
-            box-shadow: inset 0 0 0 1px $input-color-focus;
-            z-index: 10;
-        }
-    }
-
-    @media only screen and (max-width: 899px) {
-        .rb-cluster-list-item:focus .rb-cluster.is-selected {
-            box-shadow: inset 0 0 0 2px white;
-        }
-    }
-
-    @media only screen and (min-width: 899px) {
-        .rb-cluster-list-item:focus .rb-cluster {
-            border-color: transparent;
-        }
-    }
-
-    .rb-cluster-title {
-        flex: 1;
+    .b-cluster-title {
         cursor: pointer;
+        flex: 1;
     }
 
-    .cluster-selected {
-        font-size: 2.3rem;
+    .b-cluster-selected-title {
         border-bottom: 2px solid $cluster-color-border-selected;
+        font-size: 2.3rem;
         margin-top: 0.5em;
         padding: 0 0.15em 0.1em;
     }
 
+
     /** Categories **/
 
-    .rb-categories {
+    .b-categories {
         list-style: none;
         padding: 0;
         @include user-select(none);
     }
 
-    .rb-category {
+    .b-category {
         margin-bottom: 1.5em;
-
-        .title {
-            font-size: 1.6rem;
-            margin: 0;
-            display: inline-block;
-            line-height: 1.3em;
-        }
-
-        .actions {
-            padding: .5em .1em;
-        }
     }
 
-    .category-header {
-        position: relative;
-        padding: .75em 0;
+    .b-category-title {
+        display: inline-block;
+        font-size: 1.6rem;
+        line-height: 1.3em;
+        margin: 0;
+    }
+
+    .b-category-list-item {
         background: linear-gradient(to bottom, $bg-color 0px, change-color($bg-color, $alpha: 0) 10px, change-color($bg-color-darkened, $alpha: 0) 19px, change-color($bg-color-darkened, $alpha: 0.25) 33px);
+        padding: .75em 0;
+        position: relative;
+    }
 
-        .btn-color {
-            display: inline-block;
-            margin: 0 .5em;
-            padding: 0;
-            width: 14px;
-            height: 14px;
-            outline-width: 1px;
-            border: none;
-            box-shadow: 0px 0px 3px #999;
-            cursor: pointer;
+    .btn-category-color {
+        border: none;
+        box-shadow: 0 0 3px #999;
+        cursor: pointer;
+        display: inline-block;
+        height: 14px;
+        margin: 0 .5em;
+        outline-width: 1px;
+        padding: 0;
+        width: 14px;
 
-            &:focus {
-                outline: none;
-                box-shadow: 0px 0px 4px #333;
-                border: 2px solid hsla(0, 0%, 100%, 0.8);
-            }
+        &:focus {
+            border: 2px solid hsla(0, 0%, 100%, 0.8);
+            box-shadow: 0px 0px 4px #333;
+            outline: none;
         }
     }
 
-    .rb-category-title {
-        /*position: relative;*/
-        display: flex;
+    .b-category-title-wrapper {
         align-items: center;
+        display: flex;
         flex: 1;
+        /*position: relative;*/
     }
 
     /** Criteria **/
 
-    .rb-criteria {
+    .b-criteria {
         list-style: none;
         padding: 0;
         @include user-select(none);
     }
 
-    .rb-criterium {
-        position: relative;
+    .b-criterium {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
-
-        .title {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin: 0;
-            padding: 0;
-        }
+        position: relative;
     }
 
-    .rb-criterium-title {
-        padding: .75em .5em;
-        flex: 1;
+    .b-criterium-title-wrapper {
         cursor: pointer;
-
-        .title:focus {
-            outline: none;
-        }
+        flex: 1;
+        padding: .75em .5em;
 
         &:focus {
             outline: none;
 
-            .title {
+            .b-criterium-title {
                 outline: 1px solid $input-color-focus;
                 outline-offset: 5px;
             }
         }
     }
 
+    .b-criterium-title {
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin: 0;
+        padding: 0;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
     /** Rubric buttons **/
+
     .btn-new {
         background-color: transparent;
         border: 1px solid transparent;
@@ -640,10 +601,10 @@
     }
 
     .criterium-details {
-        position: relative;
-        padding-top: 10px;
-        padding-bottom: 10px;
         color: #333;
+        position: relative;
+        padding-bottom: 10px;
+        padding-top: 10px;
         width: 100%;
 
         i.fa-close {
@@ -658,51 +619,51 @@
     }
 
     .criterium-details-header {
-        display: flex;
         align-items: flex-start;
+        display: flex;
         margin-bottom: .75em;
     }
 
     .criterium-details-title {
+        align-items: flex-start;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
         margin: 0 .25em .5em -.1em;
+        width: 100%;
 
         label {
+            border: 1px solid transparent;
             font-size: 1.3rem;
             font-weight: 400;
             margin-bottom: 0;
-            border: 1px solid transparent;
         }
 
         .input-detail {
             font-size: 1.6rem;
             height: 1.9em;
+            margin-left: -.3em;
             padding-left: .25em;
             width: 100%;
-            margin-left: -.3em;
         }
     }
 
     .criterium-path {
-        font-size: 1.2rem;
         display: none;
+        font-size: 1.2rem;
     }
 
     .criterium-weight {
-        margin-top: .7em;
         font-size: 1.4rem;
+        margin-top: .7em;
 
         label {
-            font-weight: 400;
             font-size: 1.3rem;
+            font-weight: 400;
         }
 
         .input-detail {
-            width: 4em;
             padding: 0 .3em;
+            width: 4em;
         }
     }
 
@@ -712,11 +673,11 @@
         padding: 0;
     }
 
-    .rb-criterium-level {
+    .b-criterium-level {
         margin-bottom: 1.5em;
     }
 
-    .rb-criterium-level-title {
+    .b-criterium-level-title {
         font-weight: 700;
     }
 
@@ -735,23 +696,23 @@
     }
 
     .criterium-level-score {
+        margin-left: .75em;
         position: relative;
         width: 3.8em;
-        margin-left: .75em;
 
         .input-detail {
+            font-size: 2.1rem;
             text-align: right;
             width: 2.7em;
-            font-size: 2.1rem;
         }
     }
 
     .criterium-level-feedback {
-        width: 100%;
-        padding: .25em .4em .35em;
         margin: 0 1em 0 -.4em;
-        resize: none;
         overflow: hidden;
+        padding: .25em .4em .35em;
+        resize: none;
+        width: 100%;
     }
 
     .criterium-details .input-detail {
@@ -775,19 +736,19 @@
     }
 
     .remove-fixed {
-        position: absolute;
-        left: -1.4em;
-        width: 1.4em;
-        height: 2.1em;
-        cursor: pointer;
-        display: flex;
         align-items: center;
-        justify-content: center;
-        color: $btn-color-darkened;
-        padding: 0;
         background: transparent;
         border: 1px solid transparent;
         border-radius: $border-radius;
+        color: $btn-color-darkened;
+        cursor: pointer;
+        display: flex;
+        height: 2.1em;
+        justify-content: center;
+        left: -1.4em;
+        padding: 0;
+        position: absolute;
+        width: 1.4em;
 
         > .fa + .fa, &:hover > .fa, &:focus > .fa {
             display: none;
@@ -813,15 +774,15 @@
     }
 
     .btn-close {
-        width: 2em;
+        background-color: darken($bg-color, 5%);
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+        color: #777;
         height: 2em;
         margin-left: .25em;
         padding: 0;
-        background-color: darken($bg-color, 5%);
-        color: #777;
-        border: 1px solid transparent;
-        border-radius: $border-radius;
         transition: background-color 200ms, color 200ms;
+        width: 2em;
 
         &:hover {
             background-color: $btn-color;
@@ -836,7 +797,7 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .app-container.split-view #clusters-wrapper-view2 {
+        #clusters-wrapper-view2 {
             display: none;
         }
 
@@ -844,7 +805,7 @@
             overflow: hidden;
         }
 
-        .clusters-view.collapse-closed {
+        .clusters-view.is-closed {
             display: none;
         }
 
@@ -858,19 +819,21 @@
             }
         }
 
-        .rb-cluster {
+        .b-cluster {
             border: 1px solid $cluster-color-border;
             border-top-width: 0;
 
             &.is-selected {
+                background-color: $cluster-color-selected;
                 border-color: $cluster-color-selected;
+                color: #fff;
             }
         }
 
-        .rb-cluster-list-item:first-child .rb-cluster {
-            border-top-width: 1px;
+        .b-cluster-list-item:first-child .b-cluster {
             border-top-left-radius: $border-radius;
             border-top-right-radius: $border-radius;
+            border-top-width: 1px;
 
             &:hover {
                 border-top-color: $cluster-color-hover;
@@ -881,12 +844,24 @@
             }
         }
 
-        .rb-cluster-list-item:last-child .rb-cluster {
+        .b-cluster-list-item:last-child .b-cluster {
             border-bottom-left-radius: $border-radius;
             border-bottom-right-radius: $border-radius;
         }
 
-        .rb-criterium-title {
+        .b-cluster-list-item:focus .b-cluster.is-selected {
+            box-shadow: inset 0 0 0 2px #fff;
+        }
+
+        .action-menu-list-item.is-cluster-selected {
+            color: #ccc;
+
+            &:hover, &:focus {
+                color: #fff;
+            }
+        }
+
+        .b-criterium-title-wrapper {
             pointer-events: none;
         }
 
@@ -900,13 +875,6 @@
             text-align: left;
             transition: background-color 200ms, color 200ms;
             width: 100%;
-
-            &::before {
-                color: #666;
-                font-size: 1.2rem;
-                margin-right: .35em;
-                transition: color 200ms;
-            }
 
             &:hover, &:focus {
                 background-color: $btn-color;
@@ -922,32 +890,43 @@
             &:focus {
                 box-shadow: inset 0 0 0 1px white;
             }
+
+            &::before {
+              color: #666;
+              font-size: 1.2rem;
+              margin-right: .35em;
+              transition: color 200ms;
+            }
         }
 
-        .clusters-view .actions {
+        .actions.rubric-actions {
             margin-bottom: .75em;
         }
 
+        .actions.category-actions {
+            padding: .5em .1em;
+        }
+
         .criterium-details-wrapper {
-            display: flex;
-            position: absolute;
-            background: change_color($modal-bg, $alpha: 0.66);
-            height: 100vh;
-            top: 0;
-            left: 0;
-            width: 100%;
             align-items: flex-start;
+            background: change_color($modal-bg, $alpha: 0.66);
+            display: flex;
+            height: 100vh;
             justify-content: center;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
             z-index: 20;
         }
 
         .criterium-details {
             background-color: $bg-color;
             border-radius: $border-radius;
-            width: 95%;
+            margin-top: 1.5em;
             max-width: 50em;
             padding: 1.2em;
-            margin-top: 1.5em;
+            width: 95%;
         }
     }
 
@@ -956,11 +935,11 @@
         /** App **/
 
         #app.builder-app {
-            /*position: absolute;
-            top: 0; bottom: 0; left: 0; right: 0;*/
+            height: calc(100vh - 166px);
             overflow: hidden;
             padding-bottom: 0;
-            height: calc(100vh - 166px);
+            /*position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;*/
         }
 
         .no-drop {
@@ -969,64 +948,63 @@
 
         /** Action Menu **/
 
-        .item-actions {
-            width: 1.8em;
-            /*height: 1.8em;*/
-            /*opacity: 0;*/
-            display: flex;
-            justify-content: center;
+        .btn-toggle-menu {
             align-items: center;
             background: transparent;
             border: 1px solid transparent;
             border-radius: $border-radius;
             color: #777;
-            transition: all 200ms;
             cursor: pointer;
+            display: flex;
             font-size: 1.1rem;
+            height: 1.8em;
+            justify-content: center;
+            /*opacity: 0;*/
+            transition: all 200ms;
+            width: 1.8em;
 
-            &:focus {
-                outline: none;
-                border: 1px solid $input-color-focus;
+            &.is-menu-visible {
                 opacity: 1;
             }
 
-            &.show-menu {
-                opacity: 1;
+            &:focus {
+                border: 1px solid $input-color-focus;
+                outline: none;
             }
 
             i {
                 padding-top: 2px;
                 pointer-events: none;
 
-                &.show-menu {
+                &.is-menu-visible {
                     padding-top: 0;
                 }
             }
         }
 
         @media (any-hover: hover) {
-            .item-actions {
+            .btn-toggle-menu.mod-category, .btn-toggle-menu.mod-criterium {
                 opacity: 0;
-            }
-        }
 
-        .app-container:not(.dragging) {
-            .rb-cluster-list-item:hover, .rb-criterium:hover, .category-header .item-header-bar:hover {
-                .item-actions {
+                &:focus {
                     opacity: 1;
                 }
             }
         }
 
+        .app-container:not(.is-dragging) .item-header-bar:hover .btn-toggle-menu {
+            opacity: 1;
+        }
+
         .action-menu {
-            display: none;
-            width: 9em;
-            position: absolute;
-            min-width: 120px;
             background: #fff;
+            display: none;
+            min-width: 120px;
+            position: absolute;
+            width: 9em;
             z-index: 10;
 
-            &.show-menu {
+            &.is-menu-visible {
                 display: flex;
             }
 
@@ -1036,68 +1014,64 @@
         }
 
         .action-menu-list {
-            position: absolute;
             background-color: #fff;
+            border-radius: $border-radius;
+            box-shadow: 0 0 3px #999;
             flex-direction: column;
             list-style: none;
-            border-radius: $border-radius;
-            box-shadow: 0px 0px 3px #999;
             overflow: hidden;
+            position: absolute;
         }
 
         .action-menu-list-item {
-            margin-right: 0;
-            font-size: 1.3rem;
-            padding: .25em .5em;
-            cursor: pointer;
-            pointer-events: all;
             border-radius: 0;
+            cursor: pointer;
+            font-size: 1.3rem;
+            margin-right: 0;
+            padding: .25em .5em;
+            pointer-events: all;
 
             &:hover {
                 background: #ddd;
             }
 
-            i {
-                margin-right: .3em;
-                color: #666;
-            }
-
-            span {
-                position: initial;
-                width: initial;
-                color: #333;
-                opacity: 1;
-            }
-
             &:focus {
                 background: $btn-color;
 
-                i, span {
+                .action-menu-icon, .action-menu-text {
                     color: white;
                 }
             }
         }
 
+        .action-menu-icon {
+            color: #666;
+            margin-right: .3em;
+        }
+
+        .action-menu-text {
+            color: #333;
+            opacity: 1;
+            position: initial;
+            width: initial;
+        }
+
+
         /** Name Input **/
 
         .name-input {
             flex-direction: column;
-            margin-top: 0;
-            margin-bottom: 1em;
             font-weight: 400;
-
-            .name-input-actions {
-                margin-top: .4em;
-                margin-left: 0;
-            }
+            margin-bottom: 1em;
+            margin-top: 0;
 
             &.cluster-new {
-                margin-bottom: 0;
-                position: absolute;
-                width: 18em;
                 box-shadow: 0 2px 10px #999;
+                margin-bottom: 0;
                 padding: .25em .25em .4em .25em;
+                position: absolute;
                 top: .25em;
+                width: 18em;
 
                 .name-input-field.mod-textarea {
                     height: 35px;
@@ -1105,15 +1079,18 @@
                     padding-top: .6em;
                 }
             }
+
+            &.mod-edit {
+                box-shadow: 0 3px 10px #666;
+                margin-left: -2%;
+                margin-top: -.25em;
+                width: 104%;
+            }
         }
 
-        /** Modal Name Input **/
-
-        .edit-title .name-input {
-            width: 104%;
-            margin-left: -2%;
-            margin-top: -.25em;
-            box-shadow: 0px 3px 10px #666;
+        .name-input-actions {
+            margin-left: 0;
+            margin-top: .4em;
         }
 
         /** Clusters collapse Menu **/
@@ -1130,91 +1107,94 @@
             &::-webkit-scrollbar {
                 height: 6px;
             }
-
-            .clusters-view {
-                transform: unset;
-            }
         }
 
         /** Rubric Editor **/
 
         .rubrics {
-            width: initial;
-            max-width: initial;
-            margin: 0;
             flex: 1;
+            margin: 0;
+            max-width: initial;
             position: relative;
+            width: initial;
         }
 
-        .builder-app .rubrics-wrapper {
+        .rubrics-wrapper {
+            bottom: 0;
+            left: 0;
             position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
+            right: 0;
+            top: 0;
         }
 
         .app-container {
-            width: 100%;
             display: flex;
             height: 100%;
+            width: 100%;
 
-            .clusters-wrapper {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                overflow-x: hidden;
-                padding-left: 1em;
-
-                &#clusters-wrapper-view2 {
-                    border-top: 1px solid $panel-border-divider-color;
-                }
-            }
-
-            &.split-view .clusters-wrapper {
-                height: 50%;
-            }
-
-            &.dragging {
+            &.is-dragging {
                 * {
                     cursor: move;
                     cursor: grabbing;
                 }
 
-                &.not-allowed, &.not-allowed * {
+                &.is-not-allowed, &.is-not-allowed * {
                     cursor: not-allowed;
                 }
             }
         }
 
+        .clusters-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-x: hidden;
+            padding-left: 1em;
+
+            &.is-split {
+                height: 50%;
+            }
+        }
+
+        #clusters-wrapper-view2 {
+            border-top: 1px solid $panel-border-divider-color;
+        }
+
         .rubric-panes-wrapper {
-            position: relative;
             flex: 1;
+            position: relative;
         }
 
         .rubric-panes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
+            left: 0;
             overflow: hidden;
+            position: absolute;
+            right: 0;
+            top: 0;
 
-            &.criterium-selected {
+            &.is-criterium-selected {
                 display: block;
             }
         }
 
-        .dragging .actions {
+        .app-container.is-dragging .actions {
             opacity: 0;
             transition: opacity 300ms;
         }
 
         /** Clusters **/
 
+        .item-header-bar {
+            cursor: pointer;
+        }
+
         .clusters-view {
-            display: flex;
             align-items: baseline;
-            margin-top: .5em;
-            margin-left: -1em;
             border-bottom: 1px solid transparent;
+            display: flex;
+            margin-left: -1em;
+            margin-top: .5em;
             transition: border-bottom-color 200ms;
         }
 
@@ -1232,14 +1212,14 @@
             }
         }
 
-        .rb-clusters {
+        .b-clusters {
             display: flex;
             margin-bottom: -1px;
             margin-left: 1em;
             max-width: calc(100% - 16em);
         }
 
-        .rb-cluster-list-item {
+        .b-cluster-list-item {
             /* A border is needed here so the ghost item can show the dotted border without flicking the content below */
             border: 1px solid transparent;
             flex: 1;
@@ -1256,16 +1236,20 @@
                 }
             }
 
-            &:hover .item-actions {
+            &:hover .btn-toggle-menu {
                 color: #666;
 
-                &.show-menu {
+                &.is-menu-visible {
                     color: #fff;
                 }
             }
+
+            &:focus .b-cluster {
+                border-color: transparent;
+            }
         }
 
-        .rb-cluster {
+        .b-cluster {
             background-color: hsla(160, 6%, 90%, 1);
             border: 1px solid hsla(197, 10%, 86%, 1);
             border-radius: $border-radius;
@@ -1274,24 +1258,6 @@
             padding: .3em 0 .4em .5em;
             white-space: nowrap;
 
-            .item-actions {
-                opacity: 1;
-
-                &.show-menu, &:hover {
-                    background: change_color($cluster-item-actions-bg-color, $alpha: 0.5);
-                    color: white;
-                }
-            }
-
-            .name-input {
-                width: 18em;
-            }
-
-            .action-menu {
-                right: -7.4em;
-                top: 4.6em;
-            }
-
             &.is-selected {
                 background: $bg-color;
                 border-color: hsla(194, 15%, 77%, 1);
@@ -1299,30 +1265,46 @@
                 font-weight: bold;
             }
 
-            &:hover, &.show-menu {
+            &:hover, &.is-menu-visible {
                 background: hsla(210, 30%, 75%, .3);
+            }
+
+            .name-input {
+                width: 18em;
             }
         }
 
-        .rb-cluster-title {
+        .action-menu.mod-cluster { /* Position dynamically set currently so this has no effect */
+            right: -7.4em;
+            top: 4.6em;
+        }
+
+        .btn-toggle-menu.mod-cluster {
+            &:hover, &.is-menu-visible {
+                background: change_color($cluster-item-actions-bg-color, $alpha: 0.5);
+                color: #fff;
+            }
+        }
+
+        .b-cluster-title {
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .rb-cluster {
+        .b-cluster {
+            border-bottom-color: transparent;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
-            border-bottom-color: transparent;
 
             &.is-selected {
+                border-bottom-color: $bg-color;
                 height: 3.6rem;
                 margin-bottom: 0;
-                border-bottom-color: $bg-color;
             }
         }
 
-        .cluster-selected {
+        .b-cluster-selected-title {
             position: absolute;
             visibility: hidden;
         }
@@ -1348,8 +1330,8 @@
             &-enter-active, &-leave-active {
                 animation-duration: 200ms;
                 height: 100%;
-
                 transition-duration: 200ms;
+
                 > div {
                     transition: opacity 200ms ease-in-out;
                 }
@@ -1360,9 +1342,11 @@
                     opacity: 0;
                 }
             }
+
             &-enter-active {
                 animation-name: bf-in;
             }
+
             &-leave-active {
                 animation-name: bf-out;
             }
@@ -1380,12 +1364,12 @@
 
         .cluster-content {
             display: flex;
-            margin-top: 1em;
-            padding-top: .2em;
-            margin-left: -.5em;
-            padding-left: .5em;
             flex: 1;
+            margin-left: -.5em;
+            margin-top: 1em;
             overflow: auto;
+            padding-left: .5em;
+            padding-top: .2em;
             @include scrollbar();
         }
 
@@ -1393,40 +1377,18 @@
             border-left: 1px solid hsla(193, 14%, 82%, 1);
             border-right: 1px solid hsla(193, 14%, 82%, 1);
             color: hsla(204, 45%, 25%, 0.6);
-            padding: .5em .5em 0;
             font-style: italic;
+            padding: .5em .5em 0;
             text-align: center;
         }
 
-        .rb-categories {
+        .b-categories {
             display: flex;
         }
 
-        .rb-category {
-            width: 19em;
+        .b-category {
             margin-right: 1.2em;
-
-            .item-header-bar {
-                cursor: pointer;
-            }
-
-            .title {
-                font-size: 1.3rem;
-            }
-
-            .actions {
-                border: 1px solid hsla(193, 14%, 82%, 1);
-                border-top: none;
-                border-bottom-left-radius: 3px;
-                border-bottom-right-radius: 3px;
-                padding: .238em 0;
-            }
-
-            .action-menu {
-                width: 12em;
-                top: 4.8em;
-                right: -10.35em;
-            }
+            width: 19em;
 
             &.ghost {
                 background: $ghost-bg-color;
@@ -1439,182 +1401,183 @@
                 }
             }
 
-            .rb-category-title {
-                align-items: stretch;
-            }
-            .rb-category-title .title {
-                font-size: 1.33rem;
-                flex: 1;
-                /*font-weight: bold;*/
-                /*color: hsla(190, 50%, 35%, 1);*/
-            }
-
             .name-input .name-input-field.mod-textarea {
                 font-size: 1.33rem;
             }
+        }
 
-            .category-header.null-category .rb-category-title .title {
+        .action-menu.mod-category {
+            right: -10.35em;
+            top: 4.8em;
+            width: 12em;
+        }
+
+        .b-category-list-item.mod-null-category-drag {
+            opacity: .5;
+            transition: opacity 200ms;
+        }
+
+        .b-category:hover .b-category-list-item {
+            opacity: 1;
+        }
+
+        .b-category-title-wrapper {
+            align-items: stretch;
+        }
+
+        .b-category-title {
+            /*color: hsla(190, 50%, 35%, 1);*/
+            flex: 1;
+            font-size: 1.33rem;
+            /*font-weight: bold;*/
+
+            &.mod-null-category {
+                font-style: oblique;
                 margin-left: 1.5em;
                 opacity: 0.8;
-                font-style: italic;
             }
 
-            &.null-category {
-                .category-header {
-                    opacity: .5;
-                    transition: opacity 200ms;
-                }
-
-                &:hover .category-header {
-                    opacity: 1;
-                }
-
-                .rb-category-title .title {
-                    font-style: oblique;
-                    margin-left: .5em;
-                }
+            &.mod-null-category-drag {
+              font-style: oblique;
+              margin-left: .5em;
             }
         }
 
-        .category-header {
-            padding: 0;
+        .actions.category-actions {
             border: 1px solid hsla(193, 14%, 82%, 1);
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            border-top: none;
+            padding: .238em 0;
+        }
+
+        .b-category-list-item {
+            background: linear-gradient(to bottom,
+                hsla(60, 2%, 91%, 0.6) 0px,
+                hsla(60, 2%, 91%, 0) 14px,
+                hsla(204, 38%, 40%, 0) 0px,
+                hsla(204, 38%, 40%, 0.12) 36px);
+            background: hsla(204, 38%, 40%, 0.12);
+            border: 1px solid hsla(193, 14%, 82%, 1);
+            border-bottom: none;
             border-top-left-radius: $border-radius;
             border-top-right-radius: $border-radius;
-            border-bottom: none;
-            background: linear-gradient(to bottom,
-                    hsla(60, 2%, 91%, 0.6) 0px,
-                    hsla(60, 2%, 91%, 0) 14px,
-                    hsla(204, 38%, 40%, 0) 0px,
-                    hsla(204, 38%, 40%, 0.12) 36px);
-            background: hsla(204, 38%, 40%, 0.12);
+            padding: 0;
+        }
 
-            .btn-color {
-                width: 6px;
-                height: unset;
-                /*height: 100%;*/
-            }
+        .item-header-bar.mod-category {
+            padding: .65em 0;
+        }
 
-            .item-header-bar {
-                padding: .65em 0;
+        .btn-toggle-menu.mod-category {
+            padding: 2px 0;
 
-                .item-actions {
-                    height: 1.8em;
-                    padding: 2px 0;
-
-                    i {
-                        padding-top: 2px;
-                    }
-
-                    &:hover, &.show-menu {
-                        background: $item-actions-bg-color;
-                    }
-                }
+            &:hover, &.is-menu-visible {
+                background: $item-actions-bg-color;
             }
         }
 
-        .no-category {
-            width: 0;
+        .btn-category-color {
+            height: unset;
+            /*height: 100%;*/
+            width: 6px;
+        }
+
+        /* Without the filler it's very hard to drag a category into an empty cluster */
+        .b-category-drag-filler {
             transition: all 1ms;
+            width: 0;
         }
 
-        .category-dragging .no-category {
-            width: 18em;
-            margin-right: 0;
-            height: 200px;
-            flex: 0;
+        .category-dragging .b-category-drag-filler {
             background: transparent;
+            flex: 0;
+            height: 200px;
+            margin-right: 0;
             transition-delay: 300ms;
+            width: 18em;
         }
 
         .category-name-input {
-            width: 18em;
             margin-top: .1em;
+            width: 18em;
         }
 
-        .cluster-content > .actions {
+        .actions.cluster-actions {
             padding-top: .4em;
         }
 
         /** Criteria **/
 
-        .rb-criterium-list-item.ghost {
+        .b-criterium-list-item.ghost {
             background-color: $ghost-bg-color;
             border: 1px dotted $ghost-border;
 
-            .title {
+            .b-criterium-title {
                 color: transparent;
             }
         }
 
-        .rb-criterium {
-            font-size: 1.3rem;
+        .b-criterium {
             background: none;
+            /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
             border-bottom: 1px solid hsla(193, 14%, 85%, 1);
             border-left: 1px solid hsla(193, 14%, 82%, 1);
             border-right: 1px solid hsla(193, 14%, 82%, 1);
-            /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
+            font-size: 1.3rem;
 
             &.is-selected {
-                /*border: 1px solid hsla(193, 14%, 75%, 1);*/
-                border: 2px solid $btn-color;
-                margin-top: -1px;
-/*                border: 1px solid darken($bg-criterium-details, 10%);*/
-                /*border-radius: $border-radius;*/
                 background: $bg-criterium-details;
+                /*border: 1px solid hsla(193, 14%, 75%, 1);*/
+                /*border: 1px solid darken($bg-criterium-details, 10%);*/
+                border: 2px solid $btn-color;
+                /*border-radius: $border-radius;*/
                 /*margin: -1px;*/
-            }
-
-            .title {
-                color: hsla(204, 45%, 25%, 1);
-            }
-
-            .item-header-bar {
-                width: 100%;
-                align-items: baseline;
-
-                .item-actions {
-                    padding: 2px 0;
-
-                    i {
-                        padding-top: 2px;
-                    }
-
-                    &:hover, &.show-menu {
-                        background: $item-actions-bg-color;
-                    }
-                }
-            }
-
-            .action-menu {
-                width: 9em;
-                top: 4.8em;
-                right: -7.35em;
+                margin-top: -1px;
             }
 
             .menu-list-item-details {
-                display: none;
+                display: none; /* Don't remember why this is here */
             }
         }
 
-        .app-container.dragging .rb-criterium .item-actions {
-            opacity: 0;
+        .action-menu.mod-criterium {
+            right: -7.35em;
+            top: 4.8em;
+            width: 9em;
         }
 
-        .rb-criterium-title {
+        .b-criterium-title {
+            color: hsla(204, 45%, 25%, 1);
+        }
+
+        .item-header-bar.mod-criterium {
+            align-items: baseline;
+            width: 100%;
+        }
+
+        .btn-toggle-menu.mod-criterium {
+            padding: 2px 0;
+
+            &:hover, &.is-menu-visible {
+                background: $item-actions-bg-color;
+            }
+        }
+
+        .b-criterium-title-wrapper {
             display: flex;
             padding: 0;
 
-            .title {
-                flex: 1;
-                padding: .7em .5em .7em 1.5em;
-                min-height: 3.419rem;
-            }
-
-            &:focus .title {
+            &:focus .b-criterium-title {
                 outline-offset: 0;
                 z-index: 10;
             }
+        }
+
+        .b-criterium-title {
+            flex: 1;
+            min-height: 3.419rem;
+            padding: .7em .5em .7em 1.5em;
         }
 
         /** Vue Swatches **/
@@ -1637,17 +1600,17 @@
         .criterium-details-wrapper {
             @include scrollbar();
             background-color: $bg-criterium-details;
-            border-top: 1px solid hsla(194, 15%, 77%, 1);
             border-left: 1px solid hsla(194, 15%, 77%, 1);
+            border-top: 1px solid hsla(194, 15%, 77%, 1);
             border-top-left-radius: $border-radius;
         }
 
         .criterium-details {
-            padding: calc(1em - 2px);
-            width: 30em;
+            border: 2px solid transparent;
             overflow-x: hidden;
             overflow-y: auto;
-            border: 2px solid transparent;
+            padding: calc(1em - 2px);
+            width: 30em;
 
             .input-detail {
                 background-color: rgba(255, 255, 255, 0.35);

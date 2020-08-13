@@ -1,9 +1,9 @@
 <template>
     <div class="save-state">
-        <div v-if="dataConnector && dataConnector.isSaving" class="saving">
+        <div v-if="dataConnector && dataConnector.isSaving">
             {{ dataConnector.processingSize }} wijziging{{ dataConnector.processingSize === 1 ? '' : 'en' }}...
         </div>
-        <div v-else-if="dataConnector" class="saved" aria-live="polite">
+        <div v-else-if="dataConnector" class="save-state-saved" aria-live="polite">
             Wijzigingen opgeslagen
         </div>
     </div>

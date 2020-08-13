@@ -7,7 +7,7 @@
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
                     <ul class="app-header-tools mod-entry-view">
                         <slot name="demoEvaluator"></slot>
-                        <li class="app-header-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span tabindex="-1"><i class="check fa" aria-hidden="true" />{{ options.isDemo ? 'Feedback' : 'Feedback beschrijvingen'}}</span></button></li>
+                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? 'Feedback' : 'Feedback beschrijvingen'}}</span></button></li>
                     </ul>
                     <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
                         <div v-for="level in rubric.levels" class="level-table-header-title">
@@ -229,7 +229,7 @@
         }
     }
 
-    .levels-table-header, .rubric-table, .app-header-item {
+    .levels-table-header, .rubric-table, .app-tool-item {
         transition: opacity 200ms;
 
         &.is-demo-inactive {

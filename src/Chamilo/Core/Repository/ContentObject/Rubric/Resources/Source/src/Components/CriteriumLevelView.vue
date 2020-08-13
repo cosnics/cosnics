@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label :for="`level-${level.id}`" class="rb-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
+        <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
         <div class="criterium-level-input">
         <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
                   placeholder="Geef feedback"

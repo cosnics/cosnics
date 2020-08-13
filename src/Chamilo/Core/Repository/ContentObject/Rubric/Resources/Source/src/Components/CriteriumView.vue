@@ -1,22 +1,22 @@
 <template>
     <component :is="tag" :id="id" class="handle criterium-handle">
-        <div class="rb-criterium" :class="{ 'is-selected': selected }">
-            <div class="item-header-bar">
-                <div @click="$emit('criterium-selected', criterium)" @dblclick.stop="startEditing" @keyup.space.enter="$emit('criterium-selected', criterium)" class="rb-criterium-title" tabindex="0">
-                    <h3 class="title" tabindex="-1">{{ criterium.title }}</h3>
+        <div class="b-criterium" :class="{ 'is-selected': selected }">
+            <div class="item-header-bar mod-criterium">
+                <div @click="$emit('criterium-selected', criterium)" @dblclick.stop="startEditing" @keyup.space.enter="$emit('criterium-selected', criterium)" class="b-criterium-title-wrapper" tabindex="0">
+                    <h3 class="b-criterium-title" tabindex="-1">{{ criterium.title }}</h3>
                 </div>
-                <button class="item-actions" :class="{'show-menu': showMenuActions}" @keyup.space.stop="" @keydown.enter.stop="" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
-                <div class="action-menu" :class="{'show-menu': showMenuActions}">
+                <button class="btn-toggle-menu mod-criterium" :class="{'is-menu-visible': showMenuActions}" @keyup.space.stop="" @keydown.enter.stop="" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
+                <div class="action-menu mod-criterium" :class="{'is-menu-visible': showMenuActions}">
                     <ul class="action-menu-list">
-                        <li @click="$emit('criterium-selected', criterium)" @keyup.space.enter="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details" tabindex="0"><i class="fa fa-search"></i><span>Details</span></li>
-                        <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="fa fa-pencil" /><span>Wijzig naam</span></li>
-                        <li @click.stop="$emit('remove', criterium)" @keyup.space.enter="$emit('remove', criterium)" class="action-menu-list-item" tabindex="0"><i class="fa fa-remove" /><span>Verwijder</span></li>
+                        <li @click="$emit('criterium-selected', criterium)" @keyup.space.enter="$emit('criterium-selected', criterium)" class="action-menu-list-item menu-list-item-details" tabindex="0"><i class="action-menu-icon fa fa-search"></i><span class="action-menu-text">Details</span></li>
+                        <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-pencil" /><span class="action-menu-text">Wijzig naam</span></li>
+                        <li @click.stop="$emit('remove', criterium)" @keyup.space.enter="$emit('remove', criterium)" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-remove" /><span class="action-menu-text">Verwijder</span></li>
                     </ul>
                 </div>
             </div>
             <div v-if="isEditing" class="edit-title">
-                <div class="cover"></div>
-                <name-input class="item-new" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="newTitle"/>
+                <div class="modal-bg"></div>
+                <name-input class="item-new mod-edit" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor criterium" v-model="newTitle"/>
             </div>
         </div>
     </component>

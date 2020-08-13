@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container" :class="mainClass">
 		<div class="rubric-panes-wrapper">
-			<div class="rubric-panes" :class="{ 'criterium-selected': !!selectedCriterium }" @click="hideMenu" @keyup.esc="hideMenu">
+			<div class="rubric-panes" :class="{ 'is-criterium-selected': !!selectedCriterium }" @click="hideMenu" @keyup.esc="hideMenu">
 				<rubric-pane id="view1"
 							 :show-split-view="uiState.showSplitView"
 							 :rubric="rubric"
@@ -34,6 +34,7 @@
 				></rubric-pane>
 				<transition name="selected-fade" mode="out-in">
 					<rubric-pane id="view2" v-if="uiState.showSplitView"
+                 :show-split-view="uiState.showSplitView"
 								 :rubric="rubric"
 								 :data-connector="dataConnector"
 								 :selected-cluster="selectedClusterView2"
@@ -293,9 +294,8 @@
 
 		get mainClass() {
 			return {
-				'dragging': this.initiatedDrag !== '',
-				'not-allowed': this.bannedForDrop !== '' && this.overElementId === this.bannedForDrop,
-				'split-view': this.uiState.showSplitView
+				'is-dragging': this.initiatedDrag !== '',
+				'is-not-allowed': this.bannedForDrop !== '' && this.overElementId === this.bannedForDrop
 			};
 		}
 
