@@ -25,4 +25,16 @@ class RubricResultRepository extends CommonEntityRepository
     {
         return $this->saveEntity($rubricResult, $flush);
     }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
+     *
+     * @return RubricResult[]
+     */
+    public function getRubricResultsForRubricData(
+        \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
+    )
+    {
+        return $this->findBy(['rubricData' => $rubricData]);
+    }
 }
