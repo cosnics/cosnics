@@ -43,7 +43,7 @@
                         <draggable tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="[]" :forceFallback="true" :animation="250"
                                    @end="endDrag" @change="onChangeCriteriumInCluster" class="b-criteria"></draggable>
                     </li>
-                    <li v-else-if="categories.length === 0" slot="footer" class="no-category"></li>
+                    <li v-else-if="categories.length === 0" slot="footer" class="b-category-drag-filler"></li>
                 </draggable>
                 <new-category class="cluster-actions" v-if="selectedCluster" :view-id="id" :actions-enabled="categoryActionsEnabled" @dialog-view="$emit('dialog-new-category', $event)" @category-added="addCategory"></new-category>
             </div>
