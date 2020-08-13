@@ -20,6 +20,7 @@
     <script>
         Vue.use(BootstrapVue);
         Vue.use(this['cosnics-rubric'].default);
+        Vue.use(VueI18n);
 
         var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
         var data = JSON.parse(rubricDataJSON);
@@ -117,7 +118,7 @@
             lang = undefined;
         }
         new Vue({
-            i18n: Vue.prototype.$createI18nInstance(lang),
+            i18n: new VueI18n({ locale: lang }),
             router: Vue.prototype.$getRouter('builder'),
             el: '#builder',
             data: {
