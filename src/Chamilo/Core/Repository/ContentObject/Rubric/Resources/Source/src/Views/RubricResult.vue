@@ -27,7 +27,7 @@
                                                     </div>
                                                     <div v-for="evaluator in evaluators" class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-${evaluator}`">
-                                                            <i v-if="getCriteriumEvaluation(criterium, evaluator).feedback" class="icon-score-feedback fa fa-info"/>
+                                                            <i v-if="getCriteriumEvaluation(criterium, evaluator).feedback" class="score-feedback-icon fa fa-info"/>
                                                             {{ getCriteriumScore(criterium, evaluator) }}
                                                         </div>
                                                         <b-tooltip v-if="getCriteriumEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{
@@ -257,7 +257,7 @@
         }
     }
 
-    .icon-score-feedback {
+    .score-feedback-icon {
       color: #2787ad;
       font-size: 1.1rem;
       margin-right: .5em;

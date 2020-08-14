@@ -28,7 +28,7 @@
             const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
 
             this.criteriumResults = rubric.getAllCriteria().map(criterium => {
-                const defaultEvaluation = ({ criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' });
+                const defaultEvaluation = { criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' };
                 const evaluations = evaluators.map((evaluator : any) => {
                     const criteriumEvaluation: CriteriumEvaluation = {...defaultEvaluation};
                     const evaluations = results.evaluations[evaluator.userId];
