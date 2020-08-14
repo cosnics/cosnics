@@ -242,6 +242,24 @@ export default class Rubric extends TreeNode {
         return maxScore;
     }
 
+    public getAllTreeNodes(treeNode: TreeNode = this) {
+        const nodes: TreeNode[] = [];
+        this.getChildrenRecursive(treeNode, nodes);
+        return nodes;
+    }
+
+    protected getChildrenRecursive(treeNode: TreeNode, nodes: TreeNode[]) {
+        nodes.push(treeNode);
+
+        treeNode.children.filter(child => (child instanceof Criterium)).forEach(
+            criterium => nodes.push(criterium)
+        );
+
+        treeNode.children.filter(child => child.hasChildren()).forEach(
+            child => this.getChildrenRecursive(child, nodes)
+        )
+    }
+
     public getAllCriteria(treeNode: TreeNode = this) {
         const criteria: Criterium[] = [];
         this.getCriteriaRecursive(treeNode, criteria);

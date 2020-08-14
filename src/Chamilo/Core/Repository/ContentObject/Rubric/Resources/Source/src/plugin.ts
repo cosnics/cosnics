@@ -4,6 +4,8 @@ import RubricDemoWrapper from './Views/RubricDemoWrapper.vue';
 import RubricBuilderWrapper from './Views/RubricBuilderWrapper.vue';
 import RubricPreviewWrapper from './Views/RubricPreviewWrapper.vue';
 import RubricEntryWrapper from './Views/RubricEntryWrapper.vue';
+import RubricResultWrapper from './Views/RubricResultWrapper.vue';
+
 import routers from './Router/router';
 
 export default {
@@ -12,6 +14,8 @@ export default {
         Vue.component('RubricBuilderWrapper', RubricBuilderWrapper);
         Vue.component('RubricPreviewWrapper', RubricPreviewWrapper);
         Vue.component('RubricEntryWrapper', RubricEntryWrapper);
+        Vue.component('RubricResultWrapper', RubricResultWrapper);
+
         // console.log('adding method to proto');
         Vue.prototype.$getRouter = function(name: string) {
             return routers.getRouter(name);
