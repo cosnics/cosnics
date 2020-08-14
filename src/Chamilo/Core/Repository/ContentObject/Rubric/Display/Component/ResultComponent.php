@@ -73,7 +73,7 @@ class ResultComponent extends Manager implements DelegateComponent
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricResult.html.twig',
             [
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
-                'RUBRIC_RESULTS_JSON' => '[{"user":{"id":2,"name":"Sonia","role":"teacher"},"target_user":{"id":5,"name":"joske","role":"student"},"results":[{"tree_node_id":37,"level_id":4,"comment":"Dit is mijn feedback","score":10},{"tree_node_id":42,"level_id":5,"comment":"Nog meer feedback","score":6},{"tree_node_id":41,"level_id":null,"comment":null,"score":16},{"tree_node_id":38,"level_id":null,"comment":null,"score":16}]}]'
+                'RUBRIC_RESULTS_JSON' => '[{"user":{"id":2,"name":"Sonia","role":"teacher"},"target_user":{"id":5,"name":"joske","role":"student"},"results":[{"tree_node_id":37,"level_id":4,"comment":"Dit is mijn feedback","score":10},{"tree_node_id":42,"level_id":5,"comment":"Nog meer feedback","score":6},{"tree_node_id":41,"level_id":null,"comment":null,"score":16},{"tree_node_id":38,"level_id":null,"comment":null,"score":16},{"tree_node_id":40,"level_id":null,"comment":null,"score":16}]}]'
             ]
         );
     }
