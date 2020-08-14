@@ -6,7 +6,7 @@
             <div class="rubric-results-view" @click="selectedCriterium = null">
                 <div class="rubric-table-header">
                     <div class="evaluators-table-header">
-                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title">{{ evaluator|capitalize }}</div>
+                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title">{{ evaluator.name|capitalize }}</div>
                         <div class="evaluator-table-header-title mod-max">Max.</div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         <span>{{ selectedCriterium.title }}</span>
                     </div>
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
+                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
                             getCriteriumEvaluation(selectedCriterium, evaluator).level.title
                           }}</span>)</p>
                         <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).feedback">
@@ -103,16 +103,11 @@
 </template>
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import Rubric from '../Domain/Rubric';
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
-    import {CriteriumEvaluation} from '../Util/interfaces';
-
-    interface CriteriumResult {
-        criterium: Criterium,
-        evaluations: any;
-    }
+    import {CriteriumEvaluation, CriteriumResult, EvaluatorEvaluation} from '../Util/interfaces';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
@@ -131,7 +126,7 @@
         private selectedCriterium: Criterium|null = null;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly evaluators!: string[];
+        @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
         @Prop({type: Array, default: () => []}) readonly criteriumResults!: CriteriumResult[];
 
         getCriteriumMaxScore(criterium: Criterium) : number {
@@ -149,21 +144,21 @@
             return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
         }
 
-        getCriteriumScore(criterium: Criterium, evaluator: string) : number {
-            return this.getCriteriumResult(criterium).evaluations[evaluator].score || 0;
+        getCriteriumScore(criterium: Criterium, evaluator: any) : number {
+            return this.getCriteriumEvaluation(criterium, evaluator).score || 0;
         }
 
-        getCategoryScore(category: Category, evaluator: string) : number {
+        getCategoryScore(category: Category, evaluator: any) : number {
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
-        getClusterScore(cluster: Cluster, evaluator: string) : number {
+        getClusterScore(cluster: Cluster, evaluator: any) : number {
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
-        getRubricScore(evaluator: string) : number {
+        getRubricScore(evaluator: any) : number {
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
@@ -174,8 +169,10 @@
             return criteriumResult;
         }
 
-        getCriteriumEvaluation(criterium: Criterium, evaluator: string) : CriteriumEvaluation {
-            return this.getCriteriumResult(criterium).evaluations[evaluator];
+        getCriteriumEvaluation(criterium: Criterium, evaluator: any) : CriteriumEvaluation {
+            const evaluatorEvaluation = this.getCriteriumResult(criterium).evaluations.find((_ : EvaluatorEvaluation) => _.evaluator === evaluator);
+            if (!evaluatorEvaluation) { throw new Error(`No evaluation found for criterium: ${criterium} and evaluator: ${evaluator && evaluator.name}`); }
+            return evaluatorEvaluation.criteriumEvaluation;
         }
     }
 </script>

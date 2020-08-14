@@ -25,12 +25,13 @@
             const rubric = Rubric.fromJSON(this.store.rubricData as RubricJsonObject);
             const results = this.store.rubricResults;
             const evaluators = results.evaluators;
+            const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
 
-            rubric.getAllCriteria().forEach(criterium => {
-                const criteriumResult: CriteriumResult = { criterium: criterium, evaluations: {} };
-                evaluators!.forEach((evaluator : string) => {
-                    const criteriumEvaluation: CriteriumEvaluation = { criterium, level: null, score: 0, feedback: '' };
-                    const evaluations = results.evaluations[evaluator];
+            this.criteriumResults = rubric.getAllCriteria().map(criterium => {
+                const defaultEvaluation = ({ criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' });
+                const evaluations = evaluators.map((evaluator : any) => {
+                    const criteriumEvaluation: CriteriumEvaluation = {...defaultEvaluation};
+                    const evaluations = results.evaluations[evaluator.userId];
                     const criteriumEvaluationInput = evaluations.find((o: any) => o.criteriumId === criterium.id);
                     if (criteriumEvaluationInput) {
                         const chosenLevel = rubric.levels.find(level => level.id === criteriumEvaluationInput.levelId);
@@ -40,9 +41,9 @@
                             criteriumEvaluation.feedback = criteriumEvaluationInput.feedback;
                         }
                     }
-                    criteriumResult.evaluations[evaluator] = criteriumEvaluation;
+                    return { evaluator, criteriumEvaluation};
                 });
-                this.criteriumResults.push(criteriumResult);
+                return { criterium, evaluations };
               });
               this.rubric = rubric;
         }

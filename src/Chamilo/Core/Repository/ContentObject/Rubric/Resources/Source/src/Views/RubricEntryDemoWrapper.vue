@@ -1,12 +1,12 @@
 <template>
     <div class="container-fluid">
-        <rubric-entry v-if="rubric" :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
+        <rubric-entry :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
                       @level-selected="selectLevel" @criterium-feedback-changed="updateCriteriumFeedback">
             <template v-slot:demoEvaluator>
                 <li class="app-tool-item">Demo:
-                    <select v-model="evaluator" @change="store.uiState.entry.options.evaluator = $event.target.value">
-                        <option disabled value="">Selecteer</option>
-                        <option v-for="evaluator in store.rubricResults.evaluators">{{evaluator}}</option>
+                    <select v-model="evaluator" @change="store.uiState.entry.options.evaluator = evaluator">
+                        <option disabled :value="null">Selecteer</option>
+                        <option v-for="evaluator in store.rubricResults.evaluators" :value="evaluator">{{evaluator.name}}</option>
                     </select>
                 </li>
             </template>
@@ -24,7 +24,7 @@
     import store from '../store';
 
     interface EvaluatorEvaluations {
-        name: string;
+        evaluator: any;
         criteriumEvaluations: CriteriumEvaluation[];
     }
 
@@ -37,18 +37,18 @@
         private rubric: Rubric | undefined;
         private store: any = store;
         private evaluatorEvaluations: EvaluatorEvaluations[] = [];
-        private evaluator: string = '';
+        private evaluator: any = null;
 
-        getCriteriumEvaluations(name: string): CriteriumEvaluation[] {
-            if (!name) { return []; }
-            const evaluatorEvaluation = this.evaluatorEvaluations.find(evaluatorEvaluation => evaluatorEvaluation.name === name);
-            if (!evaluatorEvaluation) { throw new Error(`No evaluation data found for evaluator: ${name}`); }
+        getCriteriumEvaluations(evaluator: any): CriteriumEvaluation[] {
+            if (!evaluator) { return []; }
+            const evaluatorEvaluation = this.evaluatorEvaluations.find(evaluatorEvaluation => evaluatorEvaluation.evaluator.userId === evaluator.userId);
+            if (!evaluatorEvaluation) { throw new Error(`No evaluation data found for evaluator: ${evaluator.name}`); }
             return evaluatorEvaluation.criteriumEvaluations;
         }
 
         selectLevel(criterium: Criterium, level: Level) {
             if (!this.evaluator) { return; }
-            const evaluations = (store.rubricResults.evaluations as any)[this.evaluator];
+            const evaluations = (store.rubricResults.evaluations as any)[this.evaluator.userId];
             const evaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === criterium.id);
             if (!evaluation) {
                 evaluations.push({ criteriumId: criterium.id, levelId: level.id, feedback: ''});
@@ -59,7 +59,7 @@
 
         updateCriteriumFeedback(criterium: Criterium, feedback: string) {
             if (!this.evaluator) { return; }
-            const evaluations = (store.rubricResults.evaluations as any)[this.evaluator];
+            const evaluations = (store.rubricResults.evaluations as any)[this.evaluator.userId];
             const evaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === criterium.id);
             evaluation.feedback = feedback;
         }
@@ -71,9 +71,9 @@
                 ({ criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' })
             );
             const evaluators = this.store.rubricResults.evaluators;
-            this.evaluator = store.uiState.entry.options.evaluator;
+            this.evaluator = this.store.uiState.entry.options.evaluator;
             this.evaluatorEvaluations = evaluators.map((evaluator: any) => {
-                const evaluations = this.store.rubricResults.evaluations[evaluator];
+                const evaluations = this.store.rubricResults.evaluations[evaluator.userId];
                 const criteriumEvaluations: CriteriumEvaluation[] = rubricDefaultEvaluation.map(defaultCriteriumEvaluation => {
                     const storeEvaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === defaultCriteriumEvaluation.criterium.id);
                     if (storeEvaluation) {
@@ -83,7 +83,7 @@
                         return { ...defaultCriteriumEvaluation };
                     }
                 });
-                return {name: evaluator, criteriumEvaluations};
+                return {evaluator, criteriumEvaluations};
             });
         }
 

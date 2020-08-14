@@ -14,7 +14,12 @@ export interface CriteriumExt {
     showDefaultFeedback: false;
 }
 
+export interface EvaluatorEvaluation {
+    evaluator: any;
+    criteriumEvaluation: CriteriumEvaluation;
+}
+
 export interface CriteriumResult {
     criterium: Criterium,
-    evaluations: any;
+    evaluations: EvaluatorEvaluation[];
 }

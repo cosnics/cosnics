@@ -13,7 +13,7 @@ export default {
             showDefaultFeedbackFields: false,
             options: {
                 isDemo: true,
-                evaluator: '',
+                evaluator: null,
             }
         }
     },
@@ -850,23 +850,26 @@ export default {
         ]
     },
     rubricResults: {
-        "evaluators": ["Bob", "Alice", "Fred"],
+        "evaluators": [
+            {"userId": 0, "name": "Bob", "role": "student", "targetUserId": 0, "targetName": "Bob"},
+            {"userId": 1, "name": "Alice", "role": "teacher", "targetUserId": 0, "targetName": "Bob"},
+            {"userId": 2, "name": "Fred", "role": "coach", "targetUserId": 0, "targetName": "Bob"}],
         "evaluations": {
-            "Alice": [
-                {"criteriumId":"fufp9nyhm59tpv834p7s5","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Uitstekend!"},
-                {"criteriumId":"yjz8854ozprzhr2hw45wup","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Flink gedaan!"},
-                {"criteriumId":"xzcorbibce20cm5g54xemi","levelId":"ll1mno0a18hjedwy6w3jt","feedback":""},
-                {"criteriumId":"aas2bl49lrnfl4i1m7uwho","levelId":"ewl5t7raruutqf4gudx15","feedback":"Hier had ik toch meer van verwacht"},
-                {"criteriumId":"9ec44j2au3v1nl9sigksrq","levelId":"icoz2ha4bahqvqfi71slz","feedback":""}
+            0: [
+                { "criteriumId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Ik vond het best moeilijk maar uiteindelijk lukte het wel."},
+                { "criteriumId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
+                { "criteriumId": "xzcorbibce20cm5g54xemi", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
+                { "criteriumId": "aas2bl49lrnfl4i1m7uwho", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
+                { "criteriumId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
             ],
-            "Bob": [
-                {"criteriumId":"fufp9nyhm59tpv834p7s5","levelId":"ll1mno0a18hjedwy6w3jt","feedback":"Ik vond het best moeilijk maar uiteindelijk lukte het wel."},
-                {"criteriumId":"yjz8854ozprzhr2hw45wup","levelId":"ll1mno0a18hjedwy6w3jt","feedback":""},
-                {"criteriumId":"xzcorbibce20cm5g54xemi","levelId":"icoz2ha4bahqvqfi71slz","feedback":""},
-                {"criteriumId":"aas2bl49lrnfl4i1m7uwho","levelId":"icoz2ha4bahqvqfi71slz","feedback":""},
-                {"criteriumId":"9ec44j2au3v1nl9sigksrq","levelId":"icoz2ha4bahqvqfi71slz","feedback":""}
+            1: [
+                { "criteriumId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Uitstekend!"},
+                { "criteriumId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Flink gedaan!"},
+                { "criteriumId": "xzcorbibce20cm5g54xemi", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
+                { "criteriumId": "aas2bl49lrnfl4i1m7uwho", "levelId": "ewl5t7raruutqf4gudx15", "feedback": "Hier had ik toch meer van verwacht"},
+                { "criteriumId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
             ],
-            "Fred": []
+            2: []
         }
     }
 };
