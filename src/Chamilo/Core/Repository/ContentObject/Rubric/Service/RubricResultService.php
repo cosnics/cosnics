@@ -47,6 +47,7 @@ class RubricResultService
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
      */
     public function storeRubricResults(
         User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
@@ -59,10 +60,12 @@ class RubricResultService
         foreach ($criteriumResultJSONModels as $criteriumResultJSONModel)
         {
             $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getCriteriumTreeNodeId());
-            //$choice = $rubricData->getChoiceById($criteriumResultJSONModel->getChoiceId());
-            $choice = $rubricData->getChoiceByLevelAndCriteriumId($criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getCriteriumTreeNodeId());
 
-            /*if ($treeNode !== $choice->getCriterium())
+            $choice = $rubricData->getChoiceByLevelAndCriteriumId(
+                $criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getCriteriumTreeNodeId()
+            );
+
+            if ($treeNode !== $choice->getCriterium())
             {
                 throw new \InvalidArgumentException(
                     sprintf(
@@ -70,7 +73,7 @@ class RubricResultService
                         $treeNode->getId()
                     )
                 );
-            }*/
+            }
 
             $calculatedScore = $choice->calculateScore();
 
@@ -168,6 +171,17 @@ class RubricResultService
         $this->rubricResultRepository->saveRubricResult($rubricResult, false);
 
         return $rubricResult;
+    }
+
+    /**
+     * @param RubricData $rubricData
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return RubricResult[]
+     */
+    public function getRubricResultsForContext(RubricData $rubricData, ContextIdentifier $contextIdentifier)
+    {
+        return $this->rubricResultRepository->getRubricResultsForContext($rubricData, $contextIdentifier);
     }
 
 }
