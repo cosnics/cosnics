@@ -1,3 +1,20 @@
+<i18n>
+{
+    "en": {
+        "cancel": "Cancel",
+        "ok": "OK"
+    },
+    "fr": {
+        "cancel": "Annuler",
+        "ok": "D'accord"
+    },
+    "nl": {
+        "cancel": "Annuleer",
+        "ok": "OK"
+    }
+}
+</i18n>
+
 <template>
     <div class="name-input" @click.stop="">
 		<div class="name-input-title">
@@ -5,8 +22,8 @@
             <textarea class="name-input-field mod-textarea" @keyup="onChange" :placeholder="placeholder" ref="name-input" @keydown.enter.prevent="ok" @keyup.esc="cancel" :value="value" @input="onInput"></textarea>
 		</div>
         <div class="name-input-actions">
-            <button class="btn-strong mod-confirm" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || 'OK' }}</button>
-            <button class="btn-strong" @click="cancel">{{ cancelTitle || 'Annuleer' }}</button>
+            <button class="btn-strong mod-confirm" @click="ok" :disabled="!(allowEmpty || hasInput)">{{ okTitle || $t('ok') }}</button>
+            <button class="btn-strong" @click="cancel">{{ cancelTitle || $t('cancel') }}</button>
         </div>
     </div>
 </template>

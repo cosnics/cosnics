@@ -1,6 +1,26 @@
+<i18n>
+    {
+    "en": {
+        "new-criteria-list": "New list of criteria",
+        "no-criteria-yet": "No criteria yet",
+        "subsections": "Subsections"
+    },
+    "fr": {
+        "new-criteria-list": "Nouvelle liste de critères",
+        "no-criteria-yet": "Pas de critères ajoutés",
+        "subsections": "Sous-sections"
+    },
+    "nl": {
+        "new-criteria-list": "Nieuwe lijst met criteria",
+        "no-criteria-yet": "Nog geen criteria toegevoegd",
+        "subsections": "Onderverdelingen"
+    }
+}
+</i18n>
+
 <template>
     <div :id="`clusters-wrapper-${id}`" class="clusters-wrapper" :class="{ 'is-split': showSplitView, 'category-dragging': categoryDragging }">
-        <button class="btn-collapse" :class="{ 'is-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>Clusters</span></button>
+        <button class="btn-collapse" :class="{ 'is-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>{{ $t('subsections') }}</span></button>
         <div class="clusters-collapse">
             <transition name="clusters-slide">
                 <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'is-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
@@ -23,7 +43,7 @@
                     <li v-for="category in categories" @mouseover="criteriumDragging && dragMouseOver(`${id}_${category.id}`)" @mouseout="criteriumDragging && dragMouseOut" :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" class="b-category" :class="{ 'no-drop': criteriumDragging && bannedForDrop === `${id}_${category.id}` }" :style="{'--category-color': category.color}">
                         <category-view :id="`${id}_${category.id}`" :key="`${id}_${category.id}`" :category="category" :menu-actions-id="menuActionsId" :edit-category-color-id="editCategoryColorId"
                                        @color-picker="$emit('color-picker', $event)" @item-actions="$emit('item-actions', $event)" @remove="onRemove" @start-edit="onStartEdit(category)" @finish-edit="onFinishEdit(category, ...arguments)" @change-color="$emit('change-color', category)"></category-view>
-                        <div v-if="category.criteria.length === 0 && !categoriesAddingCriterium[category.id] && !criteriumDragging" class="criteria-empty-list">Nog geen criteria toegevoegd</div>
+                        <div v-if="category.criteria.length === 0 && !categoriesAddingCriterium[category.id] && !criteriumDragging" class="criteria-empty-list">{{ $t('no-criteria-yet') }}</div>
                         <draggable :key="`${id}_${category.id}_draggable`" :disabled="draggableDisabled" tag="ul" group="criteria" handle=".criterium-handle" ghost-class="ghost" swapTreshold="0.75" :list="category.criteria" :forceFallback="true" :animation="250"
                                    :move="onMoveCriterium" @start="startDrag($event,'criterium')" @end="endDrag" @change="onChangeCriterium($event, category)" class="b-criteria">
                             <criterium-view v-for="criterium in category.criteria" tag="li" class="b-criterium-list-item" :id="`${id}_${criterium.id}`" :key="`${id}_${criterium.id}`"
@@ -36,7 +56,7 @@
                         <div class="b-category-list-item mod-null-category-drag">
                             <div class="item-header-bar mod-category">
                                 <div class="b-category-title-wrapper">
-                                    <h2 class="b-category-title mod-null-category-drag">Nieuwe lijst met criteria...</h2>
+                                    <h2 class="b-category-title mod-null-category-drag">{{ $t('new-criteria-list') }}...</h2>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,19 @@
+<i18n>
+{
+    "en": {
+        "split-view": "Split View"
+    },
+    "fr": {
+        "split-view": "Vue Partagé"
+    },
+    "nl": {
+        "split-view": "Split View"
+    }
+}
+</i18n>
+
 <template>
-    <button title="Split View" class="btn-show-split-view" aria-hidden="true" :class="{ checked: showSplitView }" @click.prevent="$emit('changed', !showSplitView)">
+    <button :title="$t('split-view')" class="btn-show-split-view" aria-hidden="true" :class="{ checked: showSplitView }" @click.prevent="$emit('changed', !showSplitView)">
         <svg tabindex="-1" class="svg show-split-view" viewBox="-50 -50 100 100">
             <path id="path-1" d="M-40 -39 L40 -39 L40 -9 L-40 -9Z"></path>
             <path id="path-2" d="M-40 9L40 9L40 39L-40 39Z"></path>

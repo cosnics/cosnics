@@ -1,3 +1,29 @@
+<i18n>
+{
+    "en": {
+        "edit": "Edit",
+        "edit-title": "Edit title",
+        "open-menu": "Open menu",
+        "remove": "Remove",
+        "title-subsection": "Title of subsection"
+    },
+    "fr": {
+        "edit": "Modifier",
+        "edit-title": "Modifier le titre",
+        "open-menu": "Ouvrer le menu",
+        "remove": "Supprimer",
+        "title-subsection": "Titre de la sous-section"
+    },
+    "nl": {
+        "edit": "Wijzig",
+        "edit-title": "Wijzig titel",
+        "open-menu": "Open menu",
+        "remove": "Verwijder",
+        "title-subsection": "Titel voor onderverdeling"
+    }
+}
+</i18n>
+
 <template>
     <component :is="tag" :id="id" tabindex="0" @keydown.enter="$emit('cluster-selected', cluster)" @keyup.space="$emit('cluster-selected', cluster)" @click.stop="$emit('cluster-selected', cluster)">
         <div class="b-cluster handle cluster-handle" tabindex="-1" :class="{ 'is-selected': selected, 'is-menu-visible': showMenuActions }">
@@ -6,17 +32,17 @@
                     <!--<div class="title"><div><i class="fa fa-map-o" aria-hidden="true"/><span>{{cluster.title}}</span></div></div>-->
                     {{cluster.title}}
                 </div>
-                <button class="btn-toggle-menu mod-cluster" :class="{'is-menu-visible': showMenuActions}" aria-label="Klap menu uit" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="onItemActions"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
+                <button class="btn-toggle-menu mod-cluster" :class="{'is-menu-visible': showMenuActions}" :aria-label="!showMenuActions && $t('open-menu')" :title="!showMenuActions && $t('open-menu')" @keyup.space.stop="" @keydown.enter.stop="" @click.prevent.stop="onItemActions"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
                 <div class="action-menu mod-cluster mod-menu-fixed" :class="{'is-menu-visible': showMenuActions }" :style="{ left: `${menuX}px`, top: `${menuY}px`}">
                     <ul class="action-menu-list">
-                        <li @click.stop="startEditing" role="button" @keyup.space.enter="startEditing" class="action-menu-list-item" :class="{ 'is-cluster-selected': selected }" tabindex="0"><i class="action-menu-icon fa fa-pencil" aria-hidden="true" /><span class="action-menu-text">Wijzig naam</span></li>
-                        <li @click.stop="$emit('remove', cluster)" role="button" @keyup.space.enter="$emit('remove', cluster)" class="action-menu-list-item" :class="{ 'is-cluster-selected': selected }" tabindex="0"><i class="action-menu-icon fa fa-remove" aria-hidden="true" /><span class="action-menu-text">Verwijder</span></li>
+                        <li @click.stop="startEditing" role="button" @keyup.space.enter="startEditing" class="action-menu-list-item" :class="{ 'is-cluster-selected': selected }" tabindex="0"><i class="action-menu-icon fa fa-pencil" aria-hidden="true" /><span class="action-menu-text">{{ $t('edit-title' )}}</span></li>
+                        <li @click.stop="$emit('remove', cluster)" role="button" @keyup.space.enter="$emit('remove', cluster)" class="action-menu-list-item" :class="{ 'is-cluster-selected': selected }" tabindex="0"><i class="action-menu-icon fa fa-remove" aria-hidden="true" /><span class="action-menu-text">{{ $t('remove') }}</span></li>
                     </ul>
                 </div>
             </div>
             <div v-if="isEditing" class="edit-title">
                 <div class="modal-bg" @click.stop=""></div>
-                <name-input class="item-new mod-edit" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" placeholder="Titel voor onderverdeling" v-model="newTitle" />
+                <name-input class="item-new mod-edit" :ok-title="$t('edit')" @ok="finishEditing" @cancel="cancel" :placeholder="$t('title-subsection')" v-model="newTitle" />
             </div>
         </div>
     </component>

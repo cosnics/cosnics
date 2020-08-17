@@ -1,10 +1,36 @@
+<i18n>
+{
+    "en": {
+        "extra-feedback": "Enter extra feedback",
+        "points": "points",
+        "select-score": "Select a score",
+        "show-default-description": "Show default feedback description of criterium",
+        "total": "Total"
+    },
+    "fr": {
+        "extra-feedback": "Feed-back supplémentaire",
+        "points": "points",
+        "select-score": "Selectionnez une note",
+        "show-default-description": "Afficher description feed-back standard du critère",
+        "total": "Total"
+    },
+    "nl": {
+        "extra-feedback": "Geef bijkomende feedback",
+        "points": "punten",
+        "select-score": "Selecteer een score",
+        "show-default-description": "Toon standaard feedback beschrijving criterium",
+        "total": "Totaal"
+    }
+}
+</i18n>
+
 <template>
     <component :is="tag" role="grid">
-      <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">Selecteer een score</div>
+      <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-score') }}</div>
       <div class="criterium mod-responsive mod-entry-view" role="row" :class="feedbackVisibleClass">
             <div class="criterium-title-header mod-responsive mod-entry-view" role="gridcell">
                 <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title mod-entry-view category-indicator">{{ criterium.title }}</h4>
-                <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback" aria-label="Toon standaard feedback beschrijving criterium" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                     <i tabindex="-1" class="btn-icon-show-feedback fa" :class="feedbackVisibleClass" aria-hidden="true" />
                 </button>
             </div>
@@ -13,24 +39,24 @@
                     <div class="criterium-level-title" :class="{ 'is-selected': isSelected(choice.level) }">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                 </div>
                 <button v-else role="radio" :aria-checked="isSelected(choice.level)" class="criterium-level-header mod-entry-view btn-score-number" :class="{ 'is-selected': isSelected(choice.level) }" @click="selectLevel(choice.level)">
                     <div class="criterium-level-title" :class="{ 'is-selected': isSelected(choice.level) }">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } punten`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                 </button>
                 <div class="default-feedback-entry-view" :class="feedbackVisibleClass">
                     {{ choice.feedback }}
                 </div>
             </div>
             <div class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
-                <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">Totaal:</span> {{ preview ? 0 : criteriumScore }} <span class="text-hidden">punten</span></div>
+                <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">{{ $t('total') }}:</span> {{ preview ? 0 : criteriumScore }} <span class="text-hidden">{{ $t('points') }}</span></div>
             </div>
         </div>
         <div class="custom-feedback" :class="feedbackVisibleClass">
-            <textarea v-if="evaluation" class="ta-custom-feedback" placeholder="Geef Feedback" v-model="evaluation.feedback" @input="$emit('feedback-changed', evaluation)"></textarea>
+            <textarea v-if="evaluation" class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="$emit('feedback-changed', evaluation)"></textarea>
         </div>
     </component>
 </template>

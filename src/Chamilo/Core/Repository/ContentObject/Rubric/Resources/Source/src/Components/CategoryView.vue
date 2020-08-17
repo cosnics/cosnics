@@ -1,22 +1,57 @@
+<i18n>
+{
+    "en": {
+        "change-into-category": "Change into categorie",
+        "color-picker": "Color Picker",
+        "edit": "Edit",
+        "edit-title": "Edit title",
+        "list-of-criteria": "List of criteria",
+        "open-menu": "Open menu",
+        "remove": "Remove",
+        "title-category": "Title of category"
+    },
+    "fr": {
+        "change-into-category": "Transformer en catégorie",
+        "color-picker": "Pipette à Couleurs",
+        "edit": "Modifier",
+        "edit-title": "Modifier le titre",
+        "list-of-criteria": "Liste des critères",
+        "open-menu": "Ouvrer le menu",
+        "remove": "Supprimer",
+        "title-category": "Titre de la catégorie"
+    },
+    "nl": {
+        "change-into-category": "Wijzig naar categorie",
+        "color-picker": "Kleurenkiezer",
+        "edit": "Wijzig",
+        "edit-title": "Wijzig titel",
+        "list-of-criteria": "Lijst met criteria",
+        "open-menu": "Open menu",
+        "remove": "Verwijder",
+        "title-category": "Titel voor categorie"
+    }
+}
+</i18n>
+
 <template>
     <div :id="id" class="b-category-list-item handle category-handle" :class="{ 'mod-null-category': !category.title }">
         <div class="item-header-bar mod-category">
-            <div class="b-category-title-wrapper">
-                <button v-if="category.title" :aria-label="`Color Picker voor ${category.title || 'Criteria'}`" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-category-color" :class="{ 'xvue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color || 'transparent'}" @click="openColorPickerForCategory(category)"></button>
-                <h2 class="b-category-title" :class="{ 'mod-null-category': !category.title }" @dblclick.stop="startEditing">{{ category.title || 'Lijst met criteria' }}</h2>
+            <button v-if="category.title" :aria-label="$t('color-picker')" :title="$t('color-picker')" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-category-color" :class="{ 'xvue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color || null}" @click="openColorPickerForCategory(category)"></button>
+            <div class="b-category-header-wrapper">
+                <swatches :id="id + '--swatches'" :swatches="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+                <h2 class="b-category-title" :class="{ 'mod-null-category': !category.title }" @dblclick.stop="startEditing">{{ category.title || $t('list-of-criteria') }}</h2>
             </div>
-            <button class="btn-toggle-menu mod-category" :class="{'is-menu-visible': showMenuActions}" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
+            <button class="btn-toggle-menu mod-category" :class="{'is-menu-visible': showMenuActions}" :aria-label="!showMenuActions && $t('open-menu')" :title="!showMenuActions && $t('open-menu')" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
             <div class="action-menu mod-category" :class="{'is-menu-visible': showMenuActions}">
                 <ul class="action-menu-list">
-                    <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-pencil" /><span class="action-menu-text">{{ category.title ? 'Wijzig naam' : 'Wijzig naar categorie' }}</span></li>
-                    <li @click.stop="$emit('remove', category)" @keyup.space.enter="$emit('remove', category)" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-remove" /><span class="action-menu-text">Verwijder</span></li>
+                    <li @click.stop="startEditing" @keyup.space.enter="startEditing" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-pencil" /><span class="action-menu-text">{{ category.title ? $t('edit-title') : $t('change-into-category') }}</span></li>
+                    <li @click.stop="$emit('remove', category)" @keyup.space.enter="$emit('remove', category)" class="action-menu-list-item" tabindex="0"><i class="action-menu-icon fa fa-remove" /><span class="action-menu-text">{{ $t('remove') }}</span></li>
                 </ul>
             </div>
         </div>
-        <swatches :id="id + '--swatches'" :swatches="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
         <div v-if="isEditing" class="edit-title">
             <div class="modal-bg"></div>
-            <name-input class="item-new mod-edit" ok-title="Wijzig" @ok="finishEditing" @cancel="cancel" allow-empty="true" placeholder="Titel voor categorie" v-model="newTitle"/>
+            <name-input class="item-new mod-edit" :ok-title="$t('edit')" @ok="finishEditing" @cancel="cancel" allow-empty="true" :placeholder="$t('title-category')" v-model="newTitle"/>
         </div>
     </div>
 </template>

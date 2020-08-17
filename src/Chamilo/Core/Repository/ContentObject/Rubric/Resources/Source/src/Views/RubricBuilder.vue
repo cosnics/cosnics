@@ -8,7 +8,7 @@
     "fr": {
         "builder": "Rubrique",
         "levels": "Niveaux",
-        "builderfull": "Rétroaction Rapide"
+        "builderfull": "Feed-back Rapide"
     },
     "nl": {
         "builder": "Rubric",

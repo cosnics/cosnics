@@ -1,9 +1,29 @@
+<i18n>
+{
+    "en": {
+        "add": "Add",
+        "add-criterium": "Add new criterium",
+        "title-new-criterium": "Title of new criterium"
+    },
+    "fr": {
+        "add": "Ajouter",
+        "add-criterium": "Ajouter un critère",
+        "title-new-criterium": "Titre du nouveau critère"
+    },
+    "nl": {
+        "add": "Voeg Toe",
+        "add-criterium": "Criterium toevoegen",
+        "title-new-criterium": "Titel voor nieuw criterium"
+    }
+}
+</i18n>
+
 <template>
     <div v-if="inputFormShown">
-        <name-input ref="name-input" ok-title="Voeg Toe" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" placeholder="Titel voor nieuw criterium" v-model="newCriterium.title"/>
+        <name-input ref="name-input" :ok-title="$t('add')" class="criterium-new item-new" @ok="addNewCriterium" @cancel="cancel" :placeholder="$t('title-new-criterium')" v-model="newCriterium.title"/>
     </div>
     <div v-else class="actions" :class="{criteriumDragging}">
-        <button class="btn-new" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCriterium">Criterium toevoegen</button>
+        <button class="btn-new" :disabled="!actionsEnabled" @keydown.enter="blockEnterUp" @click="createNewCriterium">{{ $t('add-criterium') }}</button>
     </div>
 </template>
 
