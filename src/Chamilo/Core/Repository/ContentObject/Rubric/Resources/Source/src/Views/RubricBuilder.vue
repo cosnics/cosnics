@@ -475,6 +475,7 @@
     }
 
     .btn-category-color {
+        background: hsla(207, 21%, 92%, 1);
         border: none;
         box-shadow: 0 0 3px #999;
         cursor: pointer;
@@ -486,16 +487,17 @@
         width: 14px;
 
         &:focus {
-            border: 2px solid hsla(0, 0%, 100%, 0.8);
+            border: 2px solid $input-color-focus;
             box-shadow: 0px 0px 4px #333;
             outline: none;
         }
     }
 
-    .b-category-title-wrapper {
+    .b-category-header-wrapper {
         align-items: center;
         display: flex;
         flex: 1;
+        flex-direction: column;
         /*position: relative;*/
     }
 
@@ -528,8 +530,9 @@
     }
 
     .b-criterium-title {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         font-weight: 400;
+        line-height: 1.3em;
         margin: 0;
         padding: 0;
 
@@ -1361,10 +1364,10 @@
         .cluster-content {
             display: flex;
             flex: 1;
-            margin-left: -.5em;
+            margin-left: calc(-.5em - 7px);
             margin-top: 1em;
             overflow: auto;
-            padding-left: .5em;
+            padding-left: calc(.5em + 7px);
             padding-top: .2em;
             @include scrollbar();
         }
@@ -1417,25 +1420,25 @@
             opacity: 1;
         }
 
-        .b-category-title-wrapper {
+        .b-category-header-wrapper {
             align-items: stretch;
+            padding-left: 1em;
         }
 
         .b-category-title {
-            /*color: hsla(190, 50%, 35%, 1);*/
+            color: hsla(190, 50%, 29%, 1);
             flex: 1;
             font-size: 1.33rem;
             /*font-weight: bold;*/
 
             &.mod-null-category {
                 font-style: oblique;
-                margin-left: 1.5em;
                 opacity: 0.8;
             }
 
             &.mod-null-category-drag {
-              font-style: oblique;
-              margin-left: .5em;
+                font-style: oblique;
+                margin-left: .5em;
             }
         }
 
@@ -1455,7 +1458,7 @@
                 hsla(204, 38%, 40%, 0.12) 36px);
             background: hsla(204, 38%, 40%, 0.12);
             border: 1px solid hsla(193, 14%, 82%, 1);
-            border-bottom: none;
+            /*border-bottom: none;*/
             border-top-left-radius: $border-radius;
             border-top-right-radius: $border-radius;
             padding: 0;
@@ -1463,9 +1466,11 @@
 
         .item-header-bar.mod-category {
             padding: .65em 0;
+            position: relative;
         }
 
         .btn-toggle-menu.mod-category {
+            margin-left: .5em;
             padding: 2px 0;
 
             &:hover, &.is-menu-visible {
@@ -1474,9 +1479,12 @@
         }
 
         .btn-category-color {
-            height: unset;
+            /*height: unset;*/
             /*height: 100%;*/
-            width: 6px;
+            /*width: 6px;*/
+            margin: 0;
+            margin-left: -7px;
+            position: absolute;
         }
 
         /* Without the filler it's very hard to drag a category into an empty cluster */
@@ -1553,6 +1561,7 @@
         }
 
         .btn-toggle-menu.mod-criterium {
+            margin-left: .5em;
             padding: 2px 0;
 
             &:hover, &.is-menu-visible {
@@ -1573,22 +1582,22 @@
         .b-criterium-title {
             flex: 1;
             min-height: 3.419rem;
-            padding: .7em .5em .7em 1.5em;
+            padding: .7em 0 .7em 1em;
         }
 
         /** Vue Swatches **/
 
         .vue-swatches {
             margin-bottom: 0;
-            width: 90%;
+            width: 100%;
         }
 
         .vue-swatches__container {
-            padding: 2px 5px 0!important;
+            padding: 0!important;
         }
 
         .vue-swatches__wrapper {
-            padding: 0 1px!important;
+            padding: 0!important;
         }
 
         /** Criterium Details Editor **/
