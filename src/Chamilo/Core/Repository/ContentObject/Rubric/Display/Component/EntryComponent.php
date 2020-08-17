@@ -55,6 +55,7 @@ class EntryComponent extends Manager implements DelegateComponent
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\Rubric:RubricEntry.html.twig',
                 [
+                    'LANGUAGE' => $this->getTranslator()->getLocale(),
                     'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
                     'FORM' => $form->createView()
                 ]
