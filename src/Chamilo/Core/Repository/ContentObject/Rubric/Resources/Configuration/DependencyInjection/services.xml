@@ -14,5 +14,7 @@
 
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler\EntryFormHandler" autowire="true" />
 
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultJSONGenerator" autowire="true" />
+
     </services>
 </container>
