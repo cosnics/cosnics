@@ -3,7 +3,16 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
-    <div id="rubric-result">
+
+    <style>
+        #app.mod-sep {
+            border: none;
+        }
+    </style>
+
+    <div id="rubric-result" style="margin-bottom: 40px;">
+        <h4 style="margin-top: 0; margin-bottom: 40px;">{{ 'RubricResult'|trans({}, appContext) }}</h4>
+
         <rubric-result-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
     </div>
 
