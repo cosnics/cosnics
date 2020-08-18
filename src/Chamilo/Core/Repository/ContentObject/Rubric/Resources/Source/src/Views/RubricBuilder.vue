@@ -1065,11 +1065,11 @@
             margin-top: 0;
 
             &.cluster-new {
+                background: #fff;
                 box-shadow: 0 2px 10px #999;
                 margin-bottom: 0;
-                padding: .25em .25em .4em .25em;
-                position: absolute;
-                top: .25em;
+                padding: 1px .25em .4em .25em;
+                position: fixed;
                 width: 18em;
 
                 .name-input-field.mod-textarea {
@@ -1090,6 +1090,14 @@
         .name-input-actions {
             margin-left: 0;
             margin-top: .4em;
+        }
+
+        .rubric-actions {
+            position: relative;
+
+            &.is-open {
+                align-self: flex-start;
+            }
         }
 
         /** Clusters collapse Menu **/

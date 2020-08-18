@@ -19,7 +19,7 @@
 </i18n>
 
 <template>
-    <div class="actions">
+    <div class="actions" :class="{'is-open': inputFormShown}">
         <div v-if="inputFormShown">
             <name-input :ok-title="$t('add')" class="cluster-new item-new" @ok="addNewCluster" @cancel="cancel" :placeholder="$t('title-new-subsection')" v-model="newCluster.title" />
         </div>
