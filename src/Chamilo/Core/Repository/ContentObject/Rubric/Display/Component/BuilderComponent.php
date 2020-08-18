@@ -31,6 +31,19 @@ class BuilderComponent extends Manager implements DelegateComponent
         $rubric = $this->getRubric();
         $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
 
+        if(!$this->getRubricService()->canChangeRubric($rubricData))
+        {
+            $html = [];
+            $html[] = $this->render_header();
+            $html[] = '<div class="alert alert-warning">' .
+                $this->getTranslator()->trans('RubricHasResults', [], 'Chamilo\Core\Repository\ContentObject\Rubric') .
+                '</div>';
+
+            $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
+        }
+
         /*echo '<pre>';
         print_r($this->getSerializer()->serialize($rubricData, 'json'));
         echo '</pre>';*/

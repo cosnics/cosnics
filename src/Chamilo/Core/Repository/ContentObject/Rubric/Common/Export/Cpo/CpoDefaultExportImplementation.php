@@ -51,29 +51,6 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
     protected function exportRubricData(Rubric $rubric, \DOMElement $contentObjectNode, \DOMDocument $document)
     {
         $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
-
-        $node1 = new ClusterNode('test cluster', $rubricData);
-        $node1->setId(2);
-
-        $node2 = new ClusterNode('test cluster 2', $rubricData);
-        $node2->setId(3);
-
-        $node3 = new CriteriumNode('test criterium 1', $rubricData);
-        $node3->setId(4);
-
-        $rubricData->getRootNode()->addChild($node1)->addChild($node2)->addChild($node3);
-
-        $level = new Level($rubricData);
-        $level->setId(1);
-        $level->setTitle('Good');
-
-        $counter = 0;
-        foreach($rubricData->getChoices() as $choice)
-        {
-            $choice->setId($counter);
-            $counter++;
-        }
-
         $jsonFormat = $this->getSerializer()->serialize($rubricData, 'json');
 
         $rubricDataNode = $document->createElement('rubric-data');

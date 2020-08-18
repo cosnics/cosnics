@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -94,6 +96,10 @@ class Rubric extends ContentObject implements Versionable
 
         $rubricData = new RubricData($this->get_title());
         $rubricData->setContentObjectId($this->getId());
+
+        $clusterNode = new ClusterNode($this->get_title(), $rubricData, $rubricData->getRootNode());
+        new CategoryNode('', $rubricData, $clusterNode);
+
         $this->getRubricService()->saveRubric($rubricData);
 
         $this->setActiveRubricDataId($rubricData->getId());

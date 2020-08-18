@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
@@ -77,14 +78,32 @@ class RubricService
      *
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Doctrine\ORM\ORMException
+     * @throws RubricHasResultsException
      */
     public function saveRubric(RubricData $rubricData)
     {
-        // TODO: when score => not allowed
+        if(!$this->canChangeRubric($rubricData))
+        {
+            throw new RubricHasResultsException();
+        }
+
         $rubricData->setLastUpdated(new \DateTime());
         $this->rubricValidator->validateRubric($rubricData);
 
         $this->rubricDataRepository->saveRubricData($rubricData);
+    }
+
+    /**
+     * This method checks if the rubric can be changed. This is a global check and does not check for specific rights
+     * for a given user.
+     *
+     * @param RubricData $rubricData
+     *
+     * @return bool
+     */
+    public function canChangeRubric(RubricData $rubricData)
+    {
+        return !$this->rubricResultService->doesRubricHaveResults($rubricData);
     }
 
     /**

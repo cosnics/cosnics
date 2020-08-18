@@ -23,12 +23,12 @@
         cursor: pointer;
     }
 
-/*    @media(min-width: 1200px) {
-        .content-nav {
-            display: none;
-        }
-    }*/
-    .content-object-rendition{
+    /*    @media(min-width: 1200px) {
+            .content-nav {
+                display: none;
+            }
+        }*/
+    .content-object-rendition {
         padding-top: 10px;
     }
 
@@ -91,27 +91,30 @@
 
 <div class="dynamic-visual-tab-content tab-content">
     {% if HAS_ENTRY %}
-        <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
-            <div class="row">
-                {% if not SHOW_COMPACT_FEEDBACK %}
+    <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
+        <div class="row">
+            {% if not SHOW_COMPACT_FEEDBACK %}
                 <div class="col-xs-12">
-                <ul class="nav nav-pills content-nav">
-                    <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
-                    {% if CAN_EDIT_ASSIGNMENT %}<li role="presentation"><a href="#score">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
-                        <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
-                    {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
-                        <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
-                    {% endif %}
-                    <li role="presentation"><a href="#feedback">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
-                </ul>
+                    <ul class="nav nav-pills content-nav">
+                        <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
+                        {% if CAN_EDIT_ASSIGNMENT %}
+                            <li role="presentation"><a href="#score">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
+                            <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
+                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                        {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
+                            <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
+                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                        {% endif %}
+                        <li role="presentation"><a href="#feedback">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
+                    </ul>
                 </div>
-                {% endif %}
+            {% endif %}
 
-                {% if SHOW_COMPACT_FEEDBACK %}
-                <div class="col-lg-7 content-object-rendition">
+            {% if SHOW_COMPACT_FEEDBACK %}
+            <div class="col-lg-7 content-object-rendition">
                 {% else %}
                 <div class="col-xs-12 content-object-rendition">
-                {% endif %}
+                    {% endif %}
                     <h3 class="entry-title title-underlined">{{ CONTENT_OBJECT_TITLE }}
                         <span class="badge score-badge {% if SCORE is not null %} score-success {% else %}no-score{% endif %}">{% if SCORE is not null %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                         {{ TITLE_EXTENSION|raw }}
@@ -122,18 +125,18 @@
 
                 {% if SHOW_COMPACT_FEEDBACK %}
                 <div class="col-lg-5">
-                {% else %}
-                <div class="col-xs-12">
-                {% endif %}
-                    {{ PARTS_EXTENSION|raw }}
-                    <div class="row">
-                        <div class="col-xs-12" id="score">
-                            {% if CAN_EDIT_ASSIGNMENT %}
-                                <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
-                                <style> label {
-                                        margin-bottom: 5px !important;
-                                    }
-                                </style>
+                    {% else %}
+                    <div class="col-xs-12">
+                        {% endif %}
+                        {{ PARTS_EXTENSION|raw }}
+                        <div class="row">
+                            <div class="col-xs-12" id="score">
+                                {% if CAN_EDIT_ASSIGNMENT %}
+                                    <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+                                    <style> label {
+                                            margin-bottom: 5px !important;
+                                        }
+                                    </style>
                                     {% if SCORE_FORM is defined %}
                                         {% form_theme SCORE_FORM 'bootstrap_3_layout.html.twig' %}
                                         {{ form_start(SCORE_FORM, { 'attr': {'class': 'form-inline'} }) }}
@@ -142,75 +145,77 @@
                                                 style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
                                         {{ form_end(SCORE_FORM) }}
                                     {% endif %}
-                            {% endif %}
-                            {% if HAS_RUBRIC %}
-                                <div style="margin: 20px 0;">
-                                    <a href="{{ RUBRIC_ENTRY_URL }}" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
-                                    <a href="{{ RUBRIC_RESULTS_URL }}" class="btn btn-default">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
-                                </div>
-                                <div style="padding: 20px; border-top: 1px dotted #dddddd;">
-                                    {{ RUBRIC_VIEW|raw }}
-                                </div>
-                            {% endif %}
+                                {% endif %}
+                                {% if HAS_RUBRIC %}
+                                    <div id="rubric">
+                                        <div style="margin: 20px 0;">
+                                            <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                                            <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="btn btn-default">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
+                                        </div>
+                                        <div style="padding: 20px; border-top: 1px dotted #dddddd;">
+                                            {{ RUBRIC_VIEW|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
+                        <div class="row">
 
-                        <div class="col-xs-12">
-                            <div style="display:none">
-                                <div id="template-container">
-                                    <div id="attachments-upload" class="file-upload">
-                                        <div class="file-previews files" id="attachments-previews">
-                                            <div id="attachments-template" class="thumbnail pull-left"
-                                                 style="display: flex; align-items: center; width: 100%;">
-                                                <div class="preview" style="display: flex; align-items: center;">
-                                                    <div class="file-upload-no-preview"
-                                                         style="width: auto; height: auto;">
+                            <div class="col-xs-12">
+                                <div style="display:none">
+                                    <div id="template-container">
+                                        <div id="attachments-upload" class="file-upload">
+                                            <div class="file-previews files" id="attachments-previews">
+                                                <div id="attachments-template" class="thumbnail pull-left"
+                                                     style="display: flex; align-items: center; width: 100%;">
+                                                    <div class="preview" style="display: flex; align-items: center;">
+                                                        <div class="file-upload-no-preview"
+                                                             style="width: auto; height: auto;">
                                                 <span class="glyphicon glyphicon-file"
                                                       style="font-size: 50px; width: auto; line-height: normal;"></span>
+                                                        </div>
+                                                        <img data-dz-thumbnail style="max-height: 75px;"/>
                                                     </div>
-                                                    <img data-dz-thumbnail style="max-height: 75px;"/>
-                                                </div>
-                                                <div class="caption">
-                                                    <h3 data-dz-name></h3>
-                                                    <strong class="error text-danger dz-error-message"
-                                                            data-dz-errormessage></strong>
-                                                    <p class="size" data-dz-size></p>
-                                                    <div>
-                                                        <div class="progress progress-striped active" role="progressbar"
-                                                             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
-                                                             style="margin-bottom: 0;">
-                                                            <div class="progress-bar progress-bar-success"
-                                                                 style="width: 0%;"
-                                                                 data-dz-uploadprogress></div>
+                                                    <div class="caption">
+                                                        <h3 data-dz-name></h3>
+                                                        <strong class="error text-danger dz-error-message"
+                                                                data-dz-errormessage></strong>
+                                                        <p class="size" data-dz-size></p>
+                                                        <div>
+                                                            <div class="progress progress-striped active" role="progressbar"
+                                                                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                                                                 style="margin-bottom: 0;">
+                                                                <div class="progress-bar progress-bar-success"
+                                                                     style="width: 0%;"
+                                                                     data-dz-uploadprogress></div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <a href="#" data-dz-remove class="btn btn-default btn-xs"><span
+                                                                class="fa fa-remove"></span></a>
                                                 </div>
-                                                <a href="#" data-dz-remove class="btn btn-default btn-xs"><span
-                                                            class="fa fa-remove"></span></a>
                                             </div>
+
+                                            <div class="clearfix"></div>
                                         </div>
-
-                                        <div class="clearfix"></div>
                                     </div>
+
                                 </div>
 
-                            </div>
-
-                            <!--div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> Verbeterde versies
-                                    </h3>
-                                </div>
-                                <div class="panel-body"!-->
+                                <!--div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"><i class="fa fa-upload" aria-hidden="true"></i> Verbeterde versies
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body"!-->
                                 {% if CAN_EDIT_ASSIGNMENT %}
                                     <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
-                                {% elseif ATTACHED_CONTENT_OBJECTS|length > 0  %}
+                                {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
                                     <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
                                 {% endif %}
 
                                 <div id="droppy" {% if CAN_EDIT_ASSIGNMENT %} class="droppy-upload" {% endif %}>
-                                     <table class="table table-striped table-data table-borderless"
+                                    <table class="table table-striped table-data table-borderless"
                                            id="entry-attachments-list">
                                         <tbody>
                                         {% for ATTACHED_CONTENT_OBJECT in ATTACHED_CONTENT_OBJECTS %}
@@ -222,183 +227,183 @@
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.user }}</td>
                                                 <td>{{ ATTACHED_CONTENT_OBJECT.content_object.date }}</td>
                                                 {% if CAN_EDIT_ASSIGNMENT %}
-                                                <td align="center"><a href="#"
-                                                                      onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
-                                                                      class="btn btn-default btn-xs"><span
-                                                                class="fa fa-remove"></span></a></td>
+                                                    <td align="center"><a href="#"
+                                                                          onclick="javascript:removeAssignmentEntryAttachment({{ ATTACHED_CONTENT_OBJECT.attachment_id }}); return false;"
+                                                                          class="btn btn-default btn-xs"><span
+                                                                    class="fa fa-remove"></span></a></td>
                                                 {% endif %}
                                             </tr>
                                         {% endfor %}
                                         </tbody>
                                     </table>
                                     {% if CAN_EDIT_ASSIGNMENT %}
-                                    <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik
-                                        om
-                                        op te laden.
-                                    </div>
+                                        <div class="droppy-message dz-message">Versleep verbeterde versies naar hier of klik
+                                            om
+                                            op te laden.
+                                        </div>
                                     {% endif %}
                                 </div>
-                            <!--/div>
-                        </div!-->
+                                <!--/div>
+                            </div!-->
+                            </div>
                         </div>
-                    </div>
-                    {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
+                        {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
 
-                    <div class="row">
-                        <div class="col-xs-12" id="feedback">
-                  <h3 class="title-underlined">Feedback</h3>
-                            {{ FEEDBACK_MANAGER|raw }}
+                        <div class="row">
+                            <div class="col-xs-12" id="feedback">
+                                <h3 class="title-underlined">Feedback</h3>
+                                {{ FEEDBACK_MANAGER|raw }}
+                            </div>
                         </div>
-                    </div>
-                    <script type="text/javascript">
-                        $(document).ready(function () {
+                        <script type="text/javascript">
+                            $(document).ready(function () {
 
-                            function processThumbnail(file) {
-                                var previewElement = $(file.previewElement);
-                                var previewSpan = $('.preview', previewElement);
-                                $('.file-upload-no-preview', previewSpan).hide();
-                            }
-
-                            function processUploadedFile(file, serverResponse) {
-
-                                /*
-                                * Generic code? maybe it stays with the template/
-                                */
-                                var previewElement = $(file.previewElement);
-                                $('.progress', previewElement).hide();
-                                $(' button.cancel', previewElement).hide();
-
-                                /*
-                                * Code to update table => move to angular
-                                 */
-                                var properties = serverResponse.properties;
-
-                                var attachmentId = properties.attachment_id;
-
-                                var element = $('<tr></tr>').attr('id', 'attachment' + attachmentId);
-
-                                var attachmentUrl = '{{ ATTACHMENT_VIEWER_URL|raw }}';
-                                attachmentUrl = attachmentUrl.replace("__ATTACHMENT_ID__", properties.id);
-
-                                var title = properties.filename;
-                                title = $('<a></a>').attr('onclick', 'javascript:openPopup("' + attachmentUrl + '"); return false;').text(title).attr('href', '#');
-
-                                var titleElement = $('<td></td>').html(title);
-                                var nameElement = $('<td></td>').text(properties.user);
-                                var dateElement = $('<td></td>').text(properties.date);
-
-
-                                var deleteButton = $('<a></a>')
-                                    .attr('type', 'button')
-                                    .attr('class', 'btn btn-default btn-xs')
-                                    .attr('href', '#')
-                                    .on('click', function (event) {
-                                        event.stopPropagation();
-                                        removeAssignmentEntryAttachment(attachmentId);
-                                    });
-
-                                var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
-
-                                deleteButton.append(deleteIcon);
-                                var deleteElement = $('<td></td>').append(deleteButton).attr('align', 'center');
-
-                                element.append(titleElement);
-                                element.append(nameElement);
-                                element.append(dateElement);
-                                element.append(deleteElement);
-
-                                var body = $('#entry-attachments-list').find('tbody');
-                                body.append(element);
-
-                                body.find('tr.no-results').hide();
-                                $(file.previewElement).hide();
-                            }
-
-                            window.removeAssignmentEntryAttachment = function (assignmentEntryAttachmentId) {
-                                if (!confirm('{{ 'ConfirmDelete'|trans({}, 'Chamilo\\Libraries') }}')) {
-                                    return;
+                                function processThumbnail(file) {
+                                    var previewElement = $(file.previewElement);
+                                    var previewSpan = $('.preview', previewElement);
+                                    $('.file-upload-no-preview', previewSpan).hide();
                                 }
 
-                                var deleteUrl = '{{ DELETE_ENTRY_ATTACHMENT_URL|raw }}';
-                                $.post(deleteUrl, {'entry_attachment_id': assignmentEntryAttachmentId})
-                                    .done(function (data) {
-                                        $('#attachment' + assignmentEntryAttachmentId).remove();
-                                        var body = $('#entry-attachments-list');
-                                        var attachmentListCount = body.find('tr').length;
+                                function processUploadedFile(file, serverResponse) {
 
-                                        if (attachmentListCount === 1) {
-                                            body.find('tr.no-results').show();
-                                        }
+                                    /*
+                                    * Generic code? maybe it stays with the template/
+                                    */
+                                    var previewElement = $(file.previewElement);
+                                    $('.progress', previewElement).hide();
+                                    $(' button.cancel', previewElement).hide();
 
-                                    });
+                                    /*
+                                    * Code to update table => move to angular
+                                     */
+                                    var properties = serverResponse.properties;
 
-                            };
-                            {% if CAN_EDIT_ASSIGNMENT %}
-                            Dropzone.autoDiscover = false;
+                                    var attachmentId = properties.attachment_id;
 
-                            var myDropzone = new Dropzone("div#droppy", {
-                                url: '{{ UPLOAD_ENTRY_ATTACHMENT_URL|raw }}',
-                                paramName: "attachments",
-                                //maxFiles: 1,
-                                previewTemplate: document.querySelector('#template-container').innerHTML,
-                                //previewsContainer: "#droppy"
+                                    var element = $('<tr></tr>').attr('id', 'attachment' + attachmentId);
+
+                                    var attachmentUrl = '{{ ATTACHMENT_VIEWER_URL|raw }}';
+                                    attachmentUrl = attachmentUrl.replace("__ATTACHMENT_ID__", properties.id);
+
+                                    var title = properties.filename;
+                                    title = $('<a></a>').attr('onclick', 'javascript:openPopup("' + attachmentUrl + '"); return false;').text(title).attr('href', '#');
+
+                                    var titleElement = $('<td></td>').html(title);
+                                    var nameElement = $('<td></td>').text(properties.user);
+                                    var dateElement = $('<td></td>').text(properties.date);
+
+
+                                    var deleteButton = $('<a></a>')
+                                        .attr('type', 'button')
+                                        .attr('class', 'btn btn-default btn-xs')
+                                        .attr('href', '#')
+                                        .on('click', function (event) {
+                                            event.stopPropagation();
+                                            removeAssignmentEntryAttachment(attachmentId);
+                                        });
+
+                                    var deleteIcon = $('<span></span>').attr('class', 'fa fa-remove');
+
+                                    deleteButton.append(deleteIcon);
+                                    var deleteElement = $('<td></td>').append(deleteButton).attr('align', 'center');
+
+                                    element.append(titleElement);
+                                    element.append(nameElement);
+                                    element.append(dateElement);
+                                    element.append(deleteElement);
+
+                                    var body = $('#entry-attachments-list').find('tbody');
+                                    body.append(element);
+
+                                    body.find('tr.no-results').hide();
+                                    $(file.previewElement).hide();
+                                }
+
+                                window.removeAssignmentEntryAttachment = function (assignmentEntryAttachmentId) {
+                                    if (!confirm('{{ 'ConfirmDelete'|trans({}, 'Chamilo\\Libraries') }}')) {
+                                        return;
+                                    }
+
+                                    var deleteUrl = '{{ DELETE_ENTRY_ATTACHMENT_URL|raw }}';
+                                    $.post(deleteUrl, {'entry_attachment_id': assignmentEntryAttachmentId})
+                                        .done(function (data) {
+                                            $('#attachment' + assignmentEntryAttachmentId).remove();
+                                            var body = $('#entry-attachments-list');
+                                            var attachmentListCount = body.find('tr').length;
+
+                                            if (attachmentListCount === 1) {
+                                                body.find('tr.no-results').show();
+                                            }
+
+                                        });
+
+                                };
+                                {% if CAN_EDIT_ASSIGNMENT %}
+                                Dropzone.autoDiscover = false;
+
+                                var myDropzone = new Dropzone("div#droppy", {
+                                    url: '{{ UPLOAD_ENTRY_ATTACHMENT_URL|raw }}',
+                                    paramName: "attachments",
+                                    //maxFiles: 1,
+                                    previewTemplate: document.querySelector('#template-container').innerHTML,
+                                    //previewsContainer: "#droppy"
+                                });
+
+                                myDropzone.on(
+                                    "success", processUploadedFile
+                                );
+
+                                myDropzone.on(
+                                    "error", function (file, message, xhr) {
+                                        $(file.previewElement).find('.dz-error-message').text(message.result_message);
+                                        console.log(message.result_message);
+                                    }
+                                );
+
+                                myDropzone.on(
+                                    "thumbnail", processThumbnail
+                                );
+                                {% endif %}
                             });
-
-                            myDropzone.on(
-                                "success", processUploadedFile
-                            );
-
-                            myDropzone.on(
-                                "error", function (file, message, xhr) {
-                                    $(file.previewElement).find('.dz-error-message').text(message.result_message);
-                                    console.log(message.result_message);
-                                }
-                            );
-
-                            myDropzone.on(
-                                "thumbnail", processThumbnail
-                            );
-                            {% endif %}
-                        });
-                    </script>
+                        </script>
 
 
+                    </div>
                 </div>
+
             </div>
 
+            {% if SHOW_AUTOMATIC_FEEDBACK %}
+                <div role="tabpanel" class="tab-pane tab-pane-with-border" id="automatic-feedback">
+                    {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
+
+                    <ul class="list-group" style="margin-top: 30px;">
+
+                        {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
+                            <li class="list-group-item">
+                                <a href="#"
+                                   onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
+                                    {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if ENTRY_COUNT > 1 %}
+                <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entries">
+                    {{ ENTRY_TABLE|raw }}
+                </div>
+            {% endif %}
+            {% endif %}
+
+            <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane tab-pane-with-border{%- endif %}" id="assignment">
+                <h3 class="title-underlined">{{ ASSIGNMENT_TITLE }}</h3>
+
+                {{ ASSIGNMENT_RENDITION|raw }}
+            </div>
         </div>
 
-        {% if SHOW_AUTOMATIC_FEEDBACK %}
-            <div role="tabpanel" class="tab-pane tab-pane-with-border" id="automatic-feedback">
-                {{ AUTOMATIC_FEEDBACK_TEXT|raw }}
-
-                <ul class="list-group" style="margin-top: 30px;">
-
-                    {% for CONTENT_OBJECT in AUTOMATIC_FEEDBACK_CONTENT_OBJECTS %}
-                        <li class="list-group-item">
-                            <a href="#"
-                               onclick="javascript:openPopup('{{ ATTACHMENT_VIEWER_URL|raw|replace({'__ATTACHMENT_ID__': CONTENT_OBJECT.id}) }}'); return false;">
-                                {{ CONTENT_OBJECT.get_icon_image()|raw }} {{ CONTENT_OBJECT.get_title() }}
-                            </a>
-                        </li>
-                    {% endfor %}
-
-                </ul>
-            </div>
-        {% endif %}
-
-        {% if ENTRY_COUNT > 1 %}
-            <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entries">
-                {{ ENTRY_TABLE|raw }}
-            </div>
-        {% endif %}
-    {% endif %}
-
-    <div role="tabpanel" class="{% if HAS_ENTRY -%}tab-pane tab-pane-with-border{%- endif %}" id="assignment">
-        <h3 class="title-underlined">{{ ASSIGNMENT_TITLE }}</h3>
-
-        {{ ASSIGNMENT_RENDITION|raw }}
-    </div>
-</div>
-
-{{ FOOTER|raw }}
+        {{ FOOTER|raw }}

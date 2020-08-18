@@ -48,7 +48,11 @@ class EntryComponent extends Manager implements DelegateComponent
         //var_dump($form->createView()->children['rubric_results']);
         if ($formHandled)
         {
-            return '';
+            return '<div class="alert alert-success">' .
+                $this->getTranslator()->trans(
+                    'RubricEntryComplete', [], 'Chamilo\Core\Repository\ContentObject\Rubric'
+                ) .
+                '</div>';
         }
         else
         {

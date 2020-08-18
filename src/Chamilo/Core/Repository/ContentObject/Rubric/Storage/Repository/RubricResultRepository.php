@@ -56,4 +56,14 @@ class RubricResultRepository extends CommonEntityRepository
             ['resultId' => 'ASC']
         );
     }
+
+    /**
+     * @param RubricData $rubricData
+     *
+     * @return int
+     */
+    public function countRubricResultsForRubric(RubricData $rubricData)
+    {
+        return $this->count(['rubricData' => $rubricData]);
+    }
 }

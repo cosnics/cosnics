@@ -184,4 +184,12 @@ class RubricResultService
         return $this->rubricResultRepository->getRubricResultsForContext($rubricData, $contextIdentifier);
     }
 
+    /**
+     * @param RubricData $rubricData
+     */
+    public function doesRubricHaveResults(RubricData $rubricData)
+    {
+        return $this->rubricResultRepository->countRubricResultsForRubric($rubricData) > 0;
+    }
+
 }
