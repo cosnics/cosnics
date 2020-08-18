@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <rubric-builder :api-config="apiConfig" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
-        <div id="server-response"></div>
+        <div v-if="debugServerResponse" id="server-response"></div>
     </div>
 </template>
 
@@ -28,6 +28,7 @@
         @Prop({type: Object, required: true}) readonly apiConfig!: object;
         @Prop({type: Number, required: true}) readonly version!: number;
         @Prop({type: Object, required: true}) readonly rubricData!: object;
+        @Prop({type: Boolean, default: false}) readonly debugServerResponse!: boolean;
 
         created() {
             this.convertedRubricData = convertRubricData(this.rubricData);

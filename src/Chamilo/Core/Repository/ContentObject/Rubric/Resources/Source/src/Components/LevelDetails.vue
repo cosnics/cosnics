@@ -1,10 +1,48 @@
+<i18n>
+{
+    "en": {
+        "add": "Add",
+        "cancel": "Cancel",
+        "default": "Default",
+        "enter-level-here": "Enter a level here",
+        "level": "Level",
+        "move-level-down": "Move level down",
+        "move-level-up": "Move level up",
+        "points": "Points",
+        "remove-level": "Remove level"
+    },
+    "fr": {
+        "add": "Ajouter",
+        "cancel": "Annuler",
+        "default": "Norme",
+        "enter-level-here": "Entre un niveau ici",
+        "level": "Niveau",
+        "move-level-down": "Vers le bas",
+        "move-level-up": "Vers le haut",
+        "points": "Points",
+        "remove-level": "Supprimer le niveau"
+    },
+    "nl": {
+        "add": "Voeg Toe",
+        "cancel": "Annuleer",
+        "default": "Standaard",
+        "enter-level-here": "Vul hier een niveau in",
+        "level": "Niveau",
+        "move-level-down": "Verplaats niveau naar beneden",
+        "move-level-up": "Verplaats niveau naar boven",
+        "points": "Punten",
+        "remove-level": "Niveau verwijderen"
+    }
+}
+</i18n>
+
 <template>
     <component :is="tag" class="level-details" :class="{ /*'show-description': showDescription,*/ 'is-selected': selectedLevel === level, 'new-level': isNew }" @keydown.esc="cancelNewLevel">
         <div class="level-details-text">
             <div class="level-details-text-1">
                 <div class="ld-title" @click.stop="selectLevel">
-                    <label :for="`level_title_${index}`" class="level-label label-hidden">Niveau</label>
-                    <input :id="`level_title_${index}`" :tabindex="tabIndex" type="text" autocomplete="off" v-model="level.title" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" placeholder="Vul hier een niveau in" class="input-detail" >
+                    <label :for="`level_title_${index}`" class="level-label label-hidden">{{ $t('level') }}</label>
+                    <input :id="`level_title_${index}`" :tabindex="tabIndex" type="text" autocomplete="off" v-model="level.title" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" :placeholder="$t('enter-level-here')" class="input-detail" >
                 </div>
                 <!--<button class="btn-more" v-if="!showLevelDescriptions":tabindex="tabIndex" @click.stop="showDescription = !showDescription"><i tabindex="-1" class="check fa" aria-hidden="true" /></button>-->
             </div>
@@ -14,28 +52,28 @@
             </div>-->
         </div>
         <div class="ld-score" @click.stop="selectLevel">
-            <label :for="`level_score_${index}`" class="level-label label-hidden">Punten</label>
+            <label :for="`level_score_${index}`" class="level-label label-hidden">{{ $t('points') }}</label>
             <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model="level.score" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" class="input-detail">
         </div>
         <div class="ld-default" @click.stop="">
-            <label :for="`level_default_${index}`" class="level-label label-hidden">Standaard</label>
+            <label :for="`level_default_${index}`" class="level-label label-hidden">{{ $t('default') }}</label>
             <input :id="`level_default_${index}`" :tabindex="tabIndex" type="radio" :checked="level.isDefault" @click.stop="setDefault" class="input-detail">
             <label :for="`level_default_${index}`" :class="`${level.isDefault ? 'checked' : 'not-checked'}`" class="fa" aria-hidden="true"></label>
         </div>
         <!--<span style="flex-basis: 100%; height: 0"></span>-->
         <div v-if="isNew" class="actions">
-            <button class="btn-strong mod-confirm" @click.prevent="addNewLevel">Voeg toe</button>
-            <button class="btn-strong" @click.prevent="cancelNewLevel">Annuleer</button>
+            <button class="btn-strong mod-confirm" @click.prevent="addNewLevel">{{ $t('add') }}</button>
+            <button class="btn-strong" @click.prevent="cancelNewLevel">{{ $t('cancel') }}</button>
         </div>
         <div class="level-actions-wrapper" :class="{ 'is-active': !isNew && selectedLevel === level }" @click.stop="">
             <div class="level-actions">
-                <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" aria-label="Verplaats niveau naar boven" @click.stop="$emit('level-move-up')">
+                <button :id="`level_move_up_${level.id}`" class="btn-level-action" :disabled="isNew || index <= 0" :aria-label="$t('move-level-up')" :title="$t('move-level-up')" @click.stop="$emit('level-move-up')">
                     <i class="fa fa-arrow-up" aria-hidden="true" />
                 </button>
-                <button :id="`level_move_down_${level.id}`" class="btn-level-action" :disabled="isNew || index >= rubric.levels.length - 1" aria-label="Verplaats niveau naar beneden" @click.stop="$emit('level-move-down')">
+                <button :id="`level_move_down_${level.id}`" class="btn-level-action" :disabled="isNew || index >= rubric.levels.length - 1" :aria-label="$t('move-level-down')" :title="$t('move-level-down')" @click.stop="$emit('level-move-down')">
                     <i class="fa fa-arrow-down" aria-hidden="true" />
                 </button>
-                <button class="btn-level-action btn-delete" :disabled="isNew" aria-label="Verwijder niveau" @click.prevent="removeLevel">
+                <button class="btn-level-action btn-delete" :disabled="isNew" :aria-label="$t('remove-level')" :title="$t('remove-level')" @click.prevent="removeLevel">
                     <i class="fa fa-minus-circle" aria-hidden="true" />
                 </button>
             </div>

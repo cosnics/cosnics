@@ -39,6 +39,7 @@ class ResultComponent extends Manager implements DelegateComponent
         return $this->getTwig()->render(
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricResult.html.twig',
             [
+                'LANGUAGE' => $this->getTranslator()->getLocale(),
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
                 'RUBRIC_RESULTS_JSON' => $this->getSerializer()->serialize($results, 'json')
             ]

@@ -29,9 +29,10 @@
 
         var lang;
         try {
-            lang = document.querySelector('html').getAttribute('lang');
+            lang = '{{ LANGUAGE|raw }}';
         } catch (err) {
-            lang = undefined;
+            console.warn('Language could not be set, defaulting to English instead.');
+            lang = 'en';
         }
 
         new Vue({

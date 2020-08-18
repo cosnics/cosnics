@@ -1,9 +1,29 @@
+<i18n>
+{
+    "en": {
+        "add": "Add",
+        "add-category": "Add new category",
+        "title-new-category": "Title of new category"
+    },
+    "fr": {
+        "add": "Ajouter",
+        "add-category": "Ajouter une catégorie",
+        "title-new-category": "Titre de la nouvelle catégorie"
+    },
+    "nl": {
+        "add": "Voeg Toe",
+        "add-category": "Categorie toevoegen",
+        "title-new-category": "Titel voor nieuwe categorie"
+    }
+}
+</i18n>
+
 <template>
     <div v-if="inputFormShown" class="category-name-input">
-        <name-input ok-title="Voeg Toe" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" placeholder="Titel voor nieuwe categorie" v-model="newCategory.title"/>
+        <name-input :ok-title="$t('add')" class="category-new item-new" @ok="addNewCategory" @cancel="cancel" :placeholder="$t('title-new-category')" v-model="newCategory.title"/>
     </div>
     <div v-else class="actions">
-        <button :disabled="!actionsEnabled" class="btn-new mod-category-add" @keydown.enter="blockEnterUp" @click="createNewCategory">Categorie toevoegen</button>
+        <button :disabled="!actionsEnabled" class="btn-new mod-category-add" @keydown.enter="blockEnterUp" @click="createNewCategory">{{ $t('add-category') }}</button>
     </div>
 </template>
 

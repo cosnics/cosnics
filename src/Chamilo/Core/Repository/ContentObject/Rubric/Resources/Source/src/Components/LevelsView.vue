@@ -1,21 +1,47 @@
+<i18n>
+{
+    "en": {
+        "add-level": "Add Level",
+        "cancel": "Cancel",
+        "levels": "Levels",
+        "remove": "Remove",
+        "remove-level": "Remove level {item}"
+    },
+    "fr": {
+        "add-level": "Ajouter un niveau",
+        "cancel": "Annuler",
+        "levels": "Niveaux",
+        "remove": "Supprimer",
+        "remove-level": "Supprimer le niveau {item}"
+    },
+    "nl": {
+        "add-level": "Niveau toevoegen",
+        "cancel": "Annuleer",
+        "levels": "Niveaus",
+        "remove": "Verwijder",
+        "remove-level": "Niveau {item} verwijderen"
+    }
+}
+</i18n>
+
 <template>
     <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
-            <h1 class="levels-title">Niveaus</h1>
+            <h1 class="levels-title">{{ $t('levels') }}</h1>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
                 <li v-if="!newLevel" class="level-new">
-                    <button class="btn-new" @click.stop="createNewLevel">Niveau toevoegen</button>
+                    <button class="btn-new" @click.stop="createNewLevel">{{ $t('add-level') }}</button>
                 </li>
                 <level-details v-else :selected-level="newLevel" :has-new="true" :is-new="true" :rubric="rubric" :level="newLevel" tag="li" :key="`level_${rubric.levels.length}`" @new-level-added="addLevel" @new-level-canceled="cancelLevel" @level-default="setDefault"></level-details>
             </ul>
         </div>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
             <div class="modal-content" @click.stop="">
-                <div class="modal-content-title">Niveau '{{ removingLevel.title }}' verwijderen?</div>
+                <div class="modal-content-title">{{ $t('remove-level', {item: `'${removingLevel.title}'`}) }}?</div>
                 <div>
-                    <button class="btn-strong mod-confirm" ref="btn-remove-level" @click.stop="removeLevel(removingLevel)">Verwijder</button>
-                    <button class="btn-strong" @click.stop="hideRemoveLevelDialog">Annuleer</button>
+                    <button class="btn-strong mod-confirm" ref="btn-remove-level" @click.stop="removeLevel(removingLevel)">{{ $t('remove') }}</button>
+                    <button class="btn-strong" @click.stop="hideRemoveLevelDialog">{{ $t('cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -181,7 +207,6 @@
 
     .level-details {
         border: 1px solid transparent;
-        border-top-color: hsla(214, 20%, 85%, 1);
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -196,7 +221,6 @@
 
         &.is-selected {
             background-color: #d4d8de;
-            border-color: hsla(214, 20%, 80%, 1);
 
             /*.input-detail {
                 background: white;
@@ -240,7 +264,7 @@
 
     .input-detail {
         background-color: hsla(190, 50%, 96%, 1);
-        border: 1px solid #d0d0d0;
+        border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         padding: 2px 5px;
 

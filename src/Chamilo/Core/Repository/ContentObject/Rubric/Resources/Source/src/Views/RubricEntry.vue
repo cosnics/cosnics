@@ -1,3 +1,32 @@
+<i18n>
+{
+    "en": {
+        "feedback": "Feedback",
+        "feedback-descriptions": "Feedback descriptions",
+        "points": "points",
+        "rubric": "Rubric",
+        "show-default-descriptions": "Show default feedback descriptions",
+        "total": "Total"
+    },
+    "fr": {
+        "feedback": "Feed-back",
+        "feedback-descriptions": "Feed-back descriptions",
+        "points": "points",
+        "rubric": "Rubrique",
+        "show-default-descriptions": "Afficher descriptions feed-back standard",
+        "total": "Total"
+    },
+    "nl": {
+        "feedback": "Feedback",
+        "feedback-descriptions": "Feedback beschrijvingen",
+        "points": "punten",
+        "rubric": "Rubric",
+        "show-default-descriptions": "Toon standaard feedback beschrijvingen",
+        "total": "Totaal"
+    }
+}
+</i18n>
+
 <template>
     <div id="app" class="mod-sep">
         <div class="rubric">
@@ -7,7 +36,7 @@
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
                     <ul class="app-header-tools mod-entry-view">
                         <slot name="demoEvaluator"></slot>
-                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" aria-label="Toon standaard feedback beschrijvingen" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? 'Feedback' : 'Feedback beschrijvingen'}}</span></button></li>
+                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
                     </ul>
                     <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
                         <div v-for="level in rubric.levels" class="level-table-header-title">
@@ -42,16 +71,16 @@
                                     </li>
                                 </ul>
                                 <div class="subtotal cluster-total mod-entry-view">
-                                    <div class="cluster-total-title">Totaal {{ cluster.title }}:</div><div class="score-entry-view"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">punten</span></div></div>
+                                    <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div><div class="score-entry-view"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                                 </div>
                             </div>
                         </li>
                     </ul>
                     <div class="subtotal rubric-total mod-entry-view">
-                        <div class="rubric-total-title">Totaal Rubric:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">punten</span></div></div>
+                        <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                     <div class="subtotal rubric-total-max mod-entry-view">
-                        <div class="rubric-total-title">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">punten</span></div></div>
+                        <div class="rubric-total-title">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                 </div>
             </div>

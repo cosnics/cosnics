@@ -1,3 +1,17 @@
+<i18n>
+{
+    "en": {
+        "select": "Select"
+    },
+    "fr": {
+        "select": "Sélectionnez"
+    },
+    "nl": {
+        "select": "Selecteer"
+    }
+}
+</i18n>
+
 <template>
     <div class="container-fluid">
         <rubric-entry :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
@@ -5,7 +19,7 @@
             <template v-slot:demoEvaluator>
                 <li class="app-tool-item">Demo:
                     <select v-model="evaluator" @change="store.uiState.entry.options.evaluator = evaluator">
-                        <option disabled :value="null">Selecteer</option>
+                        <option disabled :value="null">{{ $t('select') }}</option>
                         <option v-for="evaluator in store.rubricResults.evaluators" :value="evaluator">{{evaluator.name}}</option>
                     </select>
                 </li>

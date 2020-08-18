@@ -28,6 +28,7 @@ class PreviewComponent extends Manager implements DelegateComponent
         return $this->getTwig()->render(
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricPreview.html.twig',
             [
+                'LANGUAGE' => $this->getTranslator()->getLocale(),
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json')
             ]
         );

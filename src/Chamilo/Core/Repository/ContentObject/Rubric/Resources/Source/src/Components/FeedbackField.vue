@@ -1,5 +1,19 @@
+<i18n>
+{
+    "en": {
+        "enter-feedback": "Enter feedback"
+    },
+    "fr": {
+        "enter-feedback": "Commentaire / Feed-back"
+    },
+    "nl": {
+        "enter-feedback": "Geef feedback"
+    }
+}
+</i18n>
+
 <template>
-    <textarea v-model="choice.feedback" placeholder="Geef feedback" class="ta-default-feedback" @input="onFeedbackChange"></textarea>
+    <textarea v-model="choice.feedback" :placeholder="$t('enter-feedback')" class="ta-default-feedback" @input="onFeedbackChange"></textarea>
 </template>
 
 <script lang="ts">

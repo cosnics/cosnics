@@ -8,7 +8,7 @@
     "fr": {
         "builder": "Rubrique",
         "levels": "Niveaux",
-        "builderfull": "Rétroaction Rapide"
+        "builderfull": "Feed-back Rapide"
     },
     "nl": {
         "builder": "Rubric",
@@ -475,6 +475,7 @@
     }
 
     .btn-category-color {
+        background: hsla(207, 21%, 92%, 1);
         border: none;
         box-shadow: 0 0 3px #999;
         cursor: pointer;
@@ -486,16 +487,17 @@
         width: 14px;
 
         &:focus {
-            border: 2px solid hsla(0, 0%, 100%, 0.8);
+            border: 2px solid $input-color-focus;
             box-shadow: 0px 0px 4px #333;
             outline: none;
         }
     }
 
-    .b-category-title-wrapper {
+    .b-category-header-wrapper {
         align-items: center;
         display: flex;
         flex: 1;
+        flex-direction: column;
         /*position: relative;*/
     }
 
@@ -528,8 +530,9 @@
     }
 
     .b-criterium-title {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         font-weight: 400;
+        line-height: 1.3em;
         margin: 0;
         padding: 0;
 
@@ -603,43 +606,34 @@
         padding-top: 10px;
         width: 100%;
 
-        i.fa-close {
-            top: 20px;
-        }
-
-        .input-detail {
-            &:focus {
-                outline: none;
-            }
+        .input-detail:focus {
+            outline: none;
         }
     }
 
     .criterium-details-header {
-        align-items: flex-start;
-        display: flex;
         margin-bottom: .75em;
+        position: relative;
     }
 
     .criterium-details-title {
-        align-items: flex-start;
-        display: flex;
-        flex-direction: column;
-        margin: 0 .25em .5em -.1em;
         width: 100%;
 
         label {
             border: 1px solid transparent;
             font-size: 1.3rem;
-            font-weight: 400;
+            font-weight: 700;
             margin-bottom: 0;
         }
 
         .input-detail {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             height: 1.9em;
-            margin-left: -.3em;
+            line-height: 1.3em;
+            margin-left: -.35em;
             padding-left: .25em;
-            width: 100%;
+            resize: none;
+            width: calc(100% + .3em);
         }
     }
 
@@ -692,7 +686,7 @@
     }
 
     .criterium-level-score {
-        margin-left: .75em;
+        margin-right: .75em;
         position: relative;
         width: 3.8em;
 
@@ -770,15 +764,19 @@
     }
 
     .btn-close {
-        background-color: darken($bg-color, 5%);
+        align-items: center;
+        background-color: $bg-criterium-details;
         border: 1px solid transparent;
         border-radius: $border-radius;
         color: #777;
-        height: 2em;
-        margin-left: .25em;
+        display: flex;
+        height: 1.6em;
+        justify-content: center;
         padding: 0;
+        position: absolute;
+        right: 2px;
         transition: background-color 200ms, color 200ms;
-        width: 2em;
+        width: 1.6em;
 
         &:hover {
             background-color: $btn-color;
@@ -923,6 +921,10 @@
             max-width: 50em;
             padding: 1.2em;
             width: 95%;
+
+            label {
+                color: hsla(206, 25%, 30%, 1);
+            }
         }
     }
 
@@ -934,8 +936,6 @@
             height: calc(100vh - 166px);
             overflow: hidden;
             padding-bottom: 0;
-            /*position: absolute;
-            top: 0; bottom: 0; left: 0; right: 0;*/
         }
 
         .no-drop {
@@ -955,7 +955,6 @@
             font-size: 1.1rem;
             height: 1.8em;
             justify-content: center;
-            /*opacity: 0;*/
             transition: all 200ms;
             width: 1.8em;
 
@@ -1062,11 +1061,11 @@
             margin-top: 0;
 
             &.cluster-new {
+                background: #fff;
                 box-shadow: 0 2px 10px #999;
                 margin-bottom: 0;
-                padding: .25em .25em .4em .25em;
-                position: absolute;
-                top: .25em;
+                padding: 1px .25em .4em .25em;
+                position: fixed;
                 width: 18em;
 
                 .name-input-field.mod-textarea {
@@ -1087,6 +1086,14 @@
         .name-input-actions {
             margin-left: 0;
             margin-top: .4em;
+        }
+
+        .rubric-actions {
+            position: relative;
+
+            &.is-open {
+                align-self: flex-start;
+            }
         }
 
         /** Clusters collapse Menu **/
@@ -1212,7 +1219,7 @@
             display: flex;
             margin-bottom: -1px;
             margin-left: 1em;
-            max-width: calc(100% - 16em);
+            max-width: calc(100% - 23em);
         }
 
         .b-cluster-list-item {
@@ -1361,10 +1368,10 @@
         .cluster-content {
             display: flex;
             flex: 1;
-            margin-left: -.5em;
+            margin-left: calc(-.5em - 7px);
             margin-top: 1em;
             overflow: auto;
-            padding-left: .5em;
+            padding-left: calc(.5em + 7px);
             padding-top: .2em;
             @include scrollbar();
         }
@@ -1417,25 +1424,24 @@
             opacity: 1;
         }
 
-        .b-category-title-wrapper {
+        .b-category-header-wrapper {
             align-items: stretch;
+            padding-left: 1em;
         }
 
         .b-category-title {
-            /*color: hsla(190, 50%, 35%, 1);*/
+            color: hsla(190, 50%, 29%, 1);
             flex: 1;
             font-size: 1.33rem;
-            /*font-weight: bold;*/
 
             &.mod-null-category {
                 font-style: oblique;
-                margin-left: 1.5em;
                 opacity: 0.8;
             }
 
             &.mod-null-category-drag {
-              font-style: oblique;
-              margin-left: .5em;
+                font-style: oblique;
+                margin-left: .5em;
             }
         }
 
@@ -1444,7 +1450,7 @@
             border-bottom-left-radius: 3px;
             border-bottom-right-radius: 3px;
             border-top: none;
-            padding: .238em 0;
+            padding: .238em 0 .238em .5em;
         }
 
         .b-category-list-item {
@@ -1455,7 +1461,6 @@
                 hsla(204, 38%, 40%, 0.12) 36px);
             background: hsla(204, 38%, 40%, 0.12);
             border: 1px solid hsla(193, 14%, 82%, 1);
-            border-bottom: none;
             border-top-left-radius: $border-radius;
             border-top-right-radius: $border-radius;
             padding: 0;
@@ -1463,9 +1468,11 @@
 
         .item-header-bar.mod-category {
             padding: .65em 0;
+            position: relative;
         }
 
         .btn-toggle-menu.mod-category {
+            margin-left: .5em;
             padding: 2px 0;
 
             &:hover, &.is-menu-visible {
@@ -1474,9 +1481,9 @@
         }
 
         .btn-category-color {
-            height: unset;
-            /*height: 100%;*/
-            width: 6px;
+            margin: 0;
+            margin-left: -7px;
+            position: absolute;
         }
 
         /* Without the filler it's very hard to drag a category into an empty cluster */
@@ -1503,6 +1510,7 @@
             padding-top: .4em;
         }
 
+
         /** Criteria **/
 
         .b-criterium-list-item.ghost {
@@ -1524,11 +1532,7 @@
 
             &.is-selected {
                 background: $bg-criterium-details;
-                /*border: 1px solid hsla(193, 14%, 75%, 1);*/
-                /*border: 1px solid darken($bg-criterium-details, 10%);*/
                 border: 2px solid $btn-color;
-                /*border-radius: $border-radius;*/
-                /*margin: -1px;*/
                 margin-top: -1px;
             }
 
@@ -1553,6 +1557,7 @@
         }
 
         .btn-toggle-menu.mod-criterium {
+            margin-left: .5em;
             padding: 2px 0;
 
             &:hover, &.is-menu-visible {
@@ -1573,22 +1578,27 @@
         .b-criterium-title {
             flex: 1;
             min-height: 3.419rem;
-            padding: .7em .5em .7em 1.5em;
+            padding: .7em 0 .7em 1em;
         }
+
+        .btn-new.mod-category-add {
+            padding-left: 0;
+        }
+
 
         /** Vue Swatches **/
 
         .vue-swatches {
             margin-bottom: 0;
-            width: 90%;
+            width: 100%;
         }
 
         .vue-swatches__container {
-            padding: 2px 5px 0!important;
+            padding: 0!important;
         }
 
         .vue-swatches__wrapper {
-            padding: 0 1px!important;
+            padding: 0!important;
         }
 
         /** Criterium Details Editor **/
@@ -1621,14 +1631,6 @@
                     border: 1px solid $input-color-focus;
                 }
             }
-
-            /*.criterium-weight .input-detail {
-                border: 1px solid darken($input-color, 5%);
-
-                &:focus {
-                    border: 1px solid $input-color-focus;
-                }
-            }*/
 
             .btn-close {
                 background-color: darken($bg-criterium-details, 5%);

@@ -52,6 +52,7 @@ class BuilderComponent extends Manager implements DelegateComponent
             'Chamilo\Core\Repository\ContentObject\Rubric:RubricBuilder.html.twig',
             [
                 'HEADER' => $this->render_header(''), 'FOOTER' => $this->render_footer(),
+                'LANGUAGE' => $this->getTranslator()->getLocale(),
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
                 'ADD_LEVEL_AJAX_URL' => $this->get_url(
                     [

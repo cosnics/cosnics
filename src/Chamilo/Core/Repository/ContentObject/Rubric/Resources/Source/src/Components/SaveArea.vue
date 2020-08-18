@@ -1,10 +1,27 @@
+<i18n>
+{
+    "en": {
+        "num-changes": "1 change | {count} changes",
+        "all-saved": "All changes saved"
+    },
+    "fr": {
+        "num-changes": "1 modification | {count} modifications",
+        "all-saved": "Modifications enregistrées"
+    },
+    "nl": {
+        "num-changes": "1 wijziging | {count} wijzigingen",
+        "all-saved": "Wijzigingen opgeslagen"
+    }
+}
+</i18n>
+
 <template>
     <div class="save-state">
         <div v-if="dataConnector && dataConnector.isSaving">
-            {{ dataConnector.processingSize }} wijziging{{ dataConnector.processingSize === 1 ? '' : 'en' }}...
+            {{ $tc('num-changes', dataConnector.processingSize, { 'count': dataConnector.processingSize }) }}...
         </div>
         <div v-else-if="dataConnector" class="save-state-saved" aria-live="polite">
-            Wijzigingen opgeslagen
+            {{ $t('all-saved') }}
         </div>
     </div>
 </template>

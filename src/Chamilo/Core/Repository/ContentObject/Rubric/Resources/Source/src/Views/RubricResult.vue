@@ -1,3 +1,29 @@
+<i18n>
+{
+    "en": {
+        "extra-feedback": "Extra feedback",
+        "gave-score": "gave a score of",
+        "levels": "Levels",
+        "rubric": "Rubric",
+        "total": "Total"
+    },
+    "fr": {
+        "extra-feedback": "Feed-back supplémentaire",
+        "gave-score": "a donné la note",
+        "levels": "Niveaux",
+        "rubric": "Rubrique",
+        "total": "Total"
+    },
+    "nl": {
+        "extra-feedback": "Extra feedback",
+        "gave-score": "gaf score",
+        "levels": "Niveaus",
+        "rubric": "Rubric",
+        "total": "Totaal"
+    }
+}
+</i18n>
+
 <template>
     <div id="app" class="mod-sep" >
         <div v-if="rubric" class="rubric mod-result-view">
@@ -44,7 +70,7 @@
                                 </li>
                             </ul>
                             <div class="subtotal cluster-total mod-result-view">
-                                <div class="cluster-total-title">Totaal {{ cluster.title }}:</div>
+                                <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div>
                                 <div v-for="evaluator in evaluators" class="score-result-view">
                                     <div class="score-number-calc mod-result-view mod-cluster">{{ getClusterScore(cluster, evaluator) }}</div>
                                 </div>
@@ -56,7 +82,7 @@
                     </li>
                 </ul>
                 <div class="subtotal rubric-total mod-result-view">
-                    <div class="rubric-total-title">Totaal Rubric:</div>
+                    <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div v-for="evaluator in evaluators" class="score-result-view">
                         <div class="score-number-calc mod-result-view mod-rubric">{{ getRubricScore(evaluator) }}</div>
                     </div>
@@ -73,18 +99,18 @@
                         <span>{{ selectedCriterium.title }}</span>
                     </div>
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> gaf score <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
+                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
                             getCriteriumEvaluation(selectedCriterium, evaluator).level.title
                           }}</span>)</p>
                         <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).feedback">
-                          Extra feedback: {{
+                          {{ $t('extra-feedback') }}: {{
                             getCriteriumEvaluation(selectedCriterium, evaluator).feedback
                           }}
                         </p>
                     </div>
                 </div>
                 <div class="rr-selected-criterium-levels">
-                    <div class="title">Niveaus:</div>
+                    <div class="title">{{ $t('levels') }}:</div>
                     <ul class="levels-list">
                         <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
                             <div class="levels-list-item-header">
