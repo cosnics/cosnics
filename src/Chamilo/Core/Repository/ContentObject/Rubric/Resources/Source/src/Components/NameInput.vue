@@ -95,9 +95,9 @@
             }
             if (this.$refs['name-input']) {
                 (this.$refs['name-input'] as HTMLElement).focus();
-                /*if (this.value !== '') {
+                if (this.value !== '') {
                     updateHeight(this.$refs['name-input'] as HTMLElement);
-                }*/
+                }
             }
         }
     }
