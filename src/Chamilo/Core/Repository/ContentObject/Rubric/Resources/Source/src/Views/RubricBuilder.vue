@@ -1223,7 +1223,7 @@
             display: flex;
             margin-bottom: -1px;
             margin-left: 1em;
-            max-width: calc(100% - 16em);
+            max-width: calc(100% - 23em);
         }
 
         .b-cluster-list-item {
