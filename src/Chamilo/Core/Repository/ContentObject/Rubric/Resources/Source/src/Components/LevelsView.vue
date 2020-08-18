@@ -207,7 +207,6 @@
 
     .level-details {
         border: 1px solid transparent;
-        border-top-color: hsla(214, 20%, 85%, 1);
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -222,7 +221,6 @@
 
         &.is-selected {
             background-color: #d4d8de;
-            border-color: hsla(214, 20%, 80%, 1);
 
             /*.input-detail {
                 background: white;
@@ -266,7 +264,7 @@
 
     .input-detail {
         background-color: hsla(190, 50%, 96%, 1);
-        border: 1px solid #d0d0d0;
+        border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         padding: 2px 5px;
 
