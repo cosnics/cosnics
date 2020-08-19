@@ -47,6 +47,13 @@ export default class DataConnector {
         this.errorListeners.push(errorListener);
     }
 
+    removeErrorListener(errorListener: DataConnectorErrorListener) {
+        const index = this.errorListeners.indexOf(errorListener);
+        if (index >= 0) {
+            this.errorListeners.splice(index, 1);
+        }
+    }
+
     get isDummyRequest() {
         return this.currentVersion === null;
     }
