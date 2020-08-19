@@ -724,6 +724,7 @@
     .criterium-details .input-detail {
         border: 1px solid $input-color;
         border-radius: $border-radius;
+        margin-right: 1.5em;
 
         &:hover {
             background-color: rgba(255, 255, 255, 0.25);

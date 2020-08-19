@@ -189,7 +189,7 @@ export default class DataConnector {
         const responseEl = document.getElementById('server-response');
         if (responseEl) {
             if (typeof data === 'object') {
-                responseEl.innerHTML = JSON.stringify(data, null,4);
+                responseEl.innerHTML = JSON.stringify(data, null, 4);
             } else {
                 responseEl.innerHTML = `<div>An error occurred:</div>${data}`;
             }
