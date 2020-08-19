@@ -129,7 +129,7 @@ class CpoImportImplementation extends ImportImplementation
             if (array_key_exists('children', $treeNodeArray))
             {
                 $childrenArray = $treeNodeArray['children'];
-                if (!empty($children))
+                if (!empty($childrenArray))
                 {
                     $this->createTreeNodeChildren($treeNode, $rubricData, $childrenArray);
                 }

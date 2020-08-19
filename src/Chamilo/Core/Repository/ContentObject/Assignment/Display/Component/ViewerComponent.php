@@ -7,6 +7,9 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -23,6 +26,7 @@ use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Doctrine\ORM\ORMException;
 
 /**
  *
@@ -33,6 +37,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ViewerComponent extends Manager implements TableSupport
 {
+    const PARAM_SELECTED_TAB = 'tab';
 
     /**
      *
@@ -120,13 +125,23 @@ class ViewerComponent extends Manager implements TableSupport
         $searchToolbarRenderer = new ButtonToolBarRenderer($searchToolbar);
 
         $supportsRubrics = $this->supportsRubrics();
-        $hasRubric = false;
+        $hasRubric = $canBuildRubric = false;
         $rubricPreview = null;
 
         if ($supportsRubrics)
         {
             $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
             $rubricPreview = $this->runRubricComponent('Preview');
+            $rubricContentObject = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
+            if ($rubricContentObject instanceof Rubric)
+            {
+                try
+                {
+                    $rubricData = $this->getRubricService()->getRubric($rubricContentObject->getActiveRubricDataId());
+                    $canBuildRubric = $this->getRubricService()->canChangeRubric($rubricData);
+                }
+                catch (\Exception $ex) {}
+            }
         }
 
         return [
@@ -156,7 +171,9 @@ class ViewerComponent extends Manager implements TableSupport
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
-            'RUBRIC_PREVIEW' => $rubricPreview
+            'CAN_BUILD_RUBRIC' => $canBuildRubric,
+            'RUBRIC_PREVIEW' => $rubricPreview,
+            'SELECTED_TAB' => $this->getRequest()->getFromUrl(self::PARAM_SELECTED_TAB)
         ];
     }
 
@@ -248,5 +265,13 @@ class ViewerComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return RubricService
+     */
+    protected function getRubricService()
+    {
+        return $this->getService(RubricService::class);
     }
 }

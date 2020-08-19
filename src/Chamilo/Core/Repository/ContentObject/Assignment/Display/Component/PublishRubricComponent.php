@@ -58,7 +58,7 @@ class PublishRubricComponent extends Manager
                 $this->getExceptionLogger()->logException($ex);
             }
 
-            $this->redirect($message, !$success, [self::PARAM_ACTION => self::ACTION_VIEW]);
+            $this->redirect($message, !$success, [self::PARAM_ACTION => self::ACTION_VIEW, ViewerComponent::PARAM_SELECTED_TAB => 'rubric']);
 
             return null;
         }

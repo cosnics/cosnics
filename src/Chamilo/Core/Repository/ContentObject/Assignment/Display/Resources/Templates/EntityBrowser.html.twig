@@ -71,11 +71,11 @@
             {% if NOTIFICATIONS_COUNT > 0 %}<span class="new-notifications-label">{{ NOTIFICATIONS_COUNT }}</span>{% endif %}
         </a>
     </li>
-    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
+    <li role="presentation" class="{{ SELECTED_TAB != 'rubric' ? 'active': '' }}"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
     <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
     {% if SUPPORTS_RUBRICS %}
-    <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+    <li role="presentation" class="{{ SELECTED_TAB == 'rubric' ? 'active': '' }}"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
     {% endif %}
 </ul>
 
@@ -90,7 +90,7 @@
         </div>
         <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
     </div>
-    <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
+    <div role="tabpanel" class="tab-pane {{ SELECTED_TAB != 'rubric' ? 'active': '' }} tab-pane-with-border" id="entities">
         {{ SEARCH_TOOLBAR|raw }}
         {{ ENTITY_TABLE|raw }}
     </div>
@@ -174,10 +174,16 @@
 
     </div>
     {% if SUPPORTS_RUBRICS %}
-    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="rubric">
+    <div role="tabpanel" class="tab-pane {{ SELECTED_TAB == 'rubric' ? 'active': '' }} tab-pane-with-border" id="rubric">
         {% if HAS_RUBRIC %}
-            <a href="{{ BUILD_RUBRIC_URL }}" class="btn btn-primary" style="margin-bottom: 20px;">{{ 'BuildRubric'|trans({}, appContext) }}</a>
-            <div style="margin-top: 15px;">{{ RUBRIC_PREVIEW|raw }}</div>
+            {% if CAN_BUILD_RUBRIC %}
+            <a href="{{ BUILD_RUBRIC_URL }}" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+            {% else %}
+                <div class="alert alert-warning">
+                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+                </div>
+            {% endif %}
+            <div style="margin: 40px 0;">{{ RUBRIC_PREVIEW|raw }}</div>
         {% else %}
             <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
             <div class="text-center" style="margin-bottom: 20px;">
