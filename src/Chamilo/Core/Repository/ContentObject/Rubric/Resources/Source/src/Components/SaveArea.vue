@@ -23,6 +23,12 @@
         <div v-else-if="dataConnector" class="save-state-saved" aria-live="polite">
             {{ $t('all-saved') }}
         </div>
+        <div v-if="error" class="block-ui"></div>
+        <div v-if="error" class="save-error">
+            <div class="save-error-msg">
+                {{ error }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -37,5 +43,6 @@
     })
     export default class SaveArea extends Vue {
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
+        @Prop({type: String, default: null}) readonly error!: string|null;
     }
 </script>

@@ -4,6 +4,7 @@
     border-top: 1px solid #d6d6d6;
     display: flex;
     justify-content: space-between;
+    position: relative;
   }
 
   .app-header-nav, .app-header-tools {
@@ -116,6 +117,37 @@
 
   .save-state-saved {
     opacity: 0.75;
+  }
+
+  .block-ui {
+    background: hsla(213, 7%, 47%, .66);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .save-error {
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .save-error-msg {
+    background: hsla(0, 70%, 47%, 1);
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3em;
+    max-width: 70ch;
+    padding: .3em 1em;
+    text-align: left;
+    z-index: 1001;
   }
 
   #app {

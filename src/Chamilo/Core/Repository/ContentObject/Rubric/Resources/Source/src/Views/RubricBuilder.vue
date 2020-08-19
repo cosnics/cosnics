@@ -3,7 +3,12 @@
     "en": {
         "builder": "Rubric",
         "levels": "Levels",
-        "builderfull": "Quick Feedback"
+        "builderfull": "Quick Feedback",
+        "error-conflict": "The server responded with an error due to a conflict. Probably someone else is working on the same rubric at this time. Please refresh the page and try again.",
+        "error-forbidden": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
+        "error-notfound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
+        "error-timeout": "The server is taking too long to respond. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
+        "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again."
     },
     "fr": {
         "builder": "Rubrique",
@@ -13,7 +18,12 @@
     "nl": {
         "builder": "Rubric",
         "levels": "Niveaus",
-        "builderfull": "Snelle Feedback"
+        "builderfull": "Snelle Feedback",
+        "error-conflict": "Serverfout vanwege een conflict. Misschien werkt iemand aan dezelfde rubric op dit ogenblik. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-forbidden": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-notfound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-timeout": "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen."
     }
 }
 </i18n>
@@ -27,7 +37,7 @@
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
                 </ul>
             </nav>
-            <save-area :data-connector="dataConnector"></save-area>
+            <save-area :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
         <div class="rubrics">
             <link rel="stylesheet"
@@ -52,7 +62,7 @@
     import RubricBuilderFull from './RubricBuilderFull.vue';
     import SaveArea from '../Components/SaveArea.vue';
     import APIConfiguration from '../Connector/APIConfiguration';
-    import DataConnector from '../Connector/DataConnector';
+    import DataConnector, {DataConnectorErrorListener} from '../Connector/DataConnector';
 
     @Component({
         components: {
@@ -63,6 +73,7 @@
         private selectedCriterium: Criterium|null = null;
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
+        private errorCode: string|null = null;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
@@ -98,6 +109,10 @@
             this.uiState.content = content;
         }
 
+        setError(code: string) : void {
+            this.errorCode = code;
+        }
+
         mounted() {
             if (this.rubricData) {
                 this.rubric = Rubric.fromJSON(this.rubricData as RubricJsonObject);
@@ -110,6 +125,7 @@
                     }
                 }
                 this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version);
+                this.dataConnector.addErrorListener(this as DataConnectorErrorListener);
             }
         }
 

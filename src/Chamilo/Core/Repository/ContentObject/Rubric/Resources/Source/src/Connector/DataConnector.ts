@@ -6,10 +6,20 @@ import Level from '../Domain/Level';
 import TreeNode from '../Domain/TreeNode';
 import Criterium from '../Domain/Criterium';
 import Choice from '../Domain/Choice';
-(window as unknown as any).axios = axios;
+
+const HTTP_FORBIDDEN = 403;
+const HTTP_NOT_FOUND = 404;
+const HTTP_CONFLICT = 409;
+const ERROR_UNKNOWN = 'UNKNOWN';
+
+const TIMEOUT_SEC = 30;
 
 function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export interface DataConnectorErrorListener {
+    setError(code: string) : void;
 }
 
 export default class DataConnector {
@@ -22,12 +32,19 @@ export default class DataConnector {
 
     private rubric: Rubric;
     private _isSaving: boolean = false;
+    private hasError: boolean = false;
+
+    private errorListeners: DataConnectorErrorListener[] = [];
 
     public constructor(rubric: Rubric, apiConfiguration: APIConfiguration, rubricDataId: number, currentVersion: number|null) {
         this.rubric = rubric;
         this.rubricDataId = rubricDataId;
         this.currentVersion = currentVersion;
         this.apiConfiguration = apiConfiguration;
+    }
+
+    addErrorListener(errorListener: DataConnectorErrorListener) {
+        this.errorListeners.push(errorListener);
     }
 
     get isDummyRequest() {
@@ -58,7 +75,9 @@ export default class DataConnector {
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addLevelURL, parameters);
-            if (this.isDummyRequest) { return; }
+
+            if (this.isDummyRequest || this.hasError) { return; }
+
             const oldId = level.id;
             level.id = String(res.level.id);
             this.rubric.setChoicesLevelId(oldId, level.id);
@@ -74,7 +93,9 @@ export default class DataConnector {
             };
 
             const res = await this.executeAPIRequest(this.apiConfiguration.addTreeNodeURL, parameters);
-            if (this.isDummyRequest) { return; }
+
+            if (this.isDummyRequest || this.hasError) { return; }
+
             const oldId = treeNode.id;
             treeNode.id = String(res.tree_node.id);
             if (res.tree_node.type === 'criterium') {
@@ -127,8 +148,7 @@ export default class DataConnector {
             const parameters = {
                 'choiceData': JSON.stringify(choice.toJSON(criterium.id, level.id)),
             };
-            const data = await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
-            console.log(data);
+            await this.executeAPIRequest(this.apiConfiguration.updateChoiceURL, parameters);
         });
     }
 
@@ -151,6 +171,7 @@ export default class DataConnector {
     }
 
     protected addToQueue(callback: Function) {
+        if (this.hasError) { return; }
         this.queue.add(async () => {
             await callback();
         });
@@ -160,7 +181,11 @@ export default class DataConnector {
     logResponse(data: any) {
         const responseEl = document.getElementById('server-response');
         if (responseEl) {
-            responseEl.innerHTML = JSON.stringify(data, null,4);
+            if (typeof data === 'object') {
+                responseEl.innerHTML = JSON.stringify(data, null,4);
+            } else {
+                responseEl.innerHTML = `<div>An error occurred:</div>${data}`;
+            }
         }
     }
 
@@ -180,12 +205,44 @@ export default class DataConnector {
             }
 
             try {
-                const res = await axios.post(apiURL, formData);
+                let res;
+                try {
+                    res = await axios.post(apiURL, formData, { timeout: TIMEOUT_SEC * 1000 });
+                } catch (err) {
+                    this.logResponse(err);
+                    throw err;
+                }
                 this.logResponse(res.data);
-                this.rubricDataId = res.data.rubric.id;
-                this.currentVersion = res.data.rubric.version;
-                return res.data;
+                if (typeof res.data === 'object') {
+                    if (res.data.error) {
+                        throw res.data.error;
+                    } else {
+                        this.rubricDataId = res.data.rubric.id;
+                        this.currentVersion = res.data.rubric.version;
+                        return res.data;
+                    }
+                } else {
+                    throw { 'code': ERROR_UNKNOWN };
+                }
             } catch (err) {
+                let code: string;
+                if (err.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
+                    code = 'timeout';
+                } else if ([HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_CONFLICT, ERROR_UNKNOWN].includes(err.code)) {
+                    if (err.code === HTTP_FORBIDDEN) {
+                        code = 'forbidden';
+                    } else if (err.code === HTTP_NOT_FOUND) {
+                        code = 'notfound';
+                    } else if (err.code === HTTP_CONFLICT) {
+                        code = 'conflict';
+                    } else if (err.code === ERROR_UNKNOWN) {
+                        code = 'unknown';
+                    }
+                } else {
+                    code = 'unknown';
+                }
+                this.hasError = true;
+                this.errorListeners.forEach(errorListener => errorListener.setError(code));
                 return err;
             }
         }
