@@ -1,14 +1,17 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,6 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
+
 /**
  * A Rubric
  */
@@ -89,7 +93,7 @@ class Rubric extends ContentObject implements Versionable
      */
     public function create($create_in_batch = false)
     {
-        if(!parent::create($create_in_batch))
+        if (!parent::create($create_in_batch))
         {
             return false;
         }
@@ -100,10 +104,26 @@ class Rubric extends ContentObject implements Versionable
         $clusterNode = new ClusterNode($this->get_title(), $rubricData, $rubricData->getRootNode());
         new CategoryNode('', $rubricData, $clusterNode);
 
+        $level = new Level($rubricData);
+
+        $level->setTitle(
+            Translation::getInstance()->getTranslation('LevelGood', [], 'Chamilo\Core\Repository\ContentObject\Rubric')
+        );
+
+        $level->setScore(10);
+
+        $level2 = new Level($rubricData);
+
+        $level2->setTitle(
+            Translation::getInstance()->getTranslation('LevelBad', [], 'Chamilo\Core\Repository\ContentObject\Rubric')
+        );
+
+        $level2->setScore(0);
+
         $this->getRubricService()->saveRubric($rubricData);
 
         $this->setActiveRubricDataId($rubricData->getId());
-        if(!parent::update())
+        if (!parent::update())
         {
             return false;
         }

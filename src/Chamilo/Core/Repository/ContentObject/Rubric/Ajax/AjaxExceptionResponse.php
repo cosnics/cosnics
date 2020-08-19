@@ -33,6 +33,6 @@ class AjaxExceptionResponse extends JsonResponse
             $code = $errorCodeMapping[$exceptionClass];
         }
 
-        parent::__construct(['error' => ['code' => $code, 'message' => $ex->getMessage()]]);
+        parent::__construct(['error' => ['code' => $code, 'message' => $ex->getMessage()]], $code);
     }
 }

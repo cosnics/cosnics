@@ -61,12 +61,12 @@ class RubricService
      * Retrieves a rubric from the database
      *
      * @param int $rubricDataId
-     * @param int $expectedVersion
+     * @param int|null $expectedVersion
      *
      * @return RubricData
      *
-     * @throws \Doctrine\ORM\ORMException
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function getRubric(int $rubricDataId, int $expectedVersion = null)
     {
