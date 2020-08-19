@@ -32,7 +32,7 @@
             <div class="rubric-results-view" @click="selectedCriterium = null">
                 <div class="rubric-table-header">
                     <div class="evaluators-table-header">
-                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title">{{ evaluator.name|capitalize }}</div>
+                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
                         <div class="evaluator-table-header-title mod-max">Max.</div>
                     </div>
                 </div>
