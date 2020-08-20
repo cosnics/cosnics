@@ -77,6 +77,7 @@
                         </li>
                     </ul>
                     <div class="subtotal rubric-total mod-entry-view">
+                        <slot name="slot"></slot>
                         <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                     <div class="subtotal rubric-total-max mod-entry-view">

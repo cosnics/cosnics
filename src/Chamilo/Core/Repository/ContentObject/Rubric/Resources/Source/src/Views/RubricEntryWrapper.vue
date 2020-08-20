@@ -1,7 +1,26 @@
+<i18n>
+{
+    "en": {
+        "save-rubric": "Save Rubric"
+    },
+    "fr": {
+        "save-rubric": "Sauvegarder la Rubrique"
+    },
+    "nl": {
+        "save-rubric": "Rubric Opslaan"
+    }
+}
+</i18n>
+
 <template>
     <div class="container-fluid">
         <rubric-entry v-if="rubric" :rubric="rubric" :criterium-evaluations="criteriumEvaluations" :ui-state="uiState" :show-errors="showErrors"
                       @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
+            <template v-slot:slot>
+                <div style="flex: 1; margin-left: .5em; justify-self: flex-start;">
+                    <button class="btn btn-primary" @click="$emit('on-save', $event)">{{ $t('save-rubric') }}</button>
+                </div>
+            </template>
         </rubric-entry>
     </div>
 </template>

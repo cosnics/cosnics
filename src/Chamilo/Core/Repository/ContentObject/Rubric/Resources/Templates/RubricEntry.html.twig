@@ -13,11 +13,11 @@
     <div id="rubric-entry">
         <h4 style="margin-top: 0; margin-bottom: 40px;">{{ 'RubricEntry'|trans({}, appContext) }}</h4>
 
-        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors"></rubric-entry-wrapper>
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
+        </rubric-entry-wrapper>
         {{ form_start(FORM) }}
         {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
         {{ form_end(FORM) }}
-        <button style="margin-top: 40px;" class="btn btn-primary" @click="saveRubric">Rubric Opslaan</button>
     </div>
     <script>
         Vue.use(BootstrapVue);
