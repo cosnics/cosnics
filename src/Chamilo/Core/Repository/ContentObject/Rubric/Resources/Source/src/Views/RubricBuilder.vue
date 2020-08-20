@@ -359,7 +359,7 @@
     /** Clusters collapse Menu **/
 
     .btn-collapse {
-        background-color: darken($bg-color, 5%);
+        background-color: $bg-criterium-details;
         border-color: transparent;
         border-radius: $border-radius;
         color: #777;
@@ -394,10 +394,6 @@
     /** Rubric Editor **/
 
     .rubrics {
-        margin: 0 1.5em;
-        max-width: 580px;
-        width: 92%;
-
         * {
             outline-width: thin;
         }
@@ -419,10 +415,6 @@
         margin-bottom: .5em;
         padding: 0;
         @include user-select(none);
-    }
-
-    .b-clusters .name-input {
-        position: fixed;
     }
 
     .b-cluster-list-item {
@@ -455,6 +447,7 @@
     .b-cluster-title {
         cursor: pointer;
         flex: 1;
+        max-width: 80ch;
     }
 
     .b-cluster-selected-title {
@@ -478,14 +471,30 @@
     }
 
     .b-category-title {
+        color: hsla(190, 50%, 29%, 1);
         display: inline-block;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         line-height: 1.3em;
         margin: 0;
+        max-width: 75ch;
+
+        &.mod-null-category {
+            font-style: oblique;
+            opacity: 0.8;
+        }
     }
 
     .b-category-list-item {
-        background: linear-gradient(to bottom, $bg-color 0px, change-color($bg-color, $alpha: 0) 10px, change-color($bg-color-darkened, $alpha: 0) 19px, change-color($bg-color-darkened, $alpha: 0.25) 33px);
+        /*background: linear-gradient(to bottom, $bg-color 0px, change-color($bg-color, $alpha: 0) 10px, change-color($bg-color-darkened, $alpha: 0) 19px, change-color($bg-color-darkened, $alpha: 0.25) 33px);*/
+        /*background: linear-gradient(to bottom,
+            hsla(60, 2%, 91%, 0.6) 0px,
+            hsla(60, 2%, 91%, 0) 14px,
+            hsla(204, 38%, 40%, 0) 0px,
+            hsla(204, 38%, 40%, 0.12) 36px);*/
+        background: hsla(204, 38%, 40%, 0.12);
+        border: 1px solid hsla(193, 14%, 82%, 1);
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
         padding: .75em 0;
         position: relative;
     }
@@ -497,9 +506,10 @@
         cursor: pointer;
         display: inline-block;
         height: 14px;
-        margin: 0 .5em;
+        margin: 0 0 0 -7px;
         outline-width: 1px;
         padding: 0;
+        position: absolute;
         width: 14px;
 
         &:focus {
@@ -510,10 +520,12 @@
     }
 
     .b-category-header-wrapper {
-        align-items: center;
+        /*align-items: center;*/
         display: flex;
         flex: 1;
         flex-direction: column;
+        padding-left: 1em;
+
         /*position: relative;*/
     }
 
@@ -526,9 +538,14 @@
     }
 
     .b-criterium {
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);
+        /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
+        border-bottom: 1px solid hsla(193, 14%, 85%, 1);
+        border-left: 1px solid hsla(193, 14%, 82%, 1);
+        border-right: 1px solid hsla(193, 14%, 82%, 1);
+        font-size: 1.3rem;
         position: relative;
     }
+
 
     .b-criterium-title-wrapper {
         cursor: pointer;
@@ -546,11 +563,13 @@
     }
 
     .b-criterium-title {
+        color: hsla(204, 45%, 25%, 1);
         font-size: 1.3rem;
         font-weight: 400;
         line-height: 1.3em;
         margin: 0;
-        padding: 0;
+        max-width: 80ch;
+        padding: 0 0 0 .5em;
 
         &:focus {
             outline: none;
@@ -594,6 +613,10 @@
         margin-bottom: -12px;
     }
 
+    .vue-swatches__container {
+        padding: 0!important;
+    }
+
     .vue-swatches__swatch:first-child .vue-swatches__check__wrapper{
         display: none;
     }
@@ -602,10 +625,18 @@
         border: 2px solid $input-color-focus;
     }
 
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 530px) {
         .vue-swatches {
             max-width: 220px;
         }
+    }
+
+    .actions.category-actions {
+        border: 1px solid hsla(193, 14%, 82%, 1);
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top: none;
+        padding: .238em 0 .238em .5em;
     }
 
     /** Criterium Details Editor **/
@@ -808,6 +839,10 @@
     }
 
     @media only screen and (max-width: 899px) {
+        .rubrics {
+            margin: 0 1.5em;
+        }
+
         #clusters-wrapper-view2 {
             display: none;
         }
@@ -831,13 +866,17 @@
         }
 
         .b-cluster {
-            border: 1px solid $cluster-color-border;
+            border: 1px solid hsla(194, 15%, 85%, 1);
             border-top-width: 0;
 
             &.is-selected {
-                background-color: $cluster-color-selected;
+                color: hsla(190, 45%, 38%, 1);
+                font-weight: bold;
                 border-color: $cluster-color-selected;
-                color: #fff;
+                border-top-color: $cluster-color-selected;
+                border-top-width: 1px;
+                margin-top: -1px;
+                /*color: #fff;*/
             }
         }
 
@@ -851,7 +890,7 @@
             }
 
             &.is-selected {
-                border-top-color: $cluster-color-selected;
+                margin-top: 0;
             }
         }
 
@@ -864,12 +903,16 @@
             box-shadow: inset 0 0 0 2px #fff;
         }
 
-        .action-menu-list-item.is-cluster-selected {
+        /*.action-menu-list-item.is-cluster-selected {
             color: #ccc;
 
             &:hover, &:focus {
                 color: #fff;
             }
+        }*/
+
+        .b-category-header-wrapper:not(.mod-null-category) {
+            margin-top: -2px;
         }
 
         .b-criterium-title-wrapper {
@@ -914,8 +957,9 @@
             margin-bottom: .75em;
         }
 
-        .actions.category-actions {
-            padding: .5em .1em;
+        .vue-swatches {
+            margin-left: -5px;
+            margin-top: -5px;
         }
 
         .criterium-details-wrapper {
@@ -1084,6 +1128,7 @@
                 padding: 1px .25em .4em .25em;
                 position: fixed;
                 width: 18em;
+                z-index: 1000;
 
                 .name-input-field.mod-textarea {
                     height: 35px;
@@ -1134,9 +1179,7 @@
         .rubrics {
             flex: 1;
             margin: 0;
-            max-width: initial;
             position: relative;
-            width: initial;
         }
 
         .rubrics-wrapper {
@@ -1237,6 +1280,10 @@
             margin-bottom: -1px;
             margin-left: 1em;
             max-width: calc(100% - 23em);
+
+            .name-input {
+                position: fixed;
+            }
         }
 
         .b-cluster-list-item {
@@ -1316,6 +1363,7 @@
             border-bottom-color: transparent;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
+
 
             &.is-selected {
                 border-bottom-color: $bg-color;
@@ -1443,18 +1491,11 @@
 
         .b-category-header-wrapper {
             align-items: stretch;
-            padding-left: 1em;
         }
 
         .b-category-title {
-            color: hsla(190, 50%, 29%, 1);
+            font-size: 1.35rem;
             flex: 1;
-            font-size: 1.33rem;
-
-            &.mod-null-category {
-                font-style: oblique;
-                opacity: 0.8;
-            }
 
             &.mod-null-category-drag {
                 font-style: oblique;
@@ -1462,24 +1503,7 @@
             }
         }
 
-        .actions.category-actions {
-            border: 1px solid hsla(193, 14%, 82%, 1);
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-            border-top: none;
-            padding: .238em 0 .238em .5em;
-        }
-
         .b-category-list-item {
-            background: linear-gradient(to bottom,
-                hsla(60, 2%, 91%, 0.6) 0px,
-                hsla(60, 2%, 91%, 0) 14px,
-                hsla(204, 38%, 40%, 0) 0px,
-                hsla(204, 38%, 40%, 0.12) 36px);
-            background: hsla(204, 38%, 40%, 0.12);
-            border: 1px solid hsla(193, 14%, 82%, 1);
-            border-top-left-radius: $border-radius;
-            border-top-right-radius: $border-radius;
             padding: 0;
         }
 
@@ -1495,12 +1519,6 @@
             &:hover, &.is-menu-visible {
                 background: $item-actions-bg-color;
             }
-        }
-
-        .btn-category-color {
-            margin: 0;
-            margin-left: -7px;
-            position: absolute;
         }
 
         /* Without the filler it's very hard to drag a category into an empty cluster */
@@ -1520,7 +1538,8 @@
 
         .category-name-input {
             margin-top: .1em;
-            width: 18em;
+            min-width: 19em;
+            padding-right: 1em;
         }
 
         .actions.cluster-actions {
@@ -1540,13 +1559,6 @@
         }
 
         .b-criterium {
-            background: none;
-            /*background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0) 14px);*/
-            border-bottom: 1px solid hsla(193, 14%, 85%, 1);
-            border-left: 1px solid hsla(193, 14%, 82%, 1);
-            border-right: 1px solid hsla(193, 14%, 82%, 1);
-            font-size: 1.3rem;
-
             &.is-selected {
                 background: $bg-criterium-details;
                 border: 2px solid $btn-color;
@@ -1562,10 +1574,6 @@
             right: -7.35em;
             top: 4.8em;
             width: 9em;
-        }
-
-        .b-criterium-title {
-            color: hsla(204, 45%, 25%, 1);
         }
 
         .item-header-bar.mod-criterium {
@@ -1608,10 +1616,6 @@
         .vue-swatches {
             margin-bottom: 0;
             width: 100%;
-        }
-
-        .vue-swatches__container {
-            padding: 0!important;
         }
 
         .vue-swatches__wrapper {

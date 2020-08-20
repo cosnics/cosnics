@@ -174,12 +174,13 @@
 <style lang="scss">
     .rubrics-wrapper-levels {
         margin-left: -1.5em;
+        max-width: 52em;
+        width: 100%;
     }
 
     .levels-container {
         margin-left: .75em;
         position: relative;
-        width: 100%;
     }
 
     .levels-title {
@@ -462,5 +463,12 @@
     .level-details .actions {
         margin-top: .5em;
         width: 100%;
+    }
+
+    @media only screen and (max-width: 659px) {
+        .rubrics-wrapper-levels {
+            max-width: initial;
+            width: initial;
+        }
     }
 </style>

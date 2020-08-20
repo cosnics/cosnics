@@ -37,7 +37,7 @@
     <div :id="id" class="b-category-list-item handle category-handle" :class="{ 'mod-null-category': !category.title }">
         <div class="item-header-bar mod-category">
             <button v-if="category.title" :aria-label="$t('color-picker')" :title="$t('color-picker')" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-category-color" :class="{ 'xvue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color || null}" @click="openColorPickerForCategory(category)"></button>
-            <div class="b-category-header-wrapper">
+            <div class="b-category-header-wrapper" :class="{ 'mod-null-category': !category.title }">
                 <swatches :id="id + '--swatches'" :swatches="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
                 <h2 class="b-category-title" :class="{ 'mod-null-category': !category.title }" @dblclick.stop="startEditing">{{ category.title || $t('list-of-criteria') }}</h2>
             </div>

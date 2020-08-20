@@ -9,11 +9,11 @@
         </div>
         <h1 class="rubric-title">{{ rubric.title }}</h1>
         <ul class="clusters">
-            <li v-for="cluster in rubric.clusters" class="cluster-list-item">
+            <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                 <div class="cluster">
                     <h2 class="cluster-title">{{ cluster.title }}</h2>
                     <ul class="categories">
-                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`">
+                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
                             <div class="category">
                                 <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
                                 <ul class="criteria">
