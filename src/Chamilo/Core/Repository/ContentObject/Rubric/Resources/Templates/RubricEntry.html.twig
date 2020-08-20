@@ -14,6 +14,11 @@
         <h4 style="margin-top: 0; margin-bottom: 40px;">{{ 'RubricEntry'|trans({}, appContext) }}</h4>
 
         <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
+            <template v-slot:slot-outer>
+                <div style="left: 0; margin-left: .5em; margin-top: .5em; position: absolute;">
+                    <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')"></button>
+                </div>
+            </template>
         </rubric-entry-wrapper>
         {{ form_start(FORM) }}
         {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
@@ -23,6 +28,18 @@
         Vue.use(BootstrapVue);
         Vue.use(VueI18n);
         Vue.use(this['cosnics-rubric'].default);
+
+        var messages = {
+            'en': {
+                'save': 'Save'
+            },
+            'fr': {
+                'save': 'Sauvegarder'
+            },
+            'nl': {
+                'save': 'Opslaan'
+            }
+        };
 
         var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
         var data = JSON.parse(rubricDataJSON);
@@ -36,7 +53,7 @@
         }
 
         new Vue({
-            i18n: new VueI18n({ locale: lang }),
+            i18n: new VueI18n({ locale: lang, messages }),
             el: '#rubric-entry',
             data: {
                 rubricData: data,
