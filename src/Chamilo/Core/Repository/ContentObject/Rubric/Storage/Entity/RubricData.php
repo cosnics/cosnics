@@ -683,4 +683,24 @@ class RubricData
         return $this->removedEntities;
     }
 
+    /**
+     * @return float
+     */
+    public function getMaximumScore()
+    {
+        $maximumScore = 0.0;
+
+        foreach($this->getTreeNodes() as $treeNode)
+        {
+            if(!$treeNode instanceof CriteriumNode)
+            {
+                continue;
+            }
+
+            $maximumScore += $treeNode->getMaximumScore();
+        }
+
+        return $maximumScore;
+    }
+
 }

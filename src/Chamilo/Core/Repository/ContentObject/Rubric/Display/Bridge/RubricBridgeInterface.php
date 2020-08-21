@@ -26,4 +26,10 @@ interface RubricBridgeInterface
      * @return User[]
      */
     public function getTargetUsers();
+
+    /**
+     * @param User $user
+     * @param float $totalScore
+     */
+    public function saveScore(User $user, float $totalScore, float $maxScore);
 }

@@ -237,6 +237,14 @@ abstract class TreeNode
     }
 
     /**
+     * @return bool
+     */
+    public function isRootNode(): bool
+    {
+        return !$this->hasParentNode();
+    }
+
+    /**
      * @return int
      */
     public function getSort(): ?int

@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\RubricBridge
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\ExtensionManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Service\AssignmentRubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -89,9 +90,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $feedbackServiceBridge =
             new FeedbackServiceBridge($assignmentFeedbackServiceBridge, $notificationServiceBridge);
 
-        $rubricBridge = new RubricBridge($this->getAssignmentServiceBridge());
+        $rubricBridge = new RubricBridge(
+            $this->getAssignmentServiceBridge(), new ScoreService($this->getAssignmentServiceBridge())
+        );
 
-        if($this->getEntry() instanceof Entry)
+        if ($this->getEntry() instanceof Entry)
         {
             $feedbackServiceBridge->setEntry($this->getEntry());
             $rubricBridge->setEntry($this->getEntry());
@@ -468,7 +471,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $response = $application->run();
 
-        if($embedded && ($response instanceof JsonResponse || $response instanceof RedirectResponse))
+        if ($embedded && ($response instanceof JsonResponse || $response instanceof RedirectResponse))
         {
             $response->send();
             exit;

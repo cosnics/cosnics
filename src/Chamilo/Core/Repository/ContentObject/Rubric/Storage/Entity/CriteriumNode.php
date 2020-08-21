@@ -185,4 +185,23 @@ class CriteriumNode extends TreeNode
         return $this;
     }
 
+    /**
+     * @return float
+     */
+    public function getMaximumScore()
+    {
+        $maximumScore = 0;
+
+        foreach($this->choices as $choice)
+        {
+            $score = $choice->calculateScore();
+            if($score > $maximumScore)
+            {
+                $maximumScore = $score;
+            }
+        }
+
+        return $maximumScore;
+    }
+
 }

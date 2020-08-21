@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler;
 use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\CriteriumResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Libraries\Format\Form\FormHandler;
 use JMS\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,9 +39,12 @@ class EntryFormHandler extends FormHandler
      * EntryFormHandler constructor.
      *
      * @param RubricResultService $rubricResultService
+     * @param RubricService $rubricService
      * @param Serializer $serializer
      */
-    public function __construct(RubricResultService $rubricResultService, Serializer $serializer)
+    public function __construct(
+        RubricResultService $rubricResultService, Serializer $serializer
+    )
     {
         $this->rubricResultService = $rubricResultService;
         $this->serializer = $serializer;
@@ -78,13 +82,20 @@ class EntryFormHandler extends FormHandler
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . CriteriumResultJSONModel::class . '>', 'json'
         );
 
+        $totalScore = 0;
+
         foreach ($this->parameters->getTargetUsers() as $targetUser)
         {
-            $this->rubricResultService->storeRubricResults(
+            $totalScore = $this->rubricResultService->storeRubricResults(
                 $this->parameters->getUser(), $targetUser, $this->parameters->getRubricData(),
                 $this->parameters->getContextIdentifier(), $resultJSONModels
             );
         }
+
+        $this->parameters->getRubricBridge()->saveScore(
+            $this->parameters->getUser(), $totalScore,
+            $this->parameters->getRubricData()->getMaximumScore()
+        );
 
         return true;
     }

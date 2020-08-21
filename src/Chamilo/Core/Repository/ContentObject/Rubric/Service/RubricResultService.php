@@ -45,6 +45,7 @@ class RubricResultService
      * @param ContextIdentifier $contextIdentifier
      * @param CriteriumResultJSONModel[] $criteriumResultJSONModels
      *
+     * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Exception
@@ -85,12 +86,14 @@ class RubricResultService
             $criteriumScores[$treeNode->getId()] = $calculatedScore;
         }
 
-        $this->calculateAndStoreContainerScore(
+        $totalScore = $this->calculateAndStoreContainerScore(
             $user, $targetUser, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
             $criteriumScores
         );
 
         $this->rubricResultRepository->flush();
+
+        return $totalScore;
     }
 
     /**

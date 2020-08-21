@@ -934,7 +934,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function canUseRubricEvaluation()
     {
-        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if($this->getAssignmentServiceBridge()->canEditAssignment())
         {
             return true;
         }

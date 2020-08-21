@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -35,15 +36,22 @@ class EntryFormHandlerParameters
     protected $contextIdentifier;
 
     /**
+     * @var RubricBridgeInterface
+     */
+    protected $rubricBridge;
+
+    /**
      * EntryFormHandlerParameters constructor.
      *
      * @param User $user
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
+     * @param RubricBridgeInterface $rubricBridge
      * @param array $targetUsers
      */
     public function __construct(
-        User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, array $targetUsers
+        User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, RubricBridgeInterface $rubricBridge,
+        array $targetUsers
     )
     {
         if (empty($targetUsers))
@@ -63,6 +71,7 @@ class EntryFormHandlerParameters
         $this->rubricData = $rubricData;
         $this->contextIdentifier = $contextIdentifier;
         $this->targetUsers = $targetUsers;
+        $this->rubricBridge = $rubricBridge;
     }
 
     /**
@@ -95,5 +104,13 @@ class EntryFormHandlerParameters
     public function getContextIdentifier(): ?ContextIdentifier
     {
         return $this->contextIdentifier;
+    }
+
+    /**
+     * @return RubricBridgeInterface
+     */
+    public function getRubricBridge(): ?RubricBridgeInterface
+    {
+        return $this->rubricBridge;
     }
 }
