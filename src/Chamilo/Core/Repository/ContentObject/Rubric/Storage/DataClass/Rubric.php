@@ -98,36 +98,6 @@ class Rubric extends ContentObject implements Versionable
             return false;
         }
 
-        $rubricData = new RubricData($this->get_title());
-        $rubricData->setContentObjectId($this->getId());
-
-        $clusterNode = new ClusterNode($this->get_title(), $rubricData, $rubricData->getRootNode());
-        new CategoryNode('', $rubricData, $clusterNode);
-
-        $level = new Level($rubricData);
-
-        $level->setTitle(
-            Translation::getInstance()->getTranslation('LevelGood', [], 'Chamilo\Core\Repository\ContentObject\Rubric')
-        );
-
-        $level->setScore(10);
-
-        $level2 = new Level($rubricData);
-
-        $level2->setTitle(
-            Translation::getInstance()->getTranslation('LevelBad', [], 'Chamilo\Core\Repository\ContentObject\Rubric')
-        );
-
-        $level2->setScore(0);
-
-        $this->getRubricService()->saveRubric($rubricData);
-
-        $this->setActiveRubricDataId($rubricData->getId());
-        if (!parent::update())
-        {
-            return false;
-        }
-
         return true;
     }
 }
