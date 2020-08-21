@@ -34,7 +34,7 @@
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div class="rubric-entry-view">
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
-                    <ul class="app-header-tools mod-entry-view">
+                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
                         <slot name="demoEvaluator"></slot>
                         <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
                     </ul>
@@ -220,8 +220,11 @@
             background-color: hsla(190, 35%, 75%, 0.2);
             margin-right: 1em;
             min-width: 18.8em;
-            padding-left: 1.2em;
             width: 18.8em;
+
+            &.mod-demo {
+                padding-left: 1.2em;
+            }
         }
 
         &.levels-table-header {

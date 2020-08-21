@@ -773,6 +773,18 @@
         }
     }
 
+    .criterium-weight, .criterium-level-score {
+        .input-detail {
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+
+            &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                appearance: none;
+            }
+        }
+    }
+
     .remove-fixed {
         align-items: center;
         background: transparent;
