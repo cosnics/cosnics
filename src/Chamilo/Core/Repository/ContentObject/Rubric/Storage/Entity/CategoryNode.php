@@ -30,11 +30,11 @@ class CategoryNode extends TreeNode
     }
 
     /**
-     * @param string $color
+     * @param string|null $color
      *
      * @return CategoryNode
      */
-    public function setColor(string $color): CategoryNode
+    public function setColor(string $color = null): CategoryNode
     {
         $this->color = $color;
 
