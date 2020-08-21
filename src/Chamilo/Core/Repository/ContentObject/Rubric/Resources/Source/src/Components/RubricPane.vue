@@ -364,7 +364,7 @@
                 oldCategory.removeChild(criterium);
                 const category = new Category();
                 category.color = '';
-                this.selectedCluster!.addChild(category, this.selectedCluster!.categories.length);
+                this.addCategory(category);
                 category.addChild(criterium, event.added.newIndex);
                 this.dataConnector?.moveTreeNode(criterium, category, event.added.newIndex);
             }
