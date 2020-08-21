@@ -183,6 +183,18 @@
                     {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
                 </div>
             {% endif %}
+            <div class="pull-right">
+                <a href="{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL }}">
+                <div class="toggle btn btn-primary btn-sm {{ SELF_EVALUATION_ALLOWED ? '' : 'off' }}" style="width: 180px; height: 30px;">
+                    <div class="toggle-group">
+                        <label class="btn btn-primary btn-sm toggle-on">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</label>
+                        <label class="btn btn-default btn-sm active toggle-off">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</label>
+                        <span class="toggle-handle btn btn-default btn-sm"></span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="clearfix"></div>
             <div style="margin: 40px 0;">{{ RUBRIC_PREVIEW|raw }}</div>
         {% else %}
             <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>

@@ -125,7 +125,7 @@ class ViewerComponent extends Manager implements TableSupport
         $searchToolbarRenderer = new ButtonToolBarRenderer($searchToolbar);
 
         $supportsRubrics = $this->supportsRubrics();
-        $hasRubric = $canBuildRubric = false;
+        $hasRubric = $canBuildRubric = $selfEvaluationAllowed = false;
         $rubricPreview = null;
 
         if ($supportsRubrics)
@@ -133,6 +133,9 @@ class ViewerComponent extends Manager implements TableSupport
             $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
             $rubricPreview = $this->runRubricComponent('Preview');
             $rubricContentObject = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
+            $selfEvaluationAllowed =
+                $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
+
             if ($rubricContentObject instanceof Rubric)
             {
                 try
@@ -140,7 +143,9 @@ class ViewerComponent extends Manager implements TableSupport
                     $rubricData = $this->getRubricService()->getRubric($rubricContentObject->getActiveRubricDataId());
                     $canBuildRubric = $this->getRubricService()->canChangeRubric($rubricData);
                 }
-                catch (\Exception $ex) {}
+                catch (\Exception $ex)
+                {
+                }
             }
         }
 
@@ -171,6 +176,10 @@ class ViewerComponent extends Manager implements TableSupport
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
+            'TOGGLE_RUBRIC_SELF_EVALUATION_URL' => $this->get_url(
+                [self::PARAM_ACTION => self::ACTION_TOGGLE_RUBRIC_SELF_EVALUATION]
+            ),
+            'SELF_EVALUATION_ALLOWED' => $selfEvaluationAllowed,
             'CAN_BUILD_RUBRIC' => $canBuildRubric,
             'RUBRIC_PREVIEW' => $rubricPreview,
             'SELECTED_TAB' => $this->getRequest()->getFromUrl(self::PARAM_SELECTED_TAB)

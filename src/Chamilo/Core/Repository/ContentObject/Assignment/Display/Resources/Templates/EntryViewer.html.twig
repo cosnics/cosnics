@@ -149,7 +149,9 @@
                                 {% if HAS_RUBRIC %}
                                     <div id="rubric">
                                         <div style="margin: 20px 0;">
-                                            <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                                            {% if CAN_USE_RUBRIC_EVALUATION %}
+                                                <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                                            {% endif %}
                                             <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="btn btn-default">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
                                         </div>
                                         <div style="padding: 20px 0; border-top: 1px dotted #dddddd;">

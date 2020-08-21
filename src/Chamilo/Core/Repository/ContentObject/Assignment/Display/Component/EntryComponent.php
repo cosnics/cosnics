@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
@@ -207,13 +208,15 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $extensionManager->extendEntryViewerParts($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
 
         $rubricView = null;
-        $hasRubric = false;
+        $hasRubric = $canUseRubricEvaluation = false;
 
         if($this->supportsRubrics())
         {
             $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
 
-            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY))
+            $canUseRubricEvaluation = $this->canUseRubricEvaluation();
+
+            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
             {
                 $rubricView = $this->runRubricComponent('Entry');
             }
@@ -273,7 +276,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'HAS_RUBRIC' => $hasRubric,
             'RUBRIC_VIEW' => $rubricView,
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1]),
-            'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1])
+            'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1]),
+            'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -923,5 +927,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getUserService()
     {
         return $this->getService('chamilo.core.user.service.user_service');
+    }
+
+    /**
+     * @return bool|null
+     */
+    protected function canUseRubricEvaluation()
+    {
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            return true;
+        }
+
+        return $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
     }
 }

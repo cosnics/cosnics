@@ -61,6 +61,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_EXTENSION = 'Extension';
     const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
     const ACTION_BUILD_RUBRIC = 'BuildRubric';
+    const ACTION_TOGGLE_RUBRIC_SELF_EVALUATION = 'ToggleRubricSelfEvaluation';
     const ACTION_EMBED = 'Embed';
 
     /**

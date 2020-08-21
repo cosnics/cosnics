@@ -95,4 +95,38 @@ class AssignmentRubricService
         return $assignmentRubric instanceof AssignmentRubric;
     }
 
+    /**
+     * @param Assignment $assignment
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function toggleRubricSelfEvaluationComponent(Assignment $assignment)
+    {
+        $assignmentRubric = $this->assignmentRubricRepository->getAssignmentRubricForAssignment($assignment);
+        if(!$assignmentRubric instanceof AssignmentRubric)
+        {
+            return;
+        }
+
+        $assignmentRubric->setSelfEvaluationAllowed(!$assignmentRubric->isSelfEvaluationAllowed());
+
+        $this->assignmentRubricRepository->saveAssignmentRubric($assignmentRubric);
+    }
+
+    /**
+     * @param Assignment $assignment
+     *
+     * @return bool|null
+     */
+    public function isSelfEvaluationAllowed(Assignment $assignment)
+    {
+        $assignmentRubric = $this->assignmentRubricRepository->getAssignmentRubricForAssignment($assignment);
+        if(!$assignmentRubric instanceof AssignmentRubric)
+        {
+            return false;
+        }
+
+        return $assignmentRubric->isSelfEvaluationAllowed();
+    }
+
 }

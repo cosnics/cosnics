@@ -41,6 +41,13 @@ class AssignmentRubric
     protected $rubricId;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="self_evaluation_allowed", type="boolean")
+     */
+    protected $selfEvaluationAllowed = false;
+
+    /**
      * @return int
      */
     public function getId(): ?int
@@ -99,4 +106,25 @@ class AssignmentRubric
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSelfEvaluationAllowed(): ?bool
+    {
+        return $this->selfEvaluationAllowed;
+    }
+
+    /**
+     * @param bool $selfEvaluationAllowed
+     *
+     * @return AssignmentRubric
+     */
+    public function setSelfEvaluationAllowed(bool $selfEvaluationAllowed): AssignmentRubric
+    {
+        $this->selfEvaluationAllowed = $selfEvaluationAllowed;
+
+        return $this;
+    }
+
 }
