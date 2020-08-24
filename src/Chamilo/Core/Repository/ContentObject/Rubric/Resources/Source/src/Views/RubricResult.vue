@@ -300,6 +300,10 @@
         width: 40em;
     }
 
+    .choice-feedback {
+        white-space: pre-line;
+    }
+
     @media only screen and (min-width: 900px) {
         .rr-selected-criterium {
             border-left: 1px solid hsla(191, 21%, 80%, 1);
@@ -332,6 +336,7 @@
 
         p {
             margin: 0;
+            white-space: pre-line;
         }
 
         span {

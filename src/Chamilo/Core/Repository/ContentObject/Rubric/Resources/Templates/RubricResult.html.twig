@@ -21,11 +21,11 @@
         Vue.use(VueI18n);
         Vue.use(this['cosnics-rubric'].default);
 
-        var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
-        var data = JSON.parse(rubricDataJSON);
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
 
-        var rubricResultsJSON = '{{ RUBRIC_RESULTS_JSON|raw }}';
-        var results = JSON.parse(rubricResultsJSON);
+        /*var results = JSON.parse(rubricResultsJSON);*/
+        var results = {{ RUBRIC_RESULTS_JSON|raw }};
 
         var lang;
         try {

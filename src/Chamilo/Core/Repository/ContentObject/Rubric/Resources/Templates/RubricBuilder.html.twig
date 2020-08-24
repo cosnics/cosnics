@@ -30,8 +30,8 @@
         Vue.use(this['cosnics-rubric'].default);
         Vue.use(VueI18n);
 
-        var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
-        var data = JSON.parse(rubricDataJSON);
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
         /*const rubricData ={
             "useScores":true,
             "title":"my_rubric",

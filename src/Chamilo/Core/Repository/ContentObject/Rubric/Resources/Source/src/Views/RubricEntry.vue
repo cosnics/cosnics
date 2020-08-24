@@ -302,6 +302,7 @@
         display: none;
         line-height: 1.4em;
         padding: .3em .5em;
+        white-space: pre-line;
 
         &.is-feedback-visible {
             display: block;

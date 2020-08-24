@@ -41,8 +41,8 @@
             }
         };
 
-        var rubricDataJSON = '{{ RUBRIC_DATA_JSON|raw }}';
-        var data = JSON.parse(rubricDataJSON);
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
 
         var lang;
         try {
