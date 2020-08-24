@@ -4,6 +4,7 @@
         "add": "Add",
         "cancel": "Cancel",
         "default": "Default",
+        "default-info": "Optional choice field. The level assigned by default to a criterium.",
         "enter-level-here": "Enter a level here",
         "level": "Level",
         "move-level-down": "Move level down",
@@ -15,6 +16,7 @@
         "add": "Ajouter",
         "cancel": "Annuler",
         "default": "Norme",
+        "default-info": "Contrôle de choix optionnel. Le niveau attribué par défaut à un critère.",
         "enter-level-here": "Entre un niveau ici",
         "level": "Niveau",
         "move-level-down": "Déplacer vers le bas",
@@ -26,6 +28,7 @@
         "add": "Voeg Toe",
         "cancel": "Annuleer",
         "default": "Standaard",
+        "default-info": "Optioneel keuzeveld. Het niveau dat standaard wordt toegekend aan een criterium.",
         "enter-level-here": "Vul hier een niveau in",
         "level": "Niveau",
         "move-level-down": "Verplaats niveau naar beneden",
@@ -56,7 +59,7 @@
             <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model="level.score" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" class="input-detail">
         </div>
         <div class="ld-default" @click.stop="">
-            <label :for="`level_default_${index}`" class="level-label label-hidden">{{ $t('default') }}</label>
+            <label :for="`level_default_${index}`" class="level-label label-hidden">{{ $t('default') }} <i class="fa fa-info-circle" :title="$t('default-info')" /></label>
             <input :id="`level_default_${index}`" :tabindex="tabIndex" type="radio" :checked="level.isDefault" @click.stop="setDefault" class="input-detail">
             <label :for="`level_default_${index}`" :class="`${level.isDefault ? 'checked' : 'not-checked'}`" class="fa" aria-hidden="true"></label>
         </div>
