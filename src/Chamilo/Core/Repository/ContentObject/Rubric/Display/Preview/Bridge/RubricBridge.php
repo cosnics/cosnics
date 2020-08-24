@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Display\Preview\Bridge;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * Class RubricBridge
  *
@@ -23,5 +25,10 @@ class RubricBridge implements \Chamilo\Core\Repository\ContentObject\Rubric\Disp
     public function getTargetUsers()
     {
         // TODO: Implement getTargetUsers() method.
+    }
+
+    public function saveScore(User $user, float $totalScore, float $maxScore)
+    {
+        // TODO: Implement saveScore() method.
     }
 }
