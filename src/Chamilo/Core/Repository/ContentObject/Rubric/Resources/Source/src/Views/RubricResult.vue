@@ -25,7 +25,7 @@
 </i18n>
 
 <template>
-    <div id="app" class="mod-sep" >
+    <div id="app" :class="{ 'mod-sep': this.options.isDemo }">
         <div v-if="rubric" class="rubric mod-result-view">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -154,6 +154,7 @@
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
         @Prop({type: Array, default: () => []}) readonly criteriumResults!: CriteriumResult[];
+        @Prop({type: Object, default: () => ({})}) readonly options!: any;
 
         getCriteriumMaxScore(criterium: Criterium) : number {
             const scores : number[] = [0];

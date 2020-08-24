@@ -3,6 +3,13 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
+
+    <style type="text/css">
+        .tab-pane #rubric-preview {
+            margin: 5px -10px;
+        }
+    </style>
+
     <div id="rubric-preview">
         <rubric-preview-wrapper v-if="rubricData" :rubric-data="rubricData"></rubric-preview-wrapper>
     </div>

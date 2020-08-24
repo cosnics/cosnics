@@ -13,7 +13,7 @@
 </i18n>
 
 <template>
-    <div class="container-fluid">
+    <div style="margin-top: -20px">
         <rubric-entry :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
                       @level-selected="selectLevel" @criterium-feedback-changed="updateCriteriumFeedback">
             <template v-slot:demoEvaluator>

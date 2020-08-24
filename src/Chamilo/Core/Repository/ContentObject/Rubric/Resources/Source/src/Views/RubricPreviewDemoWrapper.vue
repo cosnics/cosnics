@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="store.uiState.preview"></rubric-entry>
+    <div style="margin-top: -20px">
+        <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="store.uiState.preview" :options="{ isPreviewDemo: true }"></rubric-entry>
     </div>
 </template>
 

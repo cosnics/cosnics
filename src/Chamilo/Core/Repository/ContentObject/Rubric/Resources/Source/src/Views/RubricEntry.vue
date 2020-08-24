@@ -28,7 +28,7 @@
 </i18n>
 
 <template>
-    <div id="app" class="mod-sep">
+    <div id="app" :class="{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo }">
         <div class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -217,7 +217,7 @@
         }
 
         &.app-header-tools {
-            background-color: hsla(190, 35%, 75%, 0.2);
+            /*background-color: hsla(190, 35%, 75%, 0.2);*/
             margin-right: 1em;
             min-width: 18.8em;
             width: 18.8em;

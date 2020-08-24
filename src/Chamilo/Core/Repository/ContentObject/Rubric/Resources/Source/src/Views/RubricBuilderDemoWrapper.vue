@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div style="margin: -20px 0">
         <rubric-builder :api-config="config" :version="null" :rubric-data="store.rubricData"  :ui-state="store.uiState.builder" @rubric-updated="onRubricUpdated"></rubric-builder>
     </div>
 </template>

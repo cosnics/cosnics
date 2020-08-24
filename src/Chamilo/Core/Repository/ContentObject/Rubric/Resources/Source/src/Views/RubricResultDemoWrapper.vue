@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <rubric-result v-if="rubric" :rubric="rubric" :evaluators="store.rubricResults.evaluators" :criterium-results="criteriumResults"></rubric-result>
+    <div style="margin-top: -20px">
+        <rubric-result v-if="rubric" :rubric="rubric" :evaluators="store.rubricResults.evaluators" :criterium-results="criteriumResults" :options="{ isDemo:  true }"></rubric-result>
     </div>
 </template>
 

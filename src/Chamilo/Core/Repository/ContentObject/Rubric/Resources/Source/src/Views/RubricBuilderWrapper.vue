@@ -1,8 +1,9 @@
 <template>
-    <div class="container-fluid">
+    <div v-if="debugServerResponse">
         <rubric-builder :api-config="apiConfig" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
-        <div v-if="debugServerResponse" id="server-response"></div>
+        <div id="server-response"></div>
     </div>
+    <rubric-builder v-else :api-config="apiConfig" :rubric-data="convertedRubricData" :version="version" :ui-state="uiState"></rubric-builder>
 </template>
 
 <script lang="ts">

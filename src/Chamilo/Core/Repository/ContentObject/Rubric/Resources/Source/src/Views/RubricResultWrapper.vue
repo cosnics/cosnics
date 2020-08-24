@@ -1,7 +1,5 @@
 <template>
-  <div class="container-fluid">
-      <rubric-result v-if="rubric" :rubric="rubric" :evaluators="evaluators" :criterium-results="criteriumResults"></rubric-result>
-  </div>
+    <rubric-result v-if="rubric" :rubric="rubric" :evaluators="evaluators" :criterium-results="criteriumResults"></rubric-result>
 </template>
 
 <script lang="ts">

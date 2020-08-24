@@ -1,7 +1,5 @@
 <template>
-    <div class="container-fluid">
-        <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="uiState"></rubric-entry>
-    </div>
+    <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="uiState"></rubric-entry>
 </template>
 
 <script lang="ts">
