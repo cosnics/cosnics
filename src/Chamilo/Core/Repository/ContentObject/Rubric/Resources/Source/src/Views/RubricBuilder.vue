@@ -376,6 +376,7 @@
 
         i {
             padding-left: 2px;
+            width: initial;
         }
 
         span {
