@@ -361,6 +361,10 @@
         .level-label {
             position: absolute;
             transform: translateY(-2.3em);
+
+            i {
+                width: initial;
+            }
         }
 
         .input-detail {
