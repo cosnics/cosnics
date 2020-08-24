@@ -17,8 +17,8 @@
         "default": "Norme",
         "enter-level-here": "Entre un niveau ici",
         "level": "Niveau",
-        "move-level-down": "Vers le bas",
-        "move-level-up": "Vers le haut",
+        "move-level-down": "Déplacer vers le bas",
+        "move-level-up": "Déplacer vers le haut",
         "points": "Points",
         "remove-level": "Supprimer le niveau"
     },
