@@ -11,7 +11,6 @@
     }
 </script>
 <style lang="scss">
-    @include chamilo();
     @include loader();
     @include app();
     @include table-app();
