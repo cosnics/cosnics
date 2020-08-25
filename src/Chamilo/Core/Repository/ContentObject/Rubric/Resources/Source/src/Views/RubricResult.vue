@@ -51,14 +51,14 @@
                                                     <div class="criterium-title-header mod-result-view">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                     </div>
-                                                    <div v-for="evaluator in evaluators" class="subtotal criterium-total mod-result-view">
-                                                        <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-${evaluator}`">
+                                                    <div v-for="(evaluator, index) in evaluators" class="subtotal criterium-total mod-result-view">
+                                                        <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-evaluation-${index}`">
                                                             <i v-if="getCriteriumEvaluation(criterium, evaluator).feedback" class="score-feedback-icon fa fa-info"/>
                                                             {{ getCriteriumScore(criterium, evaluator) }}
                                                         </div>
-                                                        <b-tooltip v-if="getCriteriumEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-${evaluator}`" placement="bottom">{{
-                                                            getCriteriumEvaluation(criterium, evaluator).feedback
-                                                          }}</b-tooltip>
+                                                        <b-tooltip v-if="getCriteriumEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-evaluation-${index}`" placement="bottom">
+                                                            {{ getCriteriumEvaluation(criterium, evaluator).feedback }}
+                                                        </b-tooltip>
                                                     </div>
                                                     <div class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium-max">{{ getCriteriumMaxScore(criterium) }}</div>
