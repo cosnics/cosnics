@@ -23,11 +23,11 @@
                                                 <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                             </div>
                                             <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
-                                                <div class="criterium-level-header mod-builder-full-view">
+                                                <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
                                                     <div class="criterium-level-title">
                                                         {{data.level.title}}
                                                     </div>
-                                                    <div class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
+                                                    <div class="score-number" :class="{ 'is-using-scores': rubric.useScores }"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                                 </div>
                                                 <div class="default-feedback-full-view" @click="focusTextField">
                                                     <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
@@ -115,15 +115,25 @@
             }
         }
 
-        mounted() {
+        updateHeightAll() {
             this.$nextTick(() => {
                 document.querySelectorAll('.ta-default-feedback').forEach(el => {
                     updateHeight(el as HTMLElement);
                 });
             });
         }
+
+        mounted() {
+            this.updateHeightAll();
+        }
+
+        @Watch('rubric.useScores')
+        onUsesScoresChange() {
+            this.updateHeightAll();
+        }
     }
 </script>
+
 <style lang="scss">
     .mod-builder-full-view {
         &.levels-table-header {
@@ -167,6 +177,18 @@
         }
     }
 
+    @media only screen and (min-width: 900px) {
+        .mod-builder-full-view {
+            &.criterium-level-header {
+                display: none;
+
+                &.is-using-scores {
+                    display: block;
+                }
+            }
+        }
+    }
+
     @media only screen and (max-width: 899px) {
         .mod-builder-full-view {
             &.rubric {
@@ -188,6 +210,14 @@
                 padding-left: .25em;
                 padding-right: .3em;
                 text-align: left;
+            }
+
+            .score-number {
+                display: none;
+
+                &.is-using-scores {
+                    display: block;
+                }
             }
         }
 

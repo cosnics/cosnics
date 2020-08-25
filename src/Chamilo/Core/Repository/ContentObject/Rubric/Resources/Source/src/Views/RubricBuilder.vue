@@ -769,7 +769,7 @@
     .criterium-details .input-detail {
         border: 1px solid $input-color;
         border-radius: $border-radius;
-        margin-right: 1.5em;
+        margin-right: 0;
 
         &:hover {
             background-color: rgba(255, 255, 255, 0.25);
@@ -784,6 +784,10 @@
             &, &:hover, &:focus {
                 background-color: $fixed-score-color;
             }
+        }
+
+        &.is-using-scores {
+            margin-right: 1.5em;
         }
     }
 

@@ -20,6 +20,7 @@
         <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
         <div class="criterium-level-input">
         <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
+                  :class="{ 'is-using-scores': rubric.useScores }"
                   :placeholder="$t('enter-level-description')"
                   @input="onFeedbackChange"></textarea>
             <div v-if="rubric.useScores" class="criterium-level-score">
