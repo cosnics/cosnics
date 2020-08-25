@@ -35,6 +35,7 @@ abstract class Manager extends AjaxManager
     const PARAM_NEW_SORT = 'newSort';
     const PARAM_LEVEL_DATA = 'levelData';
     const PARAM_CHOICE_DATA = 'choiceData';
+    const PARAM_RUBRIC_JSON_DATA = 'rubricData';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -122,5 +123,13 @@ abstract class Manager extends AjaxManager
     protected function getChoiceData()
     {
         return $this->getRequest()->getFromPost(self::PARAM_CHOICE_DATA);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRubricJSONData()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_RUBRIC_JSON_DATA);
     }
 }
