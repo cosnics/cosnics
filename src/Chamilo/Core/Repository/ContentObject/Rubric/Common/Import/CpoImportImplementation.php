@@ -44,8 +44,6 @@ class CpoImportImplementation extends ImportImplementation
     {
         $this->initializeContainer();
 
-        $this->getRubricService()->deleteRubricData($contentObject->getActiveRubricDataId());
-
         /** @var CpoContentObjectImportParameters $importParameters */
         $importParameters = $this->get_content_object_import_parameters();
 
