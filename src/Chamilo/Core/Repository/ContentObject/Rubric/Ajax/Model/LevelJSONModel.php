@@ -53,11 +53,11 @@ class LevelJSONModel
      *
      * @param int $id
      * @param string $title
-     * @param string $description
      * @param int $score
      * @param bool $isDefault
+     * @param string|null $description
      */
-    public function __construct(int $id, string $title, string $description, int $score, bool $isDefault)
+    public function __construct(int $id, string $title, int $score, bool $isDefault, string $description = null)
     {
         $this->id = $id;
         $this->title = $title;
@@ -144,7 +144,7 @@ class LevelJSONModel
     public static function fromLevel(Level $level)
     {
         return new self(
-            $level->getId(), $level->getTitle(), $level->getDescription(), $level->getScore(), $level->isDefault()
+            $level->getId(), $level->getTitle(), $level->getScore(), $level->isDefault(), $level->getDescription()
         );
     }
 }

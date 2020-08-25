@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\ChoiceJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\LevelJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\RubricJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeJSONModel;
 use JMS\Serializer\Serializer;
 
@@ -78,6 +79,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function removeTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
@@ -105,6 +107,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function updateTreeNode(int $rubricDataId, int $versionId, string $treeNodeJSONData)
     {
@@ -136,6 +139,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function moveTreeNode(
         int $rubricDataId, int $versionId, string $treeNodeJSONData, int $newParentId, int $newSort
@@ -188,6 +192,7 @@ class RubricAjaxService
      *
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function addLevel(int $rubricDataId, int $versionId, string $levelJSONData)
     {
@@ -215,6 +220,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function removeLevel(int $rubricDataId, int $versionId, string $levelJSONData)
     {
@@ -241,6 +247,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function updateLevel(int $rubricDataId, int $versionId, string $levelJSONData)
     {
@@ -269,6 +276,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function moveLevel(int $rubricDataId, int $versionId, string $levelJSONData, int $newSort)
     {
@@ -315,6 +323,7 @@ class RubricAjaxService
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
      */
     public function updateChoice(int $rubricDataId, int $versionId, string $choiceJSONData)
     {
@@ -352,6 +361,52 @@ class RubricAjaxService
         }
 
         return $choiceJSONModel;
+    }
+
+    /**
+     * @param int $rubricDataId
+     * @param int $versionId
+     * @param string $rubricJSONData
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function updateRubricData(int $rubricDataId, int $versionId, string $rubricJSONData)
+    {
+        $rubricJSONModel = $this->parseRubricJSONModel($rubricJSONData);
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
+
+        $rubricJSONModel->updateRubricData($rubricData);
+
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()],
+            'rubricData' => $rubricData
+        ];
+    }
+
+    /**
+     * @param string $rubricJSONData
+     *
+     * @return RubricJSONModel
+     */
+    protected function parseRubricJSONModel(string $rubricJSONData)
+    {
+        $rubricJSONData = $this->serializer->deserialize(
+            $rubricJSONData, RubricJSONModel::class, 'json'
+        );
+
+        if (!$rubricJSONData instanceof RubricJSONModel)
+        {
+            throw new \RuntimeException('Could not parse the rubric JSON model');
+        }
+
+        return $rubricJSONData;
     }
 
 }

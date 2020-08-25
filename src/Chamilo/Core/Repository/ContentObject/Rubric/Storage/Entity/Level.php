@@ -142,7 +142,7 @@ class Level
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      *
      * @return Level
      */
