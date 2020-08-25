@@ -9,7 +9,7 @@
     },
     "fr": {
         "extra-feedback": "Feed-back supplémentaire",
-        "gave-score": "a donné la note",
+        "gave-score": "a donné le score",
         "levels": "Niveaux",
         "rubric": "Rubrique",
         "total": "Total"

@@ -5,7 +5,7 @@
         "fixed-score": "This level has a fixed score for this level. Click to remove."
     },
     "fr": {
-        "enter-level-description": "Entrez une description de niveau",
+        "enter-level-description": "Entrer une description de niveau",
         "fixed-score": "Ce critère a une note fixe pour ce niveau. Cliquez pour l'annuler."
     },
     "nl": {
