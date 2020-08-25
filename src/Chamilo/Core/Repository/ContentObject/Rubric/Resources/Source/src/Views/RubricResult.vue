@@ -1,6 +1,7 @@
 <i18n>
 {
     "en": {
+        "chose": "chose",
         "extra-feedback": "Extra feedback",
         "gave-score": "gave a score of",
         "levels": "Levels",
@@ -8,6 +9,7 @@
         "total": "Total"
     },
     "fr": {
+        "chose": "a choisi",
         "extra-feedback": "Feed-back supplémentaire",
         "gave-score": "a donné le score",
         "levels": "Niveaux",
@@ -15,6 +17,7 @@
         "total": "Total"
     },
     "nl": {
+        "chose": "koos",
         "extra-feedback": "Extra feedback",
         "gave-score": "gaf score",
         "levels": "Niveaus",
@@ -32,8 +35,8 @@
             <div class="rubric-results-view" @click="selectedCriterium = null">
                 <div class="rubric-table-header">
                     <div class="evaluators-table-header">
-                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
-                        <div class="evaluator-table-header-title mod-max">Max.</div>
+                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
+                        <div v-if="rubric.useScores" class="evaluator-table-header-title mod-max">Max.</div>
                     </div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
@@ -51,16 +54,16 @@
                                                     <div class="criterium-title-header mod-result-view">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                     </div>
-                                                    <div v-for="(evaluator, index) in evaluators" class="subtotal criterium-total mod-result-view">
-                                                        <div class="score-number-calc mod-result-view mod-criterium" :id="`${criterium.id}-evaluation-${index}`">
+                                                    <div v-for="(evaluator, index) in evaluators" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="rubric.useScores ? '' : getCriteriumEvaluation(criterium, evaluator).level.title">
+                                                        <div class="mod-result-view" :class="rubric.useScores ? 'score-number-calc mod-criterium' : 'graded-level'" :id="`${criterium.id}-evaluation-${index}`">
                                                             <i v-if="getCriteriumEvaluation(criterium, evaluator).feedback" class="score-feedback-icon fa fa-info"/>
-                                                            {{ getCriteriumScore(criterium, evaluator) }}
+                                                            {{ rubric.useScores ? getCriteriumScore(criterium, evaluator) : getCriteriumEvaluation(criterium, evaluator).level.title }}
                                                         </div>
                                                         <b-tooltip v-if="getCriteriumEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-evaluation-${index}`" placement="bottom">
                                                             {{ getCriteriumEvaluation(criterium, evaluator).feedback }}
                                                         </b-tooltip>
                                                     </div>
-                                                    <div class="subtotal criterium-total mod-result-view">
+                                                    <div v-if="rubric.useScores" class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium-max">{{ getCriteriumMaxScore(criterium) }}</div>
                                                     </div>
                                                 </div>
@@ -69,7 +72,7 @@
                                     </div>
                                 </li>
                             </ul>
-                            <div class="subtotal cluster-total mod-result-view">
+                            <div v-if="rubric.useScores" class="subtotal cluster-total mod-result-view">
                                 <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div>
                                 <div v-for="evaluator in evaluators" class="score-result-view">
                                     <div class="score-number-calc mod-result-view mod-cluster">{{ getClusterScore(cluster, evaluator) }}</div>
@@ -81,7 +84,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="subtotal rubric-total mod-result-view">
+                <div v-if="rubric.useScores" class="subtotal rubric-total mod-result-view">
                     <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div v-for="evaluator in evaluators" class="score-result-view">
                         <div class="score-number-calc mod-result-view mod-rubric">{{ getRubricScore(evaluator) }}</div>
@@ -99,13 +102,13 @@
                         <span>{{ selectedCriterium.title }}</span>
                     </div>
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
+                        <p v-if="rubric.useScores && getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
                             getCriteriumEvaluation(selectedCriterium, evaluator).level.title
                           }}</span>)</p>
+                        <p v-else-if="getCriteriumEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
+                            '<span class="score-title">{{ getCriteriumEvaluation(selectedCriterium, evaluator).level.title }}</span>'</p>
                         <p v-if="getCriteriumEvaluation(selectedCriterium, evaluator).feedback">
-                          {{ $t('extra-feedback') }}: {{
-                            getCriteriumEvaluation(selectedCriterium, evaluator).feedback
-                          }}
+                          {{ $t('extra-feedback') }}: {{ getCriteriumEvaluation(selectedCriterium, evaluator).feedback }}
                         </p>
                     </div>
                 </div>
@@ -218,6 +221,10 @@
         flex: initial;
         width: 4.6em;
 
+        &.mod-grades {
+            width: 6.95em;
+        }
+
         &.mod-max {
             background: hsla(203, 33%, 60%, 1);
             color: #fff;
@@ -271,6 +278,10 @@
             cursor: default;
             margin-right: .5em;
             width: 5em;
+
+            &.mod-grades {
+                width: 7.5em;
+            }
         }
 
         &.score-number-calc {
@@ -282,17 +293,31 @@
                 background: $score-lighter;
             }
         }
+
+        &.graded-level {
+            background: $score-lighter;
+            border: 1px solid transparent;
+            border-radius: $border-radius;
+            color: #666;
+            font-size: 1.2rem;
+            line-height: 2.3em;
+            overflow: hidden;
+            padding: .133em .2em 0 .2em;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
     }
 
     .score-feedback-icon {
-      color: #2787ad;
-      font-size: 1.1rem;
-      margin-right: .5em;
+        color: #2787ad;
+        font-size: 1.1rem;
+        margin-right: .5em;
     }
 
     .score-result-view {
-      margin-left: .5em;
-      width: 5em;
+        margin-left: .5em;
+        width: 5em;
     }
 
     .rr-selected-criterium {
