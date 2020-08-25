@@ -39,19 +39,21 @@
                     <div class="criterium-level-title" :class="{ 'is-selected': isSelected(choice.level) }">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span v-if="useScores" class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span v-else class="graded-level" :class="{ 'is-selected': isSelected(choice.level) }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected(choice.level) }" /></span>
                 </div>
                 <button v-else role="radio" :aria-checked="isSelected(choice.level)" class="criterium-level-header mod-entry-view btn-score-number" :class="{ 'is-selected': isSelected(choice.level) }" @click="selectLevel(choice.level)">
                     <div class="criterium-level-title" :class="{ 'is-selected': isSelected(choice.level) }">
                         {{choice.title}}
                     </div>
-                    <span class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span v-if="useScores" class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                    <span v-else class="graded-level" :class="{ 'is-selected': isSelected(choice.level) }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected(choice.level) }" /></span>
                 </button>
                 <div class="default-feedback-entry-view" :class="feedbackVisibleClass">
                     {{ choice.feedback }}
                 </div>
             </div>
-            <div class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
+            <div v-if="useScores" class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
                 <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">{{ $t('total') }}:</span> {{ preview ? 0 : criteriumScore }} <span class="text-hidden">{{ $t('points') }}</span></div>
             </div>
         </div>
@@ -76,6 +78,7 @@
         @Prop({type: Object}) readonly evaluation!: CriteriumEvaluation|null;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
+        @Prop({type: Boolean, default: false}) readonly useScores!: boolean;
 
         get feedbackVisibleClass() {
             return { 'is-feedback-visible': this.ext.showDefaultFeedback || this.showDefaultFeedbackFields };
