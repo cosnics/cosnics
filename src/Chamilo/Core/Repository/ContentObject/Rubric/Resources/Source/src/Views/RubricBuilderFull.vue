@@ -27,7 +27,7 @@
                                                     <div class="criterium-level-title">
                                                         {{data.level.title}}
                                                     </div>
-                                                    <div class="score-number" :class="{ 'is-using-scores': rubric.useScores }"><!--<i class="check fa"/>-->{{ data.score }}</div>
+                                                    <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                                 </div>
                                                 <div class="default-feedback-full-view" @click="focusTextField">
                                                     <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
@@ -210,14 +210,6 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
                 padding-left: .25em;
                 padding-right: .3em;
                 text-align: left;
-            }
-
-            .score-number {
-                display: none;
-
-                &.is-using-scores {
-                    display: block;
-                }
             }
         }
 
