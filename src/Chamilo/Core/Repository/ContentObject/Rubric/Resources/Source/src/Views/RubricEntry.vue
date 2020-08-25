@@ -284,11 +284,19 @@
 
         &:hover, &:focus {
             border: 1px solid $level-selected-color;
+
+            .level-icon-check {
+                opacity: .5;
+            }
         }
 
         &.is-selected {
             &:hover, &:focus {
                 box-shadow: inset 0 0 0 1px white;
+
+                .level-icon-check {
+                    opacity: 1;
+                }
             }
         }
     }
@@ -301,9 +309,12 @@
 
     .level-icon-check {
         opacity: 0.2;
+        font-size: 1.3rem;
+        transition: opacity 200ms, font-size 200ms;
 
         &.is-selected {
             opacity: 1;
+            font-size: 1.6rem;
         }
     }
 
