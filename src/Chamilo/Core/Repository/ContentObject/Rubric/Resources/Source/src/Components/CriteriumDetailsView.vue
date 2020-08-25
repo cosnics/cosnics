@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Rubric from '../Domain/Rubric';
     import Level from '../Domain/Level';
@@ -102,6 +102,13 @@
 
         onChoiceChange(choice: Choice, criterium: Criterium, level: Level) {
             this.$emit('change-choice', choice, criterium, level);
+        }
+
+        @Watch('rubric.useScores')
+        onUsesScoresChange() {
+            window.setTimeout(() => {
+                this.updateHeightAll();
+            }, 250);
         }
     }
 </script>

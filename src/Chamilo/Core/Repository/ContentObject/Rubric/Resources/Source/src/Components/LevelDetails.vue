@@ -54,7 +54,7 @@
                 <textarea :id="`level_description_${index}`" :tabindex="tabIndex" v-model="level.description" placeholder="Vul hier een beschrijving in" @input="onChange" @focus="selectLevel" class="input-detail"></textarea>
             </div>-->
         </div>
-        <div class="ld-score" @click.stop="selectLevel">
+        <div v-if="rubric.useScores" class="ld-score" @click.stop="selectLevel">
             <label :for="`level_score_${index}`" class="level-label label-hidden">{{ $t('points') }}</label>
             <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model="level.score" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" class="input-detail">
         </div>

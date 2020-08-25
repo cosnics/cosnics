@@ -223,11 +223,15 @@
     align-items: baseline;
   }
 
-  .score-number {
+  .score-number, .graded-level {
     border-radius: $border-radius;
     color: #666;
     font-size: 1.8rem;
     line-height: 1.6em;
+  }
+
+  .graded-level {
+    display: inline-block;
   }
 
   .score-number-calc {

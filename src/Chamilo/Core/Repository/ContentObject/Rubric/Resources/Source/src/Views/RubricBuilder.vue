@@ -8,12 +8,14 @@
         "error-forbidden": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-notfound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-timeout": "The server is taking too long to respond. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
-        "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again."
+        "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
+        "use-scores": "Use Scores"
     },
     "fr": {
         "builder": "Rubrique",
         "levels": "Niveaux",
-        "builderfull": "Feed-back Rapide"
+        "builderfull": "Feed-back Rapide",
+        "use-scores": "Utiliser les Scores"
     },
     "nl": {
         "builder": "Rubric",
@@ -23,7 +25,8 @@
         "error-forbidden": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-notfound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-timeout": "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
-        "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen."
+        "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "use-scores": "Gebruik Scores"
     }
 }
 </i18n>
@@ -37,6 +40,9 @@
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
                 </ul>
             </nav>
+            <ul class="app-header-tools" v-if="rubric">
+                <li class="app-tool-item"><button class="btn-check" :aria-label="$t('use-scores')" :class="{ checked: rubric.useScores }" @click.prevent="toggleUseScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('use-scores') }}</span></button></li>
+            </ul>
             <save-area :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
         <div class="rubrics">
@@ -99,6 +105,13 @@
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
             this.uiState.selectedCriterium = criterium ? criterium.id : '';
+        }
+
+        toggleUseScores() {
+            if (this.rubric) {
+                this.rubric.useScores = !this.rubric.useScores;
+                // todo: dataconnector.
+            }
         }
 
         get content() {
@@ -756,7 +769,7 @@
     .criterium-details .input-detail {
         border: 1px solid $input-color;
         border-radius: $border-radius;
-        margin-right: 1.5em;
+        margin-right: 0;
 
         &:hover {
             background-color: rgba(255, 255, 255, 0.25);
@@ -771,6 +784,10 @@
             &, &:hover, &:focus {
                 background-color: $fixed-score-color;
             }
+        }
+
+        &.is-using-scores {
+            margin-right: 1.5em;
         }
     }
 

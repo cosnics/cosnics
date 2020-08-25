@@ -1,15 +1,15 @@
 <i18n>
 {
     "en": {
-        "enter-feedback": "Enter feedback",
+        "enter-level-description": "Enter level description",
         "fixed-score": "This level has a fixed score for this level. Click to remove."
     },
     "fr": {
-        "enter-feedback": "Commentaire / Feed-back",
+        "enter-level-description": "Entrer une description de niveau",
         "fixed-score": "Ce critère a une note fixe pour ce niveau. Cliquez pour l'annuler."
     },
     "nl": {
-        "enter-feedback": "Geef feedback",
+        "enter-level-description": "Voer een niveauomschrijving in",
         "fixed-score": "Dit criterium heeft een overschreven vaste score voor dit niveau. Klik om dit ongedaan te maken."
     }
 }
@@ -20,7 +20,8 @@
         <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
         <div class="criterium-level-input">
         <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
-                  :placeholder="$t('enter-feedback')"
+                  :class="{ 'is-using-scores': rubric.useScores }"
+                  :placeholder="$t('enter-level-description')"
                   @input="onFeedbackChange"></textarea>
             <div v-if="rubric.useScores" class="criterium-level-score">
                 <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore" :title="$t('fixed-score')"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>

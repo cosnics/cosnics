@@ -38,7 +38,7 @@
                         <slot name="demoEvaluator"></slot>
                         <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
                     </ul>
-                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
+                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
                         <div v-for="level in rubric.levels" class="level-table-header-title">
                             {{ level.title }}
                         </div>
@@ -64,23 +64,25 @@
                                                     :ext="getCriteriumData(criterium)"
                                                     :evaluation="getCriteriumEvaluation(criterium)"
                                                     :show-errors="showErrors"
+                                                    :use-scores="rubric.useScores"
                                                     @level-selected="selectLevel" @feedback-changed="onCriteriumFeedbackChanged">
                                                 </criterium-entry>
                                             </ul>
                                         </div>
                                     </li>
                                 </ul>
-                                <div class="subtotal cluster-total mod-entry-view">
+                                <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
                                     <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div><div class="score-entry-view"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                                 </div>
                             </div>
                         </li>
                     </ul>
-                    <div class="subtotal rubric-total mod-entry-view">
+                    <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
                         <slot name="slot-inner"></slot>
                         <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
-                    <div class="subtotal rubric-total-max mod-entry-view">
+                    <slot v-else name="slot-inner"></slot>
+                    <div v-if="rubric.useScores" class="subtotal rubric-total-max mod-entry-view">
                         <div class="rubric-total-title">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                 </div>
@@ -229,8 +231,12 @@
 
         &.levels-table-header {
             margin-left: 0;
-            margin-right: 4em;
+            margin-right: 0;
             width: 100%;
+
+            &.is-using-scores {
+                margin-right: 4em;
+            }
         }
 
         &.criterium-title-header {
@@ -287,9 +293,17 @@
         }
     }
 
-    .criterium-level-title, .score-number {
+    .criterium-level-title, .score-number, .graded-level {
         &.is-selected {
             color: #fff;
+        }
+    }
+
+    .level-icon-check {
+        opacity: 0.2;
+
+        &.is-selected {
+            opacity: 1;
         }
     }
 
