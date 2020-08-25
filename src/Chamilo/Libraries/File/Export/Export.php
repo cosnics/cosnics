@@ -84,7 +84,7 @@ abstract class Export
         }
         else
         {
-            return Path::getInstance()->getArchivePath();
+            return Path::getInstance()->getTemporaryPath();
         }
     }
 

@@ -25,9 +25,11 @@ class Basic extends Xlsx
         $title = strlen($block->get_title()) <= 31 ? $block->get_title() : StringUtilities::getInstance()->truncate(
             $block->get_title(), 
             28) . '...';
-        
+
+        $title = str_replace('/', '_', $title);
+
         $cell_letter = $this->determine_cell_letter_from_column_counter($column_counter);
-        
+
         $php_excel->getActiveSheet()->setTitle($title);
         $php_excel->getActiveSheet()->getColumnDimension($cell_letter)->setWidth(60);
         

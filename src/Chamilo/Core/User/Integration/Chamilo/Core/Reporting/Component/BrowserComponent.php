@@ -24,7 +24,7 @@ class BrowserComponent extends Manager
 
     function get_table()
     {
-        $table = new SortableTableFromArray($this->get_table_data());
+        $table = new SortableTableFromArray($this->get_table_data(), null);
         
         $html[] = $table->toHtml();
         
