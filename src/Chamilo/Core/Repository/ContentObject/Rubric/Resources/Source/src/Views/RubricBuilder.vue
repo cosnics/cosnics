@@ -110,7 +110,7 @@
         toggleUseScores() {
             if (this.rubric) {
                 this.rubric.useScores = !this.rubric.useScores;
-                // todo: dataconnector.
+                this.dataConnector?.updateRubric(this.rubric);
             }
         }
 

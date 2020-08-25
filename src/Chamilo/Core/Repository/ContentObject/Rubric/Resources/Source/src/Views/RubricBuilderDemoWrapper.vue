@@ -25,7 +25,8 @@
             'moveTreeNodeURL': 'https://test',
             'updateChoiceURL': 'https://test',
             'updateLevelURL': 'https://test',
-            'updateTreeNodeURL': 'https://test'
+            'updateTreeNodeURL': 'https://test',
+            'updateRubricURL': 'https://test'
         };
         private store: any = store;
 

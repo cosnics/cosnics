@@ -20,7 +20,7 @@ class UpdateRubricComponent extends Manager
      */
     function runAjaxComponent()
     {
-        return $this->getRubricAjaxService()->updateRubric(
+        return $this->getRubricAjaxService()->updateRubricData(
             $this->getRubricDataId(), $this->getVersion(), $this->getRubricJSONData()
         );
     }

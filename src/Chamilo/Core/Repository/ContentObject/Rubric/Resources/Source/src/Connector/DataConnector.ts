@@ -74,6 +74,15 @@ export default class DataConnector {
         this._isSaving = false;
     }
 
+    updateRubric(rubric: Rubric) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'rubricData': JSON.stringify({ 'use_scores': rubric.useScores })
+            };
+            await this.executeAPIRequest(this.apiConfiguration.updateRubricURL, parameters);
+        });
+    }
+
     addLevel(level: Level, index: number) {
         this.addToQueue(async () => {
             const parameters = {

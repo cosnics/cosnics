@@ -8,4 +8,5 @@ export default interface APIConfiguration {
     readonly updateChoiceURL: string;
     readonly updateLevelURL: string;
     readonly updateTreeNodeURL: string;
+    readonly updateRubricURL: string;
 };
