@@ -14,8 +14,8 @@
 
 <template>
     <div style="margin-top: -20px">
-        <rubric-entry :rubric="rubric" :criterium-evaluations="getCriteriumEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
-                      @level-selected="selectLevel" @criterium-feedback-changed="updateCriteriumFeedback">
+        <rubric-entry :rubric="rubric" :tree-node-evaluations="getTreeNodeEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
+                      @level-selected="selectLevel" @criterium-feedback-changed="updateFeedback">
             <template v-slot:demoEvaluator>
                 <li class="app-tool-item">Demo:
                     <select v-model="evaluator" @change="store.uiState.entry.options.evaluator = evaluator">
@@ -31,15 +31,16 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
-    import Level from '../Domain/Level';
+    import TreeNode from '../Domain/TreeNode';
     import Criterium from '../Domain/Criterium';
+    import Level from '../Domain/Level';
     import RubricEntry from './RubricEntry.vue';
-    import {CriteriumEvaluation} from '../Util/interfaces';
+    import {TreeNodeEvaluation} from '../Util/interfaces';
     import store from '../store';
 
     interface EvaluatorEvaluations {
         evaluator: any;
-        criteriumEvaluations: CriteriumEvaluation[];
+        treeNodeEvaluations: TreeNodeEvaluation[];
     }
 
     @Component({
@@ -53,51 +54,56 @@
         private evaluatorEvaluations: EvaluatorEvaluations[] = [];
         private evaluator: any = null;
 
-        getCriteriumEvaluations(evaluator: any): CriteriumEvaluation[] {
+        getTreeNodeEvaluations(evaluator: any): TreeNodeEvaluation[] {
             if (!evaluator) { return []; }
             const evaluatorEvaluation = this.evaluatorEvaluations.find(evaluatorEvaluation => evaluatorEvaluation.evaluator.userId === evaluator.userId);
             if (!evaluatorEvaluation) { throw new Error(`No evaluation data found for evaluator: ${evaluator.name}`); }
-            return evaluatorEvaluation.criteriumEvaluations;
+            return evaluatorEvaluation.treeNodeEvaluations;
         }
 
-        selectLevel(criterium: Criterium, level: Level) {
+        selectLevel(treeNode: TreeNode, level: Level) {
             if (!this.evaluator) { return; }
             const evaluations = (store.rubricResults.evaluations as any)[this.evaluator.userId];
-            const evaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === criterium.id);
+            const evaluation = evaluations.find((evaluation: any) => evaluation.treeNodeId === treeNode.id);
             if (!evaluation) {
-                evaluations.push({ criteriumId: criterium.id, levelId: level.id, feedback: ''});
+                evaluations.push({ treeNodeId: treeNode.id, levelId: level.id, feedback: ''});
             } else {
                 evaluation.levelId = level.id;
             }
         }
 
-        updateCriteriumFeedback(criterium: Criterium, feedback: string) {
+        updateFeedback(treeNode: TreeNode, feedback: string) {
             if (!this.evaluator) { return; }
             const evaluations = (store.rubricResults.evaluations as any)[this.evaluator.userId];
-            const evaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === criterium.id);
-            evaluation.feedback = feedback;
+            const evaluation = evaluations.find((evaluation: any) => evaluation.treeNodeId === treeNode.id);
+            if (!evaluation) {
+                evaluations.push({ treeNodeId: treeNode.id, levelId: this.rubric!.levels.find(level => level.isDefault)?.id || null, feedback });
+            } else {
+                evaluation.feedback = feedback;
+            }
         }
 
         initData() {
             const rubric = this.rubric = Rubric.fromJSON(this.store.rubricData as RubricJsonObject);
             const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
-            const rubricDefaultEvaluation: CriteriumEvaluation[] = rubric.getAllCriteria().map(criterium =>
-                ({ criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' })
+            const rubricDefaultEvaluation: TreeNodeEvaluation[] = rubric.getAllTreeNodes().map(treeNode =>
+                ({ treeNode, level: defaultLevel, score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null, feedback: '' })
             );
             const evaluators = this.store.rubricResults.evaluators;
             this.evaluator = this.store.uiState.entry.options.evaluator;
             this.evaluatorEvaluations = evaluators.map((evaluator: any) => {
                 const evaluations = this.store.rubricResults.evaluations[evaluator.userId];
-                const criteriumEvaluations: CriteriumEvaluation[] = rubricDefaultEvaluation.map(defaultCriteriumEvaluation => {
-                    const storeEvaluation = evaluations.find((evaluation: any) => evaluation.criteriumId === defaultCriteriumEvaluation.criterium.id);
+                const treeNodeEvaluations: TreeNodeEvaluation[] = rubricDefaultEvaluation.map(defaultCriteriumEvaluation => {
+                    const storeEvaluation = evaluations.find((evaluation: any) => evaluation.treeNodeId === defaultCriteriumEvaluation.treeNode.id);
                     if (storeEvaluation) {
                         const level = rubric.levels.find(level => level.id === storeEvaluation.levelId);
-                        return { criterium: defaultCriteriumEvaluation.criterium, level: level!, score: rubric.getChoiceScore(defaultCriteriumEvaluation.criterium, level!), feedback: storeEvaluation.feedback };
+                        const score = (level && defaultCriteriumEvaluation.treeNode instanceof Criterium) ? rubric.getChoiceScore(defaultCriteriumEvaluation.treeNode, level) : null;
+                        return { treeNode: defaultCriteriumEvaluation.treeNode, level: level!, score, feedback: storeEvaluation.feedback };
                     } else {
                         return { ...defaultCriteriumEvaluation };
                     }
                 });
-                return {evaluator, criteriumEvaluations};
+                return { evaluator, treeNodeEvaluations };
             });
         }
 

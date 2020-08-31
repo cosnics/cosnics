@@ -1,5 +1,5 @@
 <template>
-    <rubric-result v-if="rubric" :rubric="rubric" :evaluators="evaluators" :criterium-results="criteriumResults"></rubric-result>
+    <rubric-result v-if="rubric" :rubric="rubric" :evaluators="evaluators" :tree-node-results="treeNodeResults"></rubric-result>
 </template>
 
 <script lang="ts">
@@ -7,7 +7,7 @@
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import RubricResult from './RubricResult.vue';
     import {convertRubricData} from '../Util/util';
-    import {CriteriumEvaluation, CriteriumResult} from '../Util/interfaces';
+    import {TreeNodeEvaluation, TreeNodeResult} from '../Util/interfaces';
 
     @Component({
         components: {
@@ -16,7 +16,7 @@
     })
     export default class RubricResultWrapper extends Vue {
         private rubric: Rubric | undefined;
-        private criteriumResults: CriteriumResult[] = [];
+        private treeNodeResults: TreeNodeResult[] = [];
         private evaluators: any[] = [];
 
         @Prop({type: Object, required: true}) readonly rubricData!: object;
@@ -30,21 +30,21 @@
             );
             const r_evaluations = this.rubricResults.map((res : any) => res.results);
 
-            this.criteriumResults = rubric.getAllCriteria().map(criterium => {
-                const defaultEvaluation: CriteriumEvaluation = { criterium, level: null, score: 0, feedback: '' };
+            this.treeNodeResults = rubric.getAllTreeNodes().map(treeNode => {
+                const defaultEvaluation: TreeNodeEvaluation = { treeNode, level: null, score: 0, feedback: '' };
                 const evaluations = evaluators.map((evaluator : any, index: number) => {
-                    const criteriumEvaluation: CriteriumEvaluation = {...defaultEvaluation};
+                    const treeNodeEvaluation: TreeNodeEvaluation = {...defaultEvaluation};
                     const evaluations = r_evaluations[index];
-                    const criteriumEvaluationInput = evaluations.find((o: any) => String(o['tree_node_id']) === criterium.id);
-                    if (criteriumEvaluationInput) {
-                        const chosenLevel = rubric.levels.find(level => level.id === String(criteriumEvaluationInput['level_id']));
-                        criteriumEvaluation.level = chosenLevel || null;
-                        criteriumEvaluation.score = criteriumEvaluationInput.score;
-                        criteriumEvaluation.feedback = criteriumEvaluationInput.comment;
+                    const treeNodeEvaluationInput = evaluations.find((o: any) => String(o['tree_node_id']) === treeNode.id);
+                    if (treeNodeEvaluationInput) {
+                        const chosenLevel = rubric.levels.find(level => level.id === String(treeNodeEvaluationInput['level_id']));
+                        treeNodeEvaluation.level = chosenLevel || null;
+                        treeNodeEvaluation.score = treeNodeEvaluationInput.score;
+                        treeNodeEvaluation.feedback = treeNodeEvaluationInput.comment;
                     }
-                    return { evaluator, criteriumEvaluation};
+                    return { evaluator, treeNodeEvaluation };
                 });
-                return { criterium, evaluations };
+                return { treeNode, evaluations };
             });
             this.evaluators = evaluators;
             this.rubric = rubric;

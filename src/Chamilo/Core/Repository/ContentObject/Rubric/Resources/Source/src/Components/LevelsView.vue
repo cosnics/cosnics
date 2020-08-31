@@ -29,7 +29,7 @@
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1 class="levels-title">{{ $t('levels') }}</h1>
             <ul class="levels-list">
-                <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog"></level-details>
+                <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
                 <li v-if="!newLevel" class="level-new">
                     <button class="btn-new" @click.stop="createNewLevel">{{ $t('add-level') }}</button>
                 </li>
@@ -186,7 +186,7 @@
     .levels-title {
         color: #666;
         font-size: 2.2rem;
-        margin-left: .5em;
+        margin-left: 1.1em;
         margin-top: .3em;
     }
 
@@ -214,6 +214,16 @@
         padding: 7px 0 7px .5em;
         transition: background-color 200ms;
         width: 100%;
+
+        &::before {
+            color: #406e8d;
+            content: attr(item-index);
+            display: block;
+            font-size: 1.5rem;
+            margin-right: .35em;
+            padding: .15em 0;
+            text-align: right;
+        }
 
         /*.input-detail {
             background: rgba(255, 255, 255, 0.1);

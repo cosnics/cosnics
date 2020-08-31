@@ -59,21 +59,20 @@
   }
 
   .cluster-title {
-    color: change-color($title-color, $alpha: 0.7);
-    font-size: 1.8rem;
+    color: change-color($title-color, $alpha: .9);
+    font-size: 1.4rem;
     font-weight: 700;
-    margin: .25em 0 0 .85em;
+    margin: .25em 0 0 1.1em;
   }
 
   .category-indicator:before {
-    background: var(--category-color);
     content: '';
     display: inline-block;
     margin-right: 0.35em;
   }
 
   .category {
-    margin: .75em 0 1.2em 0;
+    margin: 0 0 1.2em 0;
 
     &:last-child {
       margin-bottom: 0;
@@ -84,14 +83,15 @@
     align-items: baseline;
     color: $title-color;
     display: flex;
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     line-height: 1.3em;
-    margin: .75em 0;
+    margin: .75em 0 0;
 
     &.category-indicator:before {
+      background: var(--category-color);
       height: 12px;
       margin-left: .05em;
-      margin-right: .35em;
+      margin-right: .25em;
       min-width: 12px;
     }
   }
@@ -107,7 +107,7 @@
     }
   }
 
-  .criterium-title-header {
+  .criterium-header {
     margin-right: 0.5em;
     position: relative;
   }
@@ -156,12 +156,14 @@
 
   .criterium-title {
     display: flex;
-    font-size: 1.4rem;
-    line-height: 1.4em;
+    font-size: 1.35rem;
+    line-height: 1.3em;
     margin-bottom: 0;
     margin-top: 0.5em;
 
     &.category-indicator:before {
+      background: none;
+      border: 1px solid var(--category-color);
       border-radius: 50%;
       height: 8px;
       margin-top: .3em;
@@ -251,6 +253,10 @@
 
     &.mod-criterium-max {
       background: hsla(197, 15%, 90%, 1);
+    }
+
+    &.mod-category-max {
+      background: hsla(200, 33%, 88%, 1);
     }
 
     &.mod-cluster-max {

@@ -1,27 +1,33 @@
 <i18n>
 {
     "en": {
+        "extra-feedback": "Enter extra feedback",
         "feedback": "Feedback",
         "feedback-descriptions": "Feedback descriptions",
         "points": "points",
         "rubric": "Rubric",
-        "show-default-descriptions": "Show default feedback descriptions",
+        "show-default-descriptions": "Show all level descriptions and feedback",
+        "show-default-description": "Show level descriptions and feedback",
         "total": "Total"
     },
     "fr": {
+        "extra-feedback": "Feed-back supplémentaire",
         "feedback": "Feed-back",
         "feedback-descriptions": "Feed-back descriptions",
         "points": "points",
         "rubric": "Rubrique",
-        "show-default-descriptions": "Afficher descriptions feed-back standard",
+        "show-default-descriptions": "Afficher toutes descriptions de niveau et feed-back",
+        "show-default-description": "Afficher descriptions de niveau et feed-back",
         "total": "Total"
     },
     "nl": {
+        "extra-feedback": "Geef bijkomende feedback",
         "feedback": "Feedback",
         "feedback-descriptions": "Feedback beschrijvingen",
         "points": "punten",
         "rubric": "Rubric",
-        "show-default-descriptions": "Toon standaard feedback beschrijvingen",
+        "show-default-descriptions": "Toon alle niveauomschrijvingen en feedback",
+        "show-default-description": "Toon niveauomschrijvingen en feedback",
         "total": "Totaal"
     }
 }
@@ -32,14 +38,14 @@
         <div class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-entry-view">
+            <div class="rubric-entry-view" style="max-width: max-content">
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
-                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
+                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }" style="flex:1;min-width:20rem;max-width:30rem;margin-right: 1rem;">
                         <slot name="demoEvaluator"></slot>
                         <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
                     </ul>
-                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
-                        <div v-for="level in rubric.levels" class="level-table-header-title">
+                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }" style="flex:1;width:unset;">
+                        <div v-for="level in rubric.levels" class="level-table-header-title" style="max-width: 33rem;flex:1;">
                             {{ level.title }}
                         </div>
                     </div>
@@ -49,23 +55,43 @@
                     <ul class="clusters">
                         <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                             <div class="cluster">
-                                <h2 class="cluster-title">{{ cluster.title }}</h2>
+                                <div class="treenode-hover" style="display: flex;margin-left:.3em;">
+                                    <div class="cluster-header treenode-header" style="min-width: 20rem; max-width: 30rem; flex:1; margin: .25em .5em 0 0em; padding-left: 1.1em;position: relative;align-self:center">
+                                        <h2 class="cluster-title" style="margin:.1em 0;margin-right:2.4rem;">{{ cluster.title }}</h2>
+                                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(cluster).showDefaultFeedback = !getTreeNodeData(cluster).showDefaultFeedback" style="top: 0">
+                                            <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(cluster).showDefaultFeedback}" aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                    <div v-if="!preview && getTreeNodeEvaluation(cluster) !== null" class="custom-feedback mod-light" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(cluster).showDefaultFeedback, 'mod-scores': rubric.useScores }]" style="flex: 1;align-self:center">
+                                        <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="getTreeNodeEvaluation(cluster).feedback" @input="onTreeNodeFeedbackChanged(getTreeNodeEvaluation(cluster))"></textarea>
+                                    </div>
+                                </div>
                                 <ul class="categories">
-                                    <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
+                                    <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" v-if="rubric.getAllCriteria(category).length > 0">
                                         <div class="category">
-                                            <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
-                                            <ul class="criteria">
+                                            <div v-if="category.title" class="treenode-hover" style="display: flex;margin-left:.3em;">
+                                                <div class="category-header treenode-header" style="min-width: 20rem; max-width: 30rem; margin-right: .5em;flex:1;position:relative;align-self:center">
+                                                    <h3 class="category-title category-indicator" style="margin: .1em 0 .1em -.3em; margin-right:2.4rem;">{{ category.title }}</h3>
+                                                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(category).showDefaultFeedback = !getTreeNodeData(category).showDefaultFeedback" style="">
+                                                        <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(category).showDefaultFeedback}" aria-hidden="true" />
+                                                    </button>
+                                                </div>
+                                                <div v-if="!preview && getTreeNodeEvaluation(category) !== null " class="custom-feedback mod-light" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(category).showDefaultFeedback, 'mod-scores': rubric.useScores }]" style="flex: 1;align-self:center">
+                                                    <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="getTreeNodeEvaluation(category).feedback" @input="onTreeNodeFeedbackChanged(getTreeNodeEvaluation(category))"></textarea>
+                                                </div>
+                                            </div>
+                                            <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
                                                 <criterium-entry v-for="criterium in category.criteria"
                                                     tag="li" class="criterium-list-item"
                                                     :key="`criterium-${criterium.id}-key`"
                                                     :show-default-feedback-fields="showDefaultFeedbackFields"
                                                     :criterium="criterium"
                                                     :preview="preview"
-                                                    :ext="getCriteriumData(criterium)"
-                                                    :evaluation="getCriteriumEvaluation(criterium)"
+                                                    :ext="getTreeNodeData(criterium)"
+                                                    :evaluation="getTreeNodeEvaluation(criterium)"
                                                     :show-errors="showErrors"
                                                     :use-scores="rubric.useScores"
-                                                    @level-selected="selectLevel" @feedback-changed="onCriteriumFeedbackChanged">
+                                                    @level-selected="selectLevel" @feedback-changed="onTreeNodeFeedbackChanged">
                                                 </criterium-entry>
                                             </ul>
                                         </div>
@@ -94,11 +120,12 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
+    import TreeNode from '../Domain/TreeNode';
     import Level from '../Domain/Level';
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
-    import {CriteriumEvaluation, CriteriumExt} from '../Util/interfaces';
+    import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
     import CriteriumEntry from '../Components/CriteriumEntry.vue';
 
     function add(v1: number, v2: number) {
@@ -109,15 +136,18 @@
         components: { CriteriumEntry }
     })
     export default class RubricEntry extends Vue {
-        private criteriaData: CriteriumExt[] = [];
+        private treeNodeData: TreeNodeExt[] = [];
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly criteriumEvaluations!: CriteriumEvaluation[];
+        @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
         @Prop({type: Object}) readonly uiState!: any;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
 
+        toggleTreeNode(treeNode: TreeNode) {
+            console.log(treeNode);
+        }
         get showDefaultFeedbackFields() : boolean {
             return this.uiState.showDefaultFeedbackFields;
         }
@@ -126,35 +156,36 @@
             const show = this.uiState.showDefaultFeedbackFields = !this.uiState.showDefaultFeedbackFields;
             if (!show) {
                 this.rubric.getAllCriteria().forEach(criterium => {
-                    this.getCriteriumData(criterium)!.showDefaultFeedback = false;
+                    this.getTreeNodeData(criterium)!.showDefaultFeedback = false;
                 });
             }
         }
 
-        onCriteriumFeedbackChanged(evaluation: CriteriumEvaluation) : void {
+        onTreeNodeFeedbackChanged(evaluation: TreeNodeEvaluation) : void {
             if (!evaluation) { return; }
-            this.$emit('criterium-feedback-changed', evaluation.criterium, evaluation.feedback);
+            this.$emit('criterium-feedback-changed', evaluation.treeNode, evaluation.feedback);
         }
 
         isSelected(criterium: Criterium, level: Level) {
             const isDefaultLevel = level.isDefault;
-            if (!this.criteriumEvaluations) { return isDefaultLevel; }
-            const evaluation = this.criteriumEvaluations.find(evaluation => evaluation.criterium === criterium);
+            if (!this.treeNodeEvaluations) { return isDefaultLevel; }
+            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
             if (!evaluation || !evaluation.level) {
                 return isDefaultLevel;
             }
             return evaluation.level === level;
         }
 
-        selectLevel(evaluation: CriteriumEvaluation, level: Level) : void {
+        selectLevel(evaluation: TreeNodeEvaluation, level: Level) : void {
             evaluation.level = level;
-            evaluation.score = this.rubric.getChoiceScore(evaluation.criterium, level);
-            this.$emit('level-selected', evaluation.criterium, level);
+            // careful: getChoiceScore will fail
+            evaluation.score = this.rubric.getChoiceScore(evaluation.treeNode as Criterium, level);
+            this.$emit('level-selected', evaluation.treeNode, level);
         }
 
         getCriteriumScore(criterium: Criterium) : number {
             if (this.preview) { return 0; }
-            const evaluation = this.criteriumEvaluations.find(evaluation => evaluation.criterium === criterium);
+            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
             if (!evaluation) { return 0; }
             return evaluation.score || 0;
         }
@@ -174,23 +205,23 @@
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
-        getCriteriumData(criterium: Criterium) : CriteriumExt|null {
-            return this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium) || null;
+        getTreeNodeData(treeNode: TreeNode) : TreeNodeExt|null {
+            return this.treeNodeData.find((_ : TreeNodeExt) => _.treeNode === treeNode) || null;
         }
 
-        getCriteriumEvaluation(criterium: Criterium) : CriteriumEvaluation|null {
-            return this.criteriumEvaluations.find((_ : CriteriumEvaluation) => _.criterium === criterium) || null;
+        getTreeNodeEvaluation(treeNode: TreeNode) : TreeNodeEvaluation|null {
+            return this.treeNodeEvaluations.find((_ : TreeNodeEvaluation) => _.treeNode === treeNode) || null;
         }
 
         private initData() {
             const rubric = this.rubric;
-            this.criteriaData = rubric.getAllCriteria().map(criterium => {
-                const choices = rubric.levels.map(level => {
-                    const choice = rubric.getChoice(criterium, level);
-                    const score = rubric.getChoiceScore(criterium, level);
+            this.treeNodeData = rubric.getAllTreeNodes().map(treeNode => {
+                const choices = treeNode instanceof Criterium ? rubric.levels.map(level => {
+                    const choice = rubric.getChoice(treeNode, level);
+                    const score = rubric.getChoiceScore(treeNode, level);
                     return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
-                });
-                return { criterium, choices, showDefaultFeedback: false };
+                }) : [];
+                return { treeNode, choices, showDefaultFeedback: false };
             });
         }
 
@@ -211,6 +242,14 @@
 
     .rubric-entry-view {
         position: relative;
+    }
+
+    .criterium-levels {
+        display: flex;
+        flex: 1;
+        list-style: none;
+        margin: 0;
+        padding: 0;
     }
 
     .mod-entry-view {
@@ -239,12 +278,12 @@
             }
         }
 
-        &.criterium-title-header {
-            border-top: 1px solid $score-light;
+        &.criterium-header {
+            /*border-top: 1px solid $score-light;*/
         }
 
         &.criterium-title {
-            margin-right: 1.5em;
+            margin-right: 2.4rem;
         }
 
         &.criterium-level-header {
@@ -307,7 +346,7 @@
         }
     }
 
-    .level-icon-check {
+    .fa.level-icon-check {
         opacity: 0.2;
         font-size: 1.3rem;
         transition: opacity 200ms, font-size 200ms;
@@ -335,9 +374,16 @@
     }
 
     .custom-feedback {
+        background: hsla(226, 19%, 72%, .3);
+        border-radius: $border-radius;
         display: none;
         margin-bottom: 1em;
-        margin-left: 20em;
+        /*margin-left: 20em;*/
+
+        &.mod-default-feedback {
+            margin-top: 1em;
+
+        }
 
         &.is-feedback-visible {
             display: block;
@@ -347,11 +393,13 @@
     .ta-custom-feedback {
         border: 1px solid #d0d0d0;
         border-radius: $border-radius;
+        display: block;
         height: 2.2em;
-        max-width: 100%;
+        max-width: 70ch;
         padding: .2em .4em 0;
         resize: none;
-        width: 40em;
+        width: 70ch;
+        width: 100%;
 
         &::placeholder {
             color: #aaa;
@@ -368,7 +416,7 @@
 
         &:hover, &:focus {
             outline: none;
-            resize: both;
+            resize: vertical;
 
             &::placeholder {
                 color: #666;
@@ -439,5 +487,52 @@
                 margin-right: 1em;
             }
         }
+
+        .custom-feedback {
+            margin-right: .5em;
+            padding: .5em .2em;
+
+            &.mod-scores {
+                margin-right: 4.5em;
+            }
+        }
+
+        .btn-show-feedback {
+            opacity: .8;
+
+        }
+
+        .treenode-header:hover .btn-show-feedback {
+            opacity: 1;
+        }
+
+        .treenode-header {
+            h2, h3, h4 {
+                cursor: default;
+            }
+        }
+    }
+
+    .treenode-hover::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        background: transparent;
+        justify-self: stretch;
+        margin-left: -10px;
+        margin-right: 6px;
+    }
+
+    .treenode-hover {
+    }
+
+    .treenode-hover:hover::before {
+        background: #66aacc8f;
+    }
+    .treenode-hover:hover {
+    }
+    .custom-feedback.mod-light {
+        background: none;
+        margin-bottom: 0;
     }
 </style>

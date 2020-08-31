@@ -856,18 +856,18 @@ export default {
             {"userId": 2, "name": "Fred", "role": "coach", "targetUserId": 0, "targetName": "Bob"}],
         "evaluations": {
             0: [
-                { "criteriumId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Ik vond het best moeilijk maar uiteindelijk lukte het wel."},
-                { "criteriumId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
-                { "criteriumId": "xzcorbibce20cm5g54xemi", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
-                { "criteriumId": "aas2bl49lrnfl4i1m7uwho", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
-                { "criteriumId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
+                { "treeNodeId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Ik vond het best moeilijk maar uiteindelijk lukte het wel."},
+                { "treeNodeId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
+                { "treeNodeId": "xzcorbibce20cm5g54xemi", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
+                { "treeNodeId": "aas2bl49lrnfl4i1m7uwho", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""},
+                { "treeNodeId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
             ],
             1: [
-                { "criteriumId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Uitstekend!"},
-                { "criteriumId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Flink gedaan!"},
-                { "criteriumId": "xzcorbibce20cm5g54xemi", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
-                { "criteriumId": "aas2bl49lrnfl4i1m7uwho", "levelId": "ewl5t7raruutqf4gudx15", "feedback": "Hier had ik toch meer van verwacht"},
-                { "criteriumId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
+                { "treeNodeId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Uitstekend!"},
+                { "treeNodeId": "yjz8854ozprzhr2hw45wup", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Flink gedaan!"},
+                { "treeNodeId": "xzcorbibce20cm5g54xemi", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": ""},
+                { "treeNodeId": "aas2bl49lrnfl4i1m7uwho", "levelId": "ewl5t7raruutqf4gudx15", "feedback": "Hier had ik toch meer van verwacht"},
+                { "treeNodeId": "9ec44j2au3v1nl9sigksrq", "levelId": "icoz2ha4bahqvqfi71slz", "feedback": ""}
             ],
             2: []
         }

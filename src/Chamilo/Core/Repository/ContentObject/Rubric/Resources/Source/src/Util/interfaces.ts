@@ -1,25 +1,25 @@
-import Criterium from '../Domain/Criterium';
+import TreeNode from '../Domain/TreeNode';
 import Level from '../Domain/Level';
 
-export interface CriteriumEvaluation {
-    criterium: Criterium;
+export interface TreeNodeEvaluation {
+    treeNode: TreeNode;
     level: Level|null;
-    score: number;
+    score: number|null;
     feedback: string;
 }
 
-export interface CriteriumExt {
-    criterium: Criterium;
+export interface TreeNodeExt {
+    treeNode: TreeNode;
     choices: any[];
     showDefaultFeedback: false;
 }
 
 export interface EvaluatorEvaluation {
     evaluator: any;
-    criteriumEvaluation: CriteriumEvaluation;
+    treeNodeEvaluation: TreeNodeEvaluation;
 }
 
-export interface CriteriumResult {
-    criterium: Criterium,
+export interface TreeNodeResult {
+    treeNode: TreeNode,
     evaluations: EvaluatorEvaluation[];
 }

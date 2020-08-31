@@ -718,7 +718,7 @@
         }
     }
 
-    .criterium-levels {
+    .b-criterium-levels {
         list-style: none;
         margin-top: 1.5em;
         padding: 0;
