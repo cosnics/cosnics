@@ -38,45 +38,45 @@
         <div class="rubric">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-entry-view" style="max-width: max-content">
+            <div class="rubric-entry-view" :class="{ 'mod-closed': !showDefaultFeedbackFields }">
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
-                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }" style="flex:1;min-width:20rem;max-width:30rem;margin-right: 1rem;">
+                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
                         <slot name="demoEvaluator"></slot>
                         <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
                     </ul>
-                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }" style="flex:1;width:unset;">
-                        <div v-for="level in rubric.levels" class="level-table-header-title" style="max-width: 33rem;flex:1;">
+                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
+                        <div v-for="level in rubric.levels" class="level-table-header-title">
                             {{ level.title }}
                         </div>
                     </div>
                 </div>
                 <div class="rubric-table" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
                     <h1 class="rubric-title">{{ rubric.title }}</h1>
-                    <ul class="clusters">
+                    <ul class="clusters mod-entry-view">
                         <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                             <div class="cluster">
-                                <div class="treenode-hover" style="display: flex;margin-left:.3em;">
-                                    <div class="cluster-header treenode-header" style="min-width: 20rem; max-width: 30rem; flex:1; margin: .25em .5em 0 0em; padding-left: 1.1em;position: relative;align-self:center">
-                                        <h2 class="cluster-title" style="margin:.1em 0;margin-right:2.4rem;">{{ cluster.title }}</h2>
-                                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(cluster).showDefaultFeedback = !getTreeNodeData(cluster).showDefaultFeedback" style="top: 0">
+                                <div class="cluster-row treenode-hover mod-entry-view">
+                                    <div class="cluster-header treenode-header">
+                                        <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
+                                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-cluster" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(cluster).showDefaultFeedback = !getTreeNodeData(cluster).showDefaultFeedback">
                                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(cluster).showDefaultFeedback}" aria-hidden="true" />
                                         </button>
                                     </div>
-                                    <div v-if="!preview && getTreeNodeEvaluation(cluster) !== null" class="custom-feedback mod-light" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(cluster).showDefaultFeedback, 'mod-scores': rubric.useScores }]" style="flex: 1;align-self:center">
+                                    <div v-if="!preview && getTreeNodeEvaluation(cluster) !== null" class="custom-feedback mod-cluster" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(cluster).showDefaultFeedback }]">
                                         <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="getTreeNodeEvaluation(cluster).feedback" @input="onTreeNodeFeedbackChanged(getTreeNodeEvaluation(cluster))"></textarea>
                                     </div>
                                 </div>
                                 <ul class="categories">
                                     <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" v-if="rubric.getAllCriteria(category).length > 0">
                                         <div class="category">
-                                            <div v-if="category.title" class="treenode-hover" style="display: flex;margin-left:.3em;">
-                                                <div class="category-header treenode-header" style="min-width: 20rem; max-width: 30rem; margin-right: .5em;flex:1;position:relative;align-self:center">
-                                                    <h3 class="category-title category-indicator" style="margin: .1em 0 .1em -.3em; margin-right:2.4rem;">{{ category.title }}</h3>
-                                                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(category).showDefaultFeedback = !getTreeNodeData(category).showDefaultFeedback" style="">
+                                            <div v-if="category.title" class="category-row treenode-hover mod-entry-view">
+                                                <div class="category-header treenode-header">
+                                                    <h3 class="category-title mod-entry-view category-indicator">{{ category.title }}</h3>
+                                                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-category" :aria-label="$t('show-default-description')" @click.prevent="getTreeNodeData(category).showDefaultFeedback = !getTreeNodeData(category).showDefaultFeedback">
                                                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(category).showDefaultFeedback}" aria-hidden="true" />
                                                     </button>
                                                 </div>
-                                                <div v-if="!preview && getTreeNodeEvaluation(category) !== null " class="custom-feedback mod-light" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(category).showDefaultFeedback, 'mod-scores': rubric.useScores }]" style="flex: 1;align-self:center">
+                                                <div v-if="!preview && getTreeNodeEvaluation(category) !== null " class="custom-feedback mod-category" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || getTreeNodeData(category).showDefaultFeedback }]">
                                                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="getTreeNodeEvaluation(category).feedback" @input="onTreeNodeFeedbackChanged(getTreeNodeEvaluation(category))"></textarea>
                                                 </div>
                                             </div>
@@ -231,6 +231,24 @@
     }
 </script>
 <style lang="scss">
+    .cluster-row.mod-entry-view {
+        display: flex;
+        margin-left:.3em;
+    }
+
+    .cluster-title.mod-entry-view {
+        margin:.1em 0;margin-right:2.4rem;
+    }
+
+    .category-row.mod-entry-view {
+        display: flex;
+        margin-left:.3em;
+    }
+
+    .category-title.mod-entry-view {
+        margin: .1em 2.4rem .1em -.3em;
+    }
+
     .text-hidden {
         height: 1px;
         left: -10000px;
@@ -242,6 +260,32 @@
 
     .rubric-entry-view {
         position: relative;
+    }
+
+    .cluster-header {
+        margin: .25em .5em 0 0em;
+        padding-left: 1.1em;
+        position: relative;
+    }
+
+    .category-header {
+        margin-right: .5em;
+        margin-top: .25em;
+        position: relative;
+    }
+
+    .btn-show-feedback.mod-cluster {
+        top: 0;
+    }
+
+    .btn-show-feedback.mod-category {
+        top: 0;
+    }
+
+    .criterium-levels-wrapper {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
     }
 
     .criterium-levels {
@@ -259,9 +303,10 @@
 
         &.app-header-tools {
             /*background-color: hsla(190, 35%, 75%, 0.2);*/
-            margin-right: 1em;
-            min-width: 18.8em;
-            width: 18.8em;
+            flex: 1;
+            margin-right: 1rem;
+            max-width: 30rem;
+            min-width: 20rem;
 
             &.mod-demo {
                 padding-left: 1.2em;
@@ -269,13 +314,9 @@
         }
 
         &.levels-table-header {
+            flex: 1;
             margin-left: 0;
             margin-right: 0;
-            width: 100%;
-
-            &.is-using-scores {
-                margin-right: 4em;
-            }
         }
 
         &.criterium-header {
@@ -374,20 +415,19 @@
     }
 
     .custom-feedback {
-        background: hsla(226, 19%, 72%, .3);
         border-radius: $border-radius;
         display: none;
         margin-bottom: 1em;
-        /*margin-left: 20em;*/
+        margin-top: .5em;
 
         &.mod-default-feedback {
             margin-top: 1em;
-
         }
 
         &.is-feedback-visible {
             display: block;
         }
+
     }
 
     .ta-custom-feedback {
@@ -432,10 +472,10 @@
         padding: 0 .25em;
     }
 
-    @media only screen and (max-width: 899px) {
+    @media only screen and (max-width: 679px) {
         .rubric-entry-view {
-            max-width: 100%;
-            width: 40em;
+            max-width: 75ch;
+            /*width: 40em;*/
         }
 
         .mod-entry-view {
@@ -443,24 +483,17 @@
                 display: none;
             }
 
-            &.criterium-level {
-                margin-left: .8em;
+            &.criterium-level:not(:first-child) {
+                margin-top: .3em;
             }
 
-            &.criterium-level-header {
-                align-content: center;
-                display: flex;
-                justify-content: center;
-                justify-items: center;
-                margin-top: .5em;
-                max-width: 40em;
-                padding: 0 .25em;
-                text-align: left;
+            &.criterium-level {
+                /*margin-left: .8em;*/
+                /*max-width: 75ch;*/
             }
 
             &.subtotal {
-                margin-right: .5em;
-                max-width: 41.25em;
+                max-width: 75ch;
             }
 
             &.criterium-total {
@@ -468,38 +501,202 @@
             }
         }
 
+        .criterium-levels {
+            flex-direction: column;
+        }
+    }
+
+    @media only screen and (min-width: 680px) {
+        .level-table-header-title {
+            max-width: 33rem;
+        }
+
+        .criterium-level.mod-entry-view {
+            background: #e7e7e7;
+            border-radius: 3px;
+            max-width: 33rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .criterium-level-title.mod-entry-view {
+            height: 1px;
+            left: -10000px;
+            overflow: hidden;
+            position: absolute;
+            top: auto;
+            width: 1px;
+        }
+
+        &.levels-table-header.mod-entry-view.is-using-scores {
+            margin-right: 4em;
+        }
+    }
+
+    @media only screen and (min-width: 680px) and (max-width: 899px) {
+        .clusters.mod-entry-view {
+            margin-top: 1em;
+        }
+    }
+
+    @media only screen and (max-width: 899px) {
+        .rubric-entry-view {
+            max-width: 100%;
+            /*width: 40em;*/
+        }
+
+        .criterium-levels {
+            margin-left: 1em;
+        }
+
+        .mod-entry-view {
+         /*   &.levels-table-header {
+                display: none;
+            }*/
+
+
+            &.cluster-row {
+                flex-direction: column;
+            }
+
+            &.category-row {
+                flex-direction: column;
+            }
+
+            &.rubric-table-header {
+                flex-direction: column;
+            }
+
+            &.levels-table-header {
+                margin-left: 1.2em;
+            }
+
+            &.criterium-level-header {
+                align-content: center;
+                display: flex;
+                justify-content: center;
+                justify-items: center;
+                /*margin-top: .5em;*/
+                padding: 0 .25em;
+                text-align: left;
+            }
+
+            &.subtotal {
+                margin-right: .5em;
+                /*max-width: 41.25em;*/
+            }
+
+            &.score-number-calc.mod-criterium {
+                /*margin-top: .335em;*/
+                margin-bottom: 0;
+            }
+
+            &.criterium-header {
+                max-width: 75ch;
+                margin-bottom: .25em;
+            }
+        }
+
+        .app-header-tools.mod-entry-view {
+            padding-left: 1.55rem;
+        }
+
+        .rubric-entry-view.mod-closed {
+            .criterium-levels, .custom-feedback, .levels-table-header.mod-entry-view, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
+                padding-left: 1.55rem;
+            }
+        }
+
+        .btn-show-feedback {
+            left: -.5em;
+        }
+
+        &.cluster-header, &.category-header {
+            max-width: 75ch;
+        }
         .default-feedback-entry-view {
             max-width: 40em;
         }
 
         .custom-feedback {
-            margin: -1.5em 1em 1em 1.3em;
+            margin: .5em .5em 0 1em;
+
+            &.mod-cluster {
+                margin: 0em .5em .5em 1em;
+            }
+
+            &.mod-category {
+                margin: 0em .5em .5em 1em;
+            }
+
+            &.mod-cluster, &.mod-category {
+                padding-top: .5em;
+                padding-bottom: .5em;
+                /*padding: .5em 0;*/
+            }
         }
     }
 
     @media only screen and (min-width: 900px) {
+        .rubric-entry-view {
+            max-width: max-content;
+        }
+
         .mod-entry-view {
-            .criterium {
+            &.criterium {
                 align-items: baseline;
             }
 
-            .criterium-level:nth-last-child(2) {
+            &.criterium-level:nth-last-child(2) {
                 margin-right: 1em;
+            }
+
+            &.criterium-header {
+                flex: 1;
+                min-width: 20rem;
+                max-width: 30rem;
             }
         }
 
         .custom-feedback {
             margin-right: .5em;
-            padding: .5em .2em;
 
             &.mod-scores {
                 margin-right: 4.5em;
+            }
+
+            &.mod-cluster {
+                flex: 1;
+                align-self: center;
+                margin: .25em 0 .5em 0;
+            }
+
+            &.mod-category {
+                flex: 1;
+                align-self: center;
+            }
+
+            &.mod-criterium {
+                /*background: hsla(226, 19%, 72%, .3);*/
+                /*padding: .5em .2em;*/
             }
         }
 
         .btn-show-feedback {
             opacity: .8;
+        }
 
+        .cluster-header {
+            align-self: center;
+            flex: 1;
+            max-width: 30rem;
+            min-width: 20rem;
+        }
+
+        .category-header {
+            align-self: center;
+            flex: 1;
+            max-width: 30rem;
+            min-width: 20rem;
         }
 
         .treenode-header:hover .btn-show-feedback {
@@ -530,9 +727,5 @@
         background: #66aacc8f;
     }
     .treenode-hover:hover {
-    }
-    .custom-feedback.mod-light {
-        background: none;
-        margin-bottom: 0;
     }
 </style>

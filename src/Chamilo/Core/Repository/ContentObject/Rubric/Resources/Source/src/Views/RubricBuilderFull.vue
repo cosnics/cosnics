@@ -24,7 +24,7 @@
                                             </div>
                                             <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
                                                 <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
-                                                    <div class="criterium-level-title">
+                                                    <div class="criterium-level-title mod-builder-full-view">
                                                         {{data.level.title}}
                                                     </div>
                                                     <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
@@ -180,11 +180,20 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     @media only screen and (min-width: 900px) {
         .mod-builder-full-view {
             &.criterium-level-header {
-                display: none;
+                /*display: none;*/
 
                 &.is-using-scores {
                     display: block;
                 }
+            }
+
+            &.criterium-level-title {
+                height: 1px;
+                left: -10000px;
+                overflow: hidden;
+                position: absolute;
+                top: auto;
+                width: 1px;
             }
         }
     }

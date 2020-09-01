@@ -43,7 +43,7 @@
                 <ul class="clusters mod-result-view">
                     <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                         <div class="cluster">
-                            <div class="cluster-row">
+                            <div class="cluster-row mod-result-view">
                                 <h2 class="cluster-title" style="flex:1">{{ cluster.title }}</h2>
                                 <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(cluster, evaluator).feedback }">
                                     <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }">
@@ -61,7 +61,7 @@
                             <ul class="categories">
                                 <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`"  v-if="rubric.getAllCriteria(category).length > 0">
                                     <div class="category">
-                                        <div v-if="category.title" class="category-row">
+                                        <div v-if="category.title" class="category-row mod-result-view">
                                             <h3 class="category-title category-indicator" style="flex:1">{{ category.title }}</h3>
                                             <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(category, evaluator).feedback }">
                                                 <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }">
@@ -249,12 +249,12 @@
         margin-top: .75em;
     }
 
-    .cluster-row {
+    .cluster-row.mod-result-view {
         display: flex;
         align-items: center;
     }
 
-    .category-row {
+    .category-row.mod-result-view {
         display: flex;
         align-items: center;
     }
