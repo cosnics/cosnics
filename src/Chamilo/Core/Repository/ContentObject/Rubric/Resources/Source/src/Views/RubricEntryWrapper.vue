@@ -34,7 +34,7 @@
         updateRubricResults() {
             if (this.rubricResults !== null) {
                 this.rubricResults.results = this.treeNodeEvaluations.map(evaluation => ({
-                    'criterium_tree_node_id': parseInt(evaluation.treeNode.id),
+                    'tree_node_id': parseInt(evaluation.treeNode.id),
                     'level_id': (evaluation.level !== null) ? parseInt(evaluation.level.id) : null,
                     'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null
                 }));
