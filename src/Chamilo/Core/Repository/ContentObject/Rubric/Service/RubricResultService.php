@@ -60,10 +60,10 @@ class RubricResultService
 
         foreach ($criteriumResultJSONModels as $criteriumResultJSONModel)
         {
-            $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getCriteriumTreeNodeId());
+            $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getTreeNodeId());
 
             $choice = $rubricData->getChoiceByLevelAndCriteriumId(
-                $criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getCriteriumTreeNodeId()
+                $criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getTreeNodeId()
             );
 
             if ($treeNode !== $choice->getCriterium())
