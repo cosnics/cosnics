@@ -8,31 +8,33 @@
             </div>
         </div>
         <h1 class="rubric-title">{{ rubric.title }}</h1>
-        <ul class="clusters">
+        <ul class="clusters mod-builder-full-view">
             <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                 <div class="cluster">
-                    <h2 class="cluster-title">{{ cluster.title }}</h2>
+                    <h2 class="cluster-title mod-builder-full-view">{{ cluster.title }}</h2>
                     <ul class="categories">
                         <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
                             <div class="category">
-                                <h3 v-if="category.title" class="category-title category-indicator">{{ category.title }}</h3>
+                                <h3 v-if="category.title" class="category-title category-indicator mod-builder-full-view">{{ category.title }}</h3>
                                 <ul class="criteria">
                                     <li v-for="criterium in category.criteria" class="criterium-list-item">
                                         <div class="criterium mod-responsive">
                                             <div class="criterium-title-header mod-responsive">
                                                 <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                             </div>
-                                            <div v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
-                                                <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
-                                                    <div class="criterium-level-title mod-builder-full-view">
-                                                        {{data.level.title}}
+                                            <ul class="criterium-levels mod-builder-full-view">
+                                                <li v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
+                                                    <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
+                                                        <div class="criterium-level-title mod-builder-full-view">
+                                                            {{data.level.title}}
+                                                        </div>
+                                                        <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                                     </div>
-                                                    <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
-                                                </div>
-                                                <div class="default-feedback-full-view" @click="focusTextField">
-                                                    <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
-                                                </div>
-                                            </div>
+                                                    <div class="default-feedback-full-view" @click="focusTextField">
+                                                        <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </li>
                                 </ul>
@@ -136,9 +138,6 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 
 <style lang="scss">
     .mod-builder-full-view {
-        &.levels-table-header {
-            margin-left: 19.8em;
-        }
 
         &.criterium-level {
             display: flex;
@@ -148,6 +147,11 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         &.criterium-level-header {
             border-color: transparent;
             cursor: text;
+        }
+
+        &.cluster-title, &.category-title {
+            max-width: 75ch;
+            margin-bottom: .2em;
         }
     }
 
@@ -177,8 +181,12 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         }
     }
 
-    @media only screen and (min-width: 900px) {
+    @media only screen and (min-width: 680px) {
         .mod-builder-full-view {
+            &.levels-table-header {
+                margin-left: 1.335em;
+            }
+
             &.criterium-level-header {
                 /*display: none;*/
 
@@ -198,7 +206,7 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         }
     }
 
-    @media only screen and (max-width: 899px) {
+    @media only screen and (max-width: 679px) {
         .mod-builder-full-view {
             &.rubric {
                 margin: 0;
@@ -220,11 +228,36 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
                 padding-right: .3em;
                 text-align: left;
             }
+
+            &.criterium-levels {
+                margin-left: 0;
+            }
         }
 
         .default-feedback-full-view {
             margin-left: .75em;
             margin-top: -.25em;
+        }
+    }
+    @media only screen and (min-width: 680px) and (max-width: 899px) {
+        .clusters.mod-builder-full-view {
+            margin-top: 1em;
+        }
+    }
+
+    @media only screen and (max-width: 899px) {
+        .rubric.mod-builder-full-view {
+            margin: 0 -.5em;
+        }
+
+        .criterium-level-header.mod-builder-full-view {
+            margin-top: .25em;
+        }
+    }
+
+    @media only screen and (min-width: 900px) {
+        .levels-table-header.mod-builder-full-view {
+            margin-left: 19.35em;
         }
     }
 </style>

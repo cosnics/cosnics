@@ -289,7 +289,7 @@ export default {
             },
             {
                 "selected": false,
-                "feedback": "De student geeft zijn mening, maar neemt daarbij vooral de mening over van anderen (bv. filosofen die aan bod kwamen, medestudenten) of onderbouwt deze niet",
+                "feedback": "De student geeft zijn mening, maar neemt daarbij vooral de mening over van anderen (bv. filosofen die aan bod kwamen, medestudenten) of onderbouwt deze niet.",
                 "has_fixed_score": false,
                 "fixed_score": 10,
                 "criterium_id": "yjz8854ozprzhr2hw45wup",

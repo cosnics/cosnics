@@ -48,7 +48,7 @@
                         <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
                     </ul>
                     <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
-                        <div v-for="level in rubric.levels" class="level-table-header-title">
+                        <div v-for="level in rubric.levels" class="level-table-header-title mod-entry-view">
                             {{ level.title }}
                         </div>
                     </div>
@@ -530,7 +530,7 @@
     }
 
     @media only screen and (min-width: 680px) {
-        .level-table-header-title {
+        .level-table-header-title.mod-entry-view {
             max-width: 33rem;
         }
 
@@ -587,6 +587,9 @@
                 display: none;
             }*/
 
+            &.criterium.mod-responsive {
+                margin-bottom: 1em;
+            }
 
             &.cluster-row {
                 flex-direction: column;
