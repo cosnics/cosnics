@@ -10,6 +10,7 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
+    import Criterium from '../Domain/Criterium';
     import RubricEntry from './RubricEntry.vue';
     import {convertRubricData} from '../Util/util';
     import {TreeNodeEvaluation} from '../Util/interfaces';
@@ -36,7 +37,8 @@
                 this.rubricResults.results = this.treeNodeEvaluations.map(evaluation => ({
                     'tree_node_id': parseInt(evaluation.treeNode.id),
                     'level_id': (evaluation.level !== null) ? parseInt(evaluation.level.id) : null,
-                    'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null
+                    'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null,
+                    'type': evaluation.treeNode.getType()
                 }));
             }
         }
@@ -45,9 +47,11 @@
             const convertedRubricData = convertRubricData(this.rubricData);
             const rubric = this.rubric = Rubric.fromJSON(convertedRubricData as RubricJsonObject);
             const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
-            this.treeNodeEvaluations = rubric.getAllCriteria().map(criterium =>
-                ({ treeNode: criterium, level: defaultLevel, score: defaultLevel ? rubric.getChoiceScore(criterium, defaultLevel) : 0, feedback: '' })
-            );
+            this.treeNodeEvaluations = rubric.getAllTreeNodes().map(treeNode =>
+                ({ treeNode,
+                   level: treeNode instanceof Criterium ? defaultLevel : null,
+                   score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null,
+                   feedback: '' }));
             this.updateRubricResults();
         }
 

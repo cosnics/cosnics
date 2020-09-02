@@ -8,6 +8,16 @@
         .col-xs-12 #rubric-entry {
             margin: 0 -10px;
         }
+        .warning-msg {
+            padding: 5px;
+        }
+        .warning-msg .fa-warning {
+            color: orange;
+            margin-right: 5px;
+        }
+        .warning-msg button {
+            border: 1px solid #ddd;
+        }
     </style>
 
     <div id="rubric-entry">
@@ -17,6 +27,10 @@
             <template v-slot:slot-outer>
                 <div style="left: 0; margin-left: .5em; margin-top: .5em; position: absolute;">
                     <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')"></button>
+                        <div v-if="showErrorMessage" class="warning-msg">
+                            <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
+                            <button @click="showErrorMessage = false">OK</button>
+                        </div>
                 </div>
             </template>
         </rubric-entry-wrapper>
@@ -31,13 +45,16 @@
 
         var messages = {
             'en': {
-                'save': 'Save'
+                'save': 'Save rubric',
+                'error': 'Attention. There are still a few errors in the rubric form.'
             },
             'fr': {
-                'save': 'Sauvegarder'
+                'save': 'Sauvegarder la rubrique',
+                'error': 'Attention. Il y a encore quelques erreurs dans la forme.'
             },
             'nl': {
-                'save': 'Opslaan'
+                'save': 'Rubric opslaan',
+                'error': 'Opgelet, er staan nog enkele fouten in het rubric formulier.'
             }
         };
 
@@ -58,11 +75,25 @@
             data: {
                 rubricData: data,
                 hasErrors: false,
+                showErrorMessage: false,
                 rubricResults: { results: [] }
             },
             computed: {
                 rubricResultsJSON: function() {
                     var res = JSON.stringify(this.rubricResults.results);
+                    if (this.showErrorMessage) {
+                        var i, results = this.rubricResults.results;
+                        if (results.length === 0) {
+                            return;
+                        }
+                        for (i = 0; i < results.length; i++) {
+                            if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
+                                return;
+                            }
+                        }
+                        this.hasErrors = false;
+                        this.showErrorMessage = false;
+                    }
                     return res;
                 }
             },
@@ -72,15 +103,18 @@
                     var i, results = this.rubricResults.results;
                     if (results.length === 0) {
                         this.hasErrors = true;
+                        this.showErrorMessage = true;
                         return;
                     }
                     for (i = 0; i < results.length; i++) {
-                        if (typeof results[i].level_id !== 'number') {
+                        if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
                             this.hasErrors = true;
+                            this.showErrorMessage = true;
                             return;
                         }
                     }
                     this.hasErrors = false;
+                    this.showErrorMessage = false;
                     var form = document.querySelector('[name=entry_form]');
                     if (form) {
                         form.submit();

@@ -1,33 +1,36 @@
 <i18n>
 {
     "en": {
+        "expand-all": "Expand all",
         "extra-feedback": "Enter extra feedback",
         "feedback": "Feedback",
-        "feedback-descriptions": "Feedback descriptions",
         "points": "points",
         "rubric": "Rubric",
         "show-default-descriptions": "Show all level descriptions and feedback",
         "show-default-description": "Show level descriptions and feedback",
+        "subsection": "Subsection",
         "total": "Total"
     },
     "fr": {
+        "expand-all": "Agrandir tout",
         "extra-feedback": "Feed-back supplémentaire",
         "feedback": "Feed-back",
-        "feedback-descriptions": "Feed-back descriptions",
         "points": "points",
         "rubric": "Rubrique",
         "show-default-descriptions": "Afficher toutes descriptions de niveau et feed-back",
         "show-default-description": "Afficher descriptions de niveau et feed-back",
+        "subsection": "Sous-section",
         "total": "Total"
     },
     "nl": {
+        "expand-all": "Alles uitklappen",
         "extra-feedback": "Geef bijkomende feedback",
         "feedback": "Feedback",
-        "feedback-descriptions": "Feedback beschrijvingen",
         "points": "punten",
         "rubric": "Rubric",
         "show-default-descriptions": "Toon alle niveauomschrijvingen en feedback",
         "show-default-description": "Toon niveauomschrijvingen en feedback",
+        "subsection": "Onderdeel",
         "total": "Totaal"
     }
 }
@@ -42,7 +45,7 @@
                 <div class="rubric-table-header mod-entry-view" aria-hidden="true">
                     <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
                         <slot name="demoEvaluator"></slot>
-                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('feedback-descriptions') }}</span></button></li>
+                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
                     </ul>
                     <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
                         <div v-for="level in rubric.levels" class="level-table-header-title">
@@ -50,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="rubric-table" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }">
+                <div class="rubric-table" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }" :style="{ '--offset': `${offset}px`}">
                     <h1 class="rubric-title">{{ rubric.title }}</h1>
                     <ul class="clusters mod-entry-view">
                         <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
@@ -98,18 +101,19 @@
                                     </li>
                                 </ul>
                                 <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
-                                    <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div><div class="score-entry-view"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                                 </div>
                             </div>
                         </li>
                     </ul>
+
                     <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
                         <slot name="slot-inner"></slot>
-                        <div class="rubric-total-title">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                        <div class="rubric-total-title u-resize">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                     <slot v-else name="slot-inner"></slot>
                     <div v-if="rubric.useScores" class="subtotal rubric-total-max mod-entry-view">
-                        <div class="rubric-total-title">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                        <div class="rubric-total-title u-resize">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max u-resize">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
                 </div>
             </div>
@@ -118,7 +122,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
     import TreeNode from '../Domain/TreeNode';
     import Level from '../Domain/Level';
@@ -137,6 +141,7 @@
     })
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
+        private offset = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
@@ -145,9 +150,19 @@
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
 
-        toggleTreeNode(treeNode: TreeNode) {
-            console.log(treeNode);
+        calculateOffset() {
+            this.$nextTick(() => {
+                try {
+                    const clustersRect = document.querySelector('.clusters')?.getBoundingClientRect().right || 0;
+                    const scoreRect = document.querySelector('.score-number-calc.mod-criterium')?.getBoundingClientRect().right || 0;
+                    const offset = clustersRect - scoreRect;
+                    this.offset = offset > 0 ? -offset : 0;
+                } catch {
+                    this.offset = 0;
+                }
+            });
         }
+
         get showDefaultFeedbackFields() : boolean {
             return this.uiState.showDefaultFeedbackFields;
         }
@@ -223,6 +238,15 @@
                 }) : [];
                 return { treeNode, choices, showDefaultFeedback: false };
             });
+        }
+
+        destroyed() {
+            window.removeEventListener('resize', this.calculateOffset);
+        }
+
+        mounted() {
+            this.calculateOffset();
+            window.addEventListener('resize', this.calculateOffset);
         }
 
         created() {
@@ -465,10 +489,9 @@
     }
 
     .rubric-entry-error {
-        border-bottom: 2px solid red;
+        align-self: flex-start;
+        /*border-bottom: 2px solid red;*/
         color: red;
-        margin-left: 19.8em;
-        margin-right: 4.5em;
         padding: 0 .25em;
     }
 
@@ -530,6 +553,10 @@
         &.levels-table-header.mod-entry-view.is-using-scores {
             margin-right: 4em;
         }
+
+        .u-resize {
+            transform: translateX(var(--offset));
+        }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
@@ -539,9 +566,16 @@
     }
 
     @media only screen and (max-width: 899px) {
+        .rubric-entry-error {
+            margin-left: 1em;
+        }
+
         .rubric-entry-view {
             max-width: 100%;
             /*width: 40em;*/
+            &.mod-closed .rubric-entry-error {
+                margin-left: 2.3em;
+            }
         }
 
         .criterium-levels {
@@ -580,7 +614,7 @@
                 text-align: left;
             }
 
-            &.subtotal {
+            &.criterium-total {
                 margin-right: .5em;
                 /*max-width: 41.25em;*/
             }
@@ -638,7 +672,7 @@
 
     @media only screen and (min-width: 900px) {
         .rubric-entry-view {
-            max-width: max-content;
+            /*max-width: max-content;*/
         }
 
         .mod-entry-view {

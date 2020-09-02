@@ -3,21 +3,21 @@
     "en": {
         "extra-feedback": "Enter extra feedback",
         "points": "points",
-        "select-score": "Select a score",
+        "select-level": "Select a level",
         "show-default-description": "Show level descriptions and feedback",
         "total": "Total"
     },
     "fr": {
         "extra-feedback": "Feed-back supplémentaire",
         "points": "points",
-        "select-score": "Selectionnez une note",
+        "select-level": "Selectionnez un niveau",
         "show-default-description": "Afficher descriptions de niveau et feed-back",
         "total": "Total"
     },
     "nl": {
         "extra-feedback": "Geef bijkomende feedback",
         "points": "punten",
-        "select-score": "Selecteer een score",
+        "select-level": "Selecteer een niveau",
         "show-default-description": "Toon niveauomschrijvingen en feedback",
         "total": "Totaal"
     }
@@ -26,7 +26,6 @@
 
 <template>
     <component :is="tag" role="grid">
-      <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-score') }}</div>
       <div class="criterium treenode-hover mod-responsive mod-entry-view" role="row" :class="feedbackVisibleClass">
             <div class="criterium-header treenode-header mod-responsive mod-entry-view" role="gridcell">
                 <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title mod-entry-view category-indicator">{{ criterium.title }}</h4>
@@ -35,6 +34,7 @@
                 </button>
             </div>
             <div class="criterium-levels-wrapper">
+                <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>
                 <ul class="criterium-levels">
                     <li v-for="choice in ext.choices" class="criterium-level mod-entry-view" :class="feedbackVisibleClass" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
                         <div v-if="preview" :aria-checked="choice.level.isDefault" class="criterium-level-header mod-entry-view" :class="{ 'is-selected': isSelected(choice.level) }">

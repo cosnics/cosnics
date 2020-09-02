@@ -87,7 +87,7 @@
             const rubric = this.rubric = Rubric.fromJSON(this.store.rubricData as RubricJsonObject);
             const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
             const rubricDefaultEvaluation: TreeNodeEvaluation[] = rubric.getAllTreeNodes().map(treeNode =>
-                ({ treeNode, level: defaultLevel, score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null, feedback: '' })
+                ({ treeNode, level: treeNode instanceof Criterium ? defaultLevel : null, score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null, feedback: '' })
             );
             const evaluators = this.store.rubricResults.evaluators;
             this.evaluator = this.store.uiState.entry.options.evaluator;
@@ -96,9 +96,9 @@
                 const treeNodeEvaluations: TreeNodeEvaluation[] = rubricDefaultEvaluation.map(defaultCriteriumEvaluation => {
                     const storeEvaluation = evaluations.find((evaluation: any) => evaluation.treeNodeId === defaultCriteriumEvaluation.treeNode.id);
                     if (storeEvaluation) {
-                        const level = rubric.levels.find(level => level.id === storeEvaluation.levelId);
+                        const level = rubric.levels.find(level => level.id === storeEvaluation.levelId) || null;
                         const score = (level && defaultCriteriumEvaluation.treeNode instanceof Criterium) ? rubric.getChoiceScore(defaultCriteriumEvaluation.treeNode, level) : null;
-                        return { treeNode: defaultCriteriumEvaluation.treeNode, level: level!, score, feedback: storeEvaluation.feedback };
+                        return { treeNode: defaultCriteriumEvaluation.treeNode, level, score, feedback: storeEvaluation.feedback };
                     } else {
                         return { ...defaultCriteriumEvaluation };
                     }
