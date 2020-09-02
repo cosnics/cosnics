@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <ul class="categories">
-                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`"  v-if="rubric.getAllCriteria(category).length > 0">
+                                <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`"  v-if="rubric.getAllCriteria(category).length > 0">
                                     <div class="category">
                                         <div v-if="category.title" class="category-row mod-result-view">
                                             <h3 class="category-title category-indicator" style="flex:1">{{ category.title }}</h3>
@@ -76,7 +76,7 @@
                                                 <div class="score-number-calc mod-result-view mod-category-max">{{ getCategoryMaxScore(category) }}</div>
                                             </div>
                                         </div>
-                                        <ul class="criteria">
+                                        <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
                                             <li v-for="criterium in category.criteria" class="criterium-list-item mod-result-view" :class="{'is-selected': selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
                                                 <div class="criterium mod-result-view">
                                                     <div class="criterium-title-header mod-result-view">

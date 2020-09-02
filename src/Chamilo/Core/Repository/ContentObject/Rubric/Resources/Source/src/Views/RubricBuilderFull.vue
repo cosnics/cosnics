@@ -13,14 +13,14 @@
                 <div class="cluster">
                     <h2 class="cluster-title mod-builder-full-view">{{ cluster.title }}</h2>
                     <ul class="categories">
-                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title ? (category.color || '#999') : '#999' }`" v-if="rubric.getAllCriteria(category).length > 0">
+                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" v-if="rubric.getAllCriteria(category).length > 0">
                             <div class="category">
                                 <h3 v-if="category.title" class="category-title category-indicator mod-builder-full-view">{{ category.title }}</h3>
-                                <ul class="criteria">
+                                <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
                                     <li v-for="criterium in category.criteria" class="criterium-list-item">
-                                        <div class="criterium mod-responsive">
+                                        <div class="criterium mod-responsive mod-builder-full-view">
                                             <div class="criterium-title-header mod-responsive">
-                                                <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
+                                                <h4 class="criterium-title category-indicator mod-builder-full-view">{{ criterium.title }}</h4>
                                             </div>
                                             <ul class="criterium-levels mod-builder-full-view">
                                                 <li v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
@@ -147,11 +147,16 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         &.criterium-level-header {
             border-color: transparent;
             cursor: text;
+            background: #e0e0e0;
         }
 
         &.cluster-title, &.category-title {
-            max-width: 75ch;
+            max-width: 70ch;
             margin-bottom: .2em;
+        }
+
+        &.criterium-title {
+            margin-right: .5em;
         }
     }
 
@@ -188,11 +193,11 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             }
 
             &.criterium-level-header {
-                /*display: none;*/
+                display: none;
 
-                &.is-using-scores {
+                /*&.is-using-scores {
                     display: block;
-                }
+                }*/
             }
 
             &.criterium-level-title {
@@ -203,6 +208,10 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
                 top: auto;
                 width: 1px;
             }
+
+            &.criterium.mod-responsive {
+                margin-bottom: 1em;
+            }
         }
     }
 
@@ -210,6 +219,10 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         .mod-builder-full-view {
             &.rubric {
                 margin: 0;
+            }
+
+            &.criterium.mod-responsive {
+                margin-bottom: 1em;
             }
 
             &.rubric-table-header {
@@ -221,7 +234,6 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             }
 
             &.criterium-level-header {
-                background: #ddd;
                 display: flex;
                 margin: .3em 0 -.1em .75em;
                 padding-left: .25em;
@@ -242,6 +254,9 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     @media only screen and (min-width: 680px) and (max-width: 899px) {
         .clusters.mod-builder-full-view {
             margin-top: 1em;
+        }
+        .criterium-level.mod-builder-full-view {
+            margin-top: .3em;
         }
     }
 

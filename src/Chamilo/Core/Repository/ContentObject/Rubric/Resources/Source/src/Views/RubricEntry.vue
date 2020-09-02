@@ -516,7 +516,8 @@
             }
 
             &.subtotal {
-                max-width: 75ch;
+                margin-right: .5em;
+                /*max-width: 75ch;*/
             }
 
             &.criterium-total {
@@ -747,7 +748,7 @@
         }
     }
 
-    .treenode-hover::before {
+/*    .treenode-hover::before {
         content: '';
         display: inline-block;
         width: 4px;
@@ -764,5 +765,5 @@
         background: #66aacc8f;
     }
     .treenode-hover:hover {
-    }
+    }*/
 </style>
