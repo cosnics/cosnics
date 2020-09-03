@@ -131,18 +131,19 @@
                         --><span>{{ selectedCriterium.title }}</span>
                     </div>
                     <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <p v-if="rubric.useScores && getTreeNodeEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ getCriteriumScore(selectedCriterium, evaluator) }}</span> (<span class="score-title">{{
-                                getTreeNodeEvaluation(selectedCriterium, evaluator).level.title
-                            }}</span>)</p>
-                        <p v-else-if="getTreeNodeEvaluation(selectedCriterium, evaluator).level !== null"><span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
-                            '<span class="score-title">{{
-                                    getTreeNodeEvaluation(selectedCriterium, evaluator).level.title
-                                }}</span>'</p>
-                        <p v-if="getTreeNodeEvaluation(selectedCriterium, evaluator).feedback">
-                            {{ $t('extra-feedback') }}: {{
-                                getTreeNodeEvaluation(selectedCriterium, evaluator).feedback
-                            }}
-                        </p>
+                        <template v-for="evaluation in [getTreeNodeEvaluation(selectedCriterium, evaluator)]">
+                            <p v-if="rubric.useScores && evaluation.level !== null">
+                                <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ evaluation.score || '0' }}</span>
+                                (<span class="score-title">{{ evaluation.level.title }}</span>)
+                            </p>
+                            <p v-else-if="evaluation.level !== null">
+                                <span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
+                                '<span class="score-title">{{ evaluation.level.title }}</span>'
+                            </p>
+                            <p v-if="evaluation.feedback">
+                                {{ $t('extra-feedback') }}: {{ evaluation.feedback }}
+                            </p>
+                        </template>
                     </div>
                 </div>
                 <div class="rr-selected-criterium-levels">
