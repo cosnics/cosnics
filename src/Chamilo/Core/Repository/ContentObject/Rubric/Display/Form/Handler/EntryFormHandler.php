@@ -92,10 +92,13 @@ class EntryFormHandler extends FormHandler
             );
         }
 
-        $this->parameters->getRubricBridge()->saveScore(
-            $this->parameters->getUser(), $totalScore,
-            $this->parameters->getRubricData()->getMaximumScore()
-        );
+        if($this->parameters->getRubricData()->useScores())
+        {
+            $this->parameters->getRubricBridge()->saveScore(
+                $this->parameters->getUser(), $totalScore,
+                $this->parameters->getRubricData()->getMaximumScore()
+            );
+        }
 
         return true;
     }
