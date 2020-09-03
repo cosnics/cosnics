@@ -197,16 +197,16 @@ class FormValidatorHtmlEditorOptions
     public function set_defaults()
     {
         $application = Request::get('application');
-        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/CKeditorInstanceConfig.js';
+        $app_sys_path = Path::getInstance()->getJavascriptPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
 
         if (file_exists($app_sys_path))
         {
-            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/CKeditorInstanceConfig.js';
+            $path = Path::getInstance()->getJavascriptPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
         else
         {
             $path = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-            'HtmlEditor/CKeditorInstanceConfig.js';
+            'HtmlEditor/CkeditorInstanceConfig.js';
         }
 
         $available_options = $this->get_option_names();
