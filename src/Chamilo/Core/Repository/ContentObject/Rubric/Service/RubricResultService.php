@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\CriteriumResultJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
@@ -43,27 +43,65 @@ class RubricResultService
      * @param User $targetUser
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
-     * @param CriteriumResultJSONModel[] $criteriumResultJSONModels
+     * @param TreeNodeResultJSONModel[] $treeNodeResultJSONModels
      *
      * @return int
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Exception
      */
     public function storeRubricResults(
         User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
-        array $criteriumResultJSONModels
+        array $treeNodeResultJSONModels
     )
     {
         $uniqueAttemptId = UUID::v4();
-        $criteriumScores = [];
 
-        foreach ($criteriumResultJSONModels as $criteriumResultJSONModel)
+        $treeNodeResultJSONModelsById = [];
+        foreach ($treeNodeResultJSONModels as $treeNodeResultJSONModel)
         {
-            $treeNode = $rubricData->getTreeNodeById($criteriumResultJSONModel->getTreeNodeId());
+            $treeNodeResultJSONModelsById[$treeNodeResultJSONModel->getTreeNodeId()] = $treeNodeResultJSONModel;
+        }
+
+        $totalScore = $this->calculateAndStoreScoreForTreeNode(
+            $user, $targetUser, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
+            $treeNodeResultJSONModelsById
+        );
+
+        $this->rubricResultRepository->flush();
+
+        return $totalScore;
+    }
+
+    /**
+     * @param User $user
+     * @param User $targetUser
+     * @param RubricData $rubricData
+     * @param ContextIdentifier $contextIdentifier
+     * @param TreeNode $treeNode
+     * @param string $uniqueAttemptId
+     * @param TreeNodeResultJSONModel[] $treeNodeResultJSONModelsById
+     *
+     * @return int
+     * @throws \Exception
+     */
+    protected function calculateAndStoreScoreForTreeNode(
+        User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
+        string $uniqueAttemptId, array $treeNodeResultJSONModelsById
+    )
+    {
+        $treeNodeResultJSONModel = $treeNodeResultJSONModelsById[$treeNode->getId()];
+
+        if ($treeNode instanceof CriteriumNode)
+        {
+            if (!$treeNodeResultJSONModel instanceof TreeNodeResultJSONModel)
+            {
+                throw new \InvalidArgumentException(
+                    sprintf('No result found for treenode with id %s', $treeNode->getId())
+                );
+            }
 
             $choice = $rubricData->getChoiceByLevelAndCriteriumId(
-                $criteriumResultJSONModel->getLevelId(), $criteriumResultJSONModel->getTreeNodeId()
+                $treeNodeResultJSONModel->getLevelId(), $treeNodeResultJSONModel->getTreeNodeId()
             );
 
             if ($treeNode !== $choice->getCriterium())
@@ -80,59 +118,26 @@ class RubricResultService
 
             $this->createRubricResult(
                 $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $calculatedScore,
-                $criteriumResultJSONModel->getComment(), $choice
+                $treeNodeResultJSONModel->getComment(), $choice
             );
 
-            $criteriumScores[$treeNode->getId()] = $calculatedScore;
-        }
-
-        $totalScore = $this->calculateAndStoreContainerScore(
-            $user, $targetUser, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
-            $criteriumScores
-        );
-
-        $this->rubricResultRepository->flush();
-
-        return $totalScore;
-    }
-
-    /**
-     * @param User $user
-     * @param User $targetUser
-     * @param RubricData $rubricData
-     * @param ContextIdentifier $contextIdentifier
-     * @param TreeNode $treeNode
-     * @param string $uniqueAttemptId
-     * @param array $criteriumScores
-     *
-     * @return int
-     * @throws \Exception
-     */
-    protected function calculateAndStoreContainerScore(
-        User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
-        string $uniqueAttemptId, array $criteriumScores
-    )
-    {
-        if ($treeNode instanceof CriteriumNode)
-        {
-            if (array_key_exists($treeNode->getId(), $criteriumScores))
-            {
-                return $criteriumScores[$treeNode->getId()];
-            }
-
-            return 0;
+            return $calculatedScore;
         }
 
         $totalScore = 0;
         foreach ($treeNode->getChildren() as $child)
         {
-            $totalScore += $this->calculateAndStoreContainerScore(
-                $user, $targetUser, $rubricData, $contextIdentifier, $child, $uniqueAttemptId, $criteriumScores
+            $totalScore += $this->calculateAndStoreScoreForTreeNode(
+                $user, $targetUser, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
+                $treeNodeResultJSONModelsById
             );
         }
 
+        $comment = $treeNodeResultJSONModel instanceof TreeNodeResultJSONModel ?
+            $treeNodeResultJSONModel->getComment() : null;
+
         $this->createRubricResult(
-            $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore
+            $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore, $comment
         );
 
         return $totalScore;

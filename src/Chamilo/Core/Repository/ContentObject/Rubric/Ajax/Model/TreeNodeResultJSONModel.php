@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Type;
  *
  * @package Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model
  */
-class CriteriumResultJSONModel
+class TreeNodeResultJSONModel
 {
     /**
      * @var int

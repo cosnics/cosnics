@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\CriteriumResultJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
@@ -79,7 +79,7 @@ class EntryFormHandler extends FormHandler
 //        $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '[{"criterium_tree_node_id": 50, "level_id": 7, "comment": "meh"}]';
 
         $resultJSONModels = $this->serializer->deserialize(
-            $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . CriteriumResultJSONModel::class . '>', 'json'
+            $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . TreeNodeResultJSONModel::class . '>', 'json'
         );
 
         $totalScore = 0;

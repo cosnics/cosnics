@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Service;
 
-use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\CriteriumResultJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CategoryNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
@@ -143,11 +143,11 @@ class RubricResultServiceTest extends ChamiloTestCase
             );
 
         $resultJSONModels = [
-            new CriteriumResultJSONModel(6, 1),
-            new CriteriumResultJSONModel(7, 7),
-            new CriteriumResultJSONModel(8, 8),
-            new CriteriumResultJSONModel(9, 4),
-            new CriteriumResultJSONModel(10, 5),
+            new TreeNodeResultJSONModel(6, 1),
+            new TreeNodeResultJSONModel(7, 7),
+            new TreeNodeResultJSONModel(8, 8),
+            new TreeNodeResultJSONModel(9, 4),
+            new TreeNodeResultJSONModel(10, 5),
         ];
 
         $user = new User();
