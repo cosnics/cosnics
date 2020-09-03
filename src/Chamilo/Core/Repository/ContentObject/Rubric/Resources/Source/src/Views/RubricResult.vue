@@ -367,6 +367,10 @@
                 text-align: left;
                 padding-left: .25em;
             }
+
+            &.mod-cluster, &.mod-cluster-max {
+                margin-bottom: .5em;
+            }
         }
 
         &.graded-level {
