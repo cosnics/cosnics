@@ -1,8 +1,9 @@
 <template>
     <div class="rubric mod-builder-full-view">
         <div class="rubric-table-header mod-builder-full-view">
+            <div class="table-header-filler" aria-hidden="true"></div>
             <div class="levels-table-header mod-builder-full-view">
-                <div v-for="level in rubric.levels" class="level-table-header-title">
+                <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
                     {{level.title}}
                 </div>
             </div>
@@ -19,7 +20,7 @@
                                 <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
                                     <li v-for="criterium in category.criteria" class="criterium-list-item">
                                         <div class="criterium mod-responsive mod-builder-full-view">
-                                            <div class="criterium-title-header mod-responsive">
+                                            <div class="criterium-title-header mod-responsive mod-builder-full-view">
                                                 <h4 class="criterium-title category-indicator mod-builder-full-view">{{ criterium.title }}</h4>
                                             </div>
                                             <ul class="criterium-levels mod-builder-full-view">
@@ -48,13 +49,14 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
     import DataConnector from '../Connector/DataConnector';
+    import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
@@ -75,6 +77,11 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
         private criteriaData: CriteriumExt[] = [];
+
+        constructor() {
+            super();
+            this.onResize = debounce(this.onResize, 200);
+        }
 
         updateHeight(e: InputEvent) {
             this.$nextTick(() => {
@@ -110,6 +117,10 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             });
         }
 
+        onResize() {
+            this.updateHeightAll();
+        }
+
         created() {
             if (this.rubric) {
                 this.initScores(this.rubric);
@@ -125,7 +136,12 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             });
         }
 
+        destroyed() {
+            window.removeEventListener('resize', this.onResize);
+        }
+
         mounted() {
+            window.addEventListener('resize', this.onResize);
             this.updateHeightAll();
         }
 
@@ -137,6 +153,14 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 </script>
 
 <style lang="scss">
+    .table-header-filler {
+        display: none;
+        flex: 1;
+        margin-right: .4em;
+        max-width: 30rem;
+        min-width: 20rem;
+    }
+
     .mod-builder-full-view {
 
         &.criterium-level {
@@ -192,6 +216,10 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
                 margin-left: 1.335em;
             }
 
+            &.level-table-header-title {
+                max-width: 33rem;
+            }
+
             &.criterium-level-header {
                 display: none;
 
@@ -211,6 +239,10 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 
             &.criterium.mod-responsive {
                 margin-bottom: 1em;
+            }
+
+            &.criterium-level {
+                max-width: 33rem;
             }
         }
     }
@@ -271,8 +303,25 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     }
 
     @media only screen and (min-width: 900px) {
+        .table-header-filler {
+            display: block;
+        }
+
+        .rubric-table-header.mod-builder-full-view {
+            display: flex;
+        }
+
         .levels-table-header.mod-builder-full-view {
-            margin-left: 19.35em;
+            /*margin-left: 19.35em;*/
+            flex: 1;
+            margin-left: 0;
+
+        }
+
+        .criterium-title-header.mod-builder-full-view {
+            flex: 1;
+            max-width: 30rem;
+            min-width: 20rem;
         }
     }
 </style>
