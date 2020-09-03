@@ -59,7 +59,8 @@
   }
 
   .cluster-title {
-    color: change-color($title-color, $alpha: .9);
+    color: hsla(203, 29%, 40%, 1);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
     margin: .25em 0 0 1.1em;
@@ -81,17 +82,19 @@
 
   .category-title {
     align-items: baseline;
-    color: $title-color;
+    color: hsla(180, 17%, 41%, 1);
     display: flex;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.375rem;
+    font-weight: 700;
     line-height: 1.3em;
     margin: .75em 0 0;
 
     &.category-indicator:before {
       background: var(--category-color);
       height: 12px;
-      margin-left: .05em;
-      margin-right: .25em;
+      margin-left: .025em;
+      margin-right: .4em;
       min-width: 12px;
     }
   }
