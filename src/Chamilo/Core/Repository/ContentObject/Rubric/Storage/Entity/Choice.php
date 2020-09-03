@@ -304,6 +304,11 @@ class Choice
      */
     public function calculateScore(): float
     {
+        if(!$this->getRubricData()->useScores())
+        {
+            return 0;
+        }
+
         if($this->hasFixedScore())
         {
             return $this->fixedScore;
