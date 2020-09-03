@@ -2,8 +2,8 @@
 {
     "en": {
         "builder": "Rubric",
+        "level-descriptions": "Level descriptions",
         "levels": "Levels",
-        "builderfull": "Quick Feedback",
         "error-conflict": "The server responded with an error due to a conflict. Probably someone else is working on the same rubric at this time. Please refresh the page and try again.",
         "error-forbidden": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-notfound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
@@ -13,14 +13,14 @@
     },
     "fr": {
         "builder": "Rubrique",
+        "level-descriptions": "Descriptions de niveau",
         "levels": "Niveaux",
-        "builderfull": "Feed-back Rapide",
         "use-scores": "Utiliser les Scores"
     },
     "nl": {
         "builder": "Rubric",
+        "level-descriptions": "Niveauomschrijvingen",
         "levels": "Niveaus",
-        "builderfull": "Snelle Feedback",
         "error-conflict": "Serverfout vanwege een conflict. Misschien werkt iemand aan dezelfde rubric op dit ogenblik. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-forbidden": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-notfound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
@@ -37,7 +37,7 @@
                 <ul class="app-header-nav">
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'Builder' }"><span class="link-text" tabindex="-1">{{ $t('builder') }}</span></router-link></li>
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderLevels' }"><span class="link-text" tabindex="-1">{{ $t('levels') }}</span></router-link></li>
-                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('builderfull') }}</span></router-link></li>
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('level-descriptions') }}</span></router-link></li>
                 </ul>
             </nav>
             <ul class="app-header-tools" v-if="rubric" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">

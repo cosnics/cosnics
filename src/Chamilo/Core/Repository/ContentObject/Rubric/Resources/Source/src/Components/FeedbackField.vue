@@ -1,19 +1,19 @@
 <i18n>
 {
     "en": {
-        "enter-feedback": "Enter feedback"
+        "enter-level-description": "Enter level description"
     },
     "fr": {
-        "enter-feedback": "Commentaire / Feed-back"
+        "enter-level-description": "Entrer une description de niveau"
     },
     "nl": {
-        "enter-feedback": "Geef feedback"
+        "enter-level-description": "Voer een niveauomschrijving in"
     }
 }
 </i18n>
 
 <template>
-    <textarea v-model="choice.feedback" :placeholder="$t('enter-feedback')" class="ta-default-feedback" @input="onFeedbackChange"></textarea>
+    <textarea v-model="choice.feedback" :placeholder="$t('enter-level-description')" class="ta-default-feedback" @input="onFeedbackChange"></textarea>
 </template>
 
 <script lang="ts">
