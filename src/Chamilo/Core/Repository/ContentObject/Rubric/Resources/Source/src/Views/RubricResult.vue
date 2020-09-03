@@ -2,6 +2,7 @@
 {
     "en": {
         "chose": "chose",
+        "close": "Close",
         "extra-feedback": "Extra feedback",
         "gave-score": "gave a score of",
         "level-descriptions": "Level descriptions",
@@ -10,6 +11,7 @@
     },
     "fr": {
         "chose": "a choisi",
+        "close": "Fermer",
         "extra-feedback": "Feed-back supplémentaire",
         "gave-score": "a donné le score",
         "level-descriptions": "Descriptions de niveau",
@@ -18,6 +20,7 @@
     },
     "nl": {
         "chose": "koos",
+        "close": "Sluiten",
         "extra-feedback": "Extra feedback",
         "gave-score": "gaf score",
         "level-descriptions": "Niveauomschrijvingen",
@@ -44,7 +47,7 @@
                     <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                         <div class="cluster">
                             <div class="cluster-row mod-result-view">
-                                <h2 class="cluster-title" style="flex:1">{{ cluster.title }}</h2>
+                                <h2 class="cluster-title mod-result-view">{{ cluster.title }}</h2>
                                 <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(cluster, evaluator).feedback }">
                                     <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ getTreeNodeEvaluation(cluster, evaluator).feedback ? $t('extra-feedback') + ': ' + getTreeNodeEvaluation(cluster, evaluator).feedback : ''}`">
                                         <i v-if="getTreeNodeEvaluation(cluster, evaluator).feedback" class="score-feedback-icon fa fa-info mod-cluster" />
@@ -62,7 +65,7 @@
                                 <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`"  v-if="rubric.getAllCriteria(category).length > 0">
                                     <div class="category">
                                         <div v-if="category.title" class="category-row mod-result-view">
-                                            <h3 class="category-title category-indicator" style="flex:1">{{ category.title }}</h3>
+                                            <h3 class="category-title category-indicator mod-result-view">{{ category.title }}</h3>
                                             <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(category, evaluator).feedback }">
                                                 <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ getTreeNodeEvaluation(category, evaluator).feedback ? $t('extra-feedback') + ': ' + getTreeNodeEvaluation(category, evaluator).feedback : ''}`">
                                                     <i v-if="getTreeNodeEvaluation(category, evaluator).feedback" class="score-feedback-icon fa fa-info mod-category" />
@@ -122,44 +125,45 @@
                     </div>
                 </div>
             </div>
-            <div v-if="selectedCriterium" class="rr-selected-criterium" @click.stop="">
-                <div style="position:sticky;top:10px;">
-                <div class="rr-selected-criterium-results">
-                    <div class="title" style="font-size: 1.4rem">
-                        <!--<span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right separator" /></span>
-                        <span v-if="selectedCriterium.parent.title.trim().length !== 0">{{ selectedCriterium.parent.title }}<i class="fa fa-angle-right separator" /></span>
-                        --><span>{{ selectedCriterium.title }}</span>
+            <div v-if="selectedCriterium" class="rr-selected-criterium-wrapper" @click.stop="selectedCriterium = null">
+                <div class="rr-selected-criterium">
+                    <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="selectedCriterium = null"><i aria-hidden="true" class="fa fa-close"/></button>
+                    <div class="rr-selected-criterium-results">
+                        <div class="rr-selected-criterium-results-title">
+                            <!--<span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right separator" /></span>
+                            <span v-if="selectedCriterium.parent.title.trim().length !== 0">{{ selectedCriterium.parent.title }}<i class="fa fa-angle-right separator" /></span>
+                            --><span>{{ selectedCriterium.title }}</span>
+                        </div>
+                        <div class="rr-selected-result" v-for="evaluator in evaluators">
+                            <template v-for="evaluation in [getTreeNodeEvaluation(selectedCriterium, evaluator)]">
+                                <p v-if="rubric.useScores && evaluation.level !== null">
+                                    <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ evaluation.score || '0' }}</span>
+                                    (<span class="score-title">{{ evaluation.level.title }}</span>)
+                                </p>
+                                <p v-else-if="evaluation.level !== null">
+                                    <span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
+                                    '<span class="score-title">{{ evaluation.level.title }}</span>'
+                                </p>
+                                <p v-if="evaluation.feedback">
+                                    {{ $t('extra-feedback') }}: {{ evaluation.feedback }}
+                                </p>
+                            </template>
+                        </div>
                     </div>
-                    <div class="rr-selected-result" v-for="evaluator in evaluators">
-                        <template v-for="evaluation in [getTreeNodeEvaluation(selectedCriterium, evaluator)]">
-                            <p v-if="rubric.useScores && evaluation.level !== null">
-                                <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ evaluation.score || '0' }}</span>
-                                (<span class="score-title">{{ evaluation.level.title }}</span>)
-                            </p>
-                            <p v-else-if="evaluation.level !== null">
-                                <span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
-                                '<span class="score-title">{{ evaluation.level.title }}</span>'
-                            </p>
-                            <p v-if="evaluation.feedback">
-                                {{ $t('extra-feedback') }}: {{ evaluation.feedback }}
-                            </p>
-                        </template>
+                    <div class="rr-selected-criterium-levels">
+                        <div class="title">{{ $t('level-descriptions') }}:</div>
+                        <ul class="levels-list">
+                            <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
+                                <div class="levels-list-item-header">
+                                    <div class="title">{{ level.title }}</div>
+                                    <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
+                                </div>
+                                <div class="choice-feedback">
+                                    {{ rubric.getChoice(selectedCriterium, level).feedback }}
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="rr-selected-criterium-levels">
-                    <div class="title">{{ $t('level-descriptions') }}:</div>
-                    <ul class="levels-list">
-                        <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
-                            <div class="levels-list-item-header">
-                                <div class="title">{{ level.title }}</div>
-                                <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
-                            </div>
-                            <div class="choice-feedback">
-                                {{ rubric.getChoice(selectedCriterium, level).feedback }}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
                 </div>
             </div>
         </div>
@@ -258,6 +262,14 @@
         margin-top: .75em;
     }
 
+    .cluster-title.mod-result-view {
+        flex: 1;
+    }
+
+    .category-title.mod-result-view {
+        flex: 1;
+    }
+
     .cluster-row.mod-result-view {
         display: flex;
         align-items: center;
@@ -284,8 +296,12 @@
     }
 
     .evaluator-table-header-title {
-        flex: initial;
         width: 8.33em;
+        text-align: right;
+
+        &.mod-grades {
+            text-align: left;
+        }
 
         /*&.mod-grades {
             width: 6.95em;
@@ -411,10 +427,42 @@
         }
     }
 
-    .rr-selected-criterium {
+    .btn-info-close {
+        align-items: center;
+        background-color: $bg-criterium-details;
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+        color: #777;
+        display: flex;
+        float: right;
+        height: 1.6em;
+        justify-content: center;
+        margin-left: .5em;
+        margin-top: .3em;
+        padding: 0;
+        transition: background-color 200ms, color 200ms;
+        width: 1.6em;
+
+        &:hover {
+            background-color: $btn-color;
+            border: 1px solid transparent;
+            border-radius: $border-radius;
+            color: #fff;
+        }
+
+        &:focus {
+            border: 1px solid $input-color-focus;
+        }
+    }
+
+    .rr-selected-criterium-wrapper{
         margin-top: 1em;
+    }
+
+    .rr-selected-criterium {
         max-width: 80ch;
     }
+
 
     .choice-feedback {
         line-height: 1.5em;
@@ -422,11 +470,47 @@
     }
 
     @media only screen and (min-width: 900px) {
-        .rr-selected-criterium {
+        .btn-info-close {
+            display: none;
+        }
+
+        .rr-selected-criterium-wrapper {
             border-left: 1px solid hsla(191, 21%, 80%, 1);
             margin-left: 1.5em;
             padding-left: 1.5em;
             width: 40%;
+            pointer-events: none;
+        }
+
+        .rr-selected-criterium {
+            position: sticky;
+            top: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 899px) {
+        .rr-selected-criterium-wrapper {
+            align-items: flex-start;
+            background: hsla(0, 0, 0, .15);
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            left: 0;
+            margin-top: 0;
+            overflow: auto;
+            padding-top: 3em;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10000;
+        }
+
+        .rr-selected-criterium {
+            background: #fff;
+            border-radius: $border-radius;
+            box-shadow: 1px 1px 5px #999;
+            margin: 0 1em;
+            padding: .5em;
         }
     }
 
@@ -435,15 +519,17 @@
         border-radius: $border-radius;
         padding: .5em;
 
-        .title {
-            color: hsla(191, 41%, 38%, 1);
-            font-weight: 700;
-            line-height: 1.3em;
-            margin-bottom: .5em;
+    }
 
-            .separator {
-                margin: 0 .3em;
-            }
+    .rr-selected-criterium-results-title {
+        color: hsla(191, 41%, 38%, 1);
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.3em;
+        margin-bottom: .5em;
+
+        .separator {
+            margin: 0 .3em;
         }
     }
 
