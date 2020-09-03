@@ -220,16 +220,22 @@
         }
 
         getCategoryScore(category: Category, evaluator: any) : number {
+            const treeNodeScore = this.getTreeNodeEvaluation(category, evaluator).score;
+            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
         getClusterScore(cluster: Cluster, evaluator: any) : number {
+            const treeNodeScore = this.getTreeNodeEvaluation(cluster, evaluator).score;
+            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
 
         getRubricScore(evaluator: any) : number {
+            const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator).score;
+            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
             if (!this.rubric) { return 0; }
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
