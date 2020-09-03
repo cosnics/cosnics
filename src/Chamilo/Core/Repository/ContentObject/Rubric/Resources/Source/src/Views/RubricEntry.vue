@@ -719,9 +719,6 @@
             }
         }
 
-        .btn-show-feedback {
-            opacity: .8;
-        }
 
         .cluster-header {
             align-self: center;
@@ -737,9 +734,6 @@
             min-width: 20rem;
         }
 
-        .treenode-header:hover .btn-show-feedback {
-            opacity: 1;
-        }
 
         .treenode-header {
             h2, h3, h4 {
@@ -747,8 +741,23 @@
             }
         }
     }
+    .btn-icon-show-feedback {
+        opacity: 0;
 
-/*    .treenode-hover::before {
+        &.is-feedback-visible {
+            opacity: 1;
+        }
+    }
+
+    .treenode-header:hover .btn-icon-show-feedback {
+        opacity: 1;
+    }
+
+    .criterium:hover .btn-icon-show-feedback {
+        opacity: 1;
+    }
+
+    /*    .treenode-hover::before {
         content: '';
         display: inline-block;
         width: 4px;
