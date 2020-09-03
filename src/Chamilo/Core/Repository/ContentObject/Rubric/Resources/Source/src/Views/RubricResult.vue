@@ -123,6 +123,7 @@
                 </div>
             </div>
             <div v-if="selectedCriterium" class="rr-selected-criterium" @click.stop="">
+                <div style="position:sticky;top:10px;">
                 <div class="rr-selected-criterium-results">
                     <div class="title" style="font-size: 1.4rem">
                         <!--<span>{{ selectedCriterium.parent.parent.title }}<i class="fa fa-angle-right separator" /></span>
@@ -157,6 +158,7 @@
                             </div>
                         </li>
                     </ul>
+                </div>
                 </div>
             </div>
         </div>
