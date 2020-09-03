@@ -46,13 +46,13 @@
                             <div class="cluster-row mod-result-view">
                                 <h2 class="cluster-title" style="flex:1">{{ cluster.title }}</h2>
                                 <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(cluster, evaluator).feedback }">
-                                    <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }">
+                                    <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ getTreeNodeEvaluation(cluster, evaluator).feedback ? $t('extra-feedback') + ': ' + getTreeNodeEvaluation(cluster, evaluator).feedback : ''}`">
                                         <i v-if="getTreeNodeEvaluation(cluster, evaluator).feedback" class="score-feedback-icon fa fa-info mod-cluster" />
                                         {{ rubric.useScores ? getClusterScore(cluster, evaluator) : '' }}
                                     </div>
-                                    <b-tooltip v-if="getTreeNodeEvaluation(cluster, evaluator).feedback" triggers="hover focus" :target="`${cluster.id}-evaluation-${index}`" placement="bottom">
+                                    <!--<b-tooltip v-if="getTreeNodeEvaluation(cluster, evaluator).feedback" triggers="hover focus" :target="`${cluster.id}-evaluation-${index}`" placement="bottom">
                                         {{ getTreeNodeEvaluation(cluster, evaluator).feedback }}
-                                    </b-tooltip>
+                                    </b-tooltip> -->
                                 </div>
                                 <div v-if="rubric.useScores" class="score-result-view">
                                     <div class="score-number-calc mod-result-view mod-cluster-max">{{ getClusterMaxScore(cluster) }}</div>
@@ -64,13 +64,13 @@
                                         <div v-if="category.title" class="category-row mod-result-view">
                                             <h3 class="category-title category-indicator" style="flex:1">{{ category.title }}</h3>
                                             <div v-for="(evaluator, index) in evaluators" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !getTreeNodeEvaluation(category, evaluator).feedback }">
-                                                <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }">
+                                                <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ getTreeNodeEvaluation(category, evaluator).feedback ? $t('extra-feedback') + ': ' + getTreeNodeEvaluation(category, evaluator).feedback : ''}`">
                                                     <i v-if="getTreeNodeEvaluation(category, evaluator).feedback" class="score-feedback-icon fa fa-info mod-category" />
                                                     {{ rubric.useScores ? getCategoryScore(category, evaluator) : '' }}
                                                 </div>
-                                                <b-tooltip v-if="getTreeNodeEvaluation(category, evaluator).feedback" triggers="hover focus" :target="`${category.id}-evaluation-${index}`" placement="bottom">
+                                                <!--<b-tooltip v-if="getTreeNodeEvaluation(category, evaluator).feedback" triggers="hover focus" :target="`${category.id}-evaluation-${index}`" placement="bottom">
                                                     {{ getTreeNodeEvaluation(category, evaluator).feedback }}
-                                                </b-tooltip>
+                                                </b-tooltip>-->
                                             </div>
                                             <div v-if="rubric.useScores" class="score-result-view">
                                                 <div class="score-number-calc mod-result-view mod-category-max">{{ getCategoryMaxScore(category) }}</div>
@@ -82,14 +82,14 @@
                                                     <div class="criterium-title-header mod-result-view">
                                                         <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
                                                     </div>
-                                                    <div v-for="(evaluator, index) in evaluators" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="rubric.useScores ? '' : getTreeNodeEvaluation(criterium, evaluator).level.title">
+                                                    <div v-for="(evaluator, index) in evaluators" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="`${ !rubric.useScores ? getTreeNodeEvaluation(criterium, evaluator).level.title : ''}${ getTreeNodeEvaluation(criterium, evaluator).feedback ? ( !rubric.useScores ? '\n' : '') + $t('extra-feedback') + ': ' + getTreeNodeEvaluation(criterium, evaluator).feedback : ''}`">
                                                         <div class="mod-result-view" :class="rubric.useScores ? 'score-number-calc mod-criterium' : 'graded-level'" :id="`${criterium.id}-evaluation-${index}`">
                                                             <i v-if="getTreeNodeEvaluation(criterium, evaluator).feedback" class="score-feedback-icon fa fa-info"/>
                                                             {{ rubric.useScores ? getCriteriumScore(criterium, evaluator) : getTreeNodeEvaluation(criterium, evaluator).level.title }}
                                                         </div>
-                                                        <b-tooltip v-if="getTreeNodeEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-evaluation-${index}`" placement="bottom">
+                                                        <!--<b-tooltip v-if="getTreeNodeEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-evaluation-${index}`" placement="bottom">
                                                             {{ getTreeNodeEvaluation(criterium, evaluator).feedback }}
-                                                        </b-tooltip>
+                                                        </b-tooltip>-->
                                                     </div>
                                                     <div v-if="rubric.useScores" class="subtotal criterium-total mod-result-view">
                                                         <div class="score-number-calc mod-result-view mod-criterium-max">{{ getCriteriumMaxScore(criterium) }}</div>
