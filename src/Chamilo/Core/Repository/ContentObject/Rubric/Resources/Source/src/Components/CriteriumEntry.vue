@@ -29,7 +29,7 @@
       <div class="criterium treenode-hover mod-responsive mod-entry-view" role="row" :class="feedbackVisibleClass">
             <div class="criterium-header treenode-header mod-responsive mod-entry-view" role="gridcell">
                 <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title mod-entry-view category-indicator">{{ criterium.title }}</h4>
-                <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback mod-criterium" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                     <i tabindex="-1" class="btn-icon-show-feedback fa" :class="feedbackVisibleClass" aria-hidden="true" />
                 </button>
             </div>

@@ -749,6 +749,12 @@
         }
     }
 
+    @media (pointer: coarse) {
+        .btn-icon-show-feedback {
+            opacity: 1;
+        }
+    }
+
     .treenode-header:hover .btn-icon-show-feedback {
         opacity: 1;
     }
