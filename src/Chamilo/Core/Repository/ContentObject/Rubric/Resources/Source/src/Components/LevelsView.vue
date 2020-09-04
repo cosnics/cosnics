@@ -274,7 +274,7 @@
     }
 
     .input-detail {
-        background-color: hsla(190, 50%, 96%, 1);
+        background-color: hsla(190, 50%, 98%, 1);
         border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         padding: 2px 5px;

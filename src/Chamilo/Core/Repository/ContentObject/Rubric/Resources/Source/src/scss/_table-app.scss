@@ -185,7 +185,7 @@
   }
 
   .criterium-level-header {
-    background: #e0e0e0;
+    background: #e6e6e6;
     border: 1px solid transparent;
     border-bottom-color: $score-light;
     border-radius: $border-radius;
@@ -249,11 +249,11 @@
     }
 
     &.mod-criterium-max {
-      background: hsla(197, 15%, 90%, 1);
+      background: hsla(213, 30%, 93%, 1);
     }
 
     &.mod-category-max {
-      background: hsla(200, 33%, 88%, 1);
+      background: hsla(203, 32%, 83%, 1);
     }
 
     &.mod-cluster-max {

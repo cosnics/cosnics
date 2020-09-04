@@ -505,7 +505,7 @@
             hsla(60, 2%, 91%, 0) 14px,
             hsla(204, 38%, 40%, 0) 0px,
             hsla(204, 38%, 40%, 0.12) 36px);*/
-        background: hsla(204, 38%, 40%, 0.12);
+        background: hsla(207, 24%, 95%, 1);
         border: 1px solid hsla(193, 14%, 82%, 1);
         border-top-left-radius: $border-radius;
         border-top-right-radius: $border-radius;
@@ -1118,7 +1118,7 @@
             pointer-events: all;
 
             &:hover {
-                background: #ddd;
+                background: #e9e9e9;
             }
 
             &:focus {
@@ -1347,7 +1347,7 @@
         }
 
         .b-cluster {
-            background-color: hsla(160, 6%, 90%, 1);
+            background-color: hsla(160, 20%, 95%, 1);
             border: 1px solid hsla(197, 10%, 86%, 1);
             border-radius: $border-radius;
             color: hsla(200, 10%, 38%, 1);
@@ -1670,7 +1670,7 @@
             width: 30em;
 
             .input-detail {
-                background-color: rgba(255, 255, 255, 0.35);
+                /*background-color: rgba(255, 255, 255, 0.35);*/
                 border: 1px solid #ccc;
 
                 &:hover {
