@@ -536,7 +536,7 @@
         }
 
         .criterium-level.mod-entry-view {
-            background: #e7e7e7;
+            background: hsla(0, 0, 98%, 1);
             border-radius: 3px;
             max-width: 33rem;
             border-bottom: 1px solid #e0e0e0;
@@ -745,6 +745,12 @@
         opacity: 0;
 
         &.is-feedback-visible {
+            opacity: 1;
+        }
+    }
+
+    @media (pointer: coarse) {
+        .btn-icon-show-feedback {
             opacity: 1;
         }
     }

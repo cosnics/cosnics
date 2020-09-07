@@ -33,13 +33,16 @@
     border-radius: $border-radius;
     box-shadow: 0px 1px 2px #999;
     color: white;
-    flex: 1;
     font-size: 1.4rem;
     line-height: 1.4em;
     margin-right: .5em;
     overflow: hidden;
     padding: .4em .5em;
     text-overflow: ellipsis;
+  }
+
+  .level-table-header-title {
+    flex: 1;
   }
 
   .rubric-title {
@@ -182,7 +185,7 @@
   }
 
   .criterium-level-header {
-    background: #e0e0e0;
+    background: #e6e6e6;
     border: 1px solid transparent;
     border-bottom-color: $score-light;
     border-radius: $border-radius;
@@ -246,11 +249,11 @@
     }
 
     &.mod-criterium-max {
-      background: hsla(197, 15%, 90%, 1);
+      background: hsla(213, 30%, 93%, 1);
     }
 
     &.mod-category-max {
-      background: hsla(200, 33%, 88%, 1);
+      background: hsla(203, 32%, 83%, 1);
     }
 
     &.mod-cluster-max {
