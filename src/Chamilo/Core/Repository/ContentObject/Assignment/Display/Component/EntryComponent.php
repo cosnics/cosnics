@@ -862,7 +862,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
+        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE, self::PARAM_RUBRIC_ENTRY);
     }
 
     /**

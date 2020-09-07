@@ -53,7 +53,7 @@ class RubricResultRepository extends CommonEntityRepository
                 'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
                 'contextId' => $contextIdentifier->getContextId()
             ],
-            ['resultId' => 'ASC']
+            ['time' => 'ASC', 'resultId' => 'ASC']
         );
     }
 

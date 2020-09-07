@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  */
 class EntryComponent extends Manager implements DelegateComponent
 {
+    const PARAM_COMPLETED = 'completed';
 
     /**
      * @return string
@@ -27,6 +28,16 @@ class EntryComponent extends Manager implements DelegateComponent
      */
     function run()
     {
+        $completedMessage = $this->getTranslator()->trans(
+            'RubricEntryComplete', [], 'Chamilo\Core\Repository\ContentObject\Rubric'
+        );
+
+        $completed = $this->getRequest()->getFromUrl(self::PARAM_COMPLETED);
+        if($completed)
+        {
+            return '<div class="alert alert-success">' . $completedMessage . '</div>';
+        }
+
         $rubric = $this->getRubric();
         $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
 
@@ -45,11 +56,8 @@ class EntryComponent extends Manager implements DelegateComponent
         $formHandled = $formHandler->handle($form, $this->getRequest());
         if ($formHandled)
         {
-            return '<div class="alert alert-success">' .
-                $this->getTranslator()->trans(
-                    'RubricEntryComplete', [], 'Chamilo\Core\Repository\ContentObject\Rubric'
-                ) .
-                '</div>';
+            $this->redirect($completedMessage, false, [self::PARAM_COMPLETED => 1]);
+            return null;
         }
         else
         {
