@@ -12,6 +12,8 @@
                 service="doctrine.orm.entity_manager_factory" />
         </service>
 
+        <service id="Doctrine\ORM\EntityManager" alias="doctrine.orm.entity_manager" />
+
         <service
             id="doctrine.orm.listeners.resolve_target_entity"
             class="Doctrine\ORM\Tools\ResolveTargetEntityListener" />
@@ -79,6 +81,8 @@
                 type="service"
                 id="doctrine.orm.entity_manager" />
         </service>
+
+        <service id="Doctrine\ORM\Tools\SchemaTool" alias="doctrine.orm.schema_tool" />
 
         <!-- Doctrine ORM Test -->
         <service
