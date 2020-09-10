@@ -227,6 +227,17 @@ class FilterData
         return $this->get_filter_property(self::FILTER_CATEGORY);
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
+    }
+
     public function get_context()
     {
         if (!isset($this->context))

@@ -51,7 +51,7 @@ class DataClassIterator extends ArrayIterator
         if ($isCompositeDataClass && $isExtensionClass)
         {
 
-            return get_parent_class($className);
+            return $className::parent_class_name();
         }
         else
         {

@@ -49,7 +49,7 @@ class DataClassResultSet extends ArrayResultSet
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-            return get_parent_class($className);
+            return $className::parent_class_name();
         }
         else
         {
