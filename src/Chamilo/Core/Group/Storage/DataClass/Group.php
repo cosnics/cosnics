@@ -122,7 +122,7 @@ class Group extends NestedSet
             if (!$include_subgroups)
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupReluser::PROPERTY_GROUP_ID),
+                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($this->get_id())
                 );
                 $parameters = new DataClassCountParameters(
@@ -130,7 +130,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -163,7 +163,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -196,7 +196,7 @@ class Group extends NestedSet
                         array(
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupReluser::PROPERTY_USER_ID
+                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
                         )
@@ -495,7 +495,7 @@ class Group extends NestedSet
         $groups[] = $this->get_id();
 
         return new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupReluser::PROPERTY_GROUP_ID), $groups
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groups
         );
     }
 
