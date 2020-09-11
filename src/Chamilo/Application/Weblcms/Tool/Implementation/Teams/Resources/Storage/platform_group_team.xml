@@ -5,6 +5,7 @@
         <property name="course_id" type="integer" unsigned="1" notnull="1"/>
         <property name="team_id" type="text" notnull="1" length="50"/>
         <property name="name" type="text" notnull="1" length="50"/>
+        <property name="active" type="integer" length="3" unsigned="1" notnull="1" default="1" />
     </properties>
     <index name="course_id">
         <indexproperty name="course_id"/>

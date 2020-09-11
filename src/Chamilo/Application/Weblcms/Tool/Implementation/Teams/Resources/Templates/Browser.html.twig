@@ -22,6 +22,10 @@
 </style>
 
 
+{% if IS_TEACHER %}
+    <div class="alert alert-info">{{ 'DelayWarning'|trans({}, appContext) }}</div>
+{% endif %}
+
 {% if IS_TEACHER and not COURSE_HAS_TEAM %}
     <a href="{{ CREATE_TEAM_URL }}" class="btn btn-default">{{ 'CreateTeam'|trans({}, appContext) }}</a>
 {% endif %}
@@ -49,6 +53,12 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="{{ SUBSCRIBE_ALL_COURSE_USERS_URL }}">{{ 'SubscribeAllCourseUsers'|trans({}, appContext) }}</a></li>
                         <li><a href="{{ REMOVE_TEAM_USERS_URL }}">{{ 'RemoveTeamUsersNotInCourse'|trans({}, appContext) }}</a></li>
+                        <li class="divider"></li>
+                        <li><a title="{{ 'DeleteTeamDescription'|trans({}, appContext) }}"
+                               href="{{ DELETE_COURSE_TEAM_URL }}"
+                               onclick="return confirm('{{ 'DeleteTeamConfirm'|trans({}, appContext) }}')">
+                                {{ 'DeleteTeam'|trans({}, appContext) }}
+                        </a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -73,7 +83,8 @@
         'VISIT_PLATFORM_GROUP_TEAM_URL': VISIT_PLATFORM_GROUP_TEAM_URL,
         'PLATFORM_GROUP_TEAMS_JSON': PLATFORM_GROUP_TEAMS_JSON,
         'IS_TEACHER': IS_TEACHER,
-        'EDIT_PLATFORM_GROUP_TEAM_URL': EDIT_PLATFORM_GROUP_TEAM_URL
+        'EDIT_PLATFORM_GROUP_TEAM_URL': EDIT_PLATFORM_GROUP_TEAM_URL,
+        'DELETE_PLATFORM_GROUP_TEAM_URL': DELETE_PLATFORM_GROUP_TEAM_URL
     } %}
 </div>
 

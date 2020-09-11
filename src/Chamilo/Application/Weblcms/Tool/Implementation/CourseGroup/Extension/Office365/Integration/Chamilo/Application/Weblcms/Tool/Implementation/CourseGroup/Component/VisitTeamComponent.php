@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -16,6 +17,7 @@ class VisitTeamComponent extends Manager
      * @return string
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws UserException
      */
     function run()
     {
@@ -33,6 +35,10 @@ class VisitTeamComponent extends Manager
         {
             $groupUrl =
                 $this->getCourseGroupOffice365Connector()->getTeamUrlForVisit($courseGroup, $this->getUser());
+        }
+        catch(UserException $ex)
+        {
+            throw $ex;
         }
         catch(\Exception $ex)
         {

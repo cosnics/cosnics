@@ -4,3 +4,6 @@ CourseGroupSyncSuccessful = "Successfully synced the course group and teacher su
 CourseGroupSyncFailed= "Failed to sync the course group and teacher subscriptions to the Office365 team"
 VisitTeam = "Go to the Office365 Team"
 SynchronizeUsers = "Synchronize the group users"
+NoTeam = "No team"
+RegularTeam = "Create team"
+ClassTeam = "Create class team (beta)"

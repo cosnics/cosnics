@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -11,22 +12,24 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class VisitPlatformGroupTeamComponent extends Manager
+class DeleteCourseTeamComponent extends Manager
 {
     /**
      * @return string|\Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
-        $platformGroupTeam = $this->getPlatformGroupTeamFromRequest();
+        if (!$this->get_course()->is_course_admin($this->getUser()))
+        {
+            throw new NotAllowedException();
+        }
 
         try
         {
-            $visitTeamUrl = $this->getPlatformGroupTeamService()->getVisitTeamUrl($this->getUser(), $platformGroupTeam);
-
-            return new RedirectResponse($visitTeamUrl);
+            $this->getCourseTeamService()->removeTeam($this->get_course());
+            $message = 'TeamRemoved';
+            $success = true;
         }
         catch (UserException $ex)
         {
@@ -34,17 +37,16 @@ class VisitPlatformGroupTeamComponent extends Manager
         }
         catch (\Exception $ex)
         {
-            $message = 'TeamCanNotBeVisited';
+            $message = 'TeamNotRemoved';
             $this->getExceptionLogger()->logException($ex);
+            $success = false;
         }
 
-        throw new UserException($this->getTranslator()->trans($message, [], Manager::context()));
+        $this->redirect(
+            $this->getTranslator()->trans($message, [], Manager::context()),
+            !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]
+        );
 
+        return;
     }
-
-    public function get_additional_parameters()
-    {
-        return [self::PARAM_PLATFORM_GROUP_TEAM_ID];
-    }
-
 }

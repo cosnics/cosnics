@@ -5,12 +5,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamAlreadyExistsException;
+use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamNotExistsException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\CourseTeamRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\CourseTeamRelationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
 
@@ -56,13 +58,13 @@ class CourseTeamService
      * @param User $owner
      * @param Course $course
      *
-     * @return Team
+     * @return string
      * @throws CourseTeamAlreadyExistsException
-     * @throws AzureUserNotExistsException
      * @throws GraphException
      * @throws \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\TooManyUsersException
+     * @throws AzureUserNotExistsException
      */
-    public function createTeam(User $owner, Course $course): Team
+    public function createTeam(User $owner, Course $course): string
     {
         if (!is_null($this->getTeam($course)))
         {
@@ -73,18 +75,17 @@ class CourseTeamService
         $teachers = $this->courseService->getTeachersFromCourse($course);
 
         $userCount = count($students) + count($teachers);
-        if($userCount >= TeamService::MAX_USERS)
+        if ($userCount >= TeamService::MAX_USERS)
         {
             throw new TooManyUsersException();
         }
 
-        $team = $this->teamService->createTeamByName(
-            $owner, $course->get_title() . ' (' . $course->get_visual_code() . ')'
-        );
+        $teamName = $course->get_title() . ' (' . $course->get_visual_code() . ')';
+        $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
 
         $courseTeamRelation = new CourseTeamRelation();
         $courseTeamRelation->setCourseId($course->getId());
-        $courseTeamRelation->setTeamId($team->getId());
+        $courseTeamRelation->setTeamId($teamId);
 
         if (!$this->courseTeamRelationRepository->create($courseTeamRelation))
         {
@@ -95,14 +96,13 @@ class CourseTeamService
             );
         }
 
-        return $team;
+        return $teamId;
     }
 
     /**
      * @param Course $course
      *
      * @return Team|null
-     * @throws GraphException
      */
     public function getTeam(Course $course): ?Team
     {
@@ -113,46 +113,52 @@ class CourseTeamService
             return null;
         }
 
-        $team = $this->teamService->getTeam($courseTeamRelation->getTeamId());
-
-        if (is_null($team))
+        try
         {
-            //team was deleted
-            $this->courseTeamRelationRepository->delete($courseTeamRelation);
-
+            return $this->teamService->getTeam($courseTeamRelation->getTeamId());
+        }
+        catch(GraphException $ex)
+        {
             return null;
         }
-
-        return $team;
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function courseHasTeam(Course $course)
     {
-        return $this->getTeam($course) instanceof Team;
+        $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
+
+        return $courseTeamRelation instanceof CourseTeamRelation;
     }
 
     /**
      * @param Course $course
      *
+     * @throws CourseTeamNotExistsException
      * @throws GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function removeTeamUsersNotInCourse(Course $course)
     {
         $teachers = $this->courseService->getTeachersFromCourse($course);
 
-        $this->teamService->removeTeamOwnersNotInArray($this->getTeam($course), $teachers);
+        $team = $this->getTeam($course);
+        if (!$team)
+        {
+            throw new CourseTeamNotExistsException($course);
+        }
+
+        $this->teamService->removeTeamOwnersNotInArray($team, $teachers);
 
         $students = $this->courseService->getStudentsFromCourse($course);
         $studentsAndTeachers = array_merge($teachers, $students);
 
         $this->teamService->removeTeamMembersNotInArray(
-            $this->getTeam($course), $studentsAndTeachers
+            $team, $studentsAndTeachers
 
         );
     }
@@ -160,8 +166,11 @@ class CourseTeamService
     /**
      * @param Course $course
      *
-     * @throws GraphException
      * @throws AzureUserNotExistsException
+     * @throws CourseTeamNotExistsException
+     * @throws GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function addAllCourseUsersToTeam(Course $course)
     {
@@ -172,15 +181,18 @@ class CourseTeamService
     /**
      * @param Course $course
      *
-     * @throws GraphException
      * @throws AzureUserNotExistsException
+     * @throws CourseTeamNotExistsException
+     * @throws GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function addCourseStudentsToTeam(Course $course)
     {
         $team = $this->getTeam($course);
         if (is_null($team))
         {
-            return;
+            throw new CourseTeamNotExistsException($course);
         }
 
         $students = $this->courseService->getStudentsFromCourse($course);
@@ -193,15 +205,17 @@ class CourseTeamService
     /**
      * @param Course $course
      *
-     * @throws GraphException
      * @throws AzureUserNotExistsException
+     * @throws CourseTeamNotExistsException
+     * @throws GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function addCourseTeachersToTeam(Course $course)
     {
         $team = $this->getTeam($course);
         if (is_null($team))
         {
-            return;
+            throw new CourseTeamNotExistsException($course);
         }
 
         $teachers = $this->courseService->getTeachersFromCourse($course);
@@ -216,10 +230,18 @@ class CourseTeamService
      */
     public function removeTeam(Course $course)
     {
-        throw new \RuntimeException(
-            sprintf(
-                'Not yet implemented!'
-            )
-        );
+        $courseTeamRelation = $this->courseTeamRelationRepository->findByCourse($course);
+
+        if (!$courseTeamRelation instanceof CourseTeamRelation)
+        {
+            return;
+        }
+
+        $courseTeamRelation->setActive(false);
+
+        if (!$this->courseTeamRelationRepository->updateCourseTeamRelation($courseTeamRelation))
+        {
+            throw new \RuntimeException('Could not deactivate the course team relation in the database');
+        }
     }
 }

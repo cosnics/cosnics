@@ -14,12 +14,14 @@ class PlatformGroupTeam extends DataClass
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_TEAM_ID = 'team_id';
     const PROPERTY_NAME = 'name';
+    const PROPERTY_ACTIVE = 'active';
 
     public static function get_default_property_names($extendedPropertyNames = array())
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
         $extendedPropertyNames[] = self::PROPERTY_TEAM_ID;
         $extendedPropertyNames[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_ACTIVE;
 
         return parent::get_default_property_names($extendedPropertyNames);
     }
@@ -79,5 +81,24 @@ class PlatformGroupTeam extends DataClass
     {
         $this->set_default_property(self::PROPERTY_NAME, $name);
         return $this;
+    }
+
+    /**
+     * @param bool $active
+     *
+     * @return $this
+     */
+    public function setActive(bool $active)
+    {
+        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->get_default_property(self::PROPERTY_ACTIVE);
     }
 }

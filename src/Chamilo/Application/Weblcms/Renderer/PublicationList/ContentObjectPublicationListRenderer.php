@@ -881,12 +881,14 @@ abstract class ContentObjectPublicationListRenderer
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
+        $publicationObject = new ContentObjectPublication($publication);
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
-        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
-            $this->get_user(),
-            new ContentObjectPublication($publication),
-            $this->tool_browser->get_application()->get_course()
-        );
+        $canEditPublicationContentObject = $has_edit_right && $publicationObject->get_allow_collaboration();
+
+//        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+//            $this->get_user(), $publicationObject,
+//            $this->tool_browser->get_application()->get_course()
+//        );
 
         if ($canEditContentObject || $canEditPublicationContentObject)
         {

@@ -69,7 +69,7 @@ interface RightsServiceInterface
      *
      * @return bool
      */
-    public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course);
+    public function canUserEditPublicationObject(User $user, ContentObjectPublication $publication, Course $course);
 
     /**
      * Checks if a user can delete a publication in a given course

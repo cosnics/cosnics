@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
 
 /**
  * Decorates the service for course groups. Adding additional functionality for the common course group functionality
@@ -39,14 +41,32 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function createGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesTeam($formValues))
+        $useTeam = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][0];
+        $this->createTeamByChoice($courseGroup, $user, $useTeam);
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @param int $useTeamENUM
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
+     */
+    protected function createTeamByChoice(CourseGroup $courseGroup, User $user, $useTeamENUM)
+    {
+        if($useTeamENUM == CourseGroupFormDecorator::OPTION_REGULAR_TEAM)
         {
-            $this->courseGroupOffice365Connector->createGroupAndTeamFromCourseGroup($courseGroup, $user);
+            $this->courseGroupOffice365Connector->createStandardTeamFromCourseGroup($courseGroup, $user);
+        }
+        if($useTeamENUM == CourseGroupFormDecorator::OPTION_CLASS_TEAM)
+        {
+            $this->courseGroupOffice365Connector->createClassTeamFromCourseGroup($courseGroup, $user);
         }
     }
 
@@ -58,18 +78,31 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param array $formValues
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function updateGroup(CourseGroup $courseGroup, User $user, $formValues = [])
     {
-        if ($this->usesTeam($formValues))
+        $useTeamFormValue = $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM][$courseGroup->getId()];
+
+        if($this->courseGroupOffice365Connector->courseGroupHasTeam($courseGroup))
         {
-            $this->courseGroupOffice365Connector->createOrUpdateTeamFromCourseGroup($courseGroup, $user);
+            if(!boolval($useTeamFormValue))
+            {
+                $this->courseGroupOffice365Connector->removeTeamFromCourseGroup($courseGroup, $user);
+            }
+            else
+            {
+                try
+                {
+                    $this->courseGroupOffice365Connector->updateTeamNameFromCourseGroup($courseGroup);
+                }
+                catch(\Exception $ex) {}
+            }
         }
         else
         {
-            $this->courseGroupOffice365Connector->unlinkTeamFromOffice365Group($courseGroup);
+            $this->createTeamByChoice($courseGroup, $user, $useTeamFormValue);
         }
     }
 
@@ -82,7 +115,7 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      */
     public function deleteGroup(CourseGroup $courseGroup, User $user)
     {
-        $this->courseGroupOffice365Connector->unlinkOffice365GroupFromCourseGroup($courseGroup, $user);
+        $this->courseGroupOffice365Connector->removeTeamFromCourseGroup($courseGroup, $user);
     }
 
     /**
@@ -90,10 +123,17 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function subscribeUser(CourseGroup $courseGroup, User $user)
     {
-        $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
+        try
+        {
+            $this->courseGroupOffice365Connector->subscribeUser($courseGroup, $user);
+        }
+        catch(TeamNotFoundException $ex) {}
     }
 
     /**
@@ -101,19 +141,16 @@ class CourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterfac
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function unsubscribeUser(CourseGroup $courseGroup, User $user)
     {
-        $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
+        try
+        {
+            $this->courseGroupOffice365Connector->unsubscribeUser($courseGroup, $user);
+        }
+        catch(TeamNotFoundException $ex) {}
     }
 
-    /**
-     * @param array $formValues
-     *
-     * @return bool
-     */
-    protected function usesTeam($formValues = [])
-    {
-        return boolval($formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM]);
-    }
 }

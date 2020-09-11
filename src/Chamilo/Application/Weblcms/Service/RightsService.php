@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -13,7 +14,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 
 /**
  * Service to manage the weblcms rights
- * 
+ *
  * @package application\weblcms
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -22,49 +23,49 @@ class RightsService implements RightsServiceInterface
 
     /**
      * The original weblcms rights class
-     * 
+     *
      * @var WeblcmsRights
      */
     private $weblcmsRights;
 
     /**
      * The course service
-     * 
+     *
      * @var CourseService
      */
     private $courseService;
 
     /**
      * The course settings service
-     * 
+     *
      * @var CourseSettingsService
      */
     private $courseSettingsService;
 
     /**
      * The publication service
-     * 
+     *
      * @var PublicationService
      */
     private $publicationService;
 
     /**
      * Caches the rights
-     * 
+     *
      * @var bool[]
      */
     private $rightsCache;
 
     /**
      * Boolean to determine whether or not we use the rights system in the "view as user" due to alternative rights
-     * 
+     *
      * @var bool
      */
     private $viewAsUserMode;
 
     /**
      * Constructor
-     * 
+     *
      * @param WeblcmsRights $weblcmsRights
      * @param CourseSettingsServiceInterface $courseSettingsService
      */
@@ -77,7 +78,7 @@ class RightsService implements RightsServiceInterface
 
     /**
      * Setter injector for this dependency due to a cyclic dependency issue
-     * 
+     *
      * @param CourseServiceInterface $courseService
      *
      * @return self
@@ -85,13 +86,13 @@ class RightsService implements RightsServiceInterface
     public function setCourseService(CourseServiceInterface $courseService)
     {
         $this->courseService = $courseService;
-        
+
         return $this;
     }
 
     /**
      * Setter injector for this dependency due to a cyclic dependency issue
-     * 
+     *
      * @param PublicationServiceInterface $publicationService
      *
      * @return self
@@ -99,13 +100,13 @@ class RightsService implements RightsServiceInterface
     public function setPublicationService(PublicationServiceInterface $publicationService)
     {
         $this->publicationService = $publicationService;
-        
+
         return $this;
     }
 
     /**
      * Sets the viewAsUserMode variable
-     * 
+     *
      * @param bool $viewAsUserMode
      *
      * @return $this
@@ -113,39 +114,43 @@ class RightsService implements RightsServiceInterface
     public function setViewAsUserMode($viewAsUserMode)
     {
         $this->viewAsUserMode = $viewAsUserMode;
-        
+
         return $this;
     }
 
     /**
      * Returns the publication identifiers where a given user has the view right for in a given category for a given
      * course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublicationCategory $category
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return int[]
      */
-    public function getPublicationIdsWithViewRightInCategory(User $user, ContentObjectPublicationCategory $category, 
-        Course $course)
+    public function getPublicationIdsWithViewRightInCategory(
+        User $user, ContentObjectPublicationCategory $category,
+        Course $course
+    )
     {
         $categoryLocation = $this->weblcmsRights->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights::TYPE_COURSE_CATEGORY, 
-            $category->getId(), 
-            $course->getId());
-        
+            WeblcmsRights::TYPE_COURSE_CATEGORY,
+            $category->getId(),
+            $course->getId()
+        );
+
         return $this->weblcmsRights->get_publication_identifiers_with_right_granted(
-            WeblcmsRights::VIEW_RIGHT, 
-            $categoryLocation, 
-            $course, 
-            $user);
+            WeblcmsRights::VIEW_RIGHT,
+            $categoryLocation,
+            $course,
+            $user
+        );
     }
 
     /**
      * Returns the publication identifiers where a given user has the view right for in a given category for a given
      * course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $tool
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -161,23 +166,25 @@ class RightsService implements RightsServiceInterface
         else
         {
             $toolRegistration = $this->courseService->getToolRegistration($tool);
-            
+
             $toolLocation = $this->weblcmsRights->get_weblcms_location_by_identifier_from_courses_subtree(
-                WeblcmsRights::TYPE_COURSE_MODULE, 
-                $toolRegistration->getId(), 
-                $course->getId());
+                WeblcmsRights::TYPE_COURSE_MODULE,
+                $toolRegistration->getId(),
+                $course->getId()
+            );
         }
-        
+
         return $this->weblcmsRights->get_publication_identifiers_with_right_granted(
-            WeblcmsRights::VIEW_RIGHT, 
-            $toolLocation, 
-            $course, 
-            $user);
+            WeblcmsRights::VIEW_RIGHT,
+            $toolLocation,
+            $course,
+            $user
+        );
     }
 
     /**
      * Checks if a user can view a publication in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -187,29 +194,79 @@ class RightsService implements RightsServiceInterface
     public function canUserViewPublication(User $user, ContentObjectPublication $publication, Course $course)
     {
         return $this->cacheFunctionCall(
-            'calculateCanUserViewPublication', 
-            array($user, $publication, $course), 
-            array($user->getId(), $publication->getId(), $course->getId()));
+            'calculateCanUserViewPublication',
+            array($user, $publication, $course),
+            array($user->getId(), $publication->getId(), $course->getId())
+        );
     }
 
     /**
      * Checks if a user can edit a publication in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * TODO: Fix this like view right, quick fix now for edit right only. Doesn't take closed categories or tools into account
+     * TODO: this will still cause strange behavior in the publication form because the right to edit the publication and the right to edit
+     * TODO: the content object are mixed here. We should extract these methods from each other and review the rights
+     *
+     * @return bool
+     */
+    public function canUserEditPublicationObject(User $user, ContentObjectPublication $publication, Course $course)
+    {
+        $hasEditRightOnPublication =
+            $this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin();
+
+        if (!$hasEditRightOnPublication && $publication->is_identified())
+        {
+            $hasEditRightOnPublication = $this->weblcmsRights->is_allowed_in_courses_subtree(
+                WeblcmsRights::EDIT_RIGHT,
+                $publication->getId(),
+                WeblcmsRights::TYPE_PUBLICATION,
+                $course->getId(),
+                $user->getId()
+            );
+        }
+
+        return $hasEditRightOnPublication && $this->isCollaborationAllowed($publication);
+    }
+
+    /**
+     * @param User $user
+     * @param ContentObjectPublication $publication
+     * @param Course $course
      *
      * @return bool
      */
     public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course)
     {
-        return $this->courseService->isUserTeacherInCourse($user, $course) && $this->isCollaborationAllowed(
-            $publication);
+        if($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        if($this->courseService->isUserTeacherInCourse($user, $course))
+        {
+            return true;
+        }
+
+        if($publication->is_identified())
+        {
+            return $this->weblcmsRights->is_allowed_in_courses_subtree(
+                WeblcmsRights::EDIT_RIGHT,
+                $publication->getId(),
+                WeblcmsRights::TYPE_PUBLICATION,
+                $course->getId(),
+                $user->getId()
+            );
+        }
+
+        return false;
     }
 
     /**
      * Checks if the publication allows collaboration
-     * 
+     *
      * @param ContentObjectPublication $publication
      *
      * @return boolean
@@ -221,7 +278,7 @@ class RightsService implements RightsServiceInterface
 
     /**
      * Checks if a user can delete a publication in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -234,53 +291,60 @@ class RightsService implements RightsServiceInterface
 
     /**
      * Checks if a user can view a publication category in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
      */
-    public function canUserViewPublicationCategory(User $user, ContentObjectPublicationCategory $publicationCategory, 
-        Course $course)
+    public function canUserViewPublicationCategory(
+        User $user, ContentObjectPublicationCategory $publicationCategory,
+        Course $course
+    )
     {
         return $this->cacheFunctionCall(
-            'calculateCanUserViewPublicationCategory', 
-            array($user, $publicationCategory, $course), 
-            array($user->getId(), $publicationCategory->getId(), $course->getId()));
+            'calculateCanUserViewPublicationCategory',
+            array($user, $publicationCategory, $course),
+            array($user->getId(), $publicationCategory->getId(), $course->getId())
+        );
     }
 
     /**
      * Checks if a user can edit a publication category in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
      */
-    public function canUserEditPublicationCategory(User $user, ContentObjectPublicationCategory $publicationCategory, 
-        Course $course)
+    public function canUserEditPublicationCategory(
+        User $user, ContentObjectPublicationCategory $publicationCategory,
+        Course $course
+    )
     {
     }
 
     /**
      * Checks if a user can delete a publication in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
      */
-    public function canUserDeletePublicationCategory(User $user, ContentObjectPublicationCategory $publicationCategory, 
-        Course $course)
+    public function canUserDeletePublicationCategory(
+        User $user, ContentObjectPublicationCategory $publicationCategory,
+        Course $course
+    )
     {
     }
 
     /**
      * Checks if a user can publish a publication in a tool of a course (and optionally in a category)
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $tool
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -288,14 +352,16 @@ class RightsService implements RightsServiceInterface
      *
      * @return bool
      */
-    public function canUserCreatePublication(User $user, $tool, Course $course, 
-        ContentObjectPublicationCategory $publicationCategory = null)
+    public function canUserCreatePublication(
+        User $user, $tool, Course $course,
+        ContentObjectPublicationCategory $publicationCategory = null
+    )
     {
     }
 
     /**
      * Checks if a user can view a tool in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $tool
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -305,14 +371,15 @@ class RightsService implements RightsServiceInterface
     public function canUserViewTool(User $user, $tool, Course $course)
     {
         return $this->cacheFunctionCall(
-            'calculatecanUserViewTool', 
-            array($user, $tool, $course), 
-            array($user->getId(), $tool, $course->getId()));
+            'calculatecanUserViewTool',
+            array($user, $tool, $course),
+            array($user->getId(), $tool, $course->getId())
+        );
     }
 
     /**
      * Checks if a user can view a course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -321,9 +388,10 @@ class RightsService implements RightsServiceInterface
     public function canUserViewCourse(User $user, Course $course)
     {
         return $this->cacheFunctionCall(
-            'calculateCanUserViewCourse', 
-            array($user, $course), 
-            array($user->getId(), $course->getId()));
+            'calculateCanUserViewCourse',
+            array($user, $course),
+            array($user->getId(), $course->getId())
+        );
     }
 
     /**
@@ -331,140 +399,151 @@ class RightsService implements RightsServiceInterface
      * Rights Calculation Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Checks if a user can view a publication in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublication $publication
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
      */
-    protected function calculateCanUserViewPublication(User $user, ContentObjectPublication $publication, Course $course)
+    protected function calculateCanUserViewPublication(User $user, ContentObjectPublication $publication, Course $course
+    )
     {
         if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
             return true;
         }
-        
+
         $categoryId = $publication->get_category_id();
         $category = $this->publicationService->getPublicationCategoryById($categoryId);
-        
-        if (! empty($category))
+
+        if (!empty($category))
         {
-            if (! $this->canUserViewPublicationCategoryRegardlessOfRightSystem($user, $category, $course))
+            if (!$this->canUserViewPublicationCategoryRegardlessOfRightSystem($user, $category, $course))
             {
                 return false;
             }
         }
         else
         {
-            if (! $this->canUserViewToolRegardlessOfRightSystem($user, $publication->get_tool(), $course))
+            if (!$this->canUserViewToolRegardlessOfRightSystem($user, $publication->get_tool(), $course))
             {
                 return false;
             }
         }
-        
+
         if ($this->weblcmsRights->is_allowed_in_courses_subtree(
-            WeblcmsRights::EDIT_RIGHT, 
-            $publication->getId(), 
-            WeblcmsRights::TYPE_PUBLICATION, 
-            $course->getId(), 
-            $user->getId()))
+            WeblcmsRights::EDIT_RIGHT,
+            $publication->getId(),
+            WeblcmsRights::TYPE_PUBLICATION,
+            $course->getId(),
+            $user->getId()
+        ))
         {
             return true;
         }
-        
-        if (! $publication->is_visible_for_target_users())
+
+        if (!$publication->is_visible_for_target_users())
         {
             return false;
         }
-        
+
         return $this->weblcmsRights->is_allowed_in_courses_subtree(
-            WeblcmsRights::VIEW_RIGHT, 
-            $publication->getId(), 
-            WeblcmsRights::TYPE_PUBLICATION, 
-            $course->getId(), 
-            $user->getId());
+            WeblcmsRights::VIEW_RIGHT,
+            $publication->getId(),
+            WeblcmsRights::TYPE_PUBLICATION,
+            $course->getId(),
+            $user->getId()
+        );
     }
 
     /**
      * Determines if a user can view a publication category in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
      * @return bool
      */
-    protected function calculateCanUserViewPublicationCategory(User $user, 
-        ContentObjectPublicationCategory $publicationCategory, Course $course)
+    protected function calculateCanUserViewPublicationCategory(
+        User $user,
+        ContentObjectPublicationCategory $publicationCategory, Course $course
+    )
     {
         if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
             return true;
         }
-        
-        if (! $this->canUserViewPublicationCategoryRegardlessOfRightSystem($user, $publicationCategory, $course))
+
+        if (!$this->canUserViewPublicationCategoryRegardlessOfRightSystem($user, $publicationCategory, $course))
         {
             return false;
         }
-        
+
         return $this->weblcmsRights->is_allowed_in_courses_subtree(
-            WeblcmsRights::VIEW_RIGHT, 
-            $publicationCategory->getId(), 
-            WeblcmsRights::TYPE_COURSE_CATEGORY, 
-            $course->getId(), 
-            $user->getId());
+            WeblcmsRights::VIEW_RIGHT,
+            $publicationCategory->getId(),
+            WeblcmsRights::TYPE_COURSE_CATEGORY,
+            $course->getId(),
+            $user->getId()
+        );
     }
 
     /**
      * Checks if a user can view a publication category regardless of the right system checks
-     * 
+     *
      * @param User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param Course $course
      *
      * @return bool
      */
-    protected function canUserViewPublicationCategoryRegardlessOfRightSystem(User $user, 
-        ContentObjectPublicationCategory $publicationCategory, Course $course)
+    protected function canUserViewPublicationCategoryRegardlessOfRightSystem(
+        User $user,
+        ContentObjectPublicationCategory $publicationCategory, Course $course
+    )
     {
         return $this->cacheFunctionCall(
-            'calculateCanUserViewPublicationCategoryRegardlessOfRightSystem', 
-            array($user, $publicationCategory, $course), 
-            array($user->getId(), $publicationCategory->getId(), $course->getId()));
+            'calculateCanUserViewPublicationCategoryRegardlessOfRightSystem',
+            array($user, $publicationCategory, $course),
+            array($user->getId(), $publicationCategory->getId(), $course->getId())
+        );
     }
 
     /**
      * Determines if a user can view a publication category regardless of the right system checks
-     * 
+     *
      * @param User $user
      * @param ContentObjectPublicationCategory $publicationCategory
      * @param Course $course
      *
      * @return bool
      */
-    protected function calculateCanUserViewPublicationCategoryRegardlessOfRightSystem(User $user, 
-        ContentObjectPublicationCategory $publicationCategory, Course $course)
+    protected function calculateCanUserViewPublicationCategoryRegardlessOfRightSystem(
+        User $user,
+        ContentObjectPublicationCategory $publicationCategory, Course $course
+    )
     {
-        if (! $this->canUserViewToolRegardlessOfRightSystem($user, $publicationCategory->get_tool(), $course))
+        if (!$this->canUserViewToolRegardlessOfRightSystem($user, $publicationCategory->get_tool(), $course))
         {
             return false;
         }
-        
-        if (! $publicationCategory->is_recursive_visible())
+
+        if (!$publicationCategory->is_recursive_visible())
         {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Determines if a user can view a tool in a given course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $tool
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course * @return bool
@@ -475,46 +554,48 @@ class RightsService implements RightsServiceInterface
         {
             return true;
         }
-        
+
         $toolRegistration = $this->courseService->getToolRegistration($tool);
-        
-        if (! $toolRegistration)
+
+        if (!$toolRegistration)
         {
             return false;
         }
-        
+
         if ($this->courseService->isUserTeacherInCourse($user, $course) &&
-             $this->courseSettingsService->isToolActive($course, $toolRegistration->getId()))
+            $this->courseSettingsService->isToolActive($course, $toolRegistration->getId()))
         {
             return true;
         }
-        
-        if (! $this->canUserViewToolRegardlessOfRightSystem($user, $tool, $course))
+
+        if (!$this->canUserViewToolRegardlessOfRightSystem($user, $tool, $course))
         {
             return false;
         }
-        
+
         if ($tool == 'home')
         {
             return $this->weblcmsRights->is_allowed_in_courses_subtree(
-                WeblcmsRights::VIEW_RIGHT, 
-                0, 
-                WeblcmsRights::TYPE_ROOT, 
-                $course->getId(), 
-                $user->getId());
+                WeblcmsRights::VIEW_RIGHT,
+                0,
+                WeblcmsRights::TYPE_ROOT,
+                $course->getId(),
+                $user->getId()
+            );
         }
-        
+
         return $this->weblcmsRights->is_allowed_in_courses_subtree(
-            WeblcmsRights::VIEW_RIGHT, 
-            $toolRegistration->getId(), 
-            WeblcmsRights::TYPE_COURSE_MODULE, 
-            $course->getId(), 
-            $user->getId());
+            WeblcmsRights::VIEW_RIGHT,
+            $toolRegistration->getId(),
+            WeblcmsRights::TYPE_COURSE_MODULE,
+            $course->getId(),
+            $user->getId()
+        );
     }
 
     /**
      * Checks if a user can view a tool regardless of the right system checks
-     * 
+     *
      * @param User $user
      * @param string $tool
      * @param Course $course
@@ -524,14 +605,15 @@ class RightsService implements RightsServiceInterface
     protected function canUserViewToolRegardlessOfRightSystem(User $user, $tool, Course $course)
     {
         return $this->cacheFunctionCall(
-            'calculateCanUserViewToolRegardlessOfRightSystem', 
-            array($user, $tool, $course), 
-            array($user->getId(), $tool, $course->getId()));
+            'calculateCanUserViewToolRegardlessOfRightSystem',
+            array($user, $tool, $course),
+            array($user->getId(), $tool, $course->getId())
+        );
     }
 
     /**
      * Determines if a user can view a tool regardless of the right system checks
-     * 
+     *
      * @param User $user
      * @param string $tool
      * @param Course $course
@@ -540,48 +622,49 @@ class RightsService implements RightsServiceInterface
      */
     protected function calculateCanUserViewToolRegardlessOfRightSystem(User $user, $tool, Course $course)
     {
-        if (! $this->canUserViewCourse($user, $course))
+        if (!$this->canUserViewCourse($user, $course))
         {
             return false;
         }
-        
+
         $adminTools = array(
-            'course_copier', 
-            'course_deleter', 
-            'course_truncater', 
-            'course_settings', 
-            'course_sections', 
-            'reporting', 
-            'rights');
-        
-        if (! $this->courseService->isUserTeacherInCourse($user, $course) && in_array($tool, $adminTools))
+            'course_copier',
+            'course_deleter',
+            'course_truncater',
+            'course_settings',
+            'course_sections',
+            'reporting',
+            'rights'
+        );
+
+        if (!$this->courseService->isUserTeacherInCourse($user, $course) && in_array($tool, $adminTools))
         {
             return false;
         }
-        
+
         $toolRegistration = $this->courseService->getToolRegistration($tool);
-        
-        if (! $toolRegistration)
+
+        if (!$toolRegistration)
         {
             return false;
         }
-        
-        if (! $this->courseSettingsService->isToolActive($course, $toolRegistration->getId()))
+
+        if (!$this->courseSettingsService->isToolActive($course, $toolRegistration->getId()))
         {
             return false;
         }
-        
-        if (! $this->courseSettingsService->isToolVisible($course, $toolRegistration->getId()))
+
+        if (!$this->courseSettingsService->isToolVisible($course, $toolRegistration->getId()))
         {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Determines if a user can view a course
-     * 
+     *
      * @param User $user
      * @param Course $course
      *
@@ -593,32 +676,32 @@ class RightsService implements RightsServiceInterface
         {
             return true;
         }
-        
+
         if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
             return true;
         }
-        
-        if (! $this->courseSettingsService->isCourseOpen($course))
+
+        if (!$this->courseSettingsService->isCourseOpen($course))
         {
             return false;
         }
-        
+
         if ($this->courseSettingsService->isCourseOpenForWorld($course))
         {
             return true;
         }
-        
-        if ($this->courseSettingsService->isCourseOpenForPlatform($course) && ! $user->is_anonymous_user())
+
+        if ($this->courseSettingsService->isCourseOpenForPlatform($course) && !$user->is_anonymous_user())
         {
             return true;
         }
-        
+
         if ($this->courseService->isUserSubscribedToCourse($user, $course))
         {
             return true;
         }
-        
+
         return false;
     }
 
@@ -627,10 +710,10 @@ class RightsService implements RightsServiceInterface
      * Cache Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Uses the cache for the results of a function call
-     * 
+     *
      * @param string $function
      * @param array $parameters
      * @param array $cacheParameters
@@ -640,19 +723,19 @@ class RightsService implements RightsServiceInterface
     protected function cacheFunctionCall($function, $parameters, $cacheParameters)
     {
         $value = $this->getFromCache($function, $cacheParameters);
-        
+
         if (is_null($value))
         {
             $value = call_user_func_array(array($this, $function), $parameters);
             $this->saveToCache($function, $cacheParameters, $value);
         }
-        
+
         return $value;
     }
 
     /**
      * Returns a value from the cache
-     * 
+     *
      * @param string $function
      * @param array $cacheParameters
      *
@@ -669,7 +752,7 @@ class RightsService implements RightsServiceInterface
 
     /**
      * Saves a value to the cache
-     * 
+     *
      * @param string $function
      * @param array $cacheParameters
      * @param string $value
@@ -682,7 +765,7 @@ class RightsService implements RightsServiceInterface
 
     /**
      * Calculates the cache key for the given parameters
-     * 
+     *
      * @param $function
      * @param array $cacheParameters
      *

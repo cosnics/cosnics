@@ -746,7 +746,7 @@ abstract class Manager extends Application
                 $introduction_text->get_content_object()
             );
 
-            $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+            $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublicationObject(
                 $this->getUser(),
                 $introduction_text,
                 $this->get_course()

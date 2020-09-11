@@ -12,6 +12,9 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\TeamNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Microsoft\Graph\Model\Team;
 
@@ -86,12 +89,13 @@ class PlatformGroupTeamService
 
         $this->validateUserCount();
 
-        $team = $this->teamService->createTeamByName($owner, $teamName);
+        $teamId = $this->teamService->createStandardTeam($teamName, $teamName, $owner);
 
         $platformGroupTeam = new PlatformGroupTeam();
         $platformGroupTeam->setCourseId($course->getId());
         $platformGroupTeam->setName($teamName);
-        $platformGroupTeam->setTeamId($team->getId());
+        $platformGroupTeam->setTeamId($teamId);
+        $platformGroupTeam->setActive(true);
 
         if (!$this->platformGroupTeamRepository->createPlatformGroupTeam($platformGroupTeam))
         {
@@ -110,6 +114,7 @@ class PlatformGroupTeamService
      *
      * @throws TooManyUsersException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function updatePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam, string $teamName, $groupIds = [])
     {
@@ -184,14 +189,22 @@ class PlatformGroupTeamService
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
-     *
+     * @param PlatformGroupTeam $platformGroupTeam
+     * @throws AzureUserNotExistsException
+     * @throws UnknownAzureUserIdException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Exception
      */
     public function addGroupUsersToPlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
+
+        if(!$team)
+        {
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
+        }
+
         $this->addGroupUsersToTeam($team, $groups->getArrayCopy());
     }
 
@@ -200,11 +213,18 @@ class PlatformGroupTeamService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws TeamNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function removeTeamUsersNotInGroups(Course $course, PlatformGroupTeam $platformGroupTeam)
     {
         $groups = $this->platformGroupTeamRepository->findGroupsForPlatformGroupTeam($platformGroupTeam);
         $team = $this->getTeam($platformGroupTeam);
+
+        if(!$team)
+        {
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
+        }
 
         $userIds = [];
 
@@ -274,9 +294,12 @@ class PlatformGroupTeamService
      *
      * @return string
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws AzureUserNotExistsException
      * @throws NotAllowedException
+     * @throws TeamNotFoundException
+     * @throws UnknownAzureUserIdException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     public function getVisitTeamUrl(User $user, PlatformGroupTeam $platformGroupTeam)
     {
@@ -307,12 +330,7 @@ class PlatformGroupTeamService
 
         if (!$team instanceof Team)
         {
-            throw new \RuntimeException(
-                sprintf(
-                    'The given team with id %s could not be found and can therefor not be visited',
-                    $platformGroupTeam->getTeamId()
-                )
-            );
+            throw new TeamNotFoundException($platformGroupTeam->getTeamId());
         }
 
         if($isTeacher)
@@ -333,7 +351,6 @@ class PlatformGroupTeamService
      * @param User $user
      *
      * @return array
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      * @throws \Exception
      */
     public function getPlatformGroupTeamsForCourse(Course $course, User $user)
@@ -389,19 +406,23 @@ class PlatformGroupTeamService
     }
 
     /**
-     * Helper method for the record iterator above. Cleans up deleted teams and updates team names when changed
-     *
      * @param int $platformGroupId
      *
      * @return string
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function updateLocalTeamNameById(int $platformGroupId)
     {
         $platformGroupTeam = $this->findPlatformGroupTeamById($platformGroupId);
 
-        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        try
+        {
+            $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        }
+        catch(GraphException $ex)
+        {
+            $team = null;
+        }
+
         if (!$team instanceof Team)
         {
             return $platformGroupTeam->getName();
@@ -424,34 +445,27 @@ class PlatformGroupTeamService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
      *
      * @return \Microsoft\Graph\Model\Team|null
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     protected function getTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        $team = $this->teamService->getTeam($platformGroupTeam->getTeamId());
-
-        if (is_null($team))
+        try
         {
-            $this->deletePlatformGroupTeam($platformGroupTeam);
-
+            return $this->teamService->getTeam($platformGroupTeam->getTeamId());
+        }
+        catch(GraphException $exception)
+        {
             return null;
         }
-
-        return $team;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\DataClass\PlatformGroupTeam $platformGroupTeam
-     */
-    protected function deleteRemovedTeam(PlatformGroupTeam $platformGroupTeam)
-    {
-        $this->platformGroupTeamRepository->deleteRelationsForPlatformGroupTeam($platformGroupTeam);
-        $this->platformGroupTeamRepository->deletePlatformGroupTeam($platformGroupTeam);
     }
 
     /**
      * @param \Microsoft\Graph\Model\Team $team
      * @param array $groups
+     *
+     * @throws AzureUserNotExistsException
+     * @throws UnknownAzureUserIdException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
      */
     protected function addGroupUsersToTeam(Team $team, array $groups = [])
     {
@@ -463,7 +477,7 @@ class PlatformGroupTeamService
         }
 
         $users = $this->userService->findUsersByIdentifiers($userIds);
-
+        $exception = null;
         foreach ($users as $user)
         {
             try
@@ -473,11 +487,29 @@ class PlatformGroupTeamService
             catch (AzureUserNotExistsException $exception)
             {
             }
+            catch(UnknownAzureUserIdException $ex)
+            {
+                $exception = $ex;
+            }
+        }
+        if($exception instanceof UnknownAzureUserIdException)
+        {
+            throw $exception;
         }
     }
 
-    protected function deletePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
+    /**
+     * @param PlatformGroupTeam $platformGroupTeam
+     */
+    public function deletePlatformGroupTeam(PlatformGroupTeam $platformGroupTeam)
     {
-        throw new \RuntimeException('Not implemented');
+        $platformGroupTeam->setActive(false);
+
+        if (!$this->platformGroupTeamRepository->updatePlatformGroupTeam($platformGroupTeam))
+        {
+            throw new \RuntimeException(
+                sprintf('The platform group team (%s) could not be deactivated', $platformGroupTeam->getId())
+            );
+        }
     }
 }

@@ -80,6 +80,6 @@ class ContentObjectTemplateSynchronizer
             }
         }
 
-        $this->configurationCacheService->clearAndWarmUp();
+        $this->configurationCacheService->clear();
     }
 }

@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Teams\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -19,7 +20,7 @@ class RemoveTeamUsersNotInCourseComponent extends Manager
     /**
      * @return string|void
      * @throws NotAllowedException
-     * @throws GraphException
+     * @throws UserException
      */
     public function run()
     {
@@ -29,17 +30,27 @@ class RemoveTeamUsersNotInCourseComponent extends Manager
             throw new NotAllowedException();
         }
 
-        /**
-         * @var CourseTeamService $courseTeamService
-         */
-        $courseTeamService = $this->getService(CourseTeamService::class);
-        $courseTeamService->removeTeamUsersNotInCourse($this->get_course());
+        try
+        {
+            $this->getCourseTeamService()->removeTeamUsersNotInCourse($this->get_course());
 
-        $message = $this->getTranslator()->trans('TeamUsersSynced', [], Manager::class);
+            $message = 'TeamUsersSynced';
+            $success = true;
+        }
+        catch (UserException $ex)
+        {
+            throw $ex;
+        }
+        catch (\Exception $ex)
+        {
+            $message = 'TeamUsersNotSynced';
+            $success = false;
+            $this->getExceptionLogger()->logException($ex);
+        }
 
-        $browserUrlParameters = $this->get_parameters();
-        $browserUrlParameters[self::PARAM_ACTION] = self::ACTION_BROWSE;
-
-        $this->redirect($message, false, $browserUrlParameters);
+        $this->redirect(
+            $this->getTranslator()->trans($message, [], Manager::context()), !$success,
+            [self::PARAM_ACTION => self::ACTION_BROWSE], [self::PARAM_PLATFORM_GROUP_TEAM_ID]
+        );
     }
 }

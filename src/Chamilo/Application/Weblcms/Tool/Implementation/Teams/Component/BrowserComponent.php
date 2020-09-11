@@ -26,13 +26,22 @@ class BrowserComponent extends Manager
     public function run(): string
     {
         $courseTeamService = $this->getCourseTeamService();
+        $courseTeamName = $this->get_course()->get_title();
         $hasTeam = $courseTeamService->courseHasTeam($this->get_course());
-        $courseTeamName = null;
 
-        if ($hasTeam)
+        try
         {
-            $courseTeam = $courseTeamService->getTeam($this->get_course());
-            $courseTeamName = $courseTeam->getProperties()['displayName'];
+            if ($hasTeam)
+            {
+                $courseTeam = $courseTeamService->getTeam($this->get_course());
+                if($courseTeam)
+                {
+                    $courseTeamName = $courseTeam->getProperties()['displayName'];
+                }
+            }
+        }
+        catch(GraphException $ex)
+        {
         }
 
         return $this->render(
@@ -46,6 +55,7 @@ class BrowserComponent extends Manager
                     self::ACTION_SUBSCRIBE_ALL_COURSE_USERS_TO_TEAM
                 ),
                 'CREATE_TEAM_URL' => $this->getUrlWithAction(self::ACTION_CREATE_TEAM),
+                'DELETE_COURSE_TEAM_URL' => $this->getUrlWithAction(self::ACTION_DELETE_TEAM),
                 'CREATE_PLATFORM_GROUP_TEAM_URL' => $this->getUrlWithAction(self::ACTION_CREATE_PLATFORM_GROUP_TEAM),
                 'SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS_URL' => $this->getUrlWithAction(
                     self::ACTION_SUBSCRIBE_PLATFORM_GROUP_TEAM_USERS,
@@ -53,6 +63,10 @@ class BrowserComponent extends Manager
                 ),
                 'EDIT_PLATFORM_GROUP_TEAM_URL' => $this->getUrlWithAction(
                     self::ACTION_EDIT_PLATFORM_GROUP_TEAM,
+                    [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']
+                ),
+                'DELETE_PLATFORM_GROUP_TEAM_URL' => $this->getUrlWithAction(
+                    self::ACTION_DELETE_PLATFORM_GROUP_TEAM,
                     [self::PARAM_PLATFORM_GROUP_TEAM_ID => '__PLATFORM_GROUP_TEAM_ID__']
                 ),
                 'REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL' => $this->getUrlWithAction(

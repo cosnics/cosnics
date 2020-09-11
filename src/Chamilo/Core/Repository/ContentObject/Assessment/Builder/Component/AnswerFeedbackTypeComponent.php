@@ -115,7 +115,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
      *
      * @see \core\repository\builder\Manager::get_table_condition()
      */
-    public function get_table_condition($table_class_name)
+    public function get_table_condition($table_class_name = null)
     {
         return new EqualityCondition(
             new PropertyConditionVariable(

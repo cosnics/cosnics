@@ -51,6 +51,7 @@
                         <li><a :href="removeUsersUrl(data.item)">{{ 'RemoveUsersNotInGroups'|trans({}, appContext) }}</a></li>
                         <li class="divider"></li>
                         <li><a :href="editTeamUrl(data.item)">{{ 'EditPlatformGroupTeam'|trans({}, appContext) }}</a></li>
+                        <li><a title="{{ 'DeleteTeamDescription'|trans({}, appContext) }}" href="#" @click="deleteTeam(data.item)">{{ 'DeleteTeam'|trans({}, appContext) }}</a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -86,6 +87,7 @@
         var removeUsersUrlTemplate = '{{ REMOVE_TEAM_USERS_NOT_IN_GROUPS_URL|raw }}';
         var editTeamUrl = '{{ EDIT_PLATFORM_GROUP_TEAM_URL|raw }}';
         var updateLocalTeamNamesUrl = '{{ UPDATE_LOCAL_TEAM_NAMES_AJAX_URL|raw }}';
+        var deleteTeamUrl = '{{ DELETE_PLATFORM_GROUP_TEAM_URL|raw }}';
 
         $(window).on('load', function () {
             new Vue({
@@ -98,6 +100,7 @@
                     addUsersUrlTemplate: addUsersUrlTemplate,
                     removeUsersUrlTemplate: removeUsersUrlTemplate,
                     editTeamUrlTemplate: editTeamUrl,
+                    deleteTeamUrlTemplate: deleteTeamUrl,
                     updateLocalTeamNamesUrl: updateLocalTeamNamesUrl
                 },
                 methods: {
@@ -113,8 +116,16 @@
                     editTeamUrl: function(team) {
                         return this.addTeamToUrl(this.editTeamUrlTemplate, team);
                     },
+                    deleteTeamUrl: function(team) {
+                        return this.addTeamToUrl(this.deleteTeamUrlTemplate, team);
+                    },
                     addTeamToUrl: function(urlTemplate, team) {
                         return urlTemplate.replace('__PLATFORM_GROUP_TEAM_ID__', team.id);
+                    },
+                    deleteTeam: function(team) {
+                        if(window.confirm('{{ 'DeleteTeamConfirm'|trans({}, appContext) }}')) {
+                            window.location.href = this.deleteTeamUrl(team);
+                        }
                     }
                 },
                 mounted: function() {

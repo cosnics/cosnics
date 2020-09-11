@@ -74,37 +74,6 @@ class CourseGroupOffice365Reference extends DataClass
     }
 
     /**
-     * @return string
-     */
-    public function getOffice365PlanId()
-    {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_PLAN_ID);
-    }
-
-    /**
-     * @param string $office365PlanId
-     *
-     * @return CourseGroupOffice365Reference
-     */
-    public function setOffice365PlanId($office365PlanId)
-    {
-        $this->set_default_property(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
-
-        return $this;
-    }
-
-    /**
-     * Returns whether or not the reference to the office365 is still active. Used to deactivate the connection
-     * without loosing the reference information
-     *
-     * @return bool
-     */
-    public function isLinked()
-    {
-        return (bool) $this->get_default_property(self::PROPERTY_LINKED);
-    }
-
-    /**
      * Stores the linked property. Used to deactivate the connection
      * without loosing the reference information
      *
@@ -117,22 +86,6 @@ class CourseGroupOffice365Reference extends DataClass
         $this->set_default_property(self::PROPERTY_LINKED, $linked);
 
         return $this;
-    }
-
-    /**
-     *
-     */
-    public function hasTeam():bool
-    {
-        return !empty($this->get_default_property(self::PROPERTY_OFFICE365_HAS_TEAM));
-    }
-
-    /**
-     * @param bool $hasTeam
-     */
-    public function setHasTeam(bool $hasTeam)
-    {
-        $this->set_default_property(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
     }
 
     /**

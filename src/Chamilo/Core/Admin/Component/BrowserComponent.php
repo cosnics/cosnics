@@ -6,6 +6,7 @@ use Chamilo\Core\Admin\Form\AdminSearchForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,7 +31,11 @@ class BrowserComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
-        
+
+        if (!$this->getUser()->is_platform_admin()) {
+            throw new NotAllowedException();
+        }
+
         $breadcrumbtrail = BreadcrumbTrail::getInstance();
         $breadcrumbtrail->truncate(true);
         $breadcrumbtrail->add(new Breadcrumb($this->get_url(), Translation::get('Administration')));
