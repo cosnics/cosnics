@@ -275,8 +275,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'PARTS_EXTENSION' => $partsExtension,
             'HAS_RUBRIC' => $hasRubric,
             'RUBRIC_VIEW' => $rubricView,
-            'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1]),
-            'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1]),
+            'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
+            'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation
         ];
 
