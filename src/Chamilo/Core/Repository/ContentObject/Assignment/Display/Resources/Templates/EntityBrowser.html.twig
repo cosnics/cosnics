@@ -175,6 +175,7 @@
     </div>
     {% if SUPPORTS_RUBRICS %}
     <div role="tabpanel" class="tab-pane {{ SELECTED_TAB == 'rubric' ? 'active': '' }} tab-pane-with-border" id="rubric">
+        <div class="alert alert-info">{{ 'BetaWarning'|trans({}, appContext) }}</div>
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
             <a href="{{ BUILD_RUBRIC_URL }}" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
@@ -197,7 +198,7 @@
             <div class="clearfix"></div>
             <div>{{ RUBRIC_PREVIEW|raw }}</div>
         {% else %}
-            <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
+            <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
             <div class="text-center" style="margin-bottom: 20px;">
                 <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success btn-lg">{{ 'AddRubric'|trans({}, appContext) }}</a>
             </div>
