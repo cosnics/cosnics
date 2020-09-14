@@ -159,4 +159,14 @@ class ContentObjectService
                 $filterConditionRenderer);
         }
     }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return ContentObject
+     */
+    public function findById(int $contentObjectId)
+    {
+        return $this->contentObjectRepository->findById($contentObjectId);
+    }
 }

@@ -41,12 +41,12 @@ class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCel
                 $title =
                     StringUtilities::getInstance()->createString($title)->safeTruncate(50, ' &hellip;')->__toString();
 
+                $assignment = $this->getEntryTableParameters()->getAssignment();
+
                 $isPartOfEntity = $this->getEntryTableParameters()->getAssignmentServiceBridge()->isUserPartOfEntity(
                     $this->getEntryTableParameters()->getUser(), $this->getEntryTableParameters()->getEntityType(),
                     $this->getEntryTableParameters()->getEntityId()
                 );
-                
-                $assignment = $this->getEntryTableParameters()->getAssignment();
 
                 if ($isPartOfEntity || $assignment->get_visibility_submissions() == 1 ||
                     $this->getEntryTableParameters()->getAssignmentServiceBridge()->canEditAssignment())

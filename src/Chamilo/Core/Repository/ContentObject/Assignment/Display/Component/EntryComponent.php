@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreFormType;
@@ -44,6 +45,8 @@ use Symfony\Component\Form\FormInterface;
  */
 class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport, TableSupport
 {
+    const PARAM_RUBRIC_ENTRY = 'RubricEntry';
+    const PARAM_RUBRIC_RESULTS = 'RubricResult';
 
     /**
      * @var ScoreService
@@ -146,6 +149,9 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      * @param FormInterface $scoreForm
      *
      * @return array|string[]
+     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getTemplateProperties(FormInterface $scoreForm = null)
     {
@@ -201,6 +207,26 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $partsExtension =
             $extensionManager->extendEntryViewerParts($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
 
+        $rubricView = null;
+        $hasRubric = $canUseRubricEvaluation = false;
+
+        if($this->supportsRubrics())
+        {
+            $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
+
+            $canUseRubricEvaluation = $this->canUseRubricEvaluation();
+
+            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
+            {
+                $rubricView = $this->runRubricComponent('Entry');
+            }
+
+            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
+            {
+                $rubricView = $this->runRubricComponent('Result');
+            }
+        }
+
         $extendParameters = [
             'HAS_ENTRY' => true,
             'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
@@ -246,7 +272,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 ['Chamilo\Core\Repository\ContentObject\Assignment', 'show_compact_feedback']
             ),
             'TITLE_EXTENSION' => $titleExtension,
-            'PARTS_EXTENSION' => $partsExtension
+            'PARTS_EXTENSION' => $partsExtension,
+            'HAS_RUBRIC' => $hasRubric,
+            'RUBRIC_VIEW' => $rubricView,
+            'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1]),
+            'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1]),
+            'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -831,7 +862,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
+        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE, self::PARAM_RUBRIC_ENTRY);
     }
 
     /**
@@ -896,5 +927,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     protected function getUserService()
     {
         return $this->getService('chamilo.core.user.service.user_service');
+    }
+
+    /**
+     * @return bool|null
+     */
+    protected function canUseRubricEvaluation()
+    {
+        if($this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            return true;
+        }
+
+        return $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
     }
 }

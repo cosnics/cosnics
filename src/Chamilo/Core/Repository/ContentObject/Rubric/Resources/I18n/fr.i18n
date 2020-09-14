@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rubric
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Rubric"
+Title = "Titre"
+Properties = "Propriétés"
+Rubric = "Rubric"
+RubricToolBrowserComponent = "Parcourir"
+RubricToolEvaluateComponent = "Evaluer"
+RubricToolIntroductionPublisherComponent = "Publier une introduction"
+RubricToolMoverComponent = "Déplacer"
+RubricToolPublisherComponent = "Publier"
+RubricToolUpdaterComponent = "Mettre à jour"
+RubricToolViewerComponent = "Afficher"

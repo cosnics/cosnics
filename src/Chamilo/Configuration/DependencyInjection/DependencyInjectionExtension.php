@@ -39,6 +39,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('configuration.xml');
         $xmlFileLoader->load('registration.xml');
         $xmlFileLoader->load('language.xml');
+        $xmlFileLoader->load('package.xml');
 
         $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
 

@@ -1,0 +1,176 @@
+@mixin app {
+  .app-header {
+    align-items: center;
+    border-top: 1px solid #d6d6d6;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .app-header-nav, .app-header-tools {
+    display: flex;
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0.6em 0;
+  }
+
+  .app-header-nav {
+    margin-left: 1.2em;
+  }
+
+  .app-header-tools {
+    display: flex;
+
+    &.mod-hide {
+      display: none;
+    }
+  }
+
+  @media only screen and (min-width: 700px) {
+    .app-header-tools.builder-app-full-view {
+      display: none;
+    }
+  }
+
+  .btn-icon-check {
+    margin-right: 0.3em;
+    width: 1em;
+
+    &::before {
+      content: '\f096';
+    }
+  }
+
+  .lbl-check {
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .btn-check {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: default;
+    margin: 0;
+    outline: none;
+    padding: 0;
+
+    &.checked {
+      color: $outline-color;
+
+      .btn-icon-check::before {
+        content: '\f046';
+      }
+    }
+
+    &:hover, &:focus {
+      color: darken($outline-color, 20%);
+    }
+
+    &:focus .lbl-check {
+      box-shadow: 0 0 0 1px $input-color-focus;
+    }
+  }
+
+  .app-tool-item select {
+    margin-right: .5em;
+
+    &:focus {
+      box-shadow: 0 0 0 1px $outline-color-light;
+      outline: none;
+    }
+  }
+
+  .app-nav-item {
+    cursor: pointer;
+    margin-right: 1em;
+  }
+
+  .app-link {
+    border-bottom: 1px solid transparent;
+    display: inline-block;
+    transition: color 120ms;
+
+    &.active-link {
+      border-bottom: 1px solid darken($panel-border-color, 5%);
+    }
+
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+
+    &:hover {
+      border-bottom: 1px solid #23527c;
+    }
+
+    &:focus, .link-text:focus {
+      outline: none;
+    }
+
+    &:focus .link-text {
+      outline: 1px solid $input-color-focus;
+      outline-offset: 2px;
+    }
+  }
+
+  .save-state {
+    color: #337ab7;
+    margin-right: 1.5em;
+    text-align: right;
+    transition: opacity 200ms;
+    width: 12em;
+  }
+
+  .save-state-saved {
+    opacity: 0.75;
+  }
+
+  .block-ui {
+    background: hsla(213, 7%, 47%, .66);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .save-error {
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .save-error-msg {
+    background: hsla(0, 70%, 47%, 1);
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3em;
+    max-width: 70ch;
+    padding: .3em 1em;
+    text-align: left;
+    z-index: 1001;
+  }
+
+  #app {
+    background-color: $bg-color;
+    color: $text-color;
+    display: flex;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.3rem;
+    flex-direction: column;
+    line-height: 2.3rem;
+    /*margin: -20px -15px -20px -15px;*/
+    padding-bottom: 1.5em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

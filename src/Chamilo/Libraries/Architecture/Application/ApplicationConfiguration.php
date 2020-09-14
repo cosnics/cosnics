@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -39,18 +40,28 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     private $configurationParameters;
 
     /**
+     * @var bool
+     */
+    protected $embeddedApplication = false;
+
+    /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $parentApplication
      * @param string[] $configurationParameters
+     * @param bool $embeddedApplication
      */
-    public function __construct(ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array())
+    public function __construct(
+        ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array(),
+        $embeddedApplication = false
+    )
     {
         $this->request = $request;
         $this->user = $user;
         $this->application = $parentApplication;
         $this->configurationParameters = $configurationParameters;
+        $this->embeddedApplication = $embeddedApplication;
     }
 
     /**
@@ -72,6 +83,14 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     }
 
     /**
+     * @param Application $parentApplication
+     */
+    public function setParentApplication(Application $parentApplication)
+    {
+        $this->application = $parentApplication;
+    }
+
+    /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
@@ -83,6 +102,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function setUser(User $user)
@@ -94,6 +114,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      *
      * @param string $key
      * @param string $defaultValue
+     *
      * @return string
      */
     public function get($key, $defaultValue = null)
@@ -109,5 +130,25 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function set($key, $value)
     {
         $this->configurationParameters[$key] = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmbeddedApplication(): ?bool
+    {
+        return $this->embeddedApplication;
+    }
+
+    /**
+     * @param bool $embeddedApplication
+     *
+     * @return ApplicationConfiguration
+     */
+    public function setEmbeddedApplication(bool $embeddedApplication): ApplicationConfiguration
+    {
+        $this->embeddedApplication = $embeddedApplication;
+
+        return $this;
     }
 }

@@ -250,7 +250,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     /**
      *
      * @param $content_object_id integer
-     * @return DOMElement
+     * @return \DOMElement
      */
     public function get_content_object_node($content_object_id)
     {

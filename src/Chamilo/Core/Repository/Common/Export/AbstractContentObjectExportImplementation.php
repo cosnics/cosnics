@@ -46,7 +46,7 @@ abstract class AbstractContentObjectExportImplementation
 
     /**
      *
-     * @return \core\repository\ContentObject
+     * @return ContentObject
      */
     public function get_content_object()
     {

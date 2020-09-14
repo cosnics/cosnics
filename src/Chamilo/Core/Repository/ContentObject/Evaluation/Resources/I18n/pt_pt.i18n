@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\evaluation
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Evaluation"
+Title = ""
+Properties = ""
+Evaluation = ""
+EvaluationToolBrowserComponent = ""
+EvaluationToolEvaluateComponent = ""
+EvaluationToolIntroductionPublisherComponent = ""
+EvaluationToolMoverComponent = ""
+EvaluationToolPublisherComponent = ""
+EvaluationToolUpdaterComponent = ""
+EvaluationToolViewerComponent = ""

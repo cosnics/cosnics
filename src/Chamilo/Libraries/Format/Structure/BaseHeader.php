@@ -14,6 +14,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -289,14 +290,17 @@ class BaseHeader implements HeaderInterface
             '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
         );
 
-        $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
+//        $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
+//
+//        $javascriptModified = $javascriptCacheService->getLastModificationTime();
+//        $javascriptModified = $javascriptModified ? $javascriptModified : time();
+//
+//        $parameters[ResourceUtilities::PARAM_TYPE] = 'javascript';
+//        $parameters['modified'] = $javascriptModified;
+//        $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
-        $javascriptModified = $javascriptCacheService->getLastModificationTime();
-        $javascriptModified = $javascriptModified ? $javascriptModified : time();
-
-        $parameters[ResourceUtilities::PARAM_TYPE] = 'javascript';
-        $parameters['modified'] = $javascriptModified;
-        $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
+        $javascriptHeaders = new JavascriptHeaders(ResourceManager::getInstance(), $pathBuilder);
+        $javascriptHeaders->addGlobalJavascriptFilesToHeader($this);
 
         $this->addJavascriptCDNFiles();
 
