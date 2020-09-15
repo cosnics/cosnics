@@ -82,16 +82,16 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
                 'radio',
                 $useTeamElementName,
                 null,
-                Translation::getInstance()->getTranslation('RegularTeam'),
-                self::OPTION_REGULAR_TEAM
+                Translation::getInstance()->getTranslation('ClassTeam'),
+                self::OPTION_CLASS_TEAM
             );
 
             $group[] = &$courseGroupForm->createElement(
                 'radio',
                 $useTeamElementName,
                 null,
-                Translation::getInstance()->getTranslation('ClassTeam'),
-                self::OPTION_CLASS_TEAM
+                Translation::getInstance()->getTranslation('RegularTeam'),
+                self::OPTION_REGULAR_TEAM
             );
 
             $courseGroupForm->addGroup($group, null, Translation::getInstance()->getTranslation('UseOffice365Team'), '');

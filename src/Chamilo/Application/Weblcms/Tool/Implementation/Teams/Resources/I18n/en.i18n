@@ -42,4 +42,4 @@ TeamRemoved = "The link with the team in Microsoft has been removed. Go to micro
 TeamNotRemoved = "The link with the team in Microsoft could not be removed."
 PlatformGroupTeamType = "Team type"
 StandardTeam = "Standard team"
-ClassTeam = "Class team"
+ClassTeam = "Class team (best choice for education)"

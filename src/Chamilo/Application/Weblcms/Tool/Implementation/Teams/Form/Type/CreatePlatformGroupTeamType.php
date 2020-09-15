@@ -36,11 +36,11 @@ class CreatePlatformGroupTeamType extends PlatformGroupTeamType
             [
                 'label' => $this->translator->trans('PlatformGroupTeamType', [], self::TRANSLATION_CONTEXT),
                 'choices' => [
-                    $this->translator->trans('StandardTeam', [], self::TRANSLATION_CONTEXT) => self::TYPE_STANDARD,
-                    $this->translator->trans('ClassTeam', [], self::TRANSLATION_CONTEXT) => self::TYPE_CLASS
+                    $this->translator->trans('ClassTeam', [], self::TRANSLATION_CONTEXT) => self::TYPE_CLASS,
+                    $this->translator->trans('StandardTeam', [], self::TRANSLATION_CONTEXT) => self::TYPE_STANDARD
                 ],
                 'expanded' => true,
-                'data' => self::TYPE_STANDARD
+                'data' => self::TYPE_CLASS
             ]
         );
     }

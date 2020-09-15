@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
 use Chamilo\Application\Weblcms\Service\CourseSubscriptionService;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -126,5 +127,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 )
             );
         }
+    }
+
+    /**
+     * @return CourseGroupService
+     */
+    protected function getCourseGroupService()
+    {
+        return $this->getService(CourseGroupService::class);
     }
 }
