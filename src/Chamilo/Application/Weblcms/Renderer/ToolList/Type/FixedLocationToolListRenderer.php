@@ -443,6 +443,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
                         StringUtilities::getInstance()->createString($publication->get_tool())->upperCamelize() .
                         '\Manager';
+
+                    // TODO fix this with a decent reference to the tool
+                    // (probably tool registration system rework necessary)
+                    if(!class_exists($class))
+                    {
+                        $class = 'Hogent\Application\Weblcms\Tool\Implementation\\' .
+                            StringUtilities::getInstance()->createString($publication->get_tool())->upperCamelize() .
+                            '\Manager';
+                    }
+
                     $url = $parent->get_url(
                         array(
                             'tool_action' => null,
