@@ -374,3 +374,4 @@ SubscribeGroupsSearcherComponent = "Zoeken binnen alle beschikbare platformgroep
 ExportUsersFilename = "cursus_gebruikers_{COURSE_NAME}"
 ExportDirectlySubscribedUsersFilename = "individueel_ingeschreven_gebruikers_{COURSE_NAME}"
 ExportGroupUsersFilename = "groep_gebruikers_{GROUP_NAME}"
+SearchFirst = "Gelieve een gebruiker te zoeken via de bovenstaande zoekbalk via voor- / familie-naam of e-mailadres."
