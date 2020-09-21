@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -38,18 +39,26 @@ class UserService
     private $configurationService;
 
     /**
+     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
+     */
+    private $propertyMapper;
+
+    /**
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
      * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
      * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
      */
     public function __construct(
-        UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService
+        UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService,
+        PropertyMapper $propertyMapper
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
         $this->configurationService = $configurationService;
+        $this->propertyMapper = $propertyMapper;
     }
 
     /**
@@ -109,17 +118,23 @@ class UserService
      * @param string $emailAddress
      * @param string $password
      * @param string $authSource
+     * @param string $status
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Exception
      */
     public function createUserFromParameters(
-        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform'
+        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform',
+        $status = User::STATUS_STUDENT
     )
     {
         $requiredParameters = [
-            'firstName' => $firstName, 'lastName' => $lastName, 'username' => $username,
-            'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'username' => $username,
+            'officialCode' => $officialCode,
+            'emailAddress' => $emailAddress,
+            'password' => $password
         ];
 
         foreach ($requiredParameters as $parameterName => $parameterValue)
@@ -143,6 +158,7 @@ class UserService
         $user->set_official_code($officialCode);
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
+        $user->set_status($status);
 
         $user->set_password($this->getHashingUtilities()->hashString($password));
 
@@ -214,6 +230,15 @@ class UserService
     public function findActiveUsersByStatus($status)
     {
         return $this->getUserRepository()->findActiveUsersByStatus($status);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findPlatformAdministrators()
+    {
+        return $this->getUserRepository()->findPlatformAdministrators();
     }
 
     /**
@@ -323,15 +348,6 @@ class UserService
 
     /**
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    public function findPlatformAdministrators()
-    {
-        return $this->getUserRepository()->findPlatformAdministrators();
-    }
-
-    /**
-     *
      * @param integer[] $userIdentifiers
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -371,6 +387,22 @@ class UserService
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findUsersMappedByOfficialCode($condition = null, $offset = 0, $count = - 1, $orderProperty = null)
+    {
+        return $this->getPropertyMapper()->mapDataClassByProperty(
+            $this->findUsers($condition = null, $offset = 0, $count = - 1, $orderProperty = null),
+            User::PROPERTY_OFFICIAL_CODE
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Configuration\Service\ConfigurationService
      */
@@ -404,6 +436,22 @@ class UserService
     protected function setHashingUtilities(HashingUtilities $hashingUtilities)
     {
         $this->hashingUtilities = $hashingUtilities;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\PropertyMapper
+     */
+    public function getPropertyMapper(): PropertyMapper
+    {
+        return $this->propertyMapper;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     */
+    public function setPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
     }
 
     /**

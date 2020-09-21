@@ -28,57 +28,33 @@ class User extends DataClass
     const CONTEXT = __NAMESPACE__;
 
     const NAME_FORMAT_FIRST = 0;
-
     const NAME_FORMAT_LAST = 1;
 
     const PROPERTY_ACTIVATION_DATE = 'activation_date';
-
     const PROPERTY_ACTIVE = 'active';
-
     const PROPERTY_APPROVED = 'approved';
-
     const PROPERTY_AUTH_SOURCE = 'auth_source';
-
     const PROPERTY_CREATOR_ID = 'creator_id';
-
     const PROPERTY_DATABASE_QUOTA = 'database_quota';
-
     const PROPERTY_DISK_QUOTA = 'disk_quota';
-
     const PROPERTY_EMAIL = 'email';
-
     const PROPERTY_EXPIRATION_DATE = 'expiration_date';
-
     const PROPERTY_EXTERNAL_UID = 'external_uid';
-
     const PROPERTY_FIRSTNAME = 'firstname';
-
     const PROPERTY_LASTNAME = 'lastname';
-
     const PROPERTY_OFFICIAL_CODE = 'official_code';
-
     const PROPERTY_PASSWORD = 'password';
-
     const PROPERTY_PHONE = 'phone';
-
     const PROPERTY_PICTURE_URI = 'picture_uri';
-
     const PROPERTY_PLATFORMADMIN = 'admin';
-
     const PROPERTY_REGISTRATION_DATE = 'registration_date';
-
     const PROPERTY_SECURITY_TOKEN = 'security_token';
-
     const PROPERTY_STATUS = 'status';
-
     const PROPERTY_TERMS_DATE = 'terms_date';
-
     const PROPERTY_USERNAME = 'username';
 
     const STATUS_ANONYMOUS = 0;
-
     const STATUS_STUDENT = 5;
-
     const STATUS_TEACHER = 1;
 
     public static function admin()
