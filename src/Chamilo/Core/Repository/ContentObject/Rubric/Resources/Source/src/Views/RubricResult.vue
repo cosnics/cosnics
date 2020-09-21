@@ -277,7 +277,9 @@
 
     .table-header-filler.mod-result-view {
         display: block;
-        margin-right: .85em;
+        margin-right: 1rem;
+        max-width: 25rem;
+        min-width: 25rem;
     }
 
     .evaluations {
@@ -289,7 +291,7 @@
     }
 
     .cluster-header.mod-result-view, .category-header.mod-result-view {
-        margin-right: .85em;
+        margin-right: 1rem;
     }
 
     .clusters.mod-result-view {
@@ -315,10 +317,10 @@
         align-items: center;
     }
     .rubric-total-title.mod-result-view {
-        margin-right: .85em;
+        margin-right: 1rem;
         flex: 1;
-        min-width: 20rem;
-        max-width: 30rem;
+        min-width: 25rem;
+        max-width: 25rem;
         text-align: right;
     }
     .rubric-results-view {
@@ -390,8 +392,12 @@
 
         &.criterium-header, &.cluster-header, &.category-header {
             flex: 1;
-            max-width: 30rem;
-            min-width: 20rem;
+            max-width: 25rem;
+            min-width: 25rem;
+        }
+
+        &.criterium-header {
+            margin-right: .5rem;
         }
 
         /*&.subtotal {
