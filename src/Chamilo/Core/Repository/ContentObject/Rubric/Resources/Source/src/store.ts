@@ -851,9 +851,9 @@ export default {
     },
     rubricResults: {
         "evaluators": [
-            {"userId": 0, "name": "Bob", "role": "student", "targetUserId": 0, "targetName": "Bob"},
-            {"userId": 1, "name": "Alice", "role": "teacher", "targetUserId": 0, "targetName": "Bob"},
-            {"userId": 2, "name": "Fred", "role": "coach", "targetUserId": 0, "targetName": "Bob"}],
+            {"userId": 0, "name": "Bob", "role": "student", "targetUserId": 0, "targetName": "Bob", "date": "2020-06-15T10:30:35+0200"},
+            {"userId": 1, "name": "Alice", "role": "teacher", "targetUserId": 0, "targetName": "Bob", "date": "2020-06-17T13:25:00+0200"},
+            {"userId": 2, "name": "Fred", "role": "coach", "targetUserId": 0, "targetName": "Bob", "date": "2020-06-17T11:05:00+0200"}],
         "evaluations": {
             0: [
                 { "treeNodeId": "fufp9nyhm59tpv834p7s5", "levelId": "ll1mno0a18hjedwy6w3jt", "feedback": "Ik vond het best moeilijk maar uiteindelijk lukte het wel."},

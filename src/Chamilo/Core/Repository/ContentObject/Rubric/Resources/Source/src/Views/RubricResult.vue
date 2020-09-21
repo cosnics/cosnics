@@ -39,7 +39,12 @@
                 <div class="rubric-table-header mod-result-view">
                     <div class="table-header-filler mod-result-view" aria-hidden="true"></div>
                     <div class="evaluators-table-header">
-                        <div v-for="evaluator in evaluators" class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
+                        <template v-for="evaluator in evaluators">
+                            <div>
+                                <div class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
+                                <div class="evaluator-table-header-date" :class="{ 'mod-grades': !rubric.useScores }">{{ new Date(evaluator.date)|formatDate }}</div>
+                            </div>
+                        </template>
                         <div v-if="rubric.useScores" class="evaluator-table-header-title mod-max">Max.</div>
                     </div>
                 </div>
@@ -195,12 +200,19 @@
         return v1 + v2;
     }
 
+    function pad(num: number) : string {
+        return `${num < 10 ? '0' : ''}${num}`;
+    }
+
     @Component({
         filters: {
             capitalize: function (value: any) {
                 if (!value) { return ''; }
                 value = value.toString();
                 return value.charAt(0).toUpperCase() + value.slice(1);
+            },
+            formatDate: function (date: Date) {
+                return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
             }
         }
     })
@@ -316,6 +328,7 @@
         display: flex;
         align-items: center;
     }
+
     .rubric-total-title.mod-result-view {
         margin-right: 1rem;
         flex: 1;
@@ -334,12 +347,25 @@
     }
 
     .evaluators-table-header {
+        align-items: flex-start;
         /*justify-content: flex-end;*/
     }
 
-    .evaluator-table-header-title {
-        width: 8.33em;
+    .evaluator-table-header-date {
+        color:hsla(200, 30%, 40%, 1);
+        font-size:1.2rem;
+        margin: 0 1em 0 .5em;
         text-align: right;
+
+        &.mod-grades {
+            text-align: left;
+        }
+    }
+
+    .evaluator-table-header-title {
+        text-align: right;
+        white-space: nowrap;
+        width: 8.33em;
 
         &.mod-grades {
             text-align: left;
