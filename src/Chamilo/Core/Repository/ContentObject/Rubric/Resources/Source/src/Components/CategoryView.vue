@@ -38,7 +38,15 @@
         <div class="item-header-bar mod-category">
             <button v-if="category.title" :aria-label="$t('color-picker')" :title="$t('color-picker')" :aria-expanded="isColorPickerOpened ? 'true' : 'false'" :aria-controls="id + '--swatches'" class="btn-category-color" :class="{ 'xvue-swatches__diagonal': category.color === '' }" :style="{'background-color': category.color || null}" @click="openColorPickerForCategory(category)"></button>
             <div class="b-category-header-wrapper" :class="{ 'mod-null-category': !category.title }">
-                <swatches :id="id + '--swatches'" :swatches="swatchColors" v-if="isColorPickerOpened" v-model="category.color" background-color="transparent" show-border swatch-size="20" inline @input="closeColorPicker"></swatches>
+                <swatches :id="id + '--swatches'"
+                          :swatches="swatchColors"
+                          v-if="isColorPickerOpened"
+                          v-model="category.color"
+                          background-color="transparent"
+                          show-border swatch-size="20"
+                          inline
+                          @input="closeColorPicker"
+                ></swatches>
                 <h2 class="b-category-title" :class="{ 'mod-null-category': !category.title }" @dblclick.stop="startEditing">{{ category.title || $t('list-of-criteria') }}</h2>
             </div>
             <button class="btn-toggle-menu mod-category" :class="{'is-menu-visible': showMenuActions}" :aria-label="!showMenuActions && $t('open-menu')" :title="!showMenuActions && $t('open-menu')" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
@@ -72,7 +80,7 @@
         private newTitle: string = '';
 
         // Color palette generated with http://medialab.github.io/iwanthue/
-        private readonly swatchColors = ['', '#5e318e', '#bd002f', '#b10099', '#1c5ce2', '#00943e', '#0182ed', '#ff2b84', '#e76f01', '#c58d00', '#ff9385', '#b7aaff', '#a4c592', '#56e9c2', '#56ee7a', '#e8d275'];
+        private readonly swatchColors = ['', '#000000', '#5e318e', '#bd002f', '#b10099', '#1c5ce2', '#00943e', '#0182ed', '#fddf00', '#ff2b84', '#e76f01', '#c58d00', '#ff9385', '#b7aaff', '#a4c592', '#56e9c2'];
 
         @Prop({type: String, required: true}) readonly id!: string;
         @Prop({type: String, required: true}) readonly menuActionsId!: string;
