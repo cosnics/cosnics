@@ -91,14 +91,14 @@ class GroupEventListener implements GroupEventListenerInterface
      */
     public function afterMove(Group $group, Group $oldParentGroup, Group $newParentGroup)
     {
-        $oldParentGroupIds = $this->groupsTreeTraverser->findParentGroupsForGroup($oldParentGroup, true);
+        $oldParentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($oldParentGroup, true);
         $subGroupIds = $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($group, true);
 
         $deleteGroupIds = $subGroupIds;
         $deleteGroupIds[] = $group->getId();
 
         $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
-        $newParentGroupIds = $this->groupsTreeTraverser->findParentGroupsForGroup($newParentGroup, true);
+        $newParentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($newParentGroup, true);
 
         $courses = $this->courseService->getCoursesWhereAtLeastOneGroupIsDirectlySubscribed($oldParentGroupIds);
         foreach ($courses as $course)

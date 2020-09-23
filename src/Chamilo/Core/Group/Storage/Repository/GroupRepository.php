@@ -154,6 +154,31 @@ class GroupRepository
     }
 
     /**
+     * Finds a group object by a given group code and parent identifier
+     *
+     * @param string $groupCode
+     * @param integer $parentIdentifier
+     *
+     * @return Group
+     * @throws \Exception
+     */
+    public function findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getNestedSetDataClassRepository()->retrieve(
+            Group::class, new DataClassRetrieveParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
      *
      * @param int $groupId
      *
@@ -270,17 +295,6 @@ class GroupRepository
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSelf
-     *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
-     */
-    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
-    {
-        return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param bool $includeSelf
      *
      * @return string[]|integer[]
@@ -289,6 +303,17 @@ class GroupRepository
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
     {
         return $this->getNestedSetDataClassRepository()->findAncestorIdentifiers($group, $includeSelf);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param boolean $includeSelf
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     */
+    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
+    {
+        return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
     }
 
     /**

@@ -89,8 +89,7 @@ class GroupService
      */
     public function __construct(
         GroupRepository $groupRepository, GroupMembershipService $groupMembershipService,
-        PropertyMapper $propertyMapper,
-        GroupEventNotifier $groupEventNotifier, GroupsTreeTraverser $groupsTreeTraverser
+        PropertyMapper $propertyMapper, GroupEventNotifier $groupEventNotifier, GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         $this->groupRepository = $groupRepository;
@@ -110,7 +109,6 @@ class GroupService
     {
         return $this->getGroupRepository()->countGroups($condition);
     }
-
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
@@ -147,7 +145,7 @@ class GroupService
             return false;
         }
 
-        foreach($deletedGroups as $deletedGroup)
+        foreach ($deletedGroups as $deletedGroup)
         {
             $subGroupIds[] = $deletedGroup->getId();
         }
@@ -178,7 +176,7 @@ class GroupService
     /**
      * @param string $groupCode
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
      */
     public function findGroupByCode($groupCode)
     {
@@ -192,6 +190,40 @@ class GroupService
         if (!$group instanceof Group)
         {
             throw new RuntimeException('Could not find the group with groupcode ' . $groupCode);
+        }
+
+        return $group;
+    }
+
+    /**
+     * @param string $groupCode
+     * @param integer $parentIdentifier
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \Exception
+     */
+    public function findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier)
+    {
+        if (empty($groupCode))
+        {
+            throw new InvalidArgumentException('The given $groupCode can not be empty');
+        }
+
+        if (empty($parentIdentifier))
+        {
+            throw new InvalidArgumentException('The given $parentIdentifier can not be empty');
+        }
+
+        $group = $this->groupRepository->findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
+
+        if (!$group instanceof Group)
+        {
+            throw new RuntimeException(
+                'Could not find the group with groupcode ' . $groupCode . ' and parent identifier ' . $parentIdentifier
+            );
         }
 
         return $group;

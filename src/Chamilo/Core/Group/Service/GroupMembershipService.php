@@ -5,8 +5,8 @@ namespace Chamilo\Core\Group\Service;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use RuntimeException;
 
 /**
@@ -31,16 +31,21 @@ class GroupMembershipService
      */
     protected $groupsTreeTraverser;
 
+    protected $userService;
+
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
      * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
-        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier
+        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier,
+        UserService $userService
     )
     {
         $this->groupMembershipRepository = $groupMembershipRepository;
         $this->groupEventNotifier = $groupEventNotifier;
+        $this->userService = $userService;
     }
 
     /**
@@ -65,6 +70,24 @@ class GroupMembershipService
         return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
             $groupIdentifiers
         );
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @throws \Exception
+     */
+    public function emptyGroup(Group $group)
+    {
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, false, false);
+
+        $success = $this->getGroupMembershipRepository()->emptyGroup($group);
+        if (!$success)
+        {
+            throw new RuntimeException('Could not empty the group with id ' . $group->getId());
+        }
+
+        $this->groupEventNotifier->afterEmptyGroup($group, $impactedUserIds);
     }
 
     /**
@@ -130,6 +153,41 @@ class GroupMembershipService
     }
 
     /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     *
+     * @return GroupMembershipService
+     */
+    public function setUserService(UserService $userService): GroupMembershipService
+    {
+        $this->userService = $userService;
+
+        return $this;
+    }
+
+    /**
+     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
+     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
+     * and therefore this cleanup action of the users after a delete should not trigger a new event.
+     *
+     * @param integer[] $groupIdentifiers
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function removeUsersFromGroupsByIdsAfterRemoval(array $groupIdentifiers)
+    {
+        return $this->groupMembershipRepository->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
+    }
+
+    /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -162,6 +220,34 @@ class GroupMembershipService
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param integer[] $userIdentifiers
+     *
+     * @throws \Exception
+     */
+    public function synchronizeGroup(Group $group, array $userIdentifiers)
+    {
+        $currentUserIdentifiers = $this->findSubscribedUserIdentifiersForGroupIdentifier($group->getId());
+
+        $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
+        $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);
+
+        $newUsers = $this->getUserService()->findUsersByIdentifiers($newUserIdentifiers);
+
+        foreach ($newUsers as $newUser)
+        {
+            $this->subscribeUserToGroup($group, $newUser);
+        }
+
+        $oldUsers = $this->getUserService()->findUsersByIdentifiers($oldUserIdentifiers);
+
+        foreach ($oldUsers as $oldUser)
+        {
+            $this->unsubscribeUserFromGroup($group, $oldUser);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function unsubscribeUserFromGroup(Group $group, User $user)
@@ -187,38 +273,5 @@ class GroupMembershipService
         }
 
         $this->groupEventNotifier->afterUnsubscribe($group, $user);
-    }
-
-    /**
-     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
-     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
-     * and therefore this cleanup action of the users after a delete should not trigger a new event.
-     *
-     * @param integer[] $groupIdentifiers
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function removeUsersFromGroupsByIdsAfterRemoval(array $groupIdentifiers)
-    {
-        return $this->groupMembershipRepository->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @throws \Exception
-     */
-    public function emptyGroup(Group $group)
-    {
-        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, false, false);
-
-        $success = $this->getGroupMembershipRepository()->emptyGroup($group);
-        if (!$success)
-        {
-            throw new RuntimeException('Could not empty the group with id ' . $group->getId());
-        }
-
-        $this->groupEventNotifier->afterEmptyGroup($group, $impactedUserIds);
     }
 }

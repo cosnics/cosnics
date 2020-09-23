@@ -317,6 +317,17 @@ class UserService
     }
 
     /**
+     * @param string[] $officialCodes
+     *
+     * @return integer[]
+     * @throws \Exception
+     */
+    public function findUserIdentifiersByOfficialCodes(array $officialCodes)
+    {
+        return $this->getUserRepository()->findUserIdentifiersByOfficialCodes($officialCodes);
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset

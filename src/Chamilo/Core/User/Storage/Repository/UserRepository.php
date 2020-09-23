@@ -172,6 +172,27 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findPlatformAdministrators()
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            User::class, new DataClassRetrievesParameters(new AndCondition($conditions))
+        );
+    }
+
+    /**
      * @param string $email
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -277,6 +298,30 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * @param string[] $officialCodes
+     *
+     * @return integer[]
+     * @throws \Exception
+     */
+    public function findUserIdentifiersByOfficialCodes(array $officialCodes)
+    {
+        $condition =
+            new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), $officialCodes);
+
+        return $this->getDataClassRepository()->distinct(
+            User::class, new DataClassDistinctParameters(
+                $condition, new DataClassProperties(
+                    array(
+                        new PropertyConditionVariable(
+                            User::class, User::PROPERTY_ID
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
@@ -306,27 +351,6 @@ class UserRepository implements UserRepositoryInterface
 
         return $this->getDataClassRepository()->retrieves(
             User::class, new DataClassRetrievesParameters($condition, null, null, $orderProperties)
-        );
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    public function findPlatformAdministrators()
-    {
-        $conditions = array();
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
     }
 
