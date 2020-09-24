@@ -18,11 +18,15 @@
 <template>
     <div>
         <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
-        <div class="criterium-level-input">
-        <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
-                  :class="{ 'is-using-scores': rubric.useScores }"
-                  :placeholder="$t('enter-level-description')"
-                  @input="onFeedbackChange"></textarea>
+        <div class="criterium-level-input" >
+            <div class="criterium-level-input-area" :class="{ 'is-using-scores': rubric.useScores}">
+                <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
+                          :class="{ 'is-input-active': isFeedbackInputActive || !choice.feedback }"
+                          :placeholder="$t('enter-level-description')"
+                          @input="onFeedbackChange" @focus="isFeedbackInputActive = true" @blur="isFeedbackInputActive = false">
+                </textarea>
+                <div class="criterium-level-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" v-html="marked(choice.feedback)"></div>
+            </div>
             <div v-if="rubric.useScores" class="criterium-level-score">
                 <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore" :title="$t('fixed-score')"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>
                 <input class="fixed-score input-detail" type="number" step="0.1" v-if="choice.hasFixedScore" v-model="choice.fixedScore" @input="onChange" />
@@ -39,11 +43,15 @@
     import Level from '../Domain/Level';
     import Criterium from '../Domain/Criterium';
     import Choice from '../Domain/Choice';
+    import DOMPurify from 'dompurify';
+    import * as marked from 'marked';
 
     @Component({
         name: 'criterium-level-view'
     })
     export default class CriteriumLevelView extends Vue {
+        private isFeedbackInputActive = false;
+
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop({type: Level, required: true}) readonly level!: Level;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
@@ -51,6 +59,10 @@
         constructor() {
             super();
             this.onChange = debounce(this.onChange, 750);
+        }
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
         }
 
         get choice() : Choice {
@@ -84,3 +96,47 @@
         }
     }
 </script>
+<style lang="scss">
+    .criterium-level-input-area {
+        flex: 1;
+        position: relative;
+
+        &.is-using-scores {
+            margin-right: 1.5em;
+        }
+    }
+
+    .criterium-level-feedback {
+        opacity: 0;
+        &.is-input-active {
+            opacity: 1;
+        }
+    }
+
+    .criterium-level-markup-preview {
+        background: hsla(190, 50%, 98%, 1);
+        border: 1px solid #d4d4d4;
+        border-radius: $border-radius;
+        bottom: .5em;
+        left: -5px;
+        right: 5px;
+        padding: 2px 5px 0;
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+
+        &.is-input-active {
+            opacity: 0;
+        }
+
+        ul {
+            list-style: disc;
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
+    }
+
+    .criterium-level-input-area:hover .criterium-level-markup-preview {
+        border-color: #aaa;
+    }
+</style>
