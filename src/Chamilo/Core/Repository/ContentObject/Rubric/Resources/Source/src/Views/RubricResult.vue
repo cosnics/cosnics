@@ -176,9 +176,7 @@
                                     <div class="title">{{ level.title }}</div>
                                     <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
                                 </div>
-                                <div class="choice-feedback">
-                                    {{ rubric.getChoice(selectedCriterium, level).feedback }}
-                                </div>
+                                <div class="choice-feedback" v-html="marked(rubric.getChoice(selectedCriterium, level).feedback)"></div>
                             </li>
                         </ul>
                     </div>
@@ -195,6 +193,8 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
+    import * as marked from 'marked';
+    import DOMPurify from 'dompurify';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
@@ -223,6 +223,10 @@
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
         @Prop({type: Array, default: () => []}) readonly treeNodeResults!: TreeNodeResult[];
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
+        }
 
         getCriteriumMaxScore(criterium: Criterium) : number {
             const scores : number[] = [0];
