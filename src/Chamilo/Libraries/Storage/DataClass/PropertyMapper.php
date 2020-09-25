@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * @package Chamilo\Libraries\Storage\DataClass
  *
@@ -47,12 +49,17 @@ class PropertyMapper
         {
             if (in_array($propertyName, $dataClass->get_default_property_names()))
             {
-                if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
-                {
-                    $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
-                }
+                $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-                $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
+                if (isset($propertyValue) && !empty($propertyValue))
+                {
+                    if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
+                    {
+                        $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
+                    }
+
+                    $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
+                }
             }
         }
 
@@ -74,12 +81,15 @@ class PropertyMapper
         {
             if (array_key_exists($propertyName, $record))
             {
-                if (!array_key_exists($record[$propertyName], $mappedRecords))
+                if ($record[$propertyName])
                 {
-                    $mappedRecords[$record[$propertyName]] = array();
-                }
+                    if (!array_key_exists($record[$propertyName], $mappedRecords))
+                    {
+                        $mappedRecords[$record[$propertyName]] = array();
+                    }
 
-                $mappedRecords[$record[$propertyName]][] = $record;
+                    $mappedRecords[$record[$propertyName]][] = $record;
+                }
             }
         }
 
@@ -125,7 +135,7 @@ class PropertyMapper
         {
             $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-            if (isset($propertyValue))
+            if (isset($propertyValue) && !empty($propertyValue))
             {
                 $mappedDataClasses[$propertyValue] = $dataClass;
             }
@@ -149,7 +159,7 @@ class PropertyMapper
         {
             $propertyValue = $record[$propertyName];
 
-            if (isset($propertyValue))
+            if (isset($propertyValue) && !empty($propertyValue))
             {
                 $mappedRecords[$propertyValue] = $record;
             }
