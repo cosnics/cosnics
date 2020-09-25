@@ -212,6 +212,9 @@
                 return value.charAt(0).toUpperCase() + value.slice(1);
             },
             formatDate: function (date: Date) {
+                if (isNaN(date.getDate())) { // todo: dates with timezone offsets, e.g. +0200 result in NaN data in Safari. For now, return an empty string.
+                    return '';
+                }
                 return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
             }
         }
