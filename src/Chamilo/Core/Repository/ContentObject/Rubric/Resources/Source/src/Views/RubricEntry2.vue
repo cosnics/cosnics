@@ -84,7 +84,7 @@
                                                 </div>
                                             </div>
                                             <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
-                                                <criterium-entry v-for="{criterium, ext, evaluation} in getCriteriumRowsData(category)"
+                                                <criterium-entry v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)"
                                                     tag="li" class="criterium-list-item"
                                                     :key="`criterium-${criterium.id}-key`"
                                                     :show-default-feedback-fields="showDefaultFeedbackFields"
@@ -92,6 +92,7 @@
                                                     :preview="preview"
                                                     :ext="ext"
                                                     :evaluation="evaluation"
+                                                    :criterium-score="score"
                                                     :show-errors="showErrors"
                                                     :use-scores="rubric.useScores"
                                                     @level-selected="selectLevel" @feedback-changed="onTreeNodeFeedbackChanged">
@@ -101,7 +102,7 @@
                                     </li>
                                 </ul>
                                 <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
-                                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ getClusterScore(cluster) }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                                 </div>
                             </div>
                         </li>
@@ -129,7 +130,7 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
-    import CriteriumEntry from '../Components/CriteriumEntry.vue';
+    import CriteriumEntry from '../Components/CriteriumEntry2.vue';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
@@ -167,6 +168,7 @@
                 .filter(cluster => cluster.hasChildren())
                 .map(cluster => ({
                     cluster,
+                    score: this.getClusterScore(cluster),
                     ...this.getTreeNodeRowData(cluster)
                 }));
         }
@@ -183,6 +185,7 @@
         getCriteriumRowsData(category: Category) {
             return category.criteria.map(criterium => ({
                 criterium,
+                score: this.getCriteriumScore(criterium),
                 ...this.getTreeNodeRowData(criterium)
             }));
         }
