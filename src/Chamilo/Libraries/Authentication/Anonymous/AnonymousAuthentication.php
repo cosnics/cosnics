@@ -57,7 +57,7 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
      */
     public function getAuthenticationType()
     {
-        return 'Anonymous';
+        return __NAMESPACE__;
     }
 
     /**

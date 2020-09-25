@@ -34,7 +34,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
      */
     public function getAuthenticationType()
     {
-        return 'Ldap';
+        return __NAMESPACE__;
     }
 
     /**

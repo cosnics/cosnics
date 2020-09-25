@@ -59,7 +59,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
      */
     public function getAuthenticationType()
     {
-        return 'Cas';
+        return __NAMESPACE__;
     }
 
     /**
@@ -268,10 +268,10 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         $user->set_status(User::STATUS_STUDENT);
         $user->set_auth_source('Cas');
         $user->set_platformadmin(0);
-        $user->set_email($userAttributes['mail']);
-        $user->set_lastname($userAttributes['sn']);
-        $user->set_firstname($userAttributes['givenName']);
-        $user->set_official_code($userAttributes['ehbPersonNumber']);
+        $user->set_email($userAttributes['email']);
+        $user->set_lastname($userAttributes['last_name']);
+        $user->set_firstname($userAttributes['first_name']);
+        $user->set_official_code($userAttributes['person_number']);
 
         if (!$user->create())
         {

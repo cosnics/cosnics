@@ -95,7 +95,7 @@ class PlatformAuthentication extends Authentication
      */
     public function getAuthenticationType()
     {
-        return 'Platform';
+        return __NAMESPACE__;
     }
 
     /**

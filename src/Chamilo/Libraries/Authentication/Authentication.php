@@ -57,13 +57,19 @@ abstract class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @return bool
+     * @return \Symfony\Component\Translation\Translator
      */
-    protected function isAuthSourceActive()
+    public function getTranslator(): Translator
     {
-        return (bool) $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'enable' . $this->getAuthenticationType() . 'Authentication')
-        );
+        return $this->translator;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**
@@ -100,19 +106,13 @@ abstract class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
+     * @return bool
      */
-    public function getTranslator(): Translator
+    protected function isAuthSourceActive()
     {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
+        return (bool) $this->configurationConsulter->getSetting(
+            array('Chamilo\Core\Admin', 'enable' . strtr($this->getAuthenticationType(), '\\', ''))
+        );
     }
 
 }

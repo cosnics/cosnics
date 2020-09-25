@@ -37,7 +37,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function getAuthenticationType()
     {
-        return 'SecurityToken';
+        return __NAMESPACE__;
     }
 
     /**
