@@ -544,7 +544,16 @@
 
     .choice-feedback {
         line-height: 1.5em;
-        white-space: pre-line;
+        /*white-space: pre-line;*/
+
+        ul {
+            list-style: disc;
+        }
+
+        ul, ol {
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
     }
 
     @media only screen and (min-width: 900px) {

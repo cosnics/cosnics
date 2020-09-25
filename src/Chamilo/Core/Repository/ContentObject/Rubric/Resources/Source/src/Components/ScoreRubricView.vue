@@ -66,11 +66,8 @@
 			</div>
 		</div>
 		<transition name="selected-fade" mode="out-in">
-	        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @show-formatting="showFormatting=true" @close="selectCriterium(null)" @change-criterium="onChangeCriterium" @change-choice="onChangeChoice"></criterium-details-view>
+	        <criterium-details-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" @close="selectCriterium(null)" @change-criterium="onChangeCriterium" @change-choice="onChangeChoice"></criterium-details-view>
 		</transition>
-        <div v-if="selectedCriterium && showFormatting" style="background:white;width:25rem;padding:1rem;z-index:10000;border:1px solid lightgrey;border-right:none;border-bottom:none;">
-            Opmaakhulp
-        </div>
 		<remove-dialog :remove-item="removeItem" @remove="onRemoveItem" @cancel="hideRemoveDialog"></remove-dialog>
 	</div>
 </template>
@@ -109,7 +106,6 @@
 		private overElementId: string = '';
 		private bannedForDrop: string = '';
 		private innerWidth: number = window.innerWidth;
-		private showFormatting: boolean = false;
 
 		@Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
 		@Prop(Criterium) readonly selectedCriterium!: Criterium | null;

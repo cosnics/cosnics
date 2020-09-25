@@ -120,13 +120,18 @@
     }
 </script>
 
-<style type="scss">
-.default-feedback-entry-view {
-    white-space: initial!important;
-}
-.default-feedback-entry-view ul {
-    list-style: disc;
-    margin: 0 0 0 2rem;
-    padding: 0;
-}
+<style lang="scss">
+    .default-feedback-entry-view {
+        white-space: initial!important;
+    }
+    .default-feedback-entry-view {
+        ul {
+            list-style: disc;
+        }
+
+        ul, ol {
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
+    }
 </style>

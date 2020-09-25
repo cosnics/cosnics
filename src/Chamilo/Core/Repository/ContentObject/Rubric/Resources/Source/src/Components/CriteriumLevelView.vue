@@ -131,6 +131,9 @@
 
         ul {
             list-style: disc;
+        }
+
+        ul, ol {
             margin: 0 0 0 2rem;
             padding: 0;
         }
