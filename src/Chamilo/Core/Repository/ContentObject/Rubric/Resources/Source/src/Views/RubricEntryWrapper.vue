@@ -12,6 +12,7 @@
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import Criterium from '../Domain/Criterium';
     import RubricEntry from './RubricEntry.vue';
+    //import RubricEntry from './RubricEntry2.vue';
     import {convertRubricData} from '../Util/util';
     import {TreeNodeEvaluation} from '../Util/interfaces';
 

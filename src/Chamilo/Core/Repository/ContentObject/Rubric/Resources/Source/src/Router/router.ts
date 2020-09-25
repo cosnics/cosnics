@@ -9,6 +9,7 @@ import RubricResultDemoWrapper from '../Views/RubricResultDemoWrapper.vue';
 import ScoreRubricView from '../Components/ScoreRubricView.vue';
 import LevelsView from '../Components/LevelsView.vue';
 import RubricBuilderFull from '../Views/RubricBuilderFull.vue';
+//import RubricBuilderFull from '../Views/RubricBuilderFull2.vue';
 
 Vue.use(VueRouter);
 

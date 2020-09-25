@@ -35,6 +35,7 @@
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import RubricEntry from './RubricEntry.vue';
+    //import RubricEntry from './RubricEntry2.vue';
     import {TreeNodeEvaluation} from '../Util/interfaces';
     import store from '../store';
 
