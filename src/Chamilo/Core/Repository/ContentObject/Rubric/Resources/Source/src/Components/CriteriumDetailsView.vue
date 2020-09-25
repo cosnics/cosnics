@@ -38,7 +38,7 @@
                     </div>
                     <div style="display: flex;justify-content: space-between;align-items:baseline">
                         <div v-if="rubric.useScores" class="criterium-weight"><label for="weight">{{ $t('weight') }}:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
-                        <div v-if="!showFormatting"><a href="#" @click.stop="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
+                        <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
                     </div>
                     <ul class="b-criterium-levels">
                         <li v-for="level in rubric.levels" :key="level.id" class="b-criterium-level">
