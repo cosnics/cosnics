@@ -51,6 +51,7 @@
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
+    import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
