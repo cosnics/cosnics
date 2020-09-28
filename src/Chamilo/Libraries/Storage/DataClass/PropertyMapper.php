@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-
 /**
  * @package Chamilo\Libraries\Storage\DataClass
  *
@@ -51,7 +49,7 @@ class PropertyMapper
             {
                 $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-                if (isset($propertyValue) && !empty($propertyValue))
+                if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
                 {
                     if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
                     {
@@ -135,7 +133,7 @@ class PropertyMapper
         {
             $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-            if (isset($propertyValue) && !empty($propertyValue))
+            if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
             {
                 $mappedDataClasses[$propertyValue] = $dataClass;
             }
@@ -159,7 +157,7 @@ class PropertyMapper
         {
             $propertyValue = $record[$propertyName];
 
-            if (isset($propertyValue) && !empty($propertyValue))
+            if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
             {
                 $mappedRecords[$propertyValue] = $record;
             }
