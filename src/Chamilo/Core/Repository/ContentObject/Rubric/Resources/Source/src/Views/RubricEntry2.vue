@@ -38,84 +38,89 @@
 
 <template>
     <div id="app" :class="{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo }">
-        <div class="rubric">
-            <link rel="stylesheet"
-                  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-entry-view" :class="{ 'mod-closed': !showDefaultFeedbackFields }">
-                <div class="rubric-table-header mod-entry-view" aria-hidden="true">
-                    <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
-                        <slot name="demoEvaluator"></slot>
-                        <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
-                    </ul>
-                    <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
-                        <div v-for="level in rubric.levels" class="level-table-header-title mod-entry-view">
-                            {{ level.title }}
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <div class="rubric" :class="[rubric.useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
+            <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
+                <slot name="demoEvaluator"></slot>
+                <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
+            </ul>
+            <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
+                <div v-for="level in rubric.levels" class="level-table-header-title mod-entry-view">
+                    {{ level.title }}
+                </div>
+            </div>
+            <div class="rubric-header-fill"></div>
+            <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
+                <div class="cluster-header treenode-header mod-responsive">
+                    <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
+                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-cluster" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                        <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
+                    </button>
+                </div>
+                <div v-if="!preview && evaluation !== null" class="custom-feedback mod-cluster" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
+                    <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
+                </div>
+                <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
+                    <div class="category-header treenode-header mod-responsive">
+                        <h3 class="category-title mod-entry-view category-indicator">{{ category.title }}</h3>
+                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-category" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                            <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
+                        </button>
+                    </div>
+                    <div v-if="category.title" class="category-row treenode-hover mod-entry-view">
+                        <div v-if="!preview && evaluation !== null" class="custom-feedback mod-category" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
+                            <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                         </div>
                     </div>
-                </div>
-                <div class="rubric-table" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }" :style="{ '--offset': `${offset}px`}">
-                    <h1 class="rubric-title">{{ rubric.title }}</h1>
-                    <ul class="clusters mod-entry-view">
-                        <li v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
-                            <div class="cluster">
-                                <div class="cluster-row treenode-hover mod-entry-view">
-                                    <div class="cluster-header treenode-header">
-                                        <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
-                                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-cluster" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
-                                            <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
-                                        </button>
-                                    </div>
-                                    <div v-if="!preview && evaluation !== null" class="custom-feedback mod-cluster" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
-                                        <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
-                                    </div>
-                                </div>
-                                <ul class="categories">
-                                    <li v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" v-if="rubric.getAllCriteria(category).length > 0">
-                                        <div class="category">
-                                            <div v-if="category.title" class="category-row treenode-hover mod-entry-view">
-                                                <div class="category-header treenode-header">
-                                                    <h3 class="category-title mod-entry-view category-indicator">{{ category.title }}</h3>
-                                                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-category" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
-                                                        <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
-                                                    </button>
-                                                </div>
-                                                <div v-if="!preview && evaluation !== null" class="custom-feedback mod-category" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
-                                                    <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
-                                                </div>
-                                            </div>
-                                            <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
-                                                <criterium-entry v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)"
-                                                    tag="li" class="criterium-list-item"
-                                                    :key="`criterium-${criterium.id}-key`"
-                                                    :show-default-feedback-fields="showDefaultFeedbackFields"
-                                                    :criterium="criterium"
-                                                    :preview="preview"
-                                                    :ext="ext"
-                                                    :evaluation="evaluation"
-                                                    :criterium-score="score"
-                                                    :show-errors="showErrors"
-                                                    :use-scores="rubric.useScores"
-                                                    @level-selected="selectLevel" @feedback-changed="onTreeNodeFeedbackChanged">
-                                                </criterium-entry>
-                                            </ul>
+                    <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
+                        <div class="criterium-header treenode-header mod-responsive mod-entry-view" role="gridcell">
+                            <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title mod-entry-view category-indicator">{{ criterium.title }}</h4>
+                            <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback mod-criterium" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                                <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
+                            </button>
+                        </div>
+                        <div class="criterium-levels-wrapper">
+                            <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>
+                            <ul class="criterium-levels">
+                                <li v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)" class="criterium-level mod-entry-view" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
+                                    <div v-if="preview" :aria-checked="choice.level.isDefault" class="criterium-level-header mod-entry-view" :class="{ 'is-selected': isSelected }">
+                                        <div class="criterium-level-title mod-entry-view" :class="{ 'is-selected': isSelected }">
+                                            {{choice.title}}
                                         </div>
-                                    </li>
-                                </ul>
-                                <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
-                                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                                        <span v-if="rubric.useScores" class="score-number" :class="{ 'is-selected': isSelected }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                                        <span v-else class="graded-level" :class="{ 'is-selected': isSelected }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
+                                    </div>
+                                    <button v-else role="radio" :aria-checked="isSelected" class="criterium-level-header mod-entry-view btn-score-number" :class="{ 'is-selected': isSelected }" @click="selectLevel(evaluation, choice.level)">
+                                        <div class="criterium-level-title mod-entry-view" :class="{ 'is-selected': isSelected }">
+                                            {{choice.title}}
+                                        </div>
+                                        <span v-if="rubric.useScores" class="score-number" :class="{ 'is-selected': isSelected }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
+                                        <span v-else class="graded-level" :class="{ 'is-selected': isSelected }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
+                                    </button>
+                                    <div v-if="choice.feedback" class="default-feedback-entry-view" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" v-html="marked(choice.feedback)"></div>
+                                </li>
+                                <div v-if="rubric.useScores" class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
+                                    <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="text-hidden">{{ $t('points') }}</span></div>
                                 </div>
+                            </ul>
+                            <div v-if="evaluation" class="custom-feedback mod-criterium" :class="[{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-scores': rubric.useScores, 'mod-default-feedback': hasDefaultFeedback(ext) }]">
+                                <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                             </div>
-                        </li>
-                    </ul>
-                    <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
-                        <slot name="slot-inner"></slot>
-                        <div class="rubric-total-title u-resize">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                        </div>
+                    </template>
+                    <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
+                        <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                     </div>
-                    <slot v-else name="slot-inner"></slot>
-                    <div v-if="rubric.useScores" class="subtotal rubric-total-max mod-entry-view">
-                        <div class="rubric-total-title u-resize">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max u-resize">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
-                    </div>
-                </div>
+                </template>
+            </template>
+            <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
+                <slot name="slot-inner"></slot>
+                <div class="rubric-total-title u-resize">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+            </div>
+            <slot v-else name="slot-inner"></slot>
+            <div v-if="rubric.useScores" class="subtotal rubric-total-max mod-entry-view">
+                <div class="rubric-total-title u-resize">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max u-resize">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
             </div>
         </div>
     </div>
@@ -130,15 +135,14 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
-    import CriteriumEntry from '../Components/CriteriumEntry2.vue';
+    import * as marked from 'marked';
+    import DOMPurify from 'dompurify';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
     }
 
-    @Component({
-        components: { CriteriumEntry }
-    })
+    @Component({})
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
         private offset = 0;
@@ -149,6 +153,10 @@
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
+        }
 
         calculateOffset() {
             this.$nextTick(() => {
@@ -161,6 +169,17 @@
                     this.offset = 0;
                 }
             });
+        }
+
+        hasDefaultFeedback(ext: TreeNodeExt) {
+            return ext.choices.map(choice => choice.feedback.length).reduce((v1: number, v2: number) => v1 + v2, 0) > 0;
+        }
+
+        getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
+            return ext.choices.map(choice => ({
+                choice,
+                isSelected: this.preview || !evaluation ? choice.level.isDefault : choice.level === evaluation.level
+            }));
         }
 
         getClusterRowsData(rubric: Rubric) {
@@ -288,7 +307,66 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+    .rubric {
+        display: grid;
+        grid-column-gap: .7rem;
+        grid-row-gap: .7rem;
+        max-width: max-content;
+        padding: 1rem;
+        position: relative;
+
+        &.mod-scores {
+            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5rem;
+        }
+
+        &.mod-grades {
+            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        }
+    }
+    .app-header-tools.mod-entry-view {
+        grid-column-start: 1;
+    }
+    .treenode-header.mod-responsive {
+        grid-column-start: 1;
+    }
+    .subtotal.mod-entry-view {
+        grid-column-start: 2;
+    }
+
+    @media only screen and (min-width: 900px) {
+        .levels-table-header.mod-entry-view {
+            grid-column-start: 2;
+        }
+    }
+
+    @media only screen and (max-width: 899px) {
+        .rubric.mod-scores {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
+        }
+
+        .rubric.mod-grades {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+        }
+
+        .app-header-tools.mod-entry-view {
+            grid-column: 1 / -1;
+        }
+
+        .levels-table-header.mod-entry-view {
+            grid-column: 1 / -1;
+        }
+        .criterium-levels-wrapper {
+            grid-column: 1 / -1;
+        }
+    }
+    @media only screen and (max-width: 679px) {
+        .levels-table-header.mod-entry-view {
+            display: none;
+        }
+    }
+</style>
+<style lang="scss" scoped>
     .cluster-row.mod-entry-view {
         display: flex;
         margin-left:.3em;
@@ -815,4 +893,19 @@
     }
     .treenode-hover:hover {
     }*/
+</style>
+<style lang="scss">
+.default-feedback-entry-view {
+    white-space: initial!important;
+}
+.default-feedback-entry-view {
+    ul {
+        list-style: disc;
+    }
+
+    ul, ol {
+        margin: 0 0 0 2rem;
+        padding: 0;
+    }
+}
 </style>

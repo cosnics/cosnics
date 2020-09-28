@@ -1,15 +1,41 @@
 <template>
-    <div class="rubric mod-builder-full-view">
-        <div class="rubric-table-header mod-builder-full-view">
-            <div class="table-header-filler" aria-hidden="true"></div>
-            <div class="levels-table-header mod-builder-full-view">
-                <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
-                    {{level.title}}
-                </div>
+    <div class="rubric mod-builder-full-view" :style="{'--num-cols': rubric.levels.length}">
+        <div class="table-header-filler" aria-hidden="true"></div>
+        <div class="levels-table-header mod-builder-full-view">
+            <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
+                {{level.title}}
             </div>
         </div>
         <h1 class="rubric-title">{{ rubric.title }}</h1>
-        <ul class="clusters mod-builder-full-view">
+        <template v-for="cluster in rubric.clusters">
+            <div class="cluster-header treenode-header mod-responsive">
+                <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
+            </div>
+            <template v-for="category in cluster.categories">
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="category-header treenode-header mod-responsive">
+                    <h3 class="category-title mod-entry-view">{{ category.title }}</h3>
+                </div>
+                <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
+                    <div class="criterium-title-header treenode-header mod-responsive mod-builder-full-view">
+                        <h4 class="criterium-title category-indicator mod-builder-full-view">{{ criterium.title }}</h4>
+                    </div>
+                    <ul class="criterium-levels mod-builder-full-view">
+                        <li v-for="data in ext.choices" class="criterium-level mod-builder-full-view">
+                            <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
+                                <div class="criterium-level-title mod-builder-full-view">
+                                    {{data.level.title}}
+                                </div>
+                                <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
+                            </div>
+                            <div class="default-feedback-full-view" @click="focusTextField">
+                                <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
+                            </div>
+                        </li>
+                    </ul>
+                </template>
+            </template>
+        </template>
+        <!--<ul class="clusters mod-builder-full-view">
             <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
                 <div class="cluster">
                     <h2 class="cluster-title mod-builder-full-view">{{ cluster.title }}</h2>
@@ -29,7 +55,7 @@
                                                         <div class="criterium-level-title mod-builder-full-view">
                                                             {{data.level.title}}
                                                         </div>
-                                                        <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
+                                                        <div v-if="rubric.useScores" class="score-number">--><!--<i class="check fa"/>--><!--{{ data.score }}</div>
                                                     </div>
                                                     <div class="default-feedback-full-view" @click="focusTextField">
                                                         <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
@@ -44,7 +70,7 @@
                     </ul>
                 </div>
             </li>
-        </ul>
+        </ul>-->
     </div>
 </template>
 
@@ -160,7 +186,40 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .rubric {
+        display: grid;
+        grid-column-gap: .7rem;
+        grid-row-gap: .7rem;
+        max-width: max-content;
+        padding: 1rem;
+        position: relative;
+
+        &.mod-builder-full-view {
+            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        }
+    }
+    .treenode-header.mod-responsive {
+        grid-column-start: 1;
+    }
+    @media only screen and (min-width: 900px) {
+        .levels-table-header.mod-builder-full-view {
+            grid-column-start: 2;
+        }
+    }
+    @media only screen and (max-width: 899px) {
+        .rubric.mod-builder-full-view {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+        }
+    }
+    @media only screen and (max-width: 679px) {
+        .levels-table-header.mod-builder-full-view {
+            display: none;
+        }
+    }
+
+</style>
+<style lang="scss" scoped>
     .table-header-filler {
         display: none;
         flex: 1;
