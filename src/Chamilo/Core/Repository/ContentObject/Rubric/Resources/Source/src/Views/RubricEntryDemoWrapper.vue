@@ -38,6 +38,7 @@
     //import RubricEntry from './RubricEntry2.vue';
     import {TreeNodeEvaluation} from '../Util/interfaces';
     import store from '../store';
+    //import store from '../store2';
 
     interface EvaluatorEvaluations {
         evaluator: any;

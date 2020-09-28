@@ -9,6 +9,7 @@
     import Rubric from '../Domain/Rubric';
     import RubricBuilder from './RubricBuilder.vue';
     import store from '../store';
+    //import store from '../store2';
 
     @Component({
         components: {

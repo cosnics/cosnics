@@ -10,6 +10,7 @@
     import RubricEntry from './RubricEntry.vue';
     //import RubricEntry from './RubricEntry2.vue';
     import store from '../store';
+    //import store from '../store2';
 
     @Component({
         components: {
