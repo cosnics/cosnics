@@ -88,7 +88,7 @@
                     </template>
                 </template>
                 <template v-if="rubric.useScores">
-                    <div class="rubric-total-title mod-result-view">{{ $t('total') }} {{ $t('rubric') }}:</div>
+                    <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <ul class="evaluations">
                         <li v-for="evaluator in evaluators" class="score-result-view">
                             <div class="score-number-calc mod-result-view mod-rubric">{{ getRubricScore(evaluator) }}</div>
@@ -276,6 +276,10 @@
     .treenode-title-header.mod-res {
         flex: 1;
     }
+
+    .total-title.mod-res {
+        grid-column-start: 1;
+    }
 </style>
 
 <style lang="scss">
@@ -321,21 +325,10 @@
         align-items: center;
     }
 
-    .rubric-total-title.mod-result-view {
-        margin-right: 1rem;
-        flex: 1;
-        min-width: 25rem;
-        max-width: 25rem;
-        text-align: right;
-    }
     .rubric-results-view {
         /*max-width: 60em;*/
         position: relative;
         /*width: 60em;*/
-    }
-
-    .rubric-total.subtotal.mod-result-view {
-        justify-content: stretch;
     }
 
     .evaluator-table-header-date {

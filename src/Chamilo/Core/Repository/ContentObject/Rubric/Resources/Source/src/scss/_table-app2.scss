@@ -282,6 +282,14 @@
     display: none;
   }
 
+  .total-title {
+    align-self: center;
+    color: darken($score-dark, 20%);
+    font-weight: 700;
+    grid-column-start: 2;
+    text-align: right;
+  }
+
   @media only screen and (min-width: 900px) {
     .rubric-header {
       grid-column-start: 2;
@@ -298,9 +306,9 @@
       padding-left: 1.8rem;
     }
 
-    .criterium.mod-responsive {
-      flex-direction: column;
-      margin-bottom: 2em;
+    .total-title {
+      grid-column-start: 1;
+      margin-left: 1.8rem;
     }
   }
 
@@ -380,11 +388,6 @@
     font-size: 1.3rem;
     justify-content: flex-end;
     margin-top: .5em;
-  }
-
-  .cluster-total-title {
-    color: darken($score-dark, 20%);
-    font-weight: 700;
   }
 
   .rubric-total, .rubric-total-max {

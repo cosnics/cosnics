@@ -100,19 +100,19 @@
                         </div>
                     </template>
                 </template>
-                <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
-                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
-                </div>
+                <template v-if="rubric.useScores">
+                    <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
+                    <div class="treenode-score-calc mod-cluster">{{ score }}</div>
+                </template>
                 <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
             </template>
-            <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
-                <slot name="slot-inner"></slot>
-                <div class="rubric-total-title u-resize">{{ $t('total') }} {{ $t('rubric') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-rubric">{{ getRubricScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
-            </div>
-            <slot v-else name="slot-inner"></slot>
-            <div v-if="rubric.useScores" class="subtotal rubric-total-max mod-entry-view">
-                <div class="rubric-total-title u-resize">Maximum:</div><div class="score-entry-view"><div class="score-number-calc mod-rubric-max u-resize">{{ rubric.getMaximumScore() }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
-            </div>
+            <template v-if="rubric.useScores">
+                <!--<slot name="slot-inner"></slot>-->
+                <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
+                <div class="treenode-score-calc mod-rubric">{{ getRubricScore() }}</div>
+                <div class="total-title">Maximum:</div>
+                <div class="treenode-score-calc mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
+            </template>
         </div>
     </div>
 </template>
@@ -136,7 +136,6 @@
     @Component({})
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
-        private offset = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
@@ -147,19 +146,6 @@
 
         marked(rawString: string) {
             return DOMPurify.sanitize(marked(rawString));
-        }
-
-        calculateOffset() {
-            this.$nextTick(() => {
-                try {
-                    const clustersRect = document.querySelector('.clusters')?.getBoundingClientRect().right || 0;
-                    const scoreRect = document.querySelector('.score-number-calc.mod-criterium')?.getBoundingClientRect().right || 0;
-                    const offset = clustersRect - scoreRect;
-                    this.offset = offset > 0 ? -offset : 0;
-                } catch {
-                    this.offset = 0;
-                }
-            });
         }
 
         hasDefaultFeedback(ext: TreeNodeExt) {
@@ -284,15 +270,6 @@
             });
         }
 
-        destroyed() {
-            window.removeEventListener('resize', this.calculateOffset);
-        }
-
-        mounted() {
-            this.calculateOffset();
-            window.addEventListener('resize', this.calculateOffset);
-        }
-
         created() {
             this.initData();
         }
@@ -320,9 +297,6 @@
     }
     .treenode-header.mod-responsive {
         grid-column-start: 1;
-    }
-    .subtotal.mod-entry-view {
-        grid-column-start: 2;
     }
 
     .btn-show {
@@ -533,11 +507,6 @@
             }
         }
 
-        &.criterium-total {
-            height: 1.58em;
-            min-width: 3.5em;
-        }
-
         &.score-number-calc.mod-criterium {
             background: $score-lighter;
             line-height: 1.6em;
@@ -641,11 +610,6 @@
 
     }
 
-    @media only screen and (min-width: 680px) {
-        .u-resize {
-            transform: translateX(var(--offset));
-        }
-    }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
         .clusters.mod-entry-view {
@@ -672,11 +636,6 @@
         }
 
         .mod-entry-view {
-            &.criterium-total {
-                margin-right: .5em;
-                /*max-width: 41.25em;*/
-            }
-
             &.score-number-calc.mod-criterium {
                 /*margin-top: .335em;*/
                 margin-bottom: 0;
