@@ -11,38 +11,39 @@
     margin: 0 1em;
   }
 
-  .rubric-table-header {
-    background: $bg-color;
-    background: linear-gradient(to bottom, $bg-color 0, $bg-color 50%, change_color($bg-color, $alpha: 0) 100%);
-    padding-bottom: .4em;
-    padding-top: .8em;
+  .rubric-header {
+    background: #fff;
+    display: flex;
+    list-style: none;
+    margin-bottom: .75rem;
+    padding: 0;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 30;
   }
 
-  .levels-table-header, .evaluators-table-header {
-    align-content: center;
-    align-items: stretch;
-    display: flex;
-  }
-
-  .level-table-header-title, .evaluator-table-header-title {
+  .rubric-header-title {
     background-color: $level-header-color;
     border-radius: $border-radius;
     box-shadow: 0px 1px 2px #999;
-    color: white;
+    color: #fff;
+    flex: 1;
     font-size: 1.4rem;
-    line-height: 1.4em;
-    margin-right: .5em;
-    overflow: hidden;
-    padding: .4em .5em;
-    text-overflow: ellipsis;
+    line-height: 1.8rem;
+    padding: .8rem .7rem;
+
+    &:not(:last-child) {
+      margin-right: .7rem;
+    }
   }
 
-  .level-table-header-title {
-    flex: 1;
+  .rubric-header-fill {
+    background: #fff;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 20;
   }
 
   .treenode-title-header {
@@ -252,14 +253,17 @@
     transition: 200ms background;
   }
 
-  /*@media only screen and (min-width: 900px) {
-    .criterium-title-header.mod-responsive {
-      width: 19em;
-      min-width: 19em;
+  @media only screen and (min-width: 900px) {
+    .rubric-header {
+      grid-column-start: 2;
     }
-  }*/
+  }
 
   @media only screen and (max-width: 899px) {
+    .rubric-header.mod-responsive {
+      padding-left: 1.8rem;
+    }
+
     .criterium.mod-responsive {
       flex-direction: column;
       margin-bottom: 2em;
@@ -274,6 +278,12 @@
       display: block;
       flex: 1;
       line-height: 2.4em;
+    }
+  }
+
+  @media only screen and (max-width: 679px) {
+    .rubric-header.mod-responsive {
+      display: none;
     }
   }
 

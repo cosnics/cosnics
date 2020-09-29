@@ -45,11 +45,9 @@
                 <slot name="demoEvaluator"></slot>
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
             </ul>
-            <div class="levels-table-header mod-entry-view" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': rubric.useScores }">
-                <div v-for="level in rubric.levels" class="level-table-header-title mod-entry-view">
-                    {{ level.title }}
-                </div>
-            </div>
+            <ul class="rubric-header mod-responsive">
+                <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
+            </ul>
             <div class="rubric-header-fill"></div>
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
                 <div class="treenode-title-header mod-responsive mod-entry">
@@ -384,12 +382,6 @@
         opacity: 1;
     }
 
-    @media only screen and (min-width: 900px) {
-        .levels-table-header.mod-entry-view {
-            grid-column-start: 2;
-        }
-    }
-
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
@@ -403,16 +395,8 @@
             grid-column: 1 / -1;
         }
 
-        .levels-table-header.mod-entry-view {
-            grid-column: 1 / -1;
-        }
         .criterium-levels-wrapper {
             grid-column: 1 / -1;
-        }
-    }
-    @media only screen and (max-width: 679px) {
-        .levels-table-header.mod-entry-view {
-            display: none;
         }
     }
 </style>
@@ -483,10 +467,6 @@
     }
 
     .mod-entry-view {
-        &.rubric-table-header {
-            display: flex;
-        }
-
         &.app-header-tools {
             /*background-color: hsla(190, 35%, 75%, 0.2);*/
             flex: 1;
@@ -497,12 +477,6 @@
             &.mod-demo {
                 padding-left: 1.2em;
             }
-        }
-
-        &.levels-table-header {
-            flex: 1;
-            margin-left: 0;
-            margin-right: 0;
         }
 
         &.criterium-header {
@@ -534,7 +508,7 @@
         }
     }
 
-    .levels-table-header, .rubric-table, .app-tool-item {
+    .app-tool-item {
         transition: opacity 200ms;
 
         &.is-demo-inactive {
@@ -664,10 +638,6 @@
         }
 
         .mod-entry-view {
-            &.levels-table-header {
-                display: none;
-            }
-
             &.criterium-level:not(:first-child) {
                 margin-top: .3em;
             }
@@ -693,10 +663,6 @@
     }
 
     @media only screen and (min-width: 680px) {
-        .level-table-header-title.mod-entry-view {
-            max-width: 33rem;
-        }
-
         .criterium-level.mod-entry-view {
             background: hsla(0, 0, 98%, 1);
             border-radius: 3px;
@@ -711,10 +677,6 @@
             position: absolute;
             top: auto;
             width: 1px;
-        }
-
-        &.levels-table-header.mod-entry-view.is-using-scores {
-            margin-right: 4em;
         }
 
         .u-resize {
@@ -746,10 +708,6 @@
         }
 
         .mod-entry-view {
-         /*   &.levels-table-header {
-                display: none;
-            }*/
-
             &.criterium.mod-responsive {
                 margin-bottom: 1em;
             }
@@ -760,14 +718,6 @@
 
             &.category-row {
                 flex-direction: column;
-            }
-
-            &.rubric-table-header {
-                flex-direction: column;
-            }
-
-            &.levels-table-header {
-                margin-left: 1.2em;
             }
 
             &.criterium-level-header {
@@ -801,7 +751,7 @@
         }
 
         .rubric-entry-view.mod-closed {
-            .criterium-levels, .custom-feedback, .levels-table-header.mod-entry-view, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
+            .criterium-levels, .custom-feedback, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
                 padding-left: 1.55rem;
             }
         }
@@ -895,7 +845,6 @@
             max-width: 30rem;
             min-width: 20rem;
         }
-
 
         .treenode-header {
             h2, h3, h4 {

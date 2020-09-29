@@ -24,16 +24,11 @@
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view" @click="selectedCriterium = null">
             <div class="rubric mod-res">
-                <div class="table-header-filler mod-result-view" aria-hidden="true"></div>
-                <div class="evaluators-table-header">
-                    <template v-for="evaluator in evaluators">
-                        <div>
-                            <div class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
-                            <div class="evaluator-table-header-date" :class="{ 'mod-grades': !rubric.useScores }">{{ new Date(evaluator.date)|formatDate }}</div>
-                        </div>
-                    </template>
-                    <div v-if="rubric.useScores" class="evaluator-table-header-title mod-max">Max.</div>
-                </div>
+                <div class="rubric-header-fill" aria-hidden="true"></div>
+                <ul class="rubric-header">
+                    <li class="rubric-header-title mod-res" v-for="evaluator in evaluators" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
+                    <li v-if="rubric.useScores" class="rubric-header-title mod-res mod-max">Max.</li>
+                </ul>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                     <div class="treenode-title-header-wrap">
@@ -254,11 +249,19 @@
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
         }
     }
+    .rubric-header-title.mod-res {
+        text-align: right;
+
+        &.mod-grades {
+            text-align: left;
+        }
+
+        &.mod-max {
+            background: hsla(203, 33%, 60%, 1);
+        }
+    }
     .rubric-title {
         display: none;
-    }
-    .evaluators-table-header {
-        grid-column-start: 2;
     }
     .treenode-header {
         grid-column-start: 1;
@@ -276,10 +279,6 @@
 </style>
 
 <style lang="scss">
-    .rubric-table-header.mod-result-view {
-        display: flex;
-    }
-
     .table-header-filler.mod-result-view {
         display: block;
         margin-right: 1rem;
@@ -339,11 +338,6 @@
         justify-content: stretch;
     }
 
-    .evaluators-table-header {
-        align-items: flex-start;
-        /*justify-content: flex-end;*/
-    }
-
     .evaluator-table-header-date {
         color:hsla(200, 30%, 40%, 1);
         font-size:1.2rem;
@@ -352,25 +346,6 @@
 
         &.mod-grades {
             text-align: left;
-        }
-    }
-
-    .evaluator-table-header-title {
-        text-align: right;
-        white-space: nowrap;
-        width: 8.33em;
-
-        &.mod-grades {
-            text-align: left;
-        }
-
-        /*&.mod-grades {
-            width: 6.95em;
-        }*/
-
-        &.mod-max {
-            background: hsla(203, 33%, 60%, 1);
-            color: #fff;
         }
     }
 

@@ -1,11 +1,9 @@
 <template>
     <div class="rubric mod-builder-full-view" :style="{'--num-cols': rubric.levels.length}">
         <div class="table-header-filler" aria-hidden="true"></div>
-        <div class="levels-table-header mod-builder-full-view">
-            <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
-                {{level.title}}
-            </div>
-        </div>
+        <ul class="rubric-header mod-responsive">
+            <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
+        </ul>
         <h1 class="rubric-title">{{ rubric.title }}</h1>
         <template v-for="cluster in rubric.clusters">
             <div class="treenode-title-header mod-responsive">
@@ -208,19 +206,9 @@
     .treenode-header.mod-responsive {
         grid-column-start: 1;
     }
-    @media only screen and (min-width: 900px) {
-        .levels-table-header.mod-builder-full-view {
-            grid-column-start: 2;
-        }
-    }
     @media only screen and (max-width: 899px) {
         .rubric.mod-builder-full-view {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
-        }
-    }
-    @media only screen and (max-width: 679px) {
-        .levels-table-header.mod-builder-full-view {
-            display: none;
         }
     }
 
@@ -285,14 +273,6 @@
 
     @media only screen and (min-width: 680px) {
         .mod-builder-full-view {
-            &.levels-table-header {
-                margin-left: 1.335em;
-            }
-
-            &.level-table-header-title {
-                max-width: 33rem;
-            }
-
             &.criterium-level-header {
                 display: none;
 
@@ -328,10 +308,6 @@
 
             &.criterium.mod-responsive {
                 margin-bottom: 1em;
-            }
-
-            &.rubric-table-header {
-                display: none;
             }
 
             &.criterium-level {
@@ -378,17 +354,6 @@
     @media only screen and (min-width: 900px) {
         .table-header-filler {
             display: block;
-        }
-
-        .rubric-table-header.mod-builder-full-view {
-            display: flex;
-        }
-
-        .levels-table-header.mod-builder-full-view {
-            /*margin-left: 19.35em;*/
-            flex: 1;
-            margin-left: 0;
-
         }
 
         .criterium-title-header.mod-builder-full-view {
