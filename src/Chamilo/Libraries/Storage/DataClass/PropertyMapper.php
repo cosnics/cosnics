@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use stdClass;
+
 /**
  * @package Chamilo\Libraries\Storage\DataClass
  *
@@ -8,6 +10,78 @@ namespace Chamilo\Libraries\Storage\DataClass;
  */
 class PropertyMapper
 {
+    /**
+     * @param \stdClass $class
+     * @param string[] $propertyNames
+     *
+     * @return boolean|string
+     */
+    public function determineClassKeyValue($class, $propertyNames)
+    {
+        $keyValue = $class;
+        $numberOfProperties = count($propertyNames);
+
+        foreach ($propertyNames as $count => $propertyName)
+        {
+            if ($keyValue instanceof stdClass)
+            {
+                if (isset($keyValue->$propertyName))
+                {
+                    if ($count < ($numberOfProperties - 1))
+                    {
+                        $keyValue = $keyValue->$propertyName;
+                    }
+                    else
+                    {
+                        return $keyValue->$propertyName;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param \stdClass[] $dataClasses
+     * @param string $propertyName
+     *
+     * @return \stdClass[][]
+     */
+    public function groupClassByProperty($dataClasses, $propertyName)
+    {
+        $mappedDataClasses = array();
+
+        foreach ($dataClasses as $dataClass)
+        {
+            if (isset($dataClass->$propertyName))
+            {
+                $propertyValue = $dataClass->$propertyName;
+
+                if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
+                {
+                    if (!array_key_exists($dataClass->$propertyName, $mappedDataClasses))
+                    {
+                        $mappedDataClasses[$dataClass->$propertyName] = array();
+                    }
+
+                    $mappedDataClasses[$dataClass->$propertyName][] = $dataClass;
+                }
+            }
+        }
+
+        return $mappedDataClasses;
+    }
+
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
@@ -92,6 +166,30 @@ class PropertyMapper
         }
 
         return $mappedRecords;
+    }
+
+    /**
+     *
+     * @param \stdClass[] $classes
+     * @param string[] $propertyNames
+     *
+     * @return \stdClass[]
+     */
+    public function mapClassByProperties(array $classes, array $propertyNames)
+    {
+        $mappedClasses = array();
+
+        foreach ($classes as $class)
+        {
+            $keyValue = $this->determineClassKeyValue($class, $propertyNames);
+
+            if ($keyValue)
+            {
+                $mappedClasses[$keyValue] = $class;
+            }
+        }
+
+        return $mappedClasses;
     }
 
     /**
