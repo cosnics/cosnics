@@ -23,7 +23,7 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view" @click="selectedCriterium = null">
-            <div class="rubric mod-result-view">
+            <div class="rubric mod-res">
                 <div class="table-header-filler mod-result-view" aria-hidden="true"></div>
                 <div class="evaluators-table-header">
                     <template v-for="evaluator in evaluators">
@@ -36,8 +36,11 @@
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
-                    <div class="cluster-header treenode-header mod-result-view">
-                        <h2 class="cluster-title mod-result-view">{{ cluster.title }}</h2>
+                    <div class="treenode-title-header-wrap">
+                        <div class="treenode-title-header mod-res">
+                            <div class="treenode-title-header-pre"></div>
+                            <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
+                        </div>
                     </div>
                     <ul class="evaluations">
                         <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
@@ -51,8 +54,11 @@
                         </li>
                     </ul>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
-                        <div class="category-header treenode-header mod-result-view">
-                            <h3 class="category-title category-indicator mod-result-view">{{ category.title }}</h3>
+                        <div class="treenode-title-header-wrap">
+                            <div class="treenode-title-header mod-res" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                                <div class="treenode-title-header-pre mod-category"></div>
+                                <h2 class="treenode-title category-title">{{ category.title }}</h2>
+                            </div>
                         </div>
                         <ul class="evaluations">
                             <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
@@ -66,8 +72,11 @@
                             </li>
                         </ul>
                         <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
-                            <div class="criterium-header mod-result-view" @click.stop="selectedCriterium = criterium">
-                                <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
+                            <div class="treenode-title-header-wrap" @click.stop="selectedCriterium = criterium">
+                                <div class="treenode-title-header mod-res" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                                    <div class="treenode-title-header-pre mod-criterium"></div>
+                                    <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
+                                </div>
                             </div>
                             <ul class="evaluations">
                                 <li v-for="(evaluation, index) in evaluations" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="`${ !rubric.useScores ? evaluation.level.title : ''}${ evaluation.feedback ? ( !rubric.useScores ? '\n' : '') + $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
@@ -241,15 +250,28 @@
         padding: 1rem;
         position: relative;
 
-        &.mod-result-view {
+        &.mod-res {
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
         }
+    }
+    .rubric-title {
+        display: none;
     }
     .evaluators-table-header {
         grid-column-start: 2;
     }
     .treenode-header {
         grid-column-start: 1;
+    }
+    .treenode-title-header-wrap {
+        align-items: center;
+        display: flex;
+        grid-column-start: 1;
+        position: relative;
+    }
+
+    .treenode-title-header.mod-res {
+        flex: 1;
     }
 </style>
 

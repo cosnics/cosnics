@@ -52,9 +52,10 @@
             </div>
             <div class="rubric-header-fill"></div>
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
-                <div class="cluster-header treenode-header mod-responsive">
-                    <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
-                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-cluster" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                <div class="treenode-title-header mod-responsive mod-entry">
+                    <div class="treenode-title-header-pre"></div>
+                    <h2 class="treenode-title cluster-title">{{ cluster.title }}</h2>
+                    <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
                 </div>
@@ -62,9 +63,10 @@
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
-                    <div class="category-header treenode-header mod-responsive">
-                        <h3 class="category-title mod-entry-view category-indicator">{{ category.title }}</h3>
-                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show-feedback mod-category" :aria-label="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                    <div v-if="category.title" class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                        <div class="treenode-title-header-pre mod-category"></div>
+                        <h3 class="treenode-title category-title">{{ category.title }}</h3>
+                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
@@ -74,9 +76,10 @@
                         </div>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                        <div class="criterium-header treenode-header mod-responsive mod-entry-view" role="gridcell">
-                            <h4 :id="`criterium-${criterium.id}-title`" class="criterium-title mod-entry-view category-indicator">{{ criterium.title }}</h4>
-                            <button v-if="!showDefaultFeedbackFields" class="btn-show-feedback mod-criterium" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" :aria-expanded="ext.showDefaultFeedback ? 'true' : 'false'" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                        <div class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                            <div class="treenode-title-header-pre mod-criterium"></div>
+                            <h4 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title">{{ criterium.title }}</h4>
+                            <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
                         </div>
@@ -332,6 +335,53 @@
     }
     .subtotal.mod-entry-view {
         grid-column-start: 2;
+    }
+
+    .btn-show {
+        background: none;
+        border: 1px solid transparent;
+        color: #b3b3b3;
+        cursor: pointer;
+        display: flex;
+        height: 1.8rem;
+        justify-content: center;
+        margin-left: .5rem;
+        width: 1.8rem;
+
+        &:hover {
+            color: #999;
+        }
+
+        &:focus {
+            outline: none;
+
+            .btn-icon-show-feedback {
+                border: 1px solid $input-color-focus;
+            }
+        }
+    }
+
+    .btn-icon-show-feedback {
+        opacity: 0;
+        transform: rotate(90deg);
+        transition: transform 300ms;
+
+        &.is-feedback-visible {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        &::before {
+            content: '\f077';
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .treenode-title-header:hover .btn-icon-show-feedback {
+        opacity: 1;
     }
 
     @media only screen and (min-width: 900px) {
@@ -867,7 +917,7 @@
         }
     }
 
-    .treenode-header:hover .btn-icon-show-feedback {
+    /*.treenode-header:hover .btn-icon-show-feedback {
         opacity: 1;
     }
 
@@ -875,7 +925,7 @@
         opacity: 1;
     }
 
-    /*    .treenode-hover::before {
+        .treenode-hover::before {
         content: '';
         display: inline-block;
         width: 4px;

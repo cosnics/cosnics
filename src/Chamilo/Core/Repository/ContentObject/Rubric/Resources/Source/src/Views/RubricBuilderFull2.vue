@@ -8,16 +8,19 @@
         </div>
         <h1 class="rubric-title">{{ rubric.title }}</h1>
         <template v-for="cluster in rubric.clusters">
-            <div class="cluster-header treenode-header mod-responsive">
-                <h2 class="cluster-title mod-entry-view">{{ cluster.title }}</h2>
+            <div class="treenode-title-header mod-responsive">
+                <div class="treenode-title-header-pre"></div>
+                <h2 class="treenode-title cluster-title">{{ cluster.title }}</h2>
             </div>
             <template v-for="category in cluster.categories">
-                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="category-header treenode-header mod-responsive">
-                    <h3 class="category-title mod-entry-view">{{ category.title }}</h3>
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                    <div class="treenode-title-header-pre mod-category"></div>
+                    <h3 class="treenode-title category-title">{{ category.title }}</h3>
                 </div>
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
-                    <div class="criterium-title-header treenode-header mod-responsive mod-builder-full-view">
-                        <h4 class="criterium-title category-indicator mod-builder-full-view">{{ criterium.title }}</h4>
+                    <div class="treenode-title-header mod-responsive" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                        <div class="treenode-title-header-pre mod-criterium"></div>
+                        <h4 class="treenode-title criterium-title">{{ criterium.title }}</h4>
                     </div>
                     <ul class="criterium-levels mod-builder-full-view">
                         <li v-for="data in ext.choices" class="criterium-level mod-builder-full-view">
@@ -198,6 +201,9 @@
         &.mod-builder-full-view {
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
+    }
+    .rubric-title {
+        display: none;
     }
     .treenode-header.mod-responsive {
         grid-column-start: 1;
