@@ -20,19 +20,21 @@
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h4 class="treenode-title criterium-title">{{ criterium.title }}</h4>
                     </div>
-                    <ul class="criterium-levels mod-builder-full-view">
-                        <li v-for="data in ext.choices" class="criterium-level mod-builder-full-view">
-                            <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
-                                <div class="criterium-level-title mod-builder-full-view">
-                                    {{data.level.title}}
+                    <div class="treenode-rubric-input">
+                        <ul class="criterium-levels mod-builder-full-view">
+                            <li v-for="data in ext.choices" class="criterium-level mod-builder-full-view">
+                                <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
+                                    <div class="criterium-level-title mod-builder-full-view">
+                                        {{data.level.title}}
+                                    </div>
+                                    <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
                                 </div>
-                                <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
-                            </div>
-                            <div class="default-feedback-full-view" @click="focusTextField">
-                                <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
-                            </div>
-                        </li>
-                    </ul>
+                                <div class="default-feedback-full-view" @click="focusTextField">
+                                    <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </template>
             </template>
         </template>

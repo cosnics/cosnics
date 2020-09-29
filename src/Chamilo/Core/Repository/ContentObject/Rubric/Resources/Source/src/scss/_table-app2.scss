@@ -285,6 +285,10 @@
     .rubric-header.mod-responsive {
       display: none;
     }
+
+    .treenode-rubric-input {
+      grid-column: 1 / -1;
+    }
   }
 
   .subtotal {

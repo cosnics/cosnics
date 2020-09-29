@@ -79,7 +79,7 @@
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
                         </div>
-                        <div class="criterium-levels-wrapper">
+                        <div class="treenode-rubric-input">
                             <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>
                             <ul class="criterium-levels">
                                 <li v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)" class="criterium-level mod-entry-view" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
@@ -392,10 +392,6 @@
         .app-header-tools.mod-entry-view {
             grid-column: 1 / -1;
         }
-
-        .criterium-levels-wrapper {
-            grid-column: 1 / -1;
-        }
     }
 </style>
 <style lang="scss" scoped>
@@ -448,12 +444,6 @@
 
     .btn-show-feedback.mod-category {
         top: 0;
-    }
-
-    .criterium-levels-wrapper {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
     }
 
     .criterium-levels {
