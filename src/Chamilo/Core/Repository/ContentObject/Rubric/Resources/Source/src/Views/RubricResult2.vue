@@ -234,11 +234,10 @@
             return this.getTreeNodeEvaluation(criterium, evaluator).score || 0;
         }
 
-        getCategoryScore(category: Category, evaluator: any) : number {
-            const treeNodeScore = this.getTreeNodeEvaluation(category, evaluator).score;
-            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
+        getCategoryScore(category: Category, evaluation: any) : number {
+            if (typeof evaluation?.score === 'number') { return evaluation.score; }
             if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
+            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
         }
 
         getClusterScore(cluster: Cluster, evaluation: any) : number {
