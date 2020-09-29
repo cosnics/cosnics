@@ -105,6 +105,17 @@
     line-height: 1.69rem;
   }
 
+  .cluster-sep {
+    border-top: 1px solid hsla(204, 38%, 80%, 1);
+    grid-column: 1 / -1;
+    height: 1px;
+    margin: .5rem 0 .5rem 1.8rem;
+
+    &.mod-grades:last-child {
+      display: none;
+    }
+  }
+
   /*.rubric-title {
     display: none;
     font-size: 2.4rem;

@@ -35,6 +35,7 @@
                     </div>
                 </template>
             </template>
+            <div class="cluster-sep mod-bf"></div>
         </template>
         <!--<ul class="clusters mod-builder-full-view">
             <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
@@ -261,6 +262,10 @@
         &:focus {
             outline: none;
         }
+    }
+
+    .cluster-sep.mod-bf:last-child {
+        display: none;
     }
 
     @media only screen and (min-width: 680px) {

@@ -103,6 +103,7 @@
                 <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
                     <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
                 </div>
+                <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
             </template>
             <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
                 <slot name="slot-inner"></slot>
