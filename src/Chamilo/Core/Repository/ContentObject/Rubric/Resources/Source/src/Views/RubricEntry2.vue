@@ -57,7 +57,7 @@
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
                 </div>
-                <div v-if="!preview && evaluation !== null" class="custom-feedback mod-cluster" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
+                <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
@@ -68,10 +68,8 @@
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
-                    <div v-if="category.title" class="category-row treenode-hover mod-entry-view">
-                        <div v-if="!preview && evaluation !== null" class="custom-feedback mod-category" :class="[{ 'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }]">
-                            <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
-                        </div>
+                    <div v-if="!preview && evaluation && category.title && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
+                        <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
                         <div class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
@@ -105,15 +103,15 @@
                                     <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="text-hidden">{{ $t('points') }}</span></div>
                                 </div>
                             </ul>
-                            <div v-if="evaluation" class="custom-feedback mod-criterium" :class="[{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-scores': rubric.useScores, 'mod-default-feedback': hasDefaultFeedback(ext) }]">
+                            <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
                                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                             </div>
                         </div>
                     </template>
-                    <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
-                        <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
-                    </div>
                 </template>
+                <div v-if="rubric.useScores" class="subtotal cluster-total mod-entry-view">
+                    <div class="cluster-total-title u-resize">{{ $t('total') }} {{ $t('subsection') }}:</div><div class="score-entry-view u-resize"><div class="score-number-calc mod-cluster">{{ score }} <span class="text-hidden">{{ $t('points') }}</span></div></div>
+                </div>
             </template>
             <div v-if="rubric.useScores" class="subtotal rubric-total mod-entry-view">
                 <slot name="slot-inner"></slot>
@@ -574,20 +572,10 @@
         }
     }
 
-    .custom-feedback {
-        border-radius: $border-radius;
-        display: none;
-        margin-bottom: 1em;
-        margin-top: .5em;
-
-        &.mod-default-feedback {
-            margin-top: 1em;
-        }
-
-        &.is-feedback-visible {
-            display: block;
-        }
-
+    .treenode-custom-feedback {
+        grid-column-start: 2;
+        padding: .2rem;
+        z-index: 10;
     }
 
     .ta-custom-feedback {
@@ -598,7 +586,6 @@
         max-width: 70ch;
         padding: .2em .4em 0;
         resize: none;
-        width: 70ch;
         width: 100%;
 
         &::placeholder {
@@ -632,6 +619,10 @@
     }
 
     @media only screen and (max-width: 679px) {
+        .treenode-custom-feedback {
+            grid-column: 1 / -1;
+        }
+
         .rubric-entry-view {
             max-width: 75ch;
             /*width: 40em;*/
@@ -703,6 +694,11 @@
             }
         }
 
+        .treenode-custom-feedback {
+            grid-column-start: 1;
+            margin-left: 1.8rem;
+        }
+
         .criterium-levels {
             margin-left: 1em;
         }
@@ -751,7 +747,7 @@
         }
 
         .rubric-entry-view.mod-closed {
-            .criterium-levels, .custom-feedback, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
+            .criterium-levels, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
                 padding-left: 1.55rem;
             }
         }
@@ -765,24 +761,6 @@
         }
         .default-feedback-entry-view {
             max-width: 40em;
-        }
-
-        .custom-feedback {
-            margin: .5em .5em 0 1em;
-
-            &.mod-cluster {
-                margin: 0em .5em .5em 1em;
-            }
-
-            &.mod-category {
-                margin: 0em .5em .5em 1em;
-            }
-
-            &.mod-cluster, &.mod-category {
-                padding-top: .5em;
-                padding-bottom: .5em;
-                /*padding: .5em 0;*/
-            }
         }
     }
 
@@ -806,31 +784,6 @@
                 max-width: 30rem;
             }
         }
-
-        .custom-feedback {
-            margin-right: .5em;
-
-            &.mod-scores {
-                margin-right: 4.5em;
-            }
-
-            &.mod-cluster {
-                flex: 1;
-                align-self: center;
-                margin: .25em 0 .5em 0;
-            }
-
-            &.mod-category {
-                flex: 1;
-                align-self: center;
-            }
-
-            &.mod-criterium {
-                /*background: hsla(226, 19%, 72%, .3);*/
-                /*padding: .5em .2em;*/
-            }
-        }
-
 
         .cluster-header {
             align-self: center;
