@@ -456,6 +456,21 @@
             background: $score-lighter;
             color: #666;
         }
+
+        &.mod-cluster {
+            background: $score-dark;
+            color: #fff;
+        }
+
+        &.mod-rubric {
+            background: $score-darker;
+            color: #fff;
+        }
+
+        &.mod-rubric-max {
+            background: hsla(207, 40%, 35%, 1);
+            color: #fff;
+        }
     }
 
     @media only screen and (max-width: 899px) {
