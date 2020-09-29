@@ -20,106 +20,70 @@
 
 <template>
     <div id="app" :class="{ 'mod-sep': this.options.isDemo }">
-        <div v-if="rubric" class="rubric mod-result-view">
-            <link rel="stylesheet"
-                  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <div class="rubric-results-view" @click="selectedCriterium = null">
-                <div class="rubric-table-header mod-result-view">
-                    <div class="table-header-filler mod-result-view" aria-hidden="true"></div>
-                    <div class="evaluators-table-header">
-                        <template v-for="evaluator in evaluators">
-                            <div>
-                                <div class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
-                                <div class="evaluator-table-header-date" :class="{ 'mod-grades': !rubric.useScores }">{{ new Date(evaluator.date)|formatDate }}</div>
-                            </div>
-                        </template>
-                        <div v-if="rubric.useScores" class="evaluator-table-header-title mod-max">Max.</div>
-                    </div>
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <div v-if="rubric" class="rubric-results-view" @click="selectedCriterium = null">
+            <div class="rubric mod-result-view">
+                <div class="table-header-filler mod-result-view" aria-hidden="true"></div>
+                <div class="evaluators-table-header">
+                    <template v-for="evaluator in evaluators">
+                        <div>
+                            <div class="evaluator-table-header-title" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</div>
+                            <div class="evaluator-table-header-date" :class="{ 'mod-grades': !rubric.useScores }">{{ new Date(evaluator.date)|formatDate }}</div>
+                        </div>
+                    </template>
+                    <div v-if="rubric.useScores" class="evaluator-table-header-title mod-max">Max.</div>
                 </div>
                 <h1 class="rubric-title">{{ rubric.title }}</h1>
-                <ul class="clusters mod-result-view">
-                    <li v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)" class="cluster-list-item">
-                        <div class="cluster">
-                            <div class="cluster-row mod-result-view">
-                                <div class="cluster-header mod-result-view">
-                                    <h2 class="cluster-title mod-result-view">{{ cluster.title }}</h2>
-                                </div>
-                                <ul class="evaluations">
-                                    <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
-                                        <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ evaluation.feedback ? $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
-                                            <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info mod-cluster" />
-                                            {{ rubric.useScores ? getClusterScore(cluster, evaluation) : '' }}
-                                        </div>
-                                        <!--<b-tooltip v-if="getTreeNodeEvaluation(cluster, evaluator).feedback" triggers="hover focus" :target="`${cluster.id}-evaluation-${index}`" placement="bottom">
-                                            {{ getTreeNodeEvaluation(cluster, evaluator).feedback }}
-                                        </b-tooltip> -->
-                                    </li>
-                                    <li v-if="rubric.useScores" class="score-result-view">
-                                        <div class="score-number-calc mod-result-view mod-cluster-max">{{ maxScore }}</div>
-                                    </li>
-                                </ul>
+                <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
+                    <div class="cluster-header treenode-header mod-result-view">
+                        <h2 class="cluster-title mod-result-view">{{ cluster.title }}</h2>
+                    </div>
+                    <ul class="evaluations">
+                        <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
+                            <div class="score-number-calc mod-result-view mod-cluster" :id="`${cluster.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ evaluation.feedback ? $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
+                                <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info mod-cluster" />
+                                {{ rubric.useScores ? getClusterScore(cluster, evaluation) : '' }}
                             </div>
-                            <ul class="categories">
-                                <li v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
-                                    <div class="category">
-                                        <div v-if="category.title" class="category-row mod-result-view">
-                                            <div class="category-header mod-result-view">
-                                                <h3 class="category-title category-indicator mod-result-view">{{ category.title }}</h3>
-                                            </div>
-                                            <ul class="evaluations">
-                                                <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
-                                                    <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ evaluation.feedback ? $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
-                                                        <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info mod-category" />
-                                                        {{ rubric.useScores ? getCategoryScore(category, evaluation) : '' }}
-                                                    </div>
-                                                    <!--<b-tooltip v-if="getTreeNodeEvaluation(category, evaluator).feedback" triggers="hover focus" :target="`${category.id}-evaluation-${index}`" placement="bottom">
-                                                        {{ getTreeNodeEvaluation(category, evaluator).feedback }}
-                                                    </b-tooltip>-->
-                                                </li>
-                                                <li v-if="rubric.useScores" class="score-result-view">
-                                                    <div class="score-number-calc mod-result-view mod-category-max">{{ maxScore }}</div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
-                                            <li v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)" class="criterium-list-item mod-result-view" :class="{'is-selected': selectedCriterium === criterium}" @click.stop="selectedCriterium = criterium">
-                                                <div class="criterium mod-result-view">
-                                                    <div class="criterium-header mod-result-view">
-                                                        <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
-                                                    </div>
-                                                    <ul class="evaluations">
-                                                        <li v-for="(evaluation, index) in evaluations" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="`${ !rubric.useScores ? evaluation.level.title : ''}${ evaluation.feedback ? ( !rubric.useScores ? '\n' : '') + $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
-                                                            <div class="mod-result-view" :class="rubric.useScores ? 'score-number-calc mod-criterium' : 'graded-level'" :id="`${criterium.id}-evaluation-${index}`">
-                                                                <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info"/>
-                                                                {{ rubric.useScores ? evaluation.score : evaluation.level.title }}
-                                                            </div>
-                                                            <!--<b-tooltip v-if="getTreeNodeEvaluation(criterium, evaluator).feedback" triggers="hover focus" :target="`${criterium.id}-evaluation-${index}`" placement="bottom">
-                                                                {{ getTreeNodeEvaluation(criterium, evaluator).feedback }}
-                                                            </b-tooltip>-->
-                                                        </li>
-                                                        <li v-if="rubric.useScores" class="subtotal criterium-total mod-result-view">
-                                                            <div class="score-number-calc mod-result-view mod-criterium-max">{{ maxScore }}</div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                        </ul>
+                        </li>
+                        <li v-if="rubric.useScores" class="score-result-view">
+                            <div class="score-number-calc mod-result-view mod-cluster-max">{{ maxScore }}</div>
+                        </li>
+                    </ul>
+                    <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
+                        <div class="category-header treenode-header mod-result-view">
+                            <h3 class="category-title category-indicator mod-result-view">{{ category.title }}</h3>
+                        </div>
+                        <ul class="evaluations">
+                            <li v-for="(evaluation, index) in evaluations" class="score-result-view" :class="{ 'mod-empty': !rubric.useScores && !evaluation.feedback }">
+                                <div class="score-number-calc mod-result-view mod-category" :id="`${category.id}-evaluation-${index}`" :class="{ 'mod-grades': !rubric.useScores }" :title="`${ evaluation.feedback ? $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
+                                    <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info mod-category" />
+                                    {{ rubric.useScores ? getCategoryScore(category, evaluation) : '' }}
+                                </div>
+                            </li>
+                            <li v-if="rubric.useScores" class="score-result-view">
+                                <div class="score-number-calc mod-result-view mod-category-max">{{ maxScore }}</div>
+                            </li>
+                        </ul>
+                        <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
+                            <div class="criterium-header mod-result-view" @click.stop="selectedCriterium = criterium">
+                                <h4 class="criterium-title category-indicator">{{ criterium.title }}</h4>
+                            </div>
+                            <ul class="evaluations">
+                                <li v-for="(evaluation, index) in evaluations" class="subtotal criterium-total mod-result-view" :class="{'mod-grades': !rubric.useScores }" :title="`${ !rubric.useScores ? evaluation.level.title : ''}${ evaluation.feedback ? ( !rubric.useScores ? '\n' : '') + $t('extra-feedback') + ': ' + evaluation.feedback : ''}`">
+                                    <div class="mod-result-view" :class="rubric.useScores ? 'score-number-calc mod-criterium' : 'graded-level'" :id="`${criterium.id}-evaluation-${index}`">
+                                        <i v-if="evaluation.feedback" class="score-feedback-icon fa fa-info"/>
+                                        {{ rubric.useScores ? evaluation.score : evaluation.level.title }}
                                     </div>
                                 </li>
+                                <li v-if="rubric.useScores" class="subtotal criterium-total mod-result-view">
+                                    <div class="score-number-calc mod-result-view mod-criterium-max">{{ maxScore }}</div>
+                                </li>
                             </ul>
-                            <!--<div v-if="rubric.useScores" class="subtotal cluster-total mod-result-view">
-                                <div class="cluster-total-title">{{ $t('total') }} {{ cluster.title }}:</div>
-                                <div v-for="evaluator in evaluators" class="score-result-view">
-                                    <div class="score-number-calc mod-result-view mod-cluster">{{ getClusterScore(cluster, evaluator) }}</div>
-                                </div>
-                                <div class="score-result-view">
-                                    <div class="score-number-calc mod-result-view mod-cluster-max">{{ getClusterMaxScore(cluster) }}</div>
-                                </div>
-                            </div>-->
-                        </div>
-                    </li>
-                </ul>
-                <div v-if="rubric.useScores" class="subtotal rubric-total mod-result-view">
+                        </template>
+                    </template>
+                </template>
+                <template v-if="rubric.useScores">
                     <div class="rubric-total-title mod-result-view">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <ul class="evaluations">
                         <li v-for="evaluator in evaluators" class="score-result-view">
@@ -129,10 +93,9 @@
                             <div class="score-number-calc mod-result-view mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
                         </li>
                     </ul>
-                </div>
+                </template>
             </div>
             <criterium-results-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" :evaluations="getCriteriumRowData(selectedCriterium).evaluations" @close="selectedCriterium = null"></criterium-results-view>
-
         </div>
     </div>
 </template>
@@ -266,6 +229,30 @@
         }
     }
 </script>
+<style lang="scss">
+    .rubric-results-view {
+        display: flex;
+    }
+    .rubric {
+        display: grid;
+        grid-column-gap: .7rem;
+        grid-row-gap: .7rem;
+        max-width: max-content;
+        padding: 1rem;
+        position: relative;
+
+        &.mod-result-view {
+            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
+        }
+    }
+    .evaluators-table-header {
+        grid-column-start: 2;
+    }
+    .treenode-header {
+        grid-column-start: 1;
+    }
+</style>
+
 <style lang="scss">
     .rubric-table-header.mod-result-view {
         display: flex;
@@ -669,7 +656,7 @@
 
     @media only screen and (min-width: 900px) {
     }
-    .rubric.mod-result-view {
+    /*.rubric.mod-result-view {
         display: flex;
-    }
+    }*/
 </style>
