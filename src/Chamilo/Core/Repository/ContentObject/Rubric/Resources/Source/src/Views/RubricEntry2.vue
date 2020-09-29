@@ -80,32 +80,23 @@
                             </button>
                         </div>
                         <div class="treenode-rubric-input">
-                            <div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>
-                            <ul class="criterium-levels">
-                                <li v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)" class="criterium-level mod-entry-view" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
-                                    <div v-if="preview" :aria-checked="choice.level.isDefault" class="criterium-level-header mod-entry-view" :class="{ 'is-selected': isSelected }">
-                                        <div class="criterium-level-title mod-entry-view" :class="{ 'is-selected': isSelected }">
-                                            {{choice.title}}
-                                        </div>
-                                        <span v-if="rubric.useScores" class="score-number" :class="{ 'is-selected': isSelected }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
-                                        <span v-else class="graded-level" :class="{ 'is-selected': isSelected }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
-                                    </div>
-                                    <button v-else role="radio" :aria-checked="isSelected" class="criterium-level-header mod-entry-view btn-score-number" :class="{ 'is-selected': isSelected }" @click="selectLevel(evaluation, choice.level)">
-                                        <div class="criterium-level-title mod-entry-view" :class="{ 'is-selected': isSelected }">
-                                            {{choice.title}}
-                                        </div>
-                                        <span v-if="rubric.useScores" class="score-number" :class="{ 'is-selected': isSelected }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
-                                        <span v-else class="graded-level" :class="{ 'is-selected': isSelected }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
-                                    </button>
-                                    <div v-if="choice.feedback" class="default-feedback-entry-view" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" v-html="marked(choice.feedback)"></div>
-                                </li>
-                                <div v-if="rubric.useScores" class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
-                                    <div class="score-number-calc mod-entry-view mod-criterium"><span class="text-hidden">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="text-hidden">{{ $t('points') }}</span></div>
+                            <!--<div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>-->
+                            <div class="treenode-choices">
+                                <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
+                                    <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
+                                        <span class="treenode-level-title">{{ choice.level.title }}</span>
+                                        <span v-if="rubric.useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                        <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
+                                    </component>
+                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }">{{ choice.feedback }}</div>
                                 </div>
-                            </ul>
+                            </div>
                             <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
                                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                             </div>
+                        </div>
+                        <div v-if="rubric.useScores" class="treenode-score">
+                            <div class="treenode-score-calc mod-criterium"><span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="sr-only">{{ $t('points') }}</span></div>
                         </div>
                     </template>
                 </template>
@@ -380,6 +371,118 @@
         opacity: 1;
     }
 
+    .treenode-choice.mod-has-feedback {
+        background: #fafafa;
+        border-bottom: 1px solid #e0e0e0;
+        border-radius: $border-radius;
+        margin-bottom: .7rem;
+    }
+
+    .treenode-level {
+        &.is-selected {
+            background: $level-selected-color;
+            color: #fff;
+        }
+
+        &.mod-btn {
+            cursor: pointer;
+            outline: none;
+
+            &:hover, &:focus {
+                border: 1px solid $level-selected-color;
+
+                .treenode-level-icon-check {
+                    opacity: .5;
+                }
+            }
+
+            &.is-selected {
+                &:hover, &:focus {
+                    box-shadow: inset 0 0 0 1px white;
+
+                    .treenode-level-icon-check {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    .treenode-level-icon-check.fa {
+        font-size: 1.3rem;
+        opacity: 0.2;
+        transition: opacity 200ms, font-size 200ms;
+
+        &.is-selected {
+            font-size: 1.6rem;
+            opacity: 1;
+        }
+    }
+
+    .treenode-level-description {
+        display: none;
+        font-size: 1.3rem;
+        line-height: 1.8rem;
+        padding: .35rem .65rem;
+        white-space: pre-line;
+
+        &.is-feedback-visible {
+            display: block;
+        }
+    }
+
+    .treenode-custom-feedback {
+        grid-column-start: 2;
+        padding: .2rem;
+        z-index: 10;
+    }
+
+    .ta-custom-feedback {
+        border: 1px solid #d0d0d0;
+        border-radius: $border-radius;
+        display: block;
+        height: 2.2em;
+        max-width: 70ch;
+        padding: .2em .4em 0;
+        resize: none;
+        width: 100%;
+
+        &::placeholder {
+            color: #aaa;
+            opacity: 1;
+        }
+
+        &:hover {
+            border: 1px solid #aaa;
+        }
+
+        &:focus {
+            border: 1px solid $input-color-focus;
+        }
+
+        &:hover, &:focus {
+            outline: none;
+            resize: vertical;
+
+            &::placeholder {
+                color: #666;
+            }
+        }
+    }
+
+    .treenode-score-calc {
+        border-radius: $border-radius;
+        font-size: 1.8rem;
+        line-height: 2.88rem;
+        padding-right: .5rem;
+        text-align: right;
+
+        &.mod-criterium {
+            background: $score-lighter;
+            color: #666;
+        }
+    }
+
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
@@ -395,24 +498,6 @@
     }
 </style>
 <style lang="scss" scoped>
-    .cluster-row.mod-entry-view {
-        display: flex;
-        margin-left:.3em;
-    }
-
-    .cluster-title.mod-entry-view {
-        margin:.1em 0;margin-right:2.4rem;
-    }
-
-    .category-row.mod-entry-view {
-        display: flex;
-        margin-left:.3em;
-    }
-
-    .category-title.mod-entry-view {
-        margin: .1em 2.4rem .1em -.3em;
-    }
-
     .text-hidden {
         height: 1px;
         left: -10000px;
@@ -426,32 +511,12 @@
         position: relative;
     }
 
-    .cluster-header {
-        margin: .25em .5em 0 0em;
-        padding-left: 1.1em;
-        position: relative;
-    }
-
-    .category-header {
-        margin-right: .5em;
-        margin-top: .25em;
-        position: relative;
-    }
-
     .btn-show-feedback.mod-cluster {
         top: 0;
     }
 
     .btn-show-feedback.mod-category {
         top: 0;
-    }
-
-    .criterium-levels {
-        display: flex;
-        flex: 1;
-        list-style: none;
-        margin: 0;
-        padding: 0;
     }
 
     .mod-entry-view {
@@ -464,22 +529,6 @@
 
             &.mod-demo {
                 padding-left: 1.2em;
-            }
-        }
-
-        &.criterium-header {
-            /*border-top: 1px solid $score-light;*/
-        }
-
-        &.criterium-title {
-            margin-right: 2.4rem;
-        }
-
-        &.criterium-level-header {
-            width: 100%;
-
-            &.is-selected {
-                background: $level-selected-color;
             }
         }
 
@@ -529,12 +578,6 @@
         }
     }
 
-    .criterium-level-title, .score-number, .graded-level {
-        &.is-selected {
-            color: #fff;
-        }
-    }
-
     .fa.level-icon-check {
         opacity: 0.2;
         font-size: 1.3rem;
@@ -562,44 +605,6 @@
         }
     }
 
-    .treenode-custom-feedback {
-        grid-column-start: 2;
-        padding: .2rem;
-        z-index: 10;
-    }
-
-    .ta-custom-feedback {
-        border: 1px solid #d0d0d0;
-        border-radius: $border-radius;
-        display: block;
-        height: 2.2em;
-        max-width: 70ch;
-        padding: .2em .4em 0;
-        resize: none;
-        width: 100%;
-
-        &::placeholder {
-            color: #aaa;
-            opacity: 1;
-        }
-
-        &:hover {
-            border: 1px solid #aaa;
-        }
-
-        &:focus {
-            border: 1px solid $input-color-focus;
-        }
-
-        &:hover, &:focus {
-            outline: none;
-            resize: vertical;
-
-            &::placeholder {
-                color: #666;
-            }
-        }
-    }
 
     .rubric-entry-error {
         align-self: flex-start;
@@ -613,21 +618,16 @@
             grid-column: 1 / -1;
         }
 
+        .treenode-score {
+            display: none;
+        }
+
         .rubric-entry-view {
             max-width: 75ch;
             /*width: 40em;*/
         }
 
         .mod-entry-view {
-            &.criterium-level:not(:first-child) {
-                margin-top: .3em;
-            }
-
-            &.criterium-level {
-                /*margin-left: .8em;*/
-                /*max-width: 75ch;*/
-            }
-
             &.subtotal {
                 margin-right: .5em;
                 /*max-width: 75ch;*/
@@ -638,28 +638,9 @@
             }
         }
 
-        .criterium-levels {
-            flex-direction: column;
-        }
     }
 
     @media only screen and (min-width: 680px) {
-        .criterium-level.mod-entry-view {
-            background: hsla(0, 0, 98%, 1);
-            border-radius: 3px;
-            max-width: 33rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .criterium-level-title.mod-entry-view {
-            height: 1px;
-            left: -10000px;
-            overflow: hidden;
-            position: absolute;
-            top: auto;
-            width: 1px;
-        }
-
         .u-resize {
             transform: translateX(var(--offset));
         }
@@ -689,33 +670,7 @@
             margin-left: 1.8rem;
         }
 
-        .criterium-levels {
-            margin-left: 1em;
-        }
-
         .mod-entry-view {
-            &.criterium.mod-responsive {
-                margin-bottom: 1em;
-            }
-
-            &.cluster-row {
-                flex-direction: column;
-            }
-
-            &.category-row {
-                flex-direction: column;
-            }
-
-            &.criterium-level-header {
-                align-content: center;
-                display: flex;
-                justify-content: center;
-                justify-items: center;
-                /*margin-top: .5em;*/
-                padding: 0 .25em;
-                text-align: left;
-            }
-
             &.criterium-total {
                 margin-right: .5em;
                 /*max-width: 41.25em;*/
@@ -725,30 +680,16 @@
                 /*margin-top: .335em;*/
                 margin-bottom: 0;
             }
-
-            &.criterium-header {
-                max-width: 75ch;
-                margin-bottom: .25em;
-            }
         }
 
         .app-header-tools.mod-entry-view {
             padding-left: 1.55rem;
         }
 
-        .rubric-entry-view.mod-closed {
-            .criterium-levels, .cluster-title.mod-entry-view, .category-title.mod-entry-view, .criterium-title.mod-entry-view {
-                padding-left: 1.55rem;
-            }
-        }
-
         .btn-show-feedback {
             left: -.5em;
         }
 
-        &.cluster-header, &.category-header {
-            max-width: 75ch;
-        }
         .default-feedback-entry-view {
             max-width: 40em;
         }
@@ -757,36 +698,6 @@
     @media only screen and (min-width: 900px) {
         .rubric-entry-view {
             /*max-width: max-content;*/
-        }
-
-        .mod-entry-view {
-            &.criterium {
-                align-items: baseline;
-            }
-
-            &.criterium-level:nth-last-child(2) {
-                margin-right: 1em;
-            }
-
-            &.criterium-header {
-                flex: 1;
-                min-width: 20rem;
-                max-width: 30rem;
-            }
-        }
-
-        .cluster-header {
-            align-self: center;
-            flex: 1;
-            max-width: 30rem;
-            min-width: 20rem;
-        }
-
-        .category-header {
-            align-self: center;
-            flex: 1;
-            max-width: 30rem;
-            min-width: 20rem;
         }
 
         .treenode-header {

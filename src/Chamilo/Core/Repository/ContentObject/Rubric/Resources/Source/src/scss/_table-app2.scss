@@ -239,18 +239,36 @@
     }
   }*/
 
-  .criterium-level {
-    flex: 1;
-    margin-right: 0.5em;
+  .treenode-choices {
+    display: flex;
+    width: 100%;
   }
 
-  .criterium-level-header {
+  .treenode-choice {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-bottom: .5rem;
+    z-index: 30;
+
+    &:not(:last-child) {
+      margin-right: .7rem;
+    }
+  }
+
+  .treenode-level {
     background: #e6e6e6;
     border: 1px solid transparent;
     border-bottom-color: $score-light;
     border-radius: $border-radius;
+    font-size: 1.8rem;
     text-align: center;
     transition: 200ms background;
+    width: 100%;
+  }
+
+  .treenode-level-title {
+    display: none;
   }
 
   @media only screen and (min-width: 900px) {
@@ -260,24 +278,18 @@
   }
 
   @media only screen and (max-width: 899px) {
-    .rubric-header.mod-responsive {
+    .treenode-title-header.mod-responsive {
+      grid-column: 1 / -1;
+      max-width: 75ch;
+    }
+
+    .rubric-header.mod-responsive, .treenode-choices {
       padding-left: 1.8rem;
     }
 
     .criterium.mod-responsive {
       flex-direction: column;
       margin-bottom: 2em;
-    }
-
-/*    .criterium-title-header.mod-responsive {
-      max-width: 40em;
-    }*/
-
-    .criterium-level-title {
-      color: darken($title-color, 5%);
-      display: block;
-      flex: 1;
-      line-height: 2.4em;
     }
   }
 
@@ -289,17 +301,29 @@
     .treenode-rubric-input {
       grid-column: 1 / -1;
     }
+
+    .treenode-choices {
+      flex-direction: column;
+    }
+
+    .treenode-choice:not(:last-child) {
+      margin-right: 0;
+    }
+
+    .treenode-level {
+      display: flex;
+      justify-content: space-between;
+      padding: .1rem .6rem;
+    }
+
+    .treenode-level-title {
+      display: block;
+      font-size: 1.3rem;
+    }
   }
 
   .subtotal {
     align-items: baseline;
-  }
-
-  .score-number, .graded-level {
-    border-radius: $border-radius;
-    color: #666;
-    font-size: 1.8rem;
-    line-height: 1.6em;
   }
 
   .score-number-calc {

@@ -1,5 +1,5 @@
 <template>
-    <div class="rubric mod-builder-full-view" :style="{'--num-cols': rubric.levels.length}">
+    <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
         <div class="table-header-filler" aria-hidden="true"></div>
         <ul class="rubric-header mod-responsive">
             <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
@@ -21,19 +21,17 @@
                         <h4 class="treenode-title criterium-title">{{ criterium.title }}</h4>
                     </div>
                     <div class="treenode-rubric-input">
-                        <ul class="criterium-levels mod-builder-full-view">
-                            <li v-for="data in ext.choices" class="criterium-level mod-builder-full-view">
-                                <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
-                                    <div class="criterium-level-title mod-builder-full-view">
-                                        {{data.level.title}}
-                                    </div>
-                                    <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
+                        <div class="treenode-choices">
+                            <div class="treenode-choice" v-for="choice in ext.choices">
+                                <div class="treenode-level mod-bf">
+                                    <span class="treenode-level-title">{{ choice.level.title }}</span>
+                                    <span v-if="rubric.useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
                                 </div>
-                                <div class="default-feedback-full-view" @click="focusTextField">
-                                    <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
+                                <div class="treenode-level-description-input" @click="focusTextField">
+                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
                                 </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </div>
                 </template>
             </template>
@@ -198,18 +196,33 @@
         padding: 1rem;
         position: relative;
 
-        &.mod-builder-full-view {
+        &.mod-bf {
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
     }
     .rubric-title {
         display: none;
     }
+
+    .treenode-level-description-input {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        flex: 1;
+        line-height: 1.8rem;
+        padding: 0;
+
+        &:hover, &:focus-within {
+            border: 1px solid $score-dark;
+        }
+    }
+
     .treenode-header.mod-responsive {
         grid-column-start: 1;
     }
+
     @media only screen and (max-width: 899px) {
-        .rubric.mod-builder-full-view {
+        .rubric.mod-bf {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
         }
     }
@@ -222,29 +235,6 @@
         margin-right: .4em;
         max-width: 30rem;
         min-width: 20rem;
-    }
-
-    .mod-builder-full-view {
-
-        &.criterium-level {
-            display: flex;
-            flex-direction: column;
-        }
-
-        &.criterium-level-header {
-            border-color: transparent;
-            cursor: text;
-            background: #e0e0e0;
-        }
-
-        &.cluster-title, &.category-title {
-            max-width: 70ch;
-            margin-bottom: .2em;
-        }
-
-        &.criterium-title {
-            margin-right: .5em;
-        }
     }
 
     .default-feedback-full-view {
@@ -274,94 +264,31 @@
     }
 
     @media only screen and (min-width: 680px) {
-        .mod-builder-full-view {
-            &.criterium-level-header {
-                display: none;
-
-                /*&.is-using-scores {
-                    display: block;
-                }*/
-            }
-
-            &.criterium-level-title {
-                height: 1px;
-                left: -10000px;
-                overflow: hidden;
-                position: absolute;
-                top: auto;
-                width: 1px;
-            }
-
-            &.criterium.mod-responsive {
-                margin-bottom: 1em;
-            }
-
-            &.criterium-level {
-                max-width: 33rem;
-            }
+        .treenode-level.mod-bf {
+            display: none;
         }
+
     }
 
     @media only screen and (max-width: 679px) {
-        .mod-builder-full-view {
-            &.rubric {
-                margin: 0;
-            }
-
-            &.criterium.mod-responsive {
-                margin-bottom: 1em;
-            }
-
-            &.criterium-level {
-                margin-bottom: .5em;
-            }
-
-            &.criterium-level-header {
-                display: flex;
-                margin: .3em 0 -.1em .75em;
-                padding-left: .25em;
-                padding-right: .3em;
-                text-align: left;
-            }
-
-            &.criterium-levels {
-                margin-left: 0;
-            }
-        }
-
         .default-feedback-full-view {
             margin-left: .75em;
             margin-top: -.25em;
         }
     }
+
     @media only screen and (min-width: 680px) and (max-width: 899px) {
-        .clusters.mod-builder-full-view {
-            margin-top: 1em;
-        }
-        .criterium-level.mod-builder-full-view {
-            margin-top: .3em;
-        }
     }
 
     @media only screen and (max-width: 899px) {
         .rubric.mod-builder-full-view {
             margin: 0 -.5em;
         }
-
-        .criterium-level-header.mod-builder-full-view {
-            margin-top: .25em;
-        }
     }
 
     @media only screen and (min-width: 900px) {
         .table-header-filler {
             display: block;
-        }
-
-        .criterium-title-header.mod-builder-full-view {
-            flex: 1;
-            max-width: 30rem;
-            min-width: 20rem;
         }
     }
 </style>
