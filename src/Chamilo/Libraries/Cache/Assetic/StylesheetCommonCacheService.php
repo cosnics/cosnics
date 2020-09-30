@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Utilities\CssFileAsset;
  * @package Chamilo\Libraries\Cache\Assetic
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StylesheetCacheService extends AsseticCacheService
+class StylesheetCommonCacheService extends AsseticCacheService
 {
 
     /**
@@ -85,7 +85,7 @@ class StylesheetCacheService extends AsseticCacheService
      */
     protected function getCachePath()
     {
-        return $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Libraries\Resources\Stylesheet');
+        return $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Libraries\Resources\Stylesheet\Common');
     }
 
     /**

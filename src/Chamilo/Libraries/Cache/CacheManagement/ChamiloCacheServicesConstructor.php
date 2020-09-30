@@ -25,7 +25,7 @@ use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
-use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
+use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
@@ -149,7 +149,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_stylesheets', new StylesheetCacheService(
+            'chamilo_stylesheets', new StylesheetCommonCacheService(
                 $pathBuilder, $configurablePathBuilder, $this->container->get(ThemePathBuilder::class)
             )
         );

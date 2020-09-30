@@ -19,7 +19,8 @@
             <tag name="chamilo.libraries.cache.cache_management.cache_services_constructor"/>
         </service>
 
-        <service id="Chamilo\Libraries\Cache\Assetic\StylesheetCacheService"/>
+        <service id="Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService"/>
+        <service id="Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService"/>
         <service id="Chamilo\Libraries\Cache\Assetic\JavascriptCacheService"/>
 
     </services>

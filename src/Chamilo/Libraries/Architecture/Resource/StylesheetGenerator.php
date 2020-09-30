@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Resource;
 
-use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
+use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
+use Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,51 +14,103 @@ class StylesheetGenerator
 {
 
     /**
-     * @var \Chamilo\Libraries\Cache\Assetic\StylesheetCacheService
+     * @var \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService
      */
-    private $stylesheetCacheService;
+    private $stylesheetCommonCacheService;
 
     /**
-     *
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCacheService $stylesheetCacheService
+     * @var \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService
      */
-    public function __construct(StylesheetCacheService $stylesheetCacheService)
+    private $styleSheetVendorCacheService;
+
+    /**
+     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService $stylesheetCommonCacheService
+     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService $styleSheetVendorCacheService
+     */
+    public function __construct(
+        StylesheetCommonCacheService $stylesheetCommonCacheService,
+        StylesheetVendorCacheService $styleSheetVendorCacheService
+    )
     {
-        $this->stylesheetCacheService = $stylesheetCacheService;
+        $this->stylesheetCommonCacheService = $stylesheetCommonCacheService;
+        $this->styleSheetVendorCacheService = $styleSheetVendorCacheService;
     }
 
     /**
-     * @param string $theme
+     * @param string $content
      */
-    public function run(string $theme)
+    public function run(string $content)
     {
         $response = new Response();
-        $stylesheetCacheService = $this->getStylesheetCacheService();
-        $stylesheetCacheService->getThemePathBuilder()->setTheme($theme);
 
         $response->setPublic();
         // 24 hours cache
         $response->setMaxAge(3600 * 24);
         $response->headers->set('Content-Type', 'text/css');
-        $response->setContent($stylesheetCacheService->get());
+        $response->setContent($content);
         $response->send();
 
         exit();
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\Assetic\StylesheetCacheService
+     * @return \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService
      */
-    public function getStylesheetCacheService(): StylesheetCacheService
+    public function getStyleSheetVendorCacheService(): StylesheetVendorCacheService
     {
-        return $this->stylesheetCacheService;
+        return $this->styleSheetVendorCacheService;
     }
 
     /**
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCacheService $stylesheetCacheService
+     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService $styleSheetVendorCacheService
+     *
+     * @return StylesheetGenerator
      */
-    public function setStylesheetCacheService(StylesheetCacheService $stylesheetCacheService): void
+    public function setStyleSheetVendorCacheService(
+        StylesheetVendorCacheService $styleSheetVendorCacheService
+    ): StylesheetGenerator
     {
-        $this->stylesheetCacheService = $stylesheetCacheService;
+        $this->styleSheetVendorCacheService = $styleSheetVendorCacheService;
+
+        return $this;
     }
+
+    /**
+     * @return \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService
+     */
+    public function getStylesheetCommonCacheService(): StylesheetCommonCacheService
+    {
+        return $this->stylesheetCommonCacheService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService $stylesheetCommonCacheService
+     *
+     * @return StylesheetGenerator
+     */
+    public function setStylesheetCommonCacheService(
+        StylesheetCommonCacheService $stylesheetCommonCacheService
+    ): StylesheetGenerator
+    {
+        $this->stylesheetCommonCacheService = $stylesheetCommonCacheService;
+
+        return $this;
+    }
+
+    /**
+     * @param string $theme
+     */
+    public function runCommon(string $theme)
+    {
+        $stylesheetCacheService = $this->getStylesheetCommonCacheService();
+        $stylesheetCacheService->getThemePathBuilder()->setTheme($theme);
+
+        $this->run($stylesheetCacheService->get());
+    }
+
+    public function runVendor()
+    {
+        $this->run($this->getStylesheetVendorCacheService()->get());
+    }
+
 }
