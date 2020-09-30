@@ -359,42 +359,12 @@
 </style>
 
 <style lang="scss">
-    .table-header-filler.mod-result-view {
-        display: block;
-        margin-right: 1rem;
-        max-width: 25rem;
-        min-width: 25rem;
-    }
-
     .evaluations {
         display: flex;
         flex: 1;
         list-style: none;
         margin: 0;
         padding: 0;
-    }
-
-    .cluster-header.mod-result-view, .category-header.mod-result-view {
-        margin-right: 1rem;
-    }
-
-    .cluster-title.mod-result-view {
-        flex: 1;
-        margin-left: .2em;
-    }
-
-    .category-title.mod-result-view {
-        flex: 1;
-    }
-
-    .cluster-row.mod-result-view {
-        display: flex;
-        align-items: center;
-    }
-
-    .category-row.mod-result-view {
-        display: flex;
-        align-items: center;
     }
 
     .rubric-results-view {
@@ -414,26 +384,6 @@
         }
     }
 
-    .mod-result-view {
-        &.criterium {
-            align-items: center;
-        }
-
-        &.graded-level {
-            background: $score-lighter;
-            border: 1px solid transparent;
-            border-radius: $border-radius;
-            color: #666;
-            font-size: 1.2rem;
-            line-height: 2.3em;
-            overflow: hidden;
-            padding: .133em .2em 0 .45em;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 100%;
-        }
-    }
-
     .score-feedback-icon {
         color: #2787ad;
         font-size: 1.1rem;
@@ -445,15 +395,6 @@
 
         &.mod-cluster {
             color: hsla(0, 0%, 100%, .85);
-        }
-    }
-
-    .score-result-view {
-        margin-right: .5em;
-        width: 9.0em;
-
-        &.mod-empty {
-            opacity: 0;
         }
     }
 </style>
