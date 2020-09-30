@@ -34,7 +34,7 @@ class JavascriptGenerator
         $response->setPublic();
         // 24 hours cache
         $response->setMaxAge(3600 * 24);
-        $response->headers->set('Content-Type', 'text/javascript');
+        $response->headers->set('Content-Type', 'application/javascript');
         $response->setContent($this->getJavascriptCacheService()->get());
         $response->send();
 
