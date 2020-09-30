@@ -302,10 +302,6 @@
         margin-right: 1rem;
     }
 
-    .clusters.mod-result-view {
-        margin-top: .75em;
-    }
-
     .cluster-title.mod-result-view {
         flex: 1;
         margin-left: .2em;

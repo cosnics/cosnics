@@ -611,25 +611,6 @@
             max-width: 75ch;
             /*width: 40em;*/
         }
-
-        .mod-entry-view {
-            &.subtotal {
-                margin-right: .5em;
-                /*max-width: 75ch;*/
-            }
-
-            &.criterium-total {
-                display: none;
-            }
-        }
-
-    }
-
-
-    @media only screen and (min-width: 680px) and (max-width: 899px) {
-        .clusters.mod-entry-view {
-            margin-top: 1em;
-        }
     }
 
     @media only screen and (max-width: 899px) {
