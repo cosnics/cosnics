@@ -116,11 +116,6 @@
     }
   }
 
-  .criterium-header {
-    margin-right: 0.5em;
-    position: relative;
-  }
-
   .treenode-choices {
     display: flex;
     width: 100%;
@@ -135,6 +130,20 @@
 
     &:not(:last-child) {
       margin-right: .7rem;
+    }
+  }
+
+  .treenode-feedback-icon {
+    color: hsla(197, 63%, 42%, 1);
+    font-size: 1.1rem;
+    margin-right: .1rem;
+
+    &.fa-info {
+      font-size: 1.6rem;
+    }
+
+    &.mod-cluster {
+      color: #fff;
     }
   }
 
@@ -210,72 +219,5 @@
       display: block;
       font-size: 1.3rem;
     }
-  }
-
-  .subtotal {
-    align-items: baseline;
-  }
-
-  .score-number-calc {
-    border: 1px solid transparent;
-    border-radius: $border-radius;
-    color: #666;
-    font-size: 1.8rem;
-    line-height: 1.2em;
-    padding-right: .3em;
-    text-align: right;
-
-    &.mod-cluster {
-      background: $score-dark;
-      color: #fff;
-    }
-
-    &.mod-rubric {
-      background: $score-darker;
-      color: #fff;
-    }
-
-    &.mod-criterium-max {
-      background: hsla(213, 30%, 93%, 1);
-    }
-
-    &.mod-category-max {
-      background: hsla(203, 32%, 83%, 1);
-    }
-
-    &.mod-cluster-max {
-      background: hsla(203, 33%, 60%, 1);
-      color: #fff;
-    }
-
-    &.mod-rubric-max {
-      background: hsla(207, 40%, 35%, 1);
-      color: #fff;
-    }
-  }
-
-  .cluster-total {
-    display: flex;
-    font-size: 1.3rem;
-    justify-content: flex-end;
-    margin-top: .5em;
-  }
-
-  .rubric-total, .rubric-total-max {
-    display: flex;
-    font-size: 1.3rem;
-    justify-content: flex-end;
-    margin-top: .25em;
-    padding-bottom: .3em;
-    padding-top: .3em;
-  }
-
-  .rubric-total {
-    border-top: 1px solid $score-light;
-  }
-
-  .rubric-total-title {
-    color: $score-darker;
-    font-weight: 700;
   }
 }
