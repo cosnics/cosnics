@@ -106,8 +106,8 @@
                 </template>
                 <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
             </template>
+            <slot name="slot-inner"></slot>
             <template v-if="rubric.useScores">
-                <!--<slot name="slot-inner"></slot>-->
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <div class="treenode-score-calc mod-rubric">{{ getRubricScore() }}</div>
                 <div class="total-title">Maximum:</div>
@@ -479,6 +479,10 @@
         .btn-icon-show-feedback {
             opacity: 1;
         }
+    }
+
+    .treenode-score {
+        z-index: 10;
     }
 
     .treenode-score-calc {
