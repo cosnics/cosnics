@@ -41,7 +41,7 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div class="rubric" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, rubric.useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
-            <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
+            <ul class="rubric-tools">
                 <slot name="demoEvaluator"></slot>
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
             </ul>
@@ -285,22 +285,28 @@
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
 
-        & > :not(.app-header-tools) {
+        & > :not(.rubric-tools) {
             transition: opacity 200ms;
         }
 
-        &.is-demo-inactive > :not(.app-header-tools) {
+        &.is-demo-inactive > :not(.rubric-tools) {
             opacity: 0;
             pointer-events: none;
         }
     }
 
-    .app-header-tools.mod-entry-view {
+    .rubric-tools {
+        align-items: center;
+        background: #fff;
+        display: flex;
         grid-column-start: 1;
-
-        &.mod-demo {
-            padding-left: 1.2em;
-        }
+        height: 100%;
+        list-style: none;
+        margin: 0;
+        padding-left: 1.75rem;
+        position: sticky;
+        top: 0;
+        z-index: 30;
     }
 
     .treenode-header.mod-responsive {
