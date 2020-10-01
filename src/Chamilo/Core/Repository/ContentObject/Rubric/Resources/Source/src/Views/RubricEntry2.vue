@@ -534,8 +534,10 @@
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
         }
 
-        .app-header-tools.mod-entry-view {
+        .rubric-tools {
             grid-column: 1 / -1;
+            max-width: 75ch;
+            position: initial;
         }
 
         .treenode-custom-feedback {
