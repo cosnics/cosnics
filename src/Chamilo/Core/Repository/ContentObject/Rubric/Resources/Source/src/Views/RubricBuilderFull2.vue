@@ -1,3 +1,16 @@
+<i18n>
+{
+    "en": {
+        "points": "points"
+    },
+    "fr": {
+        "points": "points"
+    },
+    "nl": {
+        "points": "punten"
+    }
+}
+</i18n>
 <template>
     <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
         <div class="table-header-filler" aria-hidden="true"></div>
