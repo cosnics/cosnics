@@ -50,21 +50,21 @@
             </ul>
             <div class="rubric-header-fill"></div>
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
-                <div class="treenode-title-header mod-responsive mod-entry">
+                <div class="treenode-title-header mod-responsive mod-entry" :class="{ 'is-highlighted': highlightedTreeNode === cluster }" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                     <div class="treenode-title-header-pre"></div>
                     <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
                     <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
                 </div>
-                <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
+                <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
-                    <div v-if="category.title" class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                    <div v-if="category.title" class="treenode-title-header mod-responsive mod-entry" :class="{ 'is-highlighted': highlightedTreeNode === category }" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-title-header-pre mod-category"></div>
                         <h2 class="treenode-title category-title">{{ category.title }}</h2>
-                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
+                        <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
@@ -72,14 +72,14 @@
                         <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext)}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext), 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div class="treenode-title-header-pre mod-criterium"></div>
                             <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title">{{ criterium.title }}</h3>
                             <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
                         </div>
-                        <div class="treenode-rubric-input">
+                        <div class="treenode-rubric-input" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <!--<div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>-->
                             <div class="treenode-choices">
                                 <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
@@ -136,6 +136,7 @@
     @Component({})
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
+        private highlightedTreeNode: TreeNode|null = null;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
@@ -354,6 +355,25 @@
         opacity: 1;
     }
 
+    .treenode-title-header.mod-entry {
+        position: relative;
+
+        &::before {
+            border-left: .5rem solid transparent;
+            bottom: -.5rem;
+            content: '';
+            left: -1rem;
+            position: absolute;
+            right: -.7rem;
+            top: -.5rem;
+            transition: 200ms border;
+        }
+
+        &.is-highlighted::before {
+            border-color: hsla(204, 45%, 53%, 1);
+        }
+    }
+
     .rubric-entry-error {
         align-self: flex-start;
         /*border-bottom: 2px solid red;*/
@@ -510,7 +530,6 @@
     @media only screen and (min-width: 900px) {
         .treenode-title-header.mod-entry {
             align-self: center;
-            position: relative;
 
             &.is-feedback-visible {
                 align-self: initial;
