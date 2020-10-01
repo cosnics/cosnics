@@ -206,7 +206,6 @@
   @media only screen and (max-width: 899px) {
     .treenode-title-header.mod-responsive {
       grid-column: 1 / -1;
-      max-width: 75ch;
     }
 
     .rubric-header.mod-responsive, .treenode-choices {
@@ -216,6 +215,12 @@
     .total-title {
       grid-column-start: 1;
       margin-left: 1.8rem;
+    }
+  }
+
+  @media only screen and (min-width: 680px) and (max-width: 899px) {
+    .treenode-title-header.mod-responsive {
+      max-width: 75ch; // todo: preserve max-width on size below 680px;
     }
   }
 
