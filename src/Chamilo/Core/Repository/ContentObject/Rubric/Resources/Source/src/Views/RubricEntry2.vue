@@ -536,6 +536,13 @@
         }
     }
 
+    @media only screen and (min-width: 680px) and (max-width: 899px) {
+        .btn-show {
+            margin-left: -.5rem;
+            order: -1;
+        }
+    }
+
     @media only screen and (max-width: 679px) {
         .treenode-custom-feedback {
             grid-column: 1 / -1;
