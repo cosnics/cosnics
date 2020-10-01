@@ -158,9 +158,12 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     {
         if (is_null($this->platform_group_cache[$user_id]))
         {
-            $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+         /*   $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
                 $user_id, 
-                true);
+                true);*/
+
+            $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_ids_recursive(
+                $user_id);
         }
         return $this->platform_group_cache[$user_id];
     }

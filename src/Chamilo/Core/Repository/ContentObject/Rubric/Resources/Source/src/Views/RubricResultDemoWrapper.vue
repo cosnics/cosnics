@@ -8,7 +8,9 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import RubricResult from './RubricResult.vue';
+    //import RubricResult from './RubricResult2.vue';
     import store from '../store';
+    //import store from '../store2';
     import {TreeNodeEvaluation, TreeNodeResult} from '../Util/interfaces';
     import Criterium from "../Domain/Criterium";
 

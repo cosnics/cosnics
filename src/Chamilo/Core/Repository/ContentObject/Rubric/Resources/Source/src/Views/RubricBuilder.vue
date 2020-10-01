@@ -662,6 +662,7 @@
 
     .criterium-details {
         color: #333;
+        display: flex;
         position: relative;
         padding-bottom: 10px;
         padding-top: 10px;

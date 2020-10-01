@@ -176,9 +176,7 @@
                                     <div class="title">{{ level.title }}</div>
                                     <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(selectedCriterium, level) }}</div>
                                 </div>
-                                <div class="choice-feedback">
-                                    {{ rubric.getChoice(selectedCriterium, level).feedback }}
-                                </div>
+                                <div class="choice-feedback" v-html="marked(rubric.getChoice(selectedCriterium, level).feedback)"></div>
                             </li>
                         </ul>
                     </div>
@@ -195,6 +193,8 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
+    import * as marked from 'marked';
+    import DOMPurify from 'dompurify';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
@@ -212,6 +212,9 @@
                 return value.charAt(0).toUpperCase() + value.slice(1);
             },
             formatDate: function (date: Date) {
+                if (isNaN(date.getDate())) { // todo: dates with timezone offsets, e.g. +0200 result in NaN data in Safari. For now, return an empty string.
+                    return '';
+                }
                 return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
             }
         }
@@ -223,6 +226,10 @@
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
         @Prop({type: Array, default: () => []}) readonly treeNodeResults!: TreeNodeResult[];
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
+        }
 
         getCriteriumMaxScore(criterium: Criterium) : number {
             const scores : number[] = [0];
@@ -540,7 +547,16 @@
 
     .choice-feedback {
         line-height: 1.5em;
-        white-space: pre-line;
+        /*white-space: pre-line;*/
+
+        ul {
+            list-style: disc;
+        }
+
+        ul, ol {
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
     }
 
     @media only screen and (min-width: 900px) {

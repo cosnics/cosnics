@@ -1,7 +1,24 @@
+<i18n>
+{
+    "en": {
+        "formatting": "Formatting"
+    },
+    "fr": {
+        "formatting": "Mise en forme"
+    },
+    "nl": {
+        "formatting": "Opmaakhulp"
+    }
+}
+</i18n>
+
 <template>
     <div class="rubric mod-builder-full-view">
+        <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-builder-full-view"></formatting-help>
         <div class="rubric-table-header mod-builder-full-view">
-            <div class="table-header-filler" aria-hidden="true"></div>
+            <div class="table-header-filler" style="align-self: center">
+                <div><a href="#" @click.prevent="showFormatting=!showFormatting" style="text-decoration: none;margin-left: 1.5rem">{{ $t('formatting') }}</a></div>
+            </div>
             <div class="levels-table-header mod-builder-full-view">
                 <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
                     {{level.title}}
@@ -56,6 +73,7 @@
     import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
     import DataConnector from '../Connector/DataConnector';
+    import FormattingHelp from '../Components/FormattingHelp.vue';
     import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {
@@ -70,13 +88,14 @@
 
     @Component({
         components: {
-            FeedbackField
+            FeedbackField, FormattingHelp
         },
     })
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
         private criteriaData: CriteriumExt[] = [];
+        private showFormatting = false;
 
         constructor() {
             super();
@@ -181,6 +200,19 @@
 
         &.criterium-title {
             margin-right: .5em;
+        }
+
+        &.formatting-help {
+            background: #fff;
+            border: 1px solid #aaa;
+            margin-right: 1rem;
+            padding-right: 1rem;
+            padding-top: 1rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 30rem;
+            z-index: 1000;
         }
     }
 

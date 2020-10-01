@@ -8,7 +8,9 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import RubricEntry from './RubricEntry.vue';
+    //import RubricEntry from './RubricEntry2.vue';
     import store from '../store';
+    //import store from '../store2';
 
     @Component({
         components: {

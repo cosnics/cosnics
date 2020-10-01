@@ -51,8 +51,7 @@
                             <span v-if="useScores" class="score-number" :class="{ 'is-selected': isSelected(choice.level) }" :aria-label="`${ choice.score } ${ $t('points') }`"><!--<i class="check fa"/>-->{{ choice.score }}</span>
                             <span v-else class="graded-level" :class="{ 'is-selected': isSelected(choice.level) }"><i class="level-icon-check fa fa-check" :class="{ 'is-selected': isSelected(choice.level) }" /></span>
                         </button>
-                        <div v-if="choice.feedback" class="default-feedback-entry-view" :class="feedbackVisibleClass">
-                            {{ choice.feedback }}
+                        <div v-if="choice.feedback" class="default-feedback-entry-view" :class="feedbackVisibleClass" v-html="marked(choice.feedback)">
                         </div>
                     </li>
                     <div v-if="useScores" class="subtotal criterium-total mod-entry-view" role="gridcell" :aria-describedby="`criterium-${criterium.id}-title`">
@@ -72,8 +71,11 @@
     import Level from '../Domain/Level';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
+    import * as marked from 'marked';
+    import DOMPurify from 'dompurify';
 
-    @Component({})
+    @Component({
+    })
     export default class CriteriumEntry extends Vue {
         @Prop({type: String, default: 'div'}) readonly tag!: String;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
@@ -83,6 +85,10 @@
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
         @Prop({type: Boolean, default: false}) readonly useScores!: boolean;
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
+        }
 
         get hasDefaultFeedback() {
             return this.ext.choices.map(choice => choice.feedback.length).reduce((v1: number, v2: number) => v1 + v2, 0) > 0;
@@ -113,3 +119,19 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .default-feedback-entry-view {
+        white-space: initial!important;
+    }
+    .default-feedback-entry-view {
+        ul {
+            list-style: disc;
+        }
+
+        ul, ol {
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
+    }
+</style>
