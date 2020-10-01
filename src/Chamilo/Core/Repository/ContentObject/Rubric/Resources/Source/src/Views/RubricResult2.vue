@@ -87,6 +87,7 @@
                             </div>
                         </template>
                     </template>
+                    <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
                 </template>
                 <template v-if="rubric.useScores">
                     <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
