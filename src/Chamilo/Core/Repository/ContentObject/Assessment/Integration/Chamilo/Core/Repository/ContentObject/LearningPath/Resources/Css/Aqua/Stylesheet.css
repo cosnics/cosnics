@@ -1,7 +1,7 @@
 .ui-slider {
     border: 1px solid #dddddd;
-    width: 50%;
     height: 20px;
+    width: 50%;
 }
 
 .ui-slider .ui-slider-range {
@@ -9,11 +9,11 @@
 }
 
 .ui-slider .ui-slider-handle {
-    border: 1px solid #406e8e;
     background: white;
+    border: 1px solid #406e8e;
     height: 20px;
-    width: 30px;
-    top: -.1em;
-    text-align: center;
     padding-top: 1px;
+    text-align: center;
+    top: -.1em;
+    width: 30px;
 }

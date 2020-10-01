@@ -114,8 +114,8 @@
 .event-container-source-49, .event-container-source-50, .event-container-source-51, .event-container-source-52,
 .event-container-source-53, .event-container-source-54 {
     background-image: radial-gradient(white 15%, transparent 16%), radial-gradient(white 15%, transparent 16%);
-    background-size: 14px 14px;
     background-position: 0 0, 7px 7px;
+    background-size: 14px 14px;
 }
 
 .event-container-source-55, .event-container-source-56, .event-container-source-57, .event-container-source-58,
@@ -138,9 +138,9 @@
 }
 
 h4 .calendar-event-range {
+    font-size: 11px;
     font-style: italic;
     font-weight: normal;
-    font-size: 11px;
 }
 
 /*****************************
@@ -151,9 +151,9 @@ h4 .calendar-event-range {
 }
 
 .table-calendar, .table-calendar-mini {
-    width: 100%;
     border-spacing: 0px;
     table-layout: fixed;
+    width: 100%;
 }
 
 .table-calendar {
@@ -162,11 +162,11 @@ h4 .calendar-event-range {
 }
 
 .table-calendar thead tr th {
-    line-height: 35px;
-    text-transform: uppercase;
-    text-align: center;
     color: dimgray;
+    line-height: 35px;
     padding: 10px 0px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .table-calendar tbody tr {
@@ -176,9 +176,9 @@ h4 .calendar-event-range {
 
 .table-calendar tbody tr td {
     border: 1px solid #dadada;
+    height: 60px;
     margin: 0px;
     padding: 4px;
-    height: 60px;
     vertical-align: top;
 }
 
@@ -225,9 +225,9 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-week tbody tr td.table-calendar-week-hours, .table-calendar-day tbody tr td.table-calendar-day-hours {
-    text-align: right;
-    padding: 5px 10px;
     color: dimgray;
+    padding: 5px 10px;
+    text-align: right;
 }
 
 .table-calendar-mini-container {
@@ -245,10 +245,10 @@ h4 .calendar-event-range {
 
 .table-calendar-mini tbody tr td {
     border: 0px solid white;
-    text-align: center;
-    vertical-align: middle;
     height: 26px;
     padding: 2px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .table-calendar-mini a, .table-calendar-mini a:hover, .table-calendar-mini a:visited {
@@ -266,14 +266,14 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-mini tbody tr td span.badge a {
-    font-weight: bold;
     color: white;
+    font-weight: bold;
     text-decoration: none;
 }
 
 .table-calendar-mini-navigation {
-    text-align: center;
     background-color: white;
+    text-align: center;
 }
 
 .table-calendar-mini-navigation span.glyphicon {
@@ -289,22 +289,22 @@ h4 .calendar-event-range {
 }
 
 .table-calendar .event-container, .table-calendar-legend .event-container, .table-calendar-list .event-container {
-    vertical-align: middle;
     border-radius: 5px;
+    vertical-align: middle;
 }
 
 .table-calendar .event-container {
-    display: block;
-    padding: 2px 8px;
-    margin-bottom: 4px;
     color: white;
+    display: block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
 }
 
 .table-calendar-legend .event-container, .table-calendar-list .event-container {
     display: inline-block;
-    width: 18px;
     height: 18px;
     margin-right: 15px;
+    width: 18px;
 }
 
 .table-calendar-list .event-container {
@@ -321,10 +321,10 @@ h4 .calendar-event-range {
 }
 
 .table-calendar .event-data, .table-calendar-legend .list-group-item .event-source, .table-calendar-list .event-data {
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .table-calendar .event-container-source, .table-calendar .event-container-source a, .table-calendar td.table-calendar-disabled .event-container-source a {
@@ -353,10 +353,10 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-list .table-calendar-list-date {
-    font-weight: bold;
     font-size: 12px;
-    padding: 5px 15px 5px 15px;
+    font-weight: bold;
     height: 30px;
+    padding: 5px 15px 5px 15px;
 }
 
 .table-calendar-list .table-calendar-list-events .row {
@@ -364,10 +364,10 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-list a {
-    font-weight: normal;
-    text-decoration: none;
     color: black;
+    font-weight: normal;
     line-height: 18px;
+    text-decoration: none;
 }
 
 .table-calendar-list .list-group {
@@ -385,10 +385,10 @@ h4 .calendar-event-range {
 }
 
 .table-calendar-list .list-group .list-group-item .list-event-item-data {
-    white-space: nowrap;
+    height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 20px;
+    white-space: nowrap;
 }
 
 .table-calendar-list .list-group .list-group-item .list-event-item-time {
@@ -410,16 +410,16 @@ h4 .calendar-event-range {
     border: 1px solid #f5f5f5;
     -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    padding: 5px 8px;
     color: #333333;
+    padding: 5px 8px;
     text-align: left;
 }
 
 .tooltip-calendar .event-data {
-    white-space: normal;
     overflow: visible;
-    text-overflow: clip;
     text-align: left;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .tooltip-calendar.top .tooltip-arrow {
@@ -455,9 +455,9 @@ h4 .calendar-event-range {
 }
 
 .tooltip-calendar .event-container {
-    width: 18px;
-    height: 18px;
     display: inline-block;
+    height: 18px;
+    width: 18px;
 }
 
 .tooltip-calendar .tooltip-event-container {

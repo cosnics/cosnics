@@ -7,6 +7,6 @@
 }
 
 .panel.panel-default.panel-rss-feed ul.list-group li.list-group-item {
-    border-width: 0px;
     border-top-width: 1px;
+    border-width: 0px;
 }

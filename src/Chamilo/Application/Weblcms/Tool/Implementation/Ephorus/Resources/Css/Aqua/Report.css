@@ -1,263 +1,263 @@
 .reportoptions, .option {
-	color: Black;
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	float: right;
+    color: Black;
+    float: right;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .ephorus-report-result a {
-	color: #FF9B04;
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	font-decoration: underline;
+    color: #ff9b04;
+    font-decoration: underline;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .summary_table {
-	color: Black;
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	width: 100%;
+    color: Black;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    width: 100%;
 }
 
 .summary_origineel {
-	color: Black;
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	width: 100%;
+    color: Black;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    width: 100%;
 }
 
 .summary_found {
-	color: #FF9B04;
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
+    color: #ff9b04;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .summary_added {
-	color: #000000;
-	font-size: 12px;
-	font-family: Ubuntu, Arial;
+    color: #000000;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .summary_removed {
-	color: #0099FF;
-	font-style: italic;
-	font-size: 12px;
-	font-family: Ubuntu, Arial;
+    color: #0099ff;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    font-style: italic;
 }
 
 .origineel {
-	border: solid 1px #CCCCCC;
-	background-color: white;
+    background-color: white;
+    border: solid 1px #cccccc;
 }
 
 .RadioTable INPUT {
-	width: 16px;
-	height: 16px;
+    height: 16px;
+    width: 16px;
 }
 
 .result_origineel {
-	border-left: solid 1px #CCCCCC;
-	border-bottom: solid 1px #CCCCCC;
-	color: #FF9B04;
-	background-color: White;
-	text-decoration: none;
-	padding-left: 6px;
-	padding-top: 1px;
-	font-size: 12px;
-	font-family: Ubuntu, Arial;
+    background-color: White;
+    border-bottom: solid 1px #cccccc;
+    border-left: solid 1px #cccccc;
+    color: #ff9b04;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    padding-left: 6px;
+    padding-top: 1px;
+    text-decoration: none;
 }
 
 .result_vergelijk {
-	border-left: solid 1px #CCCCCC;
-	border-right: solid 1px #CCCCCC;
-	border-bottom: solid 1px #CCCCCC;
-	background-color: White;
-	color: black;
-	padding-left: 6px;
-	padding-top: 1px;
-	font-size: 12px;
-	font-family: Ubuntu, Arial;
+    background-color: White;
+    border-bottom: solid 1px #cccccc;
+    border-left: solid 1px #cccccc;
+    border-right: solid 1px #cccccc;
+    color: black;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    padding-left: 6px;
+    padding-top: 1px;
 }
 
 .result_header_origineel {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	font-weight: bold;
-	color: #0099FF;
-	background-color: White;
-	border-left: solid 1px #CCCCCC;
-	border-top: solid 1px #CCCCCC;
-	border-bottom: solid 1px #CCCCCC;
-	padding-left: 6px;
-	padding-top: 1px;
-	padding-bottom: 1px;
+    background-color: White;
+    border-bottom: solid 1px #cccccc;
+    border-left: solid 1px #cccccc;
+    border-top: solid 1px #cccccc;
+    color: #0099ff;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    font-weight: bold;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-top: 1px;
 }
 
 .result_header_vergelijk {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	color: #0099FF;
-	font-weight: bold;
-	background-color: White;
-	border-left: solid 1px #CCCCCC;
-	border-right: solid 1px #CCCCCC;
-	border-top: solid 1px #CCCCCC;
-	border-bottom: solid 1px #CCCCCC;
-	padding-left: 6px;
-	padding-top: 1px;
-	padding-bottom: 1px;
+    background-color: White;
+    border-bottom: solid 1px #cccccc;
+    border-left: solid 1px #cccccc;
+    border-right: solid 1px #cccccc;
+    border-top: solid 1px #cccccc;
+    color: #0099ff;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    font-weight: bold;
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-top: 1px;
 }
 
 .report_table_header {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	color: #0099FF;
-	font-weight: bold;
+    color: #0099ff;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .report_table_font {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	color: #000000;
+    color: #000000;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .report_table_header_b {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	color: black;
-	font-weight: bold;
+    color: black;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .report_table_font_b, td {
-	font-family: Ubuntu, Arial;
-	font-size: 12px;
-	color: black;
+    color: black;
+    font-family: Ubuntu, Arial;
+    font-size: 12px;
 }
 
 .minFont {
-	font-family: Ubuntu, Verdana;
-	font-size: 7pt;
+    font-family: Ubuntu, Verdana;
+    font-size: 7pt;
 }
 
 .tableTop {
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	padding-left: 5px;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
+    padding-left: 5px;
 }
 
 .tableTop2 {
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	padding-left: 5px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
+    padding-left: 5px;
 }
 
 .tableLeft {
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	padding-left: 5px;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
+    padding-left: 5px;
 }
 
 .tableMiddle {
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
 }
 
 .tableRight {
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	padding-left: 5px;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
+    padding-left: 5px;
 }
 
 .tableRight1 {
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-left-color: #ffffff;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	padding-left: 5px;
+    border-left-color: #ffffff;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
+    padding-left: 5px;
 }
 
 .tableBottom {
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
 }
 
 .tableFull {
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
-	border-bottom-color: #CCCCCC;
-	border-bottom-width: 1px;
-	border-bottom-style: Solid;
+    border-bottom-color: #cccccc;
+    border-bottom-style: Solid;
+    border-bottom-width: 1px;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
 }
 
 .tableFullTop {
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
-	border-left-color: #CCCCCC;
-	border-left-width: 1px;
-	border-left-style: Solid;
+    border-left-color: #cccccc;
+    border-left-style: Solid;
+    border-left-width: 1px;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
 }
 
 .tableTopRight {
-	border-top-color: #CCCCCC;
-	border-top-width: 1px;
-	border-top-style: Solid;
-	border-right-color: #CCCCCC;
-	border-right-width: 1px;
-	border-right-style: Solid;
+    border-right-color: #cccccc;
+    border-right-style: Solid;
+    border-right-width: 1px;
+    border-top-color: #cccccc;
+    border-top-style: Solid;
+    border-top-width: 1px;
 }
 
 .button_print {
-	text-decoration: none;
-	font-weight: bold;
-	color: #4171B5;
-	outline: none;
-	padding-bottom: 20px;
+    color: #4171b5;
+    font-weight: bold;
+    outline: none;
+    padding-bottom: 20px;
+    text-decoration: none;
 }
 
 .ephorus-diff-header {
-	background-color: #f5f5f5;
-	color: #333;
+    background-color: #f5f5f5;
+    color: #333333;
 }

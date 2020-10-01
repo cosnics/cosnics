@@ -13,8 +13,8 @@
 }
 
 .portal-block-content .table-calendar-day {
-    margin-bottom: 0px;
     border-top-width: 0px;
+    margin-bottom: 0px;
     table-layout: auto;
 }
 

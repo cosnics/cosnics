@@ -71,9 +71,9 @@
 }
 
 span.badge-date {
+    background-color: #337ab7;
     font-weight: normal;
     opacity: 0.5;
-    background-color: #337ab7;
 }
 
 @media ( min-width: 768px) {
@@ -103,11 +103,11 @@ span.badge-date {
 
 .notifications-block-new-label {
     background-color: red;
-    color: white !important;
     border-radius: 20px;
-    padding: 5px 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    color: white !important;
     font-size: 10px;
     margin-left: 5px;
     margin-right: 5px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px 8px;
 }

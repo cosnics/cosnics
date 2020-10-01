@@ -7,13 +7,13 @@
 }
 
 .table.table-assessment-question-form > tbody > tr > td {
-    padding-bottom: 20px;
     border: 0px solid white;
+    padding-bottom: 20px;
 }
 
 .form-assessment-extra-container {
-    margin-top: 10px;
     display: none;
+    margin-top: 10px;
 }
 
 .table.table-assessment-question-form > tbody > tr > td.table-cell-selection,

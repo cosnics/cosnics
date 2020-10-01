@@ -8,8 +8,8 @@
 
 .media-element-js-playback-error .btn-toolbar, .office-viewer-container .btn-action-toolbar,
 .text-container .btn-action-toolbar {
-    margin-top: 15px;
     margin-bottom: 0px;
+    margin-top: 15px;
 }
 
 .media-element-js-container .alert {
@@ -21,10 +21,10 @@
 }
 
 .office-viewer-container .office-viewer-content .office-viewer-sidebar {
+    display: none;
     position: fixed;
     top: 15px;
     z-index: 10001;
-    display: none;
 }
 
 .office-viewer-container .office-viewer-content .office-viewer-sidebar .office-viewer-full-screen-message {
@@ -34,27 +34,27 @@
 
 .office-viewer-container .office-viewer-content .office-viewer-frame,
 .text-container .text-frame {
-    width: 100%;
-    height: 600px;
     border: 1px solid #dddddd;
+    height: 600px;
+    width: 100%;
 }
 
 .office-viewer-container .office-viewer-frame.office-viewer-frame-embed {
-    max-width: 816px;
     border-left: 0px solid #dddddd;
     border-top: 0px solid #dddddd;
+    max-width: 816px;
 }
 
 .office-viewer-container .office-viewer-frame.office-viewer-frame-full-screen {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
     border: 0px solid white;
+    bottom: 0px;
+    height: 100%;
+    left: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 100%;
+    z-index: 10000;
 }
 
 @media ( max-width: 767px) {

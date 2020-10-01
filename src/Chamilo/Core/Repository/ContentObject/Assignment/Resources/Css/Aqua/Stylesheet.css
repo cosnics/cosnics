@@ -3,7 +3,7 @@
 }
 
 .assignment {
-    border: 2px solid #B5CAE7;
+    border: 2px solid #b5cae7;
     margin: 5px 5px 5px 5px;
     padding: 5px 5px 5px 5px;
 }
@@ -47,7 +47,7 @@
 }
 
 .submitted-details {
-    color: #AAAAAA;
+    color: #aaaaaa;
     font-size: 12px;
     margin-bottom: 15px;
 }
@@ -66,8 +66,8 @@
 }
 
 .score-success {
-    color: white;
     background-color: #28a745;
+    color: white;
     font-size: 14px;
 }
 
@@ -79,8 +79,8 @@
 .score-form {
     background-color: #f9f9f9;
     border: 1px solid #dddddd;
-    padding: 2px 8px;
     margin-bottom: 15px;
+    padding: 2px 8px;
 }
 
 .btn-score {

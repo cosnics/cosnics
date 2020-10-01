@@ -1,1 +1,1 @@
-.ui-slider{border:1px solid #ddd;width:50%;height:20px}.ui-slider .ui-slider-range{background:#406e8e}.ui-slider .ui-slider-handle{border:1px solid #406e8e;background:white;height:20px;width:30px;top:-.1em;text-align:center;padding-top:1px}
+.ui-slider{border:1px solid #ddd;height:20px;width:50%}.ui-slider .ui-slider-range{background:#406e8e}.ui-slider .ui-slider-handle{background:#fff;border:1px solid #406e8e;height:20px;padding-top:1px;text-align:center;top:-.1em;width:30px}
