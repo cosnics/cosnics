@@ -278,9 +278,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
         ContentObjectPublication $contentObjectPublication, User $currentUser
     )
     {
-        $subscribedGroupIds = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
-            $currentUser->getId(), true
-        );
+        $subscribedGroupIds = \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_ids_recursive($currentUser->getId());
 
         $targetGroupIds = $this->getTargetPlatformGroupIds($contentObjectPublication);
 

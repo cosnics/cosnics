@@ -159,6 +159,59 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return static::retrieves(Group::class_name(), $parameters);
     }
 
+    public static $allSubscribedGroupIdsCache = array();
+    public static function retrieve_all_subscribed_groups_ids_recursive(int $user_id)
+    {
+        if (isset(self::$allSubscribedGroupIdsCache[$user_id]))
+            return self::$allSubscribedGroupIdsCache[$user_id];
+
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID));
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id));
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, null);
+        $records = static::records(GroupRelUser::class_name(), $parameters)->as_array();
+
+        $mapper = function ($record)
+        {
+            return $record[GroupRelUser::PROPERTY_GROUP_ID];
+        };
+
+        $groupIds = array_map($mapper, $records);
+
+        $groupIds = array_unique(array_merge($groupIds, self::retrieve_all_parent_ids_from_children_in_array_recursive($groupIds)));
+
+        self::$allSubscribedGroupIdsCache[$user_id] = $groupIds;
+
+        return $groupIds;
+    }
+
+    public static function retrieve_all_parent_ids_from_children_in_array_recursive(array $childIds)
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID));
+        $condition = new InCondition(
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
+            $childIds);
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, null);
+        $records = static::records(Group::class_name(), $parameters)->as_array();
+        $mapper = function ($record)
+        {
+            return $record[Group::PROPERTY_PARENT_ID];
+        };
+        $filter = function($id) {
+            return $id != 0;
+        };
+
+        $parent_ids = array_filter(array_map($mapper, $records), $filter);
+
+        if(count($parent_ids) == 0)
+            return $parent_ids;
+
+        return array_merge($parent_ids, self::retrieve_all_parent_ids_from_children_in_array_recursive($parent_ids));
+    }
+
     public static $allSubscribedGroupsCache = array();
 
     public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
