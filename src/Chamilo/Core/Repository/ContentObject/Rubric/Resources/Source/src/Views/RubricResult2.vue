@@ -23,17 +23,17 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view">
-            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (rubric.useScores ? 1 : 0)}" @click.stop="selectedCriterium = null">
+            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedCriterium = null">
                 <div class="rubric-header-fill" aria-hidden="true"></div>
                 <ul class="rubric-header mod-res">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
-                        :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
-                    <li v-if="rubric.useScores" class="rubric-header-title mod-res mod-max">Max.</li>
+                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
+                    <li v-if="useScores" class="rubric-header-title mod-res mod-max">Max.</li>
                 </ul>
                 <ul class="rubric-header mod-res mod-date">
                     <li class="rubric-header-date" v-for="evaluator in evaluators"
-                        :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
-                    <li v-if="rubric.useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
+                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
+                    <li v-if="useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                     <div class="treenode-title-header-wrap">
@@ -44,11 +44,11 @@
                     </div>
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': !rubric.useScores, 'mod-hide': !rubric.useScores && !evaluation.feedback}" v-for="evaluation in evaluations">
+                            <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                {{ rubric.useScores ? getClusterScore(cluster, evaluation) : '' }}
+                                {{ useScores ? getClusterScore(cluster, evaluation) : '' }}
                             </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="rubric.useScores">{{ maxScore }}</div>
+                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">{{ maxScore }}</div>
                         </div>
                     </div>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
@@ -61,11 +61,11 @@
                             </div>
                             <div class="treenode-rubric-results">
                                 <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-category" :class="{'mod-grades': !rubric.useScores, 'mod-hide': !rubric.useScores && !evaluation.feedback}" v-for="evaluation in evaluations">
+                                    <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ rubric.useScores ? getCategoryScore(category, evaluation) : '' }}
+                                        {{ useScores ? getCategoryScore(category, evaluation) : '' }}
                                     </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="rubric.useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">{{ maxScore }}</div>
                                 </div>
                             </div>
                         </template>
@@ -78,18 +78,18 @@
                             </div>
                             <div class="treenode-rubric-results" @click.stop="selectedCriterium = criterium">
                                 <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': !rubric.useScores}" v-for="evaluation in evaluations">
+                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ rubric.useScores ? evaluation.score : evaluation.level.title }}
+                                        {{ useScores ? evaluation.score : evaluation.level.title }}
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" v-if="rubric.useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-criterium-max" v-if="useScores">{{ maxScore }}</div>
                                 </div>
                             </div>
                         </template>
                     </template>
-                    <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
+                    <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
                 </template>
-                <template v-if="rubric.useScores">
+                <template v-if="useScores">
                     <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
@@ -152,6 +152,14 @@
             } else {
                 return extraFeedback;
             }
+        }
+
+        get useScores() {
+            return this.rubric.useScores;
+        }
+
+        get useGrades() {
+            return !this.rubric.useScores;
         }
 
         getClusterRowsData(rubric: Rubric) {

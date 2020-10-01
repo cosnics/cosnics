@@ -43,7 +43,7 @@
                             <div class="treenode-choice" v-for="choice in ext.choices">
                                 <div class="treenode-level mod-bf">
                                     <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                    <span v-if="rubric.useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                    <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
                                 </div>
                                 <div class="treenode-level-description-input" @click="focusTextField">
                                     <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
@@ -110,6 +110,14 @@
             if (elem.target.className === 'default-feedback') {
                 elem.target.querySelector('.ta-default-feedback').focus();
             }
+        }
+
+        get useScores() {
+            return this.rubric.useScores;
+        }
+
+        get useGrades() {
+            return !this.rubric.useScores;
         }
 
         getCriteriumRowsData(category: Category) {

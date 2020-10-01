@@ -40,7 +40,7 @@
     <div id="app" :class="{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo }">
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div class="rubric mod-entry" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, rubric.useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
+        <div class="rubric mod-entry" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
             <ul class="rubric-tools">
                 <slot name="demoEvaluator"></slot>
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
@@ -85,7 +85,7 @@
                                 <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
                                     <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
                                         <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                        <span v-if="rubric.useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                        <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
                                         <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
                                     </component>
                                     <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="marked(choice.feedback)"></div>
@@ -95,19 +95,19 @@
                                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                             </div>
                         </div>
-                        <div v-if="rubric.useScores" class="treenode-score">
+                        <div v-if="useScores" class="treenode-score">
                             <div class="treenode-score-calc mod-criterium"><span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="sr-only">{{ $t('points') }}</span></div>
                         </div>
                     </template>
                 </template>
-                <template v-if="rubric.useScores">
+                <template v-if="useScores">
                     <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
                     <div class="treenode-score-calc mod-cluster">{{ score }}</div>
                 </template>
-                <div class="cluster-sep" :class="{ 'mod-grades': !rubric.useScores }"></div>
+                <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
             </template>
             <slot name="slot-inner"></slot>
-            <template v-if="rubric.useScores">
+            <template v-if="useScores">
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <div class="treenode-score-calc mod-rubric">{{ getRubricScore() }}</div>
                 <div class="total-title">Maximum:</div>
@@ -157,6 +157,14 @@
                 choice,
                 isSelected: this.preview || !evaluation ? choice.level.isDefault : choice.level === evaluation.level
             }));
+        }
+
+        get useScores() {
+            return this.rubric.useScores;
+        }
+
+        get useGrades() {
+            return !this.rubric.useScores;
         }
 
         getClusterRowsData(rubric: Rubric) {
