@@ -25,11 +25,15 @@
         <div v-if="rubric" class="rubric-results-view">
             <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (rubric.useScores ? 1 : 0)}" @click.stop="selectedCriterium = null">
                 <div class="rubric-header-fill" aria-hidden="true"></div>
-                <ul class="rubric-header">
-                    <li class="rubric-header-title mod-res" v-for="evaluator in evaluators" :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">
-                        {{ evaluator.name|capitalize }}
-                    </li>
+                <ul class="rubric-header mod-res">
+                    <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
+                        :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
                     <li v-if="rubric.useScores" class="rubric-header-title mod-res mod-max">Max.</li>
+                </ul>
+                <ul class="rubric-header mod-res mod-date">
+                    <li class="rubric-header-date" v-for="evaluator in evaluators"
+                        :class="{ 'mod-grades': !rubric.useScores }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
+                    <li v-if="rubric.useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                     <div class="treenode-title-header-wrap">
@@ -246,6 +250,15 @@
         grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
+    .rubric-header.mod-res {
+        grid-column-start: 2;
+    }
+
+    .rubric-header.mod-date {
+        margin-top: -1.5rem;
+        z-index: 29;
+    }
+
     .rubric-header-title.mod-res {
         text-align: right;
 
@@ -255,6 +268,26 @@
 
         &.mod-max {
             background: hsla(203, 33%, 60%, 1);
+        }
+    }
+
+    .rubric-header-date {
+        color: hsla(200, 30%, 40%, 1);
+        flex: 1;
+        font-size: 1.2rem;
+        padding: 0 .5rem;
+        text-align: right;
+
+        &.mod-max {
+            visibility: hidden;
+        }
+
+        &:not(:last-child) {
+            margin-right: .7rem;
+        }
+
+        &.mod-grades {
+            text-align: left;
         }
     }
 
