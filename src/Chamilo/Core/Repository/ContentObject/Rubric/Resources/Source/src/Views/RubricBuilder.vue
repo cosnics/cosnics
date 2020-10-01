@@ -45,7 +45,7 @@
             </ul>
             <save-area :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
-        <div class="rubrics">
+        <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
@@ -870,7 +870,7 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .rubrics {
+        .rubrics:not(.builder-app-full-view) {
             margin: 0 1.5em;
         }
 

@@ -34,7 +34,7 @@
                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                 </div>
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
-                    <div class="treenode-title-header mod-responsive" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                    <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
                     </div>
@@ -230,6 +230,12 @@
 
     .cluster-sep.mod-bf:last-child {
         display: none;
+    }
+
+    @media only screen and (min-width: 900px) {
+        .treenode-title-header.mod-bf {
+            padding-top: .6rem;
+        }
     }
 
     @media only screen and (max-width: 899px) {
