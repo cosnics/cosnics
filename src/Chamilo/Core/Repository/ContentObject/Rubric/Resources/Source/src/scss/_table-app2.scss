@@ -16,6 +16,20 @@
     position: relative;
   }
 
+  .rubric-tools {
+    align-items: center;
+    background: #fff;
+    display: flex;
+    grid-column-start: 1;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    padding-left: 1.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+
   .rubric-header {
     background: #fff;
     display: flex;
