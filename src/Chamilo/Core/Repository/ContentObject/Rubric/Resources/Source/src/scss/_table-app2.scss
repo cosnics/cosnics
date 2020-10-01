@@ -13,7 +13,21 @@
     grid-row-gap: .7rem;
     max-width: max-content;
     padding: 1rem;
-    position: relative;
+    /*position: relative;*/
+  }
+
+  .rubric-tools {
+    align-items: center;
+    background: #fff;
+    display: flex;
+    grid-column-start: 1;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    padding-left: 1.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
   }
 
   .rubric-header {
@@ -192,7 +206,6 @@
   @media only screen and (max-width: 899px) {
     .treenode-title-header.mod-responsive {
       grid-column: 1 / -1;
-      max-width: 75ch;
     }
 
     .rubric-header.mod-responsive, .treenode-choices {
@@ -202,6 +215,12 @@
     .total-title {
       grid-column-start: 1;
       margin-left: 1.8rem;
+    }
+  }
+
+  @media only screen and (min-width: 680px) and (max-width: 899px) {
+    .treenode-title-header.mod-responsive {
+      max-width: 75ch; // todo: preserve max-width on size below 680px;
     }
   }
 
