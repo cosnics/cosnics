@@ -40,7 +40,7 @@
     <div id="app" :class="{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo }">
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div class="rubric" :class="[rubric.useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
+        <div class="rubric" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, rubric.useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
             <ul class="app-header-tools mod-entry-view" :class="{ 'mod-demo': this.options.isDemo }">
                 <slot name="demoEvaluator"></slot>
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
@@ -52,7 +52,7 @@
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
                 <div class="treenode-title-header mod-responsive mod-entry">
                     <div class="treenode-title-header-pre"></div>
-                    <h2 class="treenode-title cluster-title">{{ cluster.title }}</h2>
+                    <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
                     <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
@@ -63,7 +63,7 @@
                 <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
                     <div v-if="category.title" class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
                         <div class="treenode-title-header-pre mod-category"></div>
-                        <h3 class="treenode-title category-title">{{ category.title }}</h3>
+                        <h2 class="treenode-title category-title">{{ category.title }}</h2>
                         <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
@@ -72,9 +72,9 @@
                         <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                        <div class="treenode-title-header mod-responsive mod-entry" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext)}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                             <div class="treenode-title-header-pre mod-criterium"></div>
-                            <h4 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title">{{ criterium.title }}</h4>
+                            <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title">{{ criterium.title }}</h3>
                             <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
@@ -88,7 +88,7 @@
                                         <span v-if="rubric.useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
                                         <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
                                     </component>
-                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }">{{ choice.feedback }}</div>
+                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="marked(choice.feedback)"></div>
                                 </div>
                             </div>
                             <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
@@ -148,8 +148,8 @@
             return DOMPurify.sanitize(marked(rawString));
         }
 
-        hasDefaultFeedback(ext: TreeNodeExt) {
-            return ext.choices.map(choice => choice.feedback.length).reduce((v1: number, v2: number) => v1 + v2, 0) > 0;
+        anyChoicesFeedback(ext: TreeNodeExt) {
+            return ext.choices.filter(choice => !!choice.feedback).length > 0;
         }
 
         getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
@@ -275,15 +275,8 @@
         }
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     .rubric {
-        display: grid;
-        grid-column-gap: .7rem;
-        grid-row-gap: .7rem;
-        max-width: max-content;
-        padding: 1rem;
-        position: relative;
-
         &.mod-scores {
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5rem;
         }
@@ -291,10 +284,25 @@
         &.mod-grades {
             grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
+
+        & > :not(.app-header-tools) {
+            transition: opacity 200ms;
+        }
+
+        &.is-demo-inactive > :not(.app-header-tools) {
+            opacity: 0;
+            pointer-events: none;
+        }
     }
+
     .app-header-tools.mod-entry-view {
         grid-column-start: 1;
+
+        &.mod-demo {
+            padding-left: 1.2em;
+        }
     }
+
     .treenode-header.mod-responsive {
         grid-column-start: 1;
     }
@@ -344,6 +352,13 @@
 
     .treenode-title-header:hover .btn-icon-show-feedback {
         opacity: 1;
+    }
+
+    .rubric-entry-error {
+        align-self: flex-start;
+        /*border-bottom: 2px solid red;*/
+        color: red;
+        padding: 0 .25em;
     }
 
     .treenode-choice.mod-has-feedback {
@@ -399,14 +414,23 @@
         font-size: 1.3rem;
         line-height: 1.8rem;
         padding: .35rem .65rem;
-        white-space: pre-line;
 
         &.is-feedback-visible {
             display: block;
         }
+
+        ul {
+            list-style: disc;
+        }
+
+        ul, ol {
+            margin: 0 0 0 2rem;
+            padding: 0;
+        }
     }
 
     .treenode-custom-feedback {
+        align-self: center;
         grid-column-start: 2;
         padding: .2rem;
         z-index: 10;
@@ -445,6 +469,12 @@
         }
     }
 
+    @media (pointer: coarse) {
+        .btn-icon-show-feedback {
+            opacity: 1;
+        }
+    }
+
     .treenode-score-calc {
         border-radius: $border-radius;
         font-size: 1.8rem;
@@ -473,6 +503,22 @@
         }
     }
 
+    @media only screen and (min-width: 900px) {
+        .treenode-title-header.mod-entry {
+            align-self: center;
+            position: relative;
+
+            &.is-feedback-visible {
+                align-self: initial;
+                padding-top: 3rem;
+
+                &.mod-no-default-feedback {
+                    padding-top: 0;
+                }
+            }
+        }
+    }
+
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
@@ -485,49 +531,26 @@
         .app-header-tools.mod-entry-view {
             grid-column: 1 / -1;
         }
+
+        .treenode-custom-feedback {
+            grid-column-start: 1;
+            margin-left: 1.8rem;
+        }
+    }
+
+    @media only screen and (max-width: 679px) {
+        .treenode-custom-feedback {
+            grid-column: 1 / -1;
+        }
+
+        .treenode-score {
+            display: none;
+        }
     }
 </style>
-<style lang="scss" scoped>
-    .text-hidden {
-        height: 1px;
-        left: -10000px;
-        opacity: 0;
-        position: absolute;
-        top: auto;
-        width: 1px;
-    }
-
+<style lang="scss">
     .rubric-entry-view {
         position: relative;
-    }
-
-    .btn-show-feedback.mod-cluster {
-        top: 0;
-    }
-
-    .btn-show-feedback.mod-category {
-        top: 0;
-    }
-
-    .mod-entry-view {
-        &.app-header-tools {
-            /*background-color: hsla(190, 35%, 75%, 0.2);*/
-            flex: 1;
-            margin-right: 1rem;
-            max-width: 30rem;
-            min-width: 20rem;
-
-            &.mod-demo {
-                padding-left: 1.2em;
-            }
-        }
-
-        &.score-number-calc.mod-criterium {
-            background: $score-lighter;
-            line-height: 1.6em;
-            margin-bottom: -1px;
-            padding-top: 1px;
-        }
     }
 
     .app-tool-item {
@@ -539,182 +562,4 @@
             pointer-events: none;
         }
     }
-
-    .btn-score-number {
-        cursor: pointer;
-        outline: none;
-
-        &:hover, &:focus {
-            border: 1px solid $level-selected-color;
-
-            .level-icon-check {
-                opacity: .5;
-            }
-        }
-
-        &.is-selected {
-            &:hover, &:focus {
-                box-shadow: inset 0 0 0 1px white;
-
-                .level-icon-check {
-                    opacity: 1;
-                }
-            }
-        }
-    }
-
-    .fa.level-icon-check {
-        opacity: 0.2;
-        font-size: 1.3rem;
-        transition: opacity 200ms, font-size 200ms;
-
-        &.is-selected {
-            opacity: 1;
-            font-size: 1.6rem;
-        }
-    }
-
-    .score-entry-view {
-        margin-left: 1em;
-        width: 3.5em;
-    }
-
-    .default-feedback-entry-view {
-        display: none;
-        line-height: 1.4em;
-        padding: .3em .5em;
-        white-space: pre-line;
-
-        &.is-feedback-visible {
-            display: block;
-        }
-    }
-
-
-    .rubric-entry-error {
-        align-self: flex-start;
-        /*border-bottom: 2px solid red;*/
-        color: red;
-        padding: 0 .25em;
-    }
-
-    @media only screen and (max-width: 679px) {
-        .treenode-custom-feedback {
-            grid-column: 1 / -1;
-        }
-
-        .treenode-score {
-            display: none;
-        }
-
-        .rubric-entry-view {
-            max-width: 75ch;
-            /*width: 40em;*/
-        }
-    }
-
-    @media only screen and (max-width: 899px) {
-        .rubric-entry-error {
-            margin-left: 1em;
-        }
-
-        .rubric-entry-view {
-            max-width: 100%;
-            /*width: 40em;*/
-            &.mod-closed .rubric-entry-error {
-                margin-left: 2.3em;
-            }
-        }
-
-        .treenode-custom-feedback {
-            grid-column-start: 1;
-            margin-left: 1.8rem;
-        }
-
-        .mod-entry-view {
-            &.score-number-calc.mod-criterium {
-                /*margin-top: .335em;*/
-                margin-bottom: 0;
-            }
-        }
-
-        .app-header-tools.mod-entry-view {
-            padding-left: 1.55rem;
-        }
-
-        .btn-show-feedback {
-            left: -.5em;
-        }
-
-        .default-feedback-entry-view {
-            max-width: 40em;
-        }
-    }
-
-    @media only screen and (min-width: 900px) {
-        .rubric-entry-view {
-            /*max-width: max-content;*/
-        }
-
-        .treenode-header {
-            h2, h3, h4 {
-                cursor: default;
-            }
-        }
-    }
-    .btn-icon-show-feedback {
-        opacity: 0;
-
-        &.is-feedback-visible {
-            opacity: 1;
-        }
-    }
-
-    @media (pointer: coarse) {
-        .btn-icon-show-feedback {
-            opacity: 1;
-        }
-    }
-
-    /*.treenode-header:hover .btn-icon-show-feedback {
-        opacity: 1;
-    }
-
-    .criterium:hover .btn-icon-show-feedback {
-        opacity: 1;
-    }
-
-        .treenode-hover::before {
-        content: '';
-        display: inline-block;
-        width: 4px;
-        background: transparent;
-        justify-self: stretch;
-        margin-left: -10px;
-        margin-right: 6px;
-    }
-
-    .treenode-hover {
-    }
-
-    .treenode-hover:hover::before {
-        background: #66aacc8f;
-    }
-    .treenode-hover:hover {
-    }*/
-</style>
-<style lang="scss">
-.default-feedback-entry-view {
-    white-space: initial!important;
-}
-.default-feedback-entry-view {
-    ul {
-        list-style: disc;
-    }
-
-    ul, ol {
-        margin: 0 0 0 2rem;
-        padding: 0;
-    }
-}
 </style>

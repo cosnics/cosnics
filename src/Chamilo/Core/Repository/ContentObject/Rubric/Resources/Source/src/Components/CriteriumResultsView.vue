@@ -89,15 +89,7 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-    .rr-selected-criterium-wrapper{
-        margin-top: 1em;
-    }
-
-    .rr-selected-criterium {
-        max-width: 80ch;
-    }
-
+<style lang="scss">
     .btn-info-close {
         align-items: center;
         background-color: $bg-criterium-details;
@@ -126,9 +118,16 @@
         }
     }
 
+    .rr-selected-criterium-wrapper{
+        margin-top: 1em;
+    }
+
+    .rr-selected-criterium {
+        max-width: 80ch;
+    }
+
     .choice-feedback {
         line-height: 1.5em;
-        /*white-space: pre-line;*/
 
         ul {
             list-style: disc;
@@ -154,6 +153,7 @@
         }
 
         .rr-selected-criterium {
+            position: -webkit-sticky;
             position: sticky;
             top: 10px;
         }
@@ -169,6 +169,7 @@
             margin-top: 0;
             overflow: auto;
             padding-top: 3em;
+            pointer-events: none;
             position: fixed;
             top: 0;
             width: 100%;
@@ -181,6 +182,7 @@
             box-shadow: 1px 1px 5px #999;
             margin: 0 1em;
             padding: .5em;
+            pointer-events: all;
         }
     }
 
@@ -188,7 +190,6 @@
         /*background: #e4e3e3;*/
         border-radius: $border-radius;
         padding: .5em;
-
     }
 
     .rr-selected-criterium-results-title {
@@ -229,7 +230,7 @@
 
         .title {
             font-size: 1.4rem;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 0;
             margin-top: 0;
         }
