@@ -176,9 +176,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $assignmentServiceBridge->setContentObjectPublication($this->publication);
         $assignmentServiceBridge->setLearningPathTrackingService($this->trackingService);
 
-        $assignmentServiceBridge->setTargetUserIds(
-            $this->getTrackingParameters($this->publication->getId())->getLearningPathTargetUserIds($learningPath)
-        );
+//        $assignmentServiceBridge->setTargetUserIds(
+//            $this->getTrackingParameters($this->publication->getId())->getLearningPathTargetUserIds($learningPath)
+//        );
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
 
