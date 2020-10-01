@@ -70,19 +70,19 @@
                             </div>
                         </template>
                         <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
-                            <div class="treenode-title-header-wrap" @click.stop="selectedCriterium = criterium">
+                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">
                                 <div class="treenode-title-header mod-res" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                                     <div class="treenode-title-header-pre mod-criterium"></div>
                                     <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
                                 </div>
                             </div>
-                            <div class="treenode-rubric-results" @click.stop="selectedCriterium = criterium">
+                            <div class="treenode-rubric-results" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">
                                 <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades}" v-for="evaluation in evaluations">
+                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                         {{ useScores ? evaluation.score : evaluation.level.title }}
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" v-if="useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" v-if="useScores">{{ maxScore }}</div>
                                 </div>
                             </div>
                         </template>
@@ -139,6 +139,7 @@
     })
     export default class RubricResult extends Vue {
         private selectedCriterium: Criterium|null = null;
+        private highlightedCriterium: Criterium|null = null;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
@@ -317,6 +318,46 @@
         display: flex;
         grid-column-start: 1;
         position: relative;
+
+        &::before, & + .treenode-rubric-results::before {
+            bottom: -.5rem;
+            content: '';
+            position: absolute;
+            right: -.7rem;
+            top: -.5rem;
+        }
+
+        &::before {
+            border-left: .5rem solid transparent;
+            left: -1rem;
+            transition: 200ms border;
+        }
+
+        & + .treenode-rubric-results::before {
+            left: 0;
+            z-index: 10;
+        }
+
+        &.is-highlighted {
+            &::before, & + .treenode-rubric-results::before {
+                background: hsla(130, 6%, 91%, 1);
+                background: hsla(230, 15%, 91%, 1);
+            }
+
+            &::before {
+                border-color: hsla(215, 45%, 60%, 1);
+            }
+        }
+
+        &.is-selected {
+            &::before, & + .treenode-rubric-results::before {
+                background: hsla(235, 25%, 88%, 1);
+            }
+
+            &::before {
+                border-color: hsla(215, 45%, 55%, 1);
+            }
+        }
     }
 
     .treenode-title-header.mod-res {
@@ -347,6 +388,14 @@
 
         &:not(:last-child) {
             margin-right: .7rem;
+        }
+
+        &.is-selected {
+            box-shadow: 0 1px 2px hsla(236, 25%, 80%, 1);
+        }
+
+        &.is-highlighted {
+            box-shadow: 0 1px 2px hsla(190, 15%, 80%, 1);
         }
 
         &.mod-grades {
