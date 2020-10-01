@@ -1,19 +1,25 @@
 <i18n>
 {
     "en": {
+        "formatting": "Formatting",
         "points": "points"
     },
     "fr": {
+        "formatting": "Mise en forme",
         "points": "points"
     },
     "nl": {
+        "formatting": "Opmaakhulp",
         "points": "punten"
     }
 }
 </i18n>
 <template>
     <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
-        <div class="table-header-filler" aria-hidden="true"></div>
+        <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
+        <ul class="rubric-tools">
+            <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
+        </ul>
         <ul class="rubric-header mod-responsive">
             <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
         </ul>
@@ -60,6 +66,7 @@
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
+    import FormattingHelp from '../Components/FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
     import debounce from 'debounce';
 
@@ -75,13 +82,14 @@
 
     @Component({
         components: {
-            FeedbackField
+            FeedbackField, FormattingHelp
         },
     })
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
         private criteriaData: CriteriumExt[] = [];
+        private showFormatting = false;
 
         constructor() {
             super();
@@ -167,6 +175,31 @@
 <style lang="scss">
     .rubric.mod-bf {
         grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+    }
+
+    .formatting-help.mod-bf {
+        background: #fff;
+        border: 1px solid #aaa;
+        margin-right: 1rem;
+        padding-right: 1rem;
+        padding-top: 1rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 30rem;
+        z-index: 1000;
+    }
+
+    .tools-show-formatting {
+        &, &:hover, &:active, &:focus {
+            outline: none;
+            text-decoration: none;
+        }
+
+        &:focus {
+            outline: 1px solid $input-color-focus;
+            outline-offset: 2px;
+        }
     }
 
     .treenode-level-description-input {
