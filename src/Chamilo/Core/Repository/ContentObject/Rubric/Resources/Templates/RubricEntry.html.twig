@@ -8,12 +8,23 @@
         .col-xs-12 #rubric-entry {
             margin: 0 -10px;
         }
+        .save-rubric-area {
+            align-items: baseline;
+            display: flex;
+            left: 0;
+            margin-left: .5em;
+            margin-top: .5em;
+            position: absolute;
+        }
         .warning-msg {
             padding: 5px;
         }
         .warning-msg .fa-warning {
             color: orange;
             margin-right: 5px;
+        }
+        .info-msg {
+            padding: 5px 5px 5px 8px;
         }
         .warning-msg button {
             border: 1px solid #ddd;
@@ -25,12 +36,13 @@
 
         <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
             <template v-slot:slot-outer>
-                <div style="left: 0; margin-left: .5em; margin-top: .5em; position: absolute;">
-                    <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')"></button>
+                <div class="save-rubric-area">
+                    <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
                         <div v-if="showErrorMessage" class="warning-msg">
                             <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
                             <button @click="showErrorMessage = false">OK</button>
                         </div>
+                        <div v-if="isSaving" class="info-msg" v-html="$t('is-saving')"></div>
                 </div>
             </template>
         </rubric-entry-wrapper>
@@ -45,16 +57,19 @@
 
         var messages = {
             'en': {
-                'save': 'Save rubric',
-                'error': 'Attention. There are still a few errors in the rubric form.'
+                'error': 'Attention. There are still a few errors in the rubric form.',
+                'is-saving': 'Saving rubric...',
+                'save': 'Save rubric'
             },
             'fr': {
-                'save': 'Sauvegarder la rubrique',
-                'error': 'Attention. Il y a encore quelques erreurs dans la forme.'
+                'error': 'Attention. Il y a encore quelques erreurs dans la forme.',
+                'is-saving': 'En train de sauvegarder la rubrique...',
+                'save': 'Sauvegarder la rubrique'
             },
             'nl': {
-                'save': 'Rubric opslaan',
-                'error': 'Opgelet, er staan nog enkele fouten in het rubric formulier.'
+                'error': 'Opgelet, er staan nog enkele fouten in het rubric formulier.',
+                'is-saving': 'Rubric aan het oplaan...',
+                'save': 'Rubric opslaan'
             }
         };
 
@@ -76,7 +91,8 @@
                 rubricData: data,
                 hasErrors: false,
                 showErrorMessage: false,
-                rubricResults: { results: [] }
+                rubricResults: { results: [] },
+                isSaving: false,
             },
             computed: {
                 rubricResultsJSON: function() {
@@ -100,6 +116,7 @@
             methods: {
                 saveRubric: function(event) {
                     event.preventDefault();
+                    if (this.isSaving) { return; }
                     var i, results = this.rubricResults.results;
                     if (results.length === 0) {
                         this.hasErrors = true;
@@ -117,6 +134,7 @@
                     this.showErrorMessage = false;
                     var form = document.querySelector('[name=entry_form]');
                     if (form) {
+                        this.isSaving = true;
                         form.submit();
                     }
                 }
