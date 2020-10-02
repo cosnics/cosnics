@@ -6,6 +6,7 @@
         "feedback": "Feedback",
         "points": "points",
         "rubric": "Rubric",
+        "select-level": "Select a level",
         "show-default-descriptions": "Show all level descriptions and feedback",
         "show-default-description": "Show level descriptions and feedback",
         "subsection": "Subsection",
@@ -17,6 +18,7 @@
         "feedback": "Feed-back",
         "points": "points",
         "rubric": "Rubrique",
+        "select-level": "Selectionnez un niveau",
         "show-default-descriptions": "Afficher toutes descriptions de niveau et feed-back",
         "show-default-description": "Afficher descriptions de niveau et feed-back",
         "subsection": "Sous-section",
@@ -28,6 +30,7 @@
         "feedback": "Feedback",
         "points": "punten",
         "rubric": "Rubric",
+        "select-level": "Selecteer een niveau",
         "show-default-descriptions": "Toon alle niveauomschrijvingen en feedback",
         "show-default-description": "Toon niveauomschrijvingen en feedback",
         "subsection": "Onderdeel",
@@ -80,7 +83,7 @@
                             </button>
                         </div>
                         <div class="treenode-rubric-input" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
-                            <!--<div v-if="showErrors && !preview && !hasSelection()" class="rubric-entry-error">{{ $t('select-level') }}</div>-->
+                            <div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>
                             <div class="treenode-choices">
                                 <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
                                     <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
@@ -304,6 +307,16 @@
         }
     }
 
+    .app-tool-item {
+        transition: opacity 200ms;
+
+        &.is-demo-inactive {
+            max-height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+
     .treenode-header.mod-responsive {
         grid-column-start: 1;
     }
@@ -355,6 +368,10 @@
         opacity: 1;
     }
 
+    .rubric-entry-error {
+        color: red;
+    }
+
     .treenode-title-header.mod-entry {
         position: relative;
 
@@ -372,13 +389,6 @@
         &.is-highlighted::before {
             border-color: hsla(204, 45%, 53%, 1);
         }
-    }
-
-    .rubric-entry-error {
-        align-self: flex-start;
-        /*border-bottom: 2px solid red;*/
-        color: red;
-        padding: 0 .25em;
     }
 
     .treenode-choice.mod-has-feedback {
@@ -557,6 +567,10 @@
             position: initial;
         }
 
+        .rubric-entry-error {
+            padding-left: 1.8rem;
+        }
+
         .treenode-custom-feedback {
             grid-column-start: 1;
             margin-left: 1.8rem;
@@ -577,21 +591,6 @@
 
         .treenode-score {
             display: none;
-        }
-    }
-</style>
-<style lang="scss">
-    .rubric-entry-view {
-        position: relative;
-    }
-
-    .app-tool-item {
-        transition: opacity 200ms;
-
-        &.is-demo-inactive {
-            max-height: 1px;
-            opacity: 0;
-            pointer-events: none;
         }
     }
 </style>
