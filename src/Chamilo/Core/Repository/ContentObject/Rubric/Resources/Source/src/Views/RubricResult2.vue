@@ -24,7 +24,7 @@
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view">
             <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedCriterium = null">
-                <div class="rubric-header-fill" aria-hidden="true"></div>
+                <!--<div class="rubric-header-fill" aria-hidden="true"></div>-->
                 <ul class="rubric-header mod-res">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
@@ -253,6 +253,7 @@
 </script>
 <style lang="scss">
     .rubric-results-view {
+        align-items: flex-start;
         display: flex;
     }
 
