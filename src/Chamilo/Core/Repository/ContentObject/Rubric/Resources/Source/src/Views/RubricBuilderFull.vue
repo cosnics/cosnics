@@ -1,79 +1,73 @@
 <i18n>
 {
     "en": {
-        "formatting": "Formatting"
+        "formatting": "Formatting",
+        "points": "points"
     },
     "fr": {
-        "formatting": "Mise en forme"
+        "formatting": "Mise en forme",
+        "points": "points"
     },
     "nl": {
-        "formatting": "Opmaakhulp"
+        "formatting": "Opmaakhulp",
+        "points": "punten"
     }
 }
 </i18n>
-
 <template>
-    <div class="rubric mod-builder-full-view">
-        <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-builder-full-view"></formatting-help>
-        <div class="rubric-table-header mod-builder-full-view">
-            <div class="table-header-filler" style="align-self: center">
-                <div><a href="#" @click.prevent="showFormatting=!showFormatting" style="text-decoration: none;margin-left: 1.5rem">{{ $t('formatting') }}</a></div>
-            </div>
-            <div class="levels-table-header mod-builder-full-view">
-                <div v-for="level in rubric.levels" class="level-table-header-title mod-builder-full-view">
-                    {{level.title}}
-                </div>
-            </div>
-        </div>
-        <h1 class="rubric-title">{{ rubric.title }}</h1>
-        <ul class="clusters mod-builder-full-view">
-            <li v-for="cluster in rubric.clusters" class="cluster-list-item" v-if="rubric.getAllCriteria(cluster).length > 0">
-                <div class="cluster">
-                    <h2 class="cluster-title mod-builder-full-view">{{ cluster.title }}</h2>
-                    <ul class="categories">
-                        <li v-for="category in cluster.categories" class="category-list-item" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`" v-if="rubric.getAllCriteria(category).length > 0">
-                            <div class="category">
-                                <h3 v-if="category.title" class="category-title category-indicator mod-builder-full-view">{{ category.title }}</h3>
-                                <ul class="criteria" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : '' }`">
-                                    <li v-for="criterium in category.criteria" class="criterium-list-item">
-                                        <div class="criterium mod-responsive mod-builder-full-view">
-                                            <div class="criterium-title-header mod-responsive mod-builder-full-view">
-                                                <h4 class="criterium-title category-indicator mod-builder-full-view">{{ criterium.title }}</h4>
-                                            </div>
-                                            <ul class="criterium-levels mod-builder-full-view">
-                                                <li v-for="data in getCriteriumData(criterium).choices" class="criterium-level mod-builder-full-view">
-                                                    <div class="criterium-level-header mod-builder-full-view" :class="{ 'is-using-scores': rubric.useScores }">
-                                                        <div class="criterium-level-title mod-builder-full-view">
-                                                            {{data.level.title}}
-                                                        </div>
-                                                        <div v-if="rubric.useScores" class="score-number"><!--<i class="check fa"/>-->{{ data.score }}</div>
-                                                    </div>
-                                                    <div class="default-feedback-full-view" @click="focusTextField">
-                                                        <feedback-field :choice="data.choice" @input="updateHeight" @change="updateFeedback(data.choice, criterium, data.level)"></feedback-field>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+    <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
+        <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
+        <ul class="rubric-tools">
+            <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
+        <ul class="rubric-header mod-responsive">
+            <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
+        </ul>
+        <template v-for="cluster in rubric.clusters">
+            <div class="treenode-title-header mod-responsive">
+                <div class="treenode-title-header-pre"></div>
+                <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
+            </div>
+            <template v-for="category in cluster.categories">
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                    <div class="treenode-title-header-pre mod-category"></div>
+                    <h2 class="treenode-title category-title">{{ category.title }}</h2>
+                </div>
+                <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
+                    <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                        <div class="treenode-title-header-pre mod-criterium"></div>
+                        <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
+                    </div>
+                    <div class="treenode-rubric-input">
+                        <div class="treenode-choices">
+                            <div class="treenode-choice" v-for="choice in ext.choices">
+                                <div class="treenode-level mod-bf">
+                                    <span class="treenode-level-title">{{ choice.level.title }}</span>
+                                    <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                </div>
+                                <div class="treenode-level-description-input" @click="focusTextField">
+                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <div class="cluster-sep mod-bf"></div>
+        </template>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
+    import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
     import FeedbackField from '../Components/FeedbackField.vue';
-    import DataConnector from '../Connector/DataConnector';
     import FormattingHelp from '../Components/FormattingHelp.vue';
+    import DataConnector from '../Connector/DataConnector';
     import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {
@@ -116,6 +110,21 @@
             if (elem.target.className === 'default-feedback') {
                 elem.target.querySelector('.ta-default-feedback').focus();
             }
+        }
+
+        get useScores() {
+            return this.rubric.useScores;
+        }
+
+        get useGrades() {
+            return !this.rubric.useScores;
+        }
+
+        getCriteriumRowsData(category: Category) {
+            return category.criteria.map(criterium => ({
+                criterium,
+                ext: this.getCriteriumData(criterium)
+            }));
         }
 
         getCriteriumData(criterium: Criterium) : CriteriumExt {
@@ -172,56 +181,41 @@
 </script>
 
 <style lang="scss">
-    .table-header-filler {
-        display: none;
-        flex: 1;
-        margin-right: .4em;
-        max-width: 30rem;
-        min-width: 20rem;
+    .rubric.mod-bf {
+        grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
     }
 
-    .mod-builder-full-view {
+    .formatting-help.mod-bf {
+        background: #fff;
+        border: 1px solid #aaa;
+        margin-right: 1rem;
+        padding-right: 1rem;
+        padding-top: 1rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 30rem;
+        z-index: 1000;
+    }
 
-        &.criterium-level {
-            display: flex;
-            flex-direction: column;
+    .tools-show-formatting {
+        &, &:hover, &:active, &:focus {
+            outline: none;
+            text-decoration: none;
         }
 
-        &.criterium-level-header {
-            border-color: transparent;
-            cursor: text;
-            background: #e0e0e0;
-        }
-
-        &.cluster-title, &.category-title {
-            max-width: 70ch;
-            margin-bottom: .2em;
-        }
-
-        &.criterium-title {
-            margin-right: .5em;
-        }
-
-        &.formatting-help {
-            background: #fff;
-            border: 1px solid #aaa;
-            margin-right: 1rem;
-            padding-right: 1rem;
-            padding-top: 1rem;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 30rem;
-            z-index: 1000;
+        &:focus {
+            outline: 1px solid $input-color-focus;
+            outline-offset: 2px;
         }
     }
 
-    .default-feedback-full-view {
-        background-color: white;
+    .treenode-level-description-input {
+        background-color: #fff;
         border: 1px solid #ccc;
-        border-radius: 3px;
+        border-radius: $border-radius;
         flex: 1;
-        line-height: 1.4em;
+        line-height: 1.8rem;
         padding: 0;
 
         &:hover, &:focus-within {
@@ -242,118 +236,25 @@
         }
     }
 
-    @media only screen and (min-width: 680px) {
-        .mod-builder-full-view {
-            &.levels-table-header {
-                margin-left: 1.335em;
-            }
-
-            &.level-table-header-title {
-                max-width: 33rem;
-            }
-
-            &.criterium-level-header {
-                display: none;
-
-                /*&.is-using-scores {
-                    display: block;
-                }*/
-            }
-
-            &.criterium-level-title {
-                height: 1px;
-                left: -10000px;
-                overflow: hidden;
-                position: absolute;
-                top: auto;
-                width: 1px;
-            }
-
-            &.criterium.mod-responsive {
-                margin-bottom: 1em;
-            }
-
-            &.criterium-level {
-                max-width: 33rem;
-            }
-        }
+    .cluster-sep.mod-bf:last-child {
+        display: none;
     }
 
-    @media only screen and (max-width: 679px) {
-        .mod-builder-full-view {
-            &.rubric {
-                margin: 0;
-            }
-
-            &.criterium.mod-responsive {
-                margin-bottom: 1em;
-            }
-
-            &.rubric-table-header {
-                display: none;
-            }
-
-            &.criterium-level {
-                margin-bottom: .5em;
-            }
-
-            &.criterium-level-header {
-                display: flex;
-                margin: .3em 0 -.1em .75em;
-                padding-left: .25em;
-                padding-right: .3em;
-                text-align: left;
-            }
-
-            &.criterium-levels {
-                margin-left: 0;
-            }
-        }
-
-        .default-feedback-full-view {
-            margin-left: .75em;
-            margin-top: -.25em;
-        }
-    }
-    @media only screen and (min-width: 680px) and (max-width: 899px) {
-        .clusters.mod-builder-full-view {
-            margin-top: 1em;
-        }
-        .criterium-level.mod-builder-full-view {
-            margin-top: .3em;
+    @media only screen and (min-width: 900px) {
+        .treenode-title-header.mod-bf {
+            padding-top: .6rem;
         }
     }
 
     @media only screen and (max-width: 899px) {
-        .rubric.mod-builder-full-view {
-            margin: 0 -.5em;
-        }
-
-        .criterium-level-header.mod-builder-full-view {
-            margin-top: .25em;
+        .rubric.mod-bf {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
         }
     }
 
-    @media only screen and (min-width: 900px) {
-        .table-header-filler {
-            display: block;
-        }
-
-        .rubric-table-header.mod-builder-full-view {
-            display: flex;
-        }
-
-        .levels-table-header.mod-builder-full-view {
-            /*margin-left: 19.35em;*/
-            flex: 1;
-            margin-left: 0;
-
-        }
-
-        .criterium-title-header.mod-builder-full-view {
-            flex: 1;
-            max-width: 30rem;
-            min-width: 20rem;
+    @media only screen and (min-width: 680px) {
+        .treenode-level.mod-bf {
+            display: none;
         }
     }
 </style>

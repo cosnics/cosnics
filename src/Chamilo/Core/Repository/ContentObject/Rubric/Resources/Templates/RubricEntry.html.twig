@@ -8,13 +8,42 @@
         .col-xs-12 #rubric-entry {
             margin: 0 -10px;
         }
+        .cluster-sep.mod-grades:nth-last-child(2) {
+            display: none;
+        }
         .save-rubric-area {
             align-items: baseline;
-            display: flex;
-            left: 0;
             margin-left: .5em;
-            margin-top: .5em;
-            position: absolute;
+        }
+        @media only screen and (max-width: 639px) {
+            .save-rubric-area {
+                width: 100%;
+            }
+
+            .save-rubric-area.mod-scores {
+                order: 1;
+            }
+        }
+        @media only screen and (min-width: 640px) {
+            .save-rubric-area-content {
+                position: absolute;
+            }
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                margin-top: 3px;
+            }
+            .save-rubric-area.mod-grades .save-rubric-area-content {
+                display: flex;
+            }
+        }
+        @media only screen and (min-width: 780px) {
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                display: flex;
+            }
+        }
+        @media only screen and (min-width: 900px) {
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                margin-top: -4px;
+            }
         }
         .warning-msg {
             padding: 5px;
@@ -36,13 +65,15 @@
 
         <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
             <template v-slot:slot-outer>
-                <div class="save-rubric-area">
-                    <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
+                <div class="save-rubric-area" :class="useScores ? 'mod-scores' : 'mod-grades'">
+                    <div class="save-rubric-area-content">
+                        <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
                         <div v-if="showErrorMessage" class="warning-msg">
                             <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
                             <button @click="showErrorMessage = false">OK</button>
                         </div>
                         <div v-if="isSaving" class="info-msg" v-html="$t('is-saving')"></div>
+                    </div>
                 </div>
             </template>
         </rubric-entry-wrapper>
@@ -54,7 +85,6 @@
         Vue.use(BootstrapVue);
         Vue.use(VueI18n);
         Vue.use(this['cosnics-rubric'].default);
-
         var messages = {
             'en': {
                 'error': 'Attention. There are still a few errors in the rubric form.',
@@ -89,6 +119,7 @@
             el: '#rubric-entry',
             data: {
                 rubricData: data,
+                useScores: data ? data.use_scores : false,
                 hasErrors: false,
                 showErrorMessage: false,
                 rubricResults: { results: [] },

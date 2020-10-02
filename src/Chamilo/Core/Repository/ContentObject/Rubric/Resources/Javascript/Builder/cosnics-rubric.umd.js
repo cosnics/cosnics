@@ -8942,7 +8942,7 @@ module.exports = Object.create || function create(O, Properties) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"chose":"chose","close":"Close","extra-feedback":"Extra feedback","gave-score":"gave a score of","level-descriptions":"Level descriptions","rubric":"Rubric","total":"Total"},"fr":{"chose":"a choisi","close":"Fermer","extra-feedback":"Feed-back supplémentaire","gave-score":"a donné le score","level-descriptions":"Descriptions de niveau","rubric":"Rubrique","total":"Total"},"nl":{"chose":"koos","close":"Sluiten","extra-feedback":"Extra feedback","gave-score":"gaf score","level-descriptions":"Niveauomschrijvingen","rubric":"Rubric","total":"Totaal"}}')
+  Component.options.__i18n.push('{"en":{"extra-feedback":"Extra feedback","rubric":"Rubric","total":"Total"},"fr":{"extra-feedback":"Feed-back supplémentaire","rubric":"Rubrique","total":"Total"},"nl":{"extra-feedback":"Extra feedback","rubric":"Rubric","total":"Totaal"}}')
   delete Component.options._Ctor
 }
 
@@ -9543,13 +9543,6 @@ module.exports = function (Component) {
 
 /***/ }),
 
-/***/ "3cbb":
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-
 /***/ "3ce2":
 /***/ (function(module, exports) {
 
@@ -9559,6 +9552,17 @@ module.exports = function (Component) {
   delete Component.options._Ctor
 }
 
+
+/***/ }),
+
+/***/ "3d50":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c027");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -13712,17 +13716,6 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 
 /***/ }),
 
-/***/ "6904":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("7c4c");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "691f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13783,6 +13776,16 @@ var TEMPLATE = String(String).split('String');
   return typeof this == 'function' && getInternalState(this).source || inspectSource(this);
 });
 
+
+/***/ }),
+
+/***/ "6af4":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("aeff");
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__);
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumResultsView_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -14235,13 +14238,6 @@ module.exports = function (target, src, options) {
 
 /***/ }),
 
-/***/ "7c4c":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "7c64":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14298,7 +14294,7 @@ module.exports = function (argument) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"formatting":"Formatting"},"fr":{"formatting":"Mise en forme"},"nl":{"formatting":"Opmaakhulp"}}')
+  Component.options.__i18n.push('{"en":{"formatting":"Formatting","points":"points"},"fr":{"formatting":"Mise en forme","points":"points"},"nl":{"formatting":"Opmaakhulp","points":"punten"}}')
   delete Component.options._Ctor
 }
 
@@ -16519,6 +16515,18 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 
 /***/ }),
 
+/***/ "aeff":
+/***/ (function(module, exports) {
+
+module.exports = function (Component) {
+  Component.options.__i18n = Component.options.__i18n || []
+  Component.options.__i18n.push('{"en":{"chose":"chose","close":"Close","extra-feedback":"Extra feedback","gave-score":"gave a score of","level-descriptions":"Level descriptions"},"fr":{"chose":"a choisi","close":"Fermer","extra-feedback":"Feed-back supplémentaire","gave-score":"a donné le score","level-descriptions":"Descriptions de niveau"},"nl":{"chose":"koos","close":"Sluiten","extra-feedback":"Extra feedback","gave-score":"gaf score","level-descriptions":"Niveauomschrijvingen"}}')
+  delete Component.options._Ctor
+}
+
+
+/***/ }),
+
 /***/ "af21":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16794,7 +16802,7 @@ module.exports =
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"expand-all":"Expand all","extra-feedback":"Enter extra feedback","feedback":"Feedback","points":"points","rubric":"Rubric","show-default-descriptions":"Show all level descriptions and feedback","show-default-description":"Show level descriptions and feedback","subsection":"Subsection","total":"Total"},"fr":{"expand-all":"Agrandir tout","extra-feedback":"Feed-back supplémentaire","feedback":"Feed-back","points":"points","rubric":"Rubrique","show-default-descriptions":"Afficher toutes descriptions de niveau et feed-back","show-default-description":"Afficher descriptions de niveau et feed-back","subsection":"Sous-section","total":"Total"},"nl":{"expand-all":"Alles uitklappen","extra-feedback":"Geef bijkomende feedback","feedback":"Feedback","points":"punten","rubric":"Rubric","show-default-descriptions":"Toon alle niveauomschrijvingen en feedback","show-default-description":"Toon niveauomschrijvingen en feedback","subsection":"Onderdeel","total":"Totaal"}}')
+  Component.options.__i18n.push('{"en":{"expand-all":"Expand all","extra-feedback":"Enter extra feedback","feedback":"Feedback","points":"points","rubric":"Rubric","select-level":"Select a level","show-default-descriptions":"Show all level descriptions and feedback","show-default-description":"Show level descriptions and feedback","subsection":"Subsection","total":"Total"},"fr":{"expand-all":"Agrandir tout","extra-feedback":"Feed-back supplémentaire","feedback":"Feed-back","points":"points","rubric":"Rubrique","select-level":"Selectionnez un niveau","show-default-descriptions":"Afficher toutes descriptions de niveau et feed-back","show-default-description":"Afficher descriptions de niveau et feed-back","subsection":"Sous-section","total":"Total"},"nl":{"expand-all":"Alles uitklappen","extra-feedback":"Geef bijkomende feedback","feedback":"Feedback","points":"punten","rubric":"Rubric","select-level":"Selecteer een niveau","show-default-descriptions":"Toon alle niveauomschrijvingen en feedback","show-default-description":"Toon niveauomschrijvingen en feedback","subsection":"Onderdeel","total":"Totaal"}}')
   delete Component.options._Ctor
 }
 
@@ -17489,6 +17497,13 @@ module.exports = function (Component) {
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricDemoWrapper_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricDemoWrapper_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricDemoWrapper_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "c027":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -20022,12 +20037,12 @@ var RubricBuilderWrappervue_type_template_id_4e3312c8_staticRenderFns = []
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.number.constructor.js
 var es_number_constructor = __webpack_require__("250b");
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=5b29c015&
-var RubricBuildervue_type_template_id_5b29c015_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.rubric)?_c('ul',{staticClass:"app-header-tools",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull', 'mod-hide': _vm.$route.name === 'Builder' && !_vm.selectedCriterium}},[_c('li',{staticClass:"app-tool-item"},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.rubric.useScores },attrs:{"aria-label":_vm.$t('use-scores')},on:{"click":function($event){$event.preventDefault();return _vm.toggleUseScores($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('use-scores')))])])])]):_vm._e(),_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}})],1),_c('div',{staticClass:"rubrics"},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":_vm.$route.name === 'Builder' ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
-var RubricBuildervue_type_template_id_5b29c015_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=51e0d0af&
+var RubricBuildervue_type_template_id_51e0d0af_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.rubric)?_c('ul',{staticClass:"app-header-tools",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull', 'mod-hide': _vm.$route.name === 'Builder' && !_vm.selectedCriterium}},[_c('li',{staticClass:"app-tool-item"},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.rubric.useScores },attrs:{"aria-label":_vm.$t('use-scores')},on:{"click":function($event){$event.preventDefault();return _vm.toggleUseScores($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('use-scores')))])])])]):_vm._e(),_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}})],1),_c('div',{staticClass:"rubrics",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull'}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":_vm.$route.name === 'Builder' ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
+var RubricBuildervue_type_template_id_51e0d0af_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=5b29c015&
+// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=51e0d0af&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.find.js
 var es_array_find = __webpack_require__("529c");
@@ -23286,12 +23301,15 @@ var ScoreRubricView_component = normalizeComponent(
 )
 
 /* harmony default export */ var Components_ScoreRubricView = (ScoreRubricView_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderFull.vue?vue&type=template&id=1791388a&
-var RubricBuilderFullvue_type_template_id_1791388a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric mod-builder-full-view"},[(_vm.showFormatting)?_c('formatting-help',{staticClass:"mod-builder-full-view",on:{"close":function($event){_vm.showFormatting = false}}}):_vm._e(),_c('div',{staticClass:"rubric-table-header mod-builder-full-view"},[_c('div',{staticClass:"table-header-filler",staticStyle:{"align-self":"center"}},[_c('div',[_c('a',{staticStyle:{"text-decoration":"none","margin-left":"1.5rem"},attrs:{"href":"#"},on:{"click":function($event){$event.preventDefault();_vm.showFormatting=!_vm.showFormatting}}},[_vm._v(_vm._s(_vm.$t('formatting')))])])]),_c('div',{staticClass:"levels-table-header mod-builder-full-view"},_vm._l((_vm.rubric.levels),function(level){return _c('div',{staticClass:"level-table-header-title mod-builder-full-view"},[_vm._v(" "+_vm._s(level.title)+" ")])}),0)]),_c('h1',{staticClass:"rubric-title"},[_vm._v(_vm._s(_vm.rubric.title))]),_c('ul',{staticClass:"clusters mod-builder-full-view"},_vm._l((_vm.rubric.clusters),function(cluster){return (_vm.rubric.getAllCriteria(cluster).length > 0)?_c('li',{staticClass:"cluster-list-item"},[_c('div',{staticClass:"cluster"},[_c('h2',{staticClass:"cluster-title mod-builder-full-view"},[_vm._v(_vm._s(cluster.title))]),_c('ul',{staticClass:"categories"},_vm._l((cluster.categories),function(category){return (_vm.rubric.getAllCriteria(category).length > 0)?_c('li',{staticClass:"category-list-item",style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent')))},[_c('div',{staticClass:"category"},[(category.title)?_c('h3',{staticClass:"category-title category-indicator mod-builder-full-view"},[_vm._v(_vm._s(category.title))]):_vm._e(),_c('ul',{staticClass:"criteria",style:(("--category-color: " + (!(category.title && category.color) ? '#999' : '')))},_vm._l((category.criteria),function(criterium){return _c('li',{staticClass:"criterium-list-item"},[_c('div',{staticClass:"criterium mod-responsive mod-builder-full-view"},[_c('div',{staticClass:"criterium-title-header mod-responsive mod-builder-full-view"},[_c('h4',{staticClass:"criterium-title category-indicator mod-builder-full-view"},[_vm._v(_vm._s(criterium.title))])]),_c('ul',{staticClass:"criterium-levels mod-builder-full-view"},_vm._l((_vm.getCriteriumData(criterium).choices),function(data){return _c('li',{staticClass:"criterium-level mod-builder-full-view"},[_c('div',{staticClass:"criterium-level-header mod-builder-full-view",class:{ 'is-using-scores': _vm.rubric.useScores }},[_c('div',{staticClass:"criterium-level-title mod-builder-full-view"},[_vm._v(" "+_vm._s(data.level.title)+" ")]),(_vm.rubric.useScores)?_c('div',{staticClass:"score-number"},[_vm._v(_vm._s(data.score))]):_vm._e()]),_c('div',{staticClass:"default-feedback-full-view",on:{"click":_vm.focusTextField}},[_c('feedback-field',{attrs:{"choice":data.choice},on:{"input":_vm.updateHeight,"change":function($event){return _vm.updateFeedback(data.choice, criterium, data.level)}}})],1)])}),0)])])}),0)])]):_vm._e()}),0)])]):_vm._e()}),0)],1)}
-var RubricBuilderFullvue_type_template_id_1791388a_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderFull.vue?vue&type=template&id=f5cef760&
+var RubricBuilderFullvue_type_template_id_f5cef760_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric mod-bf",style:({'--num-cols': _vm.rubric.levels.length})},[(_vm.showFormatting)?_c('formatting-help',{staticClass:"mod-bf",on:{"close":function($event){_vm.showFormatting = false}}}):_vm._e(),_c('ul',{staticClass:"rubric-tools"},[_c('li',[_c('a',{staticClass:"tools-show-formatting",attrs:{"href":"#","role":"button"},on:{"click":function($event){$event.preventDefault();_vm.showFormatting=!_vm.showFormatting}}},[_vm._v(_vm._s(_vm.$t('formatting')))])])]),_c('ul',{staticClass:"rubric-header mod-responsive"},_vm._l((_vm.rubric.levels),function(level){return _c('li',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0),_vm._l((_vm.rubric.clusters),function(cluster){return [_c('div',{staticClass:"treenode-title-header mod-responsive"},[_c('div',{staticClass:"treenode-title-header-pre"}),_c('h1',{staticClass:"treenode-title cluster-title"},[_vm._v(_vm._s(cluster.title))])]),_vm._l((cluster.categories),function(category){return [(category.title && _vm.rubric.getAllCriteria(category).length > 0)?_c('div',{staticClass:"treenode-title-header mod-responsive",style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent')))},[_c('div',{staticClass:"treenode-title-header-pre mod-category"}),_c('h2',{staticClass:"treenode-title category-title"},[_vm._v(_vm._s(category.title))])]):_vm._e(),_vm._l((_vm.getCriteriumRowsData(category)),function(ref){
+var criterium = ref.criterium;
+var ext = ref.ext;
+return [_c('div',{staticClass:"treenode-title-header mod-responsive mod-bf",style:(("--category-color: " + (!(category.title && category.color) ? '#999' : category.color)))},[_c('div',{staticClass:"treenode-title-header-pre mod-criterium"}),_c('h3',{staticClass:"treenode-title criterium-title"},[_vm._v(_vm._s(criterium.title))])]),_c('div',{staticClass:"treenode-rubric-input"},[_c('div',{staticClass:"treenode-choices"},_vm._l((ext.choices),function(choice){return _c('div',{staticClass:"treenode-choice"},[_c('div',{staticClass:"treenode-level mod-bf"},[_c('span',{staticClass:"treenode-level-title"},[_vm._v(_vm._s(choice.level.title))]),(_vm.useScores)?_c('span',{attrs:{"aria-label":((choice.score) + " " + (_vm.$t('points')))}},[_vm._v(_vm._s(choice.score))]):_vm._e()]),_c('div',{staticClass:"treenode-level-description-input",on:{"click":_vm.focusTextField}},[_c('feedback-field',{attrs:{"choice":choice.choice},on:{"input":_vm.updateHeight,"change":function($event){return _vm.updateFeedback(choice.choice, criterium, choice.level)}}})],1)])}),0)])]})]}),_c('div',{staticClass:"cluster-sep mod-bf"})]})],2)}
+var RubricBuilderFullvue_type_template_id_f5cef760_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=template&id=1791388a&
+// CONCATENATED MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=template&id=f5cef760&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/FeedbackField.vue?vue&type=template&id=198db8e9&
 var FeedbackFieldvue_type_template_id_198db8e9_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"feedback-input-area"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.choice.feedback),expression:"choice.feedback"}],staticClass:"ta-default-feedback",class:{'is-input-active': _vm.isFeedbackInputActive || !_vm.choice.feedback},attrs:{"placeholder":_vm.$t('enter-level-description')},domProps:{"value":(_vm.choice.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.choice, "feedback", $event.target.value)},_vm.onFeedbackChange],"focus":function($event){_vm.isFeedbackInputActive = true},"blur":function($event){_vm.isFeedbackInputActive = false}}},[_vm._v(">")]),_c('div',{staticClass:"feedback-markup-preview",class:{'is-input-active': _vm.isFeedbackInputActive || !_vm.choice.feedback},domProps:{"innerHTML":_vm._s(_vm.marked(_vm.choice.feedback))}})])}
@@ -23406,6 +23424,7 @@ if (typeof FeedbackFieldvue_type_custom_index_0_blockType_i18n["default"] === 'f
 
 
 
+
 var RubricBuilderFullvue_type_script_lang_ts_a, RubricBuilderFullvue_type_script_lang_ts_b;
 
 
@@ -23460,6 +23479,18 @@ function (_Vue) {
       }
     }
   }, {
+    key: "getCriteriumRowsData",
+    value: function getCriteriumRowsData(category) {
+      var _this2 = this;
+
+      return category.criteria.map(function (criterium) {
+        return {
+          criterium: criterium,
+          ext: _this2.getCriteriumData(criterium)
+        };
+      });
+    }
+  }, {
     key: "getCriteriumData",
     value: function getCriteriumData(criterium) {
       var criteriumExt = this.criteriaData.find(function (_) {
@@ -23475,7 +23506,7 @@ function (_Vue) {
   }, {
     key: "initScores",
     value: function initScores(rubric) {
-      var _this2 = this;
+      var _this3 = this;
 
       rubric.getAllCriteria().forEach(function (criterium) {
         var criteriumExt = {
@@ -23492,7 +23523,7 @@ function (_Vue) {
           });
         });
 
-        _this2.criteriaData.push(criteriumExt);
+        _this3.criteriaData.push(criteriumExt);
       });
     }
   }, {
@@ -23531,6 +23562,16 @@ function (_Vue) {
     key: "onUsesScoresChange",
     value: function onUsesScoresChange() {
       this.updateHeightAll();
+    }
+  }, {
+    key: "useScores",
+    get: function get() {
+      return this.rubric.useScores;
+    }
+  }, {
+    key: "useGrades",
+    get: function get() {
+      return !this.rubric.useScores;
     }
   }]);
 
@@ -23572,8 +23613,8 @@ var RubricBuilderFullvue_type_custom_index_0_blockType_i18n = __webpack_require_
 
 var RubricBuilderFull_component = normalizeComponent(
   Views_RubricBuilderFullvue_type_script_lang_ts_,
-  RubricBuilderFullvue_type_template_id_1791388a_render,
-  RubricBuilderFullvue_type_template_id_1791388a_staticRenderFns,
+  RubricBuilderFullvue_type_template_id_f5cef760_render,
+  RubricBuilderFullvue_type_template_id_f5cef760_staticRenderFns,
   false,
   null,
   null,
@@ -23825,8 +23866,8 @@ var RubricBuildervue_type_custom_index_0_blockType_i18n = __webpack_require__("5
 
 var RubricBuilder_component = normalizeComponent(
   Views_RubricBuildervue_type_script_lang_ts_,
-  RubricBuildervue_type_template_id_5b29c015_render,
-  RubricBuildervue_type_template_id_5b29c015_staticRenderFns,
+  RubricBuildervue_type_template_id_51e0d0af_render,
+  RubricBuildervue_type_template_id_51e0d0af_staticRenderFns,
   false,
   null,
   null,
@@ -24013,194 +24054,37 @@ var RubricBuilderWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricBuilderWrapper = (RubricBuilderWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricPreviewWrapper.vue?vue&type=template&id=5b4ecd80&
-var RubricPreviewWrappervue_type_template_id_5b4ecd80_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"preview":true,"ui-state":_vm.uiState}}):_vm._e()}
-var RubricPreviewWrappervue_type_template_id_5b4ecd80_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricPreviewWrapper.vue?vue&type=template&id=9abf4cee&
+var RubricPreviewWrappervue_type_template_id_9abf4cee_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"preview":true,"ui-state":_vm.uiState}}):_vm._e()}
+var RubricPreviewWrappervue_type_template_id_9abf4cee_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricPreviewWrapper.vue?vue&type=template&id=5b4ecd80&
+// CONCATENATED MODULE: ./src/Views/RubricPreviewWrapper.vue?vue&type=template&id=9abf4cee&
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntry.vue?vue&type=template&id=4af75de9&
-var RubricEntryvue_type_template_id_4af75de9_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo },attrs:{"id":"app"}},[_c('div',{staticClass:"rubric"},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),_c('div',{staticClass:"rubric-entry-view",class:{ 'mod-closed': !_vm.showDefaultFeedbackFields }},[_c('div',{staticClass:"rubric-table-header mod-entry-view",attrs:{"aria-hidden":"true"}},[_c('ul',{staticClass:"app-header-tools mod-entry-view",class:{ 'mod-demo': this.options.isDemo }},[_vm._t("demoEvaluator"),_c('li',{staticClass:"app-tool-item",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.showDefaultFeedbackFields },attrs:{"aria-label":_vm.$t('show-default-descriptions'),"aria-expanded":_vm.showDefaultFeedbackFields ? 'true' : 'false'},on:{"click":function($event){$event.preventDefault();return _vm.toggleDefaultFeedbackFields($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.options.isDemo ? _vm.$t('feedback') : _vm.$t('expand-all')))])])])],2),_c('div',{staticClass:"levels-table-header mod-entry-view",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator, 'is-using-scores': _vm.rubric.useScores }},_vm._l((_vm.rubric.levels),function(level){return _c('div',{staticClass:"level-table-header-title mod-entry-view"},[_vm._v(" "+_vm._s(level.title)+" ")])}),0)]),_c('div',{staticClass:"rubric-table",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator },style:({ '--offset': (_vm.offset + "px")})},[_c('h1',{staticClass:"rubric-title"},[_vm._v(_vm._s(_vm.rubric.title))]),_c('ul',{staticClass:"clusters mod-entry-view"},_vm._l((_vm.rubric.clusters),function(cluster){return (_vm.rubric.getAllCriteria(cluster).length > 0)?_c('li',{staticClass:"cluster-list-item"},[_c('div',{staticClass:"cluster"},[_c('div',{staticClass:"cluster-row treenode-hover mod-entry-view"},[_c('div',{staticClass:"cluster-header treenode-header"},[_c('h2',{staticClass:"cluster-title mod-entry-view"},[_vm._v(_vm._s(cluster.title))]),(!_vm.preview && !_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show-feedback mod-cluster",attrs:{"aria-label":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();_vm.getTreeNodeData(cluster).showDefaultFeedback = !_vm.getTreeNodeData(cluster).showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || _vm.getTreeNodeData(cluster).showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),(!_vm.preview && _vm.getTreeNodeEvaluation(cluster) !== null)?_c('div',{staticClass:"custom-feedback mod-cluster",class:[{ 'is-feedback-visible': _vm.showDefaultFeedbackFields || _vm.getTreeNodeData(cluster).showDefaultFeedback }]},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.getTreeNodeEvaluation(cluster).feedback),expression:"getTreeNodeEvaluation(cluster).feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(_vm.getTreeNodeEvaluation(cluster).feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.getTreeNodeEvaluation(cluster), "feedback", $event.target.value)},function($event){_vm.onTreeNodeFeedbackChanged(_vm.getTreeNodeEvaluation(cluster))}]}})]):_vm._e()]),_c('ul',{staticClass:"categories"},_vm._l((cluster.categories),function(category){return (_vm.rubric.getAllCriteria(category).length > 0)?_c('li',{staticClass:"category-list-item",style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent')))},[_c('div',{staticClass:"category"},[(category.title)?_c('div',{staticClass:"category-row treenode-hover mod-entry-view"},[_c('div',{staticClass:"category-header treenode-header"},[_c('h3',{staticClass:"category-title mod-entry-view category-indicator"},[_vm._v(_vm._s(category.title))]),(!_vm.preview && !_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show-feedback mod-category",attrs:{"aria-label":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();_vm.getTreeNodeData(category).showDefaultFeedback = !_vm.getTreeNodeData(category).showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || _vm.getTreeNodeData(category).showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),(!_vm.preview && _vm.getTreeNodeEvaluation(category) !== null )?_c('div',{staticClass:"custom-feedback mod-category",class:[{ 'is-feedback-visible': _vm.showDefaultFeedbackFields || _vm.getTreeNodeData(category).showDefaultFeedback }]},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.getTreeNodeEvaluation(category).feedback),expression:"getTreeNodeEvaluation(category).feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(_vm.getTreeNodeEvaluation(category).feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.getTreeNodeEvaluation(category), "feedback", $event.target.value)},function($event){_vm.onTreeNodeFeedbackChanged(_vm.getTreeNodeEvaluation(category))}]}})]):_vm._e()]):_vm._e(),_c('ul',{staticClass:"criteria",style:(("--category-color: " + (!(category.title && category.color) ? '#999' : '')))},_vm._l((category.criteria),function(criterium){return _c('criterium-entry',{key:("criterium-" + (criterium.id) + "-key"),staticClass:"criterium-list-item",attrs:{"tag":"li","show-default-feedback-fields":_vm.showDefaultFeedbackFields,"criterium":criterium,"preview":_vm.preview,"ext":_vm.getTreeNodeData(criterium),"evaluation":_vm.getTreeNodeEvaluation(criterium),"show-errors":_vm.showErrors,"use-scores":_vm.rubric.useScores},on:{"level-selected":_vm.selectLevel,"feedback-changed":_vm.onTreeNodeFeedbackChanged}})}),1)])]):_vm._e()}),0),(_vm.rubric.useScores)?_c('div',{staticClass:"subtotal cluster-total mod-entry-view"},[_c('div',{staticClass:"cluster-total-title u-resize"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('subsection'))+":")]),_c('div',{staticClass:"score-entry-view u-resize"},[_c('div',{staticClass:"score-number-calc mod-cluster"},[_vm._v(_vm._s(_vm.getClusterScore(cluster))+" "),_c('span',{staticClass:"text-hidden"},[_vm._v(_vm._s(_vm.$t('points')))])])])]):_vm._e()])]):_vm._e()}),0),(_vm.rubric.useScores)?_c('div',{staticClass:"subtotal rubric-total mod-entry-view"},[_vm._t("slot-inner"),_c('div',{staticClass:"rubric-total-title u-resize"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('rubric'))+":")]),_c('div',{staticClass:"score-entry-view u-resize"},[_c('div',{staticClass:"score-number-calc mod-rubric"},[_vm._v(_vm._s(_vm.getRubricScore())+" "),_c('span',{staticClass:"text-hidden"},[_vm._v(_vm._s(_vm.$t('points')))])])])],2):_vm._t("slot-inner"),(_vm.rubric.useScores)?_c('div',{staticClass:"subtotal rubric-total-max mod-entry-view"},[_c('div',{staticClass:"rubric-total-title u-resize"},[_vm._v("Maximum:")]),_c('div',{staticClass:"score-entry-view"},[_c('div',{staticClass:"score-number-calc mod-rubric-max u-resize"},[_vm._v(_vm._s(_vm.rubric.getMaximumScore())+" "),_c('span',{staticClass:"text-hidden"},[_vm._v(_vm._s(_vm.$t('points')))])])])]):_vm._e()],2)])])])}
-var RubricEntryvue_type_template_id_4af75de9_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/Views/RubricEntry.vue?vue&type=template&id=4af75de9&
-
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/CriteriumEntry.vue?vue&type=template&id=105a0067&
-var CriteriumEntryvue_type_template_id_105a0067_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component",attrs:{"role":"grid"}},[_c('div',{staticClass:"criterium treenode-hover mod-responsive mod-entry-view",class:_vm.feedbackVisibleClass,attrs:{"role":"row"}},[_c('div',{staticClass:"criterium-header treenode-header mod-responsive mod-entry-view",attrs:{"role":"gridcell"}},[_c('h4',{staticClass:"criterium-title mod-entry-view category-indicator",attrs:{"id":("criterium-" + (_vm.criterium.id) + "-title")}},[_vm._v(_vm._s(_vm.criterium.title))]),(!_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show-feedback mod-criterium",attrs:{"aria-label":_vm.$t('show-default-description'),"title":_vm.$t('show-default-description'),"aria-expanded":_vm.ext.showDefaultFeedback ? 'true' : 'false'},on:{"click":function($event){$event.preventDefault();_vm.ext.showDefaultFeedback = !_vm.ext.showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:_vm.feedbackVisibleClass,attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),_c('div',{staticClass:"criterium-levels-wrapper"},[(_vm.showErrors && !_vm.preview && !_vm.hasSelection())?_c('div',{staticClass:"rubric-entry-error"},[_vm._v(_vm._s(_vm.$t('select-level')))]):_vm._e(),_c('ul',{staticClass:"criterium-levels"},[_vm._l((_vm.ext.choices),function(choice){return _c('li',{staticClass:"criterium-level mod-entry-view",class:_vm.feedbackVisibleClass,attrs:{"role":"gridcell","aria-describedby":("criterium-" + (_vm.criterium.id) + "-title")}},[(_vm.preview)?_c('div',{staticClass:"criterium-level-header mod-entry-view",class:{ 'is-selected': _vm.isSelected(choice.level) },attrs:{"aria-checked":choice.level.isDefault}},[_c('div',{staticClass:"criterium-level-title mod-entry-view",class:{ 'is-selected': _vm.isSelected(choice.level) }},[_vm._v(" "+_vm._s(choice.title)+" ")]),(_vm.useScores)?_c('span',{staticClass:"score-number",class:{ 'is-selected': _vm.isSelected(choice.level) },attrs:{"aria-label":((choice.score) + " " + (_vm.$t('points')))}},[_vm._v(_vm._s(choice.score))]):_c('span',{staticClass:"graded-level",class:{ 'is-selected': _vm.isSelected(choice.level) }},[_c('i',{staticClass:"level-icon-check fa fa-check",class:{ 'is-selected': _vm.isSelected(choice.level) }})])]):_c('button',{staticClass:"criterium-level-header mod-entry-view btn-score-number",class:{ 'is-selected': _vm.isSelected(choice.level) },attrs:{"role":"radio","aria-checked":_vm.isSelected(choice.level)},on:{"click":function($event){return _vm.selectLevel(choice.level)}}},[_c('div',{staticClass:"criterium-level-title mod-entry-view",class:{ 'is-selected': _vm.isSelected(choice.level) }},[_vm._v(" "+_vm._s(choice.title)+" ")]),(_vm.useScores)?_c('span',{staticClass:"score-number",class:{ 'is-selected': _vm.isSelected(choice.level) },attrs:{"aria-label":((choice.score) + " " + (_vm.$t('points')))}},[_vm._v(_vm._s(choice.score))]):_c('span',{staticClass:"graded-level",class:{ 'is-selected': _vm.isSelected(choice.level) }},[_c('i',{staticClass:"level-icon-check fa fa-check",class:{ 'is-selected': _vm.isSelected(choice.level) }})])]),(choice.feedback)?_c('div',{staticClass:"default-feedback-entry-view",class:_vm.feedbackVisibleClass,domProps:{"innerHTML":_vm._s(_vm.marked(choice.feedback))}}):_vm._e()])}),(_vm.useScores)?_c('div',{staticClass:"subtotal criterium-total mod-entry-view",attrs:{"role":"gridcell","aria-describedby":("criterium-" + (_vm.criterium.id) + "-title")}},[_c('div',{staticClass:"score-number-calc mod-entry-view mod-criterium"},[_c('span',{staticClass:"text-hidden"},[_vm._v(_vm._s(_vm.$t('total'))+":")]),_vm._v(" "+_vm._s(_vm.preview ? 0 : _vm.criteriumScore)+" "),_c('span',{staticClass:"text-hidden"},[_vm._v(_vm._s(_vm.$t('points')))])])]):_vm._e()],2),(_vm.evaluation)?_c('div',{staticClass:"custom-feedback mod-criterium",class:[_vm.feedbackVisibleClass, { 'mod-scores': _vm.useScores, 'mod-default-feedback': _vm.hasDefaultFeedback }]},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.evaluation.feedback),expression:"evaluation.feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(_vm.evaluation.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.evaluation, "feedback", $event.target.value)},function($event){return _vm.$emit('feedback-changed', _vm.evaluation)}]}})]):_vm._e()])])])}
-var CriteriumEntryvue_type_template_id_105a0067_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/Components/CriteriumEntry.vue?vue&type=template&id=105a0067&
-
-// EXTERNAL MODULE: ./src/Util/interfaces.ts
-var interfaces = __webpack_require__("3cbb");
-
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/CriteriumEntry.vue?vue&type=script&lang=ts&
-
-
-
-
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntry.vue?vue&type=template&id=23b160fd&
+var RubricEntryvue_type_template_id_23b160fd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo },attrs:{"id":"app"}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),_c('div',{staticClass:"rubric mod-entry",class:[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, _vm.useScores ? 'mod-scores' : 'mod-grades'],style:({'--num-cols': _vm.rubric.levels.length})},[_c('ul',{staticClass:"rubric-tools"},[_vm._t("demoEvaluator"),_c('li',{staticClass:"app-tool-item",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.showDefaultFeedbackFields },attrs:{"aria-label":_vm.$t('show-default-descriptions'),"aria-expanded":_vm.showDefaultFeedbackFields ? 'true' : 'false'},on:{"click":function($event){$event.preventDefault();return _vm.toggleDefaultFeedbackFields($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.options.isDemo ? _vm.$t('feedback') : _vm.$t('expand-all')))])])])],2),_c('ul',{staticClass:"rubric-header mod-responsive"},_vm._l((_vm.rubric.levels),function(level){return _c('li',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0),_c('div',{staticClass:"rubric-header-fill"}),_vm._l((_vm.getClusterRowsData(_vm.rubric)),function(ref){
+var cluster = ref.cluster;
+var ext = ref.ext;
+var evaluation = ref.evaluation;
+var score = ref.score;
+return [_c('div',{staticClass:"treenode-title-header mod-responsive mod-entry",class:{ 'is-highlighted': _vm.highlightedTreeNode === cluster },on:{"mouseover":function($event){_vm.highlightedTreeNode = cluster},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('div',{staticClass:"treenode-title-header-pre"}),_c('h1',{staticClass:"treenode-title cluster-title"},[_vm._v(_vm._s(cluster.title))]),(!_vm.preview && !_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show",attrs:{"aria-label":_vm.$t('show-default-description'),"title":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();ext.showDefaultFeedback = !ext.showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),(!_vm.preview && evaluation && (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback))?_c('div',{staticClass:"treenode-custom-feedback",on:{"mouseover":function($event){_vm.highlightedTreeNode = cluster},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(evaluation.feedback),expression:"evaluation.feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(evaluation.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(evaluation, "feedback", $event.target.value)},function($event){return _vm.onTreeNodeFeedbackChanged(evaluation)}]}})]):_vm._e(),_vm._l((_vm.getCategoryRowsData(cluster)),function(ref){
+var category = ref.category;
+var ext = ref.ext;
+var evaluation = ref.evaluation;
+return [(category.title)?_c('div',{staticClass:"treenode-title-header mod-responsive mod-entry",class:{ 'is-highlighted': _vm.highlightedTreeNode === category },style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent'))),on:{"mouseover":function($event){_vm.highlightedTreeNode = category},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('div',{staticClass:"treenode-title-header-pre mod-category"}),_c('h2',{staticClass:"treenode-title category-title"},[_vm._v(_vm._s(category.title))]),(!_vm.preview && !_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show",attrs:{"aria-label":_vm.$t('show-default-description'),"title":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();ext.showDefaultFeedback = !ext.showDefaultFeedback},"mouseover":function($event){_vm.highlightedTreeNode = category},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]):_vm._e(),(!_vm.preview && evaluation && category.title && (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback))?_c('div',{staticClass:"treenode-custom-feedback"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(evaluation.feedback),expression:"evaluation.feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(evaluation.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(evaluation, "feedback", $event.target.value)},function($event){return _vm.onTreeNodeFeedbackChanged(evaluation)}]}})]):_vm._e(),_vm._l((_vm.getCriteriumRowsData(category)),function(ref){
+var criterium = ref.criterium;
+var ext = ref.ext;
+var evaluation = ref.evaluation;
+var score = ref.score;
+return [_c('div',{staticClass:"treenode-title-header mod-responsive mod-entry",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !_vm.anyChoicesFeedback(ext), 'is-highlighted': _vm.highlightedTreeNode === criterium},style:(("--category-color: " + (!(category.title && category.color) ? '#999' : category.color))),on:{"mouseover":function($event){_vm.highlightedTreeNode = criterium},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('div',{staticClass:"treenode-title-header-pre mod-criterium"}),_c('h3',{staticClass:"treenode-title criterium-title",attrs:{"id":("criterium-" + (criterium.id) + "-title")}},[_vm._v(_vm._s(criterium.title))]),(!_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show",attrs:{"aria-label":_vm.$t('show-default-description'),"title":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();ext.showDefaultFeedback = !ext.showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),_c('div',{staticClass:"treenode-rubric-input",on:{"mouseover":function($event){_vm.highlightedTreeNode = criterium},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[(_vm.showErrors && !_vm.preview && !(evaluation && evaluation.level))?_c('div',{staticClass:"rubric-entry-error"},[_vm._v(_vm._s(_vm.$t('select-level')))]):_vm._e(),_c('div',{staticClass:"treenode-choices"},_vm._l((_vm.getChoicesColumnData(ext, evaluation)),function(ref){
+var choice = ref.choice;
+var isSelected = ref.isSelected;
+return _c('div',{staticClass:"treenode-choice",class:{'mod-has-feedback': (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }},[_c(_vm.preview ? 'div' : 'button',{tag:"component",staticClass:"treenode-level",class:{ 'is-selected': isSelected, 'mod-btn': !_vm.preview },on:{"click":function($event){_vm.preview ? null : _vm.selectLevel(evaluation, choice.level)}}},[_c('span',{staticClass:"treenode-level-title"},[_vm._v(_vm._s(choice.level.title))]),(_vm.useScores)?_c('span',{attrs:{"aria-label":((choice.score) + " " + (_vm.$t('points')))}},[_vm._v(_vm._s(choice.score))]):_c('span',[_c('i',{staticClass:"treenode-level-icon-check fa fa-check",class:{ 'is-selected': isSelected }})])]),(choice.feedback && (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback))?_c('div',{staticClass:"treenode-level-description",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback },domProps:{"innerHTML":_vm._s(_vm.marked(choice.feedback))}}):_vm._e()],1)}),0),(evaluation && (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback))?_c('div',{staticClass:"treenode-custom-feedback"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(evaluation.feedback),expression:"evaluation.feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(evaluation.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(evaluation, "feedback", $event.target.value)},function($event){return _vm.onTreeNodeFeedbackChanged(evaluation)}]}})]):_vm._e()]),(_vm.useScores)?_c('div',{staticClass:"treenode-score"},[_c('div',{staticClass:"treenode-score-calc mod-criterium"},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('total'))+":")]),_vm._v(" "+_vm._s(_vm.preview ? 0 : score)+" "),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('points')))])])]):_vm._e()]})]}),(_vm.useScores)?[_c('div',{staticClass:"total-title"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('subsection'))+":")]),_c('div',{staticClass:"treenode-score-calc mod-cluster"},[_vm._v(_vm._s(score))])]:_vm._e(),_c('div',{staticClass:"cluster-sep",class:{ 'mod-grades': _vm.useGrades }})]}),_vm._t("slot-inner"),(_vm.useScores)?[_c('div',{staticClass:"total-title"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('rubric'))+":")]),_c('div',{staticClass:"treenode-score-calc mod-rubric"},[_vm._v(_vm._s(_vm.getRubricScore()))]),_c('div',{staticClass:"total-title"},[_vm._v("Maximum:")]),_c('div',{staticClass:"treenode-score-calc mod-rubric-max"},[_vm._v(_vm._s(_vm.rubric.getMaximumScore()))])]:_vm._e()],2)])}
+var RubricEntryvue_type_template_id_23b160fd_staticRenderFns = []
 
 
+// CONCATENATED MODULE: ./src/Views/RubricEntry.vue?vue&type=template&id=23b160fd&
 
-
-var CriteriumEntryvue_type_script_lang_ts_a, CriteriumEntryvue_type_script_lang_ts_b, CriteriumEntryvue_type_script_lang_ts_c, CriteriumEntryvue_type_script_lang_ts_d;
-
-
-
-
-
-
-
-
-var CriteriumEntryvue_type_script_lang_ts_CriteriumEntry =
-/*#__PURE__*/
-function (_Vue) {
-  _inherits(CriteriumEntry, _Vue);
-
-  function CriteriumEntry() {
-    _classCallCheck(this, CriteriumEntry);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(CriteriumEntry).apply(this, arguments));
-  }
-
-  _createClass(CriteriumEntry, [{
-    key: "marked",
-    value: function marked(rawString) {
-      return purify_default.a.sanitize(lib_marked(rawString));
-    }
-  }, {
-    key: "isSelected",
-    value: function isSelected(level) {
-      if (this.preview || !this.evaluation) {
-        return level.isDefault;
-      }
-
-      return this.evaluation.level === level;
-    }
-  }, {
-    key: "hasSelection",
-    value: function hasSelection() {
-      if (!this.evaluation) {
-        return false;
-      }
-
-      return !!this.evaluation.level;
-    }
-  }, {
-    key: "selectLevel",
-    value: function selectLevel(level) {
-      if (!this.evaluation) {
-        return;
-      }
-
-      this.$emit('level-selected', this.evaluation, level);
-    }
-  }, {
-    key: "hasDefaultFeedback",
-    get: function get() {
-      return this.ext.choices.map(function (choice) {
-        return choice.feedback.length;
-      }).reduce(function (v1, v2) {
-        return v1 + v2;
-      }, 0) > 0;
-    }
-  }, {
-    key: "feedbackVisibleClass",
-    get: function get() {
-      return {
-        'is-feedback-visible': this.ext.showDefaultFeedback || this.showDefaultFeedbackFields
-      };
-    }
-  }, {
-    key: "criteriumScore",
-    get: function get() {
-      if (!this.evaluation) {
-        return 0;
-      }
-
-      return this.evaluation.score || 0;
-    }
-  }]);
-
-  return CriteriumEntry;
-}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
-
-__decorate([Prop({
-  type: String,
-  default: 'div'
-}), __metadata("design:type", typeof (CriteriumEntryvue_type_script_lang_ts_a = typeof String !== "undefined" && String) === "function" ? CriteriumEntryvue_type_script_lang_ts_a : Object)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "tag", void 0);
-
-__decorate([Prop({
-  type: Criterium_Criterium,
-  required: true
-}), __metadata("design:type", typeof (CriteriumEntryvue_type_script_lang_ts_b = typeof Criterium_Criterium !== "undefined" && Criterium_Criterium) === "function" ? CriteriumEntryvue_type_script_lang_ts_b : Object)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "criterium", void 0);
-
-__decorate([Prop({
-  type: Boolean,
-  default: true
-}), __metadata("design:type", Boolean)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "showDefaultFeedbackFields", void 0);
-
-__decorate([Prop({
-  type: Object
-}), __metadata("design:type", typeof (CriteriumEntryvue_type_script_lang_ts_c = typeof interfaces["TreeNodeExt"] !== "undefined" && interfaces["TreeNodeExt"]) === "function" ? CriteriumEntryvue_type_script_lang_ts_c : Object)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "ext", void 0);
-
-__decorate([Prop({
-  type: Object
-}), __metadata("design:type", Object)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "evaluation", void 0);
-
-__decorate([Prop({
-  type: Boolean,
-  default: false
-}), __metadata("design:type", Boolean)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "preview", void 0);
-
-__decorate([Prop({
-  type: Boolean,
-  default: false
-}), __metadata("design:type", Boolean)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "showErrors", void 0);
-
-__decorate([Prop({
-  type: Boolean,
-  default: false
-}), __metadata("design:type", Boolean)], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry.prototype, "useScores", void 0);
-
-CriteriumEntryvue_type_script_lang_ts_CriteriumEntry = __decorate([vue_class_component_esm({})], CriteriumEntryvue_type_script_lang_ts_CriteriumEntry);
-/* harmony default export */ var CriteriumEntryvue_type_script_lang_ts_ = (CriteriumEntryvue_type_script_lang_ts_CriteriumEntry);
-// CONCATENATED MODULE: ./src/Components/CriteriumEntry.vue?vue&type=script&lang=ts&
- /* harmony default export */ var Components_CriteriumEntryvue_type_script_lang_ts_ = (CriteriumEntryvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/Components/CriteriumEntry.vue?vue&type=style&index=0&lang=scss&
-var CriteriumEntryvue_type_style_index_0_lang_scss_ = __webpack_require__("6904");
-
-// EXTERNAL MODULE: ./src/Components/CriteriumEntry.vue?vue&type=custom&index=0&blockType=i18n
-var CriteriumEntryvue_type_custom_index_0_blockType_i18n = __webpack_require__("eefa");
-
-// CONCATENATED MODULE: ./src/Components/CriteriumEntry.vue
-
-
-
-
-
-
-/* normalize component */
-
-var CriteriumEntry_component = normalizeComponent(
-  Components_CriteriumEntryvue_type_script_lang_ts_,
-  CriteriumEntryvue_type_template_id_105a0067_render,
-  CriteriumEntryvue_type_template_id_105a0067_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* custom blocks */
-
-if (typeof CriteriumEntryvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(CriteriumEntryvue_type_custom_index_0_blockType_i18n["default"])(CriteriumEntry_component)
-
-/* harmony default export */ var Components_CriteriumEntry = (CriteriumEntry_component.exports);
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntry.vue?vue&type=script&lang=ts&
 
 
@@ -24213,7 +24097,10 @@ if (typeof CriteriumEntryvue_type_custom_index_0_blockType_i18n["default"] === '
 
 
 
+
+
 var RubricEntryvue_type_script_lang_ts_a;
+
 
 
 
@@ -24237,38 +24124,91 @@ function (_Vue) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(RubricEntry).apply(this, arguments));
     _this.treeNodeData = [];
-    _this.offset = 0;
+    _this.highlightedTreeNode = null;
     return _this;
   }
 
   _createClass(RubricEntry, [{
-    key: "calculateOffset",
-    value: function calculateOffset() {
+    key: "marked",
+    value: function marked(rawString) {
+      return purify_default.a.sanitize(lib_marked(rawString));
+    }
+  }, {
+    key: "anyChoicesFeedback",
+    value: function anyChoicesFeedback(ext) {
+      return ext.choices.filter(function (choice) {
+        return !!choice.feedback;
+      }).length > 0;
+    }
+  }, {
+    key: "getChoicesColumnData",
+    value: function getChoicesColumnData(ext, evaluation) {
       var _this2 = this;
 
-      this.$nextTick(function () {
-        try {
-          var _document$querySelect, _document$querySelect2;
-
-          var clustersRect = ((_document$querySelect = document.querySelector('.clusters')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.getBoundingClientRect().right) || 0;
-          var scoreRect = ((_document$querySelect2 = document.querySelector('.score-number-calc.mod-criterium')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.getBoundingClientRect().right) || 0;
-          var offset = clustersRect - scoreRect;
-          _this2.offset = offset > 0 ? -offset : 0;
-        } catch (_unused) {
-          _this2.offset = 0;
-        }
+      return ext.choices.map(function (choice) {
+        return {
+          choice: choice,
+          isSelected: _this2.preview || !evaluation ? choice.level.isDefault : choice.level === evaluation.level
+        };
       });
+    }
+  }, {
+    key: "getClusterRowsData",
+    value: function getClusterRowsData(rubric) {
+      var _this3 = this;
+
+      return rubric.clusters.filter(function (cluster) {
+        return cluster.hasChildren();
+      }).map(function (cluster) {
+        return _objectSpread2({
+          cluster: cluster,
+          score: _this3.getClusterScore(cluster)
+        }, _this3.getTreeNodeRowData(cluster));
+      });
+    }
+  }, {
+    key: "getCategoryRowsData",
+    value: function getCategoryRowsData(cluster) {
+      var _this4 = this;
+
+      return cluster.categories.filter(function (category) {
+        return category.hasChildren();
+      }).map(function (category) {
+        return _objectSpread2({
+          category: category
+        }, _this4.getTreeNodeRowData(category));
+      });
+    }
+  }, {
+    key: "getCriteriumRowsData",
+    value: function getCriteriumRowsData(category) {
+      var _this5 = this;
+
+      return category.criteria.map(function (criterium) {
+        return _objectSpread2({
+          criterium: criterium,
+          score: _this5.getCriteriumScore(criterium)
+        }, _this5.getTreeNodeRowData(criterium));
+      });
+    }
+  }, {
+    key: "getTreeNodeRowData",
+    value: function getTreeNodeRowData(treeNode) {
+      return {
+        ext: this.getTreeNodeData(treeNode),
+        evaluation: this.getTreeNodeEvaluation(treeNode)
+      };
     }
   }, {
     key: "toggleDefaultFeedbackFields",
     value: function toggleDefaultFeedbackFields() {
-      var _this3 = this;
+      var _this6 = this;
 
       var show = this.uiState.showDefaultFeedbackFields = !this.uiState.showDefaultFeedbackFields;
 
       if (!show) {
         this.rubric.getAllCriteria().forEach(function (criterium) {
-          _this3.getTreeNodeData(criterium).showDefaultFeedback = false;
+          _this6.getTreeNodeData(criterium).showDefaultFeedback = false;
         });
       }
     }
@@ -24328,40 +24268,40 @@ function (_Vue) {
   }, {
     key: "getCategoryScore",
     value: function getCategoryScore(category) {
-      var _this4 = this;
+      var _this7 = this;
 
       if (this.preview) {
         return 0;
       }
 
       return this.rubric.getAllCriteria(category).map(function (criterium) {
-        return _this4.getCriteriumScore(criterium);
+        return _this7.getCriteriumScore(criterium);
       }).reduce(add, 0);
     }
   }, {
     key: "getClusterScore",
     value: function getClusterScore(cluster) {
-      var _this5 = this;
+      var _this8 = this;
 
       if (this.preview) {
         return 0;
       }
 
       return this.rubric.getAllCriteria(cluster).map(function (criterium) {
-        return _this5.getCriteriumScore(criterium);
+        return _this8.getCriteriumScore(criterium);
       }).reduce(add, 0);
     }
   }, {
     key: "getRubricScore",
     value: function getRubricScore() {
-      var _this6 = this;
+      var _this9 = this;
 
       if (this.preview) {
         return 0;
       }
 
       return this.rubric.getAllCriteria().map(function (criterium) {
-        return _this6.getCriteriumScore(criterium);
+        return _this9.getCriteriumScore(criterium);
       }).reduce(add, 0);
     }
   }, {
@@ -24402,20 +24342,19 @@ function (_Vue) {
       });
     }
   }, {
-    key: "destroyed",
-    value: function destroyed() {
-      window.removeEventListener('resize', this.calculateOffset);
-    }
-  }, {
-    key: "mounted",
-    value: function mounted() {
-      this.calculateOffset();
-      window.addEventListener('resize', this.calculateOffset);
-    }
-  }, {
     key: "created",
     value: function created() {
       this.initData();
+    }
+  }, {
+    key: "useScores",
+    get: function get() {
+      return this.rubric.useScores;
+    }
+  }, {
+    key: "useGrades",
+    get: function get() {
+      return !this.rubric.useScores;
     }
   }, {
     key: "showDefaultFeedbackFields",
@@ -24459,11 +24398,7 @@ __decorate([Prop({
   default: false
 }), __metadata("design:type", Boolean)], RubricEntryvue_type_script_lang_ts_RubricEntry.prototype, "showErrors", void 0);
 
-RubricEntryvue_type_script_lang_ts_RubricEntry = __decorate([vue_class_component_esm({
-  components: {
-    CriteriumEntry: Components_CriteriumEntry
-  }
-})], RubricEntryvue_type_script_lang_ts_RubricEntry);
+RubricEntryvue_type_script_lang_ts_RubricEntry = __decorate([vue_class_component_esm({})], RubricEntryvue_type_script_lang_ts_RubricEntry);
 /* harmony default export */ var RubricEntryvue_type_script_lang_ts_ = (RubricEntryvue_type_script_lang_ts_RubricEntry);
 // CONCATENATED MODULE: ./src/Views/RubricEntry.vue?vue&type=script&lang=ts&
  /* harmony default export */ var Views_RubricEntryvue_type_script_lang_ts_ = (RubricEntryvue_type_script_lang_ts_); 
@@ -24484,8 +24419,8 @@ var RubricEntryvue_type_custom_index_0_blockType_i18n = __webpack_require__("45f
 
 var RubricEntry_component = normalizeComponent(
   Views_RubricEntryvue_type_script_lang_ts_,
-  RubricEntryvue_type_template_id_4af75de9_render,
-  RubricEntryvue_type_template_id_4af75de9_staticRenderFns,
+  RubricEntryvue_type_template_id_23b160fd_render,
+  RubricEntryvue_type_template_id_23b160fd_staticRenderFns,
   false,
   null,
   null,
@@ -24507,7 +24442,6 @@ if (typeof RubricEntryvue_type_custom_index_0_blockType_i18n["default"] === 'fun
 
 
 
- //import RubricEntry from './RubricEntry2.vue';
 
 
 
@@ -24562,8 +24496,8 @@ RubricPreviewWrappervue_type_script_lang_ts_RubricPreviewWrapper = __decorate([v
 
 var RubricPreviewWrapper_component = normalizeComponent(
   Views_RubricPreviewWrappervue_type_script_lang_ts_,
-  RubricPreviewWrappervue_type_template_id_5b4ecd80_render,
-  RubricPreviewWrappervue_type_template_id_5b4ecd80_staticRenderFns,
+  RubricPreviewWrappervue_type_template_id_9abf4cee_render,
+  RubricPreviewWrappervue_type_template_id_9abf4cee_staticRenderFns,
   false,
   null,
   null,
@@ -24572,12 +24506,12 @@ var RubricPreviewWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricPreviewWrapper = (RubricPreviewWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryWrapper.vue?vue&type=template&id=cf67c13e&
-var RubricEntryWrappervue_type_template_id_cf67c13e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"tree-node-evaluations":_vm.treeNodeEvaluations,"ui-state":_vm.uiState,"show-errors":_vm.showErrors},on:{"level-selected":_vm.updateRubricResults,"criterium-feedback-changed":_vm.updateRubricResults},scopedSlots:_vm._u([{key:"slot-inner",fn:function(){return [_vm._t("slot-outer")]},proxy:true}],null,true)}):_vm._e()}
-var RubricEntryWrappervue_type_template_id_cf67c13e_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryWrapper.vue?vue&type=template&id=7efcaaf8&
+var RubricEntryWrappervue_type_template_id_7efcaaf8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"tree-node-evaluations":_vm.treeNodeEvaluations,"ui-state":_vm.uiState,"show-errors":_vm.showErrors},on:{"level-selected":_vm.updateRubricResults,"criterium-feedback-changed":_vm.updateRubricResults},scopedSlots:_vm._u([{key:"slot-inner",fn:function(){return [_vm._t("slot-outer")]},proxy:true}],null,true)}):_vm._e()}
+var RubricEntryWrappervue_type_template_id_7efcaaf8_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricEntryWrapper.vue?vue&type=template&id=cf67c13e&
+// CONCATENATED MODULE: ./src/Views/RubricEntryWrapper.vue?vue&type=template&id=7efcaaf8&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryWrapper.vue?vue&type=script&lang=ts&
 
@@ -24591,7 +24525,6 @@ var RubricEntryWrappervue_type_template_id_cf67c13e_staticRenderFns = []
 
 
 
- //import RubricEntry from './RubricEntry2.vue';
 
 
 
@@ -24688,8 +24621,8 @@ RubricEntryWrappervue_type_script_lang_ts_RubricEntryWrapper = __decorate([vue_c
 
 var RubricEntryWrapper_component = normalizeComponent(
   Views_RubricEntryWrappervue_type_script_lang_ts_,
-  RubricEntryWrappervue_type_template_id_cf67c13e_render,
-  RubricEntryWrappervue_type_template_id_cf67c13e_staticRenderFns,
+  RubricEntryWrappervue_type_template_id_7efcaaf8_render,
+  RubricEntryWrappervue_type_template_id_7efcaaf8_staticRenderFns,
   false,
   null,
   null,
@@ -24708,16 +24641,138 @@ var RubricResultWrappervue_type_template_id_7ed34c80_staticRenderFns = []
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.function.name.js
 var es_function_name = __webpack_require__("2fec");
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResult.vue?vue&type=template&id=9b200982&
-var RubricResultvue_type_template_id_9b200982_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{ 'mod-sep': this.options.isDemo },attrs:{"id":"app"}},[(_vm.rubric)?_c('div',{staticClass:"rubric mod-result-view"},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),_c('div',{staticClass:"rubric-results-view",on:{"click":function($event){_vm.selectedCriterium = null}}},[_c('div',{staticClass:"rubric-table-header mod-result-view"},[_c('div',{staticClass:"table-header-filler mod-result-view",attrs:{"aria-hidden":"true"}}),_c('div',{staticClass:"evaluators-table-header"},[_vm._l((_vm.evaluators),function(evaluator){return [_c('div',[_c('div',{staticClass:"evaluator-table-header-title",class:{ 'mod-grades': !_vm.rubric.useScores },attrs:{"title":evaluator.name}},[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))]),_c('div',{staticClass:"evaluator-table-header-date",class:{ 'mod-grades': !_vm.rubric.useScores }},[_vm._v(_vm._s(_vm._f("formatDate")(new Date(evaluator.date))))])])]}),(_vm.rubric.useScores)?_c('div',{staticClass:"evaluator-table-header-title mod-max"},[_vm._v("Max.")]):_vm._e()],2)]),_c('h1',{staticClass:"rubric-title"},[_vm._v(_vm._s(_vm.rubric.title))]),_c('ul',{staticClass:"clusters mod-result-view"},_vm._l((_vm.rubric.clusters),function(cluster){return (_vm.rubric.getAllCriteria(cluster).length > 0)?_c('li',{staticClass:"cluster-list-item"},[_c('div',{staticClass:"cluster"},[_c('div',{staticClass:"cluster-row mod-result-view"},[_c('div',{staticClass:"cluster-header mod-result-view"},[_c('h2',{staticClass:"cluster-title mod-result-view"},[_vm._v(_vm._s(cluster.title))])]),_c('ul',{staticClass:"evaluations"},[_vm._l((_vm.evaluators),function(evaluator,index){return _c('li',{staticClass:"score-result-view",class:{ 'mod-empty': !_vm.rubric.useScores && !_vm.getTreeNodeEvaluation(cluster, evaluator).feedback }},[_c('div',{staticClass:"score-number-calc mod-result-view mod-cluster",class:{ 'mod-grades': !_vm.rubric.useScores },attrs:{"id":((cluster.id) + "-evaluation-" + index),"title":("" + (_vm.getTreeNodeEvaluation(cluster, evaluator).feedback ? _vm.$t('extra-feedback') + ': ' + _vm.getTreeNodeEvaluation(cluster, evaluator).feedback : ''))}},[(_vm.getTreeNodeEvaluation(cluster, evaluator).feedback)?_c('i',{staticClass:"score-feedback-icon fa fa-info mod-cluster"}):_vm._e(),_vm._v(" "+_vm._s(_vm.rubric.useScores ? _vm.getClusterScore(cluster, evaluator) : '')+" ")])])}),(_vm.rubric.useScores)?_c('li',{staticClass:"score-result-view"},[_c('div',{staticClass:"score-number-calc mod-result-view mod-cluster-max"},[_vm._v(_vm._s(_vm.getClusterMaxScore(cluster)))])]):_vm._e()],2)]),_c('ul',{staticClass:"categories"},_vm._l((cluster.categories),function(category){return (_vm.rubric.getAllCriteria(category).length > 0)?_c('li',{staticClass:"category-list-item",style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent')))},[_c('div',{staticClass:"category"},[(category.title)?_c('div',{staticClass:"category-row mod-result-view"},[_c('div',{staticClass:"category-header mod-result-view"},[_c('h3',{staticClass:"category-title category-indicator mod-result-view"},[_vm._v(_vm._s(category.title))])]),_c('ul',{staticClass:"evaluations"},[_vm._l((_vm.evaluators),function(evaluator,index){return _c('li',{staticClass:"score-result-view",class:{ 'mod-empty': !_vm.rubric.useScores && !_vm.getTreeNodeEvaluation(category, evaluator).feedback }},[_c('div',{staticClass:"score-number-calc mod-result-view mod-category",class:{ 'mod-grades': !_vm.rubric.useScores },attrs:{"id":((category.id) + "-evaluation-" + index),"title":("" + (_vm.getTreeNodeEvaluation(category, evaluator).feedback ? _vm.$t('extra-feedback') + ': ' + _vm.getTreeNodeEvaluation(category, evaluator).feedback : ''))}},[(_vm.getTreeNodeEvaluation(category, evaluator).feedback)?_c('i',{staticClass:"score-feedback-icon fa fa-info mod-category"}):_vm._e(),_vm._v(" "+_vm._s(_vm.rubric.useScores ? _vm.getCategoryScore(category, evaluator) : '')+" ")])])}),(_vm.rubric.useScores)?_c('li',{staticClass:"score-result-view"},[_c('div',{staticClass:"score-number-calc mod-result-view mod-category-max"},[_vm._v(_vm._s(_vm.getCategoryMaxScore(category)))])]):_vm._e()],2)]):_vm._e(),_c('ul',{staticClass:"criteria",style:(("--category-color: " + (!(category.title && category.color) ? '#999' : '')))},_vm._l((category.criteria),function(criterium){return _c('li',{staticClass:"criterium-list-item mod-result-view",class:{'is-selected': _vm.selectedCriterium === criterium},on:{"click":function($event){$event.stopPropagation();_vm.selectedCriterium = criterium}}},[_c('div',{staticClass:"criterium mod-result-view"},[_c('div',{staticClass:"criterium-header mod-result-view"},[_c('h4',{staticClass:"criterium-title category-indicator"},[_vm._v(_vm._s(criterium.title))])]),_c('ul',{staticClass:"evaluations"},[_vm._l((_vm.evaluators),function(evaluator,index){return _c('li',{staticClass:"subtotal criterium-total mod-result-view",class:{'mod-grades': !_vm.rubric.useScores },attrs:{"title":("" + (!_vm.rubric.useScores ? _vm.getTreeNodeEvaluation(criterium, evaluator).level.title : '') + (_vm.getTreeNodeEvaluation(criterium, evaluator).feedback ? ( !_vm.rubric.useScores ? '\n' : '') + _vm.$t('extra-feedback') + ': ' + _vm.getTreeNodeEvaluation(criterium, evaluator).feedback : ''))}},[_c('div',{staticClass:"mod-result-view",class:_vm.rubric.useScores ? 'score-number-calc mod-criterium' : 'graded-level',attrs:{"id":((criterium.id) + "-evaluation-" + index)}},[(_vm.getTreeNodeEvaluation(criterium, evaluator).feedback)?_c('i',{staticClass:"score-feedback-icon fa fa-info"}):_vm._e(),_vm._v(" "+_vm._s(_vm.rubric.useScores ? _vm.getCriteriumScore(criterium, evaluator) : _vm.getTreeNodeEvaluation(criterium, evaluator).level.title)+" ")])])}),(_vm.rubric.useScores)?_c('li',{staticClass:"subtotal criterium-total mod-result-view"},[_c('div',{staticClass:"score-number-calc mod-result-view mod-criterium-max"},[_vm._v(_vm._s(_vm.getCriteriumMaxScore(criterium)))])]):_vm._e()],2)])])}),0)])]):_vm._e()}),0)])]):_vm._e()}),0),(_vm.rubric.useScores)?_c('div',{staticClass:"subtotal rubric-total mod-result-view"},[_c('div',{staticClass:"rubric-total-title mod-result-view"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('rubric'))+":")]),_c('ul',{staticClass:"evaluations"},[_vm._l((_vm.evaluators),function(evaluator){return _c('li',{staticClass:"score-result-view"},[_c('div',{staticClass:"score-number-calc mod-result-view mod-rubric"},[_vm._v(_vm._s(_vm.getRubricScore(evaluator)))])])}),_c('li',{staticClass:"score-result-view"},[_c('div',{staticClass:"score-number-calc mod-result-view mod-rubric-max"},[_vm._v(_vm._s(_vm.rubric.getMaximumScore()))])])],2)]):_vm._e()]),(_vm.selectedCriterium)?_c('div',{staticClass:"rr-selected-criterium-wrapper",on:{"click":function($event){$event.stopPropagation();_vm.selectedCriterium = null}}},[_c('div',{staticClass:"rr-selected-criterium"},[_c('button',{staticClass:"btn-info-close",attrs:{"aria-label":_vm.$t('close'),"title":_vm.$t('close')},on:{"click":function($event){_vm.selectedCriterium = null}}},[_c('i',{staticClass:"fa fa-close",attrs:{"aria-hidden":"true"}})]),_c('div',{staticClass:"rr-selected-criterium-results"},[_c('div',{staticClass:"rr-selected-criterium-results-title"},[_c('span',[_vm._v(_vm._s(_vm.selectedCriterium.title))])]),_vm._l((_vm.evaluators),function(evaluator){return _c('div',{staticClass:"rr-selected-result"},[_vm._l(([_vm.getTreeNodeEvaluation(_vm.selectedCriterium, evaluator)]),function(evaluation){return [(_vm.rubric.useScores && evaluation.level !== null)?_c('p',[_c('span',[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))]),_vm._v(" "+_vm._s(_vm.$t('gave-score'))+" "),_c('span',[_vm._v(_vm._s(evaluation.score || '0'))]),_vm._v(" ("),_c('span',{staticClass:"score-title"},[_vm._v(_vm._s(evaluation.level.title))]),_vm._v(") ")]):(evaluation.level !== null)?_c('p',[_c('span',[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))]),_vm._v(" "+_vm._s(_vm.$t('chose'))+" '"),_c('span',{staticClass:"score-title"},[_vm._v(_vm._s(evaluation.level.title))]),_vm._v("' ")]):_vm._e(),(evaluation.feedback)?_c('p',[_vm._v(" "+_vm._s(_vm.$t('extra-feedback'))+": "+_vm._s(evaluation.feedback)+" ")]):_vm._e()]})],2)})],2),_c('div',{staticClass:"rr-selected-criterium-levels"},[_c('div',{staticClass:"title"},[_vm._v(_vm._s(_vm.$t('level-descriptions'))+":")]),_c('ul',{staticClass:"levels-list"},_vm._l((_vm.rubric.levels),function(level){return _c('li',{key:level.id,staticClass:"levels-list-item"},[_c('div',{staticClass:"levels-list-item-header"},[_c('div',{staticClass:"title"},[_vm._v(_vm._s(level.title))]),(_vm.rubric.useScores)?_c('div',{staticClass:"choice-score"},[_vm._v(_vm._s(_vm.rubric.getChoiceScore(_vm.selectedCriterium, level)))]):_vm._e()]),_c('div',{staticClass:"choice-feedback",domProps:{"innerHTML":_vm._s(_vm.marked(_vm.rubric.getChoice(_vm.selectedCriterium, level).feedback))}})])}),0)])])]):_vm._e()]):_vm._e()])}
-var RubricResultvue_type_template_id_9b200982_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResult.vue?vue&type=template&id=0d192c96&
+var RubricResultvue_type_template_id_0d192c96_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{ 'mod-sep': this.options.isDemo },attrs:{"id":"app"}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{staticClass:"rubric-results-view"},[_c('div',{staticClass:"rubric mod-res",style:({'--num-cols': _vm.evaluators.length + (_vm.useScores ? 1 : 0)}),on:{"click":function($event){$event.stopPropagation();_vm.selectedCriterium = null}}},[_c('ul',{staticClass:"rubric-header mod-res"},[_vm._l((_vm.evaluators),function(evaluator){return _c('li',{staticClass:"rubric-header-title mod-res",class:{ 'mod-grades': _vm.useGrades },attrs:{"title":evaluator.name}},[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))])}),(_vm.useScores)?_c('li',{staticClass:"rubric-header-title mod-res mod-max"},[_vm._v("Max.")]):_vm._e()],2),_c('ul',{staticClass:"rubric-header mod-res mod-date"},[_vm._l((_vm.evaluators),function(evaluator){return _c('li',{staticClass:"rubric-header-date",class:{ 'mod-grades': _vm.useGrades },attrs:{"title":evaluator.name}},[_vm._v(_vm._s(_vm._f("formatDate")(new Date(evaluator.date))))])}),(_vm.useScores)?_c('li',{staticClass:"rubric-header-date mod-max",attrs:{"aria-hidden":"true"}}):_vm._e()],2),_vm._l((_vm.getClusterRowsData(_vm.rubric)),function(ref){
+var cluster = ref.cluster;
+var maxScore = ref.maxScore;
+var evaluations = ref.evaluations;
+return [_c('div',{staticClass:"treenode-title-header-wrap"},[_c('div',{staticClass:"treenode-title-header mod-res"},[_c('div',{staticClass:"treenode-title-header-pre"}),_c('h1',{staticClass:"treenode-title cluster-title"},[_vm._v(_vm._s(cluster.title))])])]),_c('div',{staticClass:"treenode-rubric-results"},[_c('div',{staticClass:"treenode-evaluations"},[_vm._l((evaluations),function(evaluation){return _c('div',{staticClass:"treenode-evaluation mod-cluster",class:{'mod-grades': _vm.useGrades, 'mod-hide': _vm.useGrades && !evaluation.feedback}},[(evaluation.feedback)?_c('i',{staticClass:"treenode-feedback-icon mod-cluster fa fa-info",attrs:{"title":_vm.getEvaluationTitleOverlay(evaluation)}}):_vm._e(),_vm._v(" "+_vm._s(_vm.useScores ? _vm.getClusterScore(cluster, evaluation) : '')+" ")])}),(_vm.useScores)?_c('div',{staticClass:"treenode-evaluation mod-cluster-max"},[_vm._v(_vm._s(maxScore))]):_vm._e()],2)]),_vm._l((_vm.getCategoryRowsData(cluster)),function(ref){
+var category = ref.category;
+var maxScore = ref.maxScore;
+var evaluations = ref.evaluations;
+return [(category.title && _vm.rubric.getAllCriteria(category).length > 0)?[_c('div',{staticClass:"treenode-title-header-wrap"},[_c('div',{staticClass:"treenode-title-header mod-res",style:(("--category-color: " + (category.title && category.color ? category.color : 'transparent')))},[_c('div',{staticClass:"treenode-title-header-pre mod-category"}),_c('h2',{staticClass:"treenode-title category-title"},[_vm._v(_vm._s(category.title))])])]),_c('div',{staticClass:"treenode-rubric-results"},[_c('div',{staticClass:"treenode-evaluations"},[_vm._l((evaluations),function(evaluation){return _c('div',{staticClass:"treenode-evaluation mod-category",class:{'mod-grades': _vm.useGrades, 'mod-hide': _vm.useGrades && !evaluation.feedback}},[(evaluation.feedback)?_c('i',{staticClass:"treenode-feedback-icon fa fa-info",attrs:{"title":_vm.getEvaluationTitleOverlay(evaluation)}}):_vm._e(),_vm._v(" "+_vm._s(_vm.useScores ? _vm.getCategoryScore(category, evaluation) : '')+" ")])}),(_vm.useScores)?_c('div',{staticClass:"treenode-evaluation mod-category-max"},[_vm._v(_vm._s(maxScore))]):_vm._e()],2)])]:_vm._e(),_vm._l((_vm.getCriteriumRowsData(category)),function(ref){
+var criterium = ref.criterium;
+var maxScore = ref.maxScore;
+var evaluations = ref.evaluations;
+return [_c('div',{staticClass:"treenode-title-header-wrap",class:{'is-selected': _vm.selectedCriterium === criterium, 'is-highlighted': _vm.highlightedCriterium === criterium},on:{"click":function($event){$event.stopPropagation();_vm.selectedCriterium = criterium},"mouseover":function($event){_vm.highlightedCriterium = criterium},"mouseout":function($event){_vm.highlightedCriterium = null}}},[_c('div',{staticClass:"treenode-title-header mod-res",style:(("--category-color: " + (!(category.title && category.color) ? '#999' : category.color)))},[_c('div',{staticClass:"treenode-title-header-pre mod-criterium"}),_c('h3',{staticClass:"treenode-title criterium-title"},[_vm._v(_vm._s(criterium.title))])])]),_c('div',{staticClass:"treenode-rubric-results",on:{"click":function($event){$event.stopPropagation();_vm.selectedCriterium = criterium},"mouseover":function($event){_vm.highlightedCriterium = criterium},"mouseout":function($event){_vm.highlightedCriterium = null}}},[_c('div',{staticClass:"treenode-evaluations"},[_vm._l((evaluations),function(evaluation){return _c('div',{staticClass:"treenode-evaluation mod-criterium",class:{'mod-grades': _vm.useGrades, 'is-selected': _vm.selectedCriterium === criterium, 'is-highlighted': _vm.highlightedCriterium === criterium}},[(evaluation.feedback)?_c('i',{staticClass:"treenode-feedback-icon fa fa-info",attrs:{"title":_vm.getEvaluationTitleOverlay(evaluation)}}):_vm._e(),_vm._v(" "+_vm._s(_vm.useScores ? evaluation.score : evaluation.level.title)+" ")])}),(_vm.useScores)?_c('div',{staticClass:"treenode-evaluation mod-criterium-max",class:{'is-selected': _vm.selectedCriterium === criterium, 'is-highlighted': _vm.highlightedCriterium === criterium}},[_vm._v(_vm._s(maxScore))]):_vm._e()],2)])]})]}),_c('div',{staticClass:"cluster-sep",class:{ 'mod-grades': _vm.useGrades }})]}),(_vm.useScores)?[_c('div',{staticClass:"total-title mod-res"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('rubric'))+":")]),_c('div',{staticClass:"treenode-rubric-results"},[_c('div',{staticClass:"treenode-evaluations"},[_vm._l((_vm.evaluators),function(evaluator){return _c('div',{staticClass:"treenode-evaluation mod-rubric"},[_vm._v(_vm._s(_vm.getRubricScore(evaluator)))])}),_c('div',{staticClass:"treenode-evaluation mod-rubric-max"},[_vm._v(_vm._s(_vm.rubric.getMaximumScore()))])],2)])]:_vm._e()],2),(_vm.selectedCriterium)?_c('criterium-results-view',{attrs:{"rubric":_vm.rubric,"criterium":_vm.selectedCriterium,"evaluations":_vm.getCriteriumRowData(_vm.selectedCriterium).evaluations},on:{"close":function($event){_vm.selectedCriterium = null}}}):_vm._e()],1):_vm._e()])}
+var RubricResultvue_type_template_id_0d192c96_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricResult.vue?vue&type=template&id=9b200982&
+// CONCATENATED MODULE: ./src/Views/RubricResult.vue?vue&type=template&id=0d192c96&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.slice.js
 var es_array_slice = __webpack_require__("9df3");
 
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/CriteriumResultsView.vue?vue&type=template&id=78d919e8&
+var CriteriumResultsViewvue_type_template_id_78d919e8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rr-selected-criterium-wrapper"},[_c('div',{staticClass:"rr-selected-criterium"},[_c('button',{staticClass:"btn-info-close",attrs:{"aria-label":_vm.$t('close'),"title":_vm.$t('close')},on:{"click":function($event){return _vm.$emit('close')}}},[_c('i',{staticClass:"fa fa-close",attrs:{"aria-hidden":"true"}})]),_c('div',{staticClass:"rr-selected-criterium-results"},[_c('div',{staticClass:"rr-selected-criterium-results-title"},[_c('span',[_vm._v(_vm._s(_vm.criterium.title))])]),_vm._l((_vm.evaluations),function(ref){
+var evaluator = ref.evaluator;
+var score = ref.score;
+var level = ref.level;
+var feedback = ref.feedback;
+return _c('div',{staticClass:"rr-selected-result"},[(_vm.rubric.useScores && level !== null)?_c('p',[_c('span',[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))]),_vm._v(" "+_vm._s(_vm.$t('gave-score'))+" "),_c('span',[_vm._v(_vm._s(score || '0'))]),_vm._v(" ("),_c('span',{staticClass:"score-title"},[_vm._v(_vm._s(level.title))]),_vm._v(") ")]):(level !== null)?_c('p',[_c('span',[_vm._v(_vm._s(_vm._f("capitalize")(evaluator.name)))]),_vm._v(" "+_vm._s(_vm.$t('chose'))+" '"),_c('span',{staticClass:"score-title"},[_vm._v(_vm._s(level.title))]),_vm._v("' ")]):_vm._e(),(feedback)?_c('p',[_vm._v(" "+_vm._s(_vm.$t('extra-feedback'))+": "+_vm._s(feedback)+" ")]):_vm._e()])})],2),_c('div',{staticClass:"rr-selected-criterium-levels"},[_c('div',{staticClass:"title"},[_vm._v(_vm._s(_vm.$t('level-descriptions'))+":")]),_c('ul',{staticClass:"levels-list"},_vm._l((_vm.rubric.levels),function(level){return _c('li',{key:level.id,staticClass:"levels-list-item"},[_c('div',{staticClass:"levels-list-item-header"},[_c('div',{staticClass:"title"},[_vm._v(_vm._s(level.title))]),(_vm.rubric.useScores)?_c('div',{staticClass:"choice-score"},[_vm._v(_vm._s(_vm.rubric.getChoiceScore(_vm.criterium, level)))]):_vm._e()]),_c('div',{staticClass:"choice-feedback",domProps:{"innerHTML":_vm._s(_vm.marked(_vm.rubric.getChoice(_vm.criterium, level).feedback))}})])}),0)])])])}
+var CriteriumResultsViewvue_type_template_id_78d919e8_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/Components/CriteriumResultsView.vue?vue&type=template&id=78d919e8&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/CriteriumResultsView.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+var CriteriumResultsViewvue_type_script_lang_ts_a, CriteriumResultsViewvue_type_script_lang_ts_b;
+
+
+
+
+
+
+
+
+var CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(CriteriumResultsView, _Vue);
+
+  function CriteriumResultsView() {
+    _classCallCheck(this, CriteriumResultsView);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(CriteriumResultsView).apply(this, arguments));
+  }
+
+  _createClass(CriteriumResultsView, [{
+    key: "marked",
+    value: function marked(rawString) {
+      return purify_default.a.sanitize(lib_marked(rawString));
+    }
+  }]);
+
+  return CriteriumResultsView;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: Rubric_Rubric
+}), __metadata("design:type", typeof (CriteriumResultsViewvue_type_script_lang_ts_a = typeof Rubric_Rubric !== "undefined" && Rubric_Rubric) === "function" ? CriteriumResultsViewvue_type_script_lang_ts_a : Object)], CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView.prototype, "rubric", void 0);
+
+__decorate([Prop({
+  type: Criterium_Criterium
+}), __metadata("design:type", typeof (CriteriumResultsViewvue_type_script_lang_ts_b = typeof Criterium_Criterium !== "undefined" && Criterium_Criterium) === "function" ? CriteriumResultsViewvue_type_script_lang_ts_b : Object)], CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView.prototype, "criterium", void 0);
+
+__decorate([Prop({
+  type: Array
+}), __metadata("design:type", Array)], CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView.prototype, "evaluations", void 0);
+
+CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView = __decorate([vue_class_component_esm({
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) {
+        return '';
+      }
+
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  }
+})], CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView);
+/* harmony default export */ var CriteriumResultsViewvue_type_script_lang_ts_ = (CriteriumResultsViewvue_type_script_lang_ts_CriteriumResultsView);
+// CONCATENATED MODULE: ./src/Components/CriteriumResultsView.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var Components_CriteriumResultsViewvue_type_script_lang_ts_ = (CriteriumResultsViewvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/Components/CriteriumResultsView.vue?vue&type=style&index=0&lang=scss&
+var CriteriumResultsViewvue_type_style_index_0_lang_scss_ = __webpack_require__("3d50");
+
+// EXTERNAL MODULE: ./src/Components/CriteriumResultsView.vue?vue&type=custom&index=0&blockType=i18n
+var CriteriumResultsViewvue_type_custom_index_0_blockType_i18n = __webpack_require__("6af4");
+
+// CONCATENATED MODULE: ./src/Components/CriteriumResultsView.vue
+
+
+
+
+
+
+/* normalize component */
+
+var CriteriumResultsView_component = normalizeComponent(
+  Components_CriteriumResultsViewvue_type_script_lang_ts_,
+  CriteriumResultsViewvue_type_template_id_78d919e8_render,
+  CriteriumResultsViewvue_type_template_id_78d919e8_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* custom blocks */
+
+if (typeof CriteriumResultsViewvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(CriteriumResultsViewvue_type_custom_index_0_blockType_i18n["default"])(CriteriumResultsView_component)
+
+/* harmony default export */ var Components_CriteriumResultsView = (CriteriumResultsView_component.exports);
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResult.vue?vue&type=script&lang=ts&
 
 
@@ -24735,8 +24790,9 @@ var es_array_slice = __webpack_require__("9df3");
 
 
 
-var RubricResultvue_type_script_lang_ts_a;
 
+
+var RubricResultvue_type_script_lang_ts_a;
 
 
 
@@ -24763,54 +24819,123 @@ function (_Vue) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(RubricResult).apply(this, arguments));
     _this.selectedCriterium = null;
+    _this.highlightedCriterium = null;
     return _this;
   }
 
   _createClass(RubricResult, [{
-    key: "marked",
-    value: function marked(rawString) {
-      return purify_default.a.sanitize(lib_marked(rawString));
+    key: "getEvaluationTitleOverlay",
+    value: function getEvaluationTitleOverlay(evaluation) {
+      var extraFeedback = evaluation.feedback ? "".concat(this.$t('extra-feedback'), ": ").concat(evaluation.feedback) : '';
+
+      if (evaluation.treeNode.getType() === 'criterium') {
+        var _evaluation$level;
+
+        return this.rubric.useScores ? extraFeedback : "".concat(((_evaluation$level = evaluation.level) === null || _evaluation$level === void 0 ? void 0 : _evaluation$level.title) || '').concat(extraFeedback && '\n' + extraFeedback);
+      } else {
+        return extraFeedback;
+      }
+    }
+  }, {
+    key: "getClusterRowsData",
+    value: function getClusterRowsData(rubric) {
+      var _this2 = this;
+
+      return rubric.clusters.filter(function (cluster) {
+        return cluster.hasChildren();
+      }).map(function (cluster) {
+        return {
+          cluster: cluster,
+          maxScore: _this2.getClusterMaxScore(cluster),
+          evaluations: _this2.getTreeNodeResult(cluster).evaluations.map(function (_) {
+            return _objectSpread2({
+              evaluator: _.evaluator
+            }, _.treeNodeEvaluation);
+          })
+        };
+      });
+    }
+  }, {
+    key: "getCategoryRowsData",
+    value: function getCategoryRowsData(cluster) {
+      var _this3 = this;
+
+      return cluster.categories.filter(function (category) {
+        return category.hasChildren();
+      }).map(function (category) {
+        return {
+          category: category,
+          maxScore: _this3.getCategoryMaxScore(category),
+          evaluations: _this3.getTreeNodeResult(category).evaluations.map(function (_) {
+            return _objectSpread2({
+              evaluator: _.evaluator
+            }, _.treeNodeEvaluation);
+          })
+        };
+      });
+    }
+  }, {
+    key: "getCriteriumRowsData",
+    value: function getCriteriumRowsData(category) {
+      var _this4 = this;
+
+      return category.criteria.map(function (criterium) {
+        return _this4.getCriteriumRowData(criterium);
+      });
+    }
+  }, {
+    key: "getCriteriumRowData",
+    value: function getCriteriumRowData(criterium) {
+      return {
+        criterium: criterium,
+        maxScore: this.getCriteriumMaxScore(criterium),
+        evaluations: this.getTreeNodeResult(criterium).evaluations.map(function (_) {
+          return _objectSpread2({
+            evaluator: _.evaluator
+          }, _.treeNodeEvaluation);
+        })
+      };
     }
   }, {
     key: "getCriteriumMaxScore",
     value: function getCriteriumMaxScore(criterium) {
-      var _this2 = this;
+      var _this5 = this;
 
       var scores = [0];
       var iterator = this.rubric.choices.get(criterium.id);
       iterator.forEach(function (choice, levelId) {
-        var level = _this2.rubric.levels.find(function (level) {
+        var level = _this5.rubric.levels.find(function (level) {
           return level.id === levelId;
         });
 
-        scores.push(_this2.rubric.getChoiceScore(criterium, level));
+        scores.push(_this5.rubric.getChoiceScore(criterium, level));
       });
       return Math.max.apply(null, scores);
     }
   }, {
     key: "getCategoryMaxScore",
     value: function getCategoryMaxScore(category) {
-      var _this3 = this;
+      var _this6 = this;
 
       if (!this.rubric) {
         return 0;
       }
 
       return this.rubric.getAllCriteria(category).map(function (criterium) {
-        return _this3.getCriteriumMaxScore(criterium);
+        return _this6.getCriteriumMaxScore(criterium);
       }).reduce(RubricResultvue_type_script_lang_ts_add, 0);
     }
   }, {
     key: "getClusterMaxScore",
     value: function getClusterMaxScore(cluster) {
-      var _this4 = this;
+      var _this7 = this;
 
       if (!this.rubric) {
         return 0;
       }
 
       return this.rubric.getAllCriteria(cluster).map(function (criterium) {
-        return _this4.getCriteriumMaxScore(criterium);
+        return _this7.getCriteriumMaxScore(criterium);
       }).reduce(RubricResultvue_type_script_lang_ts_add, 0);
     }
   }, {
@@ -24820,13 +24945,11 @@ function (_Vue) {
     }
   }, {
     key: "getCategoryScore",
-    value: function getCategoryScore(category, evaluator) {
-      var _this5 = this;
+    value: function getCategoryScore(category, evaluation) {
+      var _this8 = this;
 
-      var treeNodeScore = this.getTreeNodeEvaluation(category, evaluator).score;
-
-      if (typeof treeNodeScore === 'number') {
-        return treeNodeScore;
+      if (typeof (evaluation === null || evaluation === void 0 ? void 0 : evaluation.score) === 'number') {
+        return evaluation.score;
       }
 
       if (!this.rubric) {
@@ -24834,18 +24957,16 @@ function (_Vue) {
       }
 
       return this.rubric.getAllCriteria(category).map(function (criterium) {
-        return _this5.getCriteriumScore(criterium, evaluator);
+        return _this8.getCriteriumScore(criterium, evaluation === null || evaluation === void 0 ? void 0 : evaluation.evaluator);
       }).reduce(RubricResultvue_type_script_lang_ts_add, 0);
     }
   }, {
     key: "getClusterScore",
-    value: function getClusterScore(cluster, evaluator) {
-      var _this6 = this;
+    value: function getClusterScore(cluster, evaluation) {
+      var _this9 = this;
 
-      var treeNodeScore = this.getTreeNodeEvaluation(cluster, evaluator).score;
-
-      if (typeof treeNodeScore === 'number') {
-        return treeNodeScore;
+      if (typeof (evaluation === null || evaluation === void 0 ? void 0 : evaluation.score) === 'number') {
+        return evaluation.score;
       }
 
       if (!this.rubric) {
@@ -24853,13 +24974,13 @@ function (_Vue) {
       }
 
       return this.rubric.getAllCriteria(cluster).map(function (criterium) {
-        return _this6.getCriteriumScore(criterium, evaluator);
+        return _this9.getCriteriumScore(criterium, evaluation === null || evaluation === void 0 ? void 0 : evaluation.evaluator);
       }).reduce(RubricResultvue_type_script_lang_ts_add, 0);
     }
   }, {
     key: "getRubricScore",
     value: function getRubricScore(evaluator) {
-      var _this7 = this;
+      var _this10 = this;
 
       var treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator).score;
 
@@ -24872,7 +24993,7 @@ function (_Vue) {
       }
 
       return this.rubric.getAllCriteria().map(function (criterium) {
-        return _this7.getCriteriumScore(criterium, evaluator);
+        return _this10.getCriteriumScore(criterium, evaluator);
       }).reduce(RubricResultvue_type_script_lang_ts_add, 0);
     }
   }, {
@@ -24900,6 +25021,16 @@ function (_Vue) {
       }
 
       return evaluatorEvaluation.treeNodeEvaluation;
+    }
+  }, {
+    key: "useScores",
+    get: function get() {
+      return this.rubric.useScores;
+    }
+  }, {
+    key: "useGrades",
+    get: function get() {
+      return !this.rubric.useScores;
     }
   }]);
 
@@ -24932,6 +25063,9 @@ __decorate([Prop({
 }), __metadata("design:type", Object)], RubricResultvue_type_script_lang_ts_RubricResult.prototype, "options", void 0);
 
 RubricResultvue_type_script_lang_ts_RubricResult = __decorate([vue_class_component_esm({
+  components: {
+    CriteriumResultsView: Components_CriteriumResultsView
+  },
   filters: {
     capitalize: function capitalize(value) {
       if (!value) {
@@ -24942,6 +25076,11 @@ RubricResultvue_type_script_lang_ts_RubricResult = __decorate([vue_class_compone
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     formatDate: function formatDate(date) {
+      if (isNaN(date.getDate())) {
+        // todo: dates with timezone offsets, e.g. +0200 result in NaN data in Safari. For now, return an empty string.
+        return '';
+      }
+
       return "".concat(pad(date.getDate()), "/").concat(pad(date.getMonth() + 1), "/").concat(date.getFullYear(), " ").concat(pad(date.getHours()), ":").concat(pad(date.getMinutes()));
     }
   }
@@ -24966,8 +25105,8 @@ var RubricResultvue_type_custom_index_0_blockType_i18n = __webpack_require__("5b
 
 var RubricResult_component = normalizeComponent(
   Views_RubricResultvue_type_script_lang_ts_,
-  RubricResultvue_type_template_id_9b200982_render,
-  RubricResultvue_type_template_id_9b200982_staticRenderFns,
+  RubricResultvue_type_template_id_0d192c96_render,
+  RubricResultvue_type_template_id_0d192c96_staticRenderFns,
   false,
   null,
   null,
@@ -28944,12 +29083,12 @@ var RubricBuilderDemoWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricBuilderDemoWrapper = (RubricBuilderDemoWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricPreviewDemoWrapper.vue?vue&type=template&id=7ce9c31c&
-var RubricPreviewDemoWrappervue_type_template_id_7ce9c31c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[(_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"preview":true,"ui-state":_vm.store.uiState.preview,"options":{ isPreviewDemo: true }}}):_vm._e()],1)}
-var RubricPreviewDemoWrappervue_type_template_id_7ce9c31c_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricPreviewDemoWrapper.vue?vue&type=template&id=74608a7b&
+var RubricPreviewDemoWrappervue_type_template_id_74608a7b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[(_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"preview":true,"ui-state":_vm.store.uiState.preview,"options":{ isPreviewDemo: true }}}):_vm._e()],1)}
+var RubricPreviewDemoWrappervue_type_template_id_74608a7b_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricPreviewDemoWrapper.vue?vue&type=template&id=7ce9c31c&
+// CONCATENATED MODULE: ./src/Views/RubricPreviewDemoWrapper.vue?vue&type=template&id=74608a7b&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricPreviewDemoWrapper.vue?vue&type=script&lang=ts&
 
@@ -28960,7 +29099,6 @@ var RubricPreviewDemoWrappervue_type_template_id_7ce9c31c_staticRenderFns = []
 
 
 
- //import RubricEntry from './RubricEntry2.vue';
 
 
 
@@ -29007,8 +29145,8 @@ RubricPreviewDemoWrappervue_type_script_lang_ts_RubricPreviewDemoWrapper = __dec
 
 var RubricPreviewDemoWrapper_component = normalizeComponent(
   Views_RubricPreviewDemoWrappervue_type_script_lang_ts_,
-  RubricPreviewDemoWrappervue_type_template_id_7ce9c31c_render,
-  RubricPreviewDemoWrappervue_type_template_id_7ce9c31c_staticRenderFns,
+  RubricPreviewDemoWrappervue_type_template_id_74608a7b_render,
+  RubricPreviewDemoWrappervue_type_template_id_74608a7b_staticRenderFns,
   false,
   null,
   null,
@@ -29017,12 +29155,12 @@ var RubricPreviewDemoWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricPreviewDemoWrapper = (RubricPreviewDemoWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryDemoWrapper.vue?vue&type=template&id=693d03a2&
-var RubricEntryDemoWrappervue_type_template_id_693d03a2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"tree-node-evaluations":_vm.getTreeNodeEvaluations(_vm.evaluator),"ui-state":_vm.store.uiState.entry,"options":_vm.store.uiState.entry.options},on:{"level-selected":_vm.selectLevel,"criterium-feedback-changed":_vm.updateFeedback},scopedSlots:_vm._u([{key:"demoEvaluator",fn:function(){return [_c('li',{staticClass:"app-tool-item"},[_vm._v("Demo: "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.evaluator),expression:"evaluator"}],on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.evaluator=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},function($event){_vm.store.uiState.entry.options.evaluator = _vm.evaluator}]}},[_c('option',{attrs:{"disabled":""},domProps:{"value":null}},[_vm._v(_vm._s(_vm.$t('select')))]),_vm._l((_vm.store.rubricResults.evaluators),function(evaluator){return _c('option',{domProps:{"value":evaluator}},[_vm._v(_vm._s(evaluator.name))])})],2)])]},proxy:true}])})],1)}
-var RubricEntryDemoWrappervue_type_template_id_693d03a2_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryDemoWrapper.vue?vue&type=template&id=4952440e&
+var RubricEntryDemoWrappervue_type_template_id_4952440e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"tree-node-evaluations":_vm.getTreeNodeEvaluations(_vm.evaluator),"ui-state":_vm.store.uiState.entry,"options":_vm.store.uiState.entry.options},on:{"level-selected":_vm.selectLevel,"criterium-feedback-changed":_vm.updateFeedback},scopedSlots:_vm._u([{key:"demoEvaluator",fn:function(){return [_c('li',{staticClass:"app-tool-item"},[_vm._v("Demo: "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.evaluator),expression:"evaluator"}],on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.evaluator=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},function($event){_vm.store.uiState.entry.options.evaluator = _vm.evaluator}]}},[_c('option',{attrs:{"disabled":""},domProps:{"value":null}},[_vm._v(_vm._s(_vm.$t('select')))]),_vm._l((_vm.store.rubricResults.evaluators),function(evaluator){return _c('option',{domProps:{"value":evaluator}},[_vm._v(_vm._s(evaluator.name))])})],2)])]},proxy:true}])})],1)}
+var RubricEntryDemoWrappervue_type_template_id_4952440e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricEntryDemoWrapper.vue?vue&type=template&id=693d03a2&
+// CONCATENATED MODULE: ./src/Views/RubricEntryDemoWrapper.vue?vue&type=template&id=4952440e&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntryDemoWrapper.vue?vue&type=script&lang=ts&
 
@@ -29201,8 +29339,8 @@ var RubricEntryDemoWrappervue_type_custom_index_0_blockType_i18n = __webpack_req
 
 var RubricEntryDemoWrapper_component = normalizeComponent(
   Views_RubricEntryDemoWrappervue_type_script_lang_ts_,
-  RubricEntryDemoWrappervue_type_template_id_693d03a2_render,
-  RubricEntryDemoWrappervue_type_template_id_693d03a2_staticRenderFns,
+  RubricEntryDemoWrappervue_type_template_id_4952440e_render,
+  RubricEntryDemoWrappervue_type_template_id_4952440e_staticRenderFns,
   false,
   null,
   null,
@@ -29754,7 +29892,6 @@ if (typeof LevelsViewvue_type_custom_index_0_blockType_i18n["default"] === 'func
 
 
 
- //import RubricBuilderFull from '../Views/RubricBuilderFull2.vue';
 
 external_commonjs_vue_commonjs2_vue_root_Vue_default.a.use(vue_router_esm);
 var builderRoutes = [{
@@ -29853,18 +29990,6 @@ var routers = {
 
 /* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_plugin);
 
-
-
-/***/ }),
-
-/***/ "ccd0":
-/***/ (function(module, exports) {
-
-module.exports = function (Component) {
-  Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"extra-feedback":"Enter extra feedback","points":"points","select-level":"Select a level","show-default-description":"Show level descriptions and feedback","total":"Total"},"fr":{"extra-feedback":"Feed-back supplémentaire","points":"points","select-level":"Selectionnez un niveau","show-default-description":"Afficher descriptions de niveau et feed-back","total":"Total"},"nl":{"extra-feedback":"Geef bijkomende feedback","points":"punten","select-level":"Selecteer een niveau","show-default-description":"Toon niveauomschrijvingen en feedback","total":"Totaal"}}')
-  delete Component.options._Ctor
-}
 
 
 /***/ }),
@@ -30620,16 +30745,6 @@ var userAgent = __webpack_require__("e4e7");
 
 module.exports = /(iphone|ipod|ipad).*applewebkit/i.test(userAgent);
 
-
-/***/ }),
-
-/***/ "eefa":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ccd0");
-/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__);
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CriteriumEntry_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
