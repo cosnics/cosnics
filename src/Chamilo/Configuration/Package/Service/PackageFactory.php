@@ -167,6 +167,8 @@ class PackageFactory
             $extra = $cosnicsProperties->extra;
         }
 
+        $package->setCss($cosnicsProperties->css);
+
         $package->set_extra($extra);
 
         $package->setCoreInstall($cosnicsProperties->install->core ? $cosnicsProperties->install->core : 0);

@@ -43,41 +43,53 @@
                 "core": 1,
                 "default": 0
             },
-            "css": {
-                "vendor": [
-                    "Resources/Plugin/Bootstrap/css/bootstrap.min.css",
-                    "Resources/Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css",
-                    "Resources/Plugin/FontAwesome5/css/all.min.css",
-                    "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
-                    "Resources/Plugin/Dropzone/dropzone.min.css",
-                    "Resources/Plugin/Jquery/jquery-ui.min.css",
-                    "Resources/Plugin/Bootstrap/css/bootstrap-toggle.min.css",
-                    "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css",
-                    "Resources/Plugin/Highlight/github.min.css",
-                    "Resources/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css"
-                ],
-                "common": {
-                    "Aqua": [
-                        "Resources/Css/Aqua/General.min.css",
-                        "Resources/Css/Aqua/Form.min.css",
-                        "Resources/Css/Aqua/Table.min.css",
-                        "Resources/Css/Aqua/Tabs.min.css",
-                        "Resources/Css/Aqua/Tree.min.css",
-                        "Resources/Css/Aqua/Bootstrap.min.css",
-                        "Resources/Css/Aqua/Stylesheet.min.css"
-                    ],
-                    "Ruby": [
-                        "Resources/Css/Aqua/General.min.css",
-                        "Resources/Css/Aqua/Form.min.css",
-                        "Resources/Css/Aqua/Table.min.css",
-                        "Resources/Css/Aqua/Tabs.min.css",
-                        "Resources/Css/Aqua/Tree.min.css",
-                        "Resources/Css/Aqua/Bootstrap.min.css",
-                        "Resources/Css/Aqua/Stylesheet.min.css",
-                        "Resources/Css/Ruby/Stylesheet.min.css"
+            "css": [
+                {
+                    "type": "vendor",
+                    "files": [
+                        "Resources/Plugin/Bootstrap/css/bootstrap.min.css",
+                        "Resources/Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css",
+                        "Resources/Plugin/FontAwesome5/css/all.min.css",
+                        "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
+                        "Resources/Plugin/Dropzone/dropzone.min.css",
+                        "Resources/Plugin/Jquery/jquery-ui.min.css",
+                        "Resources/Plugin/Bootstrap/css/bootstrap-toggle.min.css",
+                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css",
+                        "Resources/Plugin/Highlight/github.min.css",
+                        "Resources/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css"
+                    ]
+                },
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/General.min.css",
+                                "Resources/Css/Aqua/Form.min.css",
+                                "Resources/Css/Aqua/Table.min.css",
+                                "Resources/Css/Aqua/Tabs.min.css",
+                                "Resources/Css/Aqua/Tree.min.css",
+                                "Resources/Css/Aqua/Bootstrap.min.css",
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/General.min.css",
+                                "Resources/Css/Aqua/Form.min.css",
+                                "Resources/Css/Aqua/Table.min.css",
+                                "Resources/Css/Aqua/Tabs.min.css",
+                                "Resources/Css/Aqua/Tree.min.css",
+                                "Resources/Css/Aqua/Bootstrap.min.css",
+                                "Resources/Css/Aqua/Stylesheet.min.css",
+                                "Resources/Css/Ruby/Stylesheet.min.css"
+                            ]
+                        }
                     ]
                 }
-            },
+            ],
             "dependencies": [
                 {
                     "id": "Chamilo\\Configuration",
