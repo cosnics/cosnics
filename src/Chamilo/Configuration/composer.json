@@ -29,6 +29,25 @@
             "name": "Configuration",
             "context": "Chamilo\\Configuration",
             "type": "Chamilo",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "core": 1,
                 "default": 0

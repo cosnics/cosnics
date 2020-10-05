@@ -26,6 +26,25 @@
             "name": "Rights",
             "context": "Chamilo\\Libraries\\Rights",
             "type": "Chamilo\\Libraries",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "core": 1,
                 "default": 0

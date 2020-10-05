@@ -33,6 +33,26 @@
             "name": "YouTube",
             "context": "Chamilo\\Core\\Repository\\Implementation\\Youtube",
             "type": "Chamilo\\Core\\Repository\\Implementation",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css",
+                                "Resources/Css/Ruby/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "default": 1,
                 "core": 0

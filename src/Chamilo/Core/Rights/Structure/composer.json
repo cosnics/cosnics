@@ -27,6 +27,26 @@
             "name": "Structure Rights Management",
             "context": "Chamilo\\Core\\Rights\\Structure",
             "type": "Chamilo\\Core\\Rights",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css",
+                                "Resources/Css/Ruby/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "core": 1,
                 "default": 0

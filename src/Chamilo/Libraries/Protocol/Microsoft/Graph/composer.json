@@ -30,6 +30,25 @@
             "name": "Microsoft Graph",
             "context": "Chamilo\\Libraries\\Protocol\\Microsoft\\Graph",
             "type": "Chamilo\\Libraries\\Protocol\\Microsoft",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "default": 0,
                 "core": 0

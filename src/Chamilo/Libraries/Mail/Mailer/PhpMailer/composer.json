@@ -28,6 +28,25 @@
             "name": "PHPMailer",
             "context": "Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer",
             "type": "Chamilo\\Libraries\\Mail\\Mailer",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "core": 1,
                 "default": 0

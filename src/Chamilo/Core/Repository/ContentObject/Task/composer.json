@@ -30,6 +30,26 @@
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Task",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Agenda",
+            "css": [
+                {
+                    "type": "common",
+                    "themes": [
+                        {
+                            "type": "Aqua",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
+                            ]
+                        },
+                        {
+                            "type": "Ruby",
+                            "files": [
+                                "Resources/Css/Aqua/Stylesheet.min.css",
+                                "Resources/Css/Ruby/Stylesheet.min.css"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "install": {
                 "default": 1,
                 "core": 0
