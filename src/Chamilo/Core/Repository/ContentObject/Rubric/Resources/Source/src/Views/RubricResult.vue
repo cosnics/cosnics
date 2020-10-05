@@ -73,7 +73,7 @@
                             <div class="treenode-title-header-wrap" :class="{'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">
                                 <div class="treenode-title-header mod-res" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                                     <div class="treenode-title-header-pre mod-criterium"></div>
-                                    <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
+                                    <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                                 </div>
                             </div>
                             <div class="treenode-rubric-results" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">

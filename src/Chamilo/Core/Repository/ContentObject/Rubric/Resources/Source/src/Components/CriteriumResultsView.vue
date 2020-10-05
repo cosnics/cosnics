@@ -28,11 +28,7 @@
         <div class="rr-selected-criterium">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
             <div class="rr-selected-criterium-results">
-                <div class="rr-selected-criterium-results-title">
-                    <!--<span>{{ criterium.parent.parent.title }}<i class="fa fa-angle-right separator" /></span>
-                    <span v-if="criterium.parent.title.trim().length !== 0">{{ criterium.parent.title }}<i class="fa fa-angle-right separator" /></span>
-                    --><span>{{ criterium.title }}</span>
-                </div>
+                <div class="rr-selected-criterium-results-title u-markdown-criterium" v-html="criterium.toMarkdown()"></div>
                 <div class="rr-selected-result" v-for="{evaluator, score, level, feedback} in evaluations">
                     <p v-if="rubric.useScores && level !== null">
                         <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ score || '0' }}</span>
@@ -55,7 +51,7 @@
                             <div class="title">{{ level.title }}</div>
                             <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(criterium, level) }}</div>
                         </div>
-                        <div class="choice-feedback" v-html="marked(rubric.getChoice(criterium, level).feedback)"></div>
+                        <div class="choice-feedback" v-html="rubric.getChoice(criterium, level).toMarkdown()"></div>
                     </li>
                 </ul>
             </div>
@@ -67,8 +63,6 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
     import Criterium from '../Domain/Criterium';
-    import * as marked from 'marked';
-    import DOMPurify from 'dompurify';
 
     @Component({
         filters: {
@@ -83,10 +77,6 @@
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Criterium}) readonly criterium!: Criterium;
         @Prop({type: Array}) readonly evaluations!: any[];
-
-        marked(rawString: string) {
-            return DOMPurify.sanitize(marked(rawString));
-        }
     }
 </script>
 <style lang="scss">

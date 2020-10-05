@@ -1,3 +1,5 @@
+import {toMarkdown} from '../Util/util';
+
 export interface ChoiceJsonObject {
     selected: boolean,
     feedback: string,
@@ -42,6 +44,10 @@ export default class Choice {
             criterium_id: criteriumId,
             level_id: levelId
         }
+    }
+
+    toMarkdown(): string {
+        return toMarkdown(this.feedback);
     }
 
     static fromJSON(choice:string|ChoiceJsonObject):Choice {

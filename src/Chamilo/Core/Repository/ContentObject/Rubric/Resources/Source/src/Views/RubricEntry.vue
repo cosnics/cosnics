@@ -77,7 +77,7 @@
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
                         <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext), 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div class="treenode-title-header-pre mod-criterium"></div>
-                            <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title">{{ criterium.title }}</h3>
+                            <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                             <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
@@ -91,7 +91,7 @@
                                         <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
                                         <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
                                     </component>
-                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="marked(choice.feedback)"></div>
+                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="choice.choice.toMarkdown()"></div>
                                 </div>
                             </div>
                             <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
@@ -129,8 +129,6 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
-    import * as marked from 'marked';
-    import DOMPurify from 'dompurify';
 
     function add(v1: number, v2: number) {
         return v1 + v2;
@@ -147,10 +145,6 @@
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
-
-        marked(rawString: string) {
-            return DOMPurify.sanitize(marked(rawString));
-        }
 
         anyChoicesFeedback(ext: TreeNodeExt) {
             return ext.choices.filter(choice => !!choice.feedback).length > 0;

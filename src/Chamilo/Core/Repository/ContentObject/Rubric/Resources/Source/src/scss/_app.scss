@@ -26,6 +26,21 @@
     }
   }
 
+  .u-markdown-criterium {
+    & > ul, & > ol {
+      margin: 0;
+      padding: 0 0 0 1.5rem;
+    }
+
+    & > ul {
+      list-style: disc;
+    }
+
+    & > p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   @media only screen and (min-width: 700px) {
     .app-header-tools.builder-app-full-view {
       display: none;

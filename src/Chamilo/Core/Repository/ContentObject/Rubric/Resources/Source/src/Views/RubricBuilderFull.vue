@@ -36,7 +36,7 @@
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
                     <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
-                        <h3 class="treenode-title criterium-title">{{ criterium.title }}</h3>
+                        <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
                     <div class="treenode-rubric-input">
                         <div class="treenode-choices">
