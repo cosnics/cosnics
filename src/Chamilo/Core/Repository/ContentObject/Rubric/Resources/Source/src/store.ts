@@ -1,6 +1,7 @@
 export default {
     uiState: {
         builder: {
+            showDefaultFeedbackFields: false,
             showSplitView: false,
             selectedCriterium: '',
             selectedClusterView1: '',

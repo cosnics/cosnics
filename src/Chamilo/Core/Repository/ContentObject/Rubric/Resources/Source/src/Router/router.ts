@@ -9,12 +9,18 @@ import RubricResultDemoWrapper from '../Views/RubricResultDemoWrapper.vue';
 import ScoreRubricView from '../Components/ScoreRubricView.vue';
 import LevelsView from '../Components/LevelsView.vue';
 import RubricBuilderFull from '../Views/RubricBuilderFull.vue';
+import RubricBuilderPreview from '../Views/RubricBuilderPreview.vue';
 
 Vue.use(VueRouter);
 
 const builderRoutes = [
   {
     path: '/',
+    name: 'BuilderPreview',
+    component: RubricBuilderPreview,
+  },
+  {
+    path: '/builder',
     name: 'Builder',
     component: ScoreRubricView,
   },
@@ -43,6 +49,11 @@ const demoRoutes = [
     children: [
       {
         path: '',
+        name: 'BuilderPreview',
+        component: RubricBuilderPreview
+      },
+      {
+        path: 'builder',
         name: 'Builder',
         component: ScoreRubricView,
       },
@@ -61,8 +72,7 @@ const demoRoutes = [
   {
     path: '/preview',
     name: 'Preview',
-    component: RubricPreviewDemoWrapper,
-    props: true
+    component: RubricPreviewDemoWrapper
   },
   {
     path: '/entry',

@@ -9539,7 +9539,7 @@ module.exports = function (Component) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"builder":"Rubric","level-descriptions":"Level descriptions","levels":"Levels","error-conflict":"The server responded with an error due to a conflict. Probably someone else is working on the same rubric at this time. Please refresh the page and try again.","error-forbidden":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-notfound":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-timeout":"The server is taking too long to respond. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-unknown":"An unknown error happened. Possibly your last change(s) haven\u0027t been saved. Please refresh the page and try again.","use-scores":"Use Scores"},"fr":{"builder":"Rubrique","level-descriptions":"Descriptions de niveau","levels":"Niveaux","use-scores":"Utiliser les Scores"},"nl":{"builder":"Rubric","level-descriptions":"Niveauomschrijvingen","levels":"Niveaus","error-conflict":"Serverfout vanwege een conflict. Misschien werkt iemand aan dezelfde rubric op dit ogenblik. Gelieve de pagina te herladen en opnieuw te proberen.","error-forbidden":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-notfound":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-timeout":"De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-unknown":"Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.","use-scores":"Gebruik Scores"}}')
+  Component.options.__i18n.push('{"en":{"builder":"Builder","level-descriptions":"Level descriptions","levels":"Levels","error-conflict":"The server responded with an error due to a conflict. Probably someone else is working on the same rubric at this time. Please refresh the page and try again.","error-forbidden":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-notfound":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-timeout":"The server is taking too long to respond. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-unknown":"An unknown error happened. Possibly your last change(s) haven\u0027t been saved. Please refresh the page and try again.","preview":"Preview","use-scores":"Use Scores"},"fr":{"builder":"Construire","level-descriptions":"Descriptions de niveau","levels":"Niveaux","preview":"Aperçu","use-scores":"Utiliser les Scores"},"nl":{"builder":"Bouwen","level-descriptions":"Niveauomschrijvingen","levels":"Niveaus","error-conflict":"Serverfout vanwege een conflict. Misschien werkt iemand aan dezelfde rubric op dit ogenblik. Gelieve de pagina te herladen en opnieuw te proberen.","error-forbidden":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-notfound":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-timeout":"De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-unknown":"Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.","preview":"Preview","use-scores":"Gebruik Scores"}}')
   delete Component.options._Ctor
 }
 
@@ -20122,22 +20122,22 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricDemoWrapper = (component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderWrapper.vue?vue&type=template&id=4e3312c8&
-var RubricBuilderWrappervue_type_template_id_4e3312c8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.debugServerResponse)?_c('div',[_c('rubric-builder',{attrs:{"api-config":_vm.apiConfig,"rubric-data":_vm.convertedRubricData,"version":_vm.version,"ui-state":_vm.uiState}}),_c('div',{attrs:{"id":"server-response"}})],1):_c('rubric-builder',{attrs:{"api-config":_vm.apiConfig,"rubric-data":_vm.convertedRubricData,"version":_vm.version,"ui-state":_vm.uiState}})}
-var RubricBuilderWrappervue_type_template_id_4e3312c8_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderWrapper.vue?vue&type=template&id=35b37b62&
+var RubricBuilderWrappervue_type_template_id_35b37b62_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.debugServerResponse)?_c('div',[_c('rubric-builder',{attrs:{"api-config":_vm.apiConfig,"rubric-data":_vm.convertedRubricData,"version":_vm.version,"ui-state":_vm.uiState}}),_c('div',{attrs:{"id":"server-response"}})],1):_c('rubric-builder',{attrs:{"api-config":_vm.apiConfig,"rubric-data":_vm.convertedRubricData,"version":_vm.version,"ui-state":_vm.uiState}})}
+var RubricBuilderWrappervue_type_template_id_35b37b62_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilderWrapper.vue?vue&type=template&id=4e3312c8&
+// CONCATENATED MODULE: ./src/Views/RubricBuilderWrapper.vue?vue&type=template&id=35b37b62&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.number.constructor.js
 var es_number_constructor = __webpack_require__("250b");
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=51e0d0af&
-var RubricBuildervue_type_template_id_51e0d0af_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.rubric)?_c('ul',{staticClass:"app-header-tools",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull', 'mod-hide': _vm.$route.name === 'Builder' && !_vm.selectedCriterium}},[_c('li',{staticClass:"app-tool-item"},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.rubric.useScores },attrs:{"aria-label":_vm.$t('use-scores')},on:{"click":function($event){$event.preventDefault();return _vm.toggleUseScores($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('use-scores')))])])])]):_vm._e(),_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}})],1),_c('div',{staticClass:"rubrics",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull'}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":_vm.$route.name === 'Builder' ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
-var RubricBuildervue_type_template_id_51e0d0af_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=120c2e57&
+var RubricBuildervue_type_template_id_120c2e57_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderPreview' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('preview')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.rubric && _vm.$route.name !== 'BuilderPreview')?_c('ul',{staticClass:"app-header-tools",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull', 'mod-hide': _vm.$route.name === 'Builder' && !_vm.selectedCriterium}},[_c('li',{staticClass:"app-tool-item"},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.rubric.useScores },attrs:{"aria-label":_vm.$t('use-scores')},on:{"click":function($event){$event.preventDefault();return _vm.toggleUseScores($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('use-scores')))])])])]):_vm._e(),(_vm.$route.name !== 'BuilderPreview')?_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}}):_vm._e()],1),_c('div',{staticClass:"rubrics",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull'}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":(_vm.$route.name === 'Builder' || _vm.$route.name === 'BuilderPreview') ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
+var RubricBuildervue_type_template_id_120c2e57_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=51e0d0af&
+// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=120c2e57&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.find.js
 var es_array_find = __webpack_require__("529c");
@@ -23947,8 +23947,8 @@ var RubricBuildervue_type_custom_index_0_blockType_i18n = __webpack_require__("5
 
 var RubricBuilder_component = normalizeComponent(
   Views_RubricBuildervue_type_script_lang_ts_,
-  RubricBuildervue_type_template_id_51e0d0af_render,
-  RubricBuildervue_type_template_id_51e0d0af_staticRenderFns,
+  RubricBuildervue_type_template_id_120c2e57_render,
+  RubricBuildervue_type_template_id_120c2e57_staticRenderFns,
   false,
   null,
   null,
@@ -23990,6 +23990,7 @@ function (_Vue) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(RubricBuilderWrapper).apply(this, arguments));
     _this.uiState = {
       showSplitView: false,
+      showDefaultFeedbackFields: false,
       selectedCriterium: '',
       selectedClusterView1: '',
       selectedClusterView2: ''
@@ -24045,8 +24046,8 @@ RubricBuilderWrappervue_type_script_lang_ts_RubricBuilderWrapper = __decorate([v
 
 var RubricBuilderWrapper_component = normalizeComponent(
   Views_RubricBuilderWrappervue_type_script_lang_ts_,
-  RubricBuilderWrappervue_type_template_id_4e3312c8_render,
-  RubricBuilderWrappervue_type_template_id_4e3312c8_staticRenderFns,
+  RubricBuilderWrappervue_type_template_id_35b37b62_render,
+  RubricBuilderWrappervue_type_template_id_35b37b62_staticRenderFns,
   false,
   null,
   null,
@@ -28194,6 +28195,7 @@ var es_object_assign = __webpack_require__("49b6");
 /* harmony default export */ var store = ({
   uiState: {
     builder: {
+      showDefaultFeedbackFields: false,
       showSplitView: false,
       selectedCriterium: '',
       selectedClusterView1: '',
@@ -29865,7 +29867,79 @@ var LevelsView_component = normalizeComponent(
 if (typeof LevelsViewvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(LevelsViewvue_type_custom_index_0_blockType_i18n["default"])(LevelsView_component)
 
 /* harmony default export */ var Components_LevelsView = (LevelsView_component.exports);
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderPreview.vue?vue&type=template&id=d8c98aca&
+var RubricBuilderPreviewvue_type_template_id_d8c98aca_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-entry',{attrs:{"rubric":_vm.rubric,"preview":true,"ui-state":_vm.uiState}}):_vm._e()}
+var RubricBuilderPreviewvue_type_template_id_d8c98aca_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/Views/RubricBuilderPreview.vue?vue&type=template&id=d8c98aca&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderPreview.vue?vue&type=script&lang=ts&
+
+
+
+
+
+var RubricBuilderPreviewvue_type_script_lang_ts_a;
+
+
+
+
+
+
+var RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(RubricBuilderPreview, _Vue);
+
+  function RubricBuilderPreview() {
+    _classCallCheck(this, RubricBuilderPreview);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(RubricBuilderPreview).apply(this, arguments));
+  }
+
+  return RubricBuilderPreview;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: Rubric_Rubric,
+  required: true
+}), __metadata("design:type", typeof (RubricBuilderPreviewvue_type_script_lang_ts_a = typeof Rubric_Rubric !== "undefined" && Rubric_Rubric) === "function" ? RubricBuilderPreviewvue_type_script_lang_ts_a : Object)], RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview.prototype, "rubric", void 0);
+
+__decorate([Prop({
+  type: Object
+}), __metadata("design:type", Object)], RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview.prototype, "uiState", void 0);
+
+RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview = __decorate([vue_class_component_esm({
+  components: {
+    RubricEntry: Views_RubricEntry
+  }
+})], RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview);
+/* harmony default export */ var RubricBuilderPreviewvue_type_script_lang_ts_ = (RubricBuilderPreviewvue_type_script_lang_ts_RubricBuilderPreview);
+// CONCATENATED MODULE: ./src/Views/RubricBuilderPreview.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var Views_RubricBuilderPreviewvue_type_script_lang_ts_ = (RubricBuilderPreviewvue_type_script_lang_ts_); 
+// CONCATENATED MODULE: ./src/Views/RubricBuilderPreview.vue
+
+
+
+
+
+/* normalize component */
+
+var RubricBuilderPreview_component = normalizeComponent(
+  Views_RubricBuilderPreviewvue_type_script_lang_ts_,
+  RubricBuilderPreviewvue_type_template_id_d8c98aca_render,
+  RubricBuilderPreviewvue_type_template_id_d8c98aca_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Views_RubricBuilderPreview = (RubricBuilderPreview_component.exports);
 // CONCATENATED MODULE: ./src/Router/router.ts
+
 
 
 
@@ -29880,6 +29954,10 @@ if (typeof LevelsViewvue_type_custom_index_0_blockType_i18n["default"] === 'func
 external_commonjs_vue_commonjs2_vue_root_Vue_default.a.use(vue_router_esm);
 var builderRoutes = [{
   path: '/',
+  name: 'BuilderPreview',
+  component: Views_RubricBuilderPreview
+}, {
+  path: '/builder',
   name: 'Builder',
   component: Components_ScoreRubricView
 }, {
@@ -29901,6 +29979,10 @@ var demoRoutes = [{
   component: Views_RubricBuilderDemoWrapper,
   children: [{
     path: '',
+    name: 'BuilderPreview',
+    component: Views_RubricBuilderPreview
+  }, {
+    path: 'builder',
     name: 'Builder',
     component: Components_ScoreRubricView
   }, {
@@ -29915,8 +29997,7 @@ var demoRoutes = [{
 }, {
   path: '/preview',
   name: 'Preview',
-  component: Views_RubricPreviewDemoWrapper,
-  props: true
+  component: Views_RubricPreviewDemoWrapper
 }, {
   path: '/entry',
   name: 'Entry',

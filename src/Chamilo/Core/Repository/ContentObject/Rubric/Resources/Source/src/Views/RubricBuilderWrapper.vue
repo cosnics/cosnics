@@ -20,6 +20,7 @@
     export default class RubricBuilderWrapper extends Vue {
         private uiState = {
             showSplitView: false,
+            showDefaultFeedbackFields: false,
             selectedCriterium: '',
             selectedClusterView1: '',
             selectedClusterView2: ''

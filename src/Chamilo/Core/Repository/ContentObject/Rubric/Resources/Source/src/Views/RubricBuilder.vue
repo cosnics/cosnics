@@ -1,7 +1,7 @@
 <i18n>
 {
     "en": {
-        "builder": "Rubric",
+        "builder": "Builder",
         "level-descriptions": "Level descriptions",
         "levels": "Levels",
         "error-conflict": "The server responded with an error due to a conflict. Probably someone else is working on the same rubric at this time. Please refresh the page and try again.",
@@ -9,16 +9,18 @@
         "error-notfound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-timeout": "The server is taking too long to respond. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
+        "preview": "Preview",
         "use-scores": "Use Scores"
     },
     "fr": {
-        "builder": "Rubrique",
+        "builder": "Construire",
         "level-descriptions": "Descriptions de niveau",
         "levels": "Niveaux",
+        "preview": "Aperçu",
         "use-scores": "Utiliser les Scores"
     },
     "nl": {
-        "builder": "Rubric",
+        "builder": "Bouwen",
         "level-descriptions": "Niveauomschrijvingen",
         "levels": "Niveaus",
         "error-conflict": "Serverfout vanwege een conflict. Misschien werkt iemand aan dezelfde rubric op dit ogenblik. Gelieve de pagina te herladen en opnieuw te proberen.",
@@ -26,6 +28,7 @@
         "error-notfound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-timeout": "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "preview": "Preview",
         "use-scores": "Gebruik Scores"
     }
 }
@@ -35,21 +38,22 @@
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-nav">
+                    <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderPreview' }"><span class="link-text" tabindex="-1">{{ $t('preview') }}</span></router-link></li>
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'Builder' }"><span class="link-text" tabindex="-1">{{ $t('builder') }}</span></router-link></li>
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderLevels' }"><span class="link-text" tabindex="-1">{{ $t('levels') }}</span></router-link></li>
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('level-descriptions') }}</span></router-link></li>
                 </ul>
             </nav>
-            <ul class="app-header-tools" v-if="rubric" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
+            <ul class="app-header-tools" v-if="rubric && $route.name !== 'BuilderPreview'" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
                 <li class="app-tool-item"><button class="btn-check" :aria-label="$t('use-scores')" :class="{ checked: rubric.useScores }" @click.prevent="toggleUseScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('use-scores') }}</span></button></li>
             </ul>
-            <save-area :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
+            <save-area v-if="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
         <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
-                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="$route.name === 'Builder' ? uiState : null" @criterium-selected="selectCriterium"></router-view>
+                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
