@@ -125,7 +125,9 @@ class ViewerComponent extends Manager implements TableSupport
         $searchToolbarRenderer = new ButtonToolBarRenderer($searchToolbar);
 
         $supportsRubrics = $this->supportsRubrics();
-        $hasRubric = $canBuildRubric = $selfEvaluationAllowed = false;
+        $hasRubric = false;
+        $canBuildRubric = false;
+        $selfEvaluationAllowed = false;
         $rubricPreview = null;
 
         if ($supportsRubrics)
@@ -176,6 +178,7 @@ class ViewerComponent extends Manager implements TableSupport
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
+            'REMOVE_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_REMOVE_RUBRIC]),
             'TOGGLE_RUBRIC_SELF_EVALUATION_URL' => $this->get_url(
                 [self::PARAM_ACTION => self::ACTION_TOGGLE_RUBRIC_SELF_EVALUATION]
             ),

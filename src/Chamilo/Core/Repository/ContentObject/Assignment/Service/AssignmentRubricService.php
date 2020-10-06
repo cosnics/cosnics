@@ -65,6 +65,17 @@ class AssignmentRubricService
     /**
      * @param Assignment $assignment
      *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeRubricFromAssigment(Assignment $assignment)
+    {
+        $assignmentRubric = $this->assignmentRubricRepository->getAssignmentRubricForAssignment($assignment);
+        $this->assignmentRubricRepository->removeAssignmentRubric($assignmentRubric);
+    }
+
+    /**
+     * @param Assignment $assignment
+     *
      * @return Rubric|\Chamilo\Core\Repository\Storage\DataClass\ContentObject|null
      */
     public function getRubricForAssignment(Assignment $assignment)

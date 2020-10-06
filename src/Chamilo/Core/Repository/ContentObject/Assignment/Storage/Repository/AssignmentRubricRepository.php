@@ -27,6 +27,16 @@ class AssignmentRubricRepository extends CommonEntityRepository
     }
 
     /**
+     * @param AssignmentRubric $assignmentRubric
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeAssignmentRubric(AssignmentRubric $assignmentRubric)
+    {
+        $this->removeEntity($assignmentRubric);
+    }
+
+    /**
      * @param Assignment $assignment
      *
      * @return AssignmentRubric|object
