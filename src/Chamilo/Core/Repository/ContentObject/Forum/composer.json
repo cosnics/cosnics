@@ -42,8 +42,7 @@
                         {
                             "type": "Ruby",
                             "files": [
-                                "Resources/Css/Aqua/Stylesheet.min.css",
-                                "Resources/Css/Ruby/Stylesheet.min.css"
+                                "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         }
                     ]

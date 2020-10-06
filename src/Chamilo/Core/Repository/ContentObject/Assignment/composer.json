@@ -1,35 +1,35 @@
 {
-  "name": "cosnics/core-repository-content-object-assignment",
-  "version": "1.0.0",
-  "description": "Core Repository ContentObject Assignment",
-  "keywords": [
-    "Core",
-    "Repository",
-    "ContentObject",
-    "Assignment"
-  ],
-  "homepage": "http://www.cosnics.org",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Sven Vanpoucke",
-      "email": "sven.vanpoucke@hogent.be"
+    "name": "cosnics/core-repository-content-object-assignment",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Assignment",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Assignment"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0"
     },
-    {
-      "name": "Hans De Bisschop",
-      "email": "hans.de.bisschop@ehb.be"
-    }
-  ],
-  "require": {
-    "php": ">=7.2.0"
-  },
-  "extra": {
-    "cosnics": {
-      "name": "Assignment",
-      "context": "Chamilo\\Core\\Repository\\ContentObject\\Assignment",
-      "type": "Chamilo\\Core\\Repository\\ContentObject",
-      "category": "Assignment",
-      "css": [
+    "extra": {
+        "cosnics": {
+            "name": "Assignment",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Assignment",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Assignment",
+            "css": [
                 {
                     "type": "common",
                     "themes": [
@@ -42,23 +42,22 @@
                         {
                             "type": "Ruby",
                             "files": [
-                                "Resources/Css/Aqua/Stylesheet.min.css",
-                                "Resources/Css/Ruby/Stylesheet.min.css"
+                                "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         }
                     ]
                 }
             ],
             "install": {
-        "default": 1,
-        "core": 0
-      },
-      "dependencies": [
-        {
-          "id": "Chamilo\\Core\\Repository",
-          "version": ">=1.0.0"
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
         }
-      ]
     }
-  }
 }

@@ -1,5 +1,30 @@
-@import url("../Aqua/ErrorPages.min.css");
+html,
+body,
+.main {
+    height: 100%;
+}
 
 body {
     background-image: url("../../Images/Ruby/Background/ErrorPage.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.main {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.error-message-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    margin: 30px;
+    max-width: 650px;
+    padding: 30px;
+}
+
+@media screen and (min-width: 720px) {
+    .error-message-container {
+        width: 650px;
+    }
 }

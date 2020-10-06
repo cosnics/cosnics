@@ -34,17 +34,13 @@
                         {
                             "type": "Aqua",
                             "files": [
-                                "Resources/Css/Aqua/Print.min.css",
                                 "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         },
                         {
                             "type": "Ruby",
                             "files": [
-                                "Resources/Css/Aqua/Print.min.css",
-                                "Resources/Css/Ruby/Print.min.css",
-                                "Resources/Css/Aqua/Stylesheet.min.css",
-                                "Resources/Css/Ruby/Stylesheet.min.css"
+                                "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         }
                     ]
