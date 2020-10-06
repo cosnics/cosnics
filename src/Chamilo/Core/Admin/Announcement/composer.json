@@ -1,13 +1,11 @@
 {
-    "name": "cosnics/core-repository-workspace-extension-office365",
+    "name": "cosnics/core-admin-announcement",
     "version": "1.0.0",
-    "description": "Core Repository Workspace Extension Office365",
+    "description": "Core Admin Announcement",
     "keywords": [
         "Core",
-        "Repository",
-        "Workspace",
-        "Extension",
-        "Office365"
+        "Admin",
+        "Announcement"
     ],
     "homepage": "http://www.cosnics.org",
     "license": "MIT",
@@ -19,6 +17,14 @@
         {
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
+        },
+        {
+            "name": "Sven Vanpoucke",
+            "email": null
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": null
         }
     ],
     "require": {
@@ -26,9 +32,9 @@
     },
     "extra": {
         "cosnics": {
-            "name": "Office 365",
-            "context": "Chamilo\\Core\\Repository\\Workspace\\Extension\\Office365",
-            "type": "Chamilo\\Core\\Repository\\Workspace\\Extension",
+            "name": "Announcement",
+            "context": "Chamilo\\Core\\Admin\\Announcement",
+            "type": "Chamilo\\Core",
             "css": [
                 {
                     "type": "common",
@@ -49,12 +55,12 @@
                 }
             ],
             "install": {
-                "default": 0,
-                "core": 0
+                "core": 1,
+                "default": 0
             },
             "dependencies": [
                 {
-                    "id": "Chamilo\\Core\\Repository",
+                    "id": "Chamilo\\Core\\Admin",
                     "version": ">=1.0.0"
                 }
             ]

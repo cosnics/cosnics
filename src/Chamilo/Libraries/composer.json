@@ -90,6 +90,10 @@
                     ]
                 }
             ],
+            "additional": [
+                "Chamilo\\Libraries\\Calendar",
+                "Chamilo\\Libraries\\Rights"
+            ],
             "dependencies": [
                 {
                     "id": "Chamilo\\Configuration",

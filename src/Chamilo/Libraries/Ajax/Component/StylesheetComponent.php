@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Service\PackageContextSequencer;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
@@ -21,6 +23,19 @@ class StylesheetComponent extends Manager implements NoAuthenticationSupport, No
 
     public function run()
     {
+        $platformPackageBundles = PlatformPackageBundles::getInstance();
+        $packages = $platformPackageBundles->get_packages();
+
+        var_dump(array_keys($packages));
+
+        var_dump($this->getService(PackageContextSequencer::class)->sequencePackageContexts(array_keys($packages)));
+        exit;
+
+        //        $sequencer = new Sequencer(array_keys($packages));
+        //        $sortedPackages = $sequencer->run();
+        //        var_dump(array_keys($packages), $sortedPackages);
+        //        exit;
+
         switch ($this->getType())
         {
             case self::TYPE_COMMON:

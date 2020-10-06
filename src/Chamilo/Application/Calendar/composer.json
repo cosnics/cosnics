@@ -50,6 +50,9 @@
                 "default": 1,
                 "core": 0
             },
+            "additional": [
+                "Chamilo\\Application\\Calendar\\Extension\\Personal"
+            ],
             "dependencies": [
                 {
                     "id": "Chamilo\\Configuration",

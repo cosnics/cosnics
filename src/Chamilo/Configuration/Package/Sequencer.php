@@ -126,9 +126,7 @@ class Sequencer
     }
 
     /**
-     * Process the pre-depends property in the package information
-     *
-     * @param Depencencies $dependency
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependencies|null $dependencies
      */
     public function process_dependency(Dependencies $dependencies = null)
     {

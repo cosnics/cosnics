@@ -157,7 +157,7 @@ class PlatformPackageBundles
         $this->reset_mode($this->mode);
     }
 
-    public function reset_mode($mode = self :: MODE_ALL)
+    public function reset_mode($mode = self::MODE_ALL)
     {
         $this->getPackageBundlesCacheService()->clearForIdentifier($this->mode);
     }

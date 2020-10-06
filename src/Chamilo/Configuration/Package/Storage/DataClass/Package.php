@@ -20,13 +20,12 @@ use Exception;
 class Package extends DataClass
 {
 
+    const PROPERTY_ADDITIONAL = 'additional';
+
     const PROPERTY_AUTHORS = 'authors';
 
     const PROPERTY_CATEGORY = 'category';
 
-    /**
-     * Package properties
-     */
     const PROPERTY_CONTEXT = 'context';
 
     const PROPERTY_CORE_INSTALL = 'core_install';
@@ -36,15 +35,10 @@ class Package extends DataClass
     const PROPERTY_DEFAULT_INSTALL = 'default_install';
 
     const PROPERTY_DEPENDENCIES = 'dependencies';
-
     const PROPERTY_DESCRIPTION = 'description';
-
     const PROPERTY_EXTRA = 'extra';
-
     const PROPERTY_NAME = 'name';
-
     const PROPERTY_TYPE = 'type';
-
     const PROPERTY_VERSION = 'version';
 
     public function add_author($author)
@@ -86,6 +80,15 @@ class Package extends DataClass
         );
 
         return $packageFactory->getPackage($context);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getAdditional()
+    {
+        return unserialize($this->get_default_property(self::PROPERTY_ADDITIONAL));
     }
 
     /**
@@ -164,6 +167,7 @@ class Package extends DataClass
         $extended_property_names[] = self::PROPERTY_DEPENDENCIES;
         $extended_property_names[] = self::PROPERTY_EXTRA;
         $extended_property_names[] = self::PROPERTY_CSS;
+        $extended_property_names[] = self::PROPERTY_ADDITIONAL;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -248,6 +252,17 @@ class Package extends DataClass
         );
 
         return $packageFactory->parsePackageFromDom($domXpath, $packageNode);
+    }
+
+    /**
+     *
+     * @param string[] $additional
+     *
+     * @throws \Exception
+     */
+    public function setAdditional($additional)
+    {
+        $this->setDefaultProperty(self::PROPERTY_ADDITIONAL, serialize($additional));
     }
 
     /**
