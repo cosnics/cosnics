@@ -38,7 +38,13 @@ class BuilderComponent extends Manager implements DelegateComponent
             $html[] = '<div class="alert alert-warning">' .
                 $this->getTranslator()->trans('RubricHasResults', [], 'Chamilo\Core\Repository\ContentObject\Rubric') .
                 '</div>';
-
+            $html[] = $this->getTwig()->render(
+                'Chamilo\Core\Repository\ContentObject\Rubric:RubricPreview.html.twig',
+                [
+                    'LANGUAGE' => $this->getTranslator()->getLocale(),
+                    'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json')
+                ]
+            );
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
