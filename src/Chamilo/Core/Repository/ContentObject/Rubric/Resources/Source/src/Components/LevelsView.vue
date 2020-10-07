@@ -5,21 +5,27 @@
         "cancel": "Cancel",
         "levels": "Levels",
         "remove": "Remove",
-        "remove-level": "Remove level {item}"
+        "remove-level": "Remove level {item}",
+        "with-scores": "With scores",
+        "without-scores": "Without scores"
     },
     "fr": {
         "add-level": "Ajouter un niveau",
         "cancel": "Annuler",
         "levels": "Niveaux",
         "remove": "Supprimer",
-        "remove-level": "Supprimer le niveau {item}"
+        "remove-level": "Supprimer le niveau {item}",
+        "with-scores": "Avec scores",
+        "without-scores": "Sans scores"
     },
     "nl": {
         "add-level": "Niveau toevoegen",
         "cancel": "Annuleer",
         "levels": "Niveaus",
         "remove": "Verwijder",
-        "remove-level": "Niveau {item} verwijderen"
+        "remove-level": "Niveau {item} verwijderen",
+        "with-scores": "Met scores",
+        "without-scores": "Zonder scores"
     }
 }
 </i18n>
@@ -28,6 +34,7 @@
     <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1 class="levels-title">{{ $t('levels') }}</h1>
+            <on-off-switch id="use-scores-check" class="levels-switch" v-model="rubric.useScores" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
                 <li v-if="!newLevel" class="level-new">
@@ -54,11 +61,12 @@
     import Level from '../Domain/Level';
     import LevelDetails from './LevelDetails.vue';
     import DataConnector from '../Connector/DataConnector';
+    import OnOffSwitch from './OnOffSwitch.vue';
 
     @Component({
         name: 'levels-view',
         components: {
-            LevelDetails
+            LevelDetails, OnOffSwitch
         },
     })
     export default class LevelsView extends Vue {
@@ -188,6 +196,11 @@
         font-size: 2.2rem;
         margin-left: 1.1em;
         margin-top: .3em;
+    }
+
+    .levels-switch {
+        width: 124px;
+        margin-left: 1.6em;
     }
 
     @media only screen and (min-width: 900px) {
@@ -411,7 +424,7 @@
         display: none;
         position: absolute;
         right: 0;
-        top: 0;
+        top: 3em;
 
         &.is-active {
             display: block;

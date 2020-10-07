@@ -44,9 +44,9 @@
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('level-descriptions') }}</span></router-link></li>
                 </ul>
             </nav>
-            <ul class="app-header-tools" v-if="rubric && $route.name !== 'BuilderPreview'" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
+            <!--<ul class="app-header-tools" v-if="rubric && $route.name !== 'BuilderPreview'" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
                 <li class="app-tool-item"><button class="btn-check" :aria-label="$t('use-scores')" :class="{ checked: rubric.useScores }" @click.prevent="toggleUseScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('use-scores') }}</span></button></li>
-            </ul>
+            </ul>-->
             <save-area v-if="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
         <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
