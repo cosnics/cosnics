@@ -3,8 +3,8 @@
     font-style: normal;
     font-weight: 400;
     font-display: auto;
-    src: url("ConnectIdents.ttf") format("truetype"),
-    url("ConnectIdents.woff") format("woff"), url("ConnectIdents.eot") format("eot"), url("ConnectIdents.svg?#ConnectIdents") format("svg");
+    src: url("../Plugin/ConnectIdents/ConnectIdents.ttf") format("truetype"),
+    url("../Plugin/ConnectIdents/ConnectIdents.woff") format("woff"), url("../Plugin/ConnectIdents/ConnectIdents.eot") format("eot"), url("../Plugin/ConnectIdents/ConnectIdents.svg?#ConnectIdents") format("svg");
 }
 
 .fas-ci {

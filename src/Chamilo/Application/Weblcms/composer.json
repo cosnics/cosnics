@@ -29,17 +29,17 @@
 			"category": "education",
 			"css": [
                 {
-                    "type": "common",
+                    "output": "cosnics.common.min.css",
                     "themes": [
                         {
-                            "type": "Aqua",
-                            "files": [
+                            "output": "cosnics.common.Aqua.min.css",
+                            "input": [
                                 "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         },
                         {
-                            "type": "Ruby",
-                            "files": [
+                            "output": "cosnics.common.Ruby.min.css",
+                            "input": [
                                 "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         }

@@ -179,17 +179,23 @@ class BaseHeader implements HeaderInterface
             $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
         );
 
+        $themePathBuilder = $this->getThemePathBuilder();
+
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $this->addVendorCssHeader($configurablePathBuilder, $pathBuilder);
-        $this->addCommonCssHeader($configurablePathBuilder, $pathBuilder);
+        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.bootstrap.min.css');
+        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.jquery.min.css');
+        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.min.css');
+
+        $this->addCssFile(
+            $pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.common.' . $themePathBuilder->getTheme() .
+            '.min.css'
+        );
 
         $this->addLink($pathBuilder->getBasePath(true), 'top');
-        $this->addLink(
-            $this->getThemePathBuilder()->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon'
-        );
+        $this->addLink($themePathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
 
         $this->addExceptionLogger($fileConfigurationConsulter);
 

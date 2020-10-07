@@ -13,8 +13,16 @@ use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 class PlatformPackageBundles
 {
     const MODE_ALL = 1;
-    const MODE_INSTALLED = 2;
+
     const MODE_AVAILABLE = 3;
+
+    const MODE_INSTALLED = 2;
+
+    /**
+     *
+     * @var \configuration\package\PlatformPackageBundles
+     */
+    private static $instance;
 
     /**
      *
@@ -42,31 +50,10 @@ class PlatformPackageBundles
 
     /**
      * A list of packages grouped by package type
-     * 
+     *
      * @var string[][]
      */
     private $type_packages;
-
-    /**
-     *
-     * @var \configuration\package\PlatformPackageBundles
-     */
-    private static $instance;
-
-    /**
-     *
-     * @param int $mode
-     * @return \Chamilo\Configuration\Package\PlatformPackageBundles
-     */
-    public static function getInstance($mode = self :: MODE_ALL)
-    {
-        if (! isset(self::$instance[$mode]))
-        {
-            self::$instance[$mode] = new self($mode);
-        }
-        
-        return self::$instance[$mode];
-    }
 
     /**
      *
@@ -80,11 +67,46 @@ class PlatformPackageBundles
 
     /**
      *
+     * @param int $mode
+     *
+     * @return \Chamilo\Configuration\Package\PlatformPackageBundles
+     */
+    public static function getInstance($mode = self :: MODE_ALL)
+    {
+        if (!isset(self::$instance[$mode]))
+        {
+            self::$instance[$mode] = new self($mode);
+        }
+
+        return self::$instance[$mode];
+    }
+
+    private function getPackageBundlesCacheService()
+    {
+        if (!isset($this->packageBundlesCacheService))
+        {
+            $this->packageBundlesCacheService = new PackageBundlesCacheService();
+        }
+
+        return $this->packageBundlesCacheService;
+    }
+
+    /**
+     *
      * @return int
      */
     public function get_mode()
     {
         return $this->mode;
+    }
+
+    /**
+     *
+     * @return int[]
+     */
+    public static function get_modes()
+    {
+        return array(self::MODE_ALL, self::MODE_AVAILABLE, self::MODE_INSTALLED);
     }
 
     /**
@@ -96,24 +118,19 @@ class PlatformPackageBundles
         return $this->package_list;
     }
 
-    public function get_types()
-    {
-        if (! isset($this->types))
-        {
-            $this->types = array_keys($this->get_type_packages());
-        }
-        
-        return $this->types;
-    }
-
     public function get_packages()
     {
-        if (! isset($this->packages))
+        if (!isset($this->packages))
         {
             $this->packages = $this->package_list->get_list(true);
         }
-        
+
         return $this->packages;
+    }
+
+    public function get_packages_contexts()
+    {
+        return array_keys($this->get_packages());
     }
 
     /**
@@ -122,34 +139,36 @@ class PlatformPackageBundles
      */
     public function get_type_packages()
     {
-        if (! isset($this->type_packages))
+        if (!isset($this->type_packages))
         {
             $this->type_packages = $this->package_list->get_all_packages(true);
         }
-        
+
         return $this->type_packages;
+    }
+
+    public function get_types()
+    {
+        if (!isset($this->types))
+        {
+            $this->types = array_keys($this->get_type_packages());
+        }
+
+        return $this->types;
     }
 
     /**
      *
      * @param boolean $include_installed
      * @param boolean $reset
+     *
      * @return \configuration\package\storage\data_class\PackageList
      */
     public function initialize()
     {
         $this->package_list = $this->getPackageBundlesCacheService()->getForIdentifier($this->mode);
-        return $this->package_list;
-    }
 
-    private function getPackageBundlesCacheService()
-    {
-        if (! isset($this->packageBundlesCacheService))
-        {
-            $this->packageBundlesCacheService = new PackageBundlesCacheService();
-        }
-        
-        return $this->packageBundlesCacheService;
+        return $this->package_list;
     }
 
     public function reset()
@@ -157,22 +176,13 @@ class PlatformPackageBundles
         $this->reset_mode($this->mode);
     }
 
-    public function reset_mode($mode = self::MODE_ALL)
-    {
-        $this->getPackageBundlesCacheService()->clearForIdentifier($this->mode);
-    }
-
     public function reset_all()
     {
         $this->getPackageBundlesCacheService()->clear();
     }
 
-    /**
-     *
-     * @return int[]
-     */
-    public static function get_modes()
+    public function reset_mode($mode = self::MODE_ALL)
     {
-        return array(self::MODE_ALL, self::MODE_AVAILABLE, self::MODE_INSTALLED);
+        $this->getPackageBundlesCacheService()->clearForIdentifier($this->mode);
     }
 }

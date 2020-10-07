@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Resource;
 
-use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
-use Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService;
-use Symfony\Component\HttpFoundation\Response;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Service\PackageContextSequencer;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * @package Chamilo\Libraries\Architecture\Resource
@@ -12,105 +14,184 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class StylesheetGenerator
 {
-
     /**
-     * @var \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService
+     * @var \Chamilo\Configuration\Package\PlatformPackageBundles
      */
-    private $stylesheetCommonCacheService;
+    private $platformPackageBundles;
 
     /**
-     * @var \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService
+     * @var \Chamilo\Configuration\Service\PackageContextSequencer
      */
-    private $styleSheetVendorCacheService;
+    private $packageContextSequencer;
 
     /**
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService $stylesheetCommonCacheService
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService $styleSheetVendorCacheService
+     * @var \Chamilo\Libraries\File\PathBuilder
+     */
+    private $pathBuilder;
+
+    /**
+     * @param \Chamilo\Configuration\Package\PlatformPackageBundles $platformPackageBundles
+     * @param \Chamilo\Configuration\Service\PackageContextSequencer $packageContextSequencer
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
     public function __construct(
-        StylesheetCommonCacheService $stylesheetCommonCacheService,
-        StylesheetVendorCacheService $styleSheetVendorCacheService
+        PlatformPackageBundles $platformPackageBundles, PackageContextSequencer $packageContextSequencer,
+        PathBuilder $pathBuilder
     )
     {
-        $this->stylesheetCommonCacheService = $stylesheetCommonCacheService;
-        $this->styleSheetVendorCacheService = $styleSheetVendorCacheService;
+        $this->platformPackageBundles = $platformPackageBundles;
+        $this->packageContextSequencer = $packageContextSequencer;
+        $this->pathBuilder = $pathBuilder;
     }
 
-    /**
-     * @param string $content
-     */
-    public function run(string $content)
+    protected function aggregateCssFiles()
     {
-        $response = new Response();
+        $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(
+            $this->getPlatformPackageBundles()->get_packages_contexts()
+        );
 
-        $response->setPublic();
-        // 24 hours cache
-        $response->setMaxAge(3600 * 24);
-        $response->headers->set('Content-Type', 'text/css');
-        $response->setContent($content);
-        $response->send();
+        $packages = $this->getPlatformPackageBundles()->get_packages();
 
-        exit();
+        $cssFiles = array();
+
+        foreach ($orderedPackageContexts as $orderedPackageContext)
+        {
+            $this->processPackageCssDefiniton($cssFiles, $packages[$orderedPackageContext]);
+        }
+
+        return $cssFiles;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService
-     */
-    public function getStyleSheetVendorCacheService(): StylesheetVendorCacheService
+    public function generateStylesheets()
     {
-        return $this->styleSheetVendorCacheService;
+        $aggregatedCssFiles = $this->aggregateCssFiles();
+
+        //        var_dump($aggregatedCssFiles);
+
+        foreach ($aggregatedCssFiles as $aggregatedCssFileName => $aggregatedCssFilePaths)
+        {
+            $this->writeCssFile($aggregatedCssFileName, $aggregatedCssFilePaths);
+        }
+
+        exit;
     }
 
     /**
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService $styleSheetVendorCacheService
+     * @return \Chamilo\Configuration\Service\PackageContextSequencer
+     */
+    public function getPackageContextSequencer(): PackageContextSequencer
+    {
+        return $this->packageContextSequencer;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\PackageContextSequencer $packageContextSequencer
      *
      * @return StylesheetGenerator
      */
-    public function setStyleSheetVendorCacheService(
-        StylesheetVendorCacheService $styleSheetVendorCacheService
-    ): StylesheetGenerator
+    public function setPackageContextSequencer(PackageContextSequencer $packageContextSequencer): StylesheetGenerator
     {
-        $this->styleSheetVendorCacheService = $styleSheetVendorCacheService;
+        $this->packageContextSequencer = $packageContextSequencer;
 
         return $this;
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getStylesheetCommonCacheService(): StylesheetCommonCacheService
+    public function getPathBuilder(): PathBuilder
     {
-        return $this->stylesheetCommonCacheService;
+        return $this->pathBuilder;
     }
 
     /**
-     * @param \Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService $stylesheetCommonCacheService
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      *
      * @return StylesheetGenerator
      */
-    public function setStylesheetCommonCacheService(
-        StylesheetCommonCacheService $stylesheetCommonCacheService
-    ): StylesheetGenerator
+    public function setPathBuilder(PathBuilder $pathBuilder): StylesheetGenerator
     {
-        $this->stylesheetCommonCacheService = $stylesheetCommonCacheService;
+        $this->pathBuilder = $pathBuilder;
 
         return $this;
     }
 
     /**
-     * @param string $theme
+     * @return \Chamilo\Configuration\Package\PlatformPackageBundles
      */
-    public function runCommon(string $theme)
+    public function getPlatformPackageBundles(): PlatformPackageBundles
     {
-        $stylesheetCacheService = $this->getStylesheetCommonCacheService();
-        $stylesheetCacheService->getThemePathBuilder()->setTheme($theme);
-
-        $this->run($stylesheetCacheService->get());
+        return $this->platformPackageBundles;
     }
 
-    public function runVendor()
+    /**
+     * @param \Chamilo\Configuration\Package\PlatformPackageBundles $platformPackageBundles
+     *
+     * @return StylesheetGenerator
+     */
+    public function setPlatformPackageBundles(PlatformPackageBundles $platformPackageBundles): StylesheetGenerator
     {
-        $this->run($this->getStylesheetVendorCacheService()->get());
+        $this->platformPackageBundles = $platformPackageBundles;
+
+        return $this;
+    }
+
+    /**
+     * @param string[][] $cssFiles
+     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
+     */
+    public function processPackageCssDefiniton(&$cssFiles, Package $package)
+    {
+        if ($package instanceof Package)
+        {
+            $cssDefinitions = $package->getCss();
+            $path = $this->getPathBuilder()->namespaceToFullPath($package->get_context());
+
+            foreach ($cssDefinitions as $cssDefinition)
+            {
+                if (isset($cssDefinition->themes))
+                {
+                    foreach ($cssDefinition->themes as $themeCssDefinition)
+                    {
+                        foreach ($themeCssDefinition->input as $themeCssDefinitionFile)
+                        {
+
+                            $cssFiles[$themeCssDefinition->output][] =
+                                $path . str_replace('/', DIRECTORY_SEPARATOR, $themeCssDefinitionFile);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach ($cssDefinition->input as $cssDefinitionFile)
+                    {
+                        $cssFiles[$cssDefinition->output][] =
+                            $path . str_replace('/', DIRECTORY_SEPARATOR, $cssDefinitionFile);
+                    }
+                }
+            }
+        }
+    }
+
+    protected function writeCssFile($aggregatedCssFileName, $aggregatedCssFilePaths)
+    {
+        $cssContent = array();
+
+        foreach ($aggregatedCssFilePaths as $aggregatedCssFilePath)
+        {
+            $cssContent[] = file_get_contents($aggregatedCssFilePath);
+        }
+
+        $aggregatedCssFilePath = $this->getPathBuilder()->getCssPath('Chamilo\Libraries') . $aggregatedCssFileName;
+
+        Filesystem::write_to_file($aggregatedCssFilePath, implode(PHP_EOL, $cssContent));
+
+        $basePath = $this->getPathBuilder()->getBasePath();
+        $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
+
+        $webAggregatedCssFilePath = str_replace($basePath, $baseWebPath, $aggregatedCssFilePath);
+
+        Filesystem::copy_file($aggregatedCssFilePath, $webAggregatedCssFilePath, true);
     }
 
 }

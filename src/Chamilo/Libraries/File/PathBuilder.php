@@ -18,8 +18,10 @@ class PathBuilder
     const BASE = 2;
     const CACHE = 6;
     const CONFIGURATION = 12;
+    const CSS = 19;
     const FULL = 1;
     const I18N = 15;
+    const IMAGES = 20;
     const JAVASCRIPT = 14;
     const LOG = 7;
     const PLUGIN = 11;
@@ -116,9 +118,30 @@ class PathBuilder
      */
     public function getConfigurationPath($namespace = 'Chamilo\Configuration', $web = false)
     {
-        return $this->cache[self::CONFIGURATION][(string) $namespace][(string) $web] = $this->getResourcesPath(
-                $namespace, $web
-            ) . 'Configuration' . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self::CONFIGURATION][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Configuration' . $this->getDirectorySeparator($web);
+    }
+
+    /**
+     * @param string $namespace
+     * @param false $web
+     *
+     * @return string
+     */
+    public function getCssPath($namespace = 'Chamilo\Configuration', $web = false)
+    {
+        return $this->cache[self::CSS][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Css' . $this->getDirectorySeparator($web);
+    }
+
+    /**
+     * @param boolean $web
+     *
+     * @return string
+     */
+    public function getDirectorySeparator(bool $web = true)
+    {
+        return ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -131,7 +154,19 @@ class PathBuilder
     public function getI18nPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::I18N][(string) $namespace][(string) $web] =
-            $this->getResourcesPath($namespace, $web) . 'I18n' . ($web ? '/' : DIRECTORY_SEPARATOR);
+            $this->getResourcesPath($namespace, $web) . 'I18n' . $this->getDirectorySeparator($web);
+    }
+
+    /**
+     * @param string $namespace
+     * @param false $web
+     *
+     * @return string
+     */
+    public function getImagesPath($namespace = 'Chamilo\Configuration', $web = false)
+    {
+        return $this->cache[self::IMAGES][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Images' . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -158,9 +193,8 @@ class PathBuilder
      */
     public function getJavascriptPath($namespace = 'Chamilo\Configuration', $web = false)
     {
-        return $this->cache[self::JAVASCRIPT][(string) $namespace][(string) $web] = $this->getResourcesPath(
-                $namespace, $web
-            ) . 'Javascript' . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self::JAVASCRIPT][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Javascript' . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -172,9 +206,8 @@ class PathBuilder
      */
     public function getPluginPath($namespace = 'Chamilo\Configuration', $web = false)
     {
-        return $this->cache[self::PLUGIN][(string) $namespace][(string) $web] = $this->getResourcesPath(
-                $namespace, $web
-            ) . 'Plugin' . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self::PLUGIN][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Plugin' . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -198,10 +231,9 @@ class PathBuilder
         }
 
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] =
-            $basePath . ($web ? '/' : DIRECTORY_SEPARATOR) .
-            ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-                    $namespace, $web
-                ) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+            $basePath . $this->getDirectorySeparator($web) . ($namespace ?
+                $this->getClassnameUtilities()->namespaceToPath($namespace, $web) . $this->getDirectorySeparator($web) :
+                '');
     }
 
     /**
@@ -213,9 +245,8 @@ class PathBuilder
      */
     public function getResourcesPath($namespace = 'Chamilo\Configuration', $web = false)
     {
-        return $this->cache[self::RESOURCE][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
-                $namespace, $web
-            ) . 'Resources' . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self::RESOURCE][(string) $namespace][(string) $web] =
+            $this->namespaceToFullPath($namespace, $web) . 'Resources' . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -241,9 +272,8 @@ class PathBuilder
      */
     public function getTemplatesPath($namespace = 'Chamilo\Configuration', $web = false)
     {
-        return $this->cache[self::TEMPLATES][(string) $namespace][(string) $web] = $this->getResourcesPath(
-                $namespace, $web
-            ) . 'Templates' . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self::TEMPLATES][(string) $namespace][(string) $web] =
+            $this->getResourcesPath($namespace, $web) . 'Templates' . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -261,7 +291,7 @@ class PathBuilder
         }
 
         return $this->cache[self::VENDOR][(string) $web] =
-            realpath($this->getBasePath($web) . '../vendor/') . ($web ? '/' : DIRECTORY_SEPARATOR);
+            realpath($this->getBasePath($web) . '../vendor/') . $this->getDirectorySeparator($web);
     }
 
     /**
@@ -286,9 +316,8 @@ class PathBuilder
      */
     public function namespaceToFullPath($namespace = null, $web = false)
     {
-        return $this->cache[self::FULL][(string) $namespace][(string) $web] =
-            $this->getBasePath($web) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-                    $namespace, $web
-                ) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+        return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ?
+                $this->getClassnameUtilities()->namespaceToPath($namespace, $web) . $this->getDirectorySeparator($web) :
+                '');
     }
 }

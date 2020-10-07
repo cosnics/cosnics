@@ -160,8 +160,7 @@ class ThemePathBuilder
      */
     public function getCssPath($namespace = null, $web = true, $includeTheme = true)
     {
-        $cssPath =
-            $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Css' . $this->getDirectorySeparator($web);
+        $cssPath = $this->getPathBuilder()->getCssPath($namespace, $web);
 
         if ($includeTheme)
         {
@@ -250,8 +249,8 @@ class ThemePathBuilder
             $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
         }
 
-        return $this->getPathBuilder()->getResourcesPath($context, $web) . 'Images' .
-            $this->getDirectorySeparator($web) . $this->getTheme() . $this->getDirectorySeparator($web);
+        return $this->getPathBuilder()->getImagesPath($context, $web) . $this->getTheme() .
+            $this->getDirectorySeparator($web);
     }
 
     /**
@@ -313,8 +312,7 @@ class ThemePathBuilder
      */
     public function getTemplatePath($namespace = null, $web = true, $includeTheme = true)
     {
-        $cssPath = $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Templates' .
-            $this->getDirectorySeparator($web);
+        $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace, $web);
 
         if ($includeTheme)
         {

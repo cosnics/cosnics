@@ -45,26 +45,36 @@
             },
             "css": [
                 {
-                    "type": "vendor",
-                    "files": [
+                    "output": "cosnics.vendor.bootstrap.min.css",
+                    "input": [
                         "Resources/Plugin/Bootstrap/css/bootstrap.min.css",
                         "Resources/Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css",
+                        "Resources/Plugin/Bootstrap/css/bootstrap-toggle.min.css"
+                    ]
+                },
+                {
+                    "output": "cosnics.vendor.jquery.min.css",
+                    "input": [
+                        "Resources/Plugin/Jquery/jquery-ui.min.css",
+                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css"
+                    ]
+                },
+                {
+                    "output": "cosnics.vendor.min.css",
+                    "input": [
                         "Resources/Plugin/FontAwesome5/css/all.min.css",
                         "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
                         "Resources/Plugin/Dropzone/dropzone.min.css",
-                        "Resources/Plugin/Jquery/jquery-ui.min.css",
-                        "Resources/Plugin/Bootstrap/css/bootstrap-toggle.min.css",
-                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css",
                         "Resources/Plugin/Highlight/github.min.css",
                         "Resources/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css"
                     ]
                 },
                 {
-                    "type": "common",
+                    "output": "cosnics.common.min.css",
                     "themes": [
                         {
-                            "type": "Aqua",
-                            "files": [
+                            "output": "cosnics.common.Aqua.min.css",
+                            "input": [
                                 "Resources/Css/Aqua/General.min.css",
                                 "Resources/Css/Aqua/Form.min.css",
                                 "Resources/Css/Aqua/Table.min.css",
@@ -75,8 +85,8 @@
                             ]
                         },
                         {
-                            "type": "Ruby",
-                            "files": [
+                            "output": "cosnics.common.Ruby.min.css",
+                            "input": [
                                 "Resources/Css/Aqua/General.min.css",
                                 "Resources/Css/Aqua/Form.min.css",
                                 "Resources/Css/Aqua/Table.min.css",

@@ -37,6 +37,7 @@
         </service>
 
         <service id="Chamilo\Configuration\Package\Service\PackageFactory"/>
+        <service id="Chamilo\Configuration\Package\PlatformPackageBundles"/>
         <service id="Chamilo\Configuration\Service\PackageContextSequencer"/>
     </services>
 </container>
