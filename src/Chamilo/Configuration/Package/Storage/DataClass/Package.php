@@ -1,15 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Package\Storage\DataClass;
 
-use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
-use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
-use DOMElement;
-use DOMXPath;
 use Exception;
 
 /**
@@ -21,26 +17,24 @@ class Package extends DataClass
 {
 
     const PROPERTY_ADDITIONAL = 'additional';
-
     const PROPERTY_AUTHORS = 'authors';
-
     const PROPERTY_CATEGORY = 'category';
-
     const PROPERTY_CONTEXT = 'context';
-
     const PROPERTY_CORE_INSTALL = 'core_install';
-
-    const PROPERTY_CSS = 'css';
-
     const PROPERTY_DEFAULT_INSTALL = 'default_install';
-
     const PROPERTY_DEPENDENCIES = 'dependencies';
     const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_EXTRA = 'extra';
     const PROPERTY_NAME = 'name';
+    const PROPERTY_RESOURCES = 'resources';
     const PROPERTY_TYPE = 'type';
     const PROPERTY_VERSION = 'version';
 
+    /**
+     * @param \stdClass $author
+     *
+     * @throws \Exception
+     */
     public function add_author($author)
     {
         $authors = $this->get_authors();
@@ -54,6 +48,7 @@ class Package extends DataClass
      * @param string $context
      *
      * @return boolean
+     * @throws \Exception
      * @deprecated Use PackageFactory->packageExists($context) now
      */
     public static function exists($context)
@@ -88,7 +83,7 @@ class Package extends DataClass
      */
     public function getAdditional()
     {
-        return unserialize($this->get_default_property(self::PROPERTY_ADDITIONAL));
+        return unserialize($this->getDefaultProperty(self::PROPERTY_ADDITIONAL));
     }
 
     /**
@@ -97,17 +92,7 @@ class Package extends DataClass
      */
     public function getCoreInstall()
     {
-        return $this->get_default_property(self::PROPERTY_CORE_INSTALL);
-    }
-
-    /**
-     * Returns the extra of this Package.
-     *
-     * @return string[][]
-     */
-    public function getCss()
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_CSS));
+        return $this->getDefaultProperty(self::PROPERTY_CORE_INSTALL);
     }
 
     /**
@@ -116,44 +101,15 @@ class Package extends DataClass
      */
     public function getDefaultInstall()
     {
-        return $this->get_default_property(self::PROPERTY_DEFAULT_INSTALL);
+        return $this->getDefaultProperty(self::PROPERTY_DEFAULT_INSTALL);
     }
 
     /**
-     * Returns the authors of this Package.
+     * @param string[] $extended_property_names
      *
-     * @return the authors.
+     * @return mixed
      */
-    public function get_authors()
-    {
-        return unserialize($this->get_default_property(self::PROPERTY_AUTHORS));
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_category()
-    {
-        return $this->get_default_property(self::PROPERTY_CATEGORY);
-    }
-
-    /**
-     * Returns the context of this Package.
-     *
-     * @return the context.
-     */
-    public function get_context()
-    {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
-    }
-
-    /**
-     * Get the default properties
-     *
-     * @return array The property names.
-     */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function getDefaultProperty_names($extended_property_names = array())
     {
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_NAME;
@@ -166,92 +122,107 @@ class Package extends DataClass
         $extended_property_names[] = self::PROPERTY_DEFAULT_INSTALL;
         $extended_property_names[] = self::PROPERTY_DEPENDENCIES;
         $extended_property_names[] = self::PROPERTY_EXTRA;
-        $extended_property_names[] = self::PROPERTY_CSS;
+        $extended_property_names[] = self::PROPERTY_RESOURCES;
         $extended_property_names[] = self::PROPERTY_ADDITIONAL;
 
         return parent::get_default_property_names($extended_property_names);
     }
 
     /**
+     * Returns the extra of this Package.
      *
-     * @return Dependencies Dependency
+     * @return string[][]
      */
-    public function get_dependencies()
+    public function getResources()
     {
-        return unserialize($this->get_default_property(self::PROPERTY_DEPENDENCIES));
+        return unserialize($this->getDefaultProperty(self::PROPERTY_RESOURCES));
     }
 
     /**
-     * Returns the description of this Package.
+     * @return \stdClass[]
+     */
+    public function get_authors()
+    {
+        return unserialize($this->getDefaultProperty(self::PROPERTY_AUTHORS));
+    }
+
+    /**
      *
-     * @return the description.
+     * @return string
+     */
+    public function get_category()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_context()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
+     * @throws \Exception
+     */
+    public function get_dependencies($dependencies = array())
+    {
+        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
+    }
+
+    /**
+     * @return string
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
-     * Returns the extra of this Package.
-     *
-     * @return the code.
+     * @return string[]
      */
     public function get_extra()
     {
-        return $this->get_default_property(self::PROPERTY_EXTRA);
+        return $this->getDefaultProperty(self::PROPERTY_EXTRA);
     }
 
     /**
-     * Returns the name of this Package.
-     *
-     * @return the name.
+     * @return string
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
-     * Returns the type of this Package.
-     *
-     * @return the type.
+     * @return string
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
-     * Returns the version of this Package.
-     *
-     * @return the version.
+     * @return string
      */
     public function get_version()
     {
-        return $this->get_default_property(self::PROPERTY_VERSION);
-    }
-
-    public function has_dependencies()
-    {
-        return (!is_null($this->get_dependencies()));
+        return $this->getDefaultProperty(self::PROPERTY_VERSION);
     }
 
     /**
-     *
-     * @param \DOMXPath $dom_xpath
-     * @param \DOMElement $package_node
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
-     * @deprecated Use PackageFactory->parsePackageFromDom($domXpath, $packageNode) now, or better even don't use this
-     *             anymore at all and use PackageFactory->getPackage($context) instead
+     * @return bool
+     * @throws \Exception
      */
-    public static function parse_package(DOMXPath $domXpath, DOMElement $packageNode)
+    public function has_dependencies()
     {
-        $packageFactory = new PackageFactory(
-            new PathBuilder(ClassnameUtilities::getInstance()), Translation::getInstance()
-        );
-
-        return $packageFactory->parsePackageFromDom($domXpath, $packageNode);
+        return (!is_null($this->get_dependencies()));
     }
 
     /**
@@ -266,120 +237,124 @@ class Package extends DataClass
     }
 
     /**
-     *
      * @param integer $coreInstall
-     */
-    public function setCoreInstall($coreInstall)
-    {
-        $this->set_default_property(self::PROPERTY_CORE_INSTALL, $coreInstall);
-    }
-
-    /**
-     * Sets the extra of this Package.
-     *
-     * @param string[][] $css
      *
      * @throws \Exception
      */
-    public function setCss($css)
+    public function setCoreInstall($coreInstall)
     {
-        $this->setDefaultProperty(self::PROPERTY_CSS, serialize($css));
+        $this->setDefaultProperty(self::PROPERTY_CORE_INSTALL, $coreInstall);
     }
 
     /**
-     *
      * @param integer $defaultInstall
+     *
+     * @throws \Exception
      */
     public function setDefaultInstall($defaultInstall)
     {
-        $this->set_default_property(self::PROPERTY_DEFAULT_INSTALL, $defaultInstall);
-    }
-
-    /**
-     * Sets the authors of this Package.
-     *
-     * @param authors
-     */
-    public function set_authors($authors)
-    {
-        $this->set_default_property(self::PROPERTY_AUTHORS, serialize($authors));
-    }
-
-    /**
-     *
-     * @param string $category
-     */
-    public function set_category($category)
-    {
-        $this->set_default_property(self::PROPERTY_CATEGORY, $category);
-    }
-
-    /**
-     * Sets the context of this Package.
-     *
-     * @param context
-     */
-    public function set_context($context)
-    {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
-    }
-
-    /**
-     *
-     * @param $dependencies Dependencies|Dependency
-     */
-    public function set_dependencies($dependencies)
-    {
-        $this->set_default_property(self::PROPERTY_DEPENDENCIES, serialize($dependencies));
-    }
-
-    /**
-     * Sets the description of this Package.
-     *
-     * @param description
-     */
-    public function set_description($description)
-    {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DEFAULT_INSTALL, $defaultInstall);
     }
 
     /**
      * Sets the extra of this Package.
      *
-     * @param extra
+     * @param string[][] $resources
+     *
+     * @throws \Exception
+     */
+    public function setResources($resources)
+    {
+        $this->setDefaultProperty(self::PROPERTY_RESOURCES, serialize($resources));
+    }
+
+    /**
+     * @param \stdClass[] $authors
+     *
+     * @throws \Exception
+     */
+    public function set_authors($authors)
+    {
+        $this->setDefaultProperty(self::PROPERTY_AUTHORS, serialize($authors));
+    }
+
+    /**
+     * @param string $category
+     *
+     * @throws \Exception
+     */
+    public function set_category($category)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY, $category);
+    }
+
+    /**
+     * @param string $context
+     *
+     * @throws \Exception
+     */
+    public function set_context($context)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
+    }
+
+    /**
+     * @param $dependencies
+     *
+     * @throws \Exception
+     */
+    public function set_dependencies($dependencies)
+    {
+        $this->setDefaultProperty(self::PROPERTY_DEPENDENCIES, serialize($dependencies));
+    }
+
+    /**
+     * @param string $description
+     *
+     * @throws \Exception
+     */
+    public function set_description($description)
+    {
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
+    }
+
+    /**
+     * @param string[] $extra
+     *
+     * @throws \Exception
      */
     public function set_extra($extra)
     {
-        $this->set_default_property(self::PROPERTY_EXTRA, $extra);
+        $this->setDefaultProperty(self::PROPERTY_EXTRA, $extra);
     }
 
     /**
-     * Sets the name of this Package.
+     * @param string $name
      *
-     * @param name
+     * @throws \Exception
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
-     * Sets the type of this Package.
+     * @param string $type
      *
-     * @param type
+     * @throws \Exception
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
-     * Sets the version of this Package.
+     * @param string $version
      *
-     * @param version
+     * @throws \Exception
      */
     public function set_version($version)
     {
-        $this->set_default_property(self::PROPERTY_VERSION, $version);
+        $this->setDefaultProperty(self::PROPERTY_VERSION, $version);
     }
 }

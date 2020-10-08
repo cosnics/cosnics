@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\PathBuilder;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StylesheetGenerator
+class ResourceGenerator
 {
     /**
      * @var \Chamilo\Configuration\Package\PlatformPackageBundles
@@ -44,7 +44,7 @@ class StylesheetGenerator
         $this->pathBuilder = $pathBuilder;
     }
 
-    protected function aggregateCssFiles()
+    protected function aggregateResourceFiles()
     {
         $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(
             $this->getPlatformPackageBundles()->get_packages_contexts()
@@ -52,28 +52,24 @@ class StylesheetGenerator
 
         $packages = $this->getPlatformPackageBundles()->get_packages();
 
-        $cssFiles = array();
+        $resourceFiles = array();
 
         foreach ($orderedPackageContexts as $orderedPackageContext)
         {
-            $this->processPackageCssDefiniton($cssFiles, $packages[$orderedPackageContext]);
+            $this->processPackageResourceDefiniton($resourceFiles, $packages[$orderedPackageContext]);
         }
 
-        return $cssFiles;
+        return $resourceFiles;
     }
 
-    public function generateStylesheets()
+    public function generateResourceFiles()
     {
-        $aggregatedCssFiles = $this->aggregateCssFiles();
+        $aggregatedResourceFiles = $this->aggregateResourceFiles();
 
-        //        var_dump($aggregatedCssFiles);
-
-        foreach ($aggregatedCssFiles as $aggregatedCssFileName => $aggregatedCssFilePaths)
+        foreach ($aggregatedResourceFiles as $aggregatedResourceFileName => $aggregatedResourceFilePaths)
         {
-            $this->writeCssFile($aggregatedCssFileName, $aggregatedCssFilePaths);
+            $this->writeResourceFile($aggregatedResourceFileName, $aggregatedResourceFilePaths);
         }
-
-        exit;
     }
 
     /**
@@ -86,14 +82,10 @@ class StylesheetGenerator
 
     /**
      * @param \Chamilo\Configuration\Service\PackageContextSequencer $packageContextSequencer
-     *
-     * @return StylesheetGenerator
      */
-    public function setPackageContextSequencer(PackageContextSequencer $packageContextSequencer): StylesheetGenerator
+    public function setPackageContextSequencer(PackageContextSequencer $packageContextSequencer)
     {
         $this->packageContextSequencer = $packageContextSequencer;
-
-        return $this;
     }
 
     /**
@@ -106,14 +98,10 @@ class StylesheetGenerator
 
     /**
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     *
-     * @return StylesheetGenerator
      */
-    public function setPathBuilder(PathBuilder $pathBuilder): StylesheetGenerator
+    public function setPathBuilder(PathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
-
-        return $this;
     }
 
     /**
@@ -126,72 +114,67 @@ class StylesheetGenerator
 
     /**
      * @param \Chamilo\Configuration\Package\PlatformPackageBundles $platformPackageBundles
-     *
-     * @return StylesheetGenerator
      */
-    public function setPlatformPackageBundles(PlatformPackageBundles $platformPackageBundles): StylesheetGenerator
+    public function setPlatformPackageBundles(PlatformPackageBundles $platformPackageBundles)
     {
         $this->platformPackageBundles = $platformPackageBundles;
-
-        return $this;
     }
 
     /**
-     * @param string[][] $cssFiles
+     * @param string[][] $resourceFiles
      * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
      */
-    public function processPackageCssDefiniton(&$cssFiles, Package $package)
+    protected function processPackageResourceDefiniton(array &$resourceFiles, Package $package)
     {
         if ($package instanceof Package)
         {
-            $cssDefinitions = $package->getCss();
+            $resourceDefinitions = $package->getResources();
             $path = $this->getPathBuilder()->namespaceToFullPath($package->get_context());
 
-            foreach ($cssDefinitions as $cssDefinition)
+            foreach ($resourceDefinitions as $resourceDefinition)
             {
-                if (isset($cssDefinition->themes))
+                if (isset($resourceDefinition->themes))
                 {
-                    foreach ($cssDefinition->themes as $themeCssDefinition)
+                    foreach ($resourceDefinition->themes as $themeResourceDefinition)
                     {
-                        foreach ($themeCssDefinition->input as $themeCssDefinitionFile)
+                        foreach ($themeResourceDefinition->input as $themeResourceDefinitionFile)
                         {
 
-                            $cssFiles[$themeCssDefinition->output][] =
-                                $path . str_replace('/', DIRECTORY_SEPARATOR, $themeCssDefinitionFile);
+                            $resourceFiles[$themeResourceDefinition->output][] =
+                                $path . str_replace('/', DIRECTORY_SEPARATOR, $themeResourceDefinitionFile);
                         }
                     }
                 }
                 else
                 {
-                    foreach ($cssDefinition->input as $cssDefinitionFile)
+                    foreach ($resourceDefinition->input as $resourceDefinitionFile)
                     {
-                        $cssFiles[$cssDefinition->output][] =
-                            $path . str_replace('/', DIRECTORY_SEPARATOR, $cssDefinitionFile);
+                        $resourceFiles[$resourceDefinition->output][] =
+                            $path . str_replace('/', DIRECTORY_SEPARATOR, $resourceDefinitionFile);
                     }
                 }
             }
         }
     }
 
-    protected function writeCssFile($aggregatedCssFileName, $aggregatedCssFilePaths)
+    protected function writeResourceFile($aggregatedResourceFileName, $aggregatedResourceFilePaths)
     {
-        $cssContent = array();
+        $resourceContent = array();
 
-        foreach ($aggregatedCssFilePaths as $aggregatedCssFilePath)
+        foreach ($aggregatedResourceFilePaths as $aggregatedResourceFilePath)
         {
-            $cssContent[] = file_get_contents($aggregatedCssFilePath);
+            $resourceContent[] = file_get_contents($aggregatedResourceFilePath);
         }
 
-        $aggregatedCssFilePath = $this->getPathBuilder()->getCssPath('Chamilo\Libraries') . $aggregatedCssFileName;
-
-        Filesystem::write_to_file($aggregatedCssFilePath, implode(PHP_EOL, $cssContent));
+        $aggregatedResourceFilePath =
+            $this->getPathBuilder()->namespaceToFullPath('Chamilo\Libraries') . $aggregatedResourceFileName;
 
         $basePath = $this->getPathBuilder()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
-        $webAggregatedCssFilePath = str_replace($basePath, $baseWebPath, $aggregatedCssFilePath);
+        $webAggregatedCssFilePath = str_replace($basePath, $baseWebPath, $aggregatedResourceFilePath);
 
-        Filesystem::copy_file($aggregatedCssFilePath, $webAggregatedCssFilePath, true);
+        Filesystem::write_to_file($webAggregatedCssFilePath, implode(PHP_EOL, $resourceContent));
     }
 
 }

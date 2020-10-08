@@ -43,9 +43,59 @@
                 "core": 1,
                 "default": 0
             },
-            "css": [
+            "resources": [
                 {
-                    "output": "cosnics.vendor.bootstrap.min.css",
+                    "output": "Resources/Javascript/cosnics.vendor.jquery.min.js",
+                    "input": [
+                        "Resources/Plugin/Jquery/jquery.min.js",
+                        "Resources/Plugin/Jquery/jquery.browser.min.js",
+                        "Resources/Plugin/Jquery/jquery-ui.min.js",
+                        "Resources/Plugin/Jquery/jquery.timeout.interval.idle.min.js",
+                        "Resources/Plugin/Jquery/jquery.mousewheel.min.js",
+                        "Resources/Plugin/Jquery/jquery.scrollable.pack.js",
+                        "Resources/Plugin/Jquery/jquery.xml2json.pack.js",
+                        "Resources/Plugin/Jquery/jquery.json.min.js",
+                        "Resources/Plugin/Jquery/jquery.query.min.js",
+                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.js"
+                    ]
+                },
+                {
+                    "output": "Resources/Javascript/cosnics.vendor.bootstrap.min.js",
+                    "input": [
+                        "Resources/Plugin/Bootstrap/bootstrap.min.js",
+                        "Resources/Plugin/Bootstrap/bootstrap-toggle.min.js",
+                        "Resources/Plugin/Bootstrap/BootstrapConflictFixes.js"
+                    ]
+                },
+                {
+                    "output": "Resources/Javascript/cosnics.vendor.angular.min.js",
+                    "input": [
+                        "Resources/Plugin/AngularJS/angular.min.js",
+                        "Resources/Plugin/AngularJS/angular-sanitize.min.js",
+                        "Resources/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap.min.js"
+                    ]
+                },
+                {
+                    "output": "Resources/Javascript/cosnics.vendor.min.js",
+                    "input": [
+                        "Resources/Plugin/Fancytree/dist/jquery.fancytree-all.min.js",
+                        "Resources/Plugin/Dropzone/dropzone.min.js",
+                        "Resources/Plugin/Highlight/highlight.pack.js",
+                        "Resources/Plugin/PhpJs/phpjs.min.js"
+                    ]
+                },
+                {
+                    "output": "Resources/Javascript/cosnics.common.min.js",
+                    "input": [
+                        "Resources/Javascript/Jquery/jquery.treeMenu.min.js",
+                        "Resources/Javascript/Utilities.min.js",
+                        "Resources/Javascript/Help.min.js",
+                        "Resources/Javascript/Visit.min.js",
+                        "Resources/Javascript/InitHighlight.min.js"
+                    ]
+                },
+                {
+                    "output": "Resources/Css/cosnics.vendor.bootstrap.min.css",
                     "input": [
                         "Resources/Plugin/Bootstrap/css/bootstrap.min.css",
                         "Resources/Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css",
@@ -53,14 +103,14 @@
                     ]
                 },
                 {
-                    "output": "cosnics.vendor.jquery.min.css",
+                    "output": "Resources/Css/cosnics.vendor.jquery.min.css",
                     "input": [
                         "Resources/Plugin/Jquery/jquery-ui.min.css",
                         "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css"
                     ]
                 },
                 {
-                    "output": "cosnics.vendor.min.css",
+                    "output": "Resources/Css/cosnics.vendor.min.css",
                     "input": [
                         "Resources/Plugin/FontAwesome5/css/all.min.css",
                         "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
@@ -70,10 +120,10 @@
                     ]
                 },
                 {
-                    "output": "cosnics.common.min.css",
+                    "output": "Resources/Css/cosnics.common.min.css",
                     "themes": [
                         {
-                            "output": "cosnics.common.Aqua.min.css",
+                            "output": "Resources/Css/cosnics.common.Aqua.min.css",
                             "input": [
                                 "Resources/Css/Aqua/General.min.css",
                                 "Resources/Css/Aqua/Form.min.css",
@@ -85,7 +135,7 @@
                             ]
                         },
                         {
-                            "output": "cosnics.common.Ruby.min.css",
+                            "output": "Resources/Css/cosnics.common.Ruby.min.css",
                             "input": [
                                 "Resources/Css/Aqua/General.min.css",
                                 "Resources/Css/Aqua/Form.min.css",

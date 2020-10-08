@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
-use Chamilo\Libraries\Architecture\Resource\StylesheetGenerator;
+use Chamilo\Libraries\Architecture\Resource\ResourceGenerator;
 
 /**
  * @package Chamilo\Libraries\Ajax\Component
@@ -16,14 +16,15 @@ class StylesheetComponent extends Manager implements NoAuthenticationSupport, No
 
     public function run()
     {
-        $this->getStyleSheetGenerator()->generateStylesheets();
+        $this->getResourceGenerator()->generateResourceFiles();
     }
 
     /**
-     * @return \Chamilo\Libraries\Architecture\Resource\StylesheetGenerator
+     * @return \Chamilo\Libraries\Architecture\Resource\ResourceGenerator
      */
-    public function getStyleSheetGenerator()
+    public function getResourceGenerator()
     {
-        return $this->getService(StylesheetGenerator::class);
+        return $this->getService(ResourceGenerator::class);
     }
+
 }

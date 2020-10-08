@@ -27,18 +27,18 @@
             "name": "Structure Rights Management",
             "context": "Chamilo\\Core\\Rights\\Structure",
             "type": "Chamilo\\Core\\Rights",
-            "css": [
+            "resources": [
                 {
-                    "output": "cosnics.common.min.css",
+                    "output": "Resources/Css/cosnics.common.min.css",
                     "themes": [
                         {
-                            "output": "cosnics.common.Aqua.min.css",
+                            "output": "Resources/Css/cosnics.common.Aqua.min.css",
                             "input": [
                                 "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         },
                         {
-                            "output": "cosnics.common.Ruby.min.css",
+                            "output": "Resources/Css/cosnics.common.Ruby.min.css",
                             "input": [
                                 "Resources/Css/Aqua/Stylesheet.min.css"
                             ]

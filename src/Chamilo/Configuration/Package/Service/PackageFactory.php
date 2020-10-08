@@ -167,7 +167,7 @@ class PackageFactory
             $extra = $cosnicsProperties->extra;
         }
 
-        $package->setCss($cosnicsProperties->css);
+        $package->setResources($cosnicsProperties->resources);
 
         $package->set_extra($extra);
 

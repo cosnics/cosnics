@@ -381,7 +381,7 @@
     "@dl-horizontal-breakpoint": "@grid-float-breakpoint",
     "@hr-border": "@gray-lighter"
   },
-  "css": [
+  "resources": [
     "print.less",
     "type.less",
     "code.less",

@@ -4,13 +4,7 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Ajax\Component\JavascriptComponent;
-use Chamilo\Libraries\Ajax\Component\StylesheetComponent;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
-use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
-use Chamilo\Libraries\Cache\Assetic\StylesheetVendorCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Path;
@@ -133,25 +127,6 @@ class BaseHeader implements HeaderInterface
         return implode(PHP_EOL, $html);
     }
 
-    protected function addCommonCssHeader(ConfigurablePathBuilder $configurablePathBuilder, PathBuilder $pathBuilder)
-    {
-        $stylesheetCacheService = new StylesheetCommonCacheService(
-            $pathBuilder, $configurablePathBuilder, $this->getThemePathBuilder()
-        );
-
-        $cssModified = $stylesheetCacheService->getLastModificationTime();
-        $cssModified = $cssModified ? $cssModified : time();
-
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'Stylesheet';
-        $parameters[StylesheetComponent::PARAM_TYPE] = StylesheetComponent::TYPE_COMMON;
-        $parameters[StylesheetComponent::PARAM_THEME] = $this->getThemePathBuilder()->getTheme();
-        $parameters[StylesheetComponent::PARAM_MODIFIED] = $cssModified;
-
-        $this->addCssFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
-    }
-
     /**
      * @param string $file
      * @param string $media
@@ -203,16 +178,17 @@ class BaseHeader implements HeaderInterface
             '<script>var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
         );
 
-        $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
-
-        $javascriptModified = $javascriptCacheService->getLastModificationTime();
-        $javascriptModified = $javascriptModified ? $javascriptModified : time();
-
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'Javascript';
-        $parameters[JavascriptComponent::PARAM_MODIFIED] = $javascriptModified;
-        $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
+        $this->addJavascriptFile(
+            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.jquery.min.js'
+        );
+        $this->addJavascriptFile(
+            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.bootstrap.min.js'
+        );
+        $this->addJavascriptFile(
+            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.angular.min.js'
+        );
+        $this->addJavascriptFile($pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.min.js');
+        $this->addJavascriptFile($pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.common.min.js');
 
         $this->addJavascriptCDNFiles();
 
@@ -271,24 +247,6 @@ class BaseHeader implements HeaderInterface
         $href = ' href="' . $url . '"';
         $header = '<link' . $href . $rel . $title . $type . '/>';
         $this->addHtmlHeader($header);
-    }
-
-    protected function addVendorCssHeader(ConfigurablePathBuilder $configurablePathBuilder, PathBuilder $pathBuilder)
-    {
-        $stylesheetCacheService = new StylesheetVendorCacheService(
-            $pathBuilder, $configurablePathBuilder
-        );
-
-        $cssModified = $stylesheetCacheService->getLastModificationTime();
-        $cssModified = $cssModified ? $cssModified : time();
-
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'Stylesheet';
-        $parameters[StylesheetComponent::PARAM_TYPE] = StylesheetComponent::TYPE_VENDOR;
-        $parameters[StylesheetComponent::PARAM_MODIFIED] = $cssModified;
-
-        $this->addCssFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
     }
 
     /**
