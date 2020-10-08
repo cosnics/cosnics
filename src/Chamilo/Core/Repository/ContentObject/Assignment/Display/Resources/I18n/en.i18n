@@ -86,4 +86,4 @@ SelfEvaluationNotAllowed = "Self evaluation not allowed"
 SelfEvaluationChanged = "Self evaluation changed (Warning: this does not remove the submitted self evaluations)"
 SelfEvaluationNotChanged = "Self evaluation not changed"
 ConfirmRemoveRubric = "Are you sure you want to remove the rubric from this assignment?"
-
+ReturnToAssignment = "Return to assignment"

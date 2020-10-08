@@ -17,6 +17,16 @@
             height: calc(100vh - 126px);
         }
 
+        .rubric-back-to-assignment {
+            background: #e0fffd;
+            display: inline-block;
+            margin-left: 13px;
+            padding: 2px;
+        }
+
+        .rubric-back-to-assignment .fa {
+            margin-right: 2px;
+        }
     </style>
     <div id="builder">
         <rubric-builder-wrapper v-if="rubricData" :api-config="apiConfig" :version="version" :rubric-data="rubricData" :debug-server-response="false"></rubric-builder-wrapper>
