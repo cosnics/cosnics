@@ -37,7 +37,8 @@ class ProcessResourcesCommand extends ChamiloCommand
      * @param \Chamilo\Libraries\Format\Utilities\ResourceProcessor $resourceProcessor
      * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
      */
-    public function __construct(Translator $translator, ResourceProcessor $resourceProcessor, CacheManager $cacheManager)
+    public function __construct(Translator $translator, ResourceProcessor $resourceProcessor, CacheManager $cacheManager
+    )
     {
         $this->resourceProcessor = $resourceProcessor;
         $this->cacheManager = $cacheManager;
@@ -51,10 +52,11 @@ class ProcessResourcesCommand extends ChamiloCommand
     protected function configure()
     {
         $this->setName('chamilo:process_resources')->setDescription(
-            $this->translator->trans('ProcessResourcesCommandDescription', array(), 'Chamilo\Libraries'))->addArgument(
-            self::ARG_CONTEXT,
-            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('ProcessResourcesContextDescription', array(), 'Chamilo\Libraries'));
+            $this->translator->trans('ProcessResourcesCommandDescription', array(), 'Chamilo\Libraries')
+        )->addArgument(
+            self::ARG_CONTEXT, InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
+            $this->translator->trans('ProcessResourcesContextDescription', array(), 'Chamilo\Libraries')
+        );
     }
 
     /**

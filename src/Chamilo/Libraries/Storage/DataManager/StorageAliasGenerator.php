@@ -49,6 +49,26 @@ class StorageAliasGenerator
 
     /**
      *
+     * @return string[][]
+     */
+    public function getAliases()
+    {
+        return $this->aliases;
+    }
+
+    /**
+     *
+     * @return string[][]
+     * @deprecated Use getAliases() now
+     */
+    public function get_aliases()
+
+    {
+        return $this->getAliases();
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
     public function getClassnameUtilities()
@@ -79,7 +99,7 @@ class StorageAliasGenerator
 
         foreach ($parts as $part)
         {
-            $possibleName .= $part{0};
+            $possibleName .= $part[0];
         }
 
         $possibleName = $possibleName . '_' . $column;
@@ -155,7 +175,7 @@ class StorageAliasGenerator
 
             foreach ($parts as $part)
             {
-                $possibleName .= $part{0};
+                $possibleName .= $part[0];
             }
 
             if (in_array($possibleName, $this->aliases[self::TYPE_TABLE]))
@@ -183,26 +203,6 @@ class StorageAliasGenerator
     public function getTypes()
     {
         return array(self::TYPE_TABLE, self::TYPE_CONSTRAINT);
-    }
-
-    /**
-     *
-     * @return string[][]
-     * @deprecated Use getAliases() now
-     */
-    public function get_aliases()
-
-    {
-        return $this->getAliases();
-    }
-
-    /**
-     *
-     * @return string[][]
-     */
-    public function getAliases()
-    {
-        return $this->aliases;
     }
 
     /**

@@ -1,21 +1,21 @@
 <?php
 
-use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 $autoloader = require __DIR__ . '/vendor/autoload.php';
-\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
+AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-$container->get('chamilo.libraries.architecture.bootstrap.bootstrap')->setup();
+$container->get(Bootstrap::class)->setup();
 
 /** @var \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter */
-$configurationConsulter = $container->get('chamilo.configuration.service.configuration_consulter');
+$configurationConsulter = $container->get(ConfigurationConsulter::class);
 
 $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
 $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
@@ -23,12 +23,12 @@ $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 try
 {
     /** @var \Symfony\Component\Console\Application $console */
-    $console = $container->get('chamilo.libraries.console');
-    $console->setHelperSet($container->get('chamilo.libraries.console.helper_set'));
+    $console = $container->get('Chamilo\Libraries\Console');
+    $console->setHelperSet($container->get('Chamilo\Libraries\Console\HelperSet'));
     $console->setCatchExceptions(false);
     $console->run();
 }
-catch(\Throwable $ex)
+catch (Throwable $ex)
 {
     $exceptionLogger->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
     throw $ex;

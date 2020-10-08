@@ -24,7 +24,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('chamilo.libraries.console'))
+        if ($container->hasDefinition('Chamilo\Libraries\Console'))
         {
             $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.command');
             $consoleDefinition = $container->getDefinition('Chamilo\Libraries\Console');
@@ -35,7 +35,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
             }
         }
 
-        if ($container->hasDefinition('chamilo.libraries.console.helper_set'))
+        if ($container->hasDefinition('Chamilo\Libraries\Console\HelperSet'))
         {
             $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.helper');
             $helperSetDefinition = $container->getDefinition('Chamilo\Libraries\Console\HelperSet');
