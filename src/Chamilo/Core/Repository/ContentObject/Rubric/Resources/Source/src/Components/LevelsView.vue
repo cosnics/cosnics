@@ -34,7 +34,7 @@
     <div @click="selectLevel(null)" @keydown.esc="hideRemoveLevelDialog">
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1 class="levels-title">{{ $t('levels') }}</h1>
-            <on-off-switch id="use-scores-check" class="levels-switch" v-model="rubric.useScores" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch>
+            <on-off-switch id="use-scores-check" class="levels-switch" :value="rubric.useScores" @input="onUseScoresChanged" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
                 <li v-if="!newLevel" class="level-new">
@@ -81,6 +81,11 @@
         constructor() {
             super();
             this.onLevelMove = debounce(this.onLevelMove, 750);
+        }
+
+        onUseScoresChanged(useScores: boolean) {
+            this.rubric.useScores = useScores;
+            this.dataConnector?.updateRubric(this.rubric);
         }
 
         createNewLevel() {

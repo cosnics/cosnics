@@ -111,13 +111,6 @@
             this.uiState.selectedCriterium = criterium ? criterium.id : '';
         }
 
-        toggleUseScores() {
-            if (this.rubric) {
-                this.rubric.useScores = !this.rubric.useScores;
-                this.dataConnector?.updateRubric(this.rubric);
-            }
-        }
-
         get content() {
             return this.uiState.content;
         }
