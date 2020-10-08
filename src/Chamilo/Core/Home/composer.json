@@ -39,6 +39,7 @@
                         {
                             "output": "Resources/Css/cosnics.common.Ruby.min.css",
                             "input": [
+                                "Resources/Css/Aqua/Stylesheet.min.css"
                             ]
                         }
                     ]
