@@ -3175,6 +3175,13 @@ module.exports = global;
 
 /***/ }),
 
+/***/ "0c07":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "0e29":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9054,6 +9061,17 @@ module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperti
   return O;
 };
 
+
+/***/ }),
+
+/***/ "2e5d":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_OnOffSwitch_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0c07");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_OnOffSwitch_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_OnOffSwitch_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_OnOffSwitch_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -20141,12 +20159,12 @@ var RubricBuilderWrappervue_type_template_id_35b37b62_staticRenderFns = []
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.number.constructor.js
 var es_number_constructor = __webpack_require__("250b");
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=120c2e57&
-var RubricBuildervue_type_template_id_120c2e57_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderPreview' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('preview')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.rubric && _vm.$route.name !== 'BuilderPreview')?_c('ul',{staticClass:"app-header-tools",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull', 'mod-hide': _vm.$route.name === 'Builder' && !_vm.selectedCriterium}},[_c('li',{staticClass:"app-tool-item"},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.rubric.useScores },attrs:{"aria-label":_vm.$t('use-scores')},on:{"click":function($event){$event.preventDefault();return _vm.toggleUseScores($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('use-scores')))])])])]):_vm._e(),(_vm.$route.name !== 'BuilderPreview')?_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}}):_vm._e()],1),_c('div',{staticClass:"rubrics",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull'}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":(_vm.$route.name === 'Builder' || _vm.$route.name === 'BuilderPreview') ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
-var RubricBuildervue_type_template_id_120c2e57_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilder.vue?vue&type=template&id=1a5ba41a&
+var RubricBuildervue_type_template_id_1a5ba41a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'builder-app': _vm.$route.name === 'Builder', 'builder-app-levels': _vm.$route.name === 'BuilderLevels'},attrs:{"id":"app"}},[_c('div',{staticClass:"app-header"},[_c('nav',{attrs:{"role":"navigation"}},[_c('ul',{staticClass:"app-header-nav"},[_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderPreview' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('preview')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'Builder' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('builder')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderLevels' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('levels')))])])],1),_c('li',{staticClass:"app-nav-item"},[_c('router-link',{staticClass:"app-link",attrs:{"to":{ name: 'BuilderFull' }}},[_c('span',{staticClass:"link-text",attrs:{"tabindex":"-1"}},[_vm._v(_vm._s(_vm.$t('level-descriptions')))])])],1)])]),(_vm.$route.name !== 'BuilderPreview')?_c('save-area',{attrs:{"data-connector":_vm.dataConnector,"error":_vm.errorCode ? _vm.$t(("error-" + _vm.errorCode)) : null}}):_vm._e()],1),_c('div',{staticClass:"rubrics",class:{'builder-app-full-view': _vm.$route.name === 'BuilderFull'}},[_c('link',{attrs:{"rel":"stylesheet","href":"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"}}),(_vm.rubric)?_c('div',{class:{ 'rubrics-wrapper': _vm.$route.name === 'Builder', 'rubrics-wrapper-levels': _vm.$route.name === 'BuilderLevels' }},[_c('router-view',{attrs:{"rubric":_vm.rubric,"data-connector":_vm.dataConnector,"selected-criterium":_vm.selectedCriterium,"ui-state":(_vm.$route.name === 'Builder' || _vm.$route.name === 'BuilderPreview') ? _vm.uiState : null},on:{"criterium-selected":_vm.selectCriterium}})],1):_c('div',{staticClass:"app-container-loading"},[_c('p',[_vm._v("Loading Rubrics...")]),_vm._m(0)])])])}
+var RubricBuildervue_type_template_id_1a5ba41a_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=120c2e57&
+// CONCATENATED MODULE: ./src/Views/RubricBuilder.vue?vue&type=template&id=1a5ba41a&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.find.js
 var es_array_find = __webpack_require__("529c");
@@ -23833,16 +23851,6 @@ function (_Vue) {
       this.uiState.selectedCriterium = criterium ? criterium.id : '';
     }
   }, {
-    key: "toggleUseScores",
-    value: function toggleUseScores() {
-      if (this.rubric) {
-        var _this$dataConnector;
-
-        this.rubric.useScores = !this.rubric.useScores;
-        (_this$dataConnector = this.dataConnector) === null || _this$dataConnector === void 0 ? void 0 : _this$dataConnector.updateRubric(this.rubric);
-      }
-    }
-  }, {
     key: "setError",
     value: function setError(code) {
       this.errorCode = code;
@@ -23956,8 +23964,8 @@ var RubricBuildervue_type_custom_index_0_blockType_i18n = __webpack_require__("5
 
 var RubricBuilder_component = normalizeComponent(
   Views_RubricBuildervue_type_script_lang_ts_,
-  RubricBuildervue_type_template_id_120c2e57_render,
-  RubricBuildervue_type_template_id_120c2e57_staticRenderFns,
+  RubricBuildervue_type_template_id_1a5ba41a_render,
+  RubricBuildervue_type_template_id_1a5ba41a_staticRenderFns,
   false,
   null,
   null,
@@ -29476,12 +29484,12 @@ var RubricResultDemoWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricResultDemoWrapper = (RubricResultDemoWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/LevelsView.vue?vue&type=template&id=78ca5640&
-var LevelsViewvue_type_template_id_78ca5640_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{on:{"click":function($event){return _vm.selectLevel(null)},"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.hideRemoveLevelDialog($event)}}},[_c('div',{staticClass:"levels-container",class:{ 'has-new': !!_vm.newLevel/*, 'show-description': showLevelDescriptions */}},[_c('h1',{staticClass:"levels-title"},[_vm._v(_vm._s(_vm.$t('levels')))]),_c('ul',{staticClass:"levels-list"},[_vm._l((_vm.rubric.levels),function(level,index){return _c('level-details',{key:("level_" + index),attrs:{"has-new":!!_vm.newLevel,"selected-level":_vm.selectedLevel,"rubric":_vm.rubric,"level":level,"tag":"li","item-index":index + 1},on:{"change":_vm.onLevelChange,"level-move-up":_vm.moveLevelUp,"level-move-down":_vm.moveLevelDown,"level-selected":_vm.selectLevel,"level-default":_vm.setDefault,"level-remove":_vm.showRemoveLevelDialog}})}),(!_vm.newLevel)?_c('li',{staticClass:"level-new"},[_c('button',{staticClass:"btn-new",on:{"click":function($event){$event.stopPropagation();return _vm.createNewLevel($event)}}},[_vm._v(_vm._s(_vm.$t('add-level')))])]):_c('level-details',{key:("level_" + (_vm.rubric.levels.length)),attrs:{"selected-level":_vm.newLevel,"has-new":true,"is-new":true,"rubric":_vm.rubric,"level":_vm.newLevel,"tag":"li"},on:{"new-level-added":_vm.addLevel,"new-level-canceled":_vm.cancelLevel,"level-default":_vm.setDefault}})],2)]),(_vm.removingLevel !== null)?_c('div',{staticClass:"modal-bg",on:{"click":function($event){$event.stopPropagation();return _vm.hideRemoveLevelDialog($event)}}},[_c('div',{staticClass:"modal-content",on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{staticClass:"modal-content-title"},[_vm._v(_vm._s(_vm.$t('remove-level', {item: ("'" + (_vm.removingLevel.title) + "'")}))+"?")]),_c('div',[_c('button',{ref:"btn-remove-level",staticClass:"btn-strong mod-confirm",on:{"click":function($event){$event.stopPropagation();return _vm.removeLevel(_vm.removingLevel)}}},[_vm._v(_vm._s(_vm.$t('remove')))]),_c('button',{staticClass:"btn-strong",on:{"click":function($event){$event.stopPropagation();return _vm.hideRemoveLevelDialog($event)}}},[_vm._v(_vm._s(_vm.$t('cancel')))])])])]):_vm._e()])}
-var LevelsViewvue_type_template_id_78ca5640_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/LevelsView.vue?vue&type=template&id=1efaedf1&
+var LevelsViewvue_type_template_id_1efaedf1_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{on:{"click":function($event){return _vm.selectLevel(null)},"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.hideRemoveLevelDialog($event)}}},[_c('div',{staticClass:"levels-container",class:{ 'has-new': !!_vm.newLevel/*, 'show-description': showLevelDescriptions */}},[_c('h1',{staticClass:"levels-title"},[_vm._v(_vm._s(_vm.$t('levels')))]),_c('on-off-switch',{staticClass:"levels-switch",attrs:{"id":"use-scores-check","value":_vm.rubric.useScores,"on-value":_vm.$t('with-scores'),"off-value":_vm.$t('without-scores')},on:{"input":_vm.onUseScoresChanged}}),_c('ul',{staticClass:"levels-list"},[_vm._l((_vm.rubric.levels),function(level,index){return _c('level-details',{key:("level_" + index),attrs:{"has-new":!!_vm.newLevel,"selected-level":_vm.selectedLevel,"rubric":_vm.rubric,"level":level,"tag":"li","item-index":index + 1},on:{"change":_vm.onLevelChange,"level-move-up":_vm.moveLevelUp,"level-move-down":_vm.moveLevelDown,"level-selected":_vm.selectLevel,"level-default":_vm.setDefault,"level-remove":_vm.showRemoveLevelDialog}})}),(!_vm.newLevel)?_c('li',{staticClass:"level-new"},[_c('button',{staticClass:"btn-new",on:{"click":function($event){$event.stopPropagation();return _vm.createNewLevel($event)}}},[_vm._v(_vm._s(_vm.$t('add-level')))])]):_c('level-details',{key:("level_" + (_vm.rubric.levels.length)),attrs:{"selected-level":_vm.newLevel,"has-new":true,"is-new":true,"rubric":_vm.rubric,"level":_vm.newLevel,"tag":"li"},on:{"new-level-added":_vm.addLevel,"new-level-canceled":_vm.cancelLevel,"level-default":_vm.setDefault}})],2)],1),(_vm.removingLevel !== null)?_c('div',{staticClass:"modal-bg",on:{"click":function($event){$event.stopPropagation();return _vm.hideRemoveLevelDialog($event)}}},[_c('div',{staticClass:"modal-content",on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{staticClass:"modal-content-title"},[_vm._v(_vm._s(_vm.$t('remove-level', {item: ("'" + (_vm.removingLevel.title) + "'")}))+"?")]),_c('div',[_c('button',{ref:"btn-remove-level",staticClass:"btn-strong mod-confirm",on:{"click":function($event){$event.stopPropagation();return _vm.removeLevel(_vm.removingLevel)}}},[_vm._v(_vm._s(_vm.$t('remove')))]),_c('button',{staticClass:"btn-strong",on:{"click":function($event){$event.stopPropagation();return _vm.hideRemoveLevelDialog($event)}}},[_vm._v(_vm._s(_vm.$t('cancel')))])])])]):_vm._e()])}
+var LevelsViewvue_type_template_id_1efaedf1_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/LevelsView.vue?vue&type=template&id=78ca5640&
+// CONCATENATED MODULE: ./src/Components/LevelsView.vue?vue&type=template&id=1efaedf1&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/LevelDetails.vue?vue&type=template&id=2e037f38&
 var LevelDetailsvue_type_template_id_2e037f38_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component",staticClass:"level-details",class:{ /*'show-description': showDescription,*/ 'is-selected': _vm.selectedLevel === _vm.level, 'new-level': _vm.isNew },on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.cancelNewLevel($event)}}},[_c('div',{staticClass:"level-details-text"},[_c('div',{staticClass:"level-details-text-1"},[_c('div',{staticClass:"ld-title",on:{"click":function($event){$event.stopPropagation();return _vm.selectLevel($event)}}},[_c('label',{staticClass:"level-label label-hidden",attrs:{"for":("level_title_" + _vm.index)}},[_vm._v(_vm._s(_vm.$t('level')))]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.level.title),expression:"level.title"}],staticClass:"input-detail",attrs:{"id":("level_title_" + _vm.index),"tabindex":_vm.tabIndex,"type":"text","autocomplete":"off","placeholder":_vm.$t('enter-level-here')},domProps:{"value":(_vm.level.title)},on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }_vm.isNew ? _vm.addNewLevel() : null},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.level, "title", $event.target.value)},_vm.onChange],"focus":_vm.selectLevel}})])])]),(_vm.rubric.useScores)?_c('div',{staticClass:"ld-score",on:{"click":function($event){$event.stopPropagation();return _vm.selectLevel($event)}}},[_c('label',{staticClass:"level-label label-hidden",attrs:{"for":("level_score_" + _vm.index)}},[_vm._v(_vm._s(_vm.$t('points')))]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.level.score),expression:"level.score"}],staticClass:"input-detail",attrs:{"id":("level_score_" + _vm.index),"tabindex":_vm.tabIndex,"type":"number","name":"Weight","maxlength":"3"},domProps:{"value":(_vm.level.score)},on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }_vm.isNew ? _vm.addNewLevel() : null},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.level, "score", $event.target.value)},_vm.onChange],"focus":_vm.selectLevel}})]):_vm._e(),_c('div',{staticClass:"ld-default",on:{"click":function($event){$event.stopPropagation();}}},[_c('label',{staticClass:"level-label label-hidden",attrs:{"for":("level_default_" + _vm.index)}},[_vm._v(_vm._s(_vm.$t('default'))+" "),_c('i',{staticClass:"fa fa-info-circle",attrs:{"title":_vm.$t('default-info')}})]),_c('input',{staticClass:"input-detail",attrs:{"id":("level_default_" + _vm.index),"tabindex":_vm.tabIndex,"type":"radio"},domProps:{"checked":_vm.level.isDefault},on:{"click":function($event){$event.stopPropagation();return _vm.setDefault($event)}}}),_c('label',{staticClass:"fa",class:("" + (_vm.level.isDefault ? 'checked' : 'not-checked')),attrs:{"for":("level_default_" + _vm.index),"aria-hidden":"true"}})]),(_vm.isNew)?_c('div',{staticClass:"actions"},[_c('button',{staticClass:"btn-strong mod-confirm",on:{"click":function($event){$event.preventDefault();return _vm.addNewLevel($event)}}},[_vm._v(_vm._s(_vm.$t('add')))]),_c('button',{staticClass:"btn-strong",on:{"click":function($event){$event.preventDefault();return _vm.cancelNewLevel($event)}}},[_vm._v(_vm._s(_vm.$t('cancel')))])]):_vm._e(),_c('div',{staticClass:"level-actions-wrapper",class:{ 'is-active': !_vm.isNew && _vm.selectedLevel === _vm.level },on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{staticClass:"level-actions"},[_c('button',{staticClass:"btn-level-action",attrs:{"id":("level_move_up_" + (_vm.level.id)),"disabled":_vm.isNew || _vm.index <= 0,"aria-label":_vm.$t('move-level-up'),"title":_vm.$t('move-level-up')},on:{"click":function($event){$event.stopPropagation();return _vm.$emit('level-move-up')}}},[_c('i',{staticClass:"fa fa-arrow-up",attrs:{"aria-hidden":"true"}})]),_c('button',{staticClass:"btn-level-action",attrs:{"id":("level_move_down_" + (_vm.level.id)),"disabled":_vm.isNew || _vm.index >= _vm.rubric.levels.length - 1,"aria-label":_vm.$t('move-level-down'),"title":_vm.$t('move-level-down')},on:{"click":function($event){$event.stopPropagation();return _vm.$emit('level-move-down')}}},[_c('i',{staticClass:"fa fa-arrow-down",attrs:{"aria-hidden":"true"}})]),_c('button',{staticClass:"btn-level-action btn-delete",attrs:{"disabled":_vm.isNew,"aria-label":_vm.$t('remove-level'),"title":_vm.$t('remove-level')},on:{"click":function($event){$event.preventDefault();return _vm.removeLevel($event)}}},[_c('i',{staticClass:"fa fa-minus-circle",attrs:{"aria-hidden":"true"}})])])])])}
@@ -29650,6 +29658,96 @@ var LevelDetails_component = normalizeComponent(
 if (typeof LevelDetailsvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(LevelDetailsvue_type_custom_index_0_blockType_i18n["default"])(LevelDetails_component)
 
 /* harmony default export */ var Components_LevelDetails = (LevelDetails_component.exports);
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/OnOffSwitch.vue?vue&type=template&id=2aff4d20&
+var OnOffSwitchvue_type_template_id_2aff4d20_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"onoffswitch"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.mValue),expression:"mValue"}],staticClass:"onoffswitch-checkbox",attrs:{"type":"checkbox","id":_vm.id},domProps:{"checked":Array.isArray(_vm.mValue)?_vm._i(_vm.mValue,null)>-1:(_vm.mValue)},on:{"change":function($event){var $$a=_vm.mValue,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.mValue=$$a.concat([$$v]))}else{$$i>-1&&(_vm.mValue=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.mValue=$$c}}}}),_c('label',{staticClass:"onoffswitch-label",attrs:{"for":_vm.id}},[_c('span',{staticClass:"onoffswitch-inner"},[_c('span',{staticClass:"onoffswitch-inner-before"},[_vm._v(_vm._s(_vm.onValue))]),_c('span',{staticClass:"onoffswitch-inner-after"},[_vm._v(_vm._s(_vm.offValue))])]),_c('span',{staticClass:"onoffswitch-switch"})])])}
+var OnOffSwitchvue_type_template_id_2aff4d20_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/Components/OnOffSwitch.vue?vue&type=template&id=2aff4d20&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/OnOffSwitch.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+var OnOffSwitchvue_type_script_lang_ts_OnOffSwitch =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(OnOffSwitch, _Vue);
+
+  function OnOffSwitch() {
+    _classCallCheck(this, OnOffSwitch);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(OnOffSwitch).apply(this, arguments));
+  }
+
+  _createClass(OnOffSwitch, [{
+    key: "mValue",
+    get: function get() {
+      return this.value;
+    },
+    set: function set(val) {
+      this.$emit('input', val);
+    }
+  }]);
+
+  return OnOffSwitch;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: Boolean,
+  required: true
+}), __metadata("design:type", Boolean)], OnOffSwitchvue_type_script_lang_ts_OnOffSwitch.prototype, "value", void 0);
+
+__decorate([Prop({
+  type: String,
+  default: 'myId'
+}), __metadata("design:type", String)], OnOffSwitchvue_type_script_lang_ts_OnOffSwitch.prototype, "id", void 0);
+
+__decorate([Prop({
+  type: String,
+  default: 'ON'
+}), __metadata("design:type", String)], OnOffSwitchvue_type_script_lang_ts_OnOffSwitch.prototype, "onValue", void 0);
+
+__decorate([Prop({
+  type: String,
+  default: 'OFF'
+}), __metadata("design:type", String)], OnOffSwitchvue_type_script_lang_ts_OnOffSwitch.prototype, "offValue", void 0);
+
+OnOffSwitchvue_type_script_lang_ts_OnOffSwitch = __decorate([vue_class_component_esm({
+  name: 'on-off-switch'
+})], OnOffSwitchvue_type_script_lang_ts_OnOffSwitch);
+/* harmony default export */ var OnOffSwitchvue_type_script_lang_ts_ = (OnOffSwitchvue_type_script_lang_ts_OnOffSwitch);
+// CONCATENATED MODULE: ./src/Components/OnOffSwitch.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var Components_OnOffSwitchvue_type_script_lang_ts_ = (OnOffSwitchvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/Components/OnOffSwitch.vue?vue&type=style&index=0&lang=scss&
+var OnOffSwitchvue_type_style_index_0_lang_scss_ = __webpack_require__("2e5d");
+
+// CONCATENATED MODULE: ./src/Components/OnOffSwitch.vue
+
+
+
+
+
+
+/* normalize component */
+
+var OnOffSwitch_component = normalizeComponent(
+  Components_OnOffSwitchvue_type_script_lang_ts_,
+  OnOffSwitchvue_type_template_id_2aff4d20_render,
+  OnOffSwitchvue_type_template_id_2aff4d20_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Components_OnOffSwitch = (OnOffSwitch_component.exports);
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/LevelsView.vue?vue&type=script&lang=ts&
 
 
@@ -29661,6 +29759,7 @@ if (typeof LevelDetailsvue_type_custom_index_0_blockType_i18n["default"] === 'fu
 
 
 var LevelsViewvue_type_script_lang_ts_a, LevelsViewvue_type_script_lang_ts_b;
+
 
 
 
@@ -29689,6 +29788,14 @@ function (_Vue) {
   }
 
   _createClass(LevelsView, [{
+    key: "onUseScoresChanged",
+    value: function onUseScoresChanged(useScores) {
+      var _this$dataConnector;
+
+      this.rubric.useScores = useScores;
+      (_this$dataConnector = this.dataConnector) === null || _this$dataConnector === void 0 ? void 0 : _this$dataConnector.updateRubric(this.rubric);
+    }
+  }, {
     key: "createNewLevel",
     value: function createNewLevel() {
       var _this2 = this;
@@ -29702,7 +29809,7 @@ function (_Vue) {
   }, {
     key: "addLevel",
     value: function addLevel() {
-      var _this$dataConnector;
+      var _this$dataConnector2;
 
       if (this.newLevel.isDefault) {
         this.rubric.levels.forEach(function (level) {
@@ -29711,7 +29818,7 @@ function (_Vue) {
       }
 
       this.rubric.addLevel(this.newLevel);
-      (_this$dataConnector = this.dataConnector) === null || _this$dataConnector === void 0 ? void 0 : _this$dataConnector.addLevel(this.newLevel, this.rubric.levels.length);
+      (_this$dataConnector2 = this.dataConnector) === null || _this$dataConnector2 === void 0 ? void 0 : _this$dataConnector2.addLevel(this.newLevel, this.rubric.levels.length);
       this.newLevel = null;
     }
   }, {
@@ -29723,10 +29830,10 @@ function (_Vue) {
   }, {
     key: "onLevelMove",
     value: function onLevelMove(level) {
-      var _this$dataConnector2;
+      var _this$dataConnector3;
 
       var index = this.rubric.levels.indexOf(level);
-      (_this$dataConnector2 = this.dataConnector) === null || _this$dataConnector2 === void 0 ? void 0 : _this$dataConnector2.moveLevel(level, index);
+      (_this$dataConnector3 = this.dataConnector) === null || _this$dataConnector3 === void 0 ? void 0 : _this$dataConnector3.moveLevel(level, index);
     }
   }, {
     key: "moveLevelUp",
@@ -29761,9 +29868,9 @@ function (_Vue) {
   }, {
     key: "onLevelChange",
     value: function onLevelChange(level) {
-      var _this$dataConnector3;
+      var _this$dataConnector4;
 
-      (_this$dataConnector3 = this.dataConnector) === null || _this$dataConnector3 === void 0 ? void 0 : _this$dataConnector3.updateLevel(level);
+      (_this$dataConnector4 = this.dataConnector) === null || _this$dataConnector4 === void 0 ? void 0 : _this$dataConnector4.updateLevel(level);
     }
   }, {
     key: "selectLevel",
@@ -29804,11 +29911,11 @@ function (_Vue) {
   }, {
     key: "removeLevel",
     value: function removeLevel(level) {
-      var _this$dataConnector4;
+      var _this$dataConnector5;
 
       this.removingLevel = null;
       this.rubric.removeLevel(level);
-      (_this$dataConnector4 = this.dataConnector) === null || _this$dataConnector4 === void 0 ? void 0 : _this$dataConnector4.deleteLevel(level);
+      (_this$dataConnector5 = this.dataConnector) === null || _this$dataConnector5 === void 0 ? void 0 : _this$dataConnector5.deleteLevel(level);
       this.selectLevel(null);
     }
   }, {
@@ -29839,7 +29946,8 @@ __decorate([Watch('removingLevel'), __metadata("design:type", Function), __metad
 LevelsViewvue_type_script_lang_ts_LevelsView = __decorate([vue_class_component_esm({
   name: 'levels-view',
   components: {
-    LevelDetails: Components_LevelDetails
+    LevelDetails: Components_LevelDetails,
+    OnOffSwitch: Components_OnOffSwitch
   }
 }), __metadata("design:paramtypes", [])], LevelsViewvue_type_script_lang_ts_LevelsView);
 /* harmony default export */ var LevelsViewvue_type_script_lang_ts_ = (LevelsViewvue_type_script_lang_ts_LevelsView);
@@ -29862,8 +29970,8 @@ var LevelsViewvue_type_custom_index_0_blockType_i18n = __webpack_require__("adc0
 
 var LevelsView_component = normalizeComponent(
   Components_LevelsViewvue_type_script_lang_ts_,
-  LevelsViewvue_type_template_id_78ca5640_render,
-  LevelsViewvue_type_template_id_78ca5640_staticRenderFns,
+  LevelsViewvue_type_template_id_1efaedf1_render,
+  LevelsViewvue_type_template_id_1efaedf1_staticRenderFns,
   false,
   null,
   null,
@@ -30288,7 +30396,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"add-level":"Add Level","cancel":"Cancel","levels":"Levels","remove":"Remove","remove-level":"Remove level {item}"},"fr":{"add-level":"Ajouter un niveau","cancel":"Annuler","levels":"Niveaux","remove":"Supprimer","remove-level":"Supprimer le niveau {item}"},"nl":{"add-level":"Niveau toevoegen","cancel":"Annuleer","levels":"Niveaus","remove":"Verwijder","remove-level":"Niveau {item} verwijderen"}}')
+  Component.options.__i18n.push('{"en":{"add-level":"Add Level","cancel":"Cancel","levels":"Levels","remove":"Remove","remove-level":"Remove level {item}","with-scores":"With scores","without-scores":"Without scores"},"fr":{"add-level":"Ajouter un niveau","cancel":"Annuler","levels":"Niveaux","remove":"Supprimer","remove-level":"Supprimer le niveau {item}","with-scores":"Avec scores","without-scores":"Sans scores"},"nl":{"add-level":"Niveau toevoegen","cancel":"Annuleer","levels":"Niveaus","remove":"Verwijder","remove-level":"Niveau {item} verwijderen","with-scores":"Met scores","without-scores":"Zonder scores"}}')
   delete Component.options._Ctor
 }
 
