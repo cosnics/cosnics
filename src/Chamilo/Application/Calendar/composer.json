@@ -29,30 +29,20 @@
             "category": "social",
             "resources": [
                 {
-                    "output": "Chamilo/Application/Calendar/Resources/Css/print.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Application/Calendar/Resources/Css/print.Aqua.min.css",
-                            "input": "Resources/Css/Aqua/Print.min.css"
-                        },
-                        {
-                            "output": "Chamilo/Application/Calendar/Resources/Css/print.Ruby.min.css",
-                            "input": "Resources/Css/Aqua/Print.min.css"
-                        }
-                    ]
+                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Print.min.css"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": "Resources/Css/Aqua/Stylesheet.min.css"
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": "Resources/Css/Aqua/Stylesheet.min.css"
-                        }
-                    ]
+                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Print.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
             ],
             "install": {

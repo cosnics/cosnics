@@ -31,21 +31,12 @@
             "type": "Chamilo\\Application\\Weblcms\\Tool",
             "resources": [
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        }
-                    ]
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
             ],
             "install": {
@@ -58,9 +49,9 @@
                     "version": ">=1.0.0"
                 }
             ],
-			"extra": {
-				"course-section": "admin"
-			}
+            "extra": {
+                "course-section": "admin"
+            }
         }
     }
 }

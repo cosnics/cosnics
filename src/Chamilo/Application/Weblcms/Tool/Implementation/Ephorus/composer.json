@@ -38,30 +38,20 @@
             ],
             "resources": [
                 {
-                    "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.Aqua.min.css",
-                            "input": "Resources/Css/Aqua/Report.min.css"
-                        },
-                        {
-                            "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.Ruby.min.css",
-                            "input": "Resources/Css/Aqua/Report.min.css"
-                        }
-                    ]
+                    "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Report.min.css"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": "Resources/Css/Aqua/Stylesheet.min.css"
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": "Resources/Css/Aqua/Stylesheet.min.css"
-                        }
-                    ]
+                    "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Report.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
             ],
             "install": {

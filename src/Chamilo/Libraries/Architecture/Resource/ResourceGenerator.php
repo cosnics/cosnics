@@ -177,17 +177,7 @@ class ResourceGenerator
         {
             foreach ($package->getResources() as $resourceDefinition)
             {
-                if (isset($resourceDefinition->themes))
-                {
-                    foreach ($resourceDefinition->themes as $themeResourceDefinition)
-                    {
-                        $this->addResourceDefinitiontoResourceFiles($themeResourceDefinition, $resourceFiles, $package);
-                    }
-                }
-                else
-                {
-                    $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
-                }
+                $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
             }
         }
     }

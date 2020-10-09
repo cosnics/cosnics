@@ -32,21 +32,12 @@
             "type": "Chamilo\\Libraries\\Protocol\\Microsoft",
             "resources": [
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        }
-                    ]
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
             ],
             "install": {

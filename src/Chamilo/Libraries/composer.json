@@ -124,47 +124,37 @@
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/General.min.css",
-                                "Resources/Css/Aqua/Form.min.css",
-                                "Resources/Css/Aqua/Table.min.css",
-                                "Resources/Css/Aqua/Tabs.min.css",
-                                "Resources/Css/Aqua/Tree.min.css",
-                                "Resources/Css/Aqua/Bootstrap.min.css",
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/General.min.css",
-                                "Resources/Css/Aqua/Form.min.css",
-                                "Resources/Css/Aqua/Table.min.css",
-                                "Resources/Css/Aqua/Tabs.min.css",
-                                "Resources/Css/Aqua/Tree.min.css",
-                                "Resources/Css/Aqua/Bootstrap.min.css",
-                                "Resources/Css/Aqua/Stylesheet.min.css",
-                                "Resources/Css/Ruby/Stylesheet.min.css"
-                            ]
-                        }
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": [
+                        "Resources/Css/Aqua/General.min.css",
+                        "Resources/Css/Aqua/Form.min.css",
+                        "Resources/Css/Aqua/Table.min.css",
+                        "Resources/Css/Aqua/Tabs.min.css",
+                        "Resources/Css/Aqua/Tree.min.css",
+                        "Resources/Css/Aqua/Bootstrap.min.css",
+                        "Resources/Css/Aqua/Stylesheet.min.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Aqua.min.css",
-                            "input": "Resources/Css/Aqua/ErrorPages.min.css"
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Ruby.min.css",
-                            "input": "Resources/Css/Ruby/ErrorPages.min.css"
-                        }
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": [
+                        "Resources/Css/Aqua/General.min.css",
+                        "Resources/Css/Aqua/Form.min.css",
+                        "Resources/Css/Aqua/Table.min.css",
+                        "Resources/Css/Aqua/Tabs.min.css",
+                        "Resources/Css/Aqua/Tree.min.css",
+                        "Resources/Css/Aqua/Bootstrap.min.css",
+                        "Resources/Css/Aqua/Stylesheet.min.css",
+                        "Resources/Css/Ruby/Stylesheet.min.css"
                     ]
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/ErrorPages.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Ruby.min.css",
+                    "input": "Resources/Css/Ruby/ErrorPages.min.css"
                 }
             ],
             "additional": [

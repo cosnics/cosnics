@@ -1,64 +1,55 @@
 {
-	"name": "cosnics/application-weblcms-bridge-assignment",
-	"version": "1.0.0",
-	"description": "Application Weblcms Assignment Bridge",
-	"keywords": [
-		"Application",
-		"Weblcms",
-		"Bridge",
-		"Assignment"
-	],
-	"homepage": "http://www.cosnics.org",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Sven Vanpoucke",
-			"email": "sven.vanpoucke@hogent.be"
-		},
-		{
-			"name": "Hans De Bisschop",
-			"email": "hans.de.bisschop@ehb.be"
-		}
-	],
-	"require": {
-		"php": ">=7.2.0"
-	},
-	"extra": {
-		"cosnics": {
-			"name": "Assignment Bridge",
-			"context": "Chamilo\\Application\\Weblcms\\Bridge\\Assignment",
-			"type": "Chamilo\\Application\\Weblcms\\Bridge",
-			"resources": [
+    "name": "cosnics/application-weblcms-bridge-assignment",
+    "version": "1.0.0",
+    "description": "Application Weblcms Assignment Bridge",
+    "keywords": [
+        "Application",
+        "Weblcms",
+        "Bridge",
+        "Assignment"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Assignment Bridge",
+            "context": "Chamilo\\Application\\Weblcms\\Bridge\\Assignment",
+            "type": "Chamilo\\Application\\Weblcms\\Bridge",
+            "resources": [
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.min.css",
-                    "themes": [
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        },
-                        {
-                            "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                            "input": [
-                                "Resources/Css/Aqua/Stylesheet.min.css"
-                            ]
-                        }
-                    ]
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
             ],
             "install": {
-				"default": 1,
-				"core": 0
-			},
-			"dependencies": [
-				{
-					"id": "Chamilo\\Application\\Weblcms",
-					"version": ">=1.0.0"
-				}
-			],
-			"extra": {
-			}
-		}
-	}
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Application\\Weblcms",
+                    "version": ">=1.0.0"
+                }
+            ],
+            "extra": {
+            }
+        }
+    }
 }
