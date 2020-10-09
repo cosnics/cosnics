@@ -1,4 +1,5 @@
-import {logMethod} from "../Logger";
+import {logMethod} from '../Logger';
+import {toMarkdown} from '../Util/util';
 
 export interface TreeNodeInterface {
     readonly children: ReadonlyArray<TreeNode>;
@@ -24,6 +25,10 @@ export default abstract class TreeNode implements TreeNodeInterface {
             this.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //GUID
         else this.id = id;
         this.title = title;
+    }
+
+    toMarkdown(): string {
+        return toMarkdown(this.title);
     }
 
     abstract getType(): string;

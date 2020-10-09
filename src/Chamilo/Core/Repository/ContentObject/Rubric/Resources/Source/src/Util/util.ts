@@ -1,3 +1,6 @@
+import * as marked from 'marked';
+import DOMPurify from 'dompurify';
+
 export function convertRubricData(d: any) {
     function sortFn(v1: any, v2: any) {
         return (v1.sort > v2.sort) ? 1 : -1;
@@ -62,4 +65,8 @@ export function convertRubricData(d: any) {
         return cluster;
     });
     return data;
+}
+
+export function toMarkdown(rawString: string) {
+    return DOMPurify.sanitize(marked(rawString));
 }

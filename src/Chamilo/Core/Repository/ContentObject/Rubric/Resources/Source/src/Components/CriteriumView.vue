@@ -32,7 +32,7 @@
         <div class="b-criterium" :class="{ 'is-selected': selected }">
             <div class="item-header-bar mod-criterium">
                 <div @click="$emit('criterium-selected', criterium)" @dblclick.stop="startEditing" @keyup.space.enter="$emit('criterium-selected', criterium)" class="b-criterium-title-wrapper" tabindex="0">
-                    <h3 class="b-criterium-title" tabindex="-1">{{ criterium.title }}</h3>
+                    <h3 class="b-criterium-title u-markdown-criterium" tabindex="-1" v-html="criterium.toMarkdown()"></h3>
                 </div>
                 <button class="btn-toggle-menu mod-criterium" :class="{'is-menu-visible': showMenuActions}" :aria-label="!showMenuActions && $t('open-menu')" :title="!showMenuActions && $t('open-menu')" @keyup.space.stop="" @keydown.enter.stop="" @click.stop="$emit('item-actions', id)"><i :class="showMenuActions ? 'fa fa-close' : 'fa fa-ellipsis-h'"/></button>
                 <div class="action-menu mod-criterium" :class="{'is-menu-visible': showMenuActions}">

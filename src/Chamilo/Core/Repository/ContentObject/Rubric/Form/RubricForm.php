@@ -39,12 +39,16 @@ class RubricForm extends ContentObjectForm
     public function create_content_object()
     {
         $rubricObject = new Rubric();
+
         $this->set_content_object($rubricObject);
 
         parent::create_content_object();
 
+        $values = $this->exportValues();
+        $useScores = (bool) $values[Rubric::PROPERTY_RUBRIC_USE_SCORES];
         $rubricData = new RubricData($rubricObject->get_title());
         $rubricData->setContentObjectId($rubricObject->getId());
+        $rubricData->setUseScores($useScores);
 
         $clusterNode = new ClusterNode($rubricObject->get_title(), $rubricData, $rubricData->getRootNode());
         new CategoryNode('', $rubricData, $clusterNode);
@@ -73,9 +77,61 @@ class RubricForm extends ContentObjectForm
         return $rubricObject;
     }
 
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject|\Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport|mixed|void|null
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Exception
+     */
+    public function update_content_object()
+    {
+        $rubricData = $this->getRubricService()->getRubric($this->get_content_object()->get_additional_properties()['active_rubric_data_id']);
+        if ($this->getRubricService()->canChangeRubric($rubricData)) {
+            $values = $this->exportValues();
+            $useScores = (bool) $values[Rubric::PROPERTY_RUBRIC_USE_SCORES];
+            $rubricData->setUseScores($useScores);
+            $this->getRubricService()->saveRubric($rubricData);
+        }
+        return parent::update_content_object();
+    }
+
+    /**
+     * @param array $htmleditor_options
+     * @param bool $in_tab
+     */
     public function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form($htmleditor_options, $in_tab);
+        $this->buildRubricForm();
+    }
+
+    /**
+     * @param array $htmleditor_options
+     * @param bool $in_tab
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function build_editing_form($htmleditor_options = array(), $in_tab = false)
+    {
+        parent::build_editing_form($htmleditor_options, $in_tab);
+        $rubricData = $this->getRubricService()->getRubric($this->get_content_object()->get_additional_properties()['active_rubric_data_id']);
+        if ($this->getRubricService()->canChangeRubric($rubricData)) {
+            $this->buildRubricForm($rubricData->useScores());
+        }
+    }
+
+    /**
+     * Builds the form for the additional rubric properties
+     * @param bool $use_scores
+     */
+    protected function buildRubricForm($use_scores = false)
+    {
+        $translator = Translation::getInstance();
+        $this->addElement('category', $translator->getTranslation('Properties'));
+        $this->addElement(
+            'checkbox', Rubric::PROPERTY_RUBRIC_USE_SCORES,
+            $translator->getTranslation('RubricUseScores')
+        )->setChecked($use_scores);
     }
 
     /**

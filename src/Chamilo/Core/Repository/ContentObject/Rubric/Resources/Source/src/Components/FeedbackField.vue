@@ -15,7 +15,7 @@
 <template>
     <div class="feedback-input-area">
         <textarea v-model="choice.feedback" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" @input="onFeedbackChange" @focus="isFeedbackInputActive = true" @blur="isFeedbackInputActive = false">></textarea>
-        <div class="feedback-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" v-html="marked(choice.feedback)"></div>
+        <div class="feedback-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" v-html="choice.toMarkdown()"></div>
     </div>
 </template>
 
@@ -23,8 +23,6 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Choice from '../Domain/Choice';
-    import DOMPurify from 'dompurify';
-    import * as marked from 'marked';
 
     @Component({
         name: 'feedback-field',
@@ -39,10 +37,6 @@
         constructor() {
             super();
             this.onChange = debounce(this.onChange, 750);
-        }
-
-        marked(rawString: string) {
-            return DOMPurify.sanitize(marked(rawString));
         }
 
         onChange() {

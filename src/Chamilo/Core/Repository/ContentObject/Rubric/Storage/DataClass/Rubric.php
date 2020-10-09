@@ -27,6 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Rubric extends ContentObject implements Versionable
 {
     const PROPERTY_ACTIVE_RUBRIC_DATA_ID = 'active_rubric_data_id';
+    const PROPERTY_RUBRIC_USE_SCORES = 'use_scores';
 
     public static function get_type_name()
     {

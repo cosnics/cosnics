@@ -6,7 +6,6 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import RubricEntry from './RubricEntry.vue';
-    //import RubricEntry from './RubricEntry2.vue';
     import {convertRubricData} from '../Util/util';
 
     @Component({
