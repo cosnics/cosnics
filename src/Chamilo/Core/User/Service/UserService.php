@@ -3,6 +3,7 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
@@ -379,6 +380,23 @@ class UserService
     public function countUsers($condition)
     {
         return $this->userRepository->countUsers($condition);
+    }
+
+    /**
+     * @param User $user
+     * @param string $context
+     * @param string $variable
+     */
+    public function getUserSettingForSettingAndUser(User $user, string $context, string $variable)
+    {
+        $userSetting = $this->userRepository->getUserSettingForSettingAndUser($context, $variable, $user);
+        if($userSetting instanceof UserSetting)
+        {
+            return $userSetting->get_value();
+        }
+
+        $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name($variable, $context);
+        return $setting->get_value();
     }
 
 }

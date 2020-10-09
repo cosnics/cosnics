@@ -260,7 +260,6 @@ class UserRepository implements UserRepositoryInterface
      * @param User $user
      *
      * @return DataClass|UserSetting
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getUserSettingForSettingAndUser($context, $variable, User $user)
     {
