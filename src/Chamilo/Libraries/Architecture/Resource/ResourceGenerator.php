@@ -6,6 +6,7 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\PackageContextSequencer;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
+use stdClass;
 
 /**
  * @package Chamilo\Libraries\Architecture\Resource
@@ -42,6 +43,32 @@ class ResourceGenerator
         $this->platformPackageBundles = $platformPackageBundles;
         $this->packageContextSequencer = $packageContextSequencer;
         $this->pathBuilder = $pathBuilder;
+    }
+
+    /**
+     * @param \stdClass $resourceDefinition
+     * @param string[][] $resourceFiles
+     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
+     */
+    protected function addResourceDefinitiontoResourceFiles(
+        stdClass $resourceDefinition, array &$resourceFiles, Package $package
+    )
+    {
+        $path = $this->getPathBuilder()->namespaceToFullPath($package->get_context());
+
+        if (is_array($resourceDefinition->input))
+        {
+            foreach ($resourceDefinition->input as $resourceDefinitionFile)
+            {
+                $resourceFiles[$resourceDefinition->output][] =
+                    $path . $this->parseResourcePath($resourceDefinitionFile);
+            }
+        }
+        else
+        {
+            $resourceFiles[$resourceDefinition->output][] =
+                $path . $this->parseResourcePath($resourceDefinition->input);
+        }
     }
 
     protected function aggregateResources()
@@ -148,30 +175,18 @@ class ResourceGenerator
     {
         if ($package instanceof Package)
         {
-            $resourceDefinitions = $package->getResources();
-            $path = $this->getPathBuilder()->namespaceToFullPath($package->get_context());
-
-            foreach ($resourceDefinitions as $resourceDefinition)
+            foreach ($package->getResources() as $resourceDefinition)
             {
                 if (isset($resourceDefinition->themes))
                 {
                     foreach ($resourceDefinition->themes as $themeResourceDefinition)
                     {
-                        foreach ($themeResourceDefinition->input as $themeResourceDefinitionFile)
-                        {
-
-                            $resourceFiles[$themeResourceDefinition->output][] =
-                                $path . $this->parseResourcePath($themeResourceDefinitionFile);
-                        }
+                        $this->addResourceDefinitiontoResourceFiles($themeResourceDefinition, $resourceFiles, $package);
                     }
                 }
                 else
                 {
-                    foreach ($resourceDefinition->input as $resourceDefinitionFile)
-                    {
-                        $resourceFiles[$resourceDefinition->output][] =
-                            $path . $this->parseResourcePath($resourceDefinitionFile);
-                    }
+                    $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
                 }
             }
         }
@@ -201,11 +216,15 @@ class ResourceGenerator
 
     /**
      * @param string $outputPath
-     * @param string|string[] $inputPaths
+     * @param string[] $inputPaths
      */
     protected function writeResourcesFile($outputPath, $inputPaths)
     {
-        if (is_array($inputPaths))
+        if (count($inputPaths) == 1)
+        {
+            Filesystem::copy_file($inputPaths[0], $outputPath, true);
+        }
+        else
         {
             $resourceContent = array();
 
@@ -216,28 +235,17 @@ class ResourceGenerator
 
             Filesystem::write_to_file($outputPath, implode(PHP_EOL, $resourceContent));
         }
-        else
-        {
-            Filesystem::copy_file($inputPaths, $outputPath, true);
-        }
     }
 
     /**
      * @param string $outputPath
-     * @param string|string[] $inputPaths
+     * @param string[] $inputPaths
      */
     protected function writeResourcesFolder($outputPath, $inputPaths)
     {
-        if (is_array($inputPaths))
+        foreach ($inputPaths as $inputPath)
         {
-            foreach ($inputPaths as $inputPath)
-            {
-                Filesystem::recurse_copy($inputPath, $outputPath, true);
-            }
-        }
-        else
-        {
-            Filesystem::recurse_copy($inputPaths, $outputPath, true);
+            Filesystem::recurse_copy($inputPath, $outputPath, true);
         }
     }
 
