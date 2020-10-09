@@ -68,7 +68,7 @@ class ResourceGenerator
 
         foreach ($aggregatedResourceFiles as $aggregatedResourceFileName => $aggregatedResourceFilePaths)
         {
-            $this->writeResourceFile($aggregatedResourceFileName, $aggregatedResourceFilePaths);
+            $this->writeResource($aggregatedResourceFileName, $aggregatedResourceFilePaths);
         }
     }
 
@@ -121,6 +121,16 @@ class ResourceGenerator
     }
 
     /**
+     * @param string $resourcePath
+     *
+     * @return string
+     */
+    protected function parseResourcePath($resourcePath)
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $resourcePath);
+    }
+
+    /**
      * @param string[][] $resourceFiles
      * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
      */
@@ -141,7 +151,7 @@ class ResourceGenerator
                         {
 
                             $resourceFiles[$themeResourceDefinition->output][] =
-                                $path . str_replace('/', DIRECTORY_SEPARATOR, $themeResourceDefinitionFile);
+                                $path . $this->parseResourcePath($themeResourceDefinitionFile);
                         }
                     }
                 }
@@ -150,31 +160,56 @@ class ResourceGenerator
                     foreach ($resourceDefinition->input as $resourceDefinitionFile)
                     {
                         $resourceFiles[$resourceDefinition->output][] =
-                            $path . str_replace('/', DIRECTORY_SEPARATOR, $resourceDefinitionFile);
+                            $path . $this->parseResourcePath($resourceDefinitionFile);
                     }
                 }
             }
         }
     }
 
-    protected function writeResourceFile($aggregatedResourceFileName, $aggregatedResourceFilePaths)
+    protected function writeResource($destinationPath, $sourcePaths)
     {
-        $resourceContent = array();
-
-        foreach ($aggregatedResourceFilePaths as $aggregatedResourceFilePath)
-        {
-            $resourceContent[] = file_get_contents($aggregatedResourceFilePath);
-        }
-
-        $aggregatedResourceFilePath =
-            $this->getPathBuilder()->namespaceToFullPath('Chamilo\Libraries') . $aggregatedResourceFileName;
-
         $basePath = $this->getPathBuilder()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
-        $webAggregatedCssFilePath = str_replace($basePath, $baseWebPath, $aggregatedResourceFilePath);
+        $fullDestinationSourcePath = $basePath . $this->parseResourcePath($destinationPath);
+        $fullDestinationWebPath = str_replace($basePath, $baseWebPath, $fullDestinationSourcePath);
 
-        Filesystem::write_to_file($webAggregatedCssFilePath, implode(PHP_EOL, $resourceContent));
+        if (is_dir($destinationPath))
+        {
+            $this->writeResourcesFolder($fullDestinationWebPath, $sourcePaths);
+        }
+        else
+        {
+            $this->writeResourcesFile($fullDestinationWebPath, $sourcePaths);
+        }
+    }
+
+    protected function writeResourcesFile($destinationPath, $sourcePaths)
+    {
+        if (count($sourcePaths) == 1)
+        {
+            Filesystem::copy_file($sourcePaths[0], $destinationPath, true);
+        }
+        else
+        {
+            $resourceContent = array();
+
+            foreach ($sourcePaths as $sourcePath)
+            {
+                $resourceContent[] = file_get_contents($sourcePath);
+            }
+
+            Filesystem::write_to_file($destinationPath, implode(PHP_EOL, $resourceContent));
+        }
+    }
+
+    protected function writeResourcesFolder($destinationPath, $sourcePaths)
+    {
+        foreach ($sourcePaths as $sourcePath)
+        {
+            Filesystem::recurse_copy($sourcePath, $destinationPath, true);
+        }
     }
 
 }

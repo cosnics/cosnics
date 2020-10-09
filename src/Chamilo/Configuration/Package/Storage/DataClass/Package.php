@@ -131,7 +131,7 @@ class Package extends DataClass
     /**
      * Returns the extra of this Package.
      *
-     * @return string[][]
+     * @return \stdClass[]
      */
     public function getResources()
     {
