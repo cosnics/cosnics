@@ -44,7 +44,7 @@ class ResourceGenerator
         $this->pathBuilder = $pathBuilder;
     }
 
-    protected function aggregateResourceFiles()
+    protected function aggregateResources()
     {
         $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(
             $this->getPlatformPackageBundles()->get_packages_contexts()
@@ -62,13 +62,13 @@ class ResourceGenerator
         return $resourceFiles;
     }
 
-    public function generateResourceFiles()
+    public function generateResources()
     {
-        $aggregatedResourceFiles = $this->aggregateResourceFiles();
+        $aggregatedResourceFiles = $this->aggregateResources();
 
-        foreach ($aggregatedResourceFiles as $aggregatedResourceFileName => $aggregatedResourceFilePaths)
+        foreach ($aggregatedResourceFiles as $outputPath => $inputPaths)
         {
-            $this->writeResource($aggregatedResourceFileName, $aggregatedResourceFilePaths);
+            $this->writeResource($outputPath, $inputPaths);
         }
     }
 
@@ -121,6 +121,16 @@ class ResourceGenerator
     }
 
     /**
+     * @param string $outputPath
+     *
+     * @return boolean
+     */
+    protected function isOutputPathDirectory(string $outputPath)
+    {
+        return $outputPath[- 1] == DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * @param string $resourcePath
      *
      * @return string
@@ -167,48 +177,67 @@ class ResourceGenerator
         }
     }
 
-    protected function writeResource($destinationPath, $sourcePaths)
+    /**
+     * @param string $outputPath
+     * @param string[] $inputPaths
+     */
+    protected function writeResource($outputPath, $inputPaths)
     {
         $basePath = $this->getPathBuilder()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
-        $fullDestinationSourcePath = $basePath . $this->parseResourcePath($destinationPath);
-        $fullDestinationWebPath = str_replace($basePath, $baseWebPath, $fullDestinationSourcePath);
+        $fullOutputSourcePath = $basePath . $this->parseResourcePath($outputPath);
+        $fullOutputWebPath = str_replace($basePath, $baseWebPath, $fullOutputSourcePath);
 
-        if (is_dir($destinationPath))
+        if ($this->isOutputPathDirectory($fullOutputWebPath))
         {
-            $this->writeResourcesFolder($fullDestinationWebPath, $sourcePaths);
+            $this->writeResourcesFolder($fullOutputWebPath, $inputPaths);
         }
         else
         {
-            $this->writeResourcesFile($fullDestinationWebPath, $sourcePaths);
+            $this->writeResourcesFile($fullOutputWebPath, $inputPaths);
         }
     }
 
-    protected function writeResourcesFile($destinationPath, $sourcePaths)
+    /**
+     * @param string $outputPath
+     * @param string|string[] $inputPaths
+     */
+    protected function writeResourcesFile($outputPath, $inputPaths)
     {
-        if (count($sourcePaths) == 1)
-        {
-            Filesystem::copy_file($sourcePaths[0], $destinationPath, true);
-        }
-        else
+        if (is_array($inputPaths))
         {
             $resourceContent = array();
 
-            foreach ($sourcePaths as $sourcePath)
+            foreach ($inputPaths as $inputPath)
             {
-                $resourceContent[] = file_get_contents($sourcePath);
+                $resourceContent[] = file_get_contents($inputPath);
             }
 
-            Filesystem::write_to_file($destinationPath, implode(PHP_EOL, $resourceContent));
+            Filesystem::write_to_file($outputPath, implode(PHP_EOL, $resourceContent));
+        }
+        else
+        {
+            Filesystem::copy_file($inputPaths, $outputPath, true);
         }
     }
 
-    protected function writeResourcesFolder($destinationPath, $sourcePaths)
+    /**
+     * @param string $outputPath
+     * @param string|string[] $inputPaths
+     */
+    protected function writeResourcesFolder($outputPath, $inputPaths)
     {
-        foreach ($sourcePaths as $sourcePath)
+        if (is_array($inputPaths))
         {
-            Filesystem::recurse_copy($sourcePath, $destinationPath, true);
+            foreach ($inputPaths as $inputPath)
+            {
+                Filesystem::recurse_copy($inputPath, $outputPath, true);
+            }
+        }
+        else
+        {
+            Filesystem::recurse_copy($inputPaths, $outputPath, true);
         }
     }
 
