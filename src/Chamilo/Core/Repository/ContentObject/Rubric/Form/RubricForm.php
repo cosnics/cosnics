@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\ClusterNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,6 +31,14 @@ class RubricForm extends ContentObjectForm
      * @var ContainerInterface
      */
     protected $container;
+
+    public function __construct(
+        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post',
+        $action = null, $extra = null, $additional_elements
+    ) {
+        // allow_new_version: false
+        parent::__construct($form_type, $workspace, $content_object, $form_name, $method, $action, $extra, $additional_elements, false);
+    }
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject|\Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport|mixed|void|null
