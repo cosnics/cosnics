@@ -124,23 +124,26 @@ class RubricForm extends ContentObjectForm
     {
         parent::build_editing_form($htmleditor_options, $in_tab);
         $rubricData = $this->getRubricService()->getRubric($this->get_content_object()->get_additional_properties()['active_rubric_data_id']);
-        if ($this->getRubricService()->canChangeRubric($rubricData)) {
-            $this->buildRubricForm($rubricData->useScores());
-        }
+        $this->buildRubricForm($rubricData->useScores(), !$this->getRubricService()->canChangeRubric($rubricData));
     }
 
     /**
      * Builds the form for the additional rubric properties
      * @param bool $use_scores
      */
-    protected function buildRubricForm($use_scores = false)
+    protected function buildRubricForm($use_scores = false, $has_results = false)
     {
         $translator = Translation::getInstance();
         $this->addElement('category', $translator->getTranslation('Properties'));
-        $this->addElement(
+        $el = $this->addElement(
             'checkbox', Rubric::PROPERTY_RUBRIC_USE_SCORES,
             $translator->getTranslation('RubricUseScores')
-        )->setChecked($use_scores);
+        );
+        $el->setChecked($use_scores);
+        if ($has_results) {
+            $el->setAttribute('disabled', true);
+            $this->add_warning_message('', '', $translator->getTranslation('RubricUseScoresDisabled'));
+        }
     }
 
     /**
