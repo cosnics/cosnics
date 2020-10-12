@@ -32,14 +32,6 @@ class RubricForm extends ContentObjectForm
      */
     protected $container;
 
-    public function __construct(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post',
-        $action = null, $extra = null, $additional_elements
-    ) {
-        // allow_new_version: false
-        parent::__construct($form_type, $workspace, $content_object, $form_name, $method, $action, $extra, $additional_elements, false);
-    }
-
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject|\Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport|mixed|void|null
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
