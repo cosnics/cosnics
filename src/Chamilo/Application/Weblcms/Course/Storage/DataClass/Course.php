@@ -680,10 +680,12 @@ class Course extends DataClass
      * Checks whether the given user is a course admin in this course
      *
      * @param User $user
+     * @param bool $includeAdminCheck - Includes the check to the admin validator. Set this to false if you only want to
+     *      check for teacher subscriptions
      *
      * @return boolean
      */
-    public function is_course_admin($user)
+    public function is_course_admin($user, $includeAdminCheck = true)
     {
         if ($user->is_platform_admin())
         {
@@ -717,7 +719,7 @@ class Course extends DataClass
             {
                 $isTeacher = true;
             }
-            elseif($courseValidator->isUserAdminOfCourse($user, $this))
+            elseif($includeAdminCheck && $courseValidator->isUserAdminOfCourse($user, $this))
             {
                 $isTeacher = true;
             }
