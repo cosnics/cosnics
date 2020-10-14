@@ -480,8 +480,14 @@ class BlockRenderer
 
         $blockContentId = 'block-content-' . $this->block->getId();
 
+        $loadingImage = Theme::getInstance()->getCommonImage('Action\LoadingMedium', 'gif');
+
         $html = [];
-        $html[] = '<div id="' . $blockContentId . '"></div>';
+        $html[] = '<div id="' . $blockContentId . '">';
+        $html[] = '<div class="text-center" style="margin: 20px;">';
+        $html[] = $loadingImage;
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         $html[] = '<script type="text/javascript">';
         $html[] = '  $(document).ready(function() {';
