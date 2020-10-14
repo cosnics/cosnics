@@ -496,7 +496,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                 $course_id = $course->get_id();
 
-                $course_admin = $course->is_course_admin($this->get_user());
+                $course_admin = $course->is_course_admin($this->get_user(), false);
 
                 $course_visible = $course_settings_controller->get_course_setting(
                     $course,
