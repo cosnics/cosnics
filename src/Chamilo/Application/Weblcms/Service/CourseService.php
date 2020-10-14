@@ -297,6 +297,11 @@ class CourseService implements CourseServiceInterface
             return true;
         }
 
+        if($this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER))
+        {
+            return true;
+        }
+
         if($includeCourseAdminValidation)
         {
             $courseValidator = CourseAdminValidator::getInstance();
@@ -307,7 +312,7 @@ class CourseService implements CourseServiceInterface
             }
         }
 
-        return $this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER);
+        return false;
     }
 
     /**

@@ -546,16 +546,7 @@ abstract class Manager extends Application
     {
         if ($user != null && $course != null)
         {
-            // // If the user is a platform administrator, grant all rights
-            // if ($user->is_platform_admin())
-            // {
-            // return true;
-            // }
-
-            $courseValidator = CourseAdminValidator::getInstance();
-
-            // If the user is a sub administrator, grant all rights
-            if ($courseValidator->isUserAdminOfCourse($user, $course))
+            if($user->is_platform_admin())
             {
                 return true;
             }
@@ -563,13 +554,22 @@ abstract class Manager extends Application
             // If the user is enrolled as a teacher directlt or via a platform group, grant all rights
             $relation = $this->retrieve_course_user_relation($course->get_id(), $user->get_id());
 
-            if (($relation && $relation->get_status() == 1) || $user->is_platform_admin())
+            if (($relation && $relation->get_status() == 1))
             {
                 return true;
             }
-            else
+
+            if(CourseDataManager::is_teacher_by_platform_group_subscription($course->get_id(), $user))
             {
-                return CourseDataManager::is_teacher_by_platform_group_subscription($course->get_id(), $user);
+                return true;
+            }
+
+            $courseValidator = CourseAdminValidator::getInstance();
+
+            // If the user is a sub administrator, grant all rights
+            if ($courseValidator->isUserAdminOfCourse($user, $course))
+            {
+                return true;
             }
         }
 

@@ -685,6 +685,11 @@ class Course extends DataClass
      */
     public function is_course_admin($user)
     {
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+
         $courseValidator = CourseAdminValidator::getInstance();
 
         // fix for view as
@@ -697,44 +702,27 @@ class Course extends DataClass
             {
                 $id = $va_id;
             }
-            else
-            {
-                if ($user->is_platform_admin())
-                {
-                    return true;
-                }
-
-                // If the user is a sub administrator, grant all rights
-                if ($courseValidator->isUserAdminOfCourse($user, $this))
-                {
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            if ($user->is_platform_admin())
-            {
-                return true;
-            }
-
-            // If the user is a sub administrator, grant all rights
-            if ($courseValidator->isUserAdminOfCourse($user, $this))
-            {
-                return true;
-            }
         }
 
         if (is_null($this->is_course_admin_cache[$id]))
         {
+            $isTeacher = false;
             $studentview = Session::retrieve('studentview');
 
             if ($studentview)
             {
-                return false;
+                $isTeacher = false;
+            }
+            elseif($this->is_subscribed_as_course_admin($user))
+            {
+                $isTeacher = true;
+            }
+            elseif($courseValidator->isUserAdminOfCourse($user, $this))
+            {
+                $isTeacher = true;
             }
 
-            $this->is_course_admin_cache[$id] = $this->is_subscribed_as_course_admin($user);
+            $this->is_course_admin_cache[$id] = $isTeacher;
         }
 
         return $this->is_course_admin_cache[$id];
