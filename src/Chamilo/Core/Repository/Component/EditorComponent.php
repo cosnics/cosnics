@@ -71,7 +71,7 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
-                $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
+                //$parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
 
                 $this->redirect(Translation::get('EditNotAllowed'), true, $parameters);
             }
@@ -82,7 +82,8 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
-                $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
+                //$parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
+
                 $this->redirect(Translation::get('UpdateNotAllowed'), false, $parameters);
             }
 
@@ -101,7 +102,8 @@ class EditorComponent extends Manager implements DelegateComponent
 
                 $parameters = array();
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
-                $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
+                // Safe to remove? Setting this redirect you to the root "category" instead of where you're coming from.
+                //$parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
 
                 if ($success)
                 {
