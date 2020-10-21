@@ -3,6 +3,7 @@ namespace Chamilo\Core\Rights\Structure\Service\Interfaces;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
+use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 
 /**
  * Manages structure location roles
@@ -35,21 +36,12 @@ interface StructureLocationRoleServiceInterface
     public function removeRoleFromStructureLocation(StructureLocation $structureLocation, $roleName);
 
     /**
-     * Returns a list of roles for a given structure location
-     * 
-     * @param StructureLocation $structureLocation
-     *
-     * @return Role[]
-     */
-    public function getRolesForLocation(StructureLocation $structureLocation);
-
-    /**
      * Returns a list of roles for a given structure location identified by given context and comnponent
-     * 
+     *
      * @param string $context
-     * @param string $action
+     * @param string|null $action
      *
      * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
-    public function getRolesForLocationByContextAndAction($context, $action = null);
+    public function getRolesForLocationByContextAndAction(string $context, string $action = null);
 }

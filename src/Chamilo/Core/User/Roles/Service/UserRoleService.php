@@ -80,7 +80,6 @@ class UserRoleService implements UserRoleServiceInterface
         {
             $userRoleIds[] = $userRole->getId();
         }
-        
         foreach ($rolesToMatch as $roleToMatch)
         {
             if (in_array($roleToMatch->getId(), $userRoleIds))
