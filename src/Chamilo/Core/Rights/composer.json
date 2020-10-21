@@ -28,6 +28,10 @@
             "type": "Chamilo\\Core",
             "resources": [
                 {
+                    "output": "Chamilo/Core/Rights/Editor/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 },

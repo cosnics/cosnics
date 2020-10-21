@@ -18,11 +18,47 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
 
     /**
      *
+     * @return \Chamilo\Configuration\Package\PackageList
+     */
+    public function getAllPackages()
+    {
+        return $this->getForIdentifier(PackageList::MODE_ALL);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Package\PackageList
+     */
+    public function getAvailablePackages()
+    {
+        return $this->getForIdentifier(PackageList::MODE_AVAILABLE);
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
      */
     public function getCachePathNamespace()
     {
         return 'Chamilo\Configuration\Package\PlatformPackageBundles';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     */
+    public function getIdentifiers()
+    {
+        return array(PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Package\PackageList
+     */
+    public function getInstalledPackages()
+    {
+        return $this->getForIdentifier(PackageList::MODE_INSTALLED);
     }
 
     /**
@@ -40,41 +76,5 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
         $packageList->get_list(true);
 
         return $this->getCacheProvider()->save($identifier, $packageList);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
-    {
-        return array(PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
-     */
-    public function getAllPackages()
-    {
-        return $this->getForIdentifier(PackageList::MODE_ALL);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
-     */
-    public function getInstalledPackages()
-    {
-        return $this->getForIdentifier(PackageList::MODE_INSTALLED);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
-     */
-    public function getAvailablePackages()
-    {
-        return $this->getForIdentifier(PackageList::MODE_AVAILABLE);
     }
 }

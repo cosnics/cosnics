@@ -10,7 +10,7 @@ use Exception;
 
 /**
  * Manages roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UserRoleService implements UserRoleServiceInterface
@@ -30,7 +30,7 @@ class UserRoleService implements UserRoleServiceInterface
 
     /**
      * UserRoleService constructor.
-     * 
+     *
      * @param RoleServiceInterface $roleService
      * @param UserRoleRepositoryInterface $userRoleRepository
      */
@@ -41,32 +41,31 @@ class UserRoleService implements UserRoleServiceInterface
     }
 
     /**
-     * Returns the roles for a given user
-     * 
-     * @param User $user
+     * Adds a role to a given user by a given role name
      *
-     * @return Role[]
+     * @param User $user
+     * @param string $roleName
+     *
+     * @throws \Exception
      */
-    public function getRolesForUser(User $user)
+    public function addRoleForUser(User $user, $roleName)
     {
-        $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
-        
-        if (empty($userRoles))
+        $role = $this->roleService->getOrCreateRoleByName($roleName);
+
+        $userRoleRelation = new RoleRelation();
+
+        $userRoleRelation->setRoleId($role->getId());
+        $userRoleRelation->setUserId($user->getId());
+
+        if (!$this->userRoleRepository->create($userRoleRelation))
         {
-            $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
+            throw new Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
-        
-        if ($user->is_platform_admin())
-        {
-            $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
-        }
-        
-        return $userRoles;
     }
 
     /**
      * Checks whether or not a user matches one of the requested roles
-     * 
+     *
      * @param User $user
      * @param Role[] $rolesToMatch
      *
@@ -76,12 +75,12 @@ class UserRoleService implements UserRoleServiceInterface
     {
         $userRoles = $this->getRolesForUser($user);
         $userRoleIds = array();
-        
+
         foreach ($userRoles as $userRole)
         {
             $userRoleIds[] = $userRole->getId();
         }
-        
+
         foreach ($rolesToMatch as $roleToMatch)
         {
             if (in_array($roleToMatch->getId(), $userRoleIds))
@@ -89,13 +88,37 @@ class UserRoleService implements UserRoleServiceInterface
                 return true;
             }
         }
-        
+
         return false;
     }
 
     /**
+     * Returns the roles for a given user
+     *
+     * @param User $user
+     *
+     * @return Role[]
+     */
+    public function getRolesForUser(User $user)
+    {
+        $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
+
+        if (empty($userRoles))
+        {
+            $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
+        }
+
+        if ($user->is_platform_admin())
+        {
+            $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
+        }
+
+        return $userRoles;
+    }
+
+    /**
      * Returns the users that are attached to a given role
-     * 
+     *
      * @param string $roleName
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -103,35 +126,13 @@ class UserRoleService implements UserRoleServiceInterface
     public function getUsersForRole($roleName)
     {
         $role = $this->roleService->getRoleByName($roleName);
+
         return $this->userRoleRepository->findUsersForRole($role->getId());
     }
 
     /**
-     * Adds a role to a given user by a given role name
-     * 
-     * @param User $user
-     * @param string $roleName
-     *
-     * @throws \Exception
-     */
-    public function addRoleForUser(User $user, $roleName)
-    {
-        $role = $this->roleService->getOrCreateRoleByName($roleName);
-        
-        $userRoleRelation = new RoleRelation();
-        
-        $userRoleRelation->setRoleId($role->getId());
-        $userRoleRelation->setUserId($user->getId());
-        
-        if (! $this->userRoleRepository->create($userRoleRelation))
-        {
-            throw new Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
-        }
-    }
-
-    /**
      * Removes a role by a given name from a given user
-     * 
+     *
      * @param User $user
      * @param string $roleName
      *
@@ -147,14 +148,15 @@ class UserRoleService implements UserRoleServiceInterface
         {
             return;
         }
-        
-        $userRoleRelation = $this->userRoleRepository->findUserRoleRelationByRoleAndUser($role->getId(), $user->getId());
-        
-        if (! $userRoleRelation)
+
+        $userRoleRelation =
+            $this->userRoleRepository->findUserRoleRelationByRoleAndUser($role->getId(), $user->getId());
+
+        if (!$userRoleRelation)
         {
             return;
         }
-        
+
         if (!$this->userRoleRepository->delete($userRoleRelation))
         {
             throw new Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);

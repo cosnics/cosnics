@@ -17,21 +17,20 @@ class InternationalizationBundlesCacheService extends DoctrineFilesystemCacheSer
 
     /**
      *
+     * @return \Chamilo\Configuration\Package\PackageList
+     */
+    public function getAllPackages()
+    {
+        return $this->getForIdentifier(PackageList::MODE_ALL);
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
      */
     public function getCachePathNamespace()
     {
         return 'Chamilo\Configuration\Package\InternationalizationBundles';
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier)
-    {
-        $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
-        return $this->getCacheProvider()->save($identifier, $internationalizationBundles->getPackageNamespaces());
     }
 
     /**
@@ -45,10 +44,12 @@ class InternationalizationBundlesCacheService extends DoctrineFilesystemCacheSer
 
     /**
      *
-     * @return \Chamilo\Configuration\Package\PackageList
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
-    public function getAllPackages()
+    public function warmUpForIdentifier($identifier)
     {
-        return $this->getForIdentifier(PackageList::MODE_ALL);
+        $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
+
+        return $this->getCacheProvider()->save($identifier, $internationalizationBundles->getPackageNamespaces());
     }
 }

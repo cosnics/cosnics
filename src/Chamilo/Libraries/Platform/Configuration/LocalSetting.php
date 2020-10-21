@@ -5,6 +5,8 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
@@ -189,7 +191,11 @@ class LocalSetting
     {
         if (!isset(self::$instance))
         {
-            $localSettingCacheService = new LocalSettingCacheService();
+            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurablePathBuilder::class
+            );
+
+            $localSettingCacheService = new LocalSettingCacheService($configurablePathBuilder);
             $userIdentifier = Session::get_user_id();
             if (is_null($userIdentifier))
             {

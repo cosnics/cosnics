@@ -45,8 +45,20 @@
             },
             "resources": [
                 {
+                    "output": "Chamilo/Libraries/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Libraries/Format/Resources/Javascript/TblChange.js",
+                    "input": "Format/Resources/Javascript/TblChange.js"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Plugin/",
                     "input": "Resources/Plugin/"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Images/",
+                    "input": "Resources/Images/"
                 },
                 {
                     "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.jquery.min.js",

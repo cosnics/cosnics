@@ -29,6 +29,18 @@
             "category": "education",
             "resources": [
                 {
+                    "output": "Chamilo/Application/Weblcms/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Application/Weblcms/Course/Resources/Javascript/",
+                    "input": "Course/Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Application/Weblcms/Tool/Resources/Javascript/",
+                    "input": "Tool/Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 },

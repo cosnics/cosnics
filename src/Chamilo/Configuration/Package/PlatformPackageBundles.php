@@ -2,6 +2,8 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
  *
@@ -13,14 +15,12 @@ use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 class PlatformPackageBundles
 {
     const MODE_ALL = 1;
-
     const MODE_AVAILABLE = 3;
-
     const MODE_INSTALLED = 2;
 
     /**
      *
-     * @var \configuration\package\PlatformPackageBundles
+     * @var \Chamilo\Configuration\Package\PlatformPackageBundles
      */
     private static $instance;
 
@@ -59,7 +59,7 @@ class PlatformPackageBundles
      *
      * @param int $mode
      */
-    public function __construct($mode = self :: MODE_ALL)
+    public function __construct($mode = self::MODE_ALL)
     {
         $this->mode = $mode;
         $this->initialize();
@@ -71,7 +71,7 @@ class PlatformPackageBundles
      *
      * @return \Chamilo\Configuration\Package\PlatformPackageBundles
      */
-    public static function getInstance($mode = self :: MODE_ALL)
+    public static function getInstance($mode = self::MODE_ALL)
     {
         if (!isset(self::$instance[$mode]))
         {
@@ -85,7 +85,11 @@ class PlatformPackageBundles
     {
         if (!isset($this->packageBundlesCacheService))
         {
-            $this->packageBundlesCacheService = new PackageBundlesCacheService();
+            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurablePathBuilder::class
+            );
+
+            $this->packageBundlesCacheService = new PackageBundlesCacheService($configurablePathBuilder);
         }
 
         return $this->packageBundlesCacheService;
@@ -162,7 +166,7 @@ class PlatformPackageBundles
      * @param boolean $include_installed
      * @param boolean $reset
      *
-     * @return \configuration\package\storage\data_class\PackageList
+     * @return \Chamilo\Configuration\Package\PackageList
      */
     public function initialize()
     {

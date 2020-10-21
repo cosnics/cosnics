@@ -46,6 +46,10 @@
             ],
             "resources": [
                 {
+                    "output": "Chamilo/Core/Repository/ContentObject/PeerAssessment/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 },

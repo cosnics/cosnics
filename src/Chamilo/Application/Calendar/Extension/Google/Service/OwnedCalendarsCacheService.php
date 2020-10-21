@@ -4,6 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
@@ -25,27 +26,12 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
     /**
      *
      * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function __construct(CalendarRepository $calendarRepository)
+    public function __construct(CalendarRepository $calendarRepository, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
-        $this->calendarRepository = $calendarRepository;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    public function getCalendarRepository()
-    {
-        return $this->calendarRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository $calendarRepository
-     */
-    public function setCalendarRepository($calendarRepository)
-    {
+        parent::__construct($configurablePathBuilder);
         $this->calendarRepository = $calendarRepository;
     }
 
@@ -60,16 +46,20 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
      */
-    public function warmUpForIdentifier($identifier)
+    public function getCalendarRepository()
     {
-        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
-        
-        return $this->getCacheProvider()->save(
-            $identifier, 
-            $this->getCalendarRepository()->findOwnedCalendars(), 
-            $lifetimeInMinutes * 60);
+        return $this->calendarRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
+     */
+    public function setCalendarRepository($calendarRepository)
+    {
+        $this->calendarRepository = $calendarRepository;
     }
 
     /**
@@ -89,7 +79,20 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
     {
         $calendarRepository = $this->getCalendarRepository();
         $identifier = $calendarRepository->getCacheIdentifier($calendarRepository->getAccessToken(), __METHOD__);
-        
+
         return $this->getForIdentifier($identifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     */
+    public function warmUpForIdentifier($identifier)
+    {
+        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
+
+        return $this->getCacheProvider()->save(
+            $identifier, $this->getCalendarRepository()->findOwnedCalendars(), $lifetimeInMinutes * 60
+        );
     }
 }

@@ -15,8 +15,8 @@ use Sabre\VObject;
  */
 class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
-    const PARAM_PATH = 'path';
     const PARAM_LIFETIME = 'lifetime';
+    const PARAM_PATH = 'path';
 
     /**
      *
@@ -29,33 +29,23 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @param string $path
+     * @param integer $lifetime
+     *
+     * @return \Sabre\VObject\Component\VCalendar
      */
-    public function warmUpForIdentifier($identifier)
+    public function getCalendarForPath($path, $lifetime = 3600)
     {
-        $path = $identifier->get(self::PARAM_PATH);
-        $lifetime = $identifier->get(self::PARAM_LIFETIME);
-        
-        if (! file_exists($path))
-        {
-            if ($f = @fopen($path, 'r'))
-            {
-                $calendarData = '';
-                while (! feof($f))
-                {
-                    $calendarData .= fgets($f, 4096);
-                }
-                fclose($f);
-            }
-        }
-        else
-        {
-            $calendarData = file_get_contents($path);
-        }
-        
-        $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
-        
-        return $this->getCacheProvider()->save($identifier, $calendar, $lifetime);
+        $cacheIdentifier = md5(serialize($path));
+        $parameterBag = new ParameterBag(
+            array(
+                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier,
+                self::PARAM_PATH => $path,
+                self::PARAM_LIFETIME => $lifetime
+            )
+        );
+
+        return $this->getForIdentifier($parameterBag);
     }
 
     /**
@@ -69,19 +59,32 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
 
     /**
      *
-     * @param string $path
-     * @param integer $lifetime
-     * @return \Sabre\VObject\Component\VCalendar
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
-    public function getCalendarForPath($path, $lifetime = 3600)
+    public function warmUpForIdentifier($identifier)
     {
-        $cacheIdentifier = md5(serialize($path));
-        $parameterBag = new ParameterBag(
-            array(
-                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier, 
-                self::PARAM_PATH => $path, 
-                self::PARAM_LIFETIME => $lifetime));
-        
-        return $this->getForIdentifier($parameterBag);
+        $path = $identifier->get(self::PARAM_PATH);
+        $lifetime = $identifier->get(self::PARAM_LIFETIME);
+
+        if (!file_exists($path))
+        {
+            if ($f = @fopen($path, 'r'))
+            {
+                $calendarData = '';
+                while (!feof($f))
+                {
+                    $calendarData .= fgets($f, 4096);
+                }
+                fclose($f);
+            }
+        }
+        else
+        {
+            $calendarData = file_get_contents($path);
+        }
+
+        $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
+
+        return $this->getCacheProvider()->save($identifier, $calendar, $lifetime);
     }
 }

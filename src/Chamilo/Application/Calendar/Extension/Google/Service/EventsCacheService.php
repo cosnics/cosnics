@@ -5,6 +5,7 @@ use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Cache\ParameterBag;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
@@ -30,26 +31,10 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
      *
      * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
      */
-    public function __construct(CalendarRepository $calendarRepository)
+    public function __construct(CalendarRepository $calendarRepository, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
-        $this->calendarRepository = $calendarRepository;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    public function getCalendarRepository()
-    {
-        return $this->calendarRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository $calendarRepository
-     */
-    public function setCalendarRepository($calendarRepository)
-    {
+        parent::__construct($configurablePathBuilder);
         $this->calendarRepository = $calendarRepository;
     }
 
@@ -64,22 +49,44 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
      */
-    public function warmUpForIdentifier($identifier)
+    public function getCalendarRepository()
     {
-        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
-        
-        $calendarIdentifier = $identifier->get(self::PARAM_CALENDAR_IDENTIFIER);
-        $fromDate = $identifier->get(self::PARAM_FROM_DATE);
-        $toDate = $identifier->get(self::PARAM_TO_DATE);
-        
-        $result = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier, 
-            $fromDate, 
-            $toDate);
-        
-        return $this->getCacheProvider()->save($identifier, $result, $lifetimeInMinutes * 60);
+        return $this->calendarRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
+     */
+    public function setCalendarRepository($calendarRepository)
+    {
+        $this->calendarRepository = $calendarRepository;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
+    {
+        $calendarRepository = $this->getCalendarRepository();
+
+        $cacheIdentifier = $calendarRepository->getCacheIdentifier(
+            $calendarRepository->getAccessToken(), __METHOD__, array($calendarIdentifier, $fromDate, $toDate)
+        );
+
+        $identifier = new ParameterBag(
+            array(
+                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier,
+                self::PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier,
+                self::PARAM_FROM_DATE => $fromDate,
+                self::PARAM_TO_DATE => $toDate
+            )
+        );
+
+        return $this->getForIdentifier($identifier);
     }
 
     /**
@@ -93,24 +100,20 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
-    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
+    public function warmUpForIdentifier($identifier)
     {
-        $calendarRepository = $this->getCalendarRepository();
-        
-        $cacheIdentifier = $calendarRepository->getCacheIdentifier(
-            $calendarRepository->getAccessToken(), 
-            __METHOD__, 
-            array($calendarIdentifier, $fromDate, $toDate));
-        
-        $identifier = new ParameterBag(
-            array(
-                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier, 
-                self::PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier, 
-                self::PARAM_FROM_DATE => $fromDate, 
-                self::PARAM_TO_DATE => $toDate));
-        
-        return $this->getForIdentifier($identifier);
+        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
+
+        $calendarIdentifier = $identifier->get(self::PARAM_CALENDAR_IDENTIFIER);
+        $fromDate = $identifier->get(self::PARAM_FROM_DATE);
+        $toDate = $identifier->get(self::PARAM_TO_DATE);
+
+        $result = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+            $calendarIdentifier, $fromDate, $toDate
+        );
+
+        return $this->getCacheProvider()->save($identifier, $result, $lifetimeInMinutes * 60);
     }
 }

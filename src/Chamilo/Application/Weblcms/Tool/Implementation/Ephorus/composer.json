@@ -38,6 +38,10 @@
             ],
             "resources": [
                 {
+                    "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Application/Weblcms/Tool/Implementation/Ephorus/Resources/Css/report.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Report.min.css"
                 },

@@ -5,7 +5,7 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 
 /**
  * Manages structure locations
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface StructureLocationServiceInterface
@@ -13,9 +13,9 @@ interface StructureLocationServiceInterface
 
     /**
      * Creates a structure location based on a given context and action
-     * 
+     *
      * @param string $context
-     * @param string $action
+     * @param string|null $action
      *
      * @return StructureLocation
      *
@@ -25,7 +25,7 @@ interface StructureLocationServiceInterface
 
     /**
      * Deletes a given structure location
-     * 
+     *
      * @param StructureLocation $structureLocation
      *
      * @throws \Exception
@@ -34,20 +34,8 @@ interface StructureLocationServiceInterface
 
     /**
      * Truncates the structure locations with their roles
-     * 
+     *
      * @throws \Exception
      */
     public function truncateStructureLocations();
-
-    /**
-     * Returns the structure location by a given context and action
-     * 
-     * @param string $context
-     * @param string $action
-     *
-     * @return StructureLocation
-     *
-     * @throws \Exception
-     */
-    public function getStructureLocationByContextAndAction($context, $action = null);
 }

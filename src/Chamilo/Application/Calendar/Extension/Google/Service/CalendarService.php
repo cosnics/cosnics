@@ -4,6 +4,8 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
 use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
  *
@@ -33,6 +35,19 @@ class CalendarService
 
     /**
      *
+     * @param string $summary
+     * @param string $description
+     * @param string $timeZone
+     *
+     * @return \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
+     */
+    private function getCalendarProperties($summary, $description, $timeZone)
+    {
+        return new CalendarProperties($summary, $description, $timeZone);
+    }
+
+    /**
+     *
      * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
     public function getCalendarRepository()
@@ -50,13 +65,59 @@ class CalendarService
     }
 
     /**
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     * @throws \Exception
+     */
+    protected function getConfigurablePathBuilder()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurablePathBuilder::class
+        );
+    }
+
+    /**
+     *
+     * @param string $calendarIdentifier
+     * @param integer $fromDate
+     * @param integer $toDate
+     *
+     * @return \Chamilo\Application\Calendar\Extension\Google\EventResultSet
+     */
+    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
+    {
+        $eventsCacheService =
+            new EventsCacheService($this->getCalendarRepository(), $this->getConfigurablePathBuilder());
+        $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
+            $calendarIdentifier, $fromDate, $toDate
+        );
+
+        return new EventResultSet(
+            $this->getCalendarProperties(
+                $googleCalendarEvents->getSummary(), $googleCalendarEvents->getDescription(),
+                $googleCalendarEvents->getTimeZone()
+            ), $googleCalendarEvents->getItems()
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function getOwnedCalendars()
     {
-        $ownedCalendarsCacheService = new OwnedCalendarsCacheService($this->getCalendarRepository());
+        $ownedCalendarsCacheService =
+            new OwnedCalendarsCacheService($this->getCalendarRepository(), $this->getConfigurablePathBuilder());
+
         return $ownedCalendarsCacheService->getOwnedCalendars();
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isAuthenticated()
+    {
+        return $this->getCalendarRepository()->hasAccessToken();
     }
 
     /**
@@ -75,49 +136,5 @@ class CalendarService
     public function logout()
     {
         return $this->getCalendarRepository()->logout();
-    }
-
-    /**
-     *
-     * @param string $calendarIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
-     * @return \Chamilo\Application\Calendar\Extension\Google\EventResultSet
-     */
-    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
-    {
-        $eventsCacheService = new EventsCacheService($this->getCalendarRepository());
-        $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier, 
-            $fromDate, 
-            $toDate);
-        
-        return new EventResultSet(
-            $this->getCalendarProperties(
-                $googleCalendarEvents->getSummary(), 
-                $googleCalendarEvents->getDescription(), 
-                $googleCalendarEvents->getTimeZone()), 
-            $googleCalendarEvents->getItems());
-    }
-
-    /**
-     *
-     * @param string $summary
-     * @param string $description
-     * @param string $timeZone
-     * @return \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
-     */
-    private function getCalendarProperties($summary, $description, $timeZone)
-    {
-        return new CalendarProperties($summary, $description, $timeZone);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isAuthenticated()
-    {
-        return $this->getCalendarRepository()->hasAccessToken();
     }
 }

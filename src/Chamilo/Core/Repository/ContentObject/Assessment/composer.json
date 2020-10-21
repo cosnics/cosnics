@@ -31,6 +31,14 @@
             "category": "Assessment",
             "resources": [
                 {
+                    "output": "Chamilo/Core/Repository/ContentObject/Assessment/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Core/Repository/ContentObject/Assessment/Display/Resources/Javascript/",
+                    "input": "Display/Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 },

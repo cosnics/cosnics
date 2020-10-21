@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterf
 
 /**
  * Repository to manage the data of roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface StructureLocationRoleRepositoryInterface extends DataManagerRepositoryInterface
@@ -14,7 +14,7 @@ interface StructureLocationRoleRepositoryInterface extends DataManagerRepository
 
     /**
      * Returns a structure location role object by a given structure location and role
-     * 
+     *
      * @param int $structureLocationId
      * @param int $roleId
      *
@@ -23,11 +23,8 @@ interface StructureLocationRoleRepositoryInterface extends DataManagerRepository
     public function findStructureLocationRoleByStructureLocationAndRole($structureLocationId, $roleId);
 
     /**
-     * Returns a list of roles by a given structure location
-     * 
-     * @param int $structureLocationId
-     *
-     * @return Role[]
+     * @return array[]
      */
-    public function findRolesForStructureLocation($structureLocationId);
+    public function retrieveStructureLocationsAndRoles();
+
 }

@@ -369,7 +369,6 @@ class DependencyInjectionContainerBuilder
      *
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
      */
     protected function getRegistrationConsulter()
     {
@@ -404,7 +403,7 @@ class DependencyInjectionContainerBuilder
                             ), new DataClassFactory()
                             )
                         )
-                    )
+                    ), $this->getConfigurablePathBuilder()
                 )
             );
         }

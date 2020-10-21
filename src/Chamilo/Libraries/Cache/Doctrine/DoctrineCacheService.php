@@ -1,15 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Cache\Doctrine;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Cache\IdentifiableCacheService;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -21,12 +14,24 @@ use Exception;
  */
 abstract class DoctrineCacheService extends IdentifiableCacheService
 {
+    /**
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    protected $configurablePathBuilder;
 
     /**
      *
      * @var \Doctrine\Common\Cache\CacheProvider
      */
     private $cacheProvider;
+
+    /**
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     */
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
 
     /**
      *
@@ -53,16 +58,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
      */
     protected function getCachePath()
     {
-        $configurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
-            )
-        );
-        $configurablePathBuilder = new ConfigurablePathBuilder(
-            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
-        );
-
-        return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
+        return $this->getConfigurablePathBuilder()->getCachePath($this->getCachePathNamespace());
     }
 
     /**
@@ -94,11 +90,24 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
         $this->cacheProvider = $cacheProvider;
     }
 
-    protected function getConfigurablePathBuilder()
+    /**
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurablePathBuilder::class
-        );
+        return $this->configurablePathBuilder;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     *
+     * @return DoctrineCacheService
+     */
+    public function setConfigurablePathBuilder(ConfigurablePathBuilder $configurablePathBuilder): DoctrineCacheService
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+
+        return $this;
     }
 
     /**

@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -130,9 +131,10 @@ class Calculator
 
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(
-                    ), \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
-                    FilterData::FILTER_CATEGORY => null, Manager::PARAM_ACTION => null
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(),
+                    \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
+                    FilterData::FILTER_CATEGORY => null,
+                    Manager::PARAM_ACTION => null
                 )
             );
             $url = $redirect->getUrl();
@@ -147,7 +149,8 @@ class Calculator
             $message = Translation::get(
                 $translation, array(
                     'SERVER' => Filesystem::format_file_size($maximumServerSize),
-                    'USER' => Filesystem::format_file_size($maximumSize), 'URL' => $url
+                    'USER' => Filesystem::format_file_size($maximumSize),
+                    'URL' => $url
                 )
             );
 
@@ -317,7 +320,10 @@ class Calculator
     {
         if (!isset($this->calculatorCacheService))
         {
-            $this->calculatorCacheService = new CalculatorCacheService();
+            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurablePathBuilder::class
+            );
+            $this->calculatorCacheService = new CalculatorCacheService($configurablePathBuilder);
         }
 
         return $this->calculatorCacheService;
@@ -337,15 +343,14 @@ class Calculator
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
-            InequalityCondition::GREATER_THAN, new StaticConditionVariable(0)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), InequalityCondition::GREATER_THAN,
+            new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
             Group::class, new DataClassRetrieveParameters(
-                $condition,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
+                $condition, array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
             )
         );
 
@@ -366,8 +371,8 @@ class Calculator
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
-            InequalityCondition::GREATER_THAN, new StaticConditionVariable(0)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), InequalityCondition::GREATER_THAN,
+            new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);
 

@@ -5,6 +5,8 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -14,6 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package user.install
  */
+
 /**
  * This installer can be used to create the storage structure for the users application.
  */
@@ -28,67 +31,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     {
         parent::__construct($formValues);
         $this->initializeContainer();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
-
-    /**
-     * Runs the install-script.
-     */
-    public function extra()
-    {
-        $values = $this->get_form_values();
-
-        $settings[] = array(Manager::context(), 'allow_registration', $values['self_reg']);
-
-        foreach ($settings as $setting)
-        {
-            $setting_object = DataManager::retrieve_setting_from_variable_name(
-                $setting[1],
-                $setting[0]);
-            $setting_object->set_value($setting[2]);
-
-            if (! $setting_object->update())
-            {
-                return false;
-            }
-        }
-
-        if (! $this->create_anonymous_user())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('AnonymousAccountCreated'));
-        }
-
-        if (! $this->create_admin_account())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('AdminAccountCreated'));
-        }
-
-        if (! $this->create_test_user_account())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('TestUserAccountCreated'));
-        }
-
-        return true;
     }
 
     public function create_admin_account()
@@ -110,7 +52,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_database_quota('300');
         $user->set_expiration_date(0);
 
-        if (! $user->create())
+        if (!$user->create())
         {
             return false;
         }
@@ -139,10 +81,11 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_database_quota('0');
         $user->set_expiration_date(0);
 
-        if (! $user->create())
+        if (!$user->create())
         {
             return false;
         }
+
         return true;
     }
 
@@ -162,14 +105,80 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_database_quota('300');
         $user->set_expiration_date(0);
 
-        if (! $user->create())
+        if (!$user->create())
         {
             return false;
         }
         else
         {
-            $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurablePathBuilder::class
+            );
+
+            $localSetting = new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
+
             return $localSetting->create('platform_language', 'nl', 'Chamilo\Core\Admin');
         }
+    }
+
+    /**
+     * Runs the install-script.
+     */
+    public function extra()
+    {
+        $values = $this->get_form_values();
+
+        $settings[] = array(Manager::context(), 'allow_registration', $values['self_reg']);
+
+        foreach ($settings as $setting)
+        {
+            $setting_object = DataManager::retrieve_setting_from_variable_name(
+                $setting[1], $setting[0]
+            );
+            $setting_object->set_value($setting[2]);
+
+            if (!$setting_object->update())
+            {
+                return false;
+            }
+        }
+
+        if (!$this->create_anonymous_user())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(self::TYPE_NORMAL, Translation::get('AnonymousAccountCreated'));
+        }
+
+        if (!$this->create_admin_account())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(self::TYPE_NORMAL, Translation::get('AdminAccountCreated'));
+        }
+
+        if (!$this->create_test_user_account())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(self::TYPE_NORMAL, Translation::get('TestUserAccountCreated'));
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService(HashingUtilities::class);
     }
 }

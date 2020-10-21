@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Service;
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
  *
@@ -23,9 +24,13 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
     /**
      *
      * @param \Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface $cacheableDataLoader
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function __construct(CacheableDataLoaderInterface $cacheableDataLoader)
+    public function __construct(
+        CacheableDataLoaderInterface $cacheableDataLoader, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
+        parent::__construct($configurablePathBuilder);
         $this->cacheableDataLoader = $cacheableDataLoader;
     }
 

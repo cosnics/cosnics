@@ -16,21 +16,9 @@ use Chamilo\Libraries\Cache\ParameterBag;
  */
 class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
 {
-    const PARAM_USER_IDENTIFIER = 'user_identifier';
     const PARAM_TYPE = 'type';
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier)
-    {
-        $groupMemberships = DataManager::retrieve_all_subscribed_groups_array(
-            $identifier->get(self::PARAM_USER_IDENTIFIER), 
-            $identifier->get(self::PARAM_TYPE));
-        
-        return $this->getCacheProvider()->save((string) $identifier, $groupMemberships);
-    }
+    const PARAM_USER_IDENTIFIER = 'user_identifier';
 
     /**
      *
@@ -54,12 +42,28 @@ class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implem
      *
      * @param User $user
      * @param boolean $type
+     *
      * @return mixed
      */
     public function getMembershipsForUserAndType(User $user, $type)
     {
         $parameterBag = new ParameterBag(
-            array(self::PARAM_USER_IDENTIFIER => $user->getId(), self::PARAM_TYPE => $type));
+            array(self::PARAM_USER_IDENTIFIER => $user->getId(), self::PARAM_TYPE => $type)
+        );
+
         return $this->getForIdentifier($parameterBag);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     */
+    public function warmUpForIdentifier($identifier)
+    {
+        $groupMemberships = DataManager::retrieve_all_subscribed_groups_array(
+            $identifier->get(self::PARAM_USER_IDENTIFIER), $identifier->get(self::PARAM_TYPE)
+        );
+
+        return $this->getCacheProvider()->save((string) $identifier, $groupMemberships);
     }
 }

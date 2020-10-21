@@ -29,6 +29,18 @@
             "type": "Chamilo\\Core",
             "resources": [
                 {
+                    "output": "Chamilo/Core/Repository/Workspace/Rights/Resources/Javascript/",
+                    "input": "Workspace/Rights/Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Core/Repository/Viewer/Resources/Javascript/",
+                    "input": "Viewer/Resources/Javascript/"
+                },
+                {
+                    "output": "Chamilo/Core/Repository/Publication/Resources/Javascript/",
+                    "input": "Publication/Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": [
                         "Feedback/Resources/Css/Aqua/Stylesheet.min.css",

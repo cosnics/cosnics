@@ -48,6 +48,12 @@
                     "version": ">=1.0.0"
                 }
             ],
+            "resources": [
+                {
+                    "output": "Chamilo/Application/Weblcms/Tool/Implementation/CourseGroup/Extension/Office365/Integration/Chamilo/Application/Weblcms/Tool/Implementation/CourseGroup/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                }
+            ],
             "install": {
                 "default": 0,
                 "core": 0

@@ -49,7 +49,8 @@ class TranslatorFactory
             Filesystem::create_dir($translationCachePath);
         }
 
-        $internationalizationBundlesCacheService = new InternationalizationBundlesCacheService();
+        $internationalizationBundlesCacheService =
+            new InternationalizationBundlesCacheService($this->configurablePathBuilder);
         $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(

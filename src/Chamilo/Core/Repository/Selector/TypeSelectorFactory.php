@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -149,6 +150,17 @@ class TypeSelectorFactory
     }
 
     /**
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     * @throws \Exception
+     */
+    public function getConfigurablePathBuilder()
+    {
+        return $this->getService(
+            ConfigurablePathBuilder::class
+        );
+    }
+
+    /**
      *
      * @return string[]
      */
@@ -194,7 +206,7 @@ class TypeSelectorFactory
      */
     public function getTypeSelector()
     {
-        $typeSelectorCacheService = new TypeSelectorCacheService($this);
+        $typeSelectorCacheService = new TypeSelectorCacheService($this, $this->getConfigurablePathBuilder());
 
         return $typeSelectorCacheService->getForContentObjectTypesUserIdentifierAndMode(
             $this->getContentObjectTypes(), $this->getUserIdentifier(), $this->mode, $this->defaultSorting

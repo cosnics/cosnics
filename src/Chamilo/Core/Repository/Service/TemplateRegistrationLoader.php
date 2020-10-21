@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Service;
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -34,11 +35,14 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
      *
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository $templateRegistrationRepository
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
     public function __construct(
-        StringUtilities $stringUtilities, TemplateRegistrationRepository $templateRegistrationRepository
+        StringUtilities $stringUtilities, TemplateRegistrationRepository $templateRegistrationRepository,
+        ConfigurablePathBuilder $configurablePathBuilder
     )
     {
+        parent::__construct($configurablePathBuilder);
         $this->stringUtilities = $stringUtilities;
         $this->templateRegistrationRepository = $templateRegistrationRepository;
     }

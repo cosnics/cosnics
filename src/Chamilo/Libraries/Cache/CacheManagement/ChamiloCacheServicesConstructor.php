@@ -19,8 +19,6 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Core\Repository\Service\TypeSelectorCacheService;
 use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
-use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
-use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
@@ -74,7 +72,8 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
 
         $cacheManager->addCacheService(
             'chamilo_configuration', new DataCacheLoader(
-                new StorageConfigurationLoader(new ConfigurationRepository($this->getDataClassRepository()))
+                new StorageConfigurationLoader(new ConfigurationRepository($this->getDataClassRepository())),
+                $this->getConfigurablePathBuilder()
             )
         );
 
@@ -82,23 +81,28 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'chamilo_registration', new DataCacheLoader(
                 new RegistrationLoader(
                     $this->getStringUtilities(), new RegistrationRepository($this->getDataClassRepository())
-                )
+                ), $this->getConfigurablePathBuilder()
             )
         );
 
         $cacheManager->addCacheService(
-            'chamilo_language',
-            new DataCacheLoader(new LanguageLoader(new LanguageRepository($this->getDataClassRepository())))
+            'chamilo_language', new DataCacheLoader(
+                new LanguageLoader(new LanguageRepository($this->getDataClassRepository())),
+                $this->getConfigurablePathBuilder()
+            )
         );
 
         $cacheManager->addCacheService(
             'chamilo_repository_configuration', $this->getTemplateRegistrationLoader()
         );
 
-        $cacheManager->addCacheService('chamilo_packages', new PackageBundlesCacheService());
+        $cacheManager->addCacheService(
+            'chamilo_packages', new PackageBundlesCacheService($this->getConfigurablePathBuilder())
+        );
 
         $cacheManager->addCacheService(
-            'chamilo_translation_bundles', new InternationalizationBundlesCacheService()
+            'chamilo_translation_bundles',
+            new InternationalizationBundlesCacheService($this->getConfigurablePathBuilder())
         );
 
         $cacheManager->addCacheService(
@@ -106,7 +110,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_calculator', new CalculatorCacheService()
+            'chamilo_calculator', new CalculatorCacheService($this->getConfigurablePathBuilder())
         );
 
         // TODO: fix this for the new cache services for items
@@ -131,18 +135,25 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
     protected function addUserCacheServices(CacheManager $cacheManager)
     {
         $cacheManager->addCacheService(
-            'chamilo_repository_type_selector', new TypeSelectorCacheService(new TypeSelectorFactory())
+            'chamilo_repository_type_selector',
+            new TypeSelectorCacheService(new TypeSelectorFactory(), $this->getConfigurablePathBuilder())
         );
 
         $googleCalendarRepository = new CalendarRepository(
             '', '', ''
         );
 
-        $cacheManager->addCacheService('chamilo_google_events', new EventsCacheService($googleCalendarRepository));
         $cacheManager->addCacheService(
-            'chamilo_google_calendars', new OwnedCalendarsCacheService($googleCalendarRepository)
+            'chamilo_google_events',
+            new EventsCacheService($googleCalendarRepository, $this->getConfigurablePathBuilder())
         );
-        $cacheManager->addCacheService('chamilo_external_calendar', new ExternalCalendarCacheService());
+        $cacheManager->addCacheService(
+            'chamilo_google_calendars',
+            new OwnedCalendarsCacheService($googleCalendarRepository, $this->getConfigurablePathBuilder())
+        );
+        $cacheManager->addCacheService(
+            'chamilo_external_calendar', new ExternalCalendarCacheService($this->getConfigurablePathBuilder())
+        );
 
         // TODO: fix the new cache services for rights
         //        $cacheManager->addCacheService(
@@ -150,8 +161,12 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         //
         //        );
 
-        $cacheManager->addCacheService('chamilo_user_groups', new UserGroupMembershipCacheService());
-        $cacheManager->addCacheService('chamilo_local_settings', new LocalSettingCacheService());
+        $cacheManager->addCacheService(
+            'chamilo_user_groups', new UserGroupMembershipCacheService($this->getConfigurablePathBuilder())
+        );
+        $cacheManager->addCacheService(
+            'chamilo_local_settings', new LocalSettingCacheService($this->getConfigurablePathBuilder())
+        );
     }
 
     /**

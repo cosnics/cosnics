@@ -7,6 +7,8 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -33,6 +35,8 @@ class UserImportForm extends FormValidator
 {
     use DependencyInjectionContainerTrait;
 
+    const TYPE_IMPORT = 1;
+
     private $failedcsv;
 
     private $current_tag;
@@ -45,10 +49,9 @@ class UserImportForm extends FormValidator
 
     private $users;
 
-    private $udm;
-
     // Constants
-    const TYPE_IMPORT = 1;
+
+    private $udm;
 
     /**
      * Creates a new UserImportForm Used to import users from a file
@@ -65,15 +68,6 @@ class UserImportForm extends FormValidator
         {
             $this->build_importing_form();
         }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
     }
 
     public function build_importing_form()
@@ -100,6 +94,104 @@ class UserImportForm extends FormValidator
 
         $defaults['mail']['send_mail'] = 1;
         $this->setDefaults($defaults);
+    }
+
+    /**
+     * XML-parser: handle character data
+     */
+    public function character_data($parser, $data)
+    {
+        $this->current_value .= $data;
+    }
+
+    public function count_failed_items()
+    {
+        return count($this->failedcsv);
+    }
+
+    /**
+     *
+     * @param $csvuser
+     *
+     * @return string
+     */
+    protected function determineRealAction($csvuser)
+    {
+        $user = DataManager::retrieve_user_by_username($csvuser[User::PROPERTY_USERNAME]);
+
+        if ($user instanceof User)
+        {
+            return 'U';
+        }
+
+        return 'A';
+    }
+
+    /**
+     * XML-parser: handle end of element
+     */
+    public function element_end($parser, $data)
+    {
+        switch ($data)
+        {
+            case 'Contact' :
+                if ($this->user['Status'] == '5')
+                {
+                    $this->user['Status'] = 5;
+                }
+                if ($this->user['Status'] == '1')
+                {
+                    $this->user['Status'] = 1;
+                }
+                $this->users[] = $this->user;
+                break;
+            case 'item' :
+                $this->users[] = $this->user;
+                break;
+            default :
+                $this->user[$data] = trim($this->current_value);
+                break;
+        }
+        $this->current_value = '';
+
+        // the xml_parse function splits the data in an element on special characters (for each split a different call
+        // to character_data function).
+        // So in the character_data function the data needs to be concatinated.
+        // If an element_end is reached, the current_value needs to be reset! (otherwise the data keeps concatinating)
+    }
+
+    public function element_start($parser, $data)
+    {
+        switch ($data)
+        {
+            case 'Contact' :
+                $this->user = array();
+                break;
+            default :
+                $this->current_tag = $data;
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService(HashingUtilities::class);
+    }
+
+    public function get_failed_csv()
+    {
+        // return implode($this->failedcsv, '<br />');
+        $short_list = array_chunk($this->failedcsv, 20);
+        $nr_more_errors = count($this->failedcsv) - 20;
+        if ($nr_more_errors > 0)
+        {
+            $short_list[0][] = Translation::get('NrMoreInvalidRecords', array('NR' => $nr_more_errors));
+        }
+
+        return implode($short_list[0], '<br />');
     }
 
     public function import_users()
@@ -182,7 +274,13 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+                    $configurablePathBuilder =
+                        DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                            ConfigurablePathBuilder::class
+                        );
+
+                    $localSetting =
+                        new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
                     $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
 
                     $send_mail = intval($values['mail']['send_mail']);
@@ -266,7 +364,13 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+                    $configurablePathBuilder =
+                        DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                            ConfigurablePathBuilder::class
+                        );
+
+                    $localSetting =
+                        new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
                     $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
                 }
             }
@@ -296,22 +400,84 @@ class UserImportForm extends FormValidator
         }
     }
 
-    public function get_failed_csv()
+    public function parse_file($file_name, $file_type)
     {
-        // return implode($this->failedcsv, '<br />');
-        $short_list = array_chunk($this->failedcsv, 20);
-        $nr_more_errors = count($this->failedcsv) - 20;
-        if ($nr_more_errors > 0)
+        $this->users = array();
+        if ($file_type == 'text/x-csv' || $file_type == 'text/csv' || $file_type == 'application/vnd.ms-excel' ||
+            $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
+            $file_type = 'text/comma-separated-values')
         {
-            $short_list[0][] = Translation::get('NrMoreInvalidRecords', array('NR' => $nr_more_errors));
+            $this->users = Import::csv_to_array($file_name);
+        }
+        elseif ($file_type == 'text/xml')
+        {
+            $parser = xml_parser_create();
+            xml_set_element_handler($parser, array(get_class(), 'element_start'), array(get_class(), 'element_end'));
+            xml_set_character_data_handler($parser, array(get_class(), 'character_data'));
+            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+            xml_parse($parser, utf8_decode(file_get_contents($file_name)));
+            xml_parser_free($parser);
+        }
+        else
+        {
+            throw new UserException(
+                Translation::getInstance()->getTranslation(
+                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), Utilities::COMMON_LIBRARIES
+                )
+            );
         }
 
-        return implode($short_list[0], '<br />');
+        return $this->users;
     }
 
-    public function count_failed_items()
+    /**
+     * Sends an email to the updated/new user
+     */
+    public function send_email($user, $unencrypted_password)
     {
-        return count($this->failedcsv);
+        $options = array();
+        $options['firstname'] = $user->get_firstname();
+        $options['lastname'] = $user->get_lastname();
+        $options['username'] = $user->get_username();
+        $options['password'] = $unencrypted_password;
+        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $options['site_url'] = Path::getInstance()->getBasePath(true);
+        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_firstname')
+        );
+        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_surname')
+        );
+        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_telephone')
+        );
+        $options['admin_email'] = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'administrator_email')
+        );
+
+        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
+
+        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        foreach ($options as $option => $value)
+        {
+            $body = str_replace('[' . $option . ']', $value, $body);
+        }
+
+        $mail = new Mail(
+            $subject, $body, $user->get_email(), true, array(), array(),
+            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+        );
+
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (Exception $ex)
+        {
+        }
     }
 
     public function validate_data($csvuser)
@@ -350,10 +516,8 @@ class UserImportForm extends FormValidator
         }
 
         // 1. Check if username exists
-        if (($action == 'A' &&
-                !DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) ||
-            ($action != 'A' &&
-                DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])))
+        if (($action == 'A' && !DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])) ||
+            ($action != 'A' && DataManager::is_username_available($csvuser[User::PROPERTY_USERNAME])))
         {
             $failures ++;
         }
@@ -417,156 +581,5 @@ class UserImportForm extends FormValidator
         {
             return $csvuser;
         }
-    }
-
-    public function parse_file($file_name, $file_type)
-    {
-        $this->users = array();
-        if ($file_type == 'text/x-csv' || $file_type == 'text/csv' || $file_type == 'application/vnd.ms-excel' ||
-            $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
-            $file_type = 'text/comma-separated-values')
-        {
-            $this->users = Import::csv_to_array($file_name);
-        }
-        elseif ($file_type == 'text/xml')
-        {
-            $parser = xml_parser_create();
-            xml_set_element_handler($parser, array(get_class(), 'element_start'), array(get_class(), 'element_end'));
-            xml_set_character_data_handler($parser, array(get_class(), 'character_data'));
-            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-            xml_parse($parser, utf8_decode(file_get_contents($file_name)));
-            xml_parser_free($parser);
-        }
-        else
-        {
-            throw new UserException(
-                Translation::getInstance()->getTranslation(
-                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), Utilities::COMMON_LIBRARIES
-                )
-            );
-        }
-
-        return $this->users;
-    }
-
-    public function element_start($parser, $data)
-    {
-        switch ($data)
-        {
-            case 'Contact' :
-                $this->user = array();
-                break;
-            default :
-                $this->current_tag = $data;
-        }
-    }
-
-    /**
-     * XML-parser: handle end of element
-     */
-    public function element_end($parser, $data)
-    {
-        switch ($data)
-        {
-            case 'Contact' :
-                if ($this->user['Status'] == '5')
-                {
-                    $this->user['Status'] = 5;
-                }
-                if ($this->user['Status'] == '1')
-                {
-                    $this->user['Status'] = 1;
-                }
-                $this->users[] = $this->user;
-                break;
-            case 'item' :
-                $this->users[] = $this->user;
-                break;
-            default :
-                $this->user[$data] = trim($this->current_value);
-                break;
-        }
-        $this->current_value = '';
-
-        // the xml_parse function splits the data in an element on special characters (for each split a different call
-        // to character_data function).
-        // So in the character_data function the data needs to be concatinated.
-        // If an element_end is reached, the current_value needs to be reset! (otherwise the data keeps concatinating)
-    }
-
-    /**
-     * XML-parser: handle character data
-     */
-    public function character_data($parser, $data)
-    {
-        $this->current_value .= $data;
-    }
-
-    /**
-     * Sends an email to the updated/new user
-     */
-    public function send_email($user, $unencrypted_password)
-    {
-        $options = array();
-        $options['firstname'] = $user->get_firstname();
-        $options['lastname'] = $user->get_lastname();
-        $options['username'] = $user->get_username();
-        $options['password'] = $unencrypted_password;
-        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-        $options['site_url'] = Path::getInstance()->getBasePath(true);
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
-        );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
-        );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
-        );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email')
-        );
-
-        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
-
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
-        foreach ($options as $option => $value)
-        {
-            $body = str_replace('[' . $option . ']', $value, $body);
-        }
-
-        $mail = new Mail(
-            $subject, $body, $user->get_email(), true, array(), array(),
-            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
-        );
-
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
-
-        try
-        {
-            $mailer->sendMail($mail);
-        }
-        catch (Exception $ex)
-        {
-        }
-    }
-
-    /**
-     *
-     * @param $csvuser
-     *
-     * @return string
-     */
-    protected function determineRealAction($csvuser)
-    {
-        $user = DataManager::retrieve_user_by_username($csvuser[User::PROPERTY_USERNAME]);
-
-        if ($user instanceof User)
-        {
-            return 'U';
-        }
-
-        return 'A';
     }
 }

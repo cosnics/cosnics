@@ -31,6 +31,10 @@
             "type": "Chamilo\\Core\\User\\Picture\\Provider",
             "resources": [
                 {
+                    "output": "Chamilo/Core/User/Picture/Provider/Platform/Resources/Images/",
+                    "input": "Resources/Images/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 },

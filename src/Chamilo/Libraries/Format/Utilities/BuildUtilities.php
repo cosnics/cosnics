@@ -2,9 +2,7 @@
 namespace Chamilo\Libraries\Format\Utilities;
 
 use Chamilo\Configuration\Package\Finder\BasicBundles;
-use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Composer\Package\Loader\JsonLoader;
 use Composer\Script\Event;
@@ -125,54 +123,5 @@ class BuildUtilities
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);
         $package->setRepositories($repositories);
-    }
-
-    /**
-     *
-     * @param \Composer\Script\Event $event
-     */
-    public static function processResources(Event $event)
-    {
-        $resourceBundles = new ResourceBundles(PackageList::ROOT);
-        $packageNamespaces = $resourceBundles->getPackageNamespaces();
-
-        $basePath = Path::getInstance()->getBasePath();
-        $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
-
-        // Copy the resources
-        foreach ($packageNamespaces as $packageNamespace)
-        {
-            // Images
-            $sourceResourceImagePath =
-                Path::getInstance()->getResourcesPath($packageNamespace) . 'Images' . DIRECTORY_SEPARATOR;
-            $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
-            Filesystem::remove($webResourceImagePath);
-            Filesystem::create_dir($webResourceImagePath);
-            Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
-
-            // Css
-            $sourceResourceStylePath =
-                Path::getInstance()->getResourcesPath($packageNamespace) . 'Css' . DIRECTORY_SEPARATOR;
-            $webResourceStylePath = str_replace($basePath, $baseWebPath, $sourceResourceStylePath);
-            Filesystem::remove($webResourceStylePath);
-            Filesystem::create_dir($webResourceStylePath);
-            Filesystem::recurse_copy($sourceResourceStylePath, $webResourceStylePath, true);
-
-            // Javascript
-            $sourceResourceJavascriptPath = Path::getInstance()->getJavascriptPath($packageNamespace);
-            $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
-            Filesystem::remove($webResourceJavascriptPath);
-            Filesystem::create_dir($webResourceJavascriptPath);
-            Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
-
-            // Plugin
-            $sourceResourcePluginPath = Path::getInstance()->getPluginPath($packageNamespace);
-            $webResourcePluginPath = str_replace($basePath, $baseWebPath, $sourceResourcePluginPath);
-            Filesystem::remove($webResourcePluginPath);
-            Filesystem::create_dir($webResourcePluginPath);
-            Filesystem::recurse_copy($sourceResourcePluginPath, $webResourcePluginPath, true);
-
-            $event->getIO()->write('Processed resources for: ' . $packageNamespace);
-        }
     }
 }
