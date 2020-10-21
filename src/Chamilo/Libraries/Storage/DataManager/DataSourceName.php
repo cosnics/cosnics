@@ -1,13 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
-
 /**
  * Describes a generic database-backed storage layer connection string
  *
@@ -158,89 +151,89 @@ abstract class DataSourceName
     }
 
     /**
-     * Get the database driver to be used
-     *
-     * @param boolean $implementation
+     * Get the database we want to connect to
      *
      * @return string
      */
-    public function getDriver($implementation = false)
+    public function getDatabase()
     {
-        if ($implementation)
-        {
-            return $this->getImplementedDriver();
-        }
-        else
-        {
-            return $this->driver;
-        }
+        return $this->database;
     }
 
     /**
-     * Get the database driver to be used
-     *
-     * @param boolean $implementation
+     * Get the database we want to connect to
      *
      * @return string
-     * @deprecated Use getDriver() now
+     * @deprecated Use getDatabase() now
      */
-    public function get_driver($implementation = false)
+    public function get_database()
     {
-        return $this->getDriver($implementation);
+        return $this->getDatabase();
     }
 
     /**
-     * Set the database driver to be used
+     * Set the database we want to connect to
      *
-     * @param string $driver
+     * @param string $database
+     *
+     * @deprecated Use setDatabase() now
      */
-    public function setDriver($driver)
+    public function set_database($database)
     {
-        $this->driver = $driver;
+        $this->setDatabase($database);
     }
 
     /**
-     * Set the database driver to be used
+     * Set the database we want to connect to
      *
-     * @param string $driver
-     *
-     * @deprecated Use setDriver() now
+     * @param string $database
      */
-    public function set_driver($driver)
+    public function setDatabase($database)
     {
-        $this->setDriver($driver);
+        $this->database = $database;
     }
 
     /**
-     * Parse a string to a valid data source name
+     * Get the host to be used to make the connection
      *
-     * @param string $type
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\DataSourceName
+     * @return string
      */
-    public static function getFromConfiguration($type)
+    public function getHost()
     {
-        $fileConfigurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
-            )
-        );
+        return $this->host;
+    }
 
-        return self::factory(
-            $type, array(
-                'driver' => $fileConfigurationConsulter->getSetting(
-                    array('Chamilo\Configuration', 'database', 'driver')
-                ),
-                'username' => $fileConfigurationConsulter->getSetting(
-                    array('Chamilo\Configuration', 'database', 'username')
-                ),
-                'host' => $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'database', 'host')),
-                'name' => $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'database', 'name')),
-                'password' => $fileConfigurationConsulter->getSetting(
-                    array('Chamilo\Configuration', 'database', 'password')
-                )
-            )
-        );
+    /**
+     * Get the host to be used to make the connection
+     *
+     * @return string
+     * @deprecated Use getHost() now
+     */
+    public function get_host()
+    {
+        return $this->getHost();
+    }
+
+    /**
+     * Set the host to be used to make the connection
+     *
+     * @param string $host
+     *
+     * @deprecated Use setHost() now
+     */
+    public function set_host($host)
+    {
+        $this->setHost($host);
+    }
+
+    /**
+     * Set the host to be used to make the connection
+     *
+     * @param string $host
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
     }
 
     /**
@@ -249,6 +242,49 @@ abstract class DataSourceName
      * @return string
      */
     abstract public function getImplementedDriver();
+
+    /**
+     * Get the password to be used to make the connection
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Get the password to be used to make the connection
+     *
+     * @return string
+     * @deprecated Use getPassword() now
+     */
+    public function get_password()
+    {
+        return $this->getPassword();
+    }
+
+    /**
+     * Set the password to be used to make the connection
+     *
+     * @param string $password
+     *
+     * @deprecated Use setPassword() now
+     */
+    public function set_password($password)
+    {
+        $this->setPassword($password);
+    }
+
+    /**
+     * Set the password to be used to make the connection
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
 
     /**
      * Get the port to be used to make the connection
@@ -356,102 +392,57 @@ abstract class DataSourceName
     }
 
     /**
-     * Get the database we want to connect to
+     * Get the database driver to be used
+     *
+     * @param boolean $implementation
      *
      * @return string
-     * @deprecated Use getDatabase() now
+     * @deprecated Use getDriver() now
      */
-    public function get_database()
+    public function get_driver($implementation = false)
     {
-        return $this->getDatabase();
+        return $this->getDriver($implementation);
     }
 
     /**
-     * Get the database we want to connect to
+     * Get the database driver to be used
      *
-     * @return string
-     */
-    public function getDatabase()
-    {
-        return $this->database;
-    }
-
-    /**
-     * Set the database we want to connect to
-     *
-     * @param string $database
-     *
-     * @deprecated Use setDatabase() now
-     */
-    public function set_database($database)
-    {
-        $this->setDatabase($database);
-    }
-
-    /**
-     * Set the database we want to connect to
-     *
-     * @param string $database
-     */
-    public function setDatabase($database)
-    {
-        $this->database = $database;
-    }
-
-    /**
-     * Parse a string to a valid data source name
-     *
-     * @param string $type
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\DataSourceName
-     * @deprecated Use getFromConfiguration() now
-     */
-    public static function get_from_config($type)
-    {
-        return static::getFromConfiguration($type);
-    }
-
-    /**
-     * Get the host to be used to make the connection
-     *
-     * @return string
-     * @deprecated Use getHost() now
-     */
-    public function get_host()
-    {
-        return $this->getHost();
-    }
-
-    /**
-     * Get the host to be used to make the connection
+     * @param boolean $implementation
      *
      * @return string
      */
-    public function getHost()
+    public function getDriver($implementation = false)
     {
-        return $this->host;
+        if ($implementation)
+        {
+            return $this->getImplementedDriver();
+        }
+        else
+        {
+            return $this->driver;
+        }
     }
 
     /**
-     * Set the host to be used to make the connection
+     * Set the database driver to be used
      *
-     * @param string $host
+     * @param string $driver
      *
-     * @deprecated Use setHost() now
+     * @deprecated Use setDriver() now
      */
-    public function set_host($host)
+    public function set_driver($driver)
     {
-        $this->setHost($host);
+        $this->setDriver($driver);
     }
 
     /**
-     * Set the host to be used to make the connection
+     * Set the database driver to be used
      *
-     * @param string $host
+     * @param string $driver
      */
-    public function setHost($host)
+    public function setDriver($driver)
     {
-        $this->host = $host;
+        $this->driver = $driver;
     }
 
     /**
@@ -463,49 +454,6 @@ abstract class DataSourceName
     public function get_implemented_driver()
     {
         return $this->getImplementedDriver();
-    }
-
-    /**
-     * Get the password to be used to make the connection
-     *
-     * @return string
-     * @deprecated Use getPassword() now
-     */
-    public function get_password()
-    {
-        return $this->getPassword();
-    }
-
-    /**
-     * Get the password to be used to make the connection
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the password to be used to make the connection
-     *
-     * @param string $password
-     *
-     * @deprecated Use setPassword() now
-     */
-    public function set_password($password)
-    {
-        $this->setPassword($password);
-    }
-
-    /**
-     * Set the password to be used to make the connection
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
     }
 
     /**

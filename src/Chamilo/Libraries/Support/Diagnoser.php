@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Support;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
@@ -20,6 +21,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class Diagnoser
 {
+    use DependencyInjectionContainerTrait;
 
     const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
@@ -40,6 +42,7 @@ class Diagnoser
     public function __construct($manager = null)
     {
         $this->manager = $manager;
+        $this->initializeContainer();
     }
 
     /**
@@ -214,7 +217,7 @@ class Diagnoser
         // $proto_info = mysql_get_proto_info();
         // $client_info = mysql_get_client_info();
         // due to abstraction of storage we can not rely on the mysql settings anymore
-        $connection = Connection::getInstance()->get_connection()->connection;
+        $connection = $this->getService('Doctrine\DBAL\Connection');
 
         $host_info = $connection->host_info;
         $server_info = $connection->server_info;

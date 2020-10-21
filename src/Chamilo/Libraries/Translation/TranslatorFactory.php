@@ -2,9 +2,6 @@
 namespace Chamilo\Libraries\Translation;
 
 use Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
@@ -79,18 +76,6 @@ class TranslatorFactory
      */
     public function createTranslator($locale = null)
     {
-        if (!$locale)
-        {
-            // TODO: Do we still need this if the default is already passed on via the DI definition?
-            $classnameUtilities = ClassnameUtilities::getInstance();
-            $pathBuilder = new PathBuilder($classnameUtilities);
-            $fileConfigurationConsulter = new ConfigurationConsulter(
-                new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder))
-            );
-
-            $locale = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'language'));
-        }
-
         $translator = new Translator($locale);
 
         $translator->addLoader('optimized', new OptimizedTranslationsPhpFileLoader());

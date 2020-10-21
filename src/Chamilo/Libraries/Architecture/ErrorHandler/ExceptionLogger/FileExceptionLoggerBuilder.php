@@ -2,12 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Builds the FileExceptionLogger class
@@ -17,12 +12,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
+    private $configurationConsulter;
 
     /**
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(ConfigurationConsulter $configurationConsulter)
     {
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -33,16 +30,33 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger()
     {
-        $fileConfigurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
-            )
-        );
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
+            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
         );
 
         return new FileExceptionLogger($configurablePathBuilder->getLogPath());
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     *
+     * @return FileExceptionLoggerBuilder
+     */
+    public function setConfigurationConsulter(
+        ConfigurationConsulter $configurationConsulter
+    ): FileExceptionLoggerBuilder
+    {
+        $this->configurationConsulter = $configurationConsulter;
+
+        return $this;
     }
 }

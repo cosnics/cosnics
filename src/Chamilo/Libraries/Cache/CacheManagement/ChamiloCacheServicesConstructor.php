@@ -6,10 +6,7 @@ use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
 use Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\LanguageLoader;
 use Chamilo\Configuration\Service\RegistrationLoader;
 use Chamilo\Configuration\Service\StorageConfigurationLoader;
@@ -22,29 +19,13 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Core\Repository\Service\TypeSelectorCacheService;
 use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
 use Chamilo\Libraries\Cache\Assetic\StylesheetCommonCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
-use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineProxyCacheService;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Translation\TranslationCacheService;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
@@ -80,82 +61,48 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
      * Adds general chamilo cache services
      *
      * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
      */
     protected function addGeneralCacheServices(CacheManager $cacheManager)
     {
-        $stringUtilities = new StringUtilities();
-        $classnameUtilities = new ClassnameUtilities($stringUtilities);
 
-        $configurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(new FileConfigurationLocator(new PathBuilder($classnameUtilities)))
-        );
-        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
-        $dataSourceName = new DataSourceName(
-            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'database'))
-        );
-        $connectionFactory = new ConnectionFactory($dataSourceName);
+        $dataClassRepository =
+            $this->container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
 
-        $conditionPartTranslatorService = new ConditionPartTranslatorService(
-            new ConditionPartTranslatorFactory($classnameUtilities), new ConditionPartCache()
-        );
-
-        $storageAliasGenerator = new StorageAliasGenerator($classnameUtilities);
-
-        $dataClassRepository = new DataClassRepository(
-            new DataClassRepositoryCache(), new DataClassDatabase(
-            $connectionFactory->getConnection(), $storageAliasGenerator,
-            $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
-            new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator), new RecordProcessor()
-        ), new DataClassFactory()
+        $cacheManager->addCacheService(
+            'chamilo_dependency_injection', new DependencyInjectionCacheService($this->getConfigurationConsulter())
         );
 
         $cacheManager->addCacheService(
-            'chamilo_dependency_injection', new DependencyInjectionCacheService($configurationConsulter)
-        );
-
-        $cacheManager->addCacheService(
-            'chamilo_configuration',
-            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository)))
-        );
-
-        $cacheManager->addCacheService(
-            'chamilo_registration', new DataCacheLoader(
-                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))
+            'chamilo_configuration', new DataCacheLoader(
+                new StorageConfigurationLoader(new ConfigurationRepository($this->getDataClassRepository()))
             )
         );
 
         $cacheManager->addCacheService(
-            'chamilo_language', new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository)))
+            'chamilo_registration', new DataCacheLoader(
+                new RegistrationLoader(
+                    $this->getStringUtilities(), new RegistrationRepository($this->getDataClassRepository())
+                )
+            )
         );
 
         $cacheManager->addCacheService(
-            'chamilo_repository_configuration', $this->container->get(TemplateRegistrationLoader::class)
+            'chamilo_language',
+            new DataCacheLoader(new LanguageLoader(new LanguageRepository($this->getDataClassRepository())))
+        );
+
+        $cacheManager->addCacheService(
+            'chamilo_repository_configuration', $this->getTemplateRegistrationLoader()
         );
 
         $cacheManager->addCacheService('chamilo_packages', new PackageBundlesCacheService());
-
-        $configurablePathBuilder = $this->container->get(ConfigurablePathBuilder::class);
-        $pathBuilder = $this->container->get(PathBuilder::class);
 
         $cacheManager->addCacheService(
             'chamilo_translation_bundles', new InternationalizationBundlesCacheService()
         );
 
         $cacheManager->addCacheService(
-            'chamilo_translations', new TranslationCacheService($configurablePathBuilder)
-        );
-
-        $cacheManager->addCacheService(
-            'chamilo_stylesheets', new StylesheetCommonCacheService(
-                $pathBuilder, $configurablePathBuilder, $this->container->get(ThemePathBuilder::class)
-            )
-        );
-
-        $cacheManager->addCacheService(
-            'chamilo_javascript', new JavascriptCacheService($pathBuilder, $configurablePathBuilder)
+            'chamilo_translations', new TranslationCacheService($this->getConfigurablePathBuilder())
         );
 
         $cacheManager->addCacheService(
@@ -167,12 +114,12 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
 
         $cacheManager->addCacheService(
             'chamilo_twig', new TwigCacheService(
-                $this->container->get(Environment::class), $this->container->get(FormFactory::class)
+                $this->getEnvironment(), $this->getFormFactory()
             )
         );
 
         $cacheManager->addCacheService(
-            'doctrine_proxies', new DoctrineProxyCacheService($this->container->get(EntityManager::class))
+            'doctrine_proxies', new DoctrineProxyCacheService($this->getEntityManager())
         );
     }
 
@@ -219,5 +166,69 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
     {
         $this->addGeneralCacheServices($cacheManager);
         $this->addUserCacheServices($cacheManager);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    protected function getConfigurablePathBuilder()
+    {
+        return $this->container->get(ConfigurablePathBuilder::class);
+    }
+
+    /**
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    protected function getConfigurationConsulter()
+    {
+        return $this->container->get('Chamilo\Configuration\Service\FileConfigurationConsulter');
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     */
+    protected function getDataClassRepository()
+    {
+        return $this->container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    protected function getEntityManager()
+    {
+        return $this->container->get(EntityManager::class);
+    }
+
+    /**
+     * @return \Twig\Environment
+     */
+    protected function getEnvironment()
+    {
+        return $this->container->get(Environment::class);
+    }
+
+    /**
+     * @return \Symfony\Component\Form\FormFactory
+     */
+    protected function getFormFactory()
+    {
+        return $this->container->get(FormFactory::class);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    protected function getStringUtilities()
+    {
+        return $this->container->get(StringUtilities::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationLoader
+     */
+    protected function getTemplateRegistrationLoader()
+    {
+        return $this->container->get(TemplateRegistrationLoader::class);
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
@@ -72,13 +73,16 @@ class Database
     private $connection;
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param \Doctrine\DBAL\Connection|null $connection
+     *
+     * @throws \Exception
      */
     public function __construct($connection = null)
     {
         if (is_null($connection))
         {
-            $this->connection = Connection::getInstance()->get_connection();
+            $this->connection =
+                DependencyInjectionContainerBuilder::getInstance()->createContainer()->get('Doctrine\DBAL\Connection');
         }
         else
         {
@@ -1272,7 +1276,8 @@ class Database
      */
     public static function quote($value, $type = null)
     {
-        return Connection::getInstance()->get_connection()->quote($value, $type);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get('Doctrine\DBAL\Connection')
+            ->quote($value, $type);
     }
 
     /**

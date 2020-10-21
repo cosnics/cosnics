@@ -132,9 +132,9 @@ class DependencyInjectionContainerBuilder
     /**
      * Constructor
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $builder
-     * @param \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface $containerExtensionFinder
-     * @param string $cacheFile
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder|null $builder
+     * @param \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface|null $containerExtensionFinder
+     * @param string|null $cacheFile
      * @param string $cacheClass
      */
     public function __construct(

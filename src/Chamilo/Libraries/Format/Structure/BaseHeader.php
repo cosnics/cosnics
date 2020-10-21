@@ -1,16 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -21,6 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BaseHeader implements HeaderInterface
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -83,6 +78,7 @@ class BaseHeader implements HeaderInterface
         $this->textDirection = $textDirection;
 
         $this->htmlHeaders = array();
+        $this->initializeContainer();
     }
 
     /**
@@ -139,69 +135,49 @@ class BaseHeader implements HeaderInterface
 
     /**
      * Adds some default headers to the output
+     * @throws \Exception
      */
     protected function addDefaultHeaders()
     {
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
-
-        $fileConfigurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(
-                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))
-            )
-        );
-
-        $configurablePathBuilder = new ConfigurablePathBuilder(
-            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
-        );
-
+        $pathBuilder = $this->getPathBuilder();
         $themePathBuilder = $this->getThemePathBuilder();
 
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.bootstrap.min.css');
-        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.jquery.min.css');
-        $this->addCssFile($pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.vendor.min.css');
+        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
+        $javascriptPath = $pathBuilder->getJavascriptPath('Chamilo/Libraries', true);
 
-        $this->addCssFile(
-            $pathBuilder->getCssPath('Chamilo/Libraries', true) . 'cosnics.common.' . $themePathBuilder->getTheme() .
-            '.min.css'
-        );
+        $this->addCssFile($cssPath . 'cosnics.vendor.bootstrap.min.css');
+        $this->addCssFile($cssPath . 'cosnics.vendor.jquery.min.css');
+        $this->addCssFile($cssPath . 'cosnics.vendor.min.css');
+        $this->addCssFile($cssPath . 'cosnics.common.' . $themePathBuilder->getTheme() . '.min.css');
 
         $this->addLink($pathBuilder->getBasePath(true), 'top');
         $this->addLink($themePathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
 
-        $this->addExceptionLogger($fileConfigurationConsulter);
+        $this->addExceptionLogger();
 
         $this->addHtmlHeader(
             '<script>var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
         );
 
-        $this->addJavascriptFile(
-            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.jquery.min.js'
-        );
-        $this->addJavascriptFile(
-            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.bootstrap.min.js'
-        );
-        $this->addJavascriptFile(
-            $pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.angular.min.js'
-        );
-        $this->addJavascriptFile($pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.vendor.min.js');
-        $this->addJavascriptFile($pathBuilder->getJavascriptPath('Chamilo/Libraries', true) . 'cosnics.common.min.js');
+        $this->addJavascriptFile($javascriptPath . 'cosnics.vendor.jquery.min.js');
+        $this->addJavascriptFile($javascriptPath . 'cosnics.vendor.bootstrap.min.js');
+        $this->addJavascriptFile($javascriptPath . 'cosnics.vendor.angular.min.js');
+        $this->addJavascriptFile($javascriptPath . 'cosnics.vendor.min.js');
+        $this->addJavascriptFile($javascriptPath . 'cosnics.common.min.js');
 
         $this->addJavascriptCDNFiles();
 
         $this->addHtmlHeader('<title>' . $this->getTitle() . '</title>');
     }
 
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function addExceptionLogger(ConfigurationConsulter $configurationConsulter)
+    public function addExceptionLogger()
     {
         // Disabled this due to a lot of javascript issues being logged due to browser issues
-        //        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+        //        $exceptionLoggerFactory = $this->getService(ExceptionLoggerFactory::class);
         //        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
         //        $exceptionLogger->addJavascriptExceptionLogger($this);
     }
@@ -330,6 +306,14 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
+     * @return \Chamilo\Libraries\File\PathBuilder
+     */
+    public function getPathBuilder()
+    {
+        return $this->getService(PathBuilder::class);
+    }
+
+    /**
      *
      * @return string
      */
@@ -349,11 +333,10 @@ class BaseHeader implements HeaderInterface
 
     /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     * @throws \Exception
      */
     public function getThemePathBuilder()
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+        return $this->getService(ThemePathBuilder::class);
     }
 
     /**
