@@ -50,6 +50,9 @@
         <service id="chamilo.application.weblcms.service.course_settings_controller"
                  class="Chamilo\Application\Weblcms\CourseSettingsController" />
 
+        <service alias="chamilo.application.weblcms.service.weblcms_rights"
+                 id="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
+
         <service id="chamilo.application.weblcms.service.weblcms_rights"
                  class="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
 
