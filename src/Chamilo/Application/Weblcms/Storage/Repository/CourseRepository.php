@@ -76,12 +76,10 @@ class CourseRepository implements CourseRepositoryInterface
             $courseIds
         );
 
-        $courses = DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class,
             new DataClassRetrievesParameters($condition)
         );
-
-        return $courses->as_array();
     }
 
     /**
@@ -101,12 +99,10 @@ class CourseRepository implements CourseRepositoryInterface
 
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
-        $courses = DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class,
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
-
-        return $courses->as_array();
     }
 
     /**
@@ -141,12 +137,10 @@ class CourseRepository implements CourseRepositoryInterface
 
         $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
 
-        $courses = DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class,
             new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
-
-        return $courses->as_array();
     }
 
     /**
@@ -181,12 +175,10 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $courses = DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class,
             new DataClassRetrievesParameters($condition, null, null, array(), $joins)
         );
-
-        return $courses->as_array();
     }
 
     /**
@@ -231,12 +223,10 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesByParameters(DataClassRetrievesParameters $retrievesParameters)
     {
-        $courses = DataManager::retrieves(
+        return DataManager::retrieves(
             Course::class,
             $retrievesParameters
         );
-
-        return $courses->as_array();
     }
 
     /**
@@ -252,7 +242,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         return DataManager::retrieve_all_courses_from_user(
             $user, null, null, null, $orderBy
-        )->as_array();
+        );
     }
 
     /**
@@ -266,7 +256,7 @@ class CourseRepository implements CourseRepositoryInterface
     {
         return DataManager::retrieve_courses_from_user_where_user_is_teacher(
             $user
-        )->as_array();
+        );
     }
 
     /**
@@ -280,7 +270,7 @@ class CourseRepository implements CourseRepositoryInterface
     {
         return DataManager::retrieve_courses_from_user_where_user_is_student(
             $user
-        )->as_array();
+        );
     }
 
     /**
@@ -354,7 +344,7 @@ class CourseRepository implements CourseRepositoryInterface
         return DataManager::retrieves(
             CourseEntityRelation::class,
             new DataClassRetrievesParameters($condition)
-        )->as_array();
+        );
     }
 
     /**
@@ -384,7 +374,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findToolRegistrations()
     {
-        return DataManager::retrieves(CourseTool::class)->as_array();
+        return DataManager::retrieves(CourseTool::class);
     }
 
     /**

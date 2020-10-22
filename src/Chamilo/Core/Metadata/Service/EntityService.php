@@ -371,7 +371,7 @@ class EntityService
         User $currentUser, Schema $schema, DataClassEntity $entity, $submittedSchemaValues
     )
     {
-        $existingSchemaInstances = $this->getSchemaInstancesForSchemaAndEntity($schema, $entity)->as_array();
+        $existingSchemaInstances = $this->getSchemaInstancesForSchemaAndEntity($schema, $entity);
         $existingSchemaInstanceIds = array();
 
         foreach ($existingSchemaInstances as $existingSchemaInstance)
@@ -442,7 +442,7 @@ class EntityService
     {
         $existingElementInstances = $this->getElementService()->getElementInstancesForSchemaInstanceAndElement(
             $schemaInstance, $element
-        )->as_array();
+        );
         $existingElementInstanceIds = array();
 
         foreach ($existingElementInstances as $existingElementInstance)

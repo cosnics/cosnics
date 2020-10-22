@@ -43,7 +43,7 @@ class AssignmentUserScoresBlock extends AssignmentScoresBlock
      */
     protected function retrieveEntitiesForCourse($course_id)
     {
-        return CourseDataManager::retrieve_all_course_users($course_id)->as_array();
+        return CourseDataManager::retrieve_all_course_users($course_id);
     }
 
     /**

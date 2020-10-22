@@ -76,11 +76,6 @@ class BrowserV2Component extends Manager implements DelegateComponent
             $this->getPager()->getCurrentRangeOffset()
         );
 
-        if ($feedback instanceof ResultSet)
-        {
-            $feedback = $feedback->as_array();
-        }
-
         $feedbackCount = count($feedback);
 
         if ($this->feedbackServiceBridge->countFeedback() > $feedbackCount)

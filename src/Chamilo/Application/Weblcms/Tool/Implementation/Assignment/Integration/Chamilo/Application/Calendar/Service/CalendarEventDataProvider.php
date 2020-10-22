@@ -27,7 +27,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
      */
     function getPublications(User $user, $fromDate, $toDate)
     {
-        $courses = DataManager::retrieve_all_courses_from_user($user)->as_array();
+        $courses = DataManager::retrieve_all_courses_from_user($user);
         
         return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
     }

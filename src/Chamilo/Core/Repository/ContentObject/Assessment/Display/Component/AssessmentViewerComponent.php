@@ -74,15 +74,15 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
             if (!$this->showFeedbackAfterEveryPage())
             {
-                $results_page_number += ($this->get_action() == self :: FORM_NEXT ||
-                    $this->get_action() == self :: FORM_SUBMIT) ? - 1 : + 1;
+                $results_page_number += ($this->get_action() == self::FORM_NEXT ||
+                    $this->get_action() == self::FORM_SUBMIT) ? - 1 : + 1;
             }
 
             $result_processor->save_answers($results_page_number);
         }
 
         if (($this->result_form_submitted() || $this->question_form_submitted()) &&
-            $this->get_action() == self :: FORM_SUBMIT)
+            $this->get_action() == self::FORM_SUBMIT)
         {
             $result_processor = new AssessmentResultProcessor($this);
             $result_processor->finish_assessment();
@@ -133,7 +133,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_action()
     {
-        $actions = array(self :: FORM_NEXT, self :: FORM_SUBMIT, self :: FORM_BACK);
+        $actions = array(self::FORM_NEXT, self::FORM_SUBMIT, self::FORM_BACK);
 
         foreach ($actions as $action)
         {
@@ -317,7 +317,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_submitted_page_number()
     {
-        $regex = '/^(' . AssessmentViewerForm :: PAGE_NUMBER . '|' . AssessmentResultViewerForm :: PAGE_NUMBER .
+        $regex = '/^(' . AssessmentViewerForm::PAGE_NUMBER . '|' . AssessmentResultViewerForm::PAGE_NUMBER .
             ')-([0-9]+)/';
         foreach (array_keys($_REQUEST) as $key)
         {
@@ -378,29 +378,29 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class, ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
             )
         );
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class, ComplexContentObjectItem :: PROPERTY_ID
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
             ), $question_ids
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
-        )->as_array();
+        );
     }
 
     public function question_form_submitted()
     {
-        return !is_null(Request:: post('_qf__' . AssessmentViewerForm :: FORM_NAME));
+        return !is_null(Request:: post('_qf__' . AssessmentViewerForm::FORM_NAME));
     }
 
     public function result_form_submitted()
     {
-        return !is_null(Request:: post('_qf__' . AssessmentResultViewerForm :: FORM_NAME));
+        return !is_null(Request:: post('_qf__' . AssessmentResultViewerForm::FORM_NAME));
     }
 
     public function showFeedbackAfterEveryPage()

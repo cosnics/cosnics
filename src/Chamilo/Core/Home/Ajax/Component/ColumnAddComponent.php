@@ -226,7 +226,7 @@ class ColumnAddComponent extends Manager
                 new StaticConditionVariable($userId));
 
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
-            $this->columns = DataManager::retrieves(Column::class, $parameters)->as_array();
+            $this->columns = DataManager::retrieves(Column::class, $parameters);
         }
 
         return $this->columns;

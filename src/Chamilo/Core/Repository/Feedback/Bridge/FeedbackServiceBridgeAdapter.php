@@ -63,13 +63,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
      */
     public function getFeedback($count = null, $offset = null)
     {
-        $feedback = $this->feedbackSupportComponent->retrieve_feedbacks($count, $offset);
-        if($feedback instanceof DataClassIterator)
-        {
-            return $feedback;
-        }
-
-        return $feedback->as_array();
+        return $this->feedbackSupportComponent->retrieve_feedbacks($count, $offset);
     }
 
     /**

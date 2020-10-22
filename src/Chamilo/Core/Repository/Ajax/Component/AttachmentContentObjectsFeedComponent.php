@@ -415,7 +415,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             new StaticConditionVariable($this->getUser()->getId())
         );
 
-        return DataManager::retrieve_categories(new AndCondition($conditions))->as_array();
+        return DataManager::retrieve_categories(new AndCondition($conditions));
     }
 
     /**
@@ -431,7 +431,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             )
         );
 
-        return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters)->as_array();
+        return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
     }
 
     /**

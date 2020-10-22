@@ -75,7 +75,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $condition
             );
         /*
-         * $publications_arr = $publications_resultset->as_array();
+         * $publications_arr = $publications_resultset;
          */
         $key = 0;
         while ($publication = $publications_resultset->next_result())

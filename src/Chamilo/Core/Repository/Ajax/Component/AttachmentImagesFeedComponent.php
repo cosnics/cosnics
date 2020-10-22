@@ -68,6 +68,6 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
             )
         );
 
-        return DataManager::retrieve_active_content_objects(File::class, $parameters)->as_array();
+        return DataManager::retrieve_active_content_objects(File::class, $parameters);
     }
 }

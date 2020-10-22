@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -19,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 
 /**
  *
@@ -196,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins(array($join)));
 
-            $directly_subscribed_group_nesting_values = static::records(Group::class, $parameters)->as_array();
+            $directly_subscribed_group_nesting_values = static::records(Group::class, $parameters);
 
             // Second: retrieve the (ids of) directly subscribed groups and their ancestors
             if (count($directly_subscribed_group_nesting_values) > 0)
@@ -259,7 +259,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 else
                 {
                     // If the user is not a member of any group
-                    self::$allSubscribedGroupsCache[$cacheId] = new EmptyResultSet();
+                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassIterator(Group::class, array());
                 }
             }
         }
@@ -292,7 +292,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $parameters = new RecordRetrievesParameters($properties, $condition);
 
-        $group_nesting_values = static::records(Group::class, $parameters)->as_array();
+        $group_nesting_values = static::records(Group::class, $parameters);
 
         // Second: retrieve the indicated groups and their descendents
         if (count($group_nesting_values) > 0)
@@ -329,7 +329,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // If the provided group_ids do not exist or were empty
-        return new EmptyResultSet();
+        return new DataClassIterator(Group::class, array());
     }
 
     /**

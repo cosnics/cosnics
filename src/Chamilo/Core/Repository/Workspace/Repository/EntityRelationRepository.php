@@ -183,7 +183,7 @@ class EntityRelationRepository
 
         return DataManager::retrieves(
             WorkspaceEntityRelation::class, new DataClassRetrievesParameters($condition)
-        )->as_array();
+        );
     }
 
     /**

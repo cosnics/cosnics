@@ -294,7 +294,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
             new StaticConditionVariable($email));
-        return self::retrieves(User::class, new DataClassRetrievesParameters($condition))->as_array();
+        return self::retrieves(User::class, new DataClassRetrievesParameters($condition));
     }
 
     /**

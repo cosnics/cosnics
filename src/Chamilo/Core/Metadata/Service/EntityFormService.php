@@ -309,7 +309,7 @@ class EntityFormService
                     $elementInstanceVocabularies =
                         $this->getElementService()->getElementInstanceVocabulariesForSchemaInstanceAndElement(
                             $schemaInstance, $element
-                        )->as_array();
+                        );
 
                     if (count($elementInstanceVocabularies) == 0)
                     {

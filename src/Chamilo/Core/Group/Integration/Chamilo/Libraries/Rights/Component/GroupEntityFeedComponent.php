@@ -48,7 +48,7 @@ class GroupEntityFeedComponent extends Manager
     {
         $result = new JsonAjaxResult();
 
-        $result->set_property(self::PROPERTY_ELEMENTS, $this->getElements()->as_array());
+        $result->set_property(self::PROPERTY_ELEMENTS, $this->getElements());
 
         $userCount = $this->countUsers();
 

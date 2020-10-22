@@ -85,6 +85,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(Registration::class, new DataClassRetrievesParameters($condition))->as_array();
+        return self::retrieves(Registration::class, new DataClassRetrievesParameters($condition));
     }
 }

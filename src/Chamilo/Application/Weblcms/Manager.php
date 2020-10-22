@@ -163,7 +163,7 @@ abstract class Manager extends Application
      */
     public function get_course_groups()
     {
-        return CourseGroupDataManager::retrieve_course_groups_from_user($this->get_user_id(), $this->get_course_id())->as_array();
+        return CourseGroupDataManager::retrieve_course_groups_from_user($this->get_user_id(), $this->get_course_id());
     }
 
     /**

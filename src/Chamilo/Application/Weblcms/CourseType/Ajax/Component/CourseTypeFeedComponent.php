@@ -157,6 +157,6 @@ class CourseTypeFeedComponent extends Manager
             array(new OrderBy(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)))
         );
 
-        return DataManager::retrieves(CourseType::class, $parameters)->as_array();
+        return DataManager::retrieves(CourseType::class, $parameters);
     }
 }

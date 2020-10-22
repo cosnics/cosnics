@@ -65,7 +65,7 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
     public function render()
     {
         $this->content_object = $this->get_content_object();
-        $this->data = DataManager::retrieve_forum_posts($this->content_object->get_id())->as_array();
+        $this->data = DataManager::retrieve_forum_posts($this->content_object->get_id());
         
         // Set filename
         $this->file = Path::getInstance()->getTemporaryPath() . $this->content_object->get_owner_id() .

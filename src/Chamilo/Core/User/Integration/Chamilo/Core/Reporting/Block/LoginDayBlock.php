@@ -41,7 +41,7 @@ class LoginDayBlock extends Block
 
         $data = DataManager::retrieves(
             LoginLogout::class, new DataClassRetrievesParameters($condition)
-        )->as_array();
+        );
 
         $days = array();
         foreach ($data as $date)

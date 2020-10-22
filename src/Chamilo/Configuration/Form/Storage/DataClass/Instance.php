@@ -77,7 +77,7 @@ class Instance extends DataClass
             new PropertyConditionVariable(Element::class, Element::PROPERTY_DYNAMIC_FORM_ID),
             new StaticConditionVariable($this->get_id()));
         $elements = DataManager::retrieve_dynamic_form_elements($condition);
-        $this->set_elements($elements->as_array());
+        $this->set_elements($elements);
 
         return $this->elements;
     }

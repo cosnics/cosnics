@@ -50,7 +50,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_REF),
-                    new StaticConditionVariable($parent->get_parent())))->as_array();
+                    new StaticConditionVariable($parent->get_parent())));
             $parent = $parent[0];
         }
         $parents = array_reverse($parents);

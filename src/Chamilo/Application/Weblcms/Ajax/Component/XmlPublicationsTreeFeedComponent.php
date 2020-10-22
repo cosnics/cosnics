@@ -43,7 +43,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
                     )
                 )
             )
-        )->as_array();
+        );
 
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL, '<tree>' . PHP_EOL;

@@ -30,7 +30,7 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
             new PropertyConditionVariable(ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ID),
             new StaticConditionVariable($publication_id));
 
-        return DataManager::retrieve_content_object_publications($condition, array(), 0, 1)->as_array();
+        return DataManager::retrieve_content_object_publications($condition, array(), 0, 1);
     }
 
     /**

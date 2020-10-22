@@ -823,7 +823,7 @@ class Course extends DataClass
 
         return DataManager::retrieves(
             CourseEntityRelation::class,
-            new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
+            new DataClassRetrievesParameters(new AndCondition($relationConditions)));
     }
 
     /**
@@ -865,7 +865,7 @@ class Course extends DataClass
 
         return DataManager::retrieves(
             CourseEntityRelation::class,
-            new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
+            new DataClassRetrievesParameters(new AndCondition($relationConditions)));
     }
 
     /**
@@ -878,7 +878,7 @@ class Course extends DataClass
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
             new StaticConditionVariable($this->get_id()));
-        $result = DataManager::retrieves(
+        return DataManager::retrieves(
             CourseGroup::class,
             new DataClassRetrievesParameters(
                 $condition,
@@ -886,8 +886,6 @@ class Course extends DataClass
                 null,
                 array(
                     new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)))));
-
-        return ($as_array ? $result->as_array() : $result);
     }
 
     /**

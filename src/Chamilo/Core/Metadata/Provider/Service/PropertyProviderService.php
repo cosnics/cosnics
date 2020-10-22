@@ -267,7 +267,7 @@ class PropertyProviderService
      */
     public function updateEntityProviderLinks(DataClassEntity $entity, $submittedProviderLinkValues)
     {
-        $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity)->as_array();
+        $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity);
 
         foreach ($availableSchemas as $availableSchema)
         {

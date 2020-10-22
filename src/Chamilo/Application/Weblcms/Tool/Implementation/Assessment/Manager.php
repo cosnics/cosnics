@@ -161,7 +161,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $trackers = DataManager::retrieves(
                 AssessmentAttempt::class_name(
                 ), new DataClassRetrievesParameters($condition)
-            )->as_array();
+            );
 
             $count = count($trackers);
 

@@ -2679,7 +2679,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             // get all course users
             $target_users = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users(
                 $course_id
-            )->as_array();
+            );
         }
         else
         {
@@ -2732,7 +2732,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     new DataClassProperties(array(new PropertiesConditionVariable(User::class))),
                     new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids)
                 )
-            )->as_array();
+            );
 
             foreach ($users as $user)
             {

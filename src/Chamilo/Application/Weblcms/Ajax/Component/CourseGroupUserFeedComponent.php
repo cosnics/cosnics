@@ -312,6 +312,6 @@ class CourseGroupUserFeedComponent extends Manager
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
             User::class, new DataClassRetrievesParameters($this->getUserCondition(), 100, $this->getOffset(), $order)
-        )->as_array();
+        );
     }
 }

@@ -89,7 +89,7 @@ class EndingAssignments extends Block
                     )
                 )
             )
-        )->as_array();
+        );
 
         $ending_assignments = array();
         foreach ($publications as $publication)

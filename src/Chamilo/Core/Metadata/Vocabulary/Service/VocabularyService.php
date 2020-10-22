@@ -143,7 +143,7 @@ class VocabularyService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition))->as_array();
+        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
     }
 
     /**

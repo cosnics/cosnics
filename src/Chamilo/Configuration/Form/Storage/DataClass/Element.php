@@ -188,7 +188,7 @@ class Element extends DataClass
             new StaticConditionVariable($this->get_id())
         );
         $options = DataManager::retrieve_dynamic_form_element_options($condition);
-        $this->set_options($options->as_array());
+        $this->set_options($options);
 
         return $this->options;
     }

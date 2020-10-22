@@ -102,7 +102,7 @@ class AnnouncementComponent extends Manager
                 {
                     continue;
                 }
-                foreach ($publications->as_array() as $publication)
+                foreach ($publications as $publication)
                 {
                     $unique_publications[$course->get_id() . '.' .
                     $publication[ContentObjectPublication::PROPERTY_ID]] = $publication;

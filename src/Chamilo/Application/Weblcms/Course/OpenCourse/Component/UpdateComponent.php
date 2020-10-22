@@ -28,7 +28,7 @@ class UpdateComponent extends Manager
         $course->setId($courseIds[0]);
 
         $form = new OpenCourseForm(OpenCourseForm::FORM_TYPE_EDIT, $this->get_url(), Translation::getInstance());
-        $form->setDefaultRoles($this->getOpenCourseService()->getRolesForOpenCourse($course)->as_array());
+        $form->setDefaultRoles($this->getOpenCourseService()->getRolesForOpenCourse($course));
 
         if ($form->validate())
         {

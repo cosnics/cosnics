@@ -92,7 +92,7 @@ class PublicationSelectorDataMapper
 
         if (count($propertyNames) == 0)
         {
-            return $publications_set->as_array();
+            return $publications_set;
         }
 
         while ($publication = $publications_set->next_result())

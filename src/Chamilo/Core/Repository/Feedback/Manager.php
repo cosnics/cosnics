@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Exception;
 
 abstract class Manager extends Application
@@ -134,15 +133,7 @@ abstract class Manager extends Application
         if ($application instanceof FeedbackNotificationSupport)
         {
             $notifications = $application->retrieve_notifications();
-
-            if (!$notifications instanceof DataClassIterator)
-            {
-                $notifications = $notifications->as_array();
-            }
-            else
-            {
-                $notifications = $notifications->getArrayCopy();
-            }
+            $notifications = $notifications->getArrayCopy();
 
             $this->getNotificationService()->notify($feedback, $notifications);
         }

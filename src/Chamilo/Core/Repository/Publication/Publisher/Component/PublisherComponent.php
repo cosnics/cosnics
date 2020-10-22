@@ -107,7 +107,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
 
             return DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters
-            )->as_array();
+            );
         }
 
         return array();

@@ -68,7 +68,7 @@ class RepositoryImplementationCategoryItem extends Item
                 new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))
             );
             $items = DataManager::retrieves(Item::class, $parameters);
-            $this->children = $items->as_array();
+            $this->children = $items;
         }
 
         return $this->children;

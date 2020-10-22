@@ -233,7 +233,7 @@ class Assignment extends ContentObject implements AttachmentSupport
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 explode(',', $automaticFeedbackContentObjectIds)
             )
-        )->as_array();
+        );
 
         return $contentObjects;
     }

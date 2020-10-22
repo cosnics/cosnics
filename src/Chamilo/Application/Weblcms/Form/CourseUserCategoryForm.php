@@ -260,7 +260,7 @@ class CourseUserCategoryForm extends FormValidator
 
         if ($existing_types)
         {
-            $existing_types = $existing_types->as_array();
+            $existing_types = $existing_types;
         }
         else
         {

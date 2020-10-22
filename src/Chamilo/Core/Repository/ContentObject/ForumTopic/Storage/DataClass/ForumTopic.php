@@ -196,8 +196,8 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     {
         if ($only_version)
         {
-            $posts = DataManager::retrieve_forum_posts($this->get_id())->as_array();
-            $subscribes = DataManager::retrieve_subscribes($this->get_id())->as_array();
+            $posts = DataManager::retrieve_forum_posts($this->get_id());
+            $subscribes = DataManager::retrieve_subscribes($this->get_id());
             foreach ($posts as $post)
             {
                 $post->delete(true);

@@ -232,7 +232,7 @@ class RightsLocation extends NestedTreeNode
         $entity_rights = DataManager::retrieve_rights_location_rights($this->get_context(), $condition);
         if ($entity_rights)
         {
-            return $entity_rights->as_array();
+            return $entity_rights;
         }
         else
         {

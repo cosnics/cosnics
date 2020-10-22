@@ -345,9 +345,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             CourseSetting::get_table_name(), $settings_condition
         );
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
 
-        $toolsArray = $tools->as_array();
         usort(
             $toolsArray, function ($toolA, $toolB) {
             $toolANamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($toolA->get_name());
@@ -418,9 +417,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
 
-        $toolsArray = $tools->as_array();
         usort(
             $toolsArray, function ($toolA, $toolB) {
             $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolA->getContext());

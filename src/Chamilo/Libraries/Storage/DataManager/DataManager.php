@@ -5,15 +5,14 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
 use Chamilo\Libraries\Storage\Cache\DataClassCountGroupedCache;
 use Chamilo\Libraries\Storage\Cache\DataClassDistinctCache;
 use Chamilo\Libraries\Storage\Cache\DataClassResultCache;
-use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\Cache\RecordCache;
 use Chamilo\Libraries\Storage\Cache\RecordResultCache;
-use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -26,7 +25,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -116,17 +114,6 @@ class DataManager
     }
 
     /**
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet
-     */
-    private static function __records($class, $parameters)
-    {
-        return static::getInstance()->records($class, $parameters);
-    }
-
-    /**
      * @param string $objectClass
      * @param string $factoryClass
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
@@ -138,17 +125,6 @@ class DataManager
         $record = static::process_record(static::getInstance()->retrieve($objectClass, $parameters));
 
         return $factoryClass::factory($objectClass, $record);
-    }
-
-    /**
-     * @param string $objectClass
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet
-     */
-    private static function __retrievesClass($objectClass, $parameters)
-    {
-        return static::getInstance()->retrieves($objectClass, $parameters);
     }
 
     /**
@@ -196,38 +172,9 @@ class DataManager
         $class_name, $display_order_property, $display_order_mapping = array(), $display_order_condition = null
     )
     {
-        foreach ($display_order_mapping as $old_display_order => $new_display_order)
-        {
-            if (!static::move_display_orders($class_name, $old_display_order, $new_display_order))
-            {
-                return false;
-            }
-
-            $display_order_property_variable = new PropertyConditionVariable($class_name, $display_order_property);
-
-            $properties = new DataClassProperties(array());
-
-            $properties->add(
-                new DataClassProperty($display_order_property_variable, new StaticConditionVariable($new_display_order))
-            );
-
-            $conditions = array();
-
-            if ($display_order_condition)
-            {
-                $conditions[] = $display_order_condition;
-            }
-
-            $conditions[] = new EqualityCondition(
-                $display_order_property_variable, new StaticConditionVariable($old_display_order)
-            );
-
-            $condition = new AndCondition($conditions);
-
-            return static::updates($class_name, $properties, $condition);
-        }
-
-        return true;
+        return self::getDataClassRepository()->changeDisplayOrdersByMappingArray(
+            $class_name, $display_order_property, $display_order_mapping, $display_order_condition
+        );
     }
 
     /**
@@ -241,19 +188,7 @@ class DataManager
      */
     public static function count($class, $parameters = null)
     {
-        if (!$parameters instanceof DataClassCountParameters)
-        {
-            $parameters = DataClassCountParameters::generate($parameters);
-        }
-
-        if (is_subclass_of($class, CompositeDataClass::class))
-        {
-            return static::countCompositeDataClass($class, $parameters);
-        }
-        else
-        {
-            return static::countClass($class, $class, $parameters);
-        }
+        return self::getDataClassRepository()->count($class, $parameters);
     }
 
     /**
@@ -301,12 +236,7 @@ class DataManager
      */
     public static function count_grouped($class, DataClassCountGroupedParameters $parameters)
     {
-        if (!DataClassCountGroupedCache::exists($class, $parameters))
-        {
-            DataClassCountGroupedCache::add($class, $parameters, static::__countGrouped($class, $parameters));
-        }
-
-        return DataClassCountGroupedCache::get($class, $parameters);
+        return self::getDataClassRepository()->countGrouped($class, $parameters);
     }
 
     /**
@@ -319,12 +249,7 @@ class DataManager
      */
     public static function create(DataClass $object)
     {
-        if (!static::getInstance()->create($object))
-        {
-            return false;
-        }
-
-        return DataClassResultCache::add($object);
+        return self::getDataClassRepository()->create($object);
     }
 
     /**
@@ -335,7 +260,7 @@ class DataManager
      */
     public static function create_record($class_name, $record)
     {
-        return static::getInstance()->create_record($class_name, $record);
+        return self::getDataClassRepository()->createRecord($class_name, $record);
     }
 
     /**
@@ -363,31 +288,7 @@ class DataManager
      */
     public static function delete(DataClass $object)
     {
-        $class_name = ($object instanceof CompositeDataClass ? $object::parent_class_name() : $object::class_name());
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($class_name, $class_name::PROPERTY_ID),
-            new StaticConditionVariable($object->get_id())
-        );
-
-        if (!static::getInstance()->delete($class_name, $condition))
-        {
-            return false;
-        }
-
-        if ($object instanceof CompositeDataClass && $object::is_extended())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
-                new StaticConditionVariable($object->get_id())
-            );
-            if (!static::getInstance()->delete($object::class_name(), $condition))
-            {
-                return false;
-            }
-        }
-
-        return DataClassCache::truncate($class_name);
+        return self::getDataClassRepository()->delete($object);
     }
 
     /**
@@ -400,12 +301,7 @@ class DataManager
      */
     public static function deletes($class, Condition $condition)
     {
-        if (!static::getInstance()->delete($class, $condition))
-        {
-            return false;
-        }
-
-        return DataClassCache::truncate($class);
+        return self::getDataClassRepository()->deletes($class, $condition);
     }
 
     /**
@@ -466,29 +362,7 @@ class DataManager
      */
     public static function determineDataClassType($className, $identifier)
     {
-        $conditionClass = static::determineCompositeDataClassParentClassName($className);
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($conditionClass, $conditionClass::PROPERTY_ID),
-            new StaticConditionVariable($identifier)
-        );
-
-        $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(new PropertyConditionVariable($conditionClass, $conditionClass::PROPERTY_TYPE))
-            ), $condition
-        );
-
-        $type = static::record($conditionClass, $parameters);
-
-        if (isset($type[$conditionClass::PROPERTY_TYPE]))
-        {
-            return $type[$conditionClass::PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException($identifier);
-        }
+        return self::getDataClassRepository()->determineDataClassType($className, $identifier);
     }
 
     /**
@@ -502,17 +376,7 @@ class DataManager
      */
     public static function distinct($class, $parameters)
     {
-        if (!$parameters instanceof DataClassDistinctParameters)
-        {
-            $parameters = DataClassDistinctParameters::generate($parameters);
-        }
-
-        if (!DataClassDistinctCache::exists($class, $parameters))
-        {
-            DataClassDistinctCache::add($class, $parameters, static::__distinct($class, $parameters));
-        }
-
-        return DataClassDistinctCache::get($class, $parameters);
+        return self::getDataClassRepository()->distinct($class, $parameters);
     }
 
     /**
@@ -525,6 +389,17 @@ class DataManager
     public static function drop_storage_unit($name)
     {
         return static::getInstance()->drop_storage_unit($name);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @throws \Exception
+     */
+    public static function getDataClassRepository()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository'
+        );
     }
 
     /**
@@ -620,65 +495,9 @@ class DataManager
         $class_name, $display_order_property, $start = 1, $end = null, $display_order_condition = null
     )
     {
-        if ($start == $end)
-        {
-            return false;
-        }
-
-        $display_order_property_variable = new PropertyConditionVariable($class_name, $display_order_property);
-
-        $conditions = array();
-
-        if (is_null($end) || $start < $end)
-        {
-            $start_operator = InequalityCondition::GREATER_THAN;
-
-            $direction = - 1;
-        }
-
-        if (!is_null($end))
-        {
-            if ($start < $end)
-            {
-                $end_operator = InequalityCondition::LESS_THAN_OR_EQUAL;
-            }
-            else
-            {
-                $start_operator = InequalityCondition::LESS_THAN;
-                $end_operator = InequalityCondition::GREATER_THAN_OR_EQUAL;
-
-                $direction = 1;
-            }
-        }
-
-        $start_variable = new StaticConditionVariable($start);
-
-        $conditions[] = new InequalityCondition($display_order_property_variable, $start_operator, $start_variable);
-
-        if (!is_null($end))
-        {
-            $end_variable = new StaticConditionVariable($end);
-
-            $conditions[] = new InequalityCondition($display_order_property_variable, $end_operator, $end_variable);
-        }
-
-        if ($display_order_condition)
-        {
-            $conditions[] = $display_order_condition;
-        }
-
-        $condition = new AndCondition($conditions);
-
-        $update_variable = new OperationConditionVariable(
-            $display_order_property_variable, OperationConditionVariable::ADDITION,
-            new StaticConditionVariable($direction)
+        return self::getDataClassRepository()->moveDisplayOrders(
+            $class_name, $display_order_property, $start, $end, $display_order_condition
         );
-
-        $properties = new DataClassProperties(array());
-
-        $properties->add(new DataClassProperty($display_order_property_variable, $update_variable));
-
-        return static::updates($class_name, $properties, $condition);
     }
 
     /**
@@ -737,19 +556,7 @@ class DataManager
      */
     public static function record($class, RecordRetrieveParameters $parameters = null)
     {
-        if (!RecordCache::exists($class, $parameters))
-        {
-            try
-            {
-                $record = RecordResultCache::add($class, static::__record($class, $parameters), $parameters);
-            }
-            catch (DataClassNoResultException $exception)
-            {
-                RecordResultCache::no_result($exception);
-            }
-        }
-
-        return RecordCache::get($class, $parameters);
+        return self::getDataClassRepository()->record($class, $parameters);
     }
 
     /**
@@ -761,20 +568,7 @@ class DataManager
      */
     public static function records($class, $parameters = null)
     {
-        if (!$parameters instanceof RecordRetrievesParameters)
-        {
-            $parameters = RecordRetrievesParameters::generate($parameters);
-        }
-
-        if (!RecordResultSetCache::exists($class, $parameters))
-        {
-            RecordResultSetCache::add($class, static::__records($class, $parameters), $parameters);
-        }
-
-        $resultSet = RecordResultSetCache::get($class, $parameters);
-        $resultSet->reset();
-
-        return $resultSet;
+        return self::getDataClassRepository()->records($class, $parameters);
     }
 
     /**
@@ -802,25 +596,7 @@ class DataManager
      */
     public static function retrieve($class, DataClassRetrieveParameters $parameters = null)
     {
-        if (is_subclass_of($class, CompositeDataClass::class))
-        {
-            try
-            {
-                return static::retrieveCompositeDataClass($class, $parameters);
-            }
-            catch (Exception $ex)
-            {
-                throw new UserException(
-                    Translation::getInstance()->getTranslation(
-                        'CouldNotRetrieveObject', null, Utilities::COMMON_LIBRARIES
-                    )
-                );
-            }
-        }
-        else
-        {
-            return static::retrieveClass($class, $class, DataClass::class, $parameters);
-        }
+        return self::getDataClassRepository()->retrieve($class, $parameters);
     }
 
     /**
@@ -892,16 +668,7 @@ class DataManager
      */
     public static function retrieve_by_id($class, $id)
     {
-        $parentClass = static::determineCompositeDataClassParentClassName($class);
-
-        return static::retrieve(
-            $class, new DataClassRetrieveParameters(
-                new EqualityCondition(
-                    new PropertyConditionVariable($parentClass, $parentClass::PROPERTY_ID),
-                    new StaticConditionVariable($id)
-                )
-            )
-        );
+        return self::getDataClassRepository()->retrieveById($class, $id);
     }
 
     /**
@@ -913,7 +680,7 @@ class DataManager
      */
     public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $object)
     {
-        return static::getInstance()->retrieve_composite_data_class_additional_properties($object);
+        return self::getDataClassRepository()->retrieveCompositeDataClassAdditionalProperties($object);
     }
 
     /**
@@ -927,7 +694,7 @@ class DataManager
      */
     public static function retrieve_maximum_value($class, $property, Condition $condition = null)
     {
-        return static::getInstance()->retrieve_maximum_value($class, $property, $condition);
+        return self::getDataClassRepository()->retrieveMaximumValue($class, $property, $condition);
     }
 
     /**
@@ -941,70 +708,21 @@ class DataManager
      */
     public static function retrieve_next_value($class, $property, Condition $condition = null)
     {
-        return static::retrieve_maximum_value($class, $property, $condition) + 1;
+        return self::getDataClassRepository()->retrieveNextValue($class, $property, $condition);
     }
 
     /**
      * Retrieve a ResultSet of DataClass object instances from the storage layer
      *
      * @param $class string
-     * @param $parameters DataClassRetrievesParameters
+     * @param DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Exception
      */
     public static function retrieves($class, $parameters = null)
     {
-        if (!$parameters instanceof DataClassRetrievesParameters)
-        {
-            $parameters = DataClassRetrievesParameters::generate($parameters);
-        }
-
-        if (is_subclass_of($class, CompositeDataClass::class))
-        {
-            return static::retrievesCompositeDataClass($class, $parameters);
-        }
-        else
-        {
-            return static::retrievesClass($class, $class, $parameters);
-        }
-    }
-
-    /**
-     * @param string $cacheClass
-     * @param string $objectClass
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return bool|mixed
-     * @throws \Exception
-     */
-    private static function retrievesClass($cacheClass, $objectClass, $parameters = null)
-    {
-        if (!DataClassResultSetCache::exists($cacheClass, $parameters))
-        {
-            DataClassResultSetCache::add(static::__retrievesClass($objectClass, $parameters), $parameters);
-        }
-
-        $resultSet = DataClassResultSetCache::get($cacheClass, $parameters);
-        $resultSet->reset();
-
-        return $resultSet;
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    private static function retrievesCompositeDataClass($className, $parameters)
-    {
-        $parentClassName = static::determineCompositeDataClassParentClassName($className);
-        $parameters = static::setCompositeDataClassParameters($parentClassName, $className, $parameters);
-
-        return static::retrievesClass($parentClassName, $className, $parameters);
+        return self::getDataClassRepository()->retrieves($class, $parameters);
     }
 
     /**
@@ -1082,7 +800,7 @@ class DataManager
      */
     public static function transactional($function)
     {
-        return static::getInstance()->transactional($function);
+        return self::getDataClassRepository()->transactional($function);
     }
 
     /**
@@ -1129,12 +847,7 @@ class DataManager
      */
     public static function update(DataClass $object)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(get_class($object), $object::PROPERTY_ID),
-            new StaticConditionVariable($object->getId())
-        );
-
-        return static::getInstance()->update($object, $condition);
+        return self::getDataClassRepository()->update($object);
     }
 
     /**
@@ -1154,20 +867,6 @@ class DataManager
         $class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array()
     )
     {
-        if ($properties instanceof DataClassProperties)
-        {
-            $properties_class = $properties;
-        }
-        else
-        {
-            $properties_class = new DataClassProperties($properties);
-        }
-
-        if (!static::getInstance()->updates($class, $properties_class, $condition))
-        {
-            return false;
-        }
-
-        return DataClassCache::truncate($class);
+        return self::getDataClassRepository()->updates($class, $properties, $condition, $offset, $count, $order_by);
     }
 }

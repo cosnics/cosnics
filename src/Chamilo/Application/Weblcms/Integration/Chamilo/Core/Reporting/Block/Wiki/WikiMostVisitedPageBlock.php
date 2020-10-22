@@ -37,7 +37,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, 
                         ComplexContentObjectItem::PROPERTY_PARENT), 
-                    new StaticConditionVariable($wiki->get_id()))))->as_array();
+                    new StaticConditionVariable($wiki->get_id()))));
         
         if (empty($complex_content_object_items))
         {

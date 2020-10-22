@@ -1017,7 +1017,7 @@ class CourseGroupForm extends FormValidator
         }
 
         /** @var CourseGroup[] $course_groups */
-        $course_groups = $parent_course_group->get_children(false)->as_array();
+        $course_groups = $parent_course_group->get_children(false);
 
         $max_number_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
         $user_number_subscriptions = array();

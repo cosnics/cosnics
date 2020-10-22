@@ -95,7 +95,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $this->publicationLinks = DataManager::retrieves(
                 ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
-            )->as_array();
+            );
         }
 
         return $this->publicationLinks;
@@ -137,7 +137,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $toolSectionRelations = DataManager::retrieves(
                 CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
-            )->as_array();
+            );
 
             foreach ($toolSectionRelations as $toolSectionRelation)
             {
@@ -193,7 +193,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $this->sections = DataManager::retrieves(
                 CourseSection::class, new DataClassRetrievesParameters($condition, null, null, $orderProperty)
-            )->as_array();
+            );
         }
 
         return $this->sections;

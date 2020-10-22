@@ -101,7 +101,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         return DataManager::retrieves(
             PeerAssessmentGroupTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
     }
 
     public function delete_group($id)
@@ -126,7 +126,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $items = DataManager::retrieves(
             PeerAssessmentGroupSubscriptionTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         $users = array();
 
@@ -190,7 +190,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $items = DataManager::retrieves(
             PeerAssessmentGroupSubscriptionTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         $group_tracker = new PeerAssessmentGroupTracker();
 
@@ -202,7 +202,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $groups = DataManager::retrieves(
             PeerAssessmentGroupTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         // loop through
         foreach ($items as $item)
@@ -251,7 +251,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $groups_array = DataManager::retrieves(
             PeerAssessmentGroupTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         // get_all peerassessmentgroup subscriptions for user
         $condition = new EqualityCondition(
@@ -263,7 +263,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $user_subscription_array = DataManager::retrieves(
             PeerAssessmentGroupSubscriptionTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         foreach ($user_subscription_array as $user_subscription)
         {
@@ -330,7 +330,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
             return DataManager::retrieves(
                 PeerAssessmentAttemptTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
         }
         else
         {
@@ -402,7 +402,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $items = DataManager::retrieves(
             PeerAssessmentAttemptStatusTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         return count($items) > 0 ? $items[0] : new PeerAssessmentAttemptStatusTracker(
             array(
@@ -444,7 +444,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
             $statuses = DataManager::retrieves(
                 PeerAssessmentAttemptStatusTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
 
             foreach ($statuses as $status)
             {
@@ -457,7 +457,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
                 $items = DataManager::retrieves(
                     PeerAssessmentScoreTracker::class,
-                    new DataClassRetrievesParameters($condition))->as_array();
+                    new DataClassRetrievesParameters($condition));
 
                 if (count($items) > 0)
                     return true;
@@ -545,7 +545,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         $items = DataManager::retrieves(
             PeerAssessmentPublicationSettingTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         return count($items) > 0 ? $items[0] : $tracker;
     }
@@ -565,7 +565,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     function get_context_group_users($context_group_id)
     {
         if ($users = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_course_group_users(
-            $context_group_id)->as_array())
+            $context_group_id))
         {
             return $users;
         }

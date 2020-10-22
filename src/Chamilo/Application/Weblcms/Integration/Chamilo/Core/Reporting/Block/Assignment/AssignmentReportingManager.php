@@ -394,7 +394,7 @@ abstract class AssignmentReportingManager extends ToolBlock
 
         $publications =
             !is_null($entityType) ? $this->filterPublicationsForEntityType($publication_resultset, $entityType) :
-                $publication_resultset->as_array();
+                $publication_resultset;
 
         return $publications;
     }

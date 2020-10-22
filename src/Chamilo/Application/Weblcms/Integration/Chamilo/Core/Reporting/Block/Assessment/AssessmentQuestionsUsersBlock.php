@@ -76,7 +76,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             new StaticConditionVariable($publication->get_content_object_id()));
         $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
         
         /**
          *
@@ -102,7 +102,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         
         $users = DataManager::retrieve_publication_target_users(
             $this->getPublicationId(),
-            $this->getCourseId())->as_array();
+            $this->getCourseId());
         
         foreach ($users as $user)
         {
@@ -124,7 +124,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
             AssessmentAttempt::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
         
         $user_question_statistics = array();
         if (count($assessment_attempts_trackers) > 0)
@@ -210,7 +210,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         
         $question_attempts_trackers = DataManager::retrieves(
             QuestionAttempt::class,
-            new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
+            new DataClassRetrievesParameters($condition, null, null, $order_by));
         
         $user_question_statistics = array();
         if (count($question_attempts_trackers) > 0)

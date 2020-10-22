@@ -104,11 +104,6 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '<div class="panel panel-default panel-feedback">';
                 $html[] = '<div class="list-group">';
 
-                if ($feedbacks instanceof ResultSet)
-                {
-                    $feedbacks = $feedbacks->as_array();
-                }
-
                 foreach ($feedbacks as $feedback)
                 {
                     $html[] = '<div class="list-group-item" id="feedback' . $feedback->getId() . '">';

@@ -166,7 +166,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             $items = DataManager::retrieves(
                 PeerAssessmentScoreTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
 
             // get the non empty values of the scores
             $s_count = array_reduce(
@@ -247,7 +247,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             $items = DataManager::retrieves(
                 PeerAssessmentScoreTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
 
             foreach ($items as $item)
             {
@@ -271,7 +271,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
         $items = DataManager::retrieves(
             PeerAssessmentScoreTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         // iterate over the results and put them in a two dimensional array
         $scores = array();
@@ -303,7 +303,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
         $items = DataManager::retrieves(
             PeerAssessmentScoreTracker::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
 
         // loop through the existing scores and update/delete them if necessary
         foreach ($items as $item)
@@ -389,7 +389,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             $items = DataManager::retrieves(
                 PeerAssessmentFeedbackTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
 
             foreach ($items as $item)
             {
@@ -416,7 +416,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             $items = DataManager::retrieves(
                 PeerAssessmentFeedbackTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
         }
         // iterate over the results and put them in a two dimensional array
         $feedback = array();
@@ -450,7 +450,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             $items = DataManager::retrieves(
                 PeerAssessmentFeedbackTracker::class,
-                new DataClassRetrievesParameters($condition))->as_array();
+                new DataClassRetrievesParameters($condition));
         }
 
         // loop through the existing feedback and update/delete them if necessary

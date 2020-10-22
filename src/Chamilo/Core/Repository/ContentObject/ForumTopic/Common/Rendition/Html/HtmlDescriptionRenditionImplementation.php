@@ -157,7 +157,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
      */
     public function get_table_data($from = 1, $total = 1)
     {
-        $data = DataManager::retrieve_forum_posts($this->object->get_id())->as_array();
+        $data = DataManager::retrieve_forum_posts($this->object->get_id());
 
         return array_slice($data, $from, self::DEFAULT_PER_PAGE);
     }

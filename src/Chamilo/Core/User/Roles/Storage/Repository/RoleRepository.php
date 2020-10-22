@@ -51,7 +51,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     {
         return DataManager::retrieves(
             Role::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $orderBy))->as_array();
+            new DataClassRetrievesParameters($condition, $count, $offset, $orderBy));
     }
 
     /**

@@ -61,7 +61,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
         
         $this->size = $publications->size();
         
-        foreach ($publications->as_array() as $publication)
+        foreach ($publications as $publication)
         {
             $this->th_titles[] = $publication->get_content_object()->get_title();
         }

@@ -101,103 +101,7 @@ class Database
      */
     public function alter_storage_unit($type, $table_name, $property, $attributes = array())
     {
-        try
-        {
-            if ($type == DataManager::ALTER_STORAGE_UNIT_DROP)
-            {
-                $column = new Column($property);
-                $query = 'ALTER TABLE ' . $table_name . ' DROP COLUMN ' .
-                    $column->getQuotedName($this->get_connection()->getDatabasePlatform());
-            }
-            else
-            {
-                $column = new Column(
-                    $property, Type::getType(self::parse_storage_unit_property_type($attributes)),
-                    self::parse_storage_unit_attributes($attributes)
-                );
-
-                // Column declaration translation-code more or less directly from Doctrine since it doesn't support
-                // altering tables (yet)
-                $columns = array();
-                /* @var \Doctrine\DBAL\Schema\Column $column */
-                $columnData = array();
-
-                if (isset($attributes['name']) && $type == DataManager::ALTER_STORAGE_UNIT_CHANGE)
-                {
-                    $old_name = $column->getQuotedName($this->get_connection()->getDatabasePlatform());
-                    $columnData['name'] = $old_name . ' ' . $attributes['name'];
-                }
-                elseif ($type == DataManager::ALTER_STORAGE_UNIT_CHANGE)
-                {
-                    $name = $column->getQuotedName($this->get_connection()->getDatabasePlatform());
-                    $columnData['name'] = $name . ' ' . $name;
-                }
-                elseif ($type == DataManager::ALTER_STORAGE_UNIT_ADD)
-                {
-                    $name = $column->getQuotedName($this->get_connection()->getDatabasePlatform());
-                    $columnData['name'] = $name;
-                }
-
-                $columnData['type'] = $column->getType();
-                $columnData['length'] = $column->getLength();
-                $columnData['notnull'] = $column->getNotNull();
-                $columnData['fixed'] = $column->getFixed();
-                $columnData['unique'] = false; // TODO: what do we do about this?
-                $columnData['version'] =
-                    ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
-
-                if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)
-                {
-                    $columnData['length'] = 255;
-                }
-
-                $columnData['unsigned'] = $column->getUnsigned();
-                $columnData['precision'] = $column->getPrecision();
-                $columnData['scale'] = $column->getScale();
-                $columnData['default'] = $column->getDefault();
-                $columnData['columnDefinition'] = $column->getColumnDefinition();
-                $columnData['autoincrement'] = $column->getAutoincrement();
-
-                $columnData['comment'] = $column->getComment();
-                if ($this->get_connection()->getDatabasePlatform()->isCommentedDoctrineType($column->getType()))
-                {
-                    $columnData['comment'] .= $this->get_connection()->getDatabasePlatform()->getDoctrineTypeComment(
-                        $column->getType()
-                    );
-                }
-
-                $columns = array($columnData['name'] => $columnData);
-
-                $fields_query = $this->get_connection()->getDatabasePlatform()->getColumnDeclarationListSQL($columns);
-
-                $action = $type == DataManager::ALTER_STORAGE_UNIT_CHANGE ? 'CHANGE' : 'ADD';
-                $query = 'ALTER TABLE ' . $table_name . ' ' . $action . ' COLUMN ' . $fields_query;
-
-                if ($type == DataManager::ALTER_STORAGE_UNIT_ADD && $columnData['autoincrement'])
-                {
-                    $query .= ', ADD PRIMARY KEY(' . $columnData['name'] . ')';
-                }
-            }
-
-            $statement = $this->get_connection()->query($query);
-
-            if (!$statement instanceof PDOException)
-            {
-                return true;
-            }
-            else
-            {
-                $this->error_handling($statement);
-
-                return false;
-            }
-        }
-        catch (Exception $exception)
-        {
-            $this->error_handling($exception);
-
-            return false;
-        }
+        return $this->getStorageUnitDatabase()->alter($type, $table_name, $property, $attributes);
     }
 
     /**
@@ -212,49 +116,7 @@ class Database
      */
     public function alter_storage_unit_index($type, $table_name, $name = null, $columns = array())
     {
-        $query = 'ALTER TABLE ' . $table_name . ' ';
-
-        switch ($type)
-        {
-            case DataManager::ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY :
-                $query .= 'DROP PRIMARY KEY';
-                break;
-            case DataManager::ALTER_STORAGE_UNIT_DROP_INDEX :
-
-                if (is_null($name))
-                {
-                    return false;
-                }
-
-                $query .= 'DROP INDEX ' . $name;
-                break;
-            case DataManager::ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY :
-                $query .= 'ADD PRIMARY KEY(' . implode(', ', array_unique($columns)) . ')';
-                break;
-            case DataManager::ALTER_STORAGE_UNIT_ADD_INDEX :
-                $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                        $name, new Index($name, $columns, false, false)
-                    );
-                break;
-            case DataManager::ALTER_STORAGE_UNIT_ADD_UNIQUE :
-                $query .= 'ADD ' . $this->get_connection()->getDatabasePlatform()->getIndexDeclarationSQL(
-                        $name, new Index($name, $columns, true, false)
-                    );
-                break;
-        }
-
-        $statement = $this->get_connection()->query($query);
-
-        if (!$statement instanceof PDOException)
-        {
-            return true;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getStorageUnitDatabase()->alterIndex($type, $table_name, $name, $columns);
     }
 
     /**
@@ -332,38 +194,7 @@ class Database
      */
     public function count($class, $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-        $dataClassProperties = $parameters->getDataClassProperties();
-
-        if ($dataClassProperties instanceof DataClassProperties)
-        {
-            $dataClassPropertyVariables = $dataClassProperties->get();
-            $property = ConditionVariableTranslator::render(array_shift($dataClassPropertyVariables));
-        }
-        else
-        {
-            $property = '1';
-        }
-
-        $query_builder->addSelect('COUNT(' . $property . ')');
-        $query_builder->from($this->prepare_table_name($class), $this->get_alias($this->prepare_table_name($class)));
-
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            $record = $statement->fetch(PDO::FETCH_NUM);
-
-            return (int) $record[0];
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getDataClassDatabase()->count($class, $parameters);
     }
 
     /**
@@ -377,46 +208,7 @@ class Database
      */
     public function count_grouped($class, $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-
-        foreach ($parameters->getDataClassProperties()->get() as $property)
-        {
-
-            $query_builder->addSelect(ConditionVariableTranslator::render($property));
-        }
-
-        $query_builder->addSelect('COUNT(1)');
-        $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
-
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-
-        foreach ($parameters->getGroupBy()->get() as $property)
-        {
-            $query_builder->addGroupBy(ConditionVariableTranslator::render($property));
-        }
-
-        $query_builder->having(ConditionTranslator::render($parameters->getHavingCondition()));
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            $counts = array();
-
-            while ($record = $statement->fetch(PDO::FETCH_NUM))
-            {
-                $counts[$record[0]] = $record[1];
-            }
-
-            $record = $statement->fetch(PDO::FETCH_NUM);
-
-            return $counts;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getDataClassDatabase()->countGrouped($class, $parameters);
     }
 
     /**
@@ -429,65 +221,7 @@ class Database
      */
     public function create($object, $auto_id = true)
     {
-        if ($object instanceof CompositeDataClass)
-        {
-            $parent_class = $object::parent_class_name();
-            $object_table = $parent_class::get_table_name();
-        }
-        else
-        {
-            $object_table = $object->get_table_name();
-        }
-
-        $props = array();
-        foreach ($object->getDefaultProperties() as $key => $value)
-        {
-            $props[$key] = $value;
-        }
-
-        if ($auto_id && in_array('id', $object->get_default_property_names()))
-        {
-            $props['id'] = null;
-        }
-
-        try
-        {
-            $result = $this->connection->insert($object_table, $props);
-
-            if ($auto_id && in_array('id', $object->get_default_property_names()))
-            {
-                $object->set_id($this->connection->lastInsertId($object_table));
-            }
-
-            if ($object instanceof CompositeDataClass && $object::is_extended())
-            {
-                $props = array();
-                foreach ($object->get_additional_properties() as $key => $value)
-                {
-                    $props[$key] = $value;
-                }
-                $props['id'] = $object->get_id();
-
-                try
-                {
-                    $result = $this->connection->insert($object->get_table_name(), $props);
-                }
-                catch (Exception $exception)
-                {
-                    $this->error_handling($exception);
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        catch (Exception $exception)
-        {
-            $this->error_handling($exception);
-
-            return false;
-        }
+        return $this->getDataClassDatabase()->create($object, $auto_id);
     }
 
     /**
@@ -499,18 +233,7 @@ class Database
      */
     public function create_record($class_name, $record)
     {
-        try
-        {
-            $result = $this->connection->insert($class_name::get_table_name(), $record);
-        }
-        catch (Exception $exception)
-        {
-            $this->error_handling($exception);
-
-            return false;
-        }
-
-        return true;
+        return $this->getDataClassDatabase()->createRecord($class_name, $record);
     }
 
     /**
@@ -524,85 +247,7 @@ class Database
      */
     public function create_storage_unit($name, $properties, $indexes)
     {
-        try
-        {
-            $table_name = $name;
-
-            if ($this->get_connection()->getSchemaManager()->tablesExist(array($table_name)))
-            {
-                $this->drop_storage_unit($name);
-            }
-
-            $schema = new Schema();
-            $table = $schema->createTable($table_name);
-
-            foreach ($properties as $property => $attributes)
-            {
-                // $type = self :: parse_storage_unit_property_type($attributes);
-                // $options = self :: parse_storage_unit_attributes($attributes);
-
-                // $table->addColumn($property, $type, $options);
-
-                switch ($attributes['type'])
-                {
-                    case 'text' :
-                        if ($attributes['length'] && $attributes['length'] <= 255)
-                        {
-                            $attributes['type'] = 'string';
-                        }
-                        break;
-                }
-
-                $type = self::parse_storage_unit_property_type($attributes);
-                $options = self::parse_storage_unit_attributes($attributes);
-
-                $table->addColumn($property, $attributes['type'], $options);
-
-                if ($options['autoincrement'] == true)
-                {
-                    $name = StorageAliasGenerator::getInstance()->getConstraintName($table_name, $name);
-                    $table->setPrimaryKey(array($property), $name);
-                }
-            }
-
-            foreach ($indexes as $index => $attributes)
-            {
-                $name = StorageAliasGenerator::getInstance()->getConstraintName($table_name, $index);
-
-                switch ($attributes['type'])
-                {
-                    case 'primary' :
-                        $table->setPrimaryKey(array_keys($attributes['fields']), $name);
-                        break;
-                    case 'unique' :
-                        $table->addUniqueIndex(array_keys($attributes['fields']), $name);
-                        break;
-                    default :
-                        $table->addIndex(array_keys($attributes['fields']), $name);
-                        break;
-                }
-            }
-
-            foreach ($schema->toSql($this->get_connection()->getDatabasePlatform()) as $query)
-            {
-                $statement = $this->get_connection()->query($query);
-
-                if ($statement instanceof PDOException)
-                {
-                    $this->error_handling($statement);
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        catch (Exception $exception)
-        {
-            $this->error_handling($exception);
-
-            return false;
-        }
+        return $this->getStorageUnitDatabase()->create($name, $properties, $indexes);
     }
 
     /**
@@ -616,25 +261,7 @@ class Database
      */
     public function delete($class, $condition)
     {
-        $query_builder = new QueryBuilder($this->connection);
-        $query_builder->delete($class::get_table_name(), $this->get_alias($class::get_table_name()));
-        if (isset($condition))
-        {
-            $query_builder->where(ConditionTranslator::render($condition));
-        }
-
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            return true;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getDataClassDatabase()->delete($class, $condition);
     }
 
     /**
@@ -648,45 +275,7 @@ class Database
      */
     public function distinct($class, DataClassDistinctParameters $parameters)
     {
-        $select = array();
-
-        foreach ($parameters->getDataClassProperties()->get() as $property)
-        {
-            $select[] = ConditionVariableTranslator::render($property);
-        }
-
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->addSelect('DISTINCT ' . implode(',', $select));
-        $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
-
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-        $query_builder = $this->process_order_by($query_builder, $class, $parameters->getOrderBy());
-
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            $distinct_elements = array();
-            while ($record = $statement->fetch(PDO::FETCH_ASSOC))
-            {
-                if (count($parameters->getDataClassProperties()->get()) > 1)
-                {
-                    $distinct_elements[] = $record;
-                }
-                else
-                {
-                    $distinct_elements[] = array_pop($record);
-                }
-            }
-
-            return $distinct_elements;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getDataClassDatabase()->distinct($class, $parameters);
     }
 
     /**
@@ -699,26 +288,7 @@ class Database
      */
     public function drop_storage_unit($table_name)
     {
-        $schema = new Schema(array(new Table($table_name)));
-
-        $new_schema = clone $schema;
-        $new_schema->dropTable($table_name);
-
-        $sql = $schema->getMigrateToSql($new_schema, $this->get_connection()->getDatabasePlatform());
-
-        foreach ($sql as $query)
-        {
-            $statement = $this->get_connection()->query($query);
-
-            if ($statement instanceof PDOException)
-            {
-                $this->error_handling($statement);
-
-                return false;
-            }
-        }
-
-        return true;
+        return $this->getStorageUnitDatabase()->drop($table_name);
     }
 
     /**
@@ -851,6 +421,36 @@ class Database
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase
+     * @throws \Exception
+     */
+    protected function getDataClassDatabase()
+    {
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase');
+    }
+
+    /**
+     * @param $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService($serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase
+     */
+    protected function getStorageUnitDatabase()
+    {
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase');
+    }
+
+    /**
      *
      * @param string $table_name
      *
@@ -919,7 +519,7 @@ class Database
      */
     public function optimize_storage_unit($table_name)
     {
-        return true;
+        return $this->getStorageUnitDatabase()->optimize($table_name);
     }
 
     /**
@@ -1276,14 +876,15 @@ class Database
      */
     public static function quote($value, $type = null)
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get('Doctrine\DBAL\Connection')
-            ->quote($value, $type);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase'
+        )->quote($value, $type);
     }
 
     /**
      *
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -1292,32 +893,7 @@ class Database
      */
     public function record($class, $parameters = null)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-
-        $group_by = $parameters->getGroupBy();
-        if ($group_by instanceof GroupBy)
-        {
-            foreach ($group_by->get() as $group_by_variable)
-            {
-                $query_builder->addGroupBy(ConditionVariableTranslator::render($group_by_variable));
-            }
-        }
-
-        if ($parameters->getDataClassProperties() instanceof DataClassProperties)
-        {
-
-            foreach ($parameters->getDataClassProperties()->get() as $condition_variable)
-            {
-                $query_builder->addSelect(ConditionVariableTranslator::render($condition_variable));
-            }
-        }
-        else
-        {
-
-            return $this->retrieve($class, $parameters);
-        }
-
-        return $this->fetch_record($query_builder, $class, $parameters);
+        return $this->getDataClassDatabase()->record($class, $parameters);
     }
 
     /**
@@ -1325,7 +901,7 @@ class Database
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet
+     * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
      * @throws \ReflectionException
@@ -1347,20 +923,7 @@ class Database
      */
     public function rename_storage_unit($old_name, $new_name)
     {
-        $query = 'ALTER TABLE ' . $old_name . ' RENAME TO ' . $new_name;
-
-        $statement = $this->get_connection()->query($query);
-
-        if (!$statement instanceof PDOException)
-        {
-            return true;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getStorageUnitDatabase()->rename($old_name, $new_name);
     }
 
     /**
@@ -1375,12 +938,7 @@ class Database
      */
     public function retrieve($class, $parameters = null)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->addSelect($this->get_alias($this->prepare_table_name($class)) . '.*');
-
-        $this->process_composite_data_class_joins($query_builder, $class, $parameters);
-
-        return $this->fetch_record($query_builder, $class, $parameters);
+        return $this->getDataClassDatabase()->retrieve($class, $parameters);
     }
 
     /**
@@ -1513,7 +1071,7 @@ class Database
      */
     public function storage_unit_exists($name)
     {
-        return $this->get_connection()->getSchemaManager()->tablesExist(array($name));
+        return $this->getStorageUnitDatabase()->optimize($name);
     }
 
     /**
@@ -1525,32 +1083,7 @@ class Database
      */
     public function transactional($function)
     {
-        // Rather than directly using Doctrine's version of transactional, we implement
-        // an intermediate function that throws an exception if the function returns #f.
-        // This mediates between Chamilo's convention of returning #f to signal failure
-        // versus Doctrine's use of Exceptions.
-        $throw_on_false = function ($connection) use ($function) {
-            $result = call_user_func($function, $connection);
-            if (!$result)
-            {
-                throw new Exception();
-            }
-            else
-            {
-                return $result;
-            }
-        };
-
-        try
-        {
-            $this->connection->transactional($throw_on_false);
-
-            return true;
-        }
-        catch (Exception $e)
-        {
-            return false;
-        }
+        return $this->getDataClassDatabase()->transactional($function);
     }
 
     /**
@@ -1574,28 +1107,7 @@ class Database
      */
     public function truncate_storage_unit($table_name, $optimize = true)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->delete($table_name);
-
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            if ($optimize)
-            {
-                return $this->optimize_storage_unit($table_name);
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
+        return $this->getStorageUnitDatabase()->truncate($table_name, $optimize);
     }
 
     /**
@@ -1701,42 +1213,6 @@ class Database
      */
     public function updates($class, $properties, $condition)
     {
-        if (count($properties->get()) > 0)
-        {
-            $query_builder = $this->connection->createQueryBuilder();
-            $query_builder->update($class::get_table_name(), $this->get_alias($class::get_table_name()));
-
-            foreach ($properties->get() as $data_class_property)
-            {
-                $query_builder->set(
-                    ConditionVariableTranslator::render($data_class_property->get_property()),
-                    ConditionVariableTranslator::render($data_class_property->get_value())
-                );
-            }
-
-            if ($condition)
-            {
-                $query_builder->where(ConditionTranslator::render($condition));
-            }
-            else
-            {
-                throw new Exception('Cannot update records without a condition');
-            }
-
-            $statement = $this->get_connection()->query($query_builder->getSQL());
-
-            if (!$statement instanceof PDOException)
-            {
-                return true;
-            }
-            else
-            {
-                $this->error_handling($statement);
-
-                return false;
-            }
-        }
-
-        return true;
+        return $this->getDataClassDatabase()->updates($class, $properties, $condition);
     }
 }

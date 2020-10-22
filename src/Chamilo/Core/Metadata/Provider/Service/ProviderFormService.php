@@ -122,7 +122,7 @@ class ProviderFormService
      */
     private function getAvailableSchemas(DataClassEntity $entity)
     {
-        return $this->getEntityService()->getAvailableSchemasForEntityType($entity)->as_array();
+        return $this->getEntityService()->getAvailableSchemasForEntityType($entity);
     }
 
     /**
@@ -233,7 +233,7 @@ class ProviderFormService
      */
     private function getElementsForSchema(Schema $schema)
     {
-        return $this->getElementService()->getElementsForSchema($schema)->as_array();
+        return $this->getElementService()->getElementsForSchema($schema);
     }
 
     /**

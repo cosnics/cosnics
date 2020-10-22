@@ -124,6 +124,6 @@ class PublisherComponent extends Manager implements DelegateComponent
 
         return DataManager::retrieve_content_objects(
             ContentObject::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
-        )->as_array();
+        );
     }
 }

@@ -47,7 +47,7 @@ abstract class Block extends ReportingBlock
         $c = 0;
         $array = array();
         
-        $trackerdata = DataManager::retrieves($tracker::class_name(), new DataClassRetrievesParameters($condition))->as_array();
+        $trackerdata = DataManager::retrieves($tracker::class_name(), new DataClassRetrievesParameters($condition));
         
         foreach ($trackerdata as $key => $value)
         {

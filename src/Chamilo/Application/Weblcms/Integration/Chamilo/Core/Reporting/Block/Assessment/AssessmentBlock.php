@@ -21,7 +21,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use const;
 
 /**
  * Abstract class that defines common functionality for blocks of the assessment
@@ -37,7 +36,7 @@ abstract class AssessmentBlock extends ToolBlock
      *
      * @param string $category_name
      * @param mixed[] $array
-     * @param ReportingData $reporting_data
+     * @param \Chamilo\Core\Reporting\ReportingData $reporting_data
      */
     protected function add_category_from_array($category_name, $array, $reporting_data)
     {
@@ -52,7 +51,7 @@ abstract class AssessmentBlock extends ToolBlock
      *
      * @param int $row_count
      * @param mixed[] $array
-     * @param ReportingData $reporting_data
+     * @param \Chamilo\Core\Reporting\ReportingData $reporting_data
      */
     protected function add_row_from_array($row_count, $array, $reporting_data)
     {
@@ -68,7 +67,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $publication_id
      * @param int $user_id
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     protected function get_assessment_attempts($publication_id, $user_id = null)
     {
@@ -97,7 +96,7 @@ abstract class AssessmentBlock extends ToolBlock
     /**
      * Returns the assessment information for a given publication
      *
-     * @param ContentObjectPublication $assessment_publication
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $assessment_publication
      *
      * @return string[string]
      */
@@ -173,7 +172,7 @@ abstract class AssessmentBlock extends ToolBlock
         $redirect = new Redirect($params);
         $link = $redirect->getUrl();
 
-        return ' . $link . '')">' . $glyph->render() . '</a>';
+        return '<a href="' . $link . '">' . $glyph->render() . '</a>';
     }
 
     /**
@@ -209,7 +208,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int[] $assessment_attempt_ids
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     protected function get_question_attempts($question_cid = null, $assessment_attempt_ids = array())
     {
@@ -252,7 +251,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int $user_id
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     protected function get_question_attempts_from_publication_and_question(
         $publication_id, $question_cid, $user_id = null
@@ -301,7 +300,7 @@ abstract class AssessmentBlock extends ToolBlock
     /**
      * Returns the assessment information for a given publication
      *
-     * @param ContentObject $question
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $question
      *
      * @return string[string]
      */

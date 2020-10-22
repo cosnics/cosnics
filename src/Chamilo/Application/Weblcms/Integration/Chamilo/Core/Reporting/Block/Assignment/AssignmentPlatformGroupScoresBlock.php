@@ -81,6 +81,6 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
             )
         );
 
-        return DataManager::retrieve_groups_and_subgroups($group_ids)->as_array();
+        return DataManager::retrieve_groups_and_subgroups($group_ids);
     }
 }

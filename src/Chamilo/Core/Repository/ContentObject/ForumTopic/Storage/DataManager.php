@@ -400,7 +400,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_subscribed_forum_topic_users($forum_topic_id)
     {
-        $subscribeds = DataManager::retrieve_subscribes($forum_topic_id)->as_array();
+        $subscribeds = DataManager::retrieve_subscribes($forum_topic_id);
         $users = array();
         foreach ($subscribeds as $subscribe)
         {

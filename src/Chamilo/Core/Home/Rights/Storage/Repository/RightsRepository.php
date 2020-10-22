@@ -68,7 +68,7 @@ class RightsRepository
     {
         return DataManager::retrieves(
             ElementTargetEntity::class,
-            new DataClassRetrievesParameters($this->getElementTargetEntityConditionByElement($element)))->as_array();
+            new DataClassRetrievesParameters($this->getElementTargetEntityConditionByElement($element)));
     }
 
     /**
@@ -82,7 +82,7 @@ class RightsRepository
     {
         return DataManager::retrieves(
             BlockTypeTargetEntity::class,
-            new DataClassRetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType)))->as_array();
+            new DataClassRetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType)));
     }
 
     /**
@@ -92,7 +92,7 @@ class RightsRepository
      */
     public function findElementTargetEntities()
     {
-        return DataManager::retrieves(ElementTargetEntity::class)->as_array();
+        return DataManager::retrieves(ElementTargetEntity::class);
     }
 
     /**
@@ -102,7 +102,7 @@ class RightsRepository
      */
     public function findBlockTypeTargetEntities()
     {
-        return DataManager::retrieves(BlockTypeTargetEntity::class)->as_array();
+        return DataManager::retrieves(BlockTypeTargetEntity::class);
     }
 
     /**

@@ -88,7 +88,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                         );
                         $course_modules = DataManager::retrieves(
                             CourseTool::class, new DataClassRetrievesParameters($condition)
-                        )->as_array();
+                        );
 
                         $course_module_id = $course_modules[0]->get_id();
                         $new_parent_id =

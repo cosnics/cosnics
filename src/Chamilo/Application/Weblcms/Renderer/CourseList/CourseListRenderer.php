@@ -73,7 +73,7 @@ class CourseListRenderer
     protected function display_courses()
     {
         $html = array();
-        $courses = $this->retrieve_courses()->as_array();
+        $courses = $this->retrieve_courses();
 
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
 
@@ -176,7 +176,7 @@ class CourseListRenderer
         if (!isset($this->tools))
         {
             $this->tools =
-                DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters())->as_array();
+                DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
         }
 
         return $this->tools;

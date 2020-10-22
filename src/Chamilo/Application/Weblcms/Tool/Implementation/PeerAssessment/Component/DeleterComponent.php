@@ -72,7 +72,7 @@ class DeleterComponent extends Manager
 
                 $statuses = DataManager::retrieves(
                     WeblcmsPeerAssessmentAttemptStatusTracker::class,
-                    new DataClassRetrievesParameters($condition))->as_array();
+                    new DataClassRetrievesParameters($condition));
 
                 // delete scores and feedaback
                 foreach ($statuses as $status)

@@ -36,7 +36,7 @@ class XmlGroupMenuFeedComponent extends Manager
                 $condition, null, null,
                 new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
             )
-        )->as_array();
+        );
 
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL, '<tree>' . PHP_EOL;

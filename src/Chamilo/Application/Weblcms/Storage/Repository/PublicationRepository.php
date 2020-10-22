@@ -131,12 +131,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function findPublicationsByCondition(Condition $condition)
     {
-        $result = new DataClassRecordResultSet(
-            ContentObjectPublication::class,
-            DataManager::retrieve_content_object_publications($condition)
-        );
-
-        return $result->as_array();
+        return DataManager::retrieve_content_object_publications($condition);
     }
 
     /**
@@ -231,12 +226,10 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        $result = new DataClassRecordResultSet(
+        return new DataClassRecordResultSet(
             ContentObjectPublication::class,
             DataManager::retrieve_content_object_publications($condition)
         );
-
-        return $result->as_array();
     }
 
     /**
@@ -260,8 +253,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     public function findTargetUsersForPublication(ContentObjectPublication $publication)
     {
-        return DataManager::retrieve_publication_target_users($publication->get_id(), $publication->get_course_id())
-            ->as_array();
+        return DataManager::retrieve_publication_target_users($publication->get_id(), $publication->get_course_id());
     }
 
     /**
@@ -286,7 +278,7 @@ class PublicationRepository implements PublicationRepositoryInterface
         return DataManager::retrieve_publication_target_course_groups(
             $publication->get_id(),
             $publication->get_course_id()
-        )->as_array();
+        );
     }
 
     /**
@@ -301,7 +293,7 @@ class PublicationRepository implements PublicationRepositoryInterface
         return DataManager::retrieve_publication_target_platform_groups(
             $publication->get_id(),
             $publication->get_course_id()
-        )->as_array();
+        );
     }
 
     /**
@@ -388,7 +380,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {
-        return DataManager::retrieves(ContentObjectPublicationCategory::class, $condition)->as_array();
+        return DataManager::retrieves(ContentObjectPublicationCategory::class, $condition);
     }
 
     /**

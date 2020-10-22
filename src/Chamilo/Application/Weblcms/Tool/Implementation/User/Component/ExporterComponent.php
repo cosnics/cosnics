@@ -139,7 +139,7 @@ class ExporterComponent extends Manager
                 new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             )
-        )->as_array();
+        );
 
         $users = array();
         foreach ($individualUsers as $individualUserRecord)
@@ -212,7 +212,7 @@ class ExporterComponent extends Manager
                 User::class, new DataClassRetrievesParameters(
                     $condition, null, null, $orderBy
                 )
-            )->as_array();
+            );
 
             foreach ($groupUsers as $groupUser)
             {

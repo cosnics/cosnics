@@ -58,6 +58,6 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
 
         return CourseGroupDataManager::retrieves(
             CourseGroup::class,
-            new DataClassRetrievesParameters($condition))->as_array();
+            new DataClassRetrievesParameters($condition));
     }
 }

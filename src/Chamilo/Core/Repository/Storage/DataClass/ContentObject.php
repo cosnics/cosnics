@@ -1005,7 +1005,7 @@ class ContentObject extends CompositeDataClass
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
 
-        return DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
+        return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
     }
 
     /**
@@ -1040,7 +1040,7 @@ class ContentObject extends CompositeDataClass
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
             $this->attachments[$type] =
-                DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
+                DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
 
         return $this->attachments[$type];
@@ -1124,7 +1124,7 @@ class ContentObject extends CompositeDataClass
     {
         if (!is_array($this->versions))
         {
-            $this->versions = DataManager::retrieve_content_object_versions($this)->as_array();
+            $this->versions = DataManager::retrieve_content_object_versions($this);
         }
 
         if ($include_last)
@@ -1269,7 +1269,7 @@ class ContentObject extends CompositeDataClass
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
 
-        return DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
+        return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
     }
 
     /**
@@ -1301,7 +1301,7 @@ class ContentObject extends CompositeDataClass
             $parameters = new DataClassRetrievesParameters(
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
-            $this->includes = DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
+            $this->includes = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
 
         return $this->includes;

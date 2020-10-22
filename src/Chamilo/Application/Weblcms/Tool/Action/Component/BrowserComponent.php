@@ -586,7 +586,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($publications_resultset)
             {
-                $this->publications = $publications_resultset->as_array();
+                $this->publications = $publications_resultset;
             }
         }
 

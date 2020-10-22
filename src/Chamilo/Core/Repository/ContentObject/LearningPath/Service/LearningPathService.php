@@ -67,8 +67,7 @@ class LearningPathService
     {
         /** @var LearningPath[] $learningPaths */
         $learningPaths =
-            $this->contentObjectRepository->findAll(LearningPath::class, new DataClassRetrievesParameters())
-                ->as_array();
+            $this->contentObjectRepository->findAll(LearningPath::class, new DataClassRetrievesParameters());
 
         return $learningPaths;
     }

@@ -25,7 +25,7 @@ class DetailsComponent extends Manager
         $availableGroups =
             \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_subscribed_platform_groups(
                 [$this->get_course_id()]
-            )->as_array();
+            );
 
         if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {

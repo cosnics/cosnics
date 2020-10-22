@@ -552,7 +552,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_user_course_groups($user_id, $course_id)
     {
-        $course_groups = self::retrieve_course_groups_from_user($user_id, $course_id)->as_array();
+        $course_groups = self::retrieve_course_groups_from_user($user_id, $course_id);
 
         $course_groups_recursive = array();
 

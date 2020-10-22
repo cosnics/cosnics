@@ -159,7 +159,7 @@ class CourseManagementRights extends WeblcmsRights
                 return false;
             }
             
-            $groups = $base_group->get_parents(true)->as_array();
+            $groups = $base_group->get_parents(true);
             $group_ids = array();
             foreach ($groups as $group)
             {

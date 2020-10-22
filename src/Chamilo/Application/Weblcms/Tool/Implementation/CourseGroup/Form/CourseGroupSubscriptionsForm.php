@@ -103,7 +103,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
     function setDefaults($defaultValues = array(), $filter = null)
     {
-        $courseGroupUsers = DataManager::retrieve_course_group_users($this->course_group->get_id())->as_array();
+        $courseGroupUsers = DataManager::retrieve_course_group_users($this->course_group->get_id());
 
         usort(
             $courseGroupUsers, function ($courseGroupUser1, $courseGroupUser2) {
@@ -284,7 +284,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             $parameters = new DataClassRetrievesParameters($condition);
             $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 User::class, $parameters
-            )->as_array();
+            );
             $succes &= $this->course_group->subscribe_users($users_to_add);
 
             foreach ($users_to_add as $user)
