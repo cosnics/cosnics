@@ -76,7 +76,7 @@
             border-radius: 4px;
             color: #fff;
             font-size: 1.3rem;
-            line-height: 2;
+            /*line-height: 2;*/
             margin-left: 10px;
         }
         .btn-logout:hover, .btn-logout:focus, .btn-logout:active {
@@ -219,12 +219,33 @@
             font-size: 1.5rem;
             line-height: 1.5;
         }
+
+        .exam-metadata {
+            margin-bottom: 1rem;
+        }
+
+        .exam-list-item2 {
+            display: flex;
+        }
+
+        .exam-info {
+            width: 80%;
+        }
+
+        .btn-action2 {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .exam-timestamp {
+            color: #406e8e;
+        }
     </style>
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="header-title">HOGENT Examination Tool</div>
-                <div class="user">Voornaam Achternaam<button class="btn-logout">Log out</button></div>
+                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-default btn-logout">Log out</button></div>
             </div>
         </div>
     </header>
@@ -233,18 +254,31 @@
             <div class="main-content mod-exams">
                 <h1 class="sr-only">Examens vandaag</h1>
                 <ul class="exam-list">
-                    <li class="exam-list-item">
-                        <div class="exam-title">Titel: <strong>Filosofie 1</strong></div>
-                        <div>
-                            <div class="exam-time exam-start-time">Starttijd: 8.30</div>
-                            <div class="exam-time exam-end-time">Eindtijd: 10.30</div>
+                    {% for EXAM in EXAMS %}
+                    <li class="exam-list-item exam-list-item2">
+                        <div class="exam-info">
+                            <div class="exam-title"><strong>{{ EXAM.title }}</strong></div>
+                            <div class="exam-metadata">
+                                {{ EXAM.course_title }} ({{ EXAM.visual_code }}) -
+                                &nbsp;{{ EXAM.firstname }}&nbsp;{{ EXAM.lastname }}
+                            </div>
+                            <div>
+                                <div class="exam-time">
+                                    Van
+                                    <span class="exam-timestamp"><strong>{{ EXAM.start_time|date("d/m/Y - H:i") }}</strong></span>
+                                    tot
+                                    <span class="exam-timestamp"><strong>{{ EXAM.end_time|date("d/m/Y - H:i") }}</strong></span>
+                                </div>
+                            </div>
                         </div>
-                        <div>Titularis: Jenny Doe</div>
-                        <form action="/page1" method="post">
-                            <input type="text" class="exam-code" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                            <button class="btn btn-action mod-access">Starten</button>
-                        </form>
+                        <div class="exam-form">
+                            <form action="/page1" method="post">
+                                <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
+                                <button class="btn btn-action mod-access btn-action2">Starten</button>
+                            </form>
+                        </div>
                     </li>
+                    {% endfor %}
                     <li class="exam-list-item">
                         <div class="exam-title">Titel: <strong>Filosofie 2</strong></div>
                         <div>
@@ -254,7 +288,7 @@
                         <div>Titularis: Jenny Doe</div>
                         <form action="/page1" method="post">
                             <input type="text" class="exam-code" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                            <button class="btn btn-action mod-access">Starten</button>
+                            <button type="submit" class="btn btn-action mod-access">Starten</button>
                         </form>
                     </li>
                 </ul>

@@ -142,7 +142,7 @@ class ExamAssignmentRepository
         $properties->add(new PropertyConditionVariable(Assignment::class, Assignment::PROPERTY_START_TIME));
         $properties->add(new PropertyConditionVariable(Assignment::class, Assignment::PROPERTY_END_TIME));
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
-        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $properties->add(new FixedPropertyConditionVariable(Course::class, Course::PROPERTY_TITLE, 'course_title'));
         $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));

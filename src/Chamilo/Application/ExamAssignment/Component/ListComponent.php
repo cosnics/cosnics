@@ -15,16 +15,24 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 class ListComponent extends Manager
 {
-
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     function run()
     {
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-     var_dump($this->getExamAssignmentService()->getCurrentExamAssignmentsForUser($this->getUser()));
+        $exams = $this->getExamAssignmentService()->getCurrentExamAssignmentsForUser($this->getUser());
 
         return $this->getTwig()->render(
             Manager::context() . ':List.html.twig',
-            ['HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer()]
+            [
+                'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'USER' => $this->getUser(),
+                'EXAMS' => $exams
+            ]
         );
     }
 
