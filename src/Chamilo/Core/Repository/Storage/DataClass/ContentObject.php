@@ -830,13 +830,24 @@ class ContentObject extends CompositeDataClass
 
     /**
      * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
+     * @throws \Exception
      */
     public function getPublicationAggregator()
     {
-        $containerBuilder = DependencyInjectionContainerBuilder::getInstance();
-        $container = $containerBuilder->createContainer();
+        return $this->getService(PublicationAggregator::class);
+    }
 
-        return $container->get(PublicationAggregator::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**
@@ -853,9 +864,7 @@ class ContentObject extends CompositeDataClass
      */
     public function getTemplateRegistrationConsulter()
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            TemplateRegistrationConsulter::class
-        );
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     /**
@@ -1292,8 +1301,7 @@ class ContentObject extends CompositeDataClass
             $parameters = new DataClassRetrievesParameters(
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
-            $this->includes =
-                DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
+            $this->includes = DataManager::retrieve_content_objects(ContentObject::class, $parameters)->as_array();
         }
 
         return $this->includes;

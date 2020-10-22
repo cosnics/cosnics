@@ -112,7 +112,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
         $entityService = new EntityService();
 
-        return $workspaceService->getWorkspaceFavouritesByUser($entityService, $user);
+        return $workspaceService->getWorkspaceFavouritesByUserFast($user);
     }
 
     /**

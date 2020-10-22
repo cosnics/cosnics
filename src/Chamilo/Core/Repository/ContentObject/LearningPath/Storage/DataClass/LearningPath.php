@@ -20,103 +20,17 @@ use InvalidArgumentException;
  */
 class LearningPath extends ContentObject implements ComplexContentObjectSupport
 {
-    const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
-    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
-    const AUTOMATIC_NUMBERING_NONE = 'none';
     const AUTOMATIC_NUMBERING_DIGITS = 'digits';
+
+    const AUTOMATIC_NUMBERING_NONE = 'none';
+
+    const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
+
+    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
 
     // Currently not implemented options
     // const AUTOMATIC_NUMBERING_ALPHABETICAL = 'alphabetical';
     // const AUTOMATIC_NUMBERING_MIX = 'mix';
-
-    /**
-     *
-     * @return string[]
-     */
-    public static function get_additional_property_names()
-    {
-        return array(self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
-    }
-
-    /**
-     * Returns the automatic numbering
-     *
-     * @return string
-     */
-    public function getAutomaticNumbering()
-    {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING);
-    }
-
-    /**
-     * Returns whether or not the automatic numbering is activated for this learning path
-     *
-     * @return bool
-     */
-    public function usesAutomaticNumbering()
-    {
-        if (!in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
-        {
-            return false;
-        }
-
-        return $this->getAutomaticNumbering() != self::AUTOMATIC_NUMBERING_NONE;
-    }
-
-    /**
-     * Sets the automatic numbering
-     *
-     * @param $automaticNumberingOption
-     */
-    public function setAutomaticNumbering($automaticNumberingOption)
-    {
-        if (!in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
-        {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'The given automaticNumberingOption must be one of %s',
-                    explode(',', self::getAutomaticNumberingOptions())
-                )
-            );
-        }
-
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
-    }
-
-    /**
-     * Returns a list of automatic numbering options
-     *
-     * @return string[]
-     */
-    public static function getAutomaticNumberingOptions()
-    {
-        return array(self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS);
-    }
-
-    /**
-     * Sets whether or not the default traversing order should be enforced
-     *
-     * @param bool $enforceDefaultTraversingOrder
-     */
-    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
-    {
-        if (!is_bool($enforceDefaultTraversingOrder))
-        {
-            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
-        }
-
-        $this->set_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
-    }
-
-    /**
-     * Returns whether or not the default traversing order is enforced
-     *
-     * @return bool
-     */
-    public function enforcesDefaultTraversingOrder()
-    {
-        return (bool) $this->get_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
-    }
 
     /**
      * Creates the LearningPath and create a TreeNodeDataRecord
@@ -140,18 +54,6 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         return true;
     }
 
-    public function update($trueUpdate = true)
-    {
-        if (!parent::update($trueUpdate))
-        {
-            return false;
-        }
-
-        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
-
-        return true;
-    }
-
     /**
      * Delete a LearningPath and all of it's node data
      *
@@ -170,25 +72,75 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
+     * Returns whether or not the default traversing order is enforced
      *
-     * @return object | \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     * @return bool
      */
-    protected function getTreeNodeDataService()
+    public function enforcesDefaultTraversingOrder()
     {
-        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return (bool) $this->get_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+    }
 
-        return $serviceContainer->get(TreeNodeDataService::class);
+    /**
+     * Returns the automatic numbering
+     *
+     * @return string
+     */
+    public function getAutomaticNumbering()
+    {
+        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING);
+    }
+
+    /**
+     * Returns a list of automatic numbering options
+     *
+     * @return string[]
+     */
+    public static function getAutomaticNumberingOptions()
+    {
+        return array(self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS);
     }
 
     /**
      *
-     * @return object |  \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     * @throws \Exception
      */
     protected function getLearningPathService()
     {
-        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(LearningPathService::class);
+    }
 
-        return $serviceContainer->get(LearningPathService::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     * @throws \Exception
+     */
+    protected function getTreeNodeDataService()
+    {
+        return $this->getService(TreeNodeDataService::class);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public static function get_additional_property_names()
+    {
+        return array(self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
 
     /**
@@ -220,8 +172,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
                 continue;
             }
 
-            if ($parentRegistration[Registration::PROPERTY_TYPE] ==
-                Manager::context() . '\ContentObject')
+            if ($parentRegistration[Registration::PROPERTY_TYPE] == Manager::context() . '\ContentObject')
             {
                 $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                     $registration[Registration::PROPERTY_CONTEXT], 6
@@ -232,5 +183,67 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         }
 
         return $types;
+    }
+
+    /**
+     * Sets the automatic numbering
+     *
+     * @param $automaticNumberingOption
+     */
+    public function setAutomaticNumbering($automaticNumberingOption)
+    {
+        if (!in_array($automaticNumberingOption, self::getAutomaticNumberingOptions()))
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The given automaticNumberingOption must be one of %s',
+                    explode(',', self::getAutomaticNumberingOptions())
+                )
+            );
+        }
+
+        $this->set_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
+    }
+
+    /**
+     * Sets whether or not the default traversing order should be enforced
+     *
+     * @param bool $enforceDefaultTraversingOrder
+     */
+    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
+    {
+        if (!is_bool($enforceDefaultTraversingOrder))
+        {
+            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+        }
+
+        $this->set_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+    }
+
+    public function update($trueUpdate = true)
+    {
+        if (!parent::update($trueUpdate))
+        {
+            return false;
+        }
+
+        $this->getTreeNodeDataService()->updateTreeNodeDataForLearningPath($this);
+
+        return true;
+    }
+
+    /**
+     * Returns whether or not the automatic numbering is activated for this learning path
+     *
+     * @return bool
+     */
+    public function usesAutomaticNumbering()
+    {
+        if (!in_array($this->getAutomaticNumbering(), $this->getAutomaticNumberingOptions()))
+        {
+            return false;
+        }
+
+        return $this->getAutomaticNumbering() != self::AUTOMATIC_NUMBERING_NONE;
     }
 }

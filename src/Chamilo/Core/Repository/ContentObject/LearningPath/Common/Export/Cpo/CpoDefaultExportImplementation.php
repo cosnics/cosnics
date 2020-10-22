@@ -86,23 +86,34 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
     /**
      *
-     * @return TreeNodeDataService
+     * @return ContentObjectRepository
+     * @throws \Exception
      */
-    protected function getTreeNodeDataService()
+    protected function getContentObjectRepository()
     {
-        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(ContentObjectRepository::class);
+    }
 
-        return $serviceContainer->get(TreeNodeDataService::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**
      *
-     * @return ContentObjectRepository
+     * @return TreeNodeDataService
+     * @throws \Exception
      */
-    protected function getContentObjectRepository()
+    protected function getTreeNodeDataService()
     {
-        $serviceContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $serviceContainer->get(ContentObjectRepository::class);
+        return $this->getService(TreeNodeDataService::class);
     }
 }

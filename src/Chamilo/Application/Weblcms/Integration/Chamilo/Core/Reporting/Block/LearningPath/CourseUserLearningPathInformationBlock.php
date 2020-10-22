@@ -108,10 +108,8 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication::PROPERTY_ID];
 
             $params_detail = $params;
-            $params_detail[Manager::PARAM_ACTION] =
-                Manager::ACTION_REPORTING;
-            $params_detail[Manager::PARAM_REPORTING_USER_ID] =
-                $this->get_user_id();
+            $params_detail[Manager::PARAM_ACTION] = Manager::ACTION_REPORTING;
+            $params_detail[Manager::PARAM_REPORTING_USER_ID] = $this->get_user_id();
 
             $link =
                 '<a href="' . $this->get_parent()->get_url($params_detail) . '" target="_blank">' . $glyph->render() .
@@ -158,24 +156,33 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     /**
      *
      * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @throws \Exception
      */
     protected function getDataClassRepository()
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
     }
 
     /**
      * Returns the LearningPathService service
      *
-     * @return LearningPathService | object
+     * @return LearningPathService
+     * @throws \Exception
      */
     protected function getLearningPathService()
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(LearningPathService::class);
+    }
 
-        return $container->get(LearningPathService::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get($serviceName);
     }
 
     /**

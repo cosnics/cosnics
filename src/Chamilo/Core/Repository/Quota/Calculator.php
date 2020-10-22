@@ -320,10 +320,8 @@ class Calculator
     {
         if (!isset($this->calculatorCacheService))
         {
-            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                ConfigurablePathBuilder::class
-            );
-            $this->calculatorCacheService = new CalculatorCacheService($configurablePathBuilder);
+            $this->calculatorCacheService =
+                new CalculatorCacheService($this->getService(ConfigurablePathBuilder::class));
         }
 
         return $this->calculatorCacheService;
@@ -538,9 +536,20 @@ class Calculator
      */
     public function getRightsService()
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(RightsService::class);
+    }
 
-        return $container->get(RightsService::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**

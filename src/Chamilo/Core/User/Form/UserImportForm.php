@@ -173,6 +173,17 @@ class UserImportForm extends FormValidator
     }
 
     /**
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     * @throws \Exception
+     */
+    protected function getConfigurablePathBuilder()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurablePathBuilder::class
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
@@ -274,13 +285,9 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $configurablePathBuilder =
-                        DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                            ConfigurablePathBuilder::class
-                        );
-
-                    $localSetting =
-                        new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
+                    $localSetting = new LocalSetting(
+                        new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
+                    );
                     $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
 
                     $send_mail = intval($values['mail']['send_mail']);
@@ -364,13 +371,9 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $configurablePathBuilder =
-                        DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                            ConfigurablePathBuilder::class
-                        );
-
-                    $localSetting =
-                        new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
+                    $localSetting = new LocalSetting(
+                        new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
+                    );
                     $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
                 }
             }
