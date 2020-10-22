@@ -230,43 +230,50 @@
     </header>
     <main>
         <div class="container">
-            <div class="main-content mod-exams">
-                <h1 class="sr-only">Examens vandaag</h1>
-                <ul class="exam-list">
-                    <li class="exam-list-item">
-                        <div class="exam-title">Titel: <strong>Filosofie 1</strong></div>
-                        <div>
-                            <div class="exam-time exam-start-time">Starttijd: 8.30</div>
-                            <div class="exam-time exam-end-time">Eindtijd: 10.30</div>
+            <div class="main-content mod-current-exam">
+                <h1 class="current-exam-title">Examen Filosofie 1</h1>
+                <div class="current-exam-info">
+                    <ul class="current-exam-info-main">
+                        <li>Cursus: Filosofie 1</li>
+                        <li>Titularis: Jenny Doe</li>
+                        <li>Opdracht: Titel opdracht</li>
+                    </ul>
+                    <div class="current-exam-info-time">
+                        <ul class="current-exam-info-time-start">
+                            <li>Starttijd: 8:30</li>
+                            <li>Duur: 120 minuten</li>
+                        </ul>
+                        <ul class="current-exam-info-time-end">
+                            <li class="time-item"><span>Tijd tot</span> <span class="time">10:30</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="current-exam-main">
+                    <div class="current-exam-essentials">
+                        <div class="current-exam-files-title"><strong>Bestanden:</strong></div>
+                        <ul class="current-exam-files-download">
+                            <li><a href="#">Examenopdracht.pdf</a></li>
+                            <li><a href="#">Invulformulier.docx</a></li>
+                            <li><a href="#">Bijlage 1.pdf</a></li>
+                            <li><a href="#">Bijlage 2.pdf</a></li>
+                        </ul>
+                    </div>
+                    <div class="current-exam-upload-section">
+                        <div class="current-exam-upload-title"><strong style="">Indienen:</strong></div>
+                        <div class="current-exam-upload-area">
+                            Sleep de gevraagde bestanden in dit kader.
                         </div>
-                        <div>Titularis: Jenny Doe</div>
-                        <form action="/page1" method="post">
-                            <input type="text" class="exam-code" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                            <button class="btn btn-action mod-access">Starten</button>
-                        </form>
-                    </li>
-                    <li class="exam-list-item">
-                        <div class="exam-title">Titel: <strong>Filosofie 2</strong></div>
-                        <div>
-                            <div class="exam-time exam-start-time">Starttijd: 10.30</div>
-                            <div class="exam-time exam-end-time">Eindtijd: 12.00</div>
-                        </div>
-                        <div>Titularis: Jenny Doe</div>
-                        <form action="/page1" method="post">
-                            <input type="text" class="exam-code" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                            <button class="btn btn-action mod-access">Starten</button>
-                        </form>
-                    </li>
-                </ul>
+                        <!--            <form action="/file-upload" class="dropzone">
+                                      <div class="fallback">
+                                        <input name="file" type="file" multiple />
+                                      </div>
+                                    </form>-->
+
+                        <div class="current-exam-upload-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
+                        <button class="btn btn-action mod-upload">Dien examenopdracht in</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="container">
-            <div class="privacy-policy">
-                <h1 class="privacy-policy-title">Privacy</h1>
-                <p class="privacy-policy-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel eros eu ipsum rhoncus sollicitudin. Mauris elementum nisl et felis scelerisque blandit. In hac habitasse platea dictumst. Suspendisse elementum vitae quam nec congue. Vestibulum in nisi ante. Nullam vitae mi est. Quisque facilisis viverra urna, nec mattis nulla. Quisque sollicitudin turpis et elementum vestibulum. Morbi quis sodales nisi, nec feugiat urna. Duis mattis enim vestibulum, consectetur orci vel, finibus risus. Integer eu orci risus. Etiam a tempus nulla, quis ultrices mauris.</p>
-            </div>
-        </div>
-    </footer>
 {{ FOOTER|raw }}

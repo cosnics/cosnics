@@ -6,13 +6,13 @@ use Chamilo\Application\ExamAssignment\Manager;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
- * Class ListComponent
+ * Class EntryComponent
  * @package Chamilo\Application\ExamAssignment\Component
  *
  * @author - Sven Vanpoucke - Hogeschool Gent
  * @author - Stefan Gabriëls - Hogeschool Gent
  */
-class ListComponent extends Manager
+class EntryComponent extends Manager
 {
 
     function run()
@@ -20,7 +20,7 @@ class ListComponent extends Manager
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         return $this->getTwig()->render(
-            Manager::context() . ':List.html.twig',
+            Manager::context() . ':Entry.html.twig',
             ['HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer()]
         );
     }
