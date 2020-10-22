@@ -577,7 +577,7 @@ EOT;
             ContentObject::PROPERTY_TITLE,
             Translation::get('Title', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             true,
-            array('id' => 'title', 'class' => 'form-control')
+            array('id' => 'title', 'class' => 'form-control', 'autocomplete' => 'off')
         );
 
         if ($this->allows_category_selection())
