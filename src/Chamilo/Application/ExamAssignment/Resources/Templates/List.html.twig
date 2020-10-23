@@ -240,7 +240,7 @@
             margin-left: -5px;
         }
         .exam-timestamp {
-            background-color: #f9f9f9;
+            background-color: #fcfcfc;
             border: 1px solid #ddd;
             border-radius: 4px;
             /*color: #406e8e;*/
@@ -299,7 +299,7 @@
                             </div>
                         </div>
                         <div class="exam-form">
-                            <form action="/page1" method="post">
+                            <form action="{{ ENTRY_URL.replace({'__EXAMID__': EXAM.publication_id}) }}" method="post">
                                 <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
                                 <button class="btn btn-action mod-access">Starten</button>
                             </form>

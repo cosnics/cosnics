@@ -15,6 +15,9 @@ abstract class Manager extends Application
     const ACTION_LIST = 'List';
     const ACTION_VIEW_ASSIGNMENT = 'ViewAssignment';
     const ACTION_RESULT = 'Result';
+    const ACTION_ENTRY = 'Entry';
+
+    const PARAM_EXAM = 'Exam';
 
     const DEFAULT_ACTION = self::ACTION_LIST;
 
