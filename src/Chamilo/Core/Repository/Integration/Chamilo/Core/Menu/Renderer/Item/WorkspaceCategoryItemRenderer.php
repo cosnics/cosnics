@@ -104,7 +104,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      * @todo This shouldn't really be here like this
      */
     protected function findWorkspaces(User $user)
@@ -184,9 +184,9 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
         $html[] = '<ul class="dropdown-menu">';
 
-        if ($workspaces->size())
+        if ($workspaces->count())
         {
-            while ($workspace = $workspaces->next_result())
+            foreach($workspaces as $workspace)
             {
                 $workspaceItem = new WorkspaceItem();
                 $workspaceItem->setWorkspaceId($workspace->getId());

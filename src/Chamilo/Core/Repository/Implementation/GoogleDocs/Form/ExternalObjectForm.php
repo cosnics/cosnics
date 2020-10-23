@@ -158,7 +158,7 @@ class ExternalObjectForm extends FormValidator
     {
         $folders = $this->application->get_external_repository_manager_connector()->retrieve_my_folders('root');
         $new_folders = array();
-        while ($folder = $folders->next_result())
+        foreach($folders as $folder)
         {
             $new_folders[$folder->getId()] = $folder->getTitle();
         }

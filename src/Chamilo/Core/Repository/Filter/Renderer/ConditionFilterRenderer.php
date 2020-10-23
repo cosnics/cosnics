@@ -268,7 +268,7 @@ class ConditionFilterRenderer extends FilterRenderer
                 )
             );
 
-            while ($user_view_rel_content_object = $user_view_rel_content_objects->next_result())
+            foreach($user_view_rel_content_objects as $user_view_rel_content_object)
             {
                 $visible_template_ids[] = $user_view_rel_content_object->get_content_object_template_id();
             }

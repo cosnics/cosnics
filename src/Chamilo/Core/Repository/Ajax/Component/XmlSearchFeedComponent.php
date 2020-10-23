@@ -49,7 +49,7 @@ class XmlSearchFeedComponent extends Manager
             ContentObject::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($lo = $objects->next_result())
+        foreach($objects as $lo)
         {
             echo '<li onclick="fill(\'' . $lo->get_title() . '\');">';
             echo $lo->get_title();

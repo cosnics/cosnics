@@ -65,7 +65,7 @@ class CourseCategoryMenu extends HtmlMenu
         $usercategories = DataManager::retrieve_course_categories_ordered_by_name();
 
         $categories = array();
-        while ($category = $usercategories->next_result())
+        foreach($usercategories as $category)
         {
             $categories[$category->get_parent()][] = $category;
         }

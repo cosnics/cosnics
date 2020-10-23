@@ -22,7 +22,7 @@ class NoOfUsersPictureBlock extends Block
         $picture[$picturetext] = 0;
         $picture[$nopicturetext] = 0;
         
-        while ($user = $users->next_result())
+        foreach($users as $user)
         {
             if ($user->get_picture_uri())
             {

@@ -237,7 +237,7 @@ class MoverComponent extends Manager
         $categories = DataManager::retrieve_categories($condition);
 
         $tree = array();
-        while ($cat = $categories->next_result())
+        foreach($categories as $cat)
         {
             $this->tree[$cat->get_id()] = str_repeat('--', $this->level) . ' ' . $cat->get_name();
 

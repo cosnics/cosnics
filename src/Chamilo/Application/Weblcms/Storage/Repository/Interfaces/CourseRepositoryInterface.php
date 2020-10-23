@@ -184,7 +184,7 @@ interface CourseRepositoryInterface
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findAllUsersFromCourse(Course $course);
 }

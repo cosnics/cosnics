@@ -82,7 +82,7 @@ class ResultsDeleterComponent extends Manager
                 QuestionAttempt::class,
                 new DataClassRetrievesParameters($condition));
 
-            while ($question_attempt = $items->next_result())
+            foreach($items as $question_attempt)
             {
                 $question_attempt->delete();
             }
@@ -103,7 +103,7 @@ class ResultsDeleterComponent extends Manager
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($assessment_attempt = $items->next_result())
+        foreach($items as $assessment_attempt)
         {
             $this->delete_user_assessment_results($assessment_attempt);
         }

@@ -1,60 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Link;
 
+use ArrayIterator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 class LinkTableDataProvider extends DataClassTableDataProvider
 {
-
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        if ($this->get_table()->get_type() == LinkTable::TYPE_PUBLICATIONS)
-        {
-            return $this->get_component()->getContentObject()->get_publications($count, $offset, $order_property);
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_PARENTS)
-        {
-            return $this->get_component()->getContentObject()->get_parents($order_property, $offset, $count);
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_CHILDREN)
-        {
-            return $this->get_component()->getContentObject()->get_children($order_property, $offset, $count);
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_ATTACHED_TO)
-        {
-            return new ArrayResultSet(
-                $this->get_component()->getContentObject()->get_attachers($order_property, $offset, $count)
-            );
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_ATTACHES)
-        {
-            return new ArrayResultSet(
-                $this->get_component()->getContentObject()->get_attachments(
-                    ContentObject::ATTACHMENT_NORMAL, $order_property, $offset, $count
-                )
-            );
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_INCLUDED_IN)
-        {
-            return new ArrayResultSet(
-                $this->get_component()->getContentObject()->get_includers($order_property, $offset, $count)
-            );
-        }
-
-        if ($this->get_table()->get_type() == LinkTable::TYPE_INCLUDES)
-        {
-            return new ArrayResultSet(
-                $this->get_component()->getContentObject()->get_includes($order_property, $offset, $count)
-            );
-        }
-    }
 
     public function count_data($condition)
     {
@@ -94,5 +46,53 @@ class LinkTableDataProvider extends DataClassTableDataProvider
         }
 
         return 0;
+    }
+
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        if ($this->get_table()->get_type() == LinkTable::TYPE_PUBLICATIONS)
+        {
+            return $this->get_component()->getContentObject()->get_publications($count, $offset, $order_property);
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_PARENTS)
+        {
+            return $this->get_component()->getContentObject()->get_parents($order_property, $offset, $count);
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_CHILDREN)
+        {
+            return $this->get_component()->getContentObject()->get_children($order_property, $offset, $count);
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_ATTACHED_TO)
+        {
+            return new ArrayIterator(
+                $this->get_component()->getContentObject()->get_attachers($order_property, $offset, $count)
+            );
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_ATTACHES)
+        {
+            return new ArrayIterator(
+                $this->get_component()->getContentObject()->get_attachments(
+                    ContentObject::ATTACHMENT_NORMAL, $order_property, $offset, $count
+                )
+            );
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_INCLUDED_IN)
+        {
+            return new ArrayIterator(
+                $this->get_component()->getContentObject()->get_includers($order_property, $offset, $count)
+            );
+        }
+
+        if ($this->get_table()->get_type() == LinkTable::TYPE_INCLUDES)
+        {
+            return new ArrayIterator(
+                $this->get_component()->getContentObject()->get_includes($order_property, $offset, $count)
+            );
+        }
     }
 }

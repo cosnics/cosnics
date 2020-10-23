@@ -112,7 +112,7 @@ class HomeService
         
         $elementIdentifierMap = array();
         
-        while ($defaultElement = $defaultElementResultSet->next_result())
+        foreach($defaultElementResultSet as $defaultElement)
         {
             if ($this->elementRightsService->canUserViewElement($user, $defaultElement))
             {
@@ -214,7 +214,7 @@ class HomeService
             
             $elementsResultSet = $this->getElementsByUserIdentifier($homeUserIdentifier);
             
-            while ($element = $elementsResultSet->next_result())
+            foreach($elementsResultSet as $element)
             {
                 $this->elements[$element->get_type()][$element->getParentId()][] = $element;
             }

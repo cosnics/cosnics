@@ -34,7 +34,7 @@ class CreateComponent extends CourseFormActionComponent
         $courseManagementRights = CourseManagementRights::getInstance();
         $courseTypes = DataManager::retrieve_active_course_types();
 
-        while ($courseType = $courseTypes->next_result())
+        foreach($courseTypes as $courseType)
         {
             if ($courseManagementRights->is_allowed(
                 CourseManagementRights::CREATE_COURSE_RIGHT,

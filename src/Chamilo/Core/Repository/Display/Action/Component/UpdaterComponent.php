@@ -77,7 +77,7 @@ class UpdaterComponent extends Manager
                         ComplexContentObjectItem::class, $parameters
                     );
                     $failures = 0;
-                    while ($child = $children->next_result())
+                    foreach($children as $child)
                     {
                         $child->set_parent($new_id);
                         if (!$child->update())

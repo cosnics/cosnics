@@ -189,7 +189,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($cat = $categories->next_result())
+        foreach($categories as $cat)
         {
             if ($is_course_admin || WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                     WeblcmsRights::ADD_RIGHT, $cat->get_id(), WeblcmsRights::TYPE_COURSE_CATEGORY,

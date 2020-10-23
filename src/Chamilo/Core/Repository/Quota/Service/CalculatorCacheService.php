@@ -78,7 +78,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
             $totalQuota = 0;
 
-            while ($user = $users->next_result())
+            foreach($users as $user)
             {
                 $calculator = new Calculator($user);
                 $totalQuota += $calculator->getMaximumUserDiskQuota();

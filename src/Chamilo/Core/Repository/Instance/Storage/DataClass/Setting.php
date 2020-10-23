@@ -204,7 +204,7 @@ class Setting extends DataClass
             new StaticConditionVariable($external_id));
         $settings = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
         
-        while ($setting = $settings->next_result())
+        foreach($settings as $setting)
         {
             self::$settings[$external_id][$setting->get_variable()] = $setting->get_value();
         }

@@ -82,6 +82,11 @@ class CategoryTreeMenu extends GenericTree
         return $this->get_connector()->retrieve_folder($node_id);
     }
 
+    /**
+     * @param int $parent_node_id
+     *
+     * @return \ArrayIterator
+     */
     public function get_node_children($parent_node_id)
     {
         return $this->get_connector()->retrieve_my_folders($parent_node_id);
@@ -89,7 +94,7 @@ class CategoryTreeMenu extends GenericTree
 
     public function node_has_children($parent_node_id)
     {
-        return $this->get_node_children($parent_node_id)->size() > 0;
+        return $this->get_node_children($parent_node_id)->count() > 0;
     }
 
     public function get_search_url()

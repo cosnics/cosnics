@@ -45,7 +45,7 @@ abstract class ReportingBlock
 
     /**
      *
-     * @return \core\reporting\ReportingData
+     * @return \Chamilo\Core\Reporting\ReportingData
      */
     abstract public function retrieve_data();
 

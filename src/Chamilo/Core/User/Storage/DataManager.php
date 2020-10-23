@@ -461,7 +461,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_all_users()
     {
-        while ($user = self::retrieves(User::class, new DataClassRetrievesParameters())->next_result())
+        foreach (self::retrieves(User::class, new DataClassRetrievesParameters()) as $user)
         {
             $user->delete();
         }

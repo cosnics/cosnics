@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress;
 
+use ArrayIterator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -20,21 +19,6 @@ class TreeNodeProgressTableDataProvider extends TableDataProvider
      * @var array
      */
     protected $data;
-
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param OrderBy[] $order_property
-     *
-     * @return ResultSet
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return new ArrayResultSet(array_slice($this->getAllData(), $offset, $count));
-    }
 
     /**
      * Counts the data
@@ -55,7 +39,7 @@ class TreeNodeProgressTableDataProvider extends TableDataProvider
      */
     protected function getAllData()
     {
-        if (! isset($this->data))
+        if (!isset($this->data))
         {
             /** @var TreeNode $treeNode */
             $treeNode = $this->get_component()->getCurrentTreeNode();
@@ -64,5 +48,20 @@ class TreeNodeProgressTableDataProvider extends TableDataProvider
         }
 
         return $this->data;
+    }
+
+    /**
+     * Returns the data as a resultset
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     *
+     * @return \ArrayIterator
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        return new ArrayIterator(array_slice($this->getAllData(), $offset, $count));
     }
 }

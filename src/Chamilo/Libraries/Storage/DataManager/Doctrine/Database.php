@@ -8,10 +8,8 @@ use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
@@ -25,11 +23,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Type;
 use Exception;
 use PDO;
 use PDOException;
@@ -908,9 +901,7 @@ class Database
      */
     public function records($class, RecordRetrievesParameters $parameters)
     {
-        return new RecordResultSet(
-            $this->get_records_result($this->build_records_sql($class, $parameters), $class, $parameters)
-        );
+        return $this->getDataClassDatabase()->records($class, $parameters);
     }
 
     /**

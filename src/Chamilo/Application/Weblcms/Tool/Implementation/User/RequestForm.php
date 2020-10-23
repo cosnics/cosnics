@@ -100,7 +100,7 @@ class RequestForm extends FormValidator
                 );
 
                 $users = array();
-                while ($user = $users_result->next_result())
+                foreach($users_result as $user)
                 {
                     $user_name = $user->get_fullname();
                     $users[$user->get_id()] = $user_name;

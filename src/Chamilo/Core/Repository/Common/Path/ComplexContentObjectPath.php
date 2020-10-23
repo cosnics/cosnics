@@ -268,7 +268,7 @@ abstract class ComplexContentObjectPath
             
             $previous_sibling_node = null;
             
-            while ($complex_content_object_item = $complex_content_object_items->next_result())
+            foreach($complex_content_object_items as $complex_content_object_item)
             {
                 
                 $content_object = $complex_content_object_item->get_ref_object();

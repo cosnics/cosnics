@@ -186,7 +186,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
-            )->next_result();
+            )->current();
         }
 
         return $this->rootGroup;
@@ -255,7 +255,7 @@ class BrowserComponent extends Manager implements TableSupport
             new StaticConditionVariable($group->getId())
         );
         $users = $this->retrieve_group_rel_users($condition);
-        $visible = ($users->size() > 0);
+        $visible = ($users->count() > 0);
 
         if ($visible)
         {
@@ -435,7 +435,7 @@ class BrowserComponent extends Manager implements TableSupport
 
             $userconditions = array();
 
-            while ($user = $users->next_result())
+            foreach ($users as $user)
             {
                 $userconditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),

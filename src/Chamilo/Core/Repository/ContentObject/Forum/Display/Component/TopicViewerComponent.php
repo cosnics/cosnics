@@ -159,7 +159,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             $this->forumTopicPosts = array();
 
-            while ($child = $children->next_result())
+            foreach($children as $child)
             {
                 $this->forumTopicPosts[] = DataManager::retrieve_by_id(ForumPost::class, $child->get_id());
             }

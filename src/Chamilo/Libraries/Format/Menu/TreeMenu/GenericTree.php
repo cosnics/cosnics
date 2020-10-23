@@ -269,7 +269,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
         $child_nodes = $this->get_node_children($parent_node_id);
         $sub_tree = array();
 
-        while ($child_node = $child_nodes->next_result())
+        foreach($child_nodes as $child_node)
         {
             $id = $this->get_node_id($child_node);
             $sub_tree[$id] = $this->create_tree_item_for_node($child_node);

@@ -36,7 +36,6 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
@@ -234,7 +233,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = array();
 
-        while ($category = $categories->next_result())
+        foreach($categories as $category)
         {
             $html[] = $this->renderTableForCategory($category);
         }
@@ -246,7 +245,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @param ContentObjectPublicationCategory $category
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public function getForumPublicationsForCategory(ContentObjectPublicationCategory $category = null)
     {
@@ -446,12 +445,12 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $publications = $this->getForumPublicationsForCategory($category);
 
-        if ($publications instanceof RecordResultSet && $publications->size() > 0)
+        if ($publications->count() > 0)
         {
-            $this->size += $publications->size();
+            $this->size += $publications->count();
             $row = 0;
 
-            while ($publication = $publications->next_result())
+            foreach($publications as $publication)
             {
                 if (! ($publication[ContentObjectPublication::PROPERTY_HIDDEN] &&
                      ! $this->is_allowed(WeblcmsRights::EDIT_RIGHT)))
@@ -491,7 +490,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $table->setCellContents(
                         $row,
                         5,
-                        $this->getForumActions($publication, $publications->is_first(), $publications->is_last()));
+                        $this->getForumActions($publication, $publications->isCurrentEntryFirst(), $publications->isCurrentEntryLast()));
                     $table->setCellAttributes($row, 5, array('class' => 'text-center'));
 
                     $row ++;

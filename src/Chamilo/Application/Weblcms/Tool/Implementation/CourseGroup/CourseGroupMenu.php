@@ -168,7 +168,7 @@ class CourseGroupMenu extends HtmlMenu
 
         // $current_group = $this->current_group;
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             $menu_item = array();
             $menu_item['title'] = $group->get_name();

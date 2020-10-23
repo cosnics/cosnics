@@ -94,7 +94,7 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Instance\Storage\DataClass\Instance>
      * @todo This shouldn't really be here like this
      */
     protected function findInstances()
@@ -154,11 +154,11 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
         $html = array();
         $instances = $this->findInstances();
 
-        if ($instances->size())
+        if ($instances->count())
         {
             $html[] = '<ul class="dropdown-menu">';
 
-            while ($instance = $instances->next_result())
+            foreach($instances as $instance)
             {
                 if (!$instance->is_enabled())
                 {

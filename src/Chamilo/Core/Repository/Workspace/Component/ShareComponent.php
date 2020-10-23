@@ -109,7 +109,7 @@ class ShareComponent extends Manager implements TableSupport
 
                 $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
 
-                while ($contentObject = $contentObjects->next_result())
+                foreach($contentObjects as $contentObject)
                 {
                     $viewUrl = new Redirect(
                         array(

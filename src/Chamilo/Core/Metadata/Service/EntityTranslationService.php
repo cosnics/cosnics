@@ -72,7 +72,7 @@ class EntityTranslationService
             EntityTranslation::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
 
-        while ($translation = $translations->next_result())
+        foreach($translations as $translation)
         {
             $translationsIndexedByIsocode[$translation->get_isocode()] = $translation;
         }

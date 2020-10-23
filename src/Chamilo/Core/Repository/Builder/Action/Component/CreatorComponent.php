@@ -214,7 +214,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                 ), new StaticConditionVariable($parent), ComplexContentObjectItem::get_table_name()
             )
         );
-        while ($complex_content_object_item = $complex_content_object_items->next_result())
+        foreach($complex_content_object_items as $complex_content_object_item)
         {
             if ($complex_content_object_item->is_complex())
             {

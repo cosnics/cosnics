@@ -78,7 +78,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                                 RepositoryCategory::class, RepositoryCategory::PROPERTY_ID
                             ), new StaticConditionVariable($pid)
                         )
-                    )->next_result();
+                    )->current();
 
                     $this->parent_title_cache[$pid] = '<a href="' . htmlentities(
                             $this->get_component()->get_url(

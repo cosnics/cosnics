@@ -7,12 +7,12 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -51,6 +51,20 @@ class GroupUserImportForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
+    public function create_group_user($group_user)
+    {
+        $group_rel_user = new GroupRelUser();
+        $group_rel_user->set_group_id($group_user['group_code']->get_id());
+        $group_rel_user->set_user_id($group_user['username']->get_id());
+
+        return $group_rel_user->create();
+    }
+
+    public function get_failed_elements()
+    {
+        return implode("<br />", $this->failed_elements);
+    }
+
     public function import_group_users()
     {
         $values = $this->exportValues();
@@ -84,6 +98,60 @@ class GroupUserImportForm extends FormValidator
         }
 
         return true;
+    }
+
+    public function process_group_users($group_users)
+    {
+        foreach ($group_users as $group_user)
+        {
+            $action = strtoupper($group_user['action']);
+            switch ($action)
+            {
+                case 'A' :
+                    $succes = $this->create_group_user($group_user);
+                    break;
+                case 'D' :
+                    $succes = $group_user['group_user']->delete();
+                    break;
+            }
+
+            if (!$succes)
+            {
+                $this->failed_elements[] = Translation::get('Failed') . ': ' . implode(";", $group_user);
+            }
+        }
+    }
+
+    public function retrieve_group($group_code)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($group_code)
+        );
+
+        $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
+
+        return $groups->current();
+    }
+
+    public function retrieve_group_user($group_id, $user_id)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
+        $condition = new AndCondition($conditions);
+
+        return DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition))->current();
+    }
+
+    public function retrieve_user($username)
+    {
+        return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
     }
 
     public function validate_group_user($group_user)
@@ -129,75 +197,5 @@ class GroupUserImportForm extends FormValidator
         }
 
         return $group_user;
-    }
-
-    public function retrieve_group($group_code)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
-            new StaticConditionVariable($group_code)
-        );
-
-        $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
-
-        return $groups->next_result();
-    }
-
-    public function retrieve_user($username)
-    {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
-    }
-
-    public function retrieve_group_user($group_id, $user_id)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition))
-            ->next_result();
-    }
-
-    public function process_group_users($group_users)
-    {
-        foreach ($group_users as $group_user)
-        {
-            $action = strtoupper($group_user['action']);
-            switch ($action)
-            {
-                case 'A' :
-                    $succes = $this->create_group_user($group_user);
-                    break;
-                case 'D' :
-                    $succes = $group_user['group_user']->delete();
-                    break;
-            }
-
-            if (!$succes)
-            {
-                $this->failed_elements[] = Translation::get('Failed') . ': ' . implode(";", $group_user);
-            }
-        }
-    }
-
-    public function create_group_user($group_user)
-    {
-        $group_rel_user = new GroupRelUser();
-        $group_rel_user->set_group_id($group_user['group_code']->get_id());
-        $group_rel_user->set_user_id($group_user['username']->get_id());
-
-        return $group_rel_user->create();
-    }
-
-    public function get_failed_elements()
-    {
-        return implode("<br />", $this->failed_elements);
     }
 }

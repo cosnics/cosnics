@@ -142,7 +142,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 $workspaces = $this->getWorkspacesForUser();
 
-                while ($workspace = $workspaces->next_result())
+                foreach ($workspaces as $workspace)
                 {
                     $isActive = ($workspace->getId() == $this->getWorkspace()->getId()) ? true : false;
 
@@ -203,7 +203,7 @@ class BrowserComponent extends Manager implements TableSupport
                 if (!$workspace)
                 {
                     $workspaces = $this->getWorkspacesForUser();
-                    $workspace = $workspaces->next_result();
+                    $workspace = $workspaces->current();
 
                     if (!$workspace)
                     {
@@ -227,17 +227,14 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     *
-     * @return Workspace[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     protected function getWorkspacesForUser()
     {
-        $workspaces = $this->workspaceService->getWorkspacesForUser(
+        return $this->workspaceService->getWorkspacesForUser(
             $this->getUser(), RightsService::RIGHT_USE, null, null,
             array(new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME)))
         );
-
-        return $workspaces;
     }
 
     public function get_additional_parameters()
@@ -258,9 +255,9 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @param \core\repository\ContentObject $content_object
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      *
-     * @return \libraries\format\Toolbar
+     * @return \Chamilo\Libraries\Format\Structure\Toolbar
      */
     public function get_default_browser_actions($content_object)
     {
@@ -334,7 +331,7 @@ class BrowserComponent extends Manager implements TableSupport
      *
      * @param boolean $allow_shared
      *
-     * @return \core\repository\RepositoryCategoryMenu
+     * @return \Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu
      */
     public function get_menu($allow_shared = true)
     {

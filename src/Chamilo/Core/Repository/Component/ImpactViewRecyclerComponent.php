@@ -91,7 +91,7 @@ class ImpactViewRecyclerComponent extends Manager
 
         $publicationAggregator = $this->getPublicationAggregator();
 
-        while ($content_object = $objects->next_result())
+        foreach($objects as $content_object)
         {
             $versions = $content_object->get_content_object_versions();
 
@@ -212,7 +212,7 @@ class ImpactViewRecyclerComponent extends Manager
         $publicationAggregator = $this->getPublicationAggregator();
         
         $failed = 0;
-        while ($content_object = $objects->next_result())
+        foreach($objects as $content_object)
         {
             if (! DataManager::content_object_deletion_allowed($content_object))
             {

@@ -89,7 +89,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
             new StaticConditionVariable($node_id)
         );
-        $child = DataManager::retrieve_categories($condition)->next_result();
+        $child = DataManager::retrieve_categories($condition)->current();
 
         return $child;
     }

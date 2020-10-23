@@ -96,7 +96,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         $user_ids = array();
 
-        while ($relation = $relations->next_result())
+        foreach($relations as $relation)
         {
             $user_ids[] = $relation->get_user();
         }

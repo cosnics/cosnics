@@ -115,7 +115,7 @@ class ContentObjectRelationService
         $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
             $oldContentObjectId);
         
-        while ($contentObjectRelation = $contentObjectRelations->next_result())
+        foreach($contentObjectRelations as $contentObjectRelation)
         {
             /** @var WorkspaceContentObjectRelation $contentObjectRelation */
             $contentObjectRelation->setContentObjectId($newContentObjectId);

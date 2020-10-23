@@ -39,7 +39,7 @@ class UpdaterComponent extends Manager
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
                 new StaticConditionVariable($category_id)));
-        $category = $categories->next_result();
+        $category = $categories->current();
 
         $trail = BreadcrumbTrail::getInstance();
         $trail->add_help('category_manager_updater');

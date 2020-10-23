@@ -116,7 +116,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
                             $rolesHtml = array();
 
                             $rolesHtml[] = '<select>';
-                            while ($role = $roles->next_result())
+                            foreach($roles as $role)
                             {
                                 $rolesHtml[] = '<option>' . $role->getRole() . '</option>';
                             }

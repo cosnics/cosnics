@@ -19,7 +19,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($hash));
         $webpage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
             Webpage::class, 
-            $condition)->next_result();
+            $condition)->current();
         
         if ($webpage)
         {

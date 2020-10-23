@@ -58,7 +58,7 @@ class GetContentObjectsComponent extends Manager
 
         $contentObjectsArray = array();
 
-        while ($contentObject = $contentObjects->next_result())
+        foreach($contentObjects as $contentObject)
         {
             /**
              * @var ContentObject $contentObject

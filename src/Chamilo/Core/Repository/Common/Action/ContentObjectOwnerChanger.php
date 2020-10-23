@@ -172,7 +172,7 @@ class ContentObjectOwnerChanger
             ComplexContentObjectItem::get_table_name());
 
         $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
-        while ($item = $items->next_result())
+        foreach($items as $item)
         {
             $co = DataManager::retrieve_by_id(ContentObject::class, $item->get_ref());
             $this->change_content_object_owner($co);

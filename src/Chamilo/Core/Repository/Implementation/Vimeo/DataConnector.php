@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Vimeo;
 
+use ArrayIterator;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Vimeo\Vimeo;
 
@@ -277,11 +277,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property ObjectTableOrder
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      *
-     * @return ArrayResultSet
+     * @return \ArrayIterator
      */
     public function retrieve_external_repository_objects($condition = null, $order_property, $offset, $count)
     {
@@ -312,7 +312,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $objects[] = $object;
         }
 
-        return new ArrayResultSet($objects);
+        return new ArrayIterator($objects);
     }
 
     /**

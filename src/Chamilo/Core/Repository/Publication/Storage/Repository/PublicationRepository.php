@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use DomainException;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -247,7 +246,7 @@ class PublicationRepository
 
     /**
      *
-     * @param RecordResultSet $records
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $records
      *
      * @param string $publicationClassName
      * @param string $contentObjectTypeClassName
@@ -258,7 +257,7 @@ class PublicationRepository
     {
         $publications = array();
 
-        while ($record = $records->next_result())
+        foreach($records as $record)
         {
             $publications[] = $this->hydratePublication($record, $publicationClassName, $contentObjectTypeClassName);
         }

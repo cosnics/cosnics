@@ -75,7 +75,7 @@ class EntityConditionService
                 $entity->getDataClassName(), new DataClassRetrievesParameters()
             );
 
-            while ($dataClassInstance = $dataClassInstances->next_result())
+            foreach($dataClassInstances as $dataClassInstance)
             {
                 $expandedEntities[] = $this->getDataClassEntityFactory()->getEntityFromDataClass($dataClassInstance);
             }

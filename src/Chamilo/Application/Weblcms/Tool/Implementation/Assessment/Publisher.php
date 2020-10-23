@@ -145,7 +145,7 @@ class Publisher
 
             $html[] = '<ul class="list-group">';
 
-            while ($content_object = $content_objects->next_result())
+            foreach($content_objects as $content_object)
             {
                 $namespace = ContentObject::get_content_object_type_namespace($content_object->get_type());
                 $glyph = $content_object->getGlyph(IdentGlyph::SIZE_MINI);

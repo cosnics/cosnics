@@ -140,7 +140,7 @@ class CreatorComponent extends Manager
         $types = array();
         $sections = array();
 
-        while ($active_manager = $active_managers->next_result())
+        foreach($active_managers as $active_manager)
         {
             $package_info = Package::get(
                 $active_manager->get_context()

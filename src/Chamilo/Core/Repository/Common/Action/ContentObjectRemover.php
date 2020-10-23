@@ -35,7 +35,7 @@ abstract class ContentObjectRemover extends Remover
         
         $content_objects = DataManager::retrieve_content_objects($class::class_name());
         
-        while ($content_object = $content_objects->next_result())
+        foreach($content_objects as $content_object)
         {
             
             $content_object_versions = $content_object->get_content_object_versions();

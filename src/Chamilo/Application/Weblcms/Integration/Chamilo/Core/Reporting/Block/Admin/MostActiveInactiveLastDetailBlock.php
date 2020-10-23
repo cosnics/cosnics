@@ -27,7 +27,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
         $reporting_data->add_row(Translation::get('LastPublication'));
         
         $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -37,7 +37,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
             $publications = DataManager::retrieve_content_object_publications(
                 $condition);
             
-            while ($publication = $publications->next_result())
+            foreach($publications as $publication)
             {
                 $last_publication = DatetimeUtilities::format_locale_date(
                     null, 

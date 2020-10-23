@@ -62,7 +62,7 @@ class DeleterComponent extends Manager
                     LearningPathTreeNodeAttempt::class, new DataClassRetrievesParameters($condition)
                 );
 
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     $attempt->delete();
                 }

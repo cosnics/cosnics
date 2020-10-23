@@ -69,7 +69,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
                 ComplexContentObjectItem::class,
                 $parameters);
 
-            while ($child = $children->next_result())
+            foreach($children as $child)
             {
                 if ($child->get_is_homepage())
                 {

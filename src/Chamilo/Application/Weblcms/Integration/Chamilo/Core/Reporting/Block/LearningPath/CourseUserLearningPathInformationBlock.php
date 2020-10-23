@@ -78,7 +78,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
          * $publications_arr = $publications_resultset;
          */
         $key = 0;
-        while ($publication = $publications_resultset->next_result())
+        foreach($publications_resultset as $publication)
         {
             $progress = $url = $link = null;
             if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(

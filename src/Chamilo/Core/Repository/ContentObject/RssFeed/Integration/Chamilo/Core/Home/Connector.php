@@ -25,14 +25,14 @@ class Connector
             RssFeed::class,
             $condition);
         
-        if ($objects->size() == 0)
+        if ($objects->count() == 0)
         {
             $options[0] = Translation::get('CreateRssFeedFirst');
         }
         else
         {
             $options[0] = Translation::get('SelectRssFeed');
-            while ($object = $objects->next_result())
+            foreach($objects as $object)
             {
                 $options[$object->get_id()] = $object->get_title();
             }

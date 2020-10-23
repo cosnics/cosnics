@@ -37,7 +37,7 @@ class EndingAssignments extends Block
 
         $courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser());
 
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $course_ids[$course->get_id()] = $course->get_id();
         }

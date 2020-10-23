@@ -140,7 +140,7 @@ class UserDetailComponent extends Manager
 
         $groups = $user->get_groups();
 
-        if (!$groups || $groups->size() == 0)
+        if (!$groups || $groups->count() == 0)
         {
             $table->setCellContents(2, 0, Translation::get('NoGroups'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
@@ -149,7 +149,7 @@ class UserDetailComponent extends Manager
         {
             $i = 2;
 
-            while ($group = $groups->next_result())
+            foreach($groups as $group)
             {
                 $redirect = new Redirect(
                     array(

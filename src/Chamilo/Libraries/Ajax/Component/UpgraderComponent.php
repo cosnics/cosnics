@@ -70,7 +70,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchNumericQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -96,7 +96,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchTextQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -122,7 +122,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchingQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -148,7 +148,7 @@ class UpgraderComponent extends Manager
             AssessmentMatrixQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -174,7 +174,7 @@ class UpgraderComponent extends Manager
             AssessmentMultipleChoiceQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -200,7 +200,7 @@ class UpgraderComponent extends Manager
             AssessmentSelectQuestion::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -224,7 +224,7 @@ class UpgraderComponent extends Manager
     {
         $existingAssignments = DataManager::retrieves(Assignment::class, new DataClassRetrievesParameters());
 
-        while ($existingAssignment = $existingAssignments->next_result())
+        foreach($existingAssignments as $existingAssignment)
         {
             $oldAllowedTypes = $existingAssignment->get_allowed_types();
             $oldAllowedTypes = explode(',', $oldAllowedTypes);
@@ -268,7 +268,7 @@ class UpgraderComponent extends Manager
             Block::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($block = $blocks->next_result())
+        foreach($blocks as $block)
         {
             $useObjectId = $block->getSetting('use_object');
             $contentObjectPublicationService->setOnlyContentObjectForElement($block, $useObjectId);
@@ -282,7 +282,7 @@ class UpgraderComponent extends Manager
     {
         $existingQuestions = DataManager::retrieves(HotspotQuestion::class, new DataClassRetrievesParameters());
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_answers();
             $newOptions = array();
@@ -306,7 +306,7 @@ class UpgraderComponent extends Manager
     {
         $existingQuestions = DataManager::retrieves(OrderingQuestion::class, new DataClassRetrievesParameters());
 
-        while ($existingQuestion = $existingQuestions->next_result())
+        foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = array();
@@ -332,7 +332,7 @@ class UpgraderComponent extends Manager
             TemplateRegistration::class, new DataClassRetrievesParameters()
         );
 
-        while ($existingTemplate = $existingTemplates->next_result())
+        foreach($existingTemplates as $existingTemplate)
         {
             try
             {

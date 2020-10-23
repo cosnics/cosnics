@@ -68,7 +68,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
         $exercises = array();
         // $score_count = 0;
-        while ($value = $trackerdata->next_result())
+        foreach($trackerdata as $value)
         {
             if ($value->get_status() == AssessmentAttempt::STATUS_COMPLETED)
             {
@@ -119,7 +119,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             );
 
         $key = 0;
-        while ($publication = $publications_resultset->next_result())
+        foreach($publications_resultset as $publication)
         {
             if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
                 $user_id, $publication[ContentObjectPublication::PROPERTY_ID]

@@ -85,7 +85,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $users = array();
 
-        while ($subscription = $subscriptions->next_result())
+        foreach($subscriptions as $subscription)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 User::class,

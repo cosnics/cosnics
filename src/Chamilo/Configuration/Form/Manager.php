@@ -93,7 +93,7 @@ abstract class Manager extends Application
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
             new StaticConditionVariable($name));
         $condition = new AndCondition($conditions);
-        $form = DataManager::retrieve_dynamic_forms($condition)->next_result();
+        $form = DataManager::retrieve_dynamic_forms($condition)->current();
         
         if (! $form)
         {

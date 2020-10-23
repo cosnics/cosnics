@@ -106,7 +106,7 @@ class UserViewForm extends FormValidator
                 )
             );
 
-            while ($relation = $relations->next_result())
+            foreach($relations as $relation)
             {
                 $defaults[] = $relation->get_content_object_template_id();
             }
@@ -176,7 +176,7 @@ class UserViewForm extends FormValidator
             UserViewRelContentObject::class, new DataClassRetrievesParameters($condition)
         );
         $existing_types = array();
-        while ($type = $types->next_result())
+        foreach($types as $type)
         {
             $existing_types[] = $type->get_content_object_template_id();
         }
@@ -193,8 +193,8 @@ class UserViewForm extends FormValidator
             $user_view_type->create();
         }
 
-        $types->reset();
-        while ($type = $types->next_result())
+        $types->rewind();
+        foreach($types as $type)
         {
             if (in_array($type->get_content_object_template_id(), $to_delete))
             {

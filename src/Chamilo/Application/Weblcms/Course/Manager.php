@@ -81,13 +81,13 @@ abstract class Manager extends Application
      */
     protected function get_selected_course()
     {
-        return $this->get_selected_courses()->next_result();
+        return $this->get_selected_courses()->current();
     }
 
     /**
      * Retrieves the selected course Use this function if you want to retrieve the selected course as a resultset
      * 
-     * @return \libraries\storage\ResultSet <Course>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<Course>
      */
     protected function get_selected_courses()
     {
@@ -96,7 +96,7 @@ abstract class Manager extends Application
             new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
             $course_ids);
         $result_set = DataManager::retrieves(Course::class, new DataClassRetrievesParameters($condition));
-        if ($result_set->size() == 0)
+        if ($result_set->count() == 0)
         {
             throw new ObjectNotExistException(Translation::get('Course'), $course_ids);
         }

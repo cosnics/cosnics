@@ -17,7 +17,7 @@ class Tab extends Element
     {
         $blocks = DataManager::retrieveTabBlocks($this);
         
-        while ($block = $blocks->next_result())
+        foreach($blocks as $block)
         {
             if ($block->getContext() == 'Chamilo\Core\Admin' || $block->getContext() == 'Chamilo\Core\User')
             {

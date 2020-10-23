@@ -12,13 +12,13 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -67,7 +67,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $publication_id
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt>
      */
     protected function get_assessment_attempts($publication_id, $user_id = null)
     {
@@ -208,7 +208,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int[] $assessment_attempt_ids
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt>
      */
     protected function get_question_attempts($question_cid = null, $assessment_attempt_ids = array())
     {
@@ -251,7 +251,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function get_question_attempts_from_publication_and_question(
         $publication_id, $question_cid, $user_id = null
@@ -261,7 +261,7 @@ abstract class AssessmentBlock extends ToolBlock
         $assessment_attempts_by_id = array();
 
         $assessment_attempts = $this->get_assessment_attempts($publication_id, $user_id);
-        while ($assessment_attempt = $assessment_attempts->next_result())
+        foreach ($assessment_attempts as $assessment_attempt)
         {
             $assessment_attempt_ids[] = $assessment_attempt->get_id();
             $assessment_attempts_by_id[$assessment_attempt->get_id()] = $assessment_attempt;
@@ -269,12 +269,12 @@ abstract class AssessmentBlock extends ToolBlock
 
         if (count($assessment_attempt_ids) == 0)
         {
-            return new ArrayResultSet(array());
+            return new DataClassIterator(AssessmentAttempt::class, array());
         }
 
         $question_attempts = $this->get_question_attempts($question_cid, $assessment_attempt_ids);
 
-        while ($question_attempt = $question_attempts->next_result())
+        foreach ($question_attempts as $question_attempt)
         {
             $question_attempt->set_optional_property(
                 self::PROPERTY_ASSESSMENT_ATTEMPT,
@@ -282,7 +282,7 @@ abstract class AssessmentBlock extends ToolBlock
             );
         }
 
-        $question_attempts->reset();
+        $question_attempts->rewind();
 
         return $question_attempts;
     }

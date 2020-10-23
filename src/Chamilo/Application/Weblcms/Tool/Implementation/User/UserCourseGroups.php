@@ -59,11 +59,11 @@ class UserCourseGroups
 
         $course_groups = CourseGroupDataManager::retrieve_course_groups_from_user($this->user_id, $this->course_id);
 
-        if ($course_groups->size() > 0)
+        if ($course_groups->count() > 0)
         {
             $html[] = '<ul>';
 
-            while ($course_group = $course_groups->next_result())
+            foreach($course_groups as $course_group)
             {
                 $html[] = '<li>';
                 $html[] = $course_group->get_name();

@@ -44,7 +44,7 @@ class PublicationSelectorDataMapper
 
         $categories = array();
 
-        while ($category = $publication_categories_set->next_result())
+        foreach($publication_categories_set as $category)
         {
             $properties = $category->get_default_properties();
             $glyphNamespace = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
@@ -95,7 +95,7 @@ class PublicationSelectorDataMapper
             return $publications_set;
         }
 
-        while ($publication = $publications_set->next_result())
+        foreach($publications_set as $publication)
         {
             $publicationProperties = array();
 

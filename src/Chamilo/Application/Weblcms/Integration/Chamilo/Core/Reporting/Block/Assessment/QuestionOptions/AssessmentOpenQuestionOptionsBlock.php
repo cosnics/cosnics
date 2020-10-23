@@ -29,7 +29,7 @@ class AssessmentOpenQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
         
         $row_count = 0;
         
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $reporting_data->add_category($row_count);
             

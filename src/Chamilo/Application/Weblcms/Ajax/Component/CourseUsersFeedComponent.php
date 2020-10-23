@@ -94,7 +94,7 @@ class CourseUsersFeedComponent extends Manager
         $users = $this->retrieve_users();
         if ($users)
         {
-            while ($user = $users->next_result())
+            foreach($users as $user)
             {
                 $user_category->add_child(
                     new AdvancedElementFinderElement(
@@ -189,7 +189,7 @@ class CourseUsersFeedComponent extends Manager
 
         $group_users = array();
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             $group_user_ids = $group->get_users(true, true);
 

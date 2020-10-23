@@ -54,13 +54,13 @@ class Connector
             ContentObject::class,
             $condition);
 
-        if ($objects->size() == 0)
+        if ($objects->count() == 0)
         {
             $result[0] = Translation::get('CreateObjectFirst');
         }
         else
         {
-            while ($object = $objects->next_result())
+            foreach($objects as $object)
             {
                 $result[$object->get_id()] = $object->get_title();
             }

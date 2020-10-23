@@ -360,7 +360,7 @@ class CourseManagementRights extends WeblcmsRights
         $succes = true;
         
         $location_children = $location->get_children();
-        while ($child = $location_children->next_result())
+        foreach($location_children as $child)
         {
             $child->set_context($location->get_context());
             

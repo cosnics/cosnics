@@ -412,7 +412,7 @@ class EntityService
     {
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        while ($element = $elements->next_result())
+        foreach($elements as $element)
         {
             if (!$this->processEntityElement(
                 $currentUser, $schemaInstance, $element, $entity, $submittedSchemaInstanceValues[$element->get_id()]

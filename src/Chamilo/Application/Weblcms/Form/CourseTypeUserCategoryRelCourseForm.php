@@ -46,7 +46,7 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
             $this->user->get_id());
 
         $cat_options['0'] = Translation::get('NoCategory');
-        while ($category = $categories->next_result())
+        foreach($categories as $category)
         {
             $cat_options[$category[CourseTypeUserCategory::PROPERTY_ID]] = $category[CourseUserCategory::PROPERTY_TITLE];
         }

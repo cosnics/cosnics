@@ -29,7 +29,7 @@ class SlideshowRenderer extends Renderer
 
         $external_repository_object = $this->retrieve_external_repository_objects(
             $this->get_condition(), null, $slideshow_index, 1
-        )->next_result();
+        )->current();
 
         $external_repository_object_count = $this->count_external_repository_objects($this->get_condition());
 

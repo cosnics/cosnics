@@ -34,7 +34,7 @@ class UpdateElementComponent extends Manager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
             new StaticConditionVariable($element_id));
-        $element = DataManager::retrieve_dynamic_form_elements($condition)->next_result();
+        $element = DataManager::retrieve_dynamic_form_elements($condition)->current();
         
         $form = new BuilderForm(BuilderForm::TYPE_EDIT, $element, $this->get_url($parameters), $this->get_user());
         

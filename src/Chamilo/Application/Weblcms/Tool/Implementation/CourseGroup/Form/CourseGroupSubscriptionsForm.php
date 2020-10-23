@@ -172,7 +172,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if ($max_group_subscriptions > 0)
         {
             // only when it is another course_group than the current one
-            while ($course_group = $course_groups->next_result())
+            foreach($course_groups as $course_group)
             {
                 // check for each user how many times is he/she subscribed int
                 // he course_group

@@ -93,7 +93,7 @@ class SelectComponent extends Manager implements TableSupport
             $vocabularyItems = $this->getVocabularyItems($vocabularyIds);
             $vocabularyItemValues = array();
             
-            while ($vocabularyItem = $vocabularyItems->next_result())
+            foreach($vocabularyItems as $vocabularyItem)
             {
                 $item = new stdClass();
                 $item->id = $vocabularyItem->get_id();

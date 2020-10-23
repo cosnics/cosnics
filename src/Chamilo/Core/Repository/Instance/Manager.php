@@ -72,7 +72,7 @@ abstract class Manager extends Application
     {
         $instances = Storage\DataManager::retrieve_active_instances($types);
 
-        if ($instances->size() == 0)
+        if ($instances->count() == 0)
         {
             if (!is_array($types))
             {
@@ -110,7 +110,7 @@ abstract class Manager extends Application
 
             $available_instances = 0;
 
-            while ($instance = $instances->next_result())
+            foreach($instances as $instance)
             {
                 $link = Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
                     urlencode($instance->get_implementation()) . '&' .

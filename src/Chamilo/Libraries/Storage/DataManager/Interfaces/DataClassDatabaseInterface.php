@@ -71,7 +71,7 @@ interface DataClassDatabaseInterface
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
-     * @return string[]
+     * @return string[]|string[][]
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters);
 

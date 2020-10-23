@@ -379,7 +379,7 @@ class CourseService implements CourseServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getAllUsersFromCourse(Course $course)
     {
@@ -498,14 +498,14 @@ class CourseService implements CourseServiceInterface
         $userIds = array();
 
         $directlySubscribedUsers = $this->courseRepository->findUsersByStatus($course->getId(), $status);
-        while ($directlySubscribedUser = $directlySubscribedUsers->next_result())
+        foreach($directlySubscribedUsers as $directlySubscribedUser)
         {
             $userIds[] = $directlySubscribedUser[User::PROPERTY_ID];
         }
 
         $groups = $this->courseRepository->findDirectSubscribedGroupsByStatus($course->getId(), $status);
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             if (!$group instanceof Group)
             {

@@ -493,7 +493,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                     $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
                         Instance::class,
                         new DataClassRetrievesParameters($condition));
-                    while ($external_instance = $external_instances->next_result())
+                    foreach($external_instances as $external_instance)
                     {
                         $setting_node_list = $this->dom_xpath->query('setting', $external_instance_node);
                         $is_matching_external_instance = true;

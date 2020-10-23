@@ -176,7 +176,7 @@ class ProviderFormService
 
         $providerRegistrations = $this->getPropertyProviderService()->getProviderRegistrationsForEntity($entity);
 
-        while ($providerRegistration = $providerRegistrations->next_result())
+        foreach($providerRegistrations as $providerRegistration)
         {
             $translationNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                 $providerRegistration->get_provider_class(), 2
@@ -248,7 +248,7 @@ class ProviderFormService
 
         $entityProviderLinksResultSet = $this->getPropertyProviderService()->getProviderLinksForEntity($entity);
 
-        while ($entityProviderLink = $entityProviderLinksResultSet->next_result())
+        foreach($entityProviderLinksResultSet as $entityProviderLink)
         {
             $entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
         }

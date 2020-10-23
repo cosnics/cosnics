@@ -389,7 +389,7 @@ abstract class NestedSet extends DataClass
                 // We have to copy the content of this result set into a temporary array
                 $need_their_related_data_removed = array($nested_set);
 
-                while ($descendant = $descendants->next_result())
+                foreach($descendants as $descendant)
                 {
                     $need_their_related_data_removed[] = $descendant;
                 }
@@ -480,7 +480,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             $update = false;
 
@@ -606,7 +606,7 @@ abstract class NestedSet extends DataClass
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
@@ -638,7 +638,7 @@ abstract class NestedSet extends DataClass
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */

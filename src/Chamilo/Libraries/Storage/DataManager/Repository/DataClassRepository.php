@@ -116,7 +116,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
-     * @return string[]
+     * @return string[]|string[][]
      */
     protected function __distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
@@ -535,7 +535,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
-     * @return string[]
+     * @return string[]|string[][]
      * @throws \Exception
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)

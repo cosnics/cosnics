@@ -128,7 +128,7 @@ class CategoryMenu extends HtmlMenu
             )
         );
 
-        while ($object = $objects->next_result())
+        foreach($objects as $object)
         {
             if ($object)
             {

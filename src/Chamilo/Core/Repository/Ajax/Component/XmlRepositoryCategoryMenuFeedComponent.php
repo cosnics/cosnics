@@ -39,7 +39,7 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
     {
         $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
-        while ($category = $categories->next_result())
+        foreach($categories as $category)
         {
             $has_children = $category->has_children() ? 1 : 0;
             echo '<leaf id="' . $category->get_id() . '" classes="' . $glyph->getClassNamesString() .

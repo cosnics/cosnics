@@ -295,6 +295,15 @@ abstract class Manager extends Application
         return DataManager::retrieve(GroupRelUser::class, new DataClassRetrieveParameters($condition));
     }
 
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
+     * @throws \Exception
+     */
     public static function retrieve_group_rel_users(
         $condition = null, $offset = null, $count = null, $order_property = null
     )

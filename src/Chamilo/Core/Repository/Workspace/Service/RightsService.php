@@ -410,7 +410,7 @@ class RightsService
                 $this->getWorkspaceService(), 
                 $contentObject);
             
-            while ($contentObjectWorkspace = $contentObjectWorkspaces->next_result())
+            foreach($contentObjectWorkspaces as $contentObjectWorkspace)
             {
                 if ($this->hasRightForWorkspace($right, $user, $contentObjectWorkspace))
                 {

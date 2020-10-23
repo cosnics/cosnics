@@ -381,7 +381,7 @@ class Group extends NestedSet
         $parents = $this->get_parents($include_self);
         $names = array();
 
-        while ($node = $parents->next_result())
+        foreach($parents as $node)
         {
             $names[] = $node->get_name();
         }
@@ -458,7 +458,7 @@ class Group extends NestedSet
 
             $subgroups = array();
 
-            while ($group = $groups->next_result())
+            foreach($groups as $group)
             {
                 $subgroups[$group->get_id()] = $group;
             }

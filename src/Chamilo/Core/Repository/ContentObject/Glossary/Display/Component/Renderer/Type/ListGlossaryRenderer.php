@@ -28,7 +28,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
     {
         $complex_content_object_items = $this->get_objects();
 
-        if ($complex_content_object_items->size() == 0)
+        if ($complex_content_object_items->count() == 0)
         {
             $html = array();
 
@@ -38,7 +38,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
             $html[] = '</div>';
         }
 
-        while ($complex_content_object_item = $complex_content_object_items->next_result())
+        foreach($complex_content_object_items as $complex_content_object_item)
         {
             $html[] = $this->display_content_object(
                 $complex_content_object_item->get_ref_object(), $complex_content_object_item

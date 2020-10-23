@@ -59,7 +59,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
             $condition, 
             $order_by);
         
-        $this->size = $publications->size();
+        $this->size = $publications->count();
         
         foreach ($publications as $publication)
         {

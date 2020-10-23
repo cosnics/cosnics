@@ -237,7 +237,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $this->topics = array();
         $this->subforums = array();
 
-        while ($child = $children->next_result())
+        foreach($children as $child)
         {
             $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,

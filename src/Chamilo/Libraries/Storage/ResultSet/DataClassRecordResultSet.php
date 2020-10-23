@@ -25,7 +25,7 @@ class DataClassRecordResultSet extends ArrayResultSet
     {
         $data_classes = array();
 
-        while ($record = $baseResultSet->next_result())
+        foreach($baseResultSet as $record)
         {
             $data_classes[] = $this->record_to_data_class($class, $record);
         }

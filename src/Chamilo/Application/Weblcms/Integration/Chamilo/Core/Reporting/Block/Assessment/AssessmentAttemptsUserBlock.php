@@ -34,7 +34,7 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         $isHotpotatoes = $assessment->get_type() == Hotpotatoes::class;
         
         $assessment_attempts = $this->get_assessment_attempts($this->getPublicationId(), $this->get_user_id());
-        while ($assessment_attempt = $assessment_attempts->next_result())
+        foreach($assessment_attempts as $assessment_attempt)
         {
             $start_time = DatetimeUtilities::format_locale_date(null, $assessment_attempt->get_start_time());
             $end_time = DatetimeUtilities::format_locale_date(null, $assessment_attempt->get_end_time());

@@ -224,7 +224,7 @@ class CourseGroup extends NestedTreeNode
 
             $users = array();
 
-            while ($relation = $course_group_user_relations->next_result())
+            foreach($course_group_user_relations as $relation)
             {
                 if ($include_users)
                 {
@@ -265,7 +265,7 @@ class CourseGroup extends NestedTreeNode
         {
             $subgroups = $this->get_children($recursive_subgroups);
 
-            while ($subgroup = $subgroups->next_result())
+            foreach($subgroups as $subgroup)
             {
                 $groups[] = $subgroup->get_id();
             }

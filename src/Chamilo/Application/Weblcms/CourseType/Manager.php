@@ -65,14 +65,14 @@ abstract class Manager extends Application
      */
     protected function get_selected_course_type()
     {
-        return $this->get_selected_course_types()->next_result();
+        return $this->get_selected_course_types()->current();
     }
 
     /**
      * Retrieves the selected course types Use this function if you want to retrieve the selected course types as a
      * resultset
      * 
-     * @return \libraries\storage\ResultSet <CourseType>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     protected function get_selected_course_types()
     {
@@ -83,7 +83,7 @@ abstract class Manager extends Application
             $course_type_ids);
         $result_set = DataManager::retrieves(CourseType::class, new DataClassRetrievesParameters($condition));
         
-        if ($result_set->size() == 0)
+        if ($result_set->count() == 0)
         {
             throw new ObjectNotExistException(Translation::get('CourseType'), $course_type_ids);
         }

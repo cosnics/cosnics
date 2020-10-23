@@ -100,7 +100,7 @@ class EntityFormService
 
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        while ($element = $elements->next_result())
+        foreach($elements as $element)
         {
             try
             {
@@ -288,7 +288,7 @@ class EntityFormService
 
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        while ($element = $elements->next_result())
+        foreach($elements as $element)
         {
             try
             {

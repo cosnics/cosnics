@@ -57,7 +57,7 @@ class AssessmentQuestionUserInformationBlock extends AssessmentQuestionUsersBloc
         
         $this->add_category_from_array(
             Translation::get('Details'), 
-            $this->get_question_user_reporting_info($complex_question, $user, $user_attempts->as_array()), 
+            $this->get_question_user_reporting_info($complex_question, $user, $user_attempts),
             $reporting_data);
         
         $reporting_data->set_rows(array(Translation::get('Details')));

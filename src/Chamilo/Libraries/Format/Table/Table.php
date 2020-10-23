@@ -230,15 +230,7 @@ abstract class Table
 
         $tableData = array();
 
-        if ($resultSet instanceof ResultSet)
-        {
-            while ($result = $resultSet->next_result())
-            {
-                $this->handle_result($tableData, $result);
-            }
-        }
-
-        if ($resultSet instanceof DataClassIterator || is_array($resultSet))
+        if ($resultSet instanceof \ArrayIterator || is_array($resultSet))
         {
             foreach ($resultSet as $result)
             {

@@ -107,7 +107,7 @@ class VisibilityTogglerComponent extends Manager
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID), 
                 new StaticConditionVariable($id)));
-        $category = $categories->next_result();
+        $category = $categories->current();
         if ($category instanceof CategoryVisibilitySupported)
         {
             if ($this->get_parent()->allowed_to_change_category_visibility($id))

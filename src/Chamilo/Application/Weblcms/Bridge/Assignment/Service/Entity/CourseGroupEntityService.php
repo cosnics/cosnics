@@ -133,7 +133,7 @@ class CourseGroupEntityService implements EntityServiceInterface
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            while ($courseGroup = $courseGroups->next_result())
+            foreach($courseGroups as $courseGroup)
             {
                 $this->targetCourseGroupIds[$id][] = $courseGroup->getId();
             }

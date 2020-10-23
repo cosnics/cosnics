@@ -95,7 +95,7 @@ class CourseMenu extends Block
 
         $course_types = CourseTypeDataManager::retrieve_active_course_types();
 
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             if ($course_management_rights->is_allowed(
                 CourseManagementRights::CREATE_COURSE_RIGHT, $course_type->get_id(),

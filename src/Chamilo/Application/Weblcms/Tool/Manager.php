@@ -285,7 +285,7 @@ abstract class Manager extends Application
 
         $course_settings_controller = CourseSettingsController::getInstance();
 
-        while ($tool = $course_tools->next_result())
+        foreach($course_tools as $tool)
         {
             $tool_active = $course_settings_controller->get_course_setting(
                 $this->get_course(), CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $tool->get_id()

@@ -338,7 +338,7 @@ class RightsUtil
         );
 
         $overview = array();
-        while ($location = $locations->next_result())
+        foreach($locations as $location)
         {
             $overview[$location[$context_location::PROPERTY_TYPE]][] =
                 $location[$context_location::PROPERTY_IDENTIFIER];
@@ -614,7 +614,7 @@ class RightsUtil
         $right_ids = array();
 
         $location_entity_rights = DataManager::retrieve_rights_location_rights($context, $condition);
-        while ($location_entity_right = $location_entity_rights->next_result())
+        foreach($location_entity_rights as $location_entity_right)
         {
             $right_ids[] = $location_entity_right->get_right_id();
         }
@@ -972,7 +972,7 @@ class RightsUtil
 
         $condition = new AndCondition($conditions);
 
-        if (DataManager::retrieve_rights_location_rights($context, $condition)->size() > 0)
+        if (DataManager::retrieve_rights_location_rights($context, $condition)->count() > 0)
         {
             return true;
         }

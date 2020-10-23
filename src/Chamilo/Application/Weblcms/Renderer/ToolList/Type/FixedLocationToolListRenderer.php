@@ -168,9 +168,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
         );
 
-        if ($course_tool_rel_course_section->size() > 0)
+        if ($course_tool_rel_course_section->count() > 0)
         {
-            return $course_tool_rel_course_section->next_result()->get_section_id();
+            return $course_tool_rel_course_section->current()->get_section_id();
         }
 
         return $section_types_map[CourseSection::TYPE_TOOL];
@@ -211,7 +211,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $parent = $this->get_parent();
         $publications = $this->get_publication_links();
 
-        if ($publications->size() == 0)
+        if ($publications->count() == 0)
         {
             return '<div class="alert alert-info">' . Translation::get('NoLinksAvailable') . '</div>';
         }
@@ -227,7 +227,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '<div class="row">';
         }
 
-        while ($publication = $publications->next_result())
+        foreach ($publications as $publication)
         {
             if ($count > 0 && $count % $this->number_of_columns == 0)
             {
@@ -481,7 +481,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_property);
         $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
-        while ($section = $sections->next_result())
+        foreach ($sections as $section)
         {
             $section_types_map[$section->get_type()] = $section->get_id();
         }
@@ -511,16 +511,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $tabs = new DynamicTabsRenderer('admin');
 
-        $sections->reset();
+        $sections->rewind();
 
-        if ($sections->size() == O)
+        if ($sections->count() == 0)
         {
             return '<div class="alert alert-warning">' . Translation::get('NoVisibleCourseSections') . '</div>';
         }
 
         $html[] = '<ul class="nav nav-tabs tool-list-tabs">';
 
-        while ($section = $sections->next_result())
+        foreach ($sections as $section)
         {
             $sec_name = $section->get_type() == CourseSection::TYPE_CUSTOM ? $section->get_name() : Translation::get(
                 $section->get_name()
@@ -549,7 +549,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $publications = $this->get_publication_links();
 
-                if ($publications->size() == 0)
+                if ($publications->count() == 0)
                 {
                     continue;
                 }
@@ -563,7 +563,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
 
             if ((isset($selectedTab) && $section->getId() == $selectedTab) ||
-                (!isset($selectedTab) && $sections->is_first()))
+                (!isset($selectedTab) && $sections->isCurrentEntryFirst()))
             {
                 $active = 'active';
             }
@@ -608,9 +608,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $html[] = $content;
         $html[] = '</div>';
 
-        $html[] = '<script src="' .
-            Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseHome.js' .
-            '"></script>';
+        $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) .
+            'CourseHome.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
     }

@@ -211,7 +211,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         $question_ids = array();
 
-        while ($question = $questions->next_result())
+        foreach($questions as $question)
         {
             $question_ids[] = $question->get_id();
         }

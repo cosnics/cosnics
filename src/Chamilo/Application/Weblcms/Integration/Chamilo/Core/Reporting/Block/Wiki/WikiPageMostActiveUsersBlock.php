@@ -31,7 +31,7 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
         $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
         
         $users = array();
-        while ($version = $versions->next_result())
+        foreach($versions as $version)
         {
             $users[$version->get_owner_id()] = isset($users[$version->get_owner_id()]) ? $users[$version->get_owner_id()] ++ : 1;
         }

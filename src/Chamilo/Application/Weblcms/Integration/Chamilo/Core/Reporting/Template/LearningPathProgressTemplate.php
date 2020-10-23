@@ -70,7 +70,7 @@ class LearningPathProgressTemplate extends ReportingTemplate
             $condition,
             $order_by
         );
-        while ($publication = $publications->next_result())
+        foreach($publications as $publication)
         {
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class,

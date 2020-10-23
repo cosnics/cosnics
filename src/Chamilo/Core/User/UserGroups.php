@@ -77,11 +77,11 @@ class UserGroups
 
         $group_relations = DataManager::retrieve_user_groups($this->user_id);
 
-        if ($group_relations->size() > 0)
+        if ($group_relations->count() > 0)
         {
             $groupElements = array();
 
-            while ($group = $group_relations->next_result())
+            foreach($group_relations as $group)
             {
                 if (!$this->isGroupValid($group))
                 {

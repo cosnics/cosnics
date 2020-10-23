@@ -208,12 +208,12 @@ class ExecuteForm extends FormValidator
         
         $values = DataManager::retrieve_dynamic_form_element_values($subselect);
         
-        while ($value = $values->next_result())
+        foreach($values as $value)
         {
             $element = DataManager::retrieve_dynamic_form_elements(
                 new EqualityCondition(
                     new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-                    new StaticConditionVariable($value->get_dynamic_form_element_id())))->next_result();
+                    new StaticConditionVariable($value->get_dynamic_form_element_id())))->current();
             
             if ($element->get_type() == Element::TYPE_RADIO_BUTTONS)
             {

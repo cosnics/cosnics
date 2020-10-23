@@ -62,7 +62,7 @@ class AnnouncementComponent extends Manager
 
         $course_settings_controller = CourseSettingsController::getInstance();
         $unique_publications = array();
-        while ($course = $user_courses->next_result())
+        foreach($user_courses as $course)
         {
             $this->courses[$course->get_id()] = $course;
 

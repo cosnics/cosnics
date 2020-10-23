@@ -89,7 +89,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
             UserSetting::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($userSetting = $userSettings->next_result())
+        foreach($userSettings as $userSetting)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),

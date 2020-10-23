@@ -63,7 +63,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $publicationsById = [];
         $assignmentPublicationsById = [];
 
-        while ($publication = $publication_resultset->next_result())
+        foreach($publication_resultset as $publication)
         {
             $publicationsById[$publication[DataClass::PROPERTY_ID]] = $publication;
         }

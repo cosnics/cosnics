@@ -84,7 +84,7 @@ abstract class ContentObjectInstaller extends Installer
             );
             $user = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters($condition)
-            )->next_result();
+            )->current();
 
             Session::register('_uid', $user->get_id());
 

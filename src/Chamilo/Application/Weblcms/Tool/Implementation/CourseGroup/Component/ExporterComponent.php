@@ -110,7 +110,7 @@ class ExporterComponent extends Manager
 
         $users = array();
 
-        while ($user_record = $user_records->next_result())
+        foreach($user_records as $user_record)
         {
             $users[] = DataClass::factory(User::class, $user_record);
         }
@@ -214,7 +214,7 @@ class ExporterComponent extends Manager
         $table[0]['Course Groups'] = Translation::get('CourseGroups');
 
         $index = 0;
-        while ($block_data = $data->next_result())
+        foreach($data as $block_data)
         {
             // if (!$block_data instanceof User)
             // {
@@ -228,7 +228,7 @@ class ExporterComponent extends Manager
                 $this->get_course_id()
             );
             $course_groups_subscribed = array();
-            while ($course_group = $course_groups->next_result())
+            foreach($course_groups as $course_group)
             {
                 $course_groups_subscribed[] = $course_group->get_name();
             }
@@ -290,7 +290,7 @@ class ExporterComponent extends Manager
      */
     protected function handle_course_groups(ResultSet $course_groups, $worksheet, $rowcount = 0)
     {
-        while ($course_group = $course_groups->next_result())
+        foreach($course_groups as $course_group)
         {
             $course_group_users = DataManager::retrieve_course_group_users_with_subscription_time(
                 $course_group->get_id(),

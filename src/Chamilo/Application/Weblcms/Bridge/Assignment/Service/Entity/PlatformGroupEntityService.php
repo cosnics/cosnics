@@ -132,7 +132,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
 
-            while ($platformGroup = $platformGroups->next_result())
+            foreach($platformGroups as $platformGroup)
             {
                 $this->targetPlatformGroupIds[$id][] = $platformGroup->getId();
             }

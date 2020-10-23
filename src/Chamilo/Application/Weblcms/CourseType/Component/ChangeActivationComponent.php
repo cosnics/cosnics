@@ -32,7 +32,7 @@ class ChangeActivationComponent extends Manager
         $this->set_parameter(self::PARAM_COURSE_TYPE_ID, $course_types);
         $failures = 0;
         
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             
             if (is_null($active_status))
@@ -52,7 +52,7 @@ class ChangeActivationComponent extends Manager
         {
             $message = $this->get_result(
                 $failures, 
-                count($course_types->size()), 
+                $course_types->count(),
                 'CourseTypeNotDeactivated', 
                 'CourseTypesNotDeactivated', 
                 'CourseTypeDeactivated', 
@@ -62,7 +62,7 @@ class ChangeActivationComponent extends Manager
         {
             $message = $this->get_result(
                 $failures, 
-                count($course_types->size()), 
+                $course_types->count(),
                 'CourseTypeNotActivated', 
                 'CourseTypesNotActivated', 
                 'CourseTypeActivated', 

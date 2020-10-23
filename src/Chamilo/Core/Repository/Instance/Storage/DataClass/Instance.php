@@ -167,7 +167,7 @@ class Instance extends CompositeDataClass
                 new StaticConditionVariable($this->get_id()));
             $settings = DataManager::retrieves(Setting::class, new DataClassRetrievesParameters($condition));
 
-            while ($setting = $settings->next_result())
+            foreach($settings as $setting)
             {
                 if (! $setting->delete())
                 {

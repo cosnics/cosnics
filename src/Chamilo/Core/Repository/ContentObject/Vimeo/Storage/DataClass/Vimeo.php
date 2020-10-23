@@ -53,6 +53,6 @@ class Vimeo extends ContentObject implements Versionable, Includeable
         $external_repositories = DataManager::retrieves(
             Instance::class,
             new DataClassRetrievesParameters($condition));
-        return $external_repositories->size() == 1;
+        return $external_repositories->count() == 1;
     }
 }

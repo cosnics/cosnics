@@ -215,7 +215,7 @@ class CourseUserCategoryForm extends FormValidator
             $defaultCourseTypes = new AdvancedElementFinderElements();
             $courseTypeGlyph = new FontAwesomeGlyph('layer-group', array(), null, 'fas');
 
-            while ($type = $courseTypeUserCategories->next_result())
+            foreach($courseTypeUserCategories as $type)
             {
                 $courseType = DataManager::retrieve_by_id(CourseType::class, $type->get_course_type_id());
                 $defaultCourseTypes->add_element(

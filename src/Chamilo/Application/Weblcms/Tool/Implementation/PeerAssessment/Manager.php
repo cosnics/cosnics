@@ -506,7 +506,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($object->get_id())));
 
-            while ($child = $children->next_result())
+            foreach($children as $child)
             {
                 // TODO check this ???
                 // $this->indicators[] = $child;

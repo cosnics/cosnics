@@ -64,9 +64,9 @@ abstract class GlossaryRenderer
      * 
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem>
      */
     public function get_objects($offset = null, $count = null, $order_property = null)
     {

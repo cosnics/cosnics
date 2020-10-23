@@ -48,7 +48,7 @@ class Block extends BlockRenderer
             LoginLogout::class,
             new DataClassRetrievesParameters($condition, 1, 0, array($order_by)));
         
-        $tracker = $trackers->next_result();
+        $tracker = $trackers->current();
         
         if (is_null($tracker))
         {

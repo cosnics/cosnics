@@ -639,11 +639,11 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $condition mixed
-     * @param $order_property ObjectTableOrder
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      *
-     * @return ArrayResultSet
+     * @return \ArrayIterator
      */
     public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
     {

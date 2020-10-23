@@ -212,7 +212,7 @@ abstract class ToolInstaller extends Installer
     protected function install_tool_for_existing_course_types()
     {
         $course_types = CourseTypeDataManager::retrieves(CourseType::class, new DataClassRetrievesParameters());
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             if (!$this->install_static_tool_setting_relations_for_object(
                 $course_type, '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting',
@@ -245,7 +245,7 @@ abstract class ToolInstaller extends Installer
         $course_management_rights = CourseManagementRights::getInstance();
 
         $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             if (!$this->install_static_tool_setting_relations_for_object(
                 $course, '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting', 'set_course_id'

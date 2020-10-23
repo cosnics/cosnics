@@ -102,7 +102,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $direct_groups = self::retrieves(CourseGroup::class, new DataClassRetrievesParameters($dg_condition));
 
         $direct_group_conditions = array();
-        while ($group = $direct_groups->next_result())
+        foreach($direct_groups as $group)
         {
             $and_conditions = array();
 
@@ -179,7 +179,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new DataClassRetrievesParameters($condition));
         $user_ids = array();
 
-        while ($relation = $relations->next_result())
+        foreach($relations as $relation)
         {
             $user_ids[] = $relation->get_user();
         }
@@ -449,7 +449,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return true;
         }
 
-        while ($group_course_group = $all_groups->next_result())
+        foreach($all_groups as $group_course_group)
         {
             $conditions = array();
 
@@ -471,7 +471,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 CourseGroupUserRelation::class,
                 new DataClassRetrievesParameters($condition));
 
-            if ($users->next_result() != null)
+            if ($users->current() != null)
             {
                 $num_groups ++;
             }
@@ -486,7 +486,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $user_id
      * @param null $course_id
      *
-     * @return mixed
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
      */
     public static function retrieve_course_groups_from_user($user_id, $course_id = null)
     {
@@ -534,7 +534,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $data_set = self::retrieve_course_groups_from_user($user_id, $course_id);
 
         $course_groups_subscribed = array();
-        while ($course_group = $data_set->next_result())
+        foreach($data_set as $course_group)
         {
             $course_groups_subscribed[] = $course_group->get_name();
         }
@@ -565,7 +565,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $parents = $course_group->get_parents(false);
 
-            while ($parent = $parents->next_result())
+            foreach($parents as $parent)
             {
                 if (! array_key_exists($parent->get_id(), $course_groups_recursive))
                 {

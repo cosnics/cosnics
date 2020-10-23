@@ -32,18 +32,17 @@ class PublicationAccessBlock extends ToolBlock
 
         $course_visits = $this->retrieve_course_visits();
 
-        for ($counter = 0; $counter < $course_visits->size(); $counter ++)
+        for ($counter = 0; $counter < $course_visits->count(); $counter ++)
         {
             $reporting_data->add_category($counter);
         }
 
         $counter = 0;
 
-        while ($course_visit = $course_visits->next_result())
+        foreach ($course_visits as $course_visit)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class,
-                $course_visit->get_user_id()
+                User::class, $course_visit->get_user_id()
             );
 
             if ($user)
@@ -53,15 +52,11 @@ class PublicationAccessBlock extends ToolBlock
             }
 
             $reporting_data->add_data_category_row(
-                $counter,
-                Translation::get('User', null, Manager::context()),
-                $name
+                $counter, Translation::get('User', null, Manager::context()), $name
             );
 
             $reporting_data->add_data_category_row(
-                $counter,
-                Translation::get('OfficialCode', null, Manager::context()),
-                $officialCode
+                $counter, Translation::get('OfficialCode', null, Manager::context()), $officialCode
             );
 
             $this->add_reporting_data_from_course_visit_as_row($counter, $reporting_data, $course_visit);
@@ -74,22 +69,21 @@ class PublicationAccessBlock extends ToolBlock
         return $reporting_data;
     }
 
-    public function retrieve_data()
+    public function get_views()
     {
-        return $this->count_data();
+        return array(Html::VIEW_TABLE);
     }
 
     /**
      * Retrieves the course visit records for the given publication
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit>
      */
     public function retrieve_course_visits()
     {
         $content_object_publication_id = $this->getPublicationId();
         $content_object_publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $content_object_publication_id
+            ContentObjectPublication::class, $content_object_publication_id
         );
 
         if (!$content_object_publication instanceof ContentObjectPublication)
@@ -107,21 +101,16 @@ class PublicationAccessBlock extends ToolBlock
         $tool_id = $this->get_tool_registration($content_object_publication->get_tool())->get_id();
 
         $condition = WeblcmsTrackingDataManager::get_course_visit_conditions_by_course_data(
-            $content_object_publication->get_course_id(),
-            $tool_id,
-            $category_id,
-            $content_object_publication_id,
-            false
+            $content_object_publication->get_course_id(), $tool_id, $category_id, $content_object_publication_id, false
         );
 
         return WeblcmsTrackingDataManager::retrieves(
-            CourseVisit::class,
-            new DataClassRetrievesParameters($condition)
+            CourseVisit::class, new DataClassRetrievesParameters($condition)
         );
     }
 
-    public function get_views()
+    public function retrieve_data()
     {
-        return array(Html::VIEW_TABLE);
+        return $this->count_data();
     }
 }

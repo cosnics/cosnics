@@ -125,7 +125,7 @@ class CourseSectionForm extends FormValidator
             CourseSection::class, new DataClassRetrievesParameters($condition)
         );
 
-        if ($course_sections->size() > 0)
+        if ($course_sections->count() > 0)
         {
             return false;
         }

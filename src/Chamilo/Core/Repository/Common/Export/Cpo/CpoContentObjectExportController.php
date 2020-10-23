@@ -371,7 +371,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         
-        while ($content_object = $content_objects->next_result())
+        foreach($content_objects as $content_object)
         {
             if (! $this->in_id_cache($content_object->get_id()))
             {
@@ -451,7 +451,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $content_object_versions = DataManager::retrieve_content_object_versions(
                 $content_object);
             
-            while ($content_object_version = $content_object_versions->next_result())
+            foreach($content_object_versions as $content_object_version)
             {
                 if (! $this->in_id_cache($content_object_version->get_id()))
                 {
@@ -513,9 +513,9 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 ComplexContentObjectItem::class,
                 $condition);
             
-            if ($children->size() > 0)
+            if ($children->count() > 0)
             {
-                while ($child = $children->next_result())
+                foreach($children as $child)
                 {
                     $this->add_content_object_sub_item($child);
                     if (! $this->in_id_cache($child->get_ref_object()->get_id()))
@@ -563,9 +563,9 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ContentObjectAttachment::class,
             new DataClassRetrievesParameters($condition));
         
-        if ($content_object_attachments->size() > 0)
+        if ($content_object_attachments->count() > 0)
         {
-            while ($content_object_attachment = $content_object_attachments->next_result())
+            foreach($content_object_attachments as $content_object_attachment)
             {
                 $this->add_content_object_attachment($content_object_attachment);
                 if (! $this->in_id_cache($content_object_attachment->get_attachment_object()->get_id()))
@@ -607,9 +607,9 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ContentObjectInclude::class,
             new DataClassRetrievesParameters($condition));
         
-        if ($content_object_includes->size() > 0)
+        if ($content_object_includes->count() > 0)
         {
-            while ($content_object_include = $content_object_includes->next_result())
+            foreach($content_object_includes as $content_object_include)
             {
                 $this->add_content_object_include($content_object, $content_object_include->get_include_object());
                 if (! $this->in_id_cache($content_object_include->get_include_object()->get_id()))

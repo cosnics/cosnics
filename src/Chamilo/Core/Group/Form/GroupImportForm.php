@@ -253,7 +253,7 @@ class GroupImportForm extends FormValidator
 
         $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
 
-        return $groups->next_result();
+        return $groups->current();
     }
 
     public function group_code_exists($code)

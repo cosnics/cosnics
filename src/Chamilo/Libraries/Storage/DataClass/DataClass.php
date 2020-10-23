@@ -188,7 +188,7 @@ abstract class DataClass
                 $dependency_class, new DataClassRetrievesParameters($dependency_condition)
             );
 
-            while ($dependency_object = $dependency_objects->next_result())
+            foreach($dependency_objects as $dependency_object)
             {
                 if (!$dependency_object->delete())
                 {

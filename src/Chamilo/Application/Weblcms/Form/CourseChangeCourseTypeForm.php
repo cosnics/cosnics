@@ -66,11 +66,11 @@ class CourseChangeCourseTypeForm extends FormValidator
         {
             $course_types[0] = Translation::get('NoCourseType');
         }
-        $this->size = $course_type_objects->size();
+        $this->size = $course_type_objects->count();
         if ($this->size != 0)
         {
             $count = 0;
-            while ($course_type = $course_type_objects->next_result())
+            foreach($course_type_objects as $course_type)
             {
                 $course_types[$course_type->get_id()] = $course_type->get_name();
             }

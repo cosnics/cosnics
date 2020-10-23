@@ -161,7 +161,7 @@ class Manager implements PublicationInterface
 
         $publications = DataManager::retrieves(Publication::class, $parameters);
 
-        while ($publication = $publications->next_result())
+        foreach($publications as $publication)
         {
             if (! $publication->delete())
             {
@@ -218,7 +218,7 @@ class Manager implements PublicationInterface
 
         $publication_attributes = array();
 
-        while ($record = $result->next_result())
+        foreach($result as $record)
         {
             $publication_attributes[] = self::create_publication_attributes_from_record($record);
         }

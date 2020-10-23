@@ -132,7 +132,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         $users = $this->retrieve_group_rel_users($condition);
 
         $conditions = array();
-        while ($user = $users->next_result())
+        foreach($users as $user)
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(

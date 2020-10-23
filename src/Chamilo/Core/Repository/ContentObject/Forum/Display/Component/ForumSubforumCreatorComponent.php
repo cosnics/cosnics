@@ -134,7 +134,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($object),
                 ComplexContentObjectItem::get_table_name()));
-        while ($complex_content_object_item = $complex_content_object_items->next_result())
+        foreach($complex_content_object_items as $complex_content_object_item)
         {
 
             if ($complex_content_object_item->is_complex())
@@ -158,7 +158,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF),
                 new StaticConditionVariable($object_id)));
-        while ($complex_content_object_item_parent = $complex_content_object_items_parent->next_result())
+        foreach($complex_content_object_items_parent as $complex_content_object_item_parent)
         {
             if ($complex_content_object_item_parent->is_complex())
             {

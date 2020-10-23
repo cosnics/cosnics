@@ -37,7 +37,7 @@ class CourseUserExportExtender implements UserExportExtender
         
         $this->course_platform_groups = array();
         
-        while ($course_platform_group = $course_platform_groups->next_result())
+        foreach($course_platform_groups as $course_platform_group)
         {
             $this->course_platform_groups[$course_platform_group->get_id()] = $course_platform_group;
         }

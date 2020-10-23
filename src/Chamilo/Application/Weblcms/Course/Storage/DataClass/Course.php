@@ -605,7 +605,7 @@ class Course extends DataClass
 
         // Create a location for each tool
         $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
-        while ($tool = $tools->next_result())
+        foreach($tools as $tool)
         {
             if (! CourseManagementRights::getInstance()->create_location_in_courses_subtree(
                 CourseManagementRights::TYPE_COURSE_MODULE,

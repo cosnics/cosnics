@@ -115,7 +115,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                             ), new StaticConditionVariable($old_id), ComplexContentObjectItem::get_table_name()
                         )
                     );
-                    while ($child = $children->next_result())
+                    foreach($children as $child)
                     {
                         $child->set_parent($new_id);
                         $child->update();

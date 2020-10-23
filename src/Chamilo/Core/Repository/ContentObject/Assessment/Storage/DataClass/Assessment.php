@@ -182,7 +182,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         
         $maxscore = 0;
         
-        while ($clo_question = $clo_questions->next_result())
+        foreach($clo_questions as $clo_question)
         {
             $maxscore += $clo_question->get_weight();
         }

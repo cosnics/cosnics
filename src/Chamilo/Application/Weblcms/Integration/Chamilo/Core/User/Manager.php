@@ -28,7 +28,7 @@ class Manager implements UserInterface
         
         $courses = DataManager::retrieve_all_courses_from_user($user);
         
-        if ($courses->size() == 0)
+        if ($courses->count() == 0)
         {
             $table->setCellContents(2, 0, Translation::get('NoCourses'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
@@ -36,7 +36,7 @@ class Manager implements UserInterface
         
         $index = 2;
         
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $redirect = new Redirect(
                 array(

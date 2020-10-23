@@ -63,7 +63,7 @@ class AssessmentsBlock extends AssessmentBlock
             ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($pub = $pub_resultset->next_result())
+        foreach($pub_resultset as $pub)
         {
             $params = $this->get_parent()->get_parameters();
             $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
@@ -110,7 +110,7 @@ class AssessmentsBlock extends AssessmentBlock
 
         $user_ids = array();
 
-        while ($assessment_attempt = $assessment_attempts->next_result())
+        foreach($assessment_attempts as $assessment_attempt)
         {
             if ($assessment_attempt->get_start_time() > $last_attempt)
             {
@@ -166,7 +166,7 @@ class AssessmentsBlock extends AssessmentBlock
             $max_score = $this->get_score_bar($max_score);
         }
 
-        $reporting_info[Translation::get('NumberOfAttempts')] = $assessment_attempts->size();
+        $reporting_info[Translation::get('NumberOfAttempts')] = $assessment_attempts->count();
 
         $reporting_info[Translation::get('ResponseUsers')] =
             count(array_unique($user_ids)) . ' / ' . count($target_users);

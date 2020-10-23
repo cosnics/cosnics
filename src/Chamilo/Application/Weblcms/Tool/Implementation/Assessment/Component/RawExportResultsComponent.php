@@ -100,7 +100,7 @@ class RawExportResultsComponent extends Manager
         $assessment_attempts = WeblcmsTrackingDataManager::retrieves(
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
-        while ($assessment_attempt = $assessment_attempts->next_result())
+        foreach($assessment_attempts as $assessment_attempt)
         {
             $assessment_result = new AssessmentResult(
                 $assessment_attempt->get_id(), 
@@ -148,7 +148,7 @@ class RawExportResultsComponent extends Manager
         $question_attempts = DataManager::retrieves(
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $question_results[] = new QuestionResult(
                 unserialize($question_attempt->get_answer()), 

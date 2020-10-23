@@ -47,7 +47,7 @@ class InstanceFormService
         $entity = $this->getDataClassEntityFactory()->getEntity($entity->getDataClassName());
         $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType($entity);
 
-        while ($availableSchema = $availableSchemas->next_result())
+        foreach($availableSchemas as $availableSchema)
         {
             $formValidator->addElement(
                 'checkbox', InstanceService::PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']',

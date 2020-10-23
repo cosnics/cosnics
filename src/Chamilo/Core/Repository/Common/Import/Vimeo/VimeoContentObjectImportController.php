@@ -68,7 +68,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                     Instance::class,
                     new DataClassRetrievesParameters($condition));
                 
-                $external_repository = $external_repositories->next_result();
+                $external_repository = $external_repositories->current();
                 $vimeo_connector = DataConnector::getInstance($external_repository);
                 $external_object = $vimeo_connector->retrieve_external_repository_object($external_id);
                 
@@ -121,7 +121,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
             Instance::class,
             new DataClassRetrievesParameters($condition));
-        $vimeo_connector_available = $external_repositories->size() == 1;
+        $vimeo_connector_available = $external_repositories->count() == 1;
         
         return $vimeo_object_available && $vimeo_connector_available;
     }

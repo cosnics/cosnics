@@ -130,7 +130,7 @@ class MigrationService
     )
     {
         $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
-        while ($complexContentObjectItem = $complexContentObjectItems->next_result())
+        foreach($complexContentObjectItems as $complexContentObjectItem)
         {
             /** @var ComplexContentObjectItem $complexContentObjectItem */
 

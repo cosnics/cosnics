@@ -52,7 +52,7 @@ class AssessmentOverviewBlock extends ToolBlock
             new DataClassRetrievesParameters($condition));
         
         $attempts = array();
-        while ($attempt = $attempts_result_set->next_result())
+        foreach($attempts_result_set as $attempt)
         {
             $attempts[$attempt->get_user_id()][$attempt->get_assessment_id()][] = $attempt;
         }

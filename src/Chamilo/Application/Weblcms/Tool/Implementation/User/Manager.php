@@ -141,7 +141,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $subscribedPlatformGroupIds = $this->get_subscribed_platformgroup_ids($this->get_course_id());
 
-        while ($parent = $parents->next_result())
+        foreach($parents as $parent)
         {
             if (in_array($parent->getId(), $subscribedPlatformGroupIds))
             {

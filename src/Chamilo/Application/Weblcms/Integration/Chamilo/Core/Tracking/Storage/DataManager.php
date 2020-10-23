@@ -23,8 +23,12 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
+/**
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
     const PREFIX = 'tracking_weblcms_';
@@ -97,7 +101,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $user_id = null
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_tools_access_summary_data($course_id = null, $user_id = null)
     {
@@ -151,7 +155,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $publication_id
      * @param int $user_id - [OPTIONAL]
      *
-     * @return RecordResultSet
+     * @return string[]
      */
     public static function retrieve_publication_access_summary_data(
         $course_id, $tool_id, $category_id, $publication_id,
@@ -401,7 +405,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param ObjectTableOrder[] $order_by
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_assessment_attempts_with_user(
         $condition = null, $offset = null, $count = null,

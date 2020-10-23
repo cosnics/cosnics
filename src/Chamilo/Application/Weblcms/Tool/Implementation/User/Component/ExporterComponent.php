@@ -103,7 +103,7 @@ class ExporterComponent extends Manager
 
         $users = array();
 
-        while ($user_record = $user_records->next_result())
+        foreach($user_records as $user_record)
         {
             $users[] = DataClass::factory(User::class, $user_record);
         }
@@ -245,7 +245,7 @@ class ExporterComponent extends Manager
         $parentIds = array();
 
         $parents = $group->get_ancestors(true);
-        while ($parent = $parents->next_result())
+        foreach($parents as $parent)
         {
             $parentIds[] = $parent->getId();
         }
@@ -257,7 +257,7 @@ class ExporterComponent extends Manager
 
         $directlySubscribedGroups = CourseDataManager::retrieve_groups_directly_subscribed_to_course($condition);
 
-        while ($directlySubscribedGroup = $directlySubscribedGroups->next_result())
+        foreach($directlySubscribedGroups as $directlySubscribedGroup)
         {
             if ($directlySubscribedGroup[CourseEntityRelation::PROPERTY_STATUS] == CourseEntityRelation::STATUS_TEACHER)
             {

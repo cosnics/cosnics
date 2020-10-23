@@ -59,7 +59,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
             LearningPathTreeNodeQuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
         
-        while ($tracker = $trackers->next_result())
+        foreach($trackers as $tracker)
         {
             $succes &= $tracker->delete();
         }

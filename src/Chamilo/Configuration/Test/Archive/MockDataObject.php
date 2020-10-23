@@ -437,7 +437,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             array(), 
             '\\common\\libraries\\MockDataObject');
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $objects[] = $res;
         }
@@ -461,7 +461,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             array(), 
             '\\common\\libraries\\MockDataObject');
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $objects[] = $res;
         }
@@ -539,7 +539,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $order, 
             '\\common\\libraries\\MockDataObject');
         $obj_retrieved = array();
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
         }
@@ -554,7 +554,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $order, 
             '\\common\\libraries\\MockDataObject');
         $obj_retrieved = array();
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
         }
@@ -589,7 +589,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $order, 
             '\\common\\libraries\\MockDataObject');
         $obj_retrieved = array();
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
         }
@@ -607,7 +607,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $order = array(new ObjectTableOrder('inta', SORT_ASC));
         $objectset = $this->db->retrieve_objects('mockdata', null, 1, 1, $order, '\\common\\libraries\\MockDataObject');
         $objects = array();
-        while ($res = $objectset->next_result())
+        foreach($objectset as $res)
         {
             $objects[] = $res;
         }

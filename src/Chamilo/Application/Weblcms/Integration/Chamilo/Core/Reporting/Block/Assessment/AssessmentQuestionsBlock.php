@@ -49,7 +49,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $count = 0;
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        // while ($question = $questions->next_result())
+        // foreach($questions as $question)
         foreach ($questions as $question)
         {
             $count ++;
@@ -96,7 +96,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $score = $min = $max = null;
         $correct_answers = $finished_attempts = 0;
 
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $assessment_attempt = $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
 
@@ -148,7 +148,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
 
         $reporting_info[Translation::get('QuestionTitle')] = $object->get_title();
         $reporting_info[Translation::get('QuestionType')] = $type;
-        $reporting_info[Translation::get('NumberOfAttempts')] = $question_attempts->size();
+        $reporting_info[Translation::get('NumberOfAttempts')] = $question_attempts->count();
         $reporting_info[Translation::get('DifficultyIndex')] = $difficulty_index;
         $reporting_info[Translation::get('AverageScore')] = $score;
         $reporting_info[Translation::get('MinScoreAchieved')] = $min;
@@ -192,7 +192,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         );
 
         $questions_arr = array();
-        while ($question = $questions->next_result())
+        foreach($questions as $question)
         {
             $questions_arr[] = $question;
         }

@@ -76,7 +76,7 @@ abstract class GroupsFeedComponent extends Manager
 
         // Add groups
         $groups = $this->retrieve_groups();
-        if ($groups && $groups->size() > 0)
+        if ($groups && $groups->count() > 0)
         {
             $translator = $this->getTranslator();
             // Add group category
@@ -87,7 +87,7 @@ abstract class GroupsFeedComponent extends Manager
             );
             $elements->add_element($group_category);
 
-            while ($group = $groups->next_result())
+            foreach($groups as $group)
             {
                 $group_category->add_child($this->get_group_element($group));
             }
@@ -152,7 +152,7 @@ abstract class GroupsFeedComponent extends Manager
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     abstract public function retrieve_groups();
 

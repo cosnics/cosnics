@@ -58,7 +58,7 @@ class ParentChangerComponent extends Manager
                     new StaticConditionVariable($ids[0])),
                 null,
                 null,
-                array())->next_result();
+                array())->current();
 
             if (! $selected_category)
             {
@@ -81,7 +81,7 @@ class ParentChangerComponent extends Manager
                     null,
                     null,
                     array()
-                )->next_result();
+                )->current();
             }
 
             $form = $this->get_move_form($categories, $parent);
@@ -203,7 +203,7 @@ class ParentChangerComponent extends Manager
         $categories = $this->get_parent()->retrieve_categories($condition, null, null, array());
 
         $tree = array();
-        while ($cat = $categories->next_result())
+        foreach($categories as $cat)
         {
             if (in_array($cat->get_id(), $selected_categories))
             {
@@ -238,7 +238,7 @@ class ParentChangerComponent extends Manager
 
         $i = 1;
 
-        while ($cat = $categories->next_result())
+        foreach($categories as $cat)
         {
             $cat->set_display_order($i);
             $cat->update();

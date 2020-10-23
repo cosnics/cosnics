@@ -6,12 +6,11 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\LanguageConsulter;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Exception;
 
 /**
@@ -27,8 +26,10 @@ class Configuration
 
     // Constants
     const REGISTRATION_CONTEXT = 1;
-    const REGISTRATION_TYPE = 2;
+
     const REGISTRATION_INTEGRATION = 3;
+
+    const REGISTRATION_TYPE = 2;
 
     /**
      * Instance of this class for the singleton pattern.
@@ -44,6 +45,24 @@ class Configuration
 
     /**
      *
+     * @return boolean
+     */
+    public static function available()
+    {
+        return self::getInstance()->is_available();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get()
+    {
+        return self::getInstance()->get_setting(func_get_args());
+    }
+
+    /**
+     *
      * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
     public function getConfigurationConsulter()
@@ -53,20 +72,11 @@ class Configuration
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    public function getRegistrationConsulter()
+    public function getDataClassRepositoryCache()
     {
-        return $this->getService(RegistrationConsulter::class);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
-     */
-    public function getLanguageConsulter()
-    {
-        return $this->getService(LanguageConsulter::class);
+        return $this->getService(DataClassRepositoryCache::class);
     }
 
     /**
@@ -85,16 +95,108 @@ class Configuration
      */
     public static function getInstance()
     {
-        if (! isset(self::$instance))
+        if (!isset(self::$instance))
         {
             self::$instance = new static();
         }
+
         return self::$instance;
     }
 
     /**
      *
+     * @param string $integration
+     * @param string $root
+     *
+     * @return string[][]
+     */
+    public function getIntegrationRegistrations($integration, $root = null)
+    {
+        return $this->getRegistrationConsulter()->getIntegrationRegistrations($integration, $root);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     */
+    public function getLanguageConsulter()
+    {
+        return $this->getService(LanguageConsulter::class);
+    }
+
+    /**
+     *
+     * @param string $isocode
+     *
+     * @return string
+     */
+    public function getLanguageNameFromIsocode($isocode)
+    {
+        return $this->getLanguageConsulter()->getLanguageNameFromIsocode($isocode);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getLanguages()
+    {
+        return $this->getLanguageConsulter()->getLanguages();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     */
+    public function getRegistrationConsulter()
+    {
+        return $this->getService(RegistrationConsulter::class);
+    }
+
+    /**
+     *
+     * @param string $context
+     *
+     * @return string[]
+     */
+    public function get_registration($context)
+    {
+        return $this->getRegistrationConsulter()->getRegistrationForContext($context);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_registration_contexts()
+    {
+        return $this->getRegistrationConsulter()->getRegistrationContexts();
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_registrations()
+    {
+        return $this->getRegistrationConsulter()->getRegistrations();
+    }
+
+    /**
+     *
+     * @param string $type
+     *
+     * @return string[][]
+     */
+    public function get_registrations_by_type($type)
+    {
+        return $this->getRegistrationConsulter()->getRegistrationsByType($type);
+    }
+
+    /**
+     *
      * @param string[] $keys
+     *
      * @return string
      */
     public function get_setting($keys)
@@ -104,39 +206,35 @@ class Configuration
 
     /**
      *
-     * @param string[] $keys
-     * @param mixed $value TODO: Reimplement this in the new services ?
+     * @param string $context
+     *
+     * @return boolean
      */
-    public function set($keys, $value)
+    public function has_settings($context)
     {
-        $variables = $keys;
-        $values = &$this->settings;
-
-        while (count($variables) > 0)
-        {
-            $key = array_shift($variables);
-
-            if (! isset($values[$key]))
-            {
-                $values[$key] = null;
-                $values = &$values[$key];
-            }
-            else
-            {
-                $values = &$values[$key];
-            }
-        }
-
-        $values = $value;
+        return $this->getConfigurationConsulter()->hasSettingsForContext($context);
     }
 
     /**
      *
-     * @return string
+     * @param string $context
+     *
+     * @return boolean
      */
-    public static function get()
+    public function isRegistered($context)
     {
-        return self::getInstance()->get_setting(func_get_args());
+        return $this->getRegistrationConsulter()->isContextRegistered($context);
+    }
+
+    /**
+     *
+     * @param string $context
+     *
+     * @return boolean
+     */
+    public function isRegisteredAndActive($context)
+    {
+        return $this->getRegistrationConsulter()->isContextRegisteredAndActive($context);
     }
 
     /**
@@ -153,23 +251,26 @@ class Configuration
         $configuration = new \Doctrine\DBAL\Configuration();
 
         $data_source_name = DataSourceName::factory(
-            'Doctrine',
-            array(
+            'Doctrine', array(
                 'driver' => Configuration::get('Chamilo\Configuration', 'database', 'driver'),
                 'username' => Configuration::get('Chamilo\Configuration', 'database', 'username'),
                 'host' => Configuration::get('Chamilo\Configuration', 'database', 'host'),
                 'name' => Configuration::get('Chamilo\Configuration', 'database', 'name'),
-                'password' => Configuration::get('Chamilo\Configuration', 'database', 'password')));
+                'password' => Configuration::get('Chamilo\Configuration', 'database', 'password')
+            )
+        );
 
         $connection_parameters = array(
             'user' => $data_source_name->get_username(),
             'password' => $data_source_name->get_password(),
             'host' => $data_source_name->get_host(),
-            'driverClass' => $data_source_name->get_driver(true));
+            'driverClass' => $data_source_name->get_driver(true)
+        );
 
         try
         {
             DriverManager::getConnection($connection_parameters, $configuration)->connect();
+
             return true;
         }
         catch (Exception $exception)
@@ -180,69 +281,24 @@ class Configuration
 
     /**
      *
+     * @param string $context
+     *
      * @return boolean
      */
-    public static function available()
+    public static function is_registered($context)
     {
-        return self::getInstance()->is_available();
+        return self::getInstance()->isRegistered($context);
     }
 
     /**
      *
      * @param string $context
-     * @return string[]
-     */
-    public function get_registration($context)
-    {
-        return $this->getRegistrationConsulter()->getRegistrationForContext($context);
-    }
-
-    /**
      *
-     * @param string $context
      * @return string[]
      */
     public static function registration($context)
     {
         return self::getInstance()->get_registration($context);
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_registrations()
-    {
-        return $this->getRegistrationConsulter()->getRegistrations();
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_registration_contexts()
-    {
-        return $this->getRegistrationConsulter()->getRegistrationContexts();
-    }
-
-    /**
-     *
-     * @param string $type
-     * @return string[][]
-     */
-    public function get_registrations_by_type($type)
-    {
-        return $this->getRegistrationConsulter()->getRegistrationsByType($type);
-    }
-
-    /**
-     *
-     * @param string $type
-     * @return string[][]
-     */
-    public static function registrations_by_type($type)
-    {
-        return self::getInstance()->get_registrations_by_type($type);
     }
 
     /**
@@ -256,62 +312,13 @@ class Configuration
 
     /**
      *
-     * @param string $context
-     * @return boolean
-     */
-    public static function is_registered($context)
-    {
-        return self::getInstance()->isRegistered($context);
-    }
-
-    /**
+     * @param string $type
      *
-     * @param string $context
-     * @return boolean
-     */
-    public function isRegistered($context)
-    {
-        return $this->getRegistrationConsulter()->isContextRegistered($context);
-    }
-
-    /**
-     *
-     * @param string $context
-     * @return boolean
-     */
-    public function isRegisteredAndActive($context)
-    {
-        return $this->getRegistrationConsulter()->isContextRegisteredAndActive($context);
-    }
-
-    /**
-     *
-     * @param string $integration
-     * @param string $root
      * @return string[][]
      */
-    public function getIntegrationRegistrations($integration, $root = null)
+    public static function registrations_by_type($type)
     {
-        return $this->getRegistrationConsulter()->getIntegrationRegistrations($integration, $root);
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getLanguages()
-    {
-        return $this->getLanguageConsulter()->getLanguages();
-    }
-
-    /**
-     *
-     * @param string $isocode
-     * @return string
-     */
-    public function getLanguageNameFromIsocode($isocode)
-    {
-        return $this->getLanguageConsulter()->getLanguageNameFromIsocode($isocode);
+        return self::getInstance()->get_registrations_by_type($type);
     }
 
     /**
@@ -320,8 +327,7 @@ class Configuration
      */
     public static function reset()
     {
-        RecordResultSetCache::truncates(array(Registration::class, Setting::class));
-        DataClassResultSetCache::truncates(array(Registration::class, Setting::class));
+        self::getInstance()->getDataClassRepositoryCache()->truncates(array(Registration::class, Setting::class));
         self::getInstance()->getConfigurationConsulter()->clearData();
         self::getInstance()->getRegistrationConsulter()->clearData();
         self::getInstance()->getLanguageConsulter()->clearData();
@@ -329,11 +335,29 @@ class Configuration
 
     /**
      *
-     * @param string $context
-     * @return boolean
+     * @param string[] $keys
+     * @param mixed $value TODO: Reimplement this in the new services ?
      */
-    public function has_settings($context)
+    public function set($keys, $value)
     {
-        return $this->getConfigurationConsulter()->hasSettingsForContext($context);
+        $variables = $keys;
+        $values = &$this->settings;
+
+        while (count($variables) > 0)
+        {
+            $key = array_shift($variables);
+
+            if (!isset($values[$key]))
+            {
+                $values[$key] = null;
+                $values = &$values[$key];
+            }
+            else
+            {
+                $values = &$values[$key];
+            }
+        }
+
+        $values = $value;
     }
 }

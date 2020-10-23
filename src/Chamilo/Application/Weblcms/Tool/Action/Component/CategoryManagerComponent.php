@@ -240,7 +240,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
             ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($cat = $subcategries->next_result())
+        foreach($subcategries as $cat)
         {
             $count = $this->count_category_publications($cat->get_id());
             if ($count > 0 || $this->have_subcategories_publications($cat->get_id()))

@@ -82,7 +82,7 @@ class GroupMenu extends HtmlMenu
                     $condition, 1, null,
                     new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
                 )
-            )->next_result();
+            )->current();
             $this->current_category = $group;
         }
         else
@@ -148,7 +148,7 @@ class GroupMenu extends HtmlMenu
                 $condition, 1, null,
                 new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
             )
-        )->next_result();
+        )->current();
         if (!$include_root)
         {
             return $this->get_menu_items($group->get_id());
@@ -203,7 +203,7 @@ class GroupMenu extends HtmlMenu
             )
         );
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             $group_id = $group->get_id();
 

@@ -230,7 +230,7 @@ abstract class Manager extends Application
                 CourseSection::class,
                 new DataClassRetrievesParameters($condition));
 
-            while ($section = $sections->next_result())
+            foreach($sections as $section)
             {
                 // $type = isset($section->type) ? $section->type : '';
                 $this->sections[] = $section;
@@ -589,7 +589,7 @@ abstract class Manager extends Application
     {
         $success = true;
         $course_groups = CourseGroupDataManager::retrieve_course_groups_from_user($user_id, $course->get_id());
-        while ($course_group = $course_groups->next_result())
+        foreach($course_groups as $course_group)
         {
             $success &= CourseGroupDataManager::unsubscribe_users_from_course_groups($user_id, $course_group->get_id());
         }

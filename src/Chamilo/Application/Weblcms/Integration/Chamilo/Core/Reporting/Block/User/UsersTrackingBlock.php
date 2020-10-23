@@ -38,7 +38,7 @@ class UsersTrackingBlock extends CourseBlock
         $count = 1;
         $users_resultset = CourseDataManager::retrieve_all_course_users($course_id);
 
-        while ($user = $users_resultset->next_result())
+        foreach($users_resultset as $user)
         {
             $course_summary_data = WeblcmsTrackingDataManager::retrieve_course_access_summary_data(
                 $course_id, $user[User::PROPERTY_ID]

@@ -37,7 +37,7 @@ class MoverComponent extends Manager
         $move_counter = ($direction == self::MOVE_DIRECTION_UP) ? - 1 : 1;
         
         $failures = 0;
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             $course_type->update_display_order_with_count($move_counter);
             

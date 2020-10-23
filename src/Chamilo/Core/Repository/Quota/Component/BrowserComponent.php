@@ -392,7 +392,7 @@ class BrowserComponent extends Manager implements TableSupport
         );
         $oldest_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
             ContentObject::class, new DataClassRetrievesParameters($condition)
-        )->next_result();
+        )->current();
 
         if ($oldest_object instanceof ContentObject)
         {

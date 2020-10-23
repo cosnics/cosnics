@@ -19,7 +19,7 @@ class ActiveInactiveBlock extends Block
             new DataClassRetrievesParameters());
         $active[Translation::get('Active')] = 0;
         $active[Translation::get('Inactive')] = 0;
-        while ($user = $users->next_result())
+        foreach($users as $user)
         {
             if ($user->get_active())
             {

@@ -43,7 +43,7 @@ class RandomizerComponent extends Manager
         $failures = 0;
         $questions = 0;
         
-        while ($complex_content_object_item = $complex_content_object_items->next_result())
+        foreach($complex_content_object_items as $complex_content_object_item)
         {
             if (in_array($complex_content_object_item->class_name(), $supported_types))
             {

@@ -80,7 +80,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
             new DataClassRetrievesParameters($condition)
         );
 
-        while ($question = $questions_resultset->next_result())
+        foreach($questions_resultset as $question)
         {
             $this->th_titles[] = $question->get_ref_object()->get_title();
         }

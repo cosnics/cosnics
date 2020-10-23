@@ -40,7 +40,7 @@ class EntityTranslationFormService
         );
         $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
 
-        while ($language = $languages->next_result())
+        foreach($languages as $language)
         {
             $fieldName = EntityTranslationService::PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
             $formValidator->addElement('text', $fieldName, $language->get_original_name());

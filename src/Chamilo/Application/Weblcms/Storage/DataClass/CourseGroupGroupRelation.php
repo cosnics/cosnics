@@ -275,7 +275,7 @@ class CourseGroupGroupRelation extends DataClass
         $data_set = array();
         $data_set = DataManager::retrieve_content_object_publication_categories($condition, null, null, null);
         
-        while ($course_groups = $data_set->next_result())
+        foreach($data_set as $course_groups)
         {
             return true;
         }
@@ -373,7 +373,7 @@ class CourseGroupGroupRelation extends DataClass
             $this->get_id());
         // check if current user is subscribed in any
         $current_subscriptions = 0;
-        while ($group = $group_set->next_result())
+        foreach($group_set as $group)
         {
             if ($group->is_member($user))
             {

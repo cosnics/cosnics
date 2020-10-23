@@ -1,26 +1,28 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component\UserAttemptStatusViewer;
 
+use ArrayIterator;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use ErrorException;
 
 /**
  *
  * @package repository.lib.complex_display.peer_asessment.component.user_attempt_status_viewer
  */
+
 /**
  * This class represents a data provider for a results candidate table
  */
 class UserAttemptStatusViewerTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function count_data($condition)
     {
         try
         {
             $array_result = $this->get_component()->get_attempts($this->get_component()->get_publication_id());
-            return new ArrayResultSet($array_result);
+
+            return count($array_result);
         }
         catch (ErrorException $e)
         {
@@ -28,12 +30,13 @@ class UserAttemptStatusViewerTableDataProvider extends DataClassTableDataProvide
         }
     }
 
-    public function count_data($condition)
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         try
         {
             $array_result = $this->get_component()->get_attempts($this->get_component()->get_publication_id());
-            return count($array_result);
+
+            return new ArrayIterator($array_result);
         }
         catch (ErrorException $e)
         {

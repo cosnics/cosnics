@@ -117,11 +117,11 @@ class WebpageContentObjectImportController extends ContentObjectImportController
             $condition = new AndCondition($conditions);
             $content_objects = DataManager::retrieve_active_content_objects(Webpage::class, $condition);
             
-            if ($content_objects->size() > 0)
+            if ($content_objects->count() > 0)
             {
-                if ($content_objects->size() == 1)
+                if ($content_objects->count() == 1)
                 {
-                    $content_object = $content_objects->next_result();
+                    $content_object = $content_objects->current();
                     
                     $redirect = new Redirect(
                         array(

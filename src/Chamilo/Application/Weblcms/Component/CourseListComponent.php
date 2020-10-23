@@ -184,7 +184,7 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
 
-        while ($courseType = $courseTypes->next_result())
+        foreach($courseTypes as $courseType)
         {
             if ($courseManagementRights->is_allowed(
                 CourseManagementRights::CREATE_COURSE_RIGHT,

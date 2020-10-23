@@ -117,7 +117,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new StaticConditionVariable($root_complex_content_ref),
                 ComplexContentObjectItem::get_table_name()));
 
-        while ($child = $children->next_result())
+        foreach($children as $child)
         {
             $copy_children[$child->get_id()] = $child->get_ref();
 

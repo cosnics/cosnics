@@ -299,7 +299,7 @@ class PropertyProviderService
     {
         $elements = $this->getElementService()->getElementsForSchema($schema);
 
-        while ($element = $elements->next_result())
+        foreach($elements as $element)
         {
             if (isset($submittedSchemaValues[$element->get_id()]))
             {

@@ -257,7 +257,7 @@ class AssessmentResultsExportController
             ComplexContentObjectItem::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($complex_question = $complex_questions_resultset->next_result())
+        foreach($complex_questions_resultset as $complex_question)
         {
             $this->export_question($complex_question, $assessment);
         }

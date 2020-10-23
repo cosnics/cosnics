@@ -47,7 +47,7 @@ class DeleteElementComponent extends Manager
                 $dynamic_form_element = DataManager::retrieve_dynamic_form_elements(
                     new EqualityCondition(
                         new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-                        new StaticConditionVariable($id)))->next_result();
+                        new StaticConditionVariable($id)))->current();
                 
                 if (! $dynamic_form_element->delete())
                 {

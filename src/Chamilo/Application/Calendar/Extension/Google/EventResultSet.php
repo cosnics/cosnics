@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use ArrayIterator;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventResultSet extends ArrayResultSet
+class EventResultSet extends ArrayIterator
 {
 
     /**
@@ -26,9 +26,8 @@ class EventResultSet extends ArrayResultSet
      */
     public function __construct(CalendarProperties $calendarProperties, array $googleCalendarEvents)
     {
-        $this->calendarProperties = $calendarProperties;
-        
         parent::__construct($googleCalendarEvents);
+        $this->calendarProperties = $calendarProperties;
     }
 
     /**
@@ -47,15 +46,5 @@ class EventResultSet extends ArrayResultSet
     public function setCalendarProperties(CalendarProperties $calendarProperties)
     {
         $this->calendarProperties = $calendarProperties;
-    }
-
-    /**
-     *
-     * @param boolean $mapToObject
-     * @return \Google_Service_Calendar_Event
-     */
-    public function next_result($mapToObject = false)
-    {
-        return parent::next_result($mapToObject);
     }
 }

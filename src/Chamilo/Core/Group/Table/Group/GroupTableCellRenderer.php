@@ -42,7 +42,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
             new StaticConditionVariable($group->get_id())
         );
         $users = $this->get_component()->retrieve_group_rel_users($condition);
-        $visible = ($users->size() > 0);
+        $visible = ($users->count() > 0);
 
         if ($visible)
         {

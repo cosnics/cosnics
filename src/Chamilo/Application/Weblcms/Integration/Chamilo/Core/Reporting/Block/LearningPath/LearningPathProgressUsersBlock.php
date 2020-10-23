@@ -68,14 +68,14 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $publications = array();
         $headings = array();
         $headings[] = Translation::get('Name');
-        while ($publication = $publication_resultset->next_result())
+        foreach($publication_resultset as $publication)
         {
             $publications[] = $publication;
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
-            if ($publication_resultset->size() > 5)
+            if ($publication_resultset->count() > 5)
             {
                 $headings[] = substr($content_object->get_title(), 0, 14);
             }
@@ -104,7 +104,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
                     ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
                 );
 
-                if ($publication_resultset->size() > 5)
+                if ($publication_resultset->count() > 5)
                 {
                     $title = substr($content_object->get_title(), 0, 14);
                 }

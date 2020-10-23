@@ -39,7 +39,7 @@ class AssessmentUsersBlock extends AssessmentBlock
 
         $user_attempts = array();
 
-        while ($assessment_attempt = $assessment_attempts->next_result())
+        foreach($assessment_attempts as $assessment_attempt)
         {
             $user_attempts[$assessment_attempt->get_user_id()]['count'] ++;
             $user_attempts[$assessment_attempt->get_user_id()]['time'] += $assessment_attempt->get_total_time();
@@ -104,7 +104,7 @@ class AssessmentUsersBlock extends AssessmentBlock
         );
         $user_attempts = $this->calculate_user_attempt_summary_data();
 
-        while ($user = $users_resultset->next_result())
+        foreach($users_resultset as $user)
         {
             $reporting_data->add_category($count);
 

@@ -23,7 +23,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
         
         $categories = array();
         
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $lang = CourseSettingsController::getInstance()->get_course_setting(
                 $course, 

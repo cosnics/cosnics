@@ -168,7 +168,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     {
         $answers = array();
 
-        while ($question_attempt = $this->question_attempts->next_result())
+        foreach ($this->question_attempts as $question_attempt)
         {
             $assessment_attempt = $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
 
@@ -180,7 +180,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             $this->get_answers_count_from_attempt($question_attempt, $answers);
         }
 
-        $this->question_attempts->reset();
+        $this->question_attempts->rewind();
 
         return $answers;
     }
@@ -188,7 +188,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     /**
      * Returns the attempts
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function get_attempts()
     {
@@ -242,7 +242,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
      */
     protected function get_total_attempts()
     {
-        return $this->question_attempts->size();
+        return $this->question_attempts->count();
     }
 
     /**

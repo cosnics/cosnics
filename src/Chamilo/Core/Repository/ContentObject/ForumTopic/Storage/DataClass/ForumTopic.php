@@ -247,7 +247,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             ComplexContentObjectItem::class,
             $condition);
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -291,7 +291,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 ComplexContentObjectItem::class,
                 $condition);
 
-            while ($item = $wrappers->next_result())
+            foreach($wrappers as $item)
             {
                 $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                     ContentObject::class,
@@ -327,7 +327,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             $emailnotificator->add_users(DataManager::retrieve_subscribed_forum_topic_users($this->get_id()));
             $emailnotificator->set_topic($this);
         }
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -358,7 +358,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             $emailnotificator->set_topic($this);
         }
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -386,7 +386,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             ComplexContentObjectItem::class,
             $condition);
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -411,7 +411,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             ComplexContentObjectItem::class,
             $condition);
 
-        while ($parent = $parents->next_result())
+        foreach($parents as $parent)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,

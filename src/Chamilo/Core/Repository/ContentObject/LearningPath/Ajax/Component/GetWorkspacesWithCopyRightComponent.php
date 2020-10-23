@@ -7,6 +7,8 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,23 +45,21 @@ class GetWorkspacesWithCopyRightComponent extends Manager
      * Processes the workspaces to an array
      *
      * @param array $workspacesDataArray
-     * @param ResultSet $workspaces
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace> $workspaces
      */
-    protected function processWorkspaces(&$workspacesDataArray = [], ResultSet $workspaces)
+    protected function processWorkspaces(&$workspacesDataArray = [], DataClassIterator $workspaces)
     {
         $rightService = RightsService::getInstance();
 
-        while($workspace = $workspaces->next_result())
+        foreach ($workspaces as $workspace)
         {
             $canUse = $rightService->canUseContentObjects($this->getUser(), $workspace);
             $canCopy = $rightService->canCopyContentObjects($this->getUser(), $workspace);
 
-            if(!$canUse && !$canCopy)
+            if (!$canUse && !$canCopy)
             {
                 continue;
             }
-
-            /** @var Workspace $workspace */
 
             $workspacesDataArray[] = array(
                 'id' => $workspace->getId(),

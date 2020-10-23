@@ -54,7 +54,7 @@ class SearchCompleteComponent extends Manager
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE))));
         $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         
-        while ($object = $objects->next_result())
+        foreach($objects as $object)
         {
             $response[] = array(
                 'id' => $object->get_id(), 

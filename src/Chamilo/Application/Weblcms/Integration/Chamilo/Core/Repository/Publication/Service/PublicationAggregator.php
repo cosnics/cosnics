@@ -128,7 +128,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $possible_courses = array();
 
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             if ($course->is_course_admin($user))
             {
@@ -143,7 +143,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $tool_names = array();
 
-        while ($tool = $tools->next_result())
+        foreach($tools as $tool)
         {
             $tool_name = $tool->get_name();
 

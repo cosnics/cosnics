@@ -320,7 +320,7 @@ class DataClassRepositoryCache
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function get($class, DataClassParameters $parameters)
     {

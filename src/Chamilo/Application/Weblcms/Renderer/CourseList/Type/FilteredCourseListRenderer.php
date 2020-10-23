@@ -2,25 +2,12 @@
 
 namespace Chamilo\Application\Weblcms\Renderer\CourseList\Type;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
-use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
 /**
  * Course list renderer to render the course list filtered by a given course type and user course category
@@ -37,6 +24,16 @@ class FilteredCourseListRenderer extends CourseListRenderer
      */
 
     /**
+     * @var \Chamilo\Application\Weblcms\Service\CourseService
+     */
+    protected $courseService;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Service\CourseUserCategoryService
+     */
+    protected $courseUserCategoryService;
+
+    /**
      * The filtered course type id
      *
      * @var int
@@ -49,16 +46,6 @@ class FilteredCourseListRenderer extends CourseListRenderer
      * @var int
      */
     private $user_course_category_id;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Service\CourseService
-     */
-    protected $courseService;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Service\CourseUserCategoryService
-     */
-    protected $courseUserCategoryService;
 
     /**
      * **************************************************************************************************************
@@ -90,38 +77,6 @@ class FilteredCourseListRenderer extends CourseListRenderer
     }
 
     /**
-     * Retrieves the courses for the user
-     */
-    protected function retrieve_courses()
-    {
-        if($this->get_course_type_id() >= 0)
-        {
-            $courseType = new CourseType();
-            $courseType->setId($this->get_course_type_id());
-
-            if ($this->get_user_course_category_id() > 0)
-            {
-                $courseUserCategory = new CourseUserCategory();
-                $courseUserCategory->setId($this->get_user_course_category_id());
-
-                return $this->courseUserCategoryService->getCoursesForUserByCourseUserCategoryAndCourseType(
-                    $this->get_parent()->getUser(), $courseUserCategory, $courseType
-                );
-            }
-
-            return new ArrayResultSet($this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType));
-        }
-
-        return new ArrayResultSet($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the course type id
      *
      * @return int
@@ -132,6 +87,12 @@ class FilteredCourseListRenderer extends CourseListRenderer
     }
 
     /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Sets the course type id
      *
      * @param int $course_type_id
@@ -139,6 +100,14 @@ class FilteredCourseListRenderer extends CourseListRenderer
     public function set_course_type_id($course_type_id)
     {
         $this->course_type_id = $course_type_id;
+    }
+
+    /**
+     * Defines the display of the message when there are no courses to display.
+     */
+    protected function get_no_courses_message_as_html()
+    {
+        return '<div class="panel-body">' . Translation::get('NoCoursesMatchSearchCriteria') . '</div>';
     }
 
     /**
@@ -162,10 +131,30 @@ class FilteredCourseListRenderer extends CourseListRenderer
     }
 
     /**
-     * Defines the display of the message when there are no courses to display.
+     * Retrieves the courses for the user
      */
-    protected function get_no_courses_message_as_html()
+    protected function retrieve_courses()
     {
-        return '<div class="panel-body">' . Translation::get('NoCoursesMatchSearchCriteria') . '</div>';
+        if ($this->get_course_type_id() >= 0)
+        {
+            $courseType = new CourseType();
+            $courseType->setId($this->get_course_type_id());
+
+            if ($this->get_user_course_category_id() > 0)
+            {
+                $courseUserCategory = new CourseUserCategory();
+                $courseUserCategory->setId($this->get_user_course_category_id());
+
+                return $this->courseUserCategoryService->getCoursesForUserByCourseUserCategoryAndCourseType(
+                    $this->get_parent()->getUser(), $courseUserCategory, $courseType
+                );
+            }
+
+            return new \ArrayIterator(
+                $this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType)
+            );
+        }
+
+        return new \ArrayIterator($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
     }
 }

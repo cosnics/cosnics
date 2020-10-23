@@ -60,7 +60,7 @@ class WeblcmsBookmarkDisplay extends Block implements
     {
         $bookmarks = $this->getBookmarks();
         
-        while ($bookmark = $bookmarks->next_result())
+        foreach($bookmarks as $bookmark)
         {
             $display = ContentObjectRenditionImplementation::factory(
                 $bookmark, 
@@ -81,7 +81,7 @@ class WeblcmsBookmarkDisplay extends Block implements
 
     public function isEmpty()
     {
-        return $this->getBookmarks()->size() == 0;
+        return $this->getBookmarks()->count() == 0;
     }
 
     public function getBookmarks()

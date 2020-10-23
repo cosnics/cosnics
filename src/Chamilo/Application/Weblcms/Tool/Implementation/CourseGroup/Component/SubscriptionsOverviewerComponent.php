@@ -296,7 +296,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     {
         $html = array();
 
-        while ($course_group = $course_groups->next_result())
+        foreach($course_groups as $course_group)
         {
             $this->table_course_group_id = $course_group->get_id();
 

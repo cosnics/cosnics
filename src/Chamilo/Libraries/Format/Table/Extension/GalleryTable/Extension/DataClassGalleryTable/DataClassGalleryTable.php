@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataCl
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTable;
 
 /**
- * This class represents an html gallery table for an ArrayResultSet with the use of a property model, a data provider
+ * This class represents an html gallery table for an \ArrayIterator with the use of a property model, a data provider
  * and a cell renderer
  *
  * @package Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable

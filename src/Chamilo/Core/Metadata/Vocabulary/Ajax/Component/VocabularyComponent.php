@@ -37,7 +37,7 @@ class VocabularyComponent extends Manager
         $options = array();
         $vocabularyItems = $this->getEntityService()->getVocabularyByElementIdAndUserId($element, $this->getUser());
 
-        while ($vocabularyItem = $vocabularyItems->next_result())
+        foreach($vocabularyItems as $vocabularyItem)
         {
             $item = new stdClass();
             $item->id = $vocabularyItem->get_id();

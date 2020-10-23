@@ -62,7 +62,7 @@ class LearningPathBlock extends CourseBlock
             $condition
         );
 
-        while ($pub = $pub_resultset->next_result())
+        foreach($pub_resultset as $pub)
         {
             $params = array();
             $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;

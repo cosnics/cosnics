@@ -25,11 +25,11 @@ class SettingsConnector
     {
         $namespaces = DataManager::retrieves(Schema::class, new DataClassRetrievesParameters());
         
-        if ($namespaces->size())
+        if ($namespaces->count())
         {
             $spaces[0] = Translation::get('SelectNamespace');
             
-            while ($namespace = $namespaces->next_result())
+            foreach($namespaces as $namespace)
             {
                 $spaces[$namespace->get_id()] = $namespace->get_name();
             }

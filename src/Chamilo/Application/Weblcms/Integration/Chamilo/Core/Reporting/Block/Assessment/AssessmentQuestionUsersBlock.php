@@ -46,7 +46,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $user_question_attempts = array();
 
         $question_attempts = $this->get_question_attempts_from_publication_and_question($publication_id, $question_id);
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $user_question_attempts[$question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT)
                 ->get_user_id()][] = $question_attempt;
@@ -55,7 +55,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $count = 0;
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        while ($user = $users_resultset->next_result())
+        foreach($users_resultset as $user)
         {
             $user_attempts = $user_question_attempts[$user->get_id()];
 

@@ -190,7 +190,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
             $children_ids = array();
             $children = DataManager::retrieve_categories($condition);
 
-            while ($child = $children->next_result())
+            foreach($children as $child)
             {
                 $children_ids[] = $child->get_id();
                 $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));

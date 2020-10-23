@@ -23,7 +23,7 @@ class CoursesPerCategoryBlock extends CourseBlock
 
         $categories = DataManager::retrieve_course_categories_ordered_by_name();
 
-        while ($category = $categories->next_result())
+        foreach($categories as $category)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),

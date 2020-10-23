@@ -46,7 +46,7 @@ class ExporterComponent extends Manager
             $result = DataManager::retrieves(
                 User::class,
                 new DataClassRetrievesParameters());
-            while ($user = $result->next_result())
+            foreach($result as $user)
             {
                 if ($file_type == 'pdf')
                 {

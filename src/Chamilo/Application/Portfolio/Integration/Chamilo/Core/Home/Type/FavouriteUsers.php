@@ -22,11 +22,11 @@ class FavouriteUsers extends BlockRenderer
         $html = array();
 
         $favouriteUsers = $this->getFavouriteService()->findFavouriteUsers($this->getUser());
-        if ($favouriteUsers->size() > 0)
+        if ($favouriteUsers->count() > 0)
         {
             $html[] = '<ul style="list-style: none; margin: 0; padding: 0;">';
 
-            while ($favouriteUser = $favouriteUsers->next_result())
+            foreach($favouriteUsers as $favouriteUser)
             {
                 $redirect = new Redirect(
                     array(

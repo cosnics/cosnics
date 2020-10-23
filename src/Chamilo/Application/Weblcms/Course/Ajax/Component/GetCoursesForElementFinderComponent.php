@@ -57,7 +57,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
             $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
 
             /** @var Course $course */
-            while ($course = $courses->next_result())
+            foreach($courses as $course)
             {
                 $advancedElementFinderElements->add_element(
                     new AdvancedElementFinderElement(

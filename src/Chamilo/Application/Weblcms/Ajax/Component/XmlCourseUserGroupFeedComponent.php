@@ -224,7 +224,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             );
 
             $users = array();
-            while ($user = $user_result_set->next_result())
+            foreach($user_result_set as $user)
             {
                 $users[] = $user;
             }
@@ -243,7 +243,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                     )
                 );
 
-                while ($group = $group_result_set->next_result())
+                foreach($group_result_set as $group)
                 {
 
                     $group_parent_id = $group->get_parent_id();

@@ -39,9 +39,9 @@ abstract class AggregateTracker extends Tracker
             static::class, new DataClassRetrievesParameters($condition)
         );
 
-        if ($tracker_items->size() != 0)
+        if ($tracker_items->count() != 0)
         {
-            $current_aggregrate_tracker = $tracker_items->next_result();
+            $current_aggregrate_tracker = $tracker_items->current();
             $this->set_id($current_aggregrate_tracker->get_id());
             $this->set_value($current_aggregrate_tracker->get_value() + 1);
 

@@ -204,7 +204,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $table_data = array();
 
-        while ($registration = $registrations->next_result())
+        foreach($registrations as $registration)
         {
             $toolbar = new Toolbar();
 

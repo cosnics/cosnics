@@ -108,11 +108,11 @@ class AssessmentAttempt extends AbstractAttempt
         }
         
         $trackers = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
-        $num = $trackers->size();
+        $num = $trackers->count();
         
         $total_score = 0;
         
-        while ($tracker = $trackers->next_result())
+        foreach($trackers as $tracker)
         {
             $total_score += $tracker->get_total_score();
         }

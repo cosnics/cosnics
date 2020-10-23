@@ -34,9 +34,9 @@ class ContentObjectRepository
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $count
      * @param int $offset
-     * @param OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
         ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
@@ -94,9 +94,9 @@ class ContentObjectRepository
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $count
      * @param int $offset
-     * @param OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
         ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
@@ -172,7 +172,7 @@ class ContentObjectRepository
      * @param $contentObjectClassName
      * @param DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAll($contentObjectClassName, DataClassRetrievesParameters $parameters)
     {
@@ -196,7 +196,7 @@ class ContentObjectRepository
      *
      * @param int $contentObjectId
      *
-     * @return ContentObject
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     public function findById($contentObjectId)
     {

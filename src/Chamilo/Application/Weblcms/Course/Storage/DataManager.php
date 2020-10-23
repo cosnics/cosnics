@@ -38,7 +38,6 @@ use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Exception;
 
@@ -90,7 +89,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $succes = true;
 
-        while ($course_setting_relation = $course_setting_relations->next_result())
+        foreach($course_setting_relations as $course_setting_relation)
         {
             $course_setting_id = $course_setting_relation->get_course_setting_id();
             $course_setting = $course_settings_controller->get_course_setting_by_id($course_setting_id);
@@ -376,7 +375,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         );
 
         $courses = self::retrieves(Course::class, new DataClassRetrievesParameters($condition));
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             if (!$course->delete())
             {
@@ -941,12 +940,12 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * Retrieves all course users of a given course with status and subscription type
      *
      * @param int $course_id
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \libraries\storage\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
      */
@@ -968,7 +967,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param int $max_objects
      * @param array $order_by
      *
-     * @return \libraries\storage\ResultSet<Course>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Course\Storage\DataClass\Course>
      */
     public static function retrieve_all_courses_from_user(
         User $user, Condition $condition = null, $offset = 0, $max_objects = - 1, $order_by = null
@@ -982,7 +981,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param User $user
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_all_courses_with_course_categories(User $user)
     {
@@ -996,7 +995,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param array $course_ids
      *
-     * @return ResultSet<Group>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     public static function retrieve_all_subscribed_platform_groups($course_ids)
     {
@@ -1029,12 +1028,12 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
          * Make sure that no results are returned, because otherwise no conditions would be build and all platform
          * groups would be retrieved
          */
-        if ($direct_subscribed_groups->size() == 0)
+        if ($direct_subscribed_groups->count() == 0)
         {
             return new DataClassIterator(Group::class, array());
         }
 
-        while ($direct_subscribed_group = $direct_subscribed_groups->next_result())
+        foreach($direct_subscribed_groups as $direct_subscribed_group)
         {
             $and_conditions = array();
 
@@ -1235,7 +1234,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param array $course_ids
      * @param Condition $condition
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_courses_with_course_categories_by_ids(
         $user_id, array $course_ids = array(), Condition $condition = null
@@ -1309,7 +1308,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             return $courses;
         }
 
-        return new RecordResultSet(array());
+        return new DataClassIterator(Course::class, array());
     }
 
     /**
@@ -1320,7 +1319,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $max_objects int
      * @param $order_by \libraries\ObjectTableOrder
      *
-     * @return \libraries\storage\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
      */
     public static function retrieve_courses_with_course_type(
         $condition = null, $offset = null, $max_objects = null, $order_by = null
@@ -1340,7 +1340,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param User $user
      * @param Condition $condition
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_courses_with_user_course_categories(User $user, Condition $condition = null)
     {
@@ -1458,7 +1458,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param $course_id int The id of the course
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_students_directly_subscribed_to_course($course_id)
     {
@@ -1472,7 +1472,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param $course_id int The id of the course
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_teachers_directly_subscribed_to_course($course_id)
     {
@@ -1498,7 +1498,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param \libraries\ObjectTableOrder[] $order_by
      * @param int $user_status
      *
-     * @return \libraries\storage\ResultSet<Course>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<Course>
      */
     protected static function retrieve_user_courses(
         User $user, Condition $condition = null, $offset = 0, $max_objects = - 1, $order_by = null, $user_status = null
@@ -1522,7 +1522,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param ObjectTableOrder[] $order_by
      * @param int $user_status
      *
-     * @return \libraries\storage\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_users_courses_with_course_type(
         User $user, Condition $condition = null, $offset = null, $max_objects = null, $order_by = null,
@@ -1557,7 +1557,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param int $count
      * @param \libraries\ObjectTableOrder $order_property
      *
-     * @return \libraries\storage\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Exception
      */
     public static function retrieve_users_directly_subscribed_to_course(
         $condition = null, $offset = null, $count = null, $order_property = null
@@ -1611,7 +1612,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param int $course_id
      *
-     * @return \libraries\storage\RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_users_directly_subscribed_to_course_by_id($course_id)
     {
@@ -1630,7 +1631,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $course_id int The id of the course
      * @param int $status
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_users_directly_subscribed_to_course_by_status(
         $course_id, $status = CourseEntityRelation::STATUS_STUDENT
@@ -1740,7 +1741,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             CourseTool::class, new DataClassRetrievesParameters($tools_condition)
         );
 
-        while ($tool = $tools->next_result())
+        foreach($tools as $tool)
         {
             if (!$tool_name || $tool_name == $tool->get_name())
             {

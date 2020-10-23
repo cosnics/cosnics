@@ -213,7 +213,7 @@ class FavouriteService
      * @param int $count
      * @param OrderBy[] $orderProperty
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {

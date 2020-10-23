@@ -93,7 +93,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $parameters = new DataClassRetrievesParameters($this->get_current_user_recycle_bin_conditions());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         $count = 0;
-        while ($object = $trashed_objects->next_result())
+        foreach($trashed_objects as $object)
         {
             $object->delete();
             $count ++;

@@ -37,7 +37,7 @@ class UnsubscribeComponent extends Manager
         $courses = $this->get_selected_courses();
         $this->set_parameter(self::PARAM_COURSE_ID, $courses);
         
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $course_id = $course->get_id();
             
@@ -58,7 +58,7 @@ class UnsubscribeComponent extends Manager
         
         $message = $this->get_result(
             $failures, 
-            $courses->size(), 
+            $courses->count(),
             'UserNotUnsubscribedFromSelectedCourses', 
             'UserNotUnsubscribedFromSelectedCourse', 
             'UserUnsubscribedFromSelectedCourses', 

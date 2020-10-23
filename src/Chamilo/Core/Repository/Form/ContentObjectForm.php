@@ -213,7 +213,7 @@ abstract class ContentObjectForm extends FormValidator
             );
             $schemaInstances = $entityService->getSchemaInstancesForEntity($entity);
 
-            while ($schemaInstance = $schemaInstances->next_result())
+            foreach($schemaInstances as $schemaInstance)
             {
                 $schema = $schemaInstance->getSchema();
                 $this->getTabsGenerator()->add_tab(

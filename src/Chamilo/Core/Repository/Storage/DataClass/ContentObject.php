@@ -449,7 +449,7 @@ class ContentObject extends CompositeDataClass
                     $condition = new AndCondition($conditions);
                     $parameters = new DataClassRetrievesParameters($condition);
                     $objects = DataManager::retrieve_content_objects($content_object::class_name(), $parameters);
-                    while ($object = $objects->next_result())
+                    foreach($objects as $object)
                     {
                         $object->set_current(ContentObject::CURRENT_OLD);
                         $object->update(false);
@@ -567,7 +567,7 @@ class ContentObject extends CompositeDataClass
             );
             $assisting_objects = DataManager::retrieve_active_content_objects($type, $condition);
 
-            while ($assisting_object = $assisting_objects->next_result())
+            foreach($assisting_objects as $assisting_object)
             {
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
@@ -587,7 +587,7 @@ class ContentObject extends CompositeDataClass
                 $items = DataManager::retrieve_complex_content_object_items(
                     ComplexContentObjectItem::class, $condition
                 );
-                while ($item = $items->next_result())
+                foreach($items as $item)
                 {
                     if (!$item->delete())
                     {
@@ -655,7 +655,7 @@ class ContentObject extends CompositeDataClass
         $condition = new OrCondition($conditions);
 
         $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
-        while ($item = $items->next_result())
+        foreach($items as $item)
         {
             if (!$item->delete())
             {
@@ -1490,7 +1490,7 @@ class ContentObject extends CompositeDataClass
             $this->synchronization_data =
                 \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_synchronization_data_set(
                     $sync_condition
-                )->next_result();
+                )->current();
         }
 
         return $this->synchronization_data;

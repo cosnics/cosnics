@@ -126,7 +126,7 @@ class CourseCategoryFeedComponent extends AjaxManager
 
         // Add course categories
         $course_categories = $this->retrieve_course_categories();
-        if ($course_categories && $course_categories->size() > 0)
+        if ($course_categories && $course_categories->count() > 0)
         {
             $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
@@ -137,7 +137,7 @@ class CourseCategoryFeedComponent extends AjaxManager
             );
             $elements->add_element($course_category_category);
 
-            while ($course_category = $course_categories->next_result())
+            foreach($course_categories as $course_category)
             {
                 $course_category_category->add_child($this->get_course_category_element($course_category));
             }
@@ -145,7 +145,7 @@ class CourseCategoryFeedComponent extends AjaxManager
 
         // Add courses
         $courses = $this->retrieve_courses();
-        if ($courses && $courses->size() > 0)
+        if ($courses && $courses->count() > 0)
         {
             $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
@@ -155,7 +155,7 @@ class CourseCategoryFeedComponent extends AjaxManager
             );
             $elements->add_element($course_category);
 
-            while ($course = $courses->next_result())
+            foreach($courses as $course)
             {
                 $course_category->add_child($this->get_course_element($course));
             }
@@ -193,7 +193,7 @@ class CourseCategoryFeedComponent extends AjaxManager
     /**
      * Returns all the groups for this feed
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory>
      */
     public function retrieve_course_categories()
     {

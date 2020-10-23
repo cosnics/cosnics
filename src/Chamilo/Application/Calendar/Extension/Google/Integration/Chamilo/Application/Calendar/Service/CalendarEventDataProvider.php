@@ -119,7 +119,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 
         $events = array();
 
-        while ($googleCalenderEvent = $eventResultSet->next_result())
+        foreach($eventResultSet as $googleCalenderEvent)
         {
             $eventParser = new EventParser(
                 $eventResultSet->getCalendarProperties(),

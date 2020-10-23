@@ -43,7 +43,7 @@ abstract class ToolAccessBlock extends ToolBlock
         
         $course_tools_summary_data = $this->retrieve_course_summary_data();
         
-        while ($course_tool_summary_data = $course_tools_summary_data->next_result())
+        foreach($course_tools_summary_data as $course_tool_summary_data)
         {
             $tool_name = $course_tool_summary_data[CourseTool::PROPERTY_NAME];
             
@@ -140,7 +140,7 @@ abstract class ToolAccessBlock extends ToolBlock
     /**
      * Returns the summary data for this course
      * 
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     abstract public function retrieve_course_summary_data();
 }

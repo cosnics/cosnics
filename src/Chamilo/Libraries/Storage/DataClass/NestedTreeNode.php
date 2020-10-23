@@ -82,7 +82,7 @@ abstract class NestedTreeNode extends NestedSet
      *        connected with parent_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @done Migrated to NestedSetDataClassRepository::findDescendants()
      * @throws \ReflectionException
      */

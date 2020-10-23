@@ -78,7 +78,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         $active_tools = array();
 
-        while ($tool = $tools->next_result())
+        foreach($tools as $tool)
         {
             $course_settings_controller = CourseSettingsController::getInstance();
             $course = DataManager::retrieve_by_id(Course::class, Request::get('course'));
@@ -128,13 +128,13 @@ class CourseSectionToolSelectorForm extends FormValidator
             new DataClassRetrievesParameters($condition));
 
         $course_section_ids = array();
-        while ($course_section = $course_sections->next_result())
+        foreach($course_sections as $course_section)
         {
             $course_section_ids[] = $course_section->get_id();
         }
 
         $registered_tools = $this->get_registered_tools();
-        while ($registered_tool = $registered_tools->next_result())
+        foreach($registered_tools as $registered_tool)
         {
             if (in_array($registered_tool->get_tool_id(), $selected_tools))
             {
@@ -172,9 +172,9 @@ class CourseSectionToolSelectorForm extends FormValidator
                 CourseToolRelCourseSection::class,
                 new DataClassRetrievesParameters($condition));
 
-            if ($course_tool_rel_course_sections->size() > 0)
+            if ($course_tool_rel_course_sections->count() > 0)
             {
-                $course_tool_rel_course_section = $course_tool_rel_course_sections->next_result();
+                $course_tool_rel_course_section = $course_tool_rel_course_sections->current();
                 $course_tool_rel_course_section->set_section_id($this->course_section->get_id());
                 if (! $course_tool_rel_course_section->update())
                 {
@@ -205,7 +205,7 @@ class CourseSectionToolSelectorForm extends FormValidator
     {
         $registered_tools = $this->get_registered_tools();
         $registered_tools_array = array();
-        while ($registered_tool = $registered_tools->next_result())
+        foreach($registered_tools as $registered_tool)
         {
             $registered_tools_array[] = $registered_tool->get_tool_id();
         }

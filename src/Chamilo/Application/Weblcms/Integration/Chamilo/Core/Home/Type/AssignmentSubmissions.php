@@ -53,7 +53,7 @@ class AssignmentSubmissions extends Block
             new DataClassRetrievesParameters($condition)
         );
 
-        if ($assignment_publications_resultset->size() == 0)
+        if ($assignment_publications_resultset->count() == 0)
         {
             return Translation::get('YouDoNotOwnAnyAssignments');
         }
@@ -64,7 +64,7 @@ class AssignmentSubmissions extends Block
         $publicationsById = [];
         $assignmentPublicationsById = [];
 
-        while ($publication = $assignment_publications_resultset->next_result())
+        foreach($assignment_publications_resultset as $publication)
         {
             $publicationsById[$publication->getId()] = $publication;
         }

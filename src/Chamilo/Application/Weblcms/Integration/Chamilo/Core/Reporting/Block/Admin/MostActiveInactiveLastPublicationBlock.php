@@ -30,7 +30,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
         $arr[Translation::get('NothingPublished')] = 0;
         $arr[Translation::get('MoreThenOneYear')] = 0;
         
-        while ($course = $courses->next_result())
+        foreach($courses as $course)
         {
             $lastpublication = 0;
             
@@ -49,9 +49,9 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
                 0, 
                 1);
             
-            if ($publications->size() > 0)
+            if ($publications->count() > 0)
             {
-                $publication = $publications->next_result();
+                $publication = $publications->current();
                 $lastpublication = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
             }
             

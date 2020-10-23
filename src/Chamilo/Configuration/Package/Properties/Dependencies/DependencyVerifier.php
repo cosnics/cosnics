@@ -85,7 +85,7 @@ class DependencyVerifier
             Registration::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($registration = $registrations->next_result())
+        foreach($registrations as $registration)
         {
             $package = Package::get($registration->get_context());
             $dependencies = $package->get_dependencies();

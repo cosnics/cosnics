@@ -123,7 +123,7 @@ class TreeBuilder
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIds)));
 
-        while ($contentObject = $contentObjects->next_result())
+        foreach($contentObjects as $contentObject)
         {
             /** @var ContentObject $contentObject */
             $nodes = $this->treeNodesPerContentObjectId[$contentObject->getId()];

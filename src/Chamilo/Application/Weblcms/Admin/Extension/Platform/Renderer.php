@@ -40,7 +40,7 @@ class Renderer extends CourseListRenderer
     /**
      * The course type list
      *
-     * @var ResultSet<CourseType>
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseType>
      */
     protected $course_types;
 
@@ -106,7 +106,7 @@ class Renderer extends CourseListRenderer
 
         $created_tabs = array();
 
-        while ($course_type = $this->course_types->next_result())
+        foreach ($this->course_types as $course_type)
         {
             $created_tabs[$course_type[CourseType::PROPERTY_ID]] = new DynamicVisualTab(
                 $course_type[CourseType::PROPERTY_ID], $course_type[CourseType::PROPERTY_TITLE], null,
@@ -291,12 +291,14 @@ class Renderer extends CourseListRenderer
             {
                 do
                 {
-                    $course_type = $this->course_types->next_result();
+
+                    $course_type = $this->course_types->current();
+                    $this->course_types->next();
                 }
                 while (!is_null($course_type) &&
                 $this->count_courses_for_course_type($course_type[CourseType::PROPERTY_ID]) == 0);
 
-                $this->course_types->reset();
+                $this->course_types->rewind();
 
                 $selected_course_type_id = $course_type[CourseType::PROPERTY_ID];
             }
@@ -359,15 +361,15 @@ class Renderer extends CourseListRenderer
     /**
      * Parsers the courses in a structure in course type / course category
      *
-     * @param RecordResultSet $courses
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $courses
      *
-     * @return mixed[][][][]
+     * @return string[][][][]
      */
     protected function parse_courses($courses)
     {
         $parsed_courses = array();
 
-        while ($course = $courses->next_result())
+        foreach ($courses as $course)
         {
             $parsed_courses[$course[Course::PROPERTY_COURSE_TYPE_ID]][] = $course;
         }
@@ -378,7 +380,7 @@ class Renderer extends CourseListRenderer
     /**
      * Retrieves the course types
      *
-     * @return RecordResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     protected function retrieve_course_types()
     {
@@ -391,7 +393,7 @@ class Renderer extends CourseListRenderer
      * Retrieves the courses with course categories Retrieves all the courses for every course type so we can decide
      * whether or not we want to show the course type tabs if required by the parent or courses are available
      *
-     * @return Course[][][]
+     * @return string[][][][]
      */
     protected function retrieve_courses()
     {

@@ -836,7 +836,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
-        return $objects->next_result();
+        return $objects->current();
     }
 
     public function tool_category_has_new_publications($category_id)

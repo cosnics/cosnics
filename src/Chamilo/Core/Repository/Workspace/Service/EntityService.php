@@ -50,7 +50,7 @@ class EntityService
         
         $ancestorGroups = $group->get_ancestors();
         
-        while ($ancestorGroup = $ancestorGroups->next_result())
+        foreach($ancestorGroups as $ancestorGroup)
         {
             $entities[PlatformGroupEntity::ENTITY_TYPE][] = $ancestorGroup->getId();
         }

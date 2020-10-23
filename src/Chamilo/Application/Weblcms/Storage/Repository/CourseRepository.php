@@ -39,149 +39,6 @@ class CourseRepository implements CourseRepositoryInterface
 {
 
     /**
-     * Returns a course by a given id
-     *
-     * @param int $courseId
-     *
-     * @return Course
-     */
-    public function findCourse($courseId)
-    {
-        return DataManager::retrieve_by_id(Course::class, $courseId);
-    }
-
-    /**
-     * Returns a course by a given visual code
-     *
-     * @param string $visualCode
-     *
-     * @return Course
-     */
-    public function findCourseByVisualCode($visualCode)
-    {
-        return DataManager::retrieve_course_by_visual_code($visualCode);
-    }
-
-    /**
-     * Returns courses with an array of course id's.
-     *
-     * @param array $courseIds
-     *
-     * @return Course[]
-     */
-    function findCourses(array $courseIds)
-    {
-        $condition = new InCondition(
-            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
-            $courseIds
-        );
-
-        return DataManager::retrieves(
-            Course::class,
-            new DataClassRetrievesParameters($condition)
-        );
-    }
-
-    /**
-     * @param int $courseTypeId
-     *
-     * @return Course[]
-     */
-    public function findCoursesByCourseTypeId(int $courseTypeId): array
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                Course::class,
-                Course::PROPERTY_COURSE_TYPE_ID
-            ),
-            new StaticConditionVariable($courseTypeId)
-        );
-
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
-
-        return DataManager::retrieves(
-            Course::class,
-            new DataClassRetrievesParameters($condition, null, null, $orderBy)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
-     * @param int[] $subscribedCourseIds
-     *
-     * @return mixed[]|Course[]
-     */
-    public function findCoursesByCourseTypeAndSubscribedCourseIds(
-        CourseType $courseType, array $subscribedCourseIds = []
-    )
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                Course::class,
-                Course::PROPERTY_COURSE_TYPE_ID
-            ),
-            new StaticConditionVariable($courseType->getId())
-        );
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(
-                Course::class,
-                Course::PROPERTY_ID
-            ),
-            $subscribedCourseIds
-        );
-
-        $condition = new AndCondition($conditions);
-
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
-
-        return DataManager::retrieves(
-            Course::class,
-            new DataClassRetrievesParameters($condition, null, null, $orderBy)
-        );
-    }
-
-    /**
-     * @param array $groupIdentifiers
-     *
-     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
-     */
-    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array())
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
-        );
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
-            $groupIdentifiers
-        );
-
-        $condition = new AndCondition($conditions);
-
-        $joins = new Joins();
-        $joins->add(
-            new Join(
-                CourseEntityRelation::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
-                )
-            )
-        );
-
-        return DataManager::retrieves(
-            Course::class,
-            new DataClassRetrievesParameters($condition, null, null, array(), $joins)
-        );
-    }
-
-    /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param int $entityType
      * @param array $entityIdentifiers
@@ -215,61 +72,92 @@ class CourseRepository implements CourseRepositoryInterface
     }
 
     /**
-     * Returns Courses with an array of course ids and a given set of parameters
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @param DataClassRetrievesParameters $retrievesParameters
-     *
-     * @return Course[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function findCoursesByParameters(DataClassRetrievesParameters $retrievesParameters)
+    public function findAllUsersFromCourse(Course $course)
     {
+        return DataManager::retrieve_all_course_users($course->getId());
+    }
+
+    /**
+     * Returns a course by a given id
+     *
+     * @param int $courseId
+     *
+     * @return Course
+     */
+    public function findCourse($courseId)
+    {
+        return DataManager::retrieve_by_id(Course::class, $courseId);
+    }
+
+    /**
+     * Returns a course by a given visual code
+     *
+     * @param string $visualCode
+     *
+     * @return Course
+     */
+    public function findCourseByVisualCode($visualCode)
+    {
+        return DataManager::retrieve_course_by_visual_code($visualCode);
+    }
+
+    /**
+     * Returns the course group subscriptions by a given course and groups
+     *
+     * @param int $courseId
+     * @param int[] $groupIds
+     *
+     * @return CourseEntityRelation[]
+     */
+    public function findCourseGroupSubscriptionsByCourseAndGroups($courseId, $groupIds)
+    {
+        $conditions = array();
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $groupIds
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($courseId)
+        );
+
+        $condition = new AndCondition($conditions);
+
         return DataManager::retrieves(
-            Course::class,
-            $retrievesParameters
+            CourseEntityRelation::class, new DataClassRetrievesParameters($condition)
         );
     }
 
     /**
-     * Returns courses where a user is subscribed
+     * Finds a course tool registration by a given tool name
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $toolName
      *
-     * @return Course[]
+     * @return CourseTool
      */
-    public function findCoursesForUser(User $user)
+    public function findCourseToolByName($toolName)
     {
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
-
-        return DataManager::retrieve_all_courses_from_user(
-            $user, null, null, null, $orderBy
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_NAME),
+            new StaticConditionVariable($toolName)
         );
-    }
 
-    /**
-     * Returns courses where a user is subscribed as a teacher
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return Course[]
-     */
-    public function findCoursesWhereUserIsTeacher(User $user)
-    {
-        return DataManager::retrieve_courses_from_user_where_user_is_teacher(
-            $user
-        );
-    }
-
-    /**
-     * Returns courses where a user is subscribed as a student
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return Course[]
-     */
-    public function findCoursesWhereUserIsStudent(User $user)
-    {
-        return DataManager::retrieve_courses_from_user_where_user_is_student(
-            $user
+        return DataManager::retrieve(
+            CourseTool::class, new DataClassRetrieveParameters($condition)
         );
     }
 
@@ -293,8 +181,7 @@ class CourseRepository implements CourseRepositoryInterface
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
-            ),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
         );
 
         $conditions[] = new EqualityCondition(
@@ -305,76 +192,173 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class,
-            new DataClassRetrieveParameters($condition)
+            CourseEntityRelation::class, new DataClassRetrieveParameters($condition)
         );
     }
 
     /**
-     * Returns the course group subscriptions by a given course and groups
+     * Returns courses with an array of course id's.
      *
-     * @param int $courseId
-     * @param int[] $groupIds
+     * @param array $courseIds
      *
-     * @return CourseEntityRelation[]
+     * @return Course[]
      */
-    public function findCourseGroupSubscriptionsByCourseAndGroups($courseId, $groupIds)
+    function findCourses(array $courseIds)
     {
-        $conditions = array();
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
-            $groupIds
+        $condition = new InCondition(
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), $courseIds
         );
+
+        return DataManager::retrieves(
+            Course::class, new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
+     * @param int[] $subscribedCourseIds
+     *
+     * @return mixed[]|Course[]
+     */
+    public function findCoursesByCourseTypeAndSubscribedCourseIds(
+        CourseType $courseType, array $subscribedCourseIds = []
+    )
+    {
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
-            ),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+                Course::class, Course::PROPERTY_COURSE_TYPE_ID
+            ), new StaticConditionVariable($courseType->getId())
         );
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($courseId)
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                Course::class, Course::PROPERTY_ID
+            ), $subscribedCourseIds
         );
 
         $condition = new AndCondition($conditions);
 
+        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+
         return DataManager::retrieves(
-            CourseEntityRelation::class,
-            new DataClassRetrievesParameters($condition)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
     }
 
     /**
-     * Finds a course tool registration by a given tool name
+     * @param int $courseTypeId
      *
-     * @param string $toolName
-     *
-     * @return CourseTool
+     * @return Course[]
      */
-    public function findCourseToolByName($toolName)
+    public function findCoursesByCourseTypeId(int $courseTypeId): array
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_NAME),
-            new StaticConditionVariable($toolName)
+            new PropertyConditionVariable(
+                Course::class, Course::PROPERTY_COURSE_TYPE_ID
+            ), new StaticConditionVariable($courseTypeId)
         );
 
-        return DataManager::retrieve(
-            CourseTool::class,
-            new DataClassRetrieveParameters($condition)
+        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+
+        return DataManager::retrieves(
+            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
     }
 
     /**
-     * Finds the tool registrations
+     * Returns Courses with an array of course ids and a given set of parameters
      *
-     * @return CourseTool[]
+     * @param DataClassRetrievesParameters $retrievesParameters
+     *
+     * @return Course[]
      */
-    public function findToolRegistrations()
+    public function findCoursesByParameters(DataClassRetrievesParameters $retrievesParameters)
     {
-        return DataManager::retrieves(CourseTool::class);
+        return DataManager::retrieves(
+            Course::class, $retrievesParameters
+        );
+    }
+
+    /**
+     * Returns courses where a user is subscribed
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return Course[]
+     */
+    public function findCoursesForUser(User $user)
+    {
+        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+
+        return DataManager::retrieve_all_courses_from_user(
+            $user, null, null, null, $orderBy
+        );
+    }
+
+    /**
+     * @param array $groupIdentifiers
+     *
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     */
+    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array())
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $groupIdentifiers
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                CourseEntityRelation::class, new EqualityCondition(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
+                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
+                )
+            )
+        );
+
+        return DataManager::retrieves(
+            Course::class, new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+        );
+    }
+
+    /**
+     * Returns courses where a user is subscribed as a student
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return Course[]
+     */
+    public function findCoursesWhereUserIsStudent(User $user)
+    {
+        return DataManager::retrieve_courses_from_user_where_user_is_student(
+            $user
+        );
+    }
+
+    /**
+     * Returns courses where a user is subscribed as a teacher
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return Course[]
+     */
+    public function findCoursesWhereUserIsTeacher(User $user)
+    {
+        return DataManager::retrieve_courses_from_user_where_user_is_teacher(
+            $user
+        );
     }
 
     /**
@@ -406,12 +390,9 @@ class CourseRepository implements CourseRepositoryInterface
 
         $joins->add(
             new Join(
-                CourseRelCourseSetting::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        CourseRelCourseSetting::class,
-                        CourseRelCourseSetting::PROPERTY_COURSE_ID
+                CourseRelCourseSetting::class, new EqualityCondition(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), new PropertyConditionVariable(
+                        CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_ID
                     )
                 )
             )
@@ -419,25 +400,20 @@ class CourseRepository implements CourseRepositoryInterface
 
         $joins->add(
             new Join(
-                CourseSetting::class,
-                new EqualityCondition(
+                CourseSetting::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseRelCourseSetting::class,
-                        CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID
-                    ),
-                    new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_ID)
+                        CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID
+                    ), new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_ID)
                 )
             )
         );
 
         $joins->add(
             new Join(
-                User::class,
-                new EqualityCondition(
+                User::class, new EqualityCondition(
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_TITULAR_ID),
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID)
-                ),
-                Join::TYPE_LEFT
+                ), Join::TYPE_LEFT
             )
         );
 
@@ -445,13 +421,12 @@ class CourseRepository implements CourseRepositoryInterface
             new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
 
         $courseRecords = DataManager::records(
-            Course::class,
-            $recordRetrievesParameters
+            Course::class, $recordRetrievesParameters
         );
 
         $courses = array();
 
-        while ($record = $courseRecords->next_result())
+        foreach ($courseRecords as $record)
         {
             $id = $record['id'];
 
@@ -471,22 +446,6 @@ class CourseRepository implements CourseRepositoryInterface
     }
 
     /**
-     * Returns all users subscribed to course by status
-     *
-     * @param $courseId
-     * @param $status
-     *
-     * @return ResultSet
-     */
-    public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
-    {
-        return DataManager::retrieve_users_directly_subscribed_to_course_by_status(
-            $courseId,
-            $status
-        );
-    }
-
-    /**
      * Returns all groups directly subscribed to course by status
      *
      * @param $courseId
@@ -497,8 +456,7 @@ class CourseRepository implements CourseRepositoryInterface
     public function findDirectSubscribedGroupsByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {
         return DataManager::retrieve_groups_directly_subscribed_to_course_as_status(
-            $courseId,
-            $status
+            $courseId, $status
         );
     }
 
@@ -513,14 +471,27 @@ class CourseRepository implements CourseRepositoryInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * Finds the tool registrations
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\RecordResultSet
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @return CourseTool[]
      */
-    public function findAllUsersFromCourse(Course $course)
+    public function findToolRegistrations()
     {
-        return DataManager::retrieve_all_course_users($course->getId());
+        return DataManager::retrieves(CourseTool::class);
+    }
+
+    /**
+     * Returns all users subscribed to course by status
+     *
+     * @param $courseId
+     * @param $status
+     *
+     * @return ResultSet
+     */
+    public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
+    {
+        return DataManager::retrieve_users_directly_subscribed_to_course_by_status(
+            $courseId, $status
+        );
     }
 }

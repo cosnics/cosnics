@@ -73,7 +73,7 @@ class ToolPublicationsBlock extends ToolBlock
         $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('Details'));
 
         $index = 1;
-        while ($content_object_publication = $content_object_publications->next_result())
+        foreach($content_object_publications as $content_object_publication)
         {
             $params = array();
 

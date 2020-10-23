@@ -84,7 +84,7 @@ class CourseImportForm extends FormValidator
                     new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
                     new StaticConditionVariable($csvcourse['category'])
                 )
-            )->next_result();
+            )->current();
 
             $catid = $cat ? $cat->get_id() : 0;
             $action = strtoupper($csvcourse['action']);
@@ -313,7 +313,7 @@ class CourseImportForm extends FormValidator
                 new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
                 new StaticConditionVariable($category_name)
             )
-        )->next_result();
+        )->current();
 
         if ($cat)
         {

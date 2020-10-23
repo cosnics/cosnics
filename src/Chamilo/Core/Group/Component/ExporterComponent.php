@@ -55,7 +55,7 @@ class ExporterComponent extends Manager
             new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_group));
         $result = $this->retrieve_groups($condition);
-        while ($group = $result->next_result())
+        foreach($result as $group)
         {
             $group_array[Group::PROPERTY_NAME] = htmlspecialchars($group->get_name());
             $group_array[Group::PROPERTY_DESCRIPTION] = htmlspecialchars($group->get_description());

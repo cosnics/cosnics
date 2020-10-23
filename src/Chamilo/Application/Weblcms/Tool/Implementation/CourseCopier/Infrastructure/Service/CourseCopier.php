@@ -281,7 +281,7 @@ class CourseCopier implements CourseCopierInterface
         {
             $targetCourseRootCourseGroup = $this->courseCopierRepository->findRootCourseGroupForCourse($targetCourseId);
 
-            while ($courseGroup = $courseGroups->next_result())
+            foreach($courseGroups as $courseGroup)
             {
                 try
                 {
@@ -328,7 +328,7 @@ class CourseCopier implements CourseCopierInterface
             throw new Exception('Could not create course group with id "' . $oldId . '"');
         }
 
-        while ($courseGroupChild = $courseGroupChildren->next_result())
+        foreach($courseGroupChildren as $courseGroupChild)
         {
             try
             {

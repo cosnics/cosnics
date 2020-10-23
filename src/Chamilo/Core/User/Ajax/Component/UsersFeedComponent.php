@@ -123,7 +123,7 @@ class UsersFeedComponent extends Manager
 
         if ($users)
         {
-            while ($user = $users->next_result())
+            foreach($users as $user)
             {
                 $user_category->add_child($this->getElementForUser($user));
             }

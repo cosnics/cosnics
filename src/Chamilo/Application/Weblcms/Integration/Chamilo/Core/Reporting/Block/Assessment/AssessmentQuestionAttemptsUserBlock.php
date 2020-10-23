@@ -41,7 +41,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
         
         $counter = 0;
         
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $assessment_attempt = $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
             

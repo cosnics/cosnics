@@ -122,7 +122,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -238,7 +238,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
                             $cond
                         );
 
-                        while ($item = $wrap->next_result())
+                        foreach($wrap as $item)
                         {
                             if ($item->get_parent() == $this->get_id())
                             {
@@ -279,7 +279,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             {
                 $lasttopid = $lasttop->get_id();
             }
-            while ($item = $wrappers->next_result())
+            foreach($wrappers as $item)
             {
                 $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                     ContentObject::class,
@@ -317,7 +317,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             );
         }
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -389,7 +389,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -416,7 +416,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -443,7 +443,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -470,7 +470,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($item = $wrappers->next_result())
+        foreach($wrappers as $item)
         {
             $lo = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,
@@ -558,7 +558,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition
         );
 
-        while ($parent = $parents->next_result())
+        foreach($parents as $parent)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class,

@@ -226,7 +226,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         );
 
         $categories = array();
-        while ($category = $objects->next_result())
+        foreach($objects as $category)
         {
             $menu_item = array();
             $menu_item['title'] = $category->get_name() . $this->get_category_count($category->get_id());

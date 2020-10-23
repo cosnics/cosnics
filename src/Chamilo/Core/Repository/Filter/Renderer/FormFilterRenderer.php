@@ -318,7 +318,7 @@ class FormFilterRenderer extends FilterRenderer
         $user_view_options = array();
         $user_view_options[0] = '-- ' . Translation::get('SelectAView') . ' --';
 
-        while ($user_view = $user_views->next_result())
+        foreach($user_views as $user_view)
         {
             $user_view_options[$user_view->get_id()] = $user_view->get_name();
         }

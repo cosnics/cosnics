@@ -687,7 +687,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         );
 
         $selected_entities_per_right = array();
-        while ($selected_entity = $selected_entities->next_result())
+        foreach($selected_entities as $selected_entity)
         {
             $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;
         }

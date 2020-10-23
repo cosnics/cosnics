@@ -44,7 +44,7 @@ class Connector
             self::get_user_course_categories_for_course_types_as_array(0, Translation::get('NoCourseType')));
         
         $course_types = CourseTypeDataManager::retrieve_active_course_types();
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             $available_course_types[json_encode(array($course_type->get_id()))] = $course_type->get_title();
             
@@ -62,7 +62,7 @@ class Connector
     {
         $course_types_result = CourseTypeDataManager::retrieve_active_course_types();
         
-        while ($course_type = $course_types_result->next_result())
+        foreach($course_types_result as $course_type)
         {
             $course_types[$course_type->get_id()] = $course_type->get_title();
         }
@@ -89,7 +89,7 @@ class Connector
         $user_course_categories = array();
         
         $categories = self::get_user_course_categories_for_course_type($course_type_id);
-        while ($user_course_category = $categories->next_result())
+        foreach($categories as $user_course_category)
         {
             $user_course_categories[json_encode(array($course_type_id, $user_course_category->get_id()))] = $course_type_title .
                  ' - ' . $user_course_category->get_title() . '';

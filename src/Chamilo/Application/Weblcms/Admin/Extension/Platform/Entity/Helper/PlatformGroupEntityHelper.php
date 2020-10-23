@@ -148,7 +148,7 @@ class PlatformGroupEntityHelper
         {
             $parents = $group->get_parents();
 
-            while ($parent = $parents->next_result())
+            foreach($parents as $parent)
             {
                 $entities[PlatformGroupEntity::ENTITY_TYPE][] = $parent;
             }

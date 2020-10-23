@@ -55,7 +55,7 @@ class ImpactViewComponent extends Manager
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID), 
                     new StaticConditionVariable($category_id));
-                $category = $this->get_parent()->retrieve_categories($condition)->next_result();
+                $category = $this->get_parent()->retrieve_categories($condition)->current();
                 
                 if (is_null($category))
                 {

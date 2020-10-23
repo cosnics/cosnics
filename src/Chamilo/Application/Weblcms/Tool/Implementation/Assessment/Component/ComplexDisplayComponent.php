@@ -107,9 +107,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        $count = $trackers->size();
+        $count = $trackers->count();
 
-        while ($tracker = $trackers->next_result())
+        foreach($trackers as $tracker)
         {
             if ($tracker->get_status() == AssessmentAttempt::STATUS_NOT_COMPLETED)
             {
@@ -290,7 +290,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($question_attempt = $question_attempts_result_set->next_result())
+        foreach($question_attempts_result_set as $question_attempt)
         {
             $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
         }

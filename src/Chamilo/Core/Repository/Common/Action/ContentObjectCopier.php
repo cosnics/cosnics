@@ -253,7 +253,7 @@ class ContentObjectCopier
 
         $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
 
-        while ($content_object = $content_objects->next_result())
+        foreach($content_objects as $content_object)
         {
             $content_object->set_title($content_object->get_title() . ' (' . Translation::get('Copy') . ')');
             $content_object->update();

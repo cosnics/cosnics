@@ -149,7 +149,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $location_ids = array();
 
-        while ($rights_location_entity_right = $rights_location_entity_rights->next_result())
+        foreach($rights_location_entity_rights as $rights_location_entity_right)
         {
             $location_ids[$rights_location_entity_right[$context_class::PROPERTY_LOCATION_ID]] = 1;
         }
@@ -198,7 +198,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $granted_rights = array();
 
-        while ($result = $result_set->next_result())
+        foreach($result_set as $result)
         {
             $granted_rights[] = $result[RightsLocationEntityRight::PROPERTY_RIGHT_ID];
         }
@@ -344,7 +344,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $location_ids = array();
 
-        while ($location = $locations->next_result())
+        foreach($locations as $location)
         {
             $location_ids[$location[$context_location::PROPERTY_IDENTIFIER]] =
                 $location[$context_location::PROPERTY_ID];
@@ -416,7 +416,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $locations = self::records($context_location, $parameters);
 
         $location_parent_ids = array();
-        while ($location = $locations->next_result())
+        foreach($locations as $location)
         {
             $location_parent_ids[$location[$context_location::PROPERTY_ID]] =
                 $location[$context_location::PROPERTY_PARENT_ID];
@@ -584,6 +584,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     // DONE
 
+    /**
+     * @param $context
+     * @param null $condition
+     * @param null $offset
+     * @param null $max_objects
+     * @param null $order_by
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
+     */
     public static function retrieve_rights_location_rights(
         $context, $condition = null, $offset = null, $max_objects = null, $order_by = null
     )
@@ -707,7 +716,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $result_set = $context_dm::records($context_location::class_name(), $parameters);
 
         $target_entities = array();
-        while ($result = $result_set->next_result())
+        foreach($result_set as $result)
         {
             $target_entities[$result[$context_entity_right::PROPERTY_ENTITY_TYPE]][] =
                 $result[$context_entity_right::PROPERTY_ENTITY_ID];

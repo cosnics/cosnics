@@ -117,7 +117,8 @@ class CourseCopierForm extends FormValidator
 
         $current_code = $this->parent->get_course_id();
         $options = array();
-        while ($course = $this->courses->next_result())
+
+        foreach ($this->courses as $course)
         {
             if ($course->get_id() != $current_code)
             {

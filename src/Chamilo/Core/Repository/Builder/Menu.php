@@ -182,7 +182,7 @@ class Menu extends HtmlMenu
             ComplexContentObjectItem::class, $parameters
         );
 
-        while ($cloi = $clois->next_result())
+        foreach($clois as $cloi)
         {
             $lo = DataManager::retrieve_by_id(
                 ContentObject::class, $cloi->get_ref()

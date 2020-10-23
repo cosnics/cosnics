@@ -162,7 +162,7 @@ class SorterComponent extends Manager
 
             $course_type_user_category_rel_course = DataManager::retrieves(
                 CourseTypeUserCategoryRelCourse::class, new DataClassRetrievesParameters($condition)
-            )->next_result();
+            )->current();
         }
 
         if (!$course_type_user_category_rel_course)

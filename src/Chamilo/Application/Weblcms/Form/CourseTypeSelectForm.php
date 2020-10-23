@@ -42,14 +42,14 @@ class CourseTypeSelectForm extends FormValidator
         $course_type_objects =
             DataManager::retrieve_active_course_types();
         $course_types = array();
-        $this->size = $course_type_objects->size();
+        $this->size = $course_type_objects->count();
         if ($this->size == 1)
         {
-            $this->single_course_type_id = $course_type_objects->next_result()->get_id();
+            $this->single_course_type_id = $course_type_objects->current()->get_id();
         }
         else
         {
-            while ($course_type = $course_type_objects->next_result())
+            foreach($course_type_objects as $course_type)
             {
                 $course_types[$course_type->get_id()] = $course_type->get_name();
             }

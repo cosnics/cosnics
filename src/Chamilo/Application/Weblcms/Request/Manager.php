@@ -26,7 +26,7 @@ abstract class Manager extends Application
         }
         
         $course_types = DataManager::retrieve_active_course_types();
-        while ($course_type = $course_types->next_result())
+        foreach($course_types as $course_type)
         {
             if (CourseManagementRights::getInstance()->is_allowed(
                 CourseManagementRights::REQUEST_COURSE_RIGHT, 

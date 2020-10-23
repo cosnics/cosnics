@@ -2,7 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
  *
@@ -14,15 +15,6 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 class EntityTableDataProvider
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableDataProvider
 {
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return new ArrayResultSet($this->generateUsers());
-    }
 
     /**
      *
@@ -51,5 +43,14 @@ class EntityTableDataProvider
         }
 
         return $users;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        return new DataClassIterator(User::class, $this->generateUsers());
     }
 }

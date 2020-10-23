@@ -551,7 +551,7 @@ class DataManager
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      *
-     * @return boolean
+     * @return string[]
      * @throws \Exception
      */
     public static function record($class, RecordRetrieveParameters $parameters = null)
@@ -563,7 +563,7 @@ class DataManager
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return bool
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Exception
      */
     public static function records($class, $parameters = null)

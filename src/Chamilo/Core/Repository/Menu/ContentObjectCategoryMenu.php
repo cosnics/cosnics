@@ -113,7 +113,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
 
             $this->categories = array();
 
-            while ($contentObjectCategory = $contentObjectCategories->next_result())
+            foreach($contentObjectCategories as $contentObjectCategory)
             {
                 $this->categories[$contentObjectCategory->get_parent()][] = $contentObjectCategory;
             }

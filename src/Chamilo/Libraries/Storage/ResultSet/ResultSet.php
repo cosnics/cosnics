@@ -25,7 +25,7 @@ abstract class ResultSet
     {
         $array = array();
 
-        while ($result = $this->next_result())
+        foreach($this as $result)
         {
             $array[] = $result;
         }

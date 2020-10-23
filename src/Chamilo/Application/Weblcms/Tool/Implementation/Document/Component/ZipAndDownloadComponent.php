@@ -163,7 +163,7 @@ class ZipAndDownloadComponent extends Manager
 
             if ($publications)
             {
-                while ($publication = $publications->next_result())
+                foreach($publications as $publication)
                 {
                     if (! $is_course_admin && $publication[ContentObjectPublication::PROPERTY_HIDDEN])
                     {
@@ -259,7 +259,7 @@ class ZipAndDownloadComponent extends Manager
             ContentObjectPublicationCategory::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($category = $categories->next_result())
+        foreach($categories as $category)
         {
             // Make safe name
             $safe_name = strtr(

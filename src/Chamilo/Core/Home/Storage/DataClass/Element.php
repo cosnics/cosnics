@@ -175,7 +175,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
             new StaticConditionVariable($this->get_id()));
         $childElements = DataManager::retrieves(Block::class, new DataClassRetrievesParameters($condition));
 
-        while ($childElement = $childElements->next_result())
+        foreach($childElements as $childElement)
         {
             if (! $childElement->delete())
             {

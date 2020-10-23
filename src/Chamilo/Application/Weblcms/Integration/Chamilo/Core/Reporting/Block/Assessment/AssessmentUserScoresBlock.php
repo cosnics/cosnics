@@ -67,13 +67,13 @@ class AssessmentUserScoresBlock extends ToolBlock
         $headings = array();
         $headings[] = Translation::get('Name');
         $headings[] = Translation::get('OfficialCode', null, Manager::context());
-        while ($publication = $publication_resultset->next_result())
+        foreach($publication_resultset as $publication)
         {
             $publications[] = $publication;
             
             $content_object = $publication->get_content_object();
             
-            if ($publication_resultset->size() > 5)
+            if ($publication_resultset->count() > 5)
             {
                 $headings[] = substr($content_object->get_title(), 0, 14);
             }
@@ -107,7 +107,7 @@ class AssessmentUserScoresBlock extends ToolBlock
             {
                 $content_object = $publication->get_content_object();
                 
-                if ($publication_resultset->size() > 5)
+                if ($publication_resultset->count() > 5)
                 {
                     $title = substr($content_object->get_title(), 0, 14);
                 }
@@ -135,7 +135,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                     AssessmentAttempt::class,
                     new DataClassRetrievesParameters($condition));
                 
-                if ($attempts_by_user->size() == 0)
+                if ($attempts_by_user->count() == 0)
                 {
                     if (DataManager::is_publication_target_user(
                         $user[User::PROPERTY_ID],
@@ -178,13 +178,13 @@ class AssessmentUserScoresBlock extends ToolBlock
         switch ($score_type)
         {
             case self::SCORE_TYPE_AVG :
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     $score += $attempt->get_total_score();
                 }
                 return number_format($score / count($attempts), 1);
             case self::SCORE_TYPE_MIN :
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_total_score() < $score)
                     {
@@ -193,7 +193,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 }
                 return $score;
             case self::SCORE_TYPE_MAX :
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_total_score() > $score)
                     {
@@ -203,7 +203,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 return $score;
             case self::SCORE_TYPE_FIRST :
                 $date = null;
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_start_time() < $date)
                     {
@@ -214,7 +214,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 return $score;
             case self::SCORE_TYPE_LAST :
                 $date = null;
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_start_time() > $date)
                     {
@@ -224,7 +224,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 }
                 return $score;
             default :
-                while ($attempt = $attempts->next_result())
+                foreach($attempts as $attempt)
                 {
                     $score += $attempt->get_total_score();
                 }

@@ -72,7 +72,7 @@ class GroupUsersSubscribeComponent extends Manager
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
                     new StaticConditionVariable($group_id))));
 
-        while ($user = $group_users->next_result())
+        foreach($group_users as $user)
         {
             $user_id = $user->get_user_id();
             if ($user_id != $this->get_user_id())
@@ -93,7 +93,7 @@ class GroupUsersSubscribeComponent extends Manager
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($group_id))));
 
-        while ($group = $groups->next_result())
+        foreach($groups as $group)
         {
             $this->subscribe_group($group->get_id(), $course);
         }

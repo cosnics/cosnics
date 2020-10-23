@@ -54,7 +54,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $total_weight = 0;
         $question_number = 1;
 
-        while ($question_cloi = $questions_cloi->next_result())
+        foreach($questions_cloi as $question_cloi)
         {
             $result = $results[$question_cloi->get_id()];
 

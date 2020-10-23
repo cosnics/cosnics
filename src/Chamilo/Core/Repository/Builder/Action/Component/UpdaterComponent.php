@@ -99,7 +99,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
                         )
                     )
                 );
-                while ($child = $children->next_result())
+                foreach($children as $child)
                 {
                     $child->set_parent($new_id);
                     $child->update();

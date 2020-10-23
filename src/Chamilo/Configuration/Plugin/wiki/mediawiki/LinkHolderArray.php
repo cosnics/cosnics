@@ -95,7 +95,7 @@ class MediawikiLinkHolderArray
         else
         {
             // Separate the link trail from the rest of the link
-            list($inside, $trail) = MediaWikiLinker :: splitTrail($trail);
+            list($inside, $trail) = MediaWikiLinker::splitTrail($trail);
 
             $entry = array('title' => $nt, 'text' => $prefix . $text . $inside, 'pdbk' => $nt->getPrefixedDBkey());
             if ($query !== '')
@@ -157,7 +157,7 @@ class MediawikiLinkHolderArray
         }
 
         $colours = array();
-        $linkCache = MediawikiLinkCache :: singleton();
+        $linkCache = MediawikiLinkCache::singleton();
         $output = $this->parent->getOutput();
 
         $threshold = 0;
@@ -212,7 +212,7 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $title_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject :: PROPERTY_TITLE),
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
                         new StaticConditionVariable($title->getText()));
                 }
             }
@@ -220,7 +220,7 @@ class MediawikiLinkHolderArray
 
         $title_condition = new OrCondition($title_conditions);
 
-        // $complex_wiki_page_id = Request :: get(\core\repository\display\action\Manager ::
+        // $complex_wiki_page_id = Request::get(\core\repository\display\action\Manager ::
         // PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         // $complex_wiki_page = RepositoryDataManager ::retrieve_by_id(ComplexContentObjectItem ::
         // class_name(),$complex_wiki_page_id);
@@ -230,28 +230,28 @@ class MediawikiLinkHolderArray
         $wiki_pages = $wiki->get_wiki_pages_by_title($title_condition);
         $wiki_complex_ids = array();
 
-        while ($wiki_page = $wiki_pages->next_result())
+        foreach($wiki_pages as $wiki_page)
         {
-            $title = MediawikiTitle :: makeTitle(NS_MAIN, $wiki_page->get_title());
+            $title = MediawikiTitle::makeTitle(NS_MAIN, $wiki_page->get_title());
             $pdbk = $title->getPrefixedDBkey();
             $linkCache->addGoodLinkObj($wiki_page->get_id(), $title, 1024, 0);
-            $colours[$pdbk] = MediawikiLinker :: getLinkColour($title, $threshold);
+            $colours[$pdbk] = MediawikiLinker::getLinkColour($title, $threshold);
 
             $complex_wiki_page_conditions = array();
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class,
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($wiki->get_id()));
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class,
-                    ComplexContentObjectItem :: PROPERTY_REF),
+                    ComplexContentObjectItem::PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
 
-            $current_complex_wiki_page = DataManager :: retrieves(
+            $current_complex_wiki_page = DataManager::retrieves(
                 ComplexContentObjectItem::class,
-                new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->next_result();
+                new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->current();
             $wiki_complex_ids[$pdbk] = $current_complex_wiki_page->get_id();
         }
 
@@ -271,7 +271,7 @@ class MediawikiLinkHolderArray
                     $linkCache->addBadLinkObj($title);
                     $colours[$pdbk] = 'new';
                     $output->addLink($title, 0);
-                    $replacePairs[$searchkey] = MediawikiLinker :: makeBrokenLinkObj(
+                    $replacePairs[$searchkey] = MediawikiLinker::makeBrokenLinkObj(
                         $title,
                         $entry['text'],
                         $this->parent->get_mediawiki_parser_context()->get_parameters());
@@ -279,10 +279,10 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $query_parameters = $this->parent->get_mediawiki_parser_context()->get_parameters();
-                    $query_parameters[Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_VIEW_WIKI_PAGE;
-                    $query_parameters[Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
+                    $query_parameters[Manager::PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::ACTION_VIEW_WIKI_PAGE;
+                    $query_parameters[Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
 
-                    $replacePairs[$searchkey] = MediawikiLinker :: makeColouredLinkObj(
+                    $replacePairs[$searchkey] = MediawikiLinker::makeColouredLinkObj(
                         $title,
                         $colours[$pdbk],
                         $entry['text'],

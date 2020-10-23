@@ -133,7 +133,7 @@ class Rights extends RightsUtil
                     RightsLocationEntityRightGroup::class,
                     new DataClassRetrievesParameters($condition));
                 
-                while ($right_group = $right_groups->next_result())
+                foreach($right_groups as $right_group)
                 {
                     if (! in_array($right_group->get_group_id(), $allowed_groups))
                     {
@@ -160,7 +160,7 @@ class Rights extends RightsUtil
                         RightsLocationEntityRightGroup::class,
                         new DataClassRetrievesParameters($condition));
                     
-                    while ($right_group = $right_groups->next_result())
+                    foreach($right_groups as $right_group)
                     {
                         if (! in_array($right_group->get_group_id(), $allowed_groups))
                         {
@@ -185,7 +185,7 @@ class Rights extends RightsUtil
                     Group::class,
                     new DataClassRetrievesParameters($condition));
                 
-                while ($group = $groups->next_result())
+                foreach($groups as $group)
                 {
                     
                     $user_ids = $group->get_users(true, true);
@@ -227,7 +227,7 @@ class Rights extends RightsUtil
                     RightsLocationEntityRightGroup::class,
                     new DataClassRetrievesParameters($condition));
                 
-                while ($right_group = $right_groups->next_result())
+                foreach($right_groups as $right_group)
                 {
                     if (! in_array($right_group->get_location_entity_right_id(), $location_entity_right_ids))
                     {
@@ -249,7 +249,7 @@ class Rights extends RightsUtil
                     Manager::context(), 
                     $condition);
                 
-                while ($location_entity_right = $location_entity_rights->next_result())
+                foreach($location_entity_rights as $location_entity_right)
                 {
                     switch ($location_entity_right->get_entity_type())
                     {
@@ -311,7 +311,7 @@ class Rights extends RightsUtil
                 User::class,
                 new DataClassRetrievesParameters($condition));
             
-            while ($authorized_user = $authorized_users->next_result())
+            foreach($authorized_users as $authorized_user)
             {
                 self::$authorized_users[$user->get_id()][] = $authorized_user;
             }

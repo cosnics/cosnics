@@ -83,7 +83,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
             $package_registrations = DataManager::retrieves(
                 Registration::class, new DataClassRetrievesParameters($condition)
             );
-            while ($package_registration = $package_registrations->next_result())
+            foreach($package_registrations as $package_registration)
             {
                 $packages[] = $package_registration->get_context();
             }

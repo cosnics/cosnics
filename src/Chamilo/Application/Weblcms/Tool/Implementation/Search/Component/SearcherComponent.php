@@ -91,7 +91,7 @@ class SearcherComponent extends Manager
             
             $tools = array();
             
-            while ($publication = $publications->next_result())
+            foreach($publications as $publication)
             {
                 if ($this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication) &&
                      (! $publication->is_hidden() || $this->is_allowed(WeblcmsRights::EDIT_RIGHT)))

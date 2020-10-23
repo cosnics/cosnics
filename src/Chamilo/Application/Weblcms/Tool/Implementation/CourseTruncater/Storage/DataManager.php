@@ -47,7 +47,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $course_sections_set = self::retrieves(CourseSection::class, $condition);
 
         $course_sections = array();
-        while ($course_section = $course_sections_set->next_result())
+        foreach($course_sections_set as $course_section)
         {
             $course_sections[] = $course_section->get_default_properties();
         }
@@ -121,7 +121,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             CourseSection::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($course_section = $course_sections->next_result())
+        foreach($course_sections as $course_section)
         {
             if (! $course_section->delete())
             {
@@ -151,7 +151,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObjectPublication::class,
             $condition);
 
-        while ($publication = $publications->next_result())
+        foreach($publications as $publication)
         {
             if (! $publication->delete())
             {
@@ -238,7 +238,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObjectPublicationCategory::class,
             $condition);
 
-        while ($cat = $subcategories->next_result())
+        foreach($subcategories as $cat)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(

@@ -141,7 +141,7 @@ class RequestForm extends FormValidator
                 \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
             $course_management_rights = CourseManagementRights::getInstance();
 
-            while ($course_type = $course_type_objects->next_result())
+            foreach($course_type_objects as $course_type)
             {
                 if ($course_management_rights->is_allowed(
                     CourseManagementRights::REQUEST_COURSE_RIGHT, $course_type->get_id(),
@@ -178,7 +178,7 @@ class RequestForm extends FormValidator
 
             $course_categories_array = array();
 
-            while ($category = $course_categories->next_result())
+            foreach($course_categories as $category)
             {
                 $course_categories_array[$category->get_id()] = $category->get_name();
             }

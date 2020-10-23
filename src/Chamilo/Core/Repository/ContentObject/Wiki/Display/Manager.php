@@ -376,7 +376,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             ComplexWikiPage::class, $parameters
         );
 
-        return $complex_wiki_homepage->next_result();
+        return $complex_wiki_homepage->current();
     }
 
     public static function is_wiki_locked($wiki_id)

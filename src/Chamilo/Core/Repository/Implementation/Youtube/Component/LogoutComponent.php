@@ -32,9 +32,9 @@ class LogoutComponent extends Manager
         $parameters = new DataClassRetrievesParameters($condition, 1);
         $settings = DataManager::retrieves(Setting::class, $parameters);
         
-        if ($settings->size() > 0)
+        if ($settings->count() > 0)
         {
-            $user_setting = $settings->next_result();
+            $user_setting = $settings->current();
             if ($user_setting->delete())
             {
                 $parameters = $this->get_parameters();

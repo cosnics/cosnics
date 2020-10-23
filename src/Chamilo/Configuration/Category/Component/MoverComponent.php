@@ -38,7 +38,7 @@ class MoverComponent extends Manager
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
                 new StaticConditionVariable($category_id)));
-        $category = $categories->next_result();
+        $category = $categories->current();
         $parent = $category->get_parent();
 
         $max = $this->get_parent()->count_categories(
@@ -63,7 +63,7 @@ class MoverComponent extends Manager
                 new StaticConditionVariable($parent));
             $condition = new AndCondition($conditions);
             $categories = $this->get_parent()->retrieve_categories($condition);
-            $newcategory = $categories->next_result();
+            $newcategory = $categories->current();
 
             if ($newcategory)
             {

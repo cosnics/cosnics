@@ -124,7 +124,7 @@ class FavouriteRepository
      * @param int $count
      * @param OrderBy[] $orderProperty
      *
-     * @return mixed
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {

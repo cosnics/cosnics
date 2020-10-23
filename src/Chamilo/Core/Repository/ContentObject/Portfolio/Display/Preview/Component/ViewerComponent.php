@@ -19,15 +19,53 @@ use Exception;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager implements
-    PortfolioDisplaySupport
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager
+    implements PortfolioDisplaySupport
 {
 
     function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
+    }
+
+    /**
+     *
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::count_portfolio_feedbacks()
+     */
+    function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
+    {
+        return $this->retrieve_portfolio_feedbacks($node)->count();
+    }
+
+    public function get_portfolio_additional_actions()
+    {
+        return array();
+    }
+
+    /**
+     *
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_feedback()
+     */
+    public function get_portfolio_feedback()
+    {
+        $feedback = new DummyFeedback();
+        $feedback->set_content_object_id($this->get_root_content_object()->get_id());
+
+        return $feedback;
+    }
+
+    /**
+     *
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_notification()
+     */
+    public function get_portfolio_notification()
+    {
+        $notification = new DummyNotification();
+        $notification->set_content_object_id($this->get_root_content_object()->get_id());
+
+        return $notification;
     }
 
     /**
@@ -37,37 +75,73 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function get_portfolio_tree_menu_url()
     {
         return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
-             \Chamilo\Core\Repository\Preview\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
-             \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
-             $this->get_root_content_object()->get_id() . '&' .
-             Manager::PARAM_STEP . '=%s';
+            \Chamilo\Core\Repository\Preview\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+            \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
+            \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
+            $this->get_root_content_object()->get_id() . '&' . Manager::PARAM_STEP . '=%s';
+    }
+
+    /*
+     * (non-PHPdoc) @see
+     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_update_feedback()
+     */
+
+    public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node)
+    {
+        return true;
+    }
+
+    /*
+     * (non-PHPdoc) @see
+     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_view_feedback()
+     */
+
+    public function is_allowed_to_set_content_object_rights()
+    {
+        return true;
+    }
+
+    /*
+     * (non-PHPdoc) @see
+     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_create_feedback()
+     */
+
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        return true;
+    }
+
+    public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node)
+    {
+        return true;
+    }
+
+    /*
+     * (non-PHPdoc) @see
+     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
+     */
+
+    /**
+     *
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
+     */
+    public function is_own_portfolio()
+    {
+        return $this->get_root_content_object()->get_owner_id() == $this->get_user_id();
     }
 
     /**
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::count_portfolio_feedbacks()
+     * @param ComplexContentObjectPathNode $node
+     *
+     * @return ResultSet
      */
-    function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
+    public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
     {
-        return $this->retrieve_portfolio_feedbacks($node)->size();
-    }
-
-    /**
-     *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
-     *
-     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
-     * @param int $count
-     * @param int $offset
-     *
-     * @return
-     */
-    function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count = null, $offset = null)
-    {
-        return PreviewStorage::getInstance()->retrieve_feedbacks(
+        return PreviewStorage::getInstance()->retrieve_notifications(
             $this->get_root_content_object()->get_id(),
-            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
+            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0
+        );
     }
 
     /**
@@ -88,63 +162,20 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
 
     /**
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_feedback()
-     */
-    public function get_portfolio_feedback()
-    {
-        $feedback = new DummyFeedback();
-        $feedback->set_content_object_id($this->get_root_content_object()->get_id());
-        return $feedback;
-    }
-
-    /*
-     * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_update_feedback()
-     */
-    public function is_allowed_to_update_feedback($feedback)
-    {
-        return true;
-    }
-
-    /*
-     * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_view_feedback()
-     */
-    public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node)
-    {
-        return true;
-    }
-
-    /*
-     * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_create_feedback()
-     */
-    public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node)
-    {
-        return true;
-    }
-
-    public function is_allowed_to_set_content_object_rights()
-    {
-        return true;
-    }
-
-    /*
-     * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
-     */
-    public function get_portfolio_additional_actions()
-    {
-        return array();
-    }
-
-    /**
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
+     * @param int $count
+     * @param int $offset
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
+     * @return \ArrayIterator
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
+     *
      */
-    public function is_own_portfolio()
+    function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count = null, $offset = null)
     {
-        return $this->get_root_content_object()->get_owner_id() == $this->get_user_id();
+        return PreviewStorage::getInstance()->retrieve_feedbacks(
+            $this->get_root_content_object()->get_id(),
+            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0
+        );
     }
 
     /**
@@ -155,30 +186,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     {
         return PreviewStorage::getInstance()->retrieve_notification(
             $this->get_root_content_object()->get_id(),
-            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
-    }
-
-    /**
-     *
-     * @param ComplexContentObjectPathNode $node
-     *
-     * @return ResultSet
-     */
-    public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
-    {
-        return PreviewStorage::getInstance()->retrieve_notifications(
-            $this->get_root_content_object()->get_id(),
-            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
-    }
-
-    /**
-     *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_notification()
-     */
-    public function get_portfolio_notification()
-    {
-        $notification = new DummyNotification();
-        $notification->set_content_object_id($this->get_root_content_object()->get_id());
-        return $notification;
+            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0
+        );
     }
 }

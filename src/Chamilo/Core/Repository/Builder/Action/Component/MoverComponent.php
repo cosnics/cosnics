@@ -71,7 +71,7 @@ class MoverComponent extends Manager
                 $items = DataManager::retrieve_complex_content_object_items(
                     ComplexContentObjectItem::class,
                     $condition);
-                $new_complex_content_object_item = $items->next_result();
+                $new_complex_content_object_item = $items->current();
                 $new_complex_content_object_item->set_display_order($display_order);
 
                 if (! $complex_content_object_item->update() || ! $new_complex_content_object_item->update())

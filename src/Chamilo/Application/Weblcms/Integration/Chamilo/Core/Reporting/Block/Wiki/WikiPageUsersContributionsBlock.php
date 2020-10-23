@@ -35,7 +35,7 @@ class WikiPageUsersContributionsBlock extends ToolBlock
         
         $users = array();
         
-        while ($version = $versions->next_result())
+        foreach($versions as $version)
         {
             $users[$version->get_owner_id()] = isset($users[$version->get_owner_id()]) ? $users[$version->get_owner_id()] ++ : 1;
         }

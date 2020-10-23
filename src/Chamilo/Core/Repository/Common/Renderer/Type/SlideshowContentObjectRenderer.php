@@ -50,7 +50,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
                 1,
                 $slideshowIndex,
                 array()
-            )->next_result();
+            )->current();
 
             $contentObjectRenditionImplementation = ContentObjectRenditionImplementation::factory(
                 $contentObject,

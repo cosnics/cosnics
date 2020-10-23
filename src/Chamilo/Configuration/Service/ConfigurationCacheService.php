@@ -43,7 +43,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             )
         );
 
-        while ($language = $languageObjects->next_result())
+        foreach($languageObjects as $language)
         {
             $languages[$language[Language::PROPERTY_ISOCODE]] = $language[Language::PROPERTY_ORIGINAL_NAME];
         }
@@ -64,7 +64,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             )
         );
 
-        while ($registration = $registrationsObjects->next_result())
+        foreach($registrationsObjects as $registration)
         {
             $registrations[self::REGISTRATION_TYPE][$registration[Registration::PROPERTY_TYPE]][$registration[Registration::PROPERTY_CONTEXT]] =
                 $registration;
@@ -106,7 +106,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             )
         );
 
-        while ($setting = $settingObjects->next_result())
+        foreach($settingObjects as $setting)
         {
             $settings[$setting[Setting::PROPERTY_APPLICATION]][$setting[Setting::PROPERTY_VARIABLE]] =
                 $setting[Setting::PROPERTY_VALUE];

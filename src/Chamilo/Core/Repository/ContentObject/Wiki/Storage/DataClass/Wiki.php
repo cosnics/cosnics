@@ -76,7 +76,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
         $wiki_pages = array();
 
-        while ($complex_content_object = $complex_content_objects->next_result())
+        foreach($complex_content_objects as $complex_content_object)
         {
             $wiki_pages[] = DataManager::retrieve_by_id(
                 ContentObject::class,

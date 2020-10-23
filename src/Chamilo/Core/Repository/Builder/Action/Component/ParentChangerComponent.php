@@ -81,10 +81,10 @@ class ParentChangerComponent extends Manager
                             ), $complex_content_object_item_ids
                         )
                     );
-                    $size = $complex_content_object_items->size();
+                    $size = $complex_content_object_items->count();
                     $old_parent = 0;
 
-                    while ($complex_content_object_item = $complex_content_object_items->next_result())
+                    foreach($complex_content_object_items as $complex_content_object_item)
                     {
                         if (!$old_parent)
                         {
@@ -198,7 +198,7 @@ class ParentChangerComponent extends Manager
 
         $i = 1;
 
-        while ($complex_content_object_item = $complex_content_object_items->next_result())
+        foreach($complex_content_object_items as $complex_content_object_item)
         {
             $complex_content_object_item->set_display_order($i);
             $complex_content_object_item->update();
@@ -217,7 +217,7 @@ class ParentChangerComponent extends Manager
             ComplexContentObjectItem::class, $condition
         );
 
-        while ($child = $children->next_result())
+        foreach($children as $child)
         {
             $ref_id = $child->get_ref();
             $ref_object = DataManager::retrieve_by_id(

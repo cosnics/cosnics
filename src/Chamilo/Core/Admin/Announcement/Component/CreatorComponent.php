@@ -135,7 +135,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             $html[] = '</div>';
             $html[] = '<ul class="list-group">';
 
-            while ($contentObject = $contentObjects->next_result())
+            foreach($contentObjects as $contentObject)
             {
                 $namespace = ContentObject::get_content_object_type_namespace($contentObject->get_type());
                 $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);

@@ -186,7 +186,7 @@ class AttemptResultViewerComponent extends Manager
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        while ($question_attempt = $question_attempts_result_set->next_result())
+        foreach($question_attempts_result_set as $question_attempt)
         {
             $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
         }
@@ -248,7 +248,7 @@ class AttemptResultViewerComponent extends Manager
 
         $results = array();
 
-        while ($question_attempt = $question_attempts->next_result())
+        foreach($question_attempts as $question_attempt)
         {
             $results[$question_attempt->get_question_complex_id()] = array(
                 'answer' => $question_attempt->get_answer(),

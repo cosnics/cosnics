@@ -133,7 +133,7 @@ class CourseSettingsConnector
         $categories = array();
 
         $categories_result_set = DataManager::retrieve_course_categories_ordered_by_name();
-        while ($category = $categories_result_set->next_result())
+        foreach($categories_result_set as $category)
         {
             $categories[$category->get_id()] = $category->get_name();
         }
@@ -237,7 +237,7 @@ class CourseSettingsConnector
             $condition, null, null, $order
         );
 
-        while ($user = $users_result_set->next_result())
+        foreach($users_result_set as $user)
         {
             $users[$user->get_id()] = $user->get_fullname() . ' (' . $user->get_official_code() . ')';
         }

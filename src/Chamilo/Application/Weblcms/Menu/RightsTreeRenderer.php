@@ -66,7 +66,7 @@ class RightsTreeRenderer extends HtmlMenu
         $sub_groups = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters($condition)
         );
-        while ($group = $sub_groups->next_result())
+        foreach($sub_groups as $group)
         {
             $sub_menu_item = $this->get_group_array($group);
             $menu[] = $sub_menu_item;

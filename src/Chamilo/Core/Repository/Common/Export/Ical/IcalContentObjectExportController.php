@@ -62,7 +62,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
-        while ($content_object = $content_objects->next_result())
+        foreach($content_objects as $content_object)
         {
             $this->process($content_object);
         }

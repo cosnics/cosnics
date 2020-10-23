@@ -442,7 +442,7 @@ class CourseGroupForm extends FormValidator
         $counter = 1; // Index 1 means the first child, index 0 is the 'parent' course group.
         $data_set = $this->course_group->get_children(false);
 
-        while ($next = $data_set->next_result())
+        foreach($data_set as $next)
         {
             $course_groups = $next;
             $this->build_header($course_groups->get_name());
@@ -658,7 +658,7 @@ class CourseGroupForm extends FormValidator
             DataManager::retrieves(CourseGroup::class, new DataClassRetrievesParameters($condition));
 
         $size_children = 0;
-        while ($existing_course_group = $course_groups->next_result())
+        foreach($course_groups as $existing_course_group)
         {
             $size_children += $existing_course_group->get_max_number_of_members();
         }
@@ -775,7 +775,7 @@ class CourseGroupForm extends FormValidator
 
         $data_set = DataManager::retrieves(CourseGroup::class, new DataClassRetrievesParameters($condition));
 
-        return ($data_set->size() > 0);
+        return ($data_set->count() > 0);
     }
 
     /**
@@ -956,7 +956,7 @@ class CourseGroupForm extends FormValidator
         /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $course_users_data_set */
         $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code, null, null, null);
         $course_users = array();
-        while ($course_user = $course_users_data_set->next_result())
+        foreach($course_users_data_set as $course_user)
         {
             $course_users[] = $course_user;
         }
@@ -1008,7 +1008,7 @@ class CourseGroupForm extends FormValidator
         $course_users = array();
         if ($course_users_drs)
         {
-            while ($course_user = $course_users_drs->next_result())
+            foreach($course_users_drs as $course_user)
             {
                 $course_users[$course_user[User::PROPERTY_ID]] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                     User::class, $course_user[User::PROPERTY_ID]
@@ -1177,9 +1177,9 @@ class CourseGroupForm extends FormValidator
             $parent_cgid = null;
             $total_size_diff = 0;
 
-            if (!$data_set->is_empty())
+            if ($data_set->count() != 0)
             {
-                while ($course_group = $data_set->next_result())
+                foreach($data_set as $course_group)
                 {
                     $course_groups[] = $course_group;
                     $parent_cgid = $course_group->get_parent_id();
@@ -1200,7 +1200,7 @@ class CourseGroupForm extends FormValidator
                     CourseGroup::class, new DataClassRetrievesParameters($condition)
                 );
 
-                while ($course_group = $c_course_groups->next_result())
+                foreach($c_course_groups as $course_group)
                 {
                     $total_size += $course_group->get_max_number_of_members();
                 }
@@ -1228,7 +1228,7 @@ class CourseGroupForm extends FormValidator
                     $parent_course_group_children = $parent_course_group->get_children(false);
                     $total_size = 0;
 
-                    while ($child_group = $parent_course_group_children->next_result())
+                    foreach($parent_course_group_children as $child_group)
                     {
                         if ($child_group->getId() == $this->course_group->getId())
                         {

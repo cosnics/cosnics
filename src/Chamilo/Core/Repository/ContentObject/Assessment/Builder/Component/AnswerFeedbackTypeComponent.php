@@ -63,9 +63,9 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
                 new DataClassRetrievesParameters($condition));
             
             $failures = 0;
-            $question_count = $complex_content_object_items->size();
+            $question_count = $complex_content_object_items->count();
             
-            while ($complex_content_object_item = $complex_content_object_items->next_result())
+            foreach($complex_content_object_items as $complex_content_object_item)
             {
                 $complex_content_object_item->set_show_answer_feedback($answer_feedback_type);
                 if (! $complex_content_object_item->update())

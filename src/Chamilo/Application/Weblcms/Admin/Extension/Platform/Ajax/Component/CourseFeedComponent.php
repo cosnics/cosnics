@@ -101,7 +101,7 @@ class CourseFeedComponent extends AjaxManager
         $courses = $this->retrieve_courses();
         if ($courses)
         {
-            while ($course = $courses->next_result())
+            foreach($courses as $course)
             {
                 $course_category->add_child($this->get_element_for_course($course));
             }

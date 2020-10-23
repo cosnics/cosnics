@@ -143,7 +143,7 @@ class BlockTypeRightsService
         $blockClassContext = $classNameUtilities->getNamespaceParent($blockClass, 6);
         
         $userBlocks = $this->homeRepository->findBlocksByUserIdentifier($user->getId());
-        while ($userBlock = $userBlocks->next_result())
+        foreach($userBlocks as $userBlock)
         {
             
             /** @var Block $userBlock */

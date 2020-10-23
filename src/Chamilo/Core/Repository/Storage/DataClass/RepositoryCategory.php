@@ -229,7 +229,7 @@ class RepositoryCategory extends PlatformCategory
                         $category->get_id()
                     );
 
-                    while ($deleted_content_object = $deleted_content_objects->next_result())
+                    foreach($deleted_content_objects as $deleted_content_object)
                     {
                         $deleted_content_object->move(0);
                     }
@@ -353,7 +353,7 @@ class RepositoryCategory extends PlatformCategory
             $children_ids = array();
             $children = DataManager::retrieve_categories($condition);
 
-            while ($child = $children->next_result())
+            foreach($children as $child)
             {
                 $children_ids[] = $child->get_id();
                 $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));

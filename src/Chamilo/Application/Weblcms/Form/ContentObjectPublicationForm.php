@@ -556,7 +556,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
-        while ($cat = $cats->next_result())
+        foreach($cats as $cat)
         {
             if ($this->is_course_admin || WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                     WeblcmsRights::ADD_RIGHT, $cat->get_id(), WeblcmsRights::TYPE_COURSE_CATEGORY,

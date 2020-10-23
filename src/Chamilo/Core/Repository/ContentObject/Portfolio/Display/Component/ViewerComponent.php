@@ -611,7 +611,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             array(new OrderBy(new PropertyConditionVariable(Activity::class, Activity::PROPERTY_DATE)))
         );
 
-        $last_activity = $last_activities->next_result();
+        $last_activity = $last_activities->current();
 
         if ($last_activity)
         {

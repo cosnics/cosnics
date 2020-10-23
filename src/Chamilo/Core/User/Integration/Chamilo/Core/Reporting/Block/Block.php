@@ -18,7 +18,7 @@ abstract class Block extends ReportingBlock
     {
         $login_dates = array();
         
-        while ($login_date = $data->next_result())
+        foreach($data as $login_date)
         {
             $date = date($format, $login_date->get_date());
             

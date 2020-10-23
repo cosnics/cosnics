@@ -127,7 +127,7 @@ class UserViewMenu extends HtmlMenu
         $userview['class'] = $glyph->getClassNamesString();
         $menu[] = $userview;
 
-        while ($userview = $userviews->next_result())
+        foreach($userviews as $userview)
         {
             $menu_item = array();
             $menu_item['title'] = $userview->get_name();
