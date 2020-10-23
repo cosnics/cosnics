@@ -56,4 +56,16 @@ class AssignmentPublicationService
         }
     }
 
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication
+     */
+    public function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->assignmentPublicationRepository->findPublicationByContentObjectPublication(
+            $contentObjectPublication
+        );
+    }
+
 }

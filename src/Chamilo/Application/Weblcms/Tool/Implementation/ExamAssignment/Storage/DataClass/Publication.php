@@ -11,9 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
 {
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_CHECK_FOR_PLAGIARISM = 'check_for_plagiarism';
+    const PROPERTY_CODE = 'code';
 
     /**
      * Get the default properties
@@ -25,8 +23,7 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
         return parent::get_default_property_names(
             array(
                 self::PROPERTY_PUBLICATION_ID,
-                self::PROPERTY_ENTITY_TYPE,
-                self::PROPERTY_CHECK_FOR_PLAGIARISM
+                self::PROPERTY_CODE,
             )
         );
     }
@@ -34,66 +31,22 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     /**
      * @return int
      */
-    public function getPublicationId()
+    public function getCode()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return (int) $this->get_default_property(self::PROPERTY_CODE);
     }
 
     /**
-     * @param int $publicationId
+     * @param int $code
      */
-    public function setPublicationId($publicationId)
+    public function setCode(int $code)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publicationId);
-    }
-
-    /**
-     * Old method for the course copier
-     *
-     * @param int $publicationId
-     */
-    public function set_publication_id($publicationId)
-    {
-        $this->setPublicationId($publicationId);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getEntityType()
-    {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
-    }
-
-    /**
-     *
-     * @param int $entityType
-     */
-    public function setEntityType($entityType)
-    {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCheckForPlagiarism()
-    {
-        return $this->get_default_property(self::PROPERTY_CHECK_FOR_PLAGIARISM);
-    }
-
-    /**
-     * @param bool $checkForPlagiarism
-     */
-    public function setCheckForPlagiarism(bool $checkForPlagiarism)
-    {
-        $this->set_default_property(self::PROPERTY_CHECK_FOR_PLAGIARISM, $checkForPlagiarism);
+        $this->set_default_property(self::PROPERTY_CODE, $code);
     }
 
     public static function get_table_name()
     {
-        return 'weblcms_assignment_publication';
+        return 'weblcms_exam_assignment_publication';
     }
 }
 

@@ -35,12 +35,4 @@ class ListComponent extends Manager
             ]
         );
     }
-
-    /**
-     * @return ExamAssignmentService
-     */
-    protected function getExamAssignmentService()
-    {
-        return $this->getService(ExamAssignmentService::class);
-    }
 }

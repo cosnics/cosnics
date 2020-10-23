@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\ExamAssignment;
 
+use Chamilo\Application\ExamAssignment\Service\ExamAssignmentService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -15,6 +16,9 @@ abstract class Manager extends Application
     const ACTION_LIST = 'List';
     const ACTION_VIEW_ASSIGNMENT = 'ViewAssignment';
     const ACTION_RESULT = 'Result';
+
+    const PARAM_CONTENT_OBJECT_PUBLICATION_ID = 'publicationId';
+    const PARAM_CODE = 'code';
 
     const DEFAULT_ACTION = self::ACTION_LIST;
 
@@ -33,5 +37,13 @@ abstract class Manager extends Application
         {
             $this->checkAuthorization(Manager::context());
         }
+    }
+
+    /**
+     * @return ExamAssignmentService
+     */
+    protected function getExamAssignmentService()
+    {
+        return $this->getService(ExamAssignmentService::class);
     }
 }
