@@ -43,12 +43,10 @@
             margin-right: auto;
             width: 100%;
         }
-
         .main-content.mod-exams {
             margin-top: 80px;
             max-width: 720px;
         }
-
         .btn-action {
             background-color: #009c7c;
             border: 1px solid;
@@ -56,8 +54,10 @@
             color: #fff;
         }
         .btn-action.mod-access {
-            font-size: 1.3rem;
-            line-height: 1rem;
+            font-size: 1.5rem;
+            line-height: 1.5rem;
+            margin-top: .7rem;
+            width: 100%;
         }
         .btn-action:hover, .btn-action:focus, .btn-action:active {
             background-color: #00b690;
@@ -82,6 +82,7 @@
         .btn-logout:hover, .btn-logout:focus, .btn-logout:active {
             background-color: #2b6090;
             border-color: #204d74;
+            color: #fff;
         }
         .btn-logout:focus {
             outline: thin dotted;
@@ -94,12 +95,23 @@
             padding: 0;
         }
         .exam-list-item {
-            background: #f0f0f0;
+            align-items: center;
+            /*background: #f0f0f0;*/
+            background: #f4f5f5;
             border: 1px solid #e6e6e6;
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
             line-height: 1.6;
             margin-bottom: 40px;
             padding: 20px;
+        }
+        .exam-title {
+            /*color: #566f81;*/
+            color: #507177;
+            margin: 0 0 .7rem;
+            font-size: larger;
+            font-weight: 700;
         }
         .exam-code {
             margin-top: 8px;
@@ -128,7 +140,6 @@
             margin-top: 60px;
             max-width: 900px;
         }
-
         .current-exam-title {
             font-size: 2rem;
             margin-bottom: 0;
@@ -166,9 +177,9 @@
             width: fit-content;
         }
         .time-item {
+            align-items: center;
             display: flex;
             flex-direction: column;
-            align-items:center;
         }
         .time {
             font-size: 2.4rem;
@@ -219,33 +230,50 @@
             font-size: 1.5rem;
             line-height: 1.5;
         }
-
         .exam-metadata {
-            margin-bottom: 1rem;
+            margin-bottom: .5rem;
         }
-
-        .exam-list-item2 {
-            display: flex;
-        }
-
         .exam-info {
-            width: 80%;
+            color: #707070;
         }
-
-        .btn-action2 {
-            width: 100%;
-            margin-top: 1rem;
+        .exam-metadata-time {
+            margin-left: -5px;
         }
-
         .exam-timestamp {
-            color: #406e8e;
+            background-color: #fcfcfc;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            /*color: #406e8e;*/
+            color: #507177;
+            font-size: 1.35rem;
+            font-weight: 500;
+            padding: 2px 5px;
+        }
+        .time-arrow {
+            color: #009c7c;
+            margin-right: -7px;
+        }
+        .time-arrow-last {
+            color: #009c7c;
+            margin-right: -2px;
+        }
+        .dmy-separator {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-left: 1px;
+        }
+        .datetime-separator {
+            font-size: 1.05rem;
+        }
+        .exam-form {
+            flex-basis: 30%;
         }
     </style>
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="header-title">HOGENT Examination Tool</div>
-                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-default btn-logout">Log out</button></div>
+                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-logout">Log out</button></div>
             </div>
         </div>
     </header>
@@ -255,42 +283,29 @@
                 <h1 class="sr-only">Examens vandaag</h1>
                 <ul class="exam-list">
                     {% for EXAM in EXAMS %}
-                    <li class="exam-list-item exam-list-item2">
+                    <li class="exam-list-item">
                         <div class="exam-info">
-                            <div class="exam-title"><strong>{{ EXAM.title }}</strong></div>
+                            <h2 class="exam-title">{{ EXAM.title }}</h2>
                             <div class="exam-metadata">
-                                {{ EXAM.course_title }} ({{ EXAM.visual_code }}) -
-                                &nbsp;{{ EXAM.firstname }}&nbsp;{{ EXAM.lastname }}
+                                <div>{{ EXAM.course_title }} (<span style="color: #48738a">{{ EXAM.visual_code }}</span>)</div>
+                                <div>{{ EXAM.firstname }} {{ EXAM.lastname }}</div>
                             </div>
-                            <div>
+                            <div class="exam-metadata-time">
                                 <div class="exam-time">
-                                    Van
-                                    <span class="exam-timestamp"><strong>{{ EXAM.start_time|date("d/m/Y - H:i") }}</strong></span>
-                                    tot
-                                    <span class="exam-timestamp"><strong>{{ EXAM.end_time|date("d/m/Y - H:i") }}</strong></span>
+                                    <span class="sr-only">Van </span><strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
+                                    <i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow-last fa fa-caret-right" aria-hidden="true"></i>
+                                    <span class="sr-only"> tot </span><strong class="exam-timestamp">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong>
                                 </div>
                             </div>
                         </div>
                         <div class="exam-form">
-                            <form action="/page1" method="post">
+                            <form action="{{ ENTRY_URL.replace({'__EXAMID__': EXAM.publication_id}) }}" method="post">
                                 <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                                <button class="btn btn-action mod-access btn-action2">Starten</button>
+                                <button class="btn btn-action mod-access">Starten</button>
                             </form>
                         </div>
                     </li>
                     {% endfor %}
-                    <li class="exam-list-item">
-                        <div class="exam-title">Titel: <strong>Filosofie 2</strong></div>
-                        <div>
-                            <div class="exam-time exam-start-time">Starttijd: 10.30</div>
-                            <div class="exam-time exam-end-time">Eindtijd: 12.00</div>
-                        </div>
-                        <div>Titularis: Jenny Doe</div>
-                        <form action="/page1" method="post">
-                            <input type="text" class="exam-code" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                            <button type="submit" class="btn btn-action mod-access">Starten</button>
-                        </form>
-                    </li>
                 </ul>
             </div>
         </div>

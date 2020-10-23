@@ -31,7 +31,8 @@ class ListComponent extends Manager
             Manager::context() . ':List.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'USER' => $this->getUser(),
-                'EXAMS' => $exams
+                'EXAMS' => $exams,
+                'ENTRY_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_ENTRY, self::PARAM_EXAM => '__EXAMID__'])
             ]
         );
     }
