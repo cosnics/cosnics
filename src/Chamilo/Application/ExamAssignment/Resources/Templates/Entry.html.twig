@@ -10,11 +10,13 @@
                     <ul class="current-exam-info-main">
                         <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
                         <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
-                        <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong></li>
+                        {% set start_time = DETAILS.assignment.get_start_time %}
+                        <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ start_time|date("H:i") }}</strong></li>
                     </ul>
                     <div class="current-exam-info-time">
                         <ul class="current-exam-info-time-end">
-                            <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ EXAM.end_time|date("d") }}<span class="dmy-separator-strong">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ EXAM.end_time|date("Y") }} - {{ EXAM.end_time|date("H:i") }}</strong></li>
+                            {% set end_time = DETAILS.assignment.get_end_time %}
+                            <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("Y") }} - {{ end_time|date("H:i") }}</strong></li>
                         </ul>
                     </div>
                 </div>
