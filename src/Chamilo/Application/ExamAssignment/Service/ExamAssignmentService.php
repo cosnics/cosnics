@@ -14,6 +14,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\AssignmentPublicationService;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -163,13 +164,13 @@ class ExamAssignmentService
         $examAssignmentPublication =
             $this->examAssignmentPublicationService->getAssignmentPublication($contentObjectPublication);
 
-        if(!$examAssignmentPublication instanceof Publication)
+        if (!$examAssignmentPublication instanceof Publication)
         {
             return false;
         }
 
         $examCode = $examAssignmentPublication->getCode();
-        if(!empty($examCode) && $examCode != $code)
+        if (!empty($examCode) && $examCode != $code)
         {
             return false;
         }
@@ -198,6 +199,18 @@ class ExamAssignmentService
             $contentObjectPublication, Entry::ENTITY_TYPE_USER, $user->getId()
         );
 
+        $attachments = [];
+
+        foreach ($assignment->get_attachments() as $attachment)
+        {
+            if ($attachment instanceof File)
+            {
+                $attachments[$attachment->get_filename()] = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+                    $attachment->getId(), $attachment->calculate_security_code()
+                );
+            }
+        }
+
         $details = [];
 
         $details['publication'] = $contentObjectPublication;
@@ -207,7 +220,7 @@ class ExamAssignmentService
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
         $details['can_submit'] = count($entries) == 0 && $assignment->get_end_time() + 900 >= time();
-        $details['attachments'] = $assignment->get_attachments();
+        $details['attachments'] = $attachments;
 
         return $details;
     }

@@ -1,33 +1,36 @@
 {% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
+    {% set appContext = 'Chamilo\\Application\\ExamAssignment' %}
     {% block main %}
     <main>
         <div class="container">
             <div class="main-content mod-current-exam">
-                <h1 class="current-exam-title">Examen Filosofie 1</h1>
+                <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
                 <div class="current-exam-info">
                     <ul class="current-exam-info-main">
-                        <li>Cursus: Filosofie 1</li>
-                        <li>Titularis: Jenny Doe</li>
-                        <li>Opdracht: Titel opdracht</li>
+                        <li>Cursus: {{ DETAILS.course.get_title() }} ({{ DETAILS.course.get_visual_code() }})</li>
+                        <li>Titularis: {{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
                     </ul>
                     <div class="current-exam-info-time">
                         <ul class="current-exam-info-time-start">
-                            <li>Starttijd: 8:30</li>
-                            <li>Duur: 120 minuten</li>
+                            <li>
+                                <span class="sr-only">Van </span><strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
+                            </li>
                         </ul>
                         <ul class="current-exam-info-time-end">
-                            <li class="time-item"><span>Tijd tot</span> <span class="time">10:30</span></li>
+                            <li class="time-item"><span>Tijd tot</span> <span class="sr-only"> tot </span><strong class="exam-timestamp">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong></li>
                         </ul>
                     </div>
+                </div>
+                <div class="alert alert-info">
+                    {{ DETAILS.assignment.get_description()|raw }}
                 </div>
                 <div class="current-exam-main">
                     <div class="current-exam-essentials">
                         <div class="current-exam-files-title"><strong>Bestanden:</strong></div>
                         <ul class="current-exam-files-download">
-                            <li><a href="#">Examenopdracht.pdf</a></li>
-                            <li><a href="#">Invulformulier.docx</a></li>
-                            <li><a href="#">Bijlage 1.pdf</a></li>
-                            <li><a href="#">Bijlage 2.pdf</a></li>
+                            {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
+                                <li><a href="{{ ATTACHMENT_URL }}">{{ ATTACHMENT }}</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <div class="current-exam-upload-section">
