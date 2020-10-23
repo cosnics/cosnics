@@ -141,6 +141,7 @@
             max-width: 900px;
         }
         .current-exam-title {
+            color: #507177;
             font-size: 2rem;
             margin-bottom: 0;
             margin-left: 5px;
@@ -149,9 +150,14 @@
         .current-exam-info {
             align-items: baseline;
             display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .current-exam-info.mod-no-description {
             margin-bottom: 60px;
         }
         .current-exam-info-main {
+            color: #696969;
             flex: 2;
             list-style: none;
             margin: 0;
@@ -177,17 +183,36 @@
             width: fit-content;
         }
         .time-item {
-            align-items: center;
+            align-items: flex-start;
             display: flex;
             flex-direction: column;
+            padding-left: 5px;
         }
         .time {
             font-size: 2.4rem;
             line-height: 2.2rem;
         }
+        .current-exam-info-description {
+            border-bottom: 1px dotted lightgrey;
+            margin-bottom: 10px;
+            margin-left: 5px;
+            padding: 5px 5px 5px 0;
+        }
+        .current-exam-info-description-title {
+            color: #507177;
+            color: #415e62;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
         .current-exam-main {
             display: flex;
             width: 100%;
+        }
+        .current-exam-main-title {
+            color: #47666b;
+            font-size: 1.6rem;
+            margin: 0;
         }
         .current-exam-essentials {
             border-radius: 5px;
@@ -196,11 +221,8 @@
             max-width: 50%;
             padding: 5px;
         }
-        .current-exam-files-title {
+        .current-exam-main-title.mod-files {
             padding: 0px 5px 5px 0;
-        }
-        .current-exam-files-title strong {
-            font-size: 1.6rem;
         }
         .current-exam-files-download {
             list-style: none;
@@ -210,11 +232,8 @@
         .current-exam-upload-section {
             flex: 3;
         }
-        .current-exam-upload-title {
+        .current-exam-main-title.mod-upload {
             padding: 5px;
-        }
-        .current-exam-upload-title strong {
-            font-size: 1.6rem;
         }
         .current-exam-upload-area {
             border: 1px dotted lightgrey;
@@ -233,6 +252,9 @@
         .exam-metadata {
             margin-bottom: .5rem;
         }
+        .course-visual-code {
+            color: #48738a;
+        }
         .exam-info {
             color: #707070;
         }
@@ -241,13 +263,20 @@
         }
         .exam-timestamp {
             background-color: #fcfcfc;
-            border: 1px solid #ddd;
-            border-radius: 4px;
             /*color: #406e8e;*/
             color: #507177;
             font-size: 1.35rem;
             font-weight: 500;
+        }
+        .exam-timestamp.mod-list {
+            border: 1px solid #ddd;
+            border-radius: 4px;
             padding: 2px 5px;
+        }
+        .exam-timestamp.mod-strong {
+            font-size: 2.3rem;
+            margin-top: -2px;
+            padding: 2px 5px 2px 0;
         }
         .time-arrow {
             color: #009c7c;
@@ -262,6 +291,9 @@
             font-weight: 400;
             margin-left: 1px;
         }
+        .dmy-separator-strong {
+            margin: 0 1px;
+        }
         .datetime-separator {
             font-size: 1.05rem;
         }
@@ -274,7 +306,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="header-title">HOGENT Examination Tool</div>
-                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-logout">Log out</button></div>
+                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-logout">{{ 'LogOut'|trans({}, appContext) }}</button></div>
             </div>
         </div>
     </header>

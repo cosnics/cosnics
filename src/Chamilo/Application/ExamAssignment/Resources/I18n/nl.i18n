@@ -1,1 +1,8 @@
 TypeName = "Examen opdrachten"
+Exams = "Examens"
+From = "Van"
+Until = "tot"
+FiveNumberCode = "5-cijferige code"
+Start = "Starten"
+LogOut = "Uitloggen"
+Description = "Beschrijving"

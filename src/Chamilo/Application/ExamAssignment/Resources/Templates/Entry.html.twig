@@ -5,28 +5,28 @@
         <div class="container">
             <div class="main-content mod-current-exam">
                 <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
-                <div class="current-exam-info">
+                {% set description = DETAILS.assignment.get_description() %}
+                <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
                     <ul class="current-exam-info-main">
-                        <li>Cursus: {{ DETAILS.course.get_title() }} ({{ DETAILS.course.get_visual_code() }})</li>
-                        <li>Titularis: {{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
+                        <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
+                        <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
+                        <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong></li>
                     </ul>
                     <div class="current-exam-info-time">
-                        <ul class="current-exam-info-time-start">
-                            <li>
-                                <span class="sr-only">Van </span><strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
-                            </li>
-                        </ul>
                         <ul class="current-exam-info-time-end">
-                            <li class="time-item"><span>Tijd tot</span> <span class="sr-only"> tot </span><strong class="exam-timestamp">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong></li>
+                            <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ EXAM.end_time|date("d") }}<span class="dmy-separator-strong">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ EXAM.end_time|date("Y") }} - {{ EXAM.end_time|date("H:i") }}</strong></li>
                         </ul>
                     </div>
                 </div>
-                <div class="alert alert-info">
-                    {{ DETAILS.assignment.get_description()|raw }}
-                </div>
+                {% if description %}
+                    <div class="current-exam-info-description">
+                        <h2 class="current-exam-info-description-title">{{ 'Description'|trans({}, appContext) }}:</h2>
+                        {{ description|raw }}
+                    </div>
+                {% endif %}
                 <div class="current-exam-main">
                     <div class="current-exam-essentials">
-                        <div class="current-exam-files-title"><strong>Bestanden:</strong></div>
+                        <h2 class="current-exam-main-title mod-files">Bestanden:</h2>
                         <ul class="current-exam-files-download">
                             {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
                                 <li><a href="{{ ATTACHMENT_URL }}">{{ ATTACHMENT }}</a></li>
@@ -34,9 +34,9 @@
                         </ul>
                     </div>
                     <div class="current-exam-upload-section">
-                        <div class="current-exam-upload-title"><strong style="">Indienen:</strong></div>
+                        <h2 class="current-exam-main-title mod-upload">Indienen:</h2>
                         <div class="current-exam-upload-area">
-                            Sleep de gevraagde bestanden in dit kader.
+                            Klik of sleep uw bestanden hier om ze op te laden.
                         </div>
                         <!--            <form action="/file-upload" class="dropzone">
                                       <div class="fallback">

@@ -1,30 +1,31 @@
 {% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
+{% set appContext = 'Chamilo\\Application\\ExamAssignment' %}
     {% block main %}
     <main>
         <div class="container">
             <div class="main-content mod-exams">
-                <h1 class="sr-only">Examens</h1>
+                <h1 class="sr-only">{{ 'Exams'|trans({}, appContext) }}</h1>
                 <ul class="exam-list">
                     {% for EXAM in EXAMS %}
                     <li class="exam-list-item">
                         <div class="exam-info">
                             <h2 class="exam-title">{{ EXAM.title }}</h2>
                             <div class="exam-metadata">
-                                <div>{{ EXAM.course_title }} (<span style="color: #48738a">{{ EXAM.visual_code }}</span>)</div>
+                                <div>{{ EXAM.course_title }} (<span class="course-visual-code">{{ EXAM.visual_code }}</span>)</div>
                                 <div>{{ EXAM.firstname }} {{ EXAM.lastname }}</div>
                             </div>
                             <div class="exam-metadata-time">
                                 <div class="exam-time">
-                                    <span class="sr-only">Van </span><strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
+                                    <span class="sr-only">{{ 'From'|trans({}, appContext) }} </span><strong class="exam-timestamp mod-list">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
                                     <i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow-last fa fa-caret-right" aria-hidden="true"></i>
-                                    <span class="sr-only"> tot </span><strong class="exam-timestamp">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong>
+                                    <span class="sr-only"> {{ 'Until'|trans({}, appContext) }} </span><strong class="exam-timestamp mod-list">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong>
                                 </div>
                             </div>
                         </div>
                         <div class="exam-form">
                             <form action="{{ ENTRY_URL|replace({'__EXAM_ID__': EXAM.publication_id}) }}" method="post">
-                                <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
-                                <button class="btn btn-action mod-access">Starten</button>
+                                <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="{{ 'FiveNumberCode'|trans({}, appContext) }}" />
+                                <button class="btn btn-action mod-access">{{ 'Start'|trans({}, appContext) }}</button>
                             </form>
                         </div>
                     </li>
