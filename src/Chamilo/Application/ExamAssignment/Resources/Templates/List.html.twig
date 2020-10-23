@@ -1,286 +1,9 @@
-{{ HEADER|raw }}
-    <style type="text/css">
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        .container-headerless {
-            display: contents;
-        }
-        .header {
-            background: #406e8e;
-            color: #fff;
-        }
-        .header-content {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 50px;
-            padding: 5px 0;
-        }
-        .user {
-            align-items: baseline;
-            display: flex;
-        }
-        @media (min-width: 500px) {
-            .header-content {
-                flex-direction: row;
-            }
-            .user {
-                margin-top: 5px;
-            }
-        }
-        .header-title {
-            font-size: 2rem;
-        }
-        .main-content {
-            color: #333;
-            margin-left: auto;
-            margin-right: auto;
-            width: 100%;
-        }
-        .main-content.mod-exams {
-            margin-top: 80px;
-            max-width: 720px;
-        }
-        .btn-action {
-            background-color: #009c7c;
-            border: 1px solid;
-            border-color: #008368;
-            color: #fff;
-        }
-        .btn-action.mod-access {
-            font-size: 1.5rem;
-            line-height: 1.5rem;
-            margin-top: .7rem;
-            width: 100%;
-        }
-        .btn-action:hover, .btn-action:focus, .btn-action:active {
-            background-color: #00b690;
-            border-color: #00b690;
-            color: #fff;
-        }
-        .btn-action:focus {
-            outline: thin dotted;
-            outline: 5px auto -webkit-focus-ring-color;
-            outline-offset: -2px;
-        }
-        .btn-logout {
-            background-color: #337ab7;
-            border: 1px solid;
-            border-color: #2e6da4;
-            border-radius: 4px;
-            color: #fff;
-            font-size: 1.3rem;
-            /*line-height: 2;*/
-            margin-left: 10px;
-        }
-        .btn-logout:hover, .btn-logout:focus, .btn-logout:active {
-            background-color: #2b6090;
-            border-color: #204d74;
-            color: #fff;
-        }
-        .btn-logout:focus {
-            outline: thin dotted;
-            outline: 5px auto -webkit-focus-ring-color;
-            outline-offset: -2px;
-        }
-        .exam-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .exam-list-item {
-            align-items: center;
-            /*background: #f0f0f0;*/
-            background: #f4f5f5;
-            border: 1px solid #e6e6e6;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-        .exam-title {
-            /*color: #566f81;*/
-            color: #507177;
-            margin: 0 0 .7rem;
-            font-size: larger;
-            font-weight: 700;
-        }
-        .exam-code {
-            margin-top: 8px;
-        }
-        .exam-code::placeholder {
-            color: #999;
-        }
-        .footer {
-            background: #fff;
-            border-top: 1px solid #ccc;
-            margin-top: auto;
-            width: 100%;
-        }
-        .privacy-policy {
-            padding: 10px 0;
-        }
-        .privacy-policy-title {
-            color: #3e3838;
-            font-size: 1.6rem;
-            margin: 0 0 10px;
-        }
-        .privacy-policy-paragraph {
-            color: #666;
-        }
-        .main-content.mod-current-exam {
-            margin-top: 60px;
-            max-width: 900px;
-        }
-        .current-exam-title {
-            font-size: 2rem;
-            margin-bottom: 0;
-            margin-left: 5px;
-            padding-bottom: 0;
-        }
-        .current-exam-info {
-            align-items: baseline;
-            display: flex;
-            margin-bottom: 60px;
-        }
-        .current-exam-info-main {
-            flex: 2;
-            list-style: none;
-            margin: 0;
-            padding: 5px;
-        }
-        .current-exam-info-time {
-            align-items: baseline;
-            display: flex;
-            flex: 3;
-            justify-content: space-between;
-        }
-        .current-exam-info-time-start {
-            list-style: none;
-            margin: 0;
-            padding: 5px;
-        }
-        .current-exam-info-time-end {
-            display: flex;
-            justify-content: space-between;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            width: fit-content;
-        }
-        .time-item {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-        }
-        .time {
-            font-size: 2.4rem;
-            line-height: 2.2rem;
-        }
-        .current-exam-main {
-            display: flex;
-            width: 100%;
-        }
-        .current-exam-essentials {
-            border-radius: 5px;
-            flex: 2;
-            margin-bottom: 20px;
-            max-width: 50%;
-            padding: 5px;
-        }
-        .current-exam-files-title {
-            padding: 0px 5px 5px 0;
-        }
-        .current-exam-files-title strong {
-            font-size: 1.6rem;
-        }
-        .current-exam-files-download {
-            list-style: none;
-            margin: 0;
-            padding: 5px 5px 5px 0;
-        }
-        .current-exam-upload-section {
-            flex: 3;
-        }
-        .current-exam-upload-title {
-            padding: 5px;
-        }
-        .current-exam-upload-title strong {
-            font-size: 1.6rem;
-        }
-        .current-exam-upload-area {
-            border: 1px dotted lightgrey;
-            height: 200px;
-            padding: 5px;
-        }
-        .current-exam-upload-reminder {
-            margin-bottom: 7px;
-            margin-top: 5px;
-            padding-left: 5px;
-        }
-        .btn-action.mod-upload {
-            font-size: 1.5rem;
-            line-height: 1.5;
-        }
-        .exam-metadata {
-            margin-bottom: .5rem;
-        }
-        .exam-info {
-            color: #707070;
-        }
-        .exam-metadata-time {
-            margin-left: -5px;
-        }
-        .exam-timestamp {
-            background-color: #fcfcfc;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            /*color: #406e8e;*/
-            color: #507177;
-            font-size: 1.35rem;
-            font-weight: 500;
-            padding: 2px 5px;
-        }
-        .time-arrow {
-            color: #009c7c;
-            margin-right: -7px;
-        }
-        .time-arrow-last {
-            color: #009c7c;
-            margin-right: -2px;
-        }
-        .dmy-separator {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-left: 1px;
-        }
-        .datetime-separator {
-            font-size: 1.05rem;
-        }
-        .exam-form {
-            flex-basis: 30%;
-        }
-    </style>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="header-title">HOGENT Examination Tool</div>
-                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-logout">Log out</button></div>
-            </div>
-        </div>
-    </header>
+{% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
+    {% block main %}
     <main>
         <div class="container">
             <div class="main-content mod-exams">
-                <h1 class="sr-only">Examens vandaag</h1>
+                <h1 class="sr-only">Examens</h1>
                 <ul class="exam-list">
                     {% for EXAM in EXAMS %}
                     <li class="exam-list-item">
@@ -299,7 +22,7 @@
                             </div>
                         </div>
                         <div class="exam-form">
-                            <form action="{{ ENTRY_URL.replace({'__EXAMID__': EXAM.publication_id}) }}" method="post">
+                            <form action="{{ ENTRY_URL|replace({'__EXAMID__': EXAM.publication_id}) }}" method="post">
                                 <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
                                 <button class="btn btn-action mod-access">Starten</button>
                             </form>
@@ -310,6 +33,8 @@
             </div>
         </div>
     </main>
+    {% endblock %}
+    {% block footer %}
     <footer class="footer">
         <div class="container">
             <div class="privacy-policy">
@@ -318,4 +43,4 @@
             </div>
         </div>
     </footer>
-{{ FOOTER|raw }}
+    {% endblock %}
