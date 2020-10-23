@@ -15,6 +15,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\Assig
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -37,6 +38,11 @@ class ExamAssignmentService
      * @var PublicationService
      */
     protected $publicationService;
+
+    /**
+     * @var UserService
+     */
+    protected $userService;
 
     /**
      * @var AssignmentPublicationService
@@ -68,12 +74,13 @@ class ExamAssignmentService
      * @param WeblcmsRights $weblcmsRights
      * @param AssignmentPublicationService $examAssignmentPublicationService
      * @param AssignmentService $assignmentService
+     * @param UserService $userService
      */
     public function __construct(
         ExamAssignmentRepository $examAssignmentRepository, CourseService $courseService,
         PublicationService $publicationService, ContentObjectService $contentObjectService,
         WeblcmsRights $weblcmsRights, AssignmentPublicationService $examAssignmentPublicationService,
-        AssignmentService $assignmentService
+        AssignmentService $assignmentService, UserService $userService
     )
     {
         $this->examAssignmentRepository = $examAssignmentRepository;
@@ -83,6 +90,7 @@ class ExamAssignmentService
         $this->weblcmsRights = $weblcmsRights;
         $this->examAssignmentPublicationService = $examAssignmentPublicationService;
         $this->assignmentService = $assignmentService;
+        $this->userService = $userService;
     }
 
     /**
@@ -159,7 +167,7 @@ class ExamAssignmentService
         {
             return false;
         }
-return true;
+
         $examCode = $examAssignmentPublication->getCode();
         if(!empty($examCode) && $examCode != $code)
         {
@@ -181,6 +189,8 @@ return true;
     public function getExamAssignmentDetails(User $user, int $contentObjectPublicationId)
     {
         $contentObjectPublication = $this->publicationService->getPublication($contentObjectPublicationId);
+        $course = $this->courseService->getCourseById($contentObjectPublication->get_course_id());
+        $titular = $this->userService->findUserByIdentifier($course->get_titular_id());
 
         /** @var Assignment $assignment */
         $assignment = $this->contentObjectService->findById($contentObjectPublication->get_content_object_id());
@@ -191,10 +201,13 @@ return true;
         $details = [];
 
         $details['publication'] = $contentObjectPublication;
+        $details['course'] = $course;
+        $details['titular'] = $titular;
         $details['assignment'] = $assignment;
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
         $details['can_submit'] = count($entries) == 0 && $assignment->get_end_time() + 900 >= time();
+        $details['attachments'] = $assignment->get_attachments();
 
         return $details;
     }

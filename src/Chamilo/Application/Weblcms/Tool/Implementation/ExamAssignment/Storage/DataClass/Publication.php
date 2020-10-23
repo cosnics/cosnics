@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -42,6 +43,16 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     public function setCode(int $code)
     {
         $this->set_default_property(self::PROPERTY_CODE, $code);
+    }
+
+    public function getEntityType()
+    {
+        return Entry::ENTITY_TYPE_USER;
+    }
+
+    public function getCheckForPlagiarism()
+    {
+        return false;
     }
 
     public static function get_table_name()

@@ -42,8 +42,6 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
                 Manager::PROPERTY_NUMBER_OF_SUBMISSIONS, 
                 Translation::getInstance()->getTranslation('NumberOfSubmissions', null, Manager::context())));
 
-        $this->add_column(new StaticTableColumn(Publication::PROPERTY_ENTITY_TYPE, ''), 1);
-
         $this->addActionsColumn();
 
         if(!$this->get_component()->get_tool_browser()->get_parent()->is_allowed(WeblcmsRights::EDIT_RIGHT))

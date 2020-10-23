@@ -32,7 +32,12 @@ class ListComponent extends Manager
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'USER' => $this->getUser(),
                 'EXAMS' => $exams,
-                'ENTRY_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_ENTRY, self::PARAM_EXAM => '__EXAMID__'])
+                'ENTRY_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_ENTRY,
+                        self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => '__EXAM_ID__'
+                    ]
+                )
             ]
         );
     }

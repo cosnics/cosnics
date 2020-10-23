@@ -1,4 +1,4 @@
-{{ HEADER|raw }}
+
     <style type="text/css">
         html, body {
             height: 100%;
@@ -288,7 +288,7 @@
                             <h2 class="exam-title">{{ EXAM.title }}</h2>
                             <div class="exam-metadata">
                                 <div>{{ EXAM.course_title }} (<span style="color: #48738a">{{ EXAM.visual_code }}</span>)</div>
-                                <div>{{ EXAM.firstname }} {{ EXAM.lastname }}</div>
+                                <div>{{ EXAM.firstname }}&nbsp;{{ EXAM.lastname }}</div>
                             </div>
                             <div class="exam-metadata-time">
                                 <div class="exam-time">
@@ -299,7 +299,7 @@
                             </div>
                         </div>
                         <div class="exam-form">
-                            <form action="{{ ENTRY_URL.replace({'__EXAMID__': EXAM.publication_id}) }}" method="post">
+                            <form action="{{ ENTRY_URL|replace({'__EXAM_ID__': EXAM.publication_id}) }}" method="post">
                                 <input type="text" class="exam-code form-control" name="exam-code" autocomplete="off" placeholder="5-cijferige code" />
                                 <button class="btn btn-action mod-access">Starten</button>
                             </form>

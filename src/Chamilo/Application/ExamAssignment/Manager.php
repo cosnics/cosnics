@@ -18,8 +18,6 @@ abstract class Manager extends Application
     const ACTION_RESULT = 'Result';
     const ACTION_ENTRY = 'Entry';
 
-    const PARAM_EXAM = 'Exam';
-
     const PARAM_CONTENT_OBJECT_PUBLICATION_ID = 'publicationId';
     const PARAM_CODE = 'code';
 

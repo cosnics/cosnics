@@ -32,14 +32,12 @@ class EntryComponent extends Manager
             $this->getUser(), $publicationId, $code
         );
 
+        $details = $this->getExamAssignmentService()->getExamAssignmentDetails($this->getUser(), $publicationId);
+
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser()
+            'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser(), 'DETAILS' => $details
         ];
-
-        $parameters = array_merge(
-            $parameters, $this->getExamAssignmentService()->getExamAssignmentDetails($this->getUser(), $publicationId)
-        );
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 

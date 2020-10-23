@@ -66,10 +66,8 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                     $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
                 );
 
-                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
-
                 $entitiesCount =
-                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->countEntities(
+                    $this->getEntityServiceManager()->getEntityServiceByType(Entry::ENTITY_TYPE_USER)->countEntities(
                         $contentObjectPublication, new FilterParameters()
                     );
 
@@ -80,25 +78,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                     );
 
                 return $entitiesWithEntriesCount . ' / ' . $entitiesCount;
-            case Publication::PROPERTY_ENTITY_TYPE:
-
-                $contentObjectPublication = new ContentObjectPublication();
-                $contentObjectPublication->setId($publication[DataClass::PROPERTY_ID]);
-
-                $contentObjectPublication->set_content_object_id(
-                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-                );
-
-                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
-
-                $entityTypeName =
-                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
-
-                $iconName = ($entityType == Entry::ENTITY_TYPE_USER) ? 'user' : 'users';
-
-                $glyph = new FontAwesomeGlyph($iconName, [], $entityTypeName);
-
-                return $glyph->render();
         }
 
         return parent::render_cell($column, $publication);
