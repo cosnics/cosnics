@@ -21,7 +21,7 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent::get_default_property_names(
+        return DataClass::get_default_property_names(
             array(
                 self::PROPERTY_PUBLICATION_ID,
                 self::PROPERTY_CODE,
@@ -38,9 +38,9 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     }
 
     /**
-     * @param int $code
+     * @param string|null $code
      */
-    public function setCode(int $code)
+    public function setCode(string $code = null)
     {
         $this->set_default_property(self::PROPERTY_CODE, $code);
     }

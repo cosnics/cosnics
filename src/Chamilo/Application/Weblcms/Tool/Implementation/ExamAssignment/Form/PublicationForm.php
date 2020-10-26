@@ -115,64 +115,10 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::context()));
 
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypeUsersEntity', [], Manager::context()),
-            Entry::ENTITY_TYPE_USER
+        $this->add_textfield(
+            Publication::PROPERTY_CODE, $this->translator->trans('Code', [], Manager::context()), false,
+            ['type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5]
         );
-
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypeCourseGroupsEntity', [], Manager::context()),
-            Entry::ENTITY_TYPE_COURSE_GROUP
-        );
-
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypePlatformGroupsEntity', [], Manager::context()),
-            Entry::ENTITY_TYPE_PLATFORM_GROUP
-        );
-
-        $this->addGroup(
-            $group,
-            Publication::PROPERTY_ENTITY_TYPE,
-            $this->translator->trans('PublishAssignmentForEntity', [], Manager::context()),
-            ''
-        );
-
-        if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
-        {
-            $redirect = new Redirect(
-                [
-                    Application::PARAM_CONTEXT => 'Chamilo\Application\Plagiarism',
-                    Application::PARAM_ACTION => 'TurnitinEula',
-                    'ViewOnly' => 1
-                ]
-            );
-
-            $eulaPageUrl = $redirect->getUrl();
-
-            $this->addElement(
-                'checkbox', Publication::PROPERTY_CHECK_FOR_PLAGIARISM,
-                $this->translator->trans('CheckForPlagiarism', [], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism')
-            );
-
-            $this->addElement(
-                'html', '<div class="alert alert-info" style="margin-top: 15px;">' .
-                $this->translator->trans('CheckForPlagiarismEULAWarning', ['{EULA_PAGE_URL}' => $eulaPageUrl], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism') .
-                '</div>'
-            );
-        }
-        else
-        {
-            $this->addElement('hidden', Publication::PROPERTY_CHECK_FOR_PLAGIARISM);
-        }
     }
 
     /**
@@ -219,10 +165,8 @@ class PublicationForm extends ContentObjectPublicationForm
         $exportValues = $this->exportValues();
 
         $publication = new Publication();
-
         $publication->setPublicationId($contentObjectPublication->getId());
-        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
-        $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
+        $publication->setCode($exportValues[Publication::PROPERTY_CODE]);
 
         return $publication->create();
     }
@@ -242,8 +186,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $publication =
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-            $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
-            $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
+            $publication->setCode($exportValues[Publication::PROPERTY_CODE]);
 
             return $publication->update();
         }
@@ -261,7 +204,6 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication =
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-        $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
-        $this->setDefaults([Publication::PROPERTY_CHECK_FOR_PLAGIARISM => $publication->getCheckForPlagiarism()]);
+        $this->setDefaults([Publication::PROPERTY_CODE => $publication->getCode()]);
     }
 }

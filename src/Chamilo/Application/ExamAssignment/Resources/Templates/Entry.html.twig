@@ -1,8 +1,21 @@
 {% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
     {% set appContext = 'Chamilo\\Application\\ExamAssignment' %}
     {% block main %}
+        <style>
+            .not-allowed-alert {
+                margin-top: 5em;
+            }
+        </style>
     <main>
         <div class="container">
+            {% if not ALLOWED_TO_VIEW_ASSIGNMENT %}
+                <div class="main-content">
+                    <div class="alert alert-danger not-allowed-alert">
+                        Je bent niet toegelaten op deze pagina omdat je niet over de juiste rechten beschikt of omdat je geen juiste code hebt opgegeven.
+                        Gelieve contact op te nemen met de titularis van deze opdracht.
+                    </div>
+                </div>
+            {% else %}
             <div class="main-content mod-current-exam">
                 <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
                 <div class="current-exam-info">
@@ -21,9 +34,11 @@
                         </ul>
                     </div>
                 </div>
+                {% if DETAILS.assignment.get_description() %}
                 <div class="alert alert-info">
                     {{ DETAILS.assignment.get_description()|raw }}
                 </div>
+                {% endif %}
                 <div class="current-exam-main">
                     <div class="current-exam-essentials">
                         <div class="current-exam-files-title"><strong>Bestanden:</strong></div>
@@ -49,6 +64,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </main>
     {% endblock %}
