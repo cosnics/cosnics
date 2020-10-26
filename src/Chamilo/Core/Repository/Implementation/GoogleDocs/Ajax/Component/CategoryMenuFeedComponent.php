@@ -25,8 +25,10 @@ class CategoryMenuFeedComponent extends Manager
         );
 
         $categories_tree = DataManager::retrieve_categories(
-            $condition, null, null, new OrderBy(
-                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
+            $condition, null, null, array(
+                new OrderBy(
+                    new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
+                )
             )
         );
     }
@@ -35,7 +37,7 @@ class CategoryMenuFeedComponent extends Manager
     {
         $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
-        foreach($categories as $category)
+        foreach ($categories as $category)
         {
             $has_children = $category->has_children() ? 1 : 0;
 

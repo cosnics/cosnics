@@ -4,11 +4,11 @@ namespace Chamilo\Application\Weblcms\CourseType\Table\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * This class describes a data provider for the course type table
@@ -27,6 +27,16 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
      */
 
     /**
+     * Counts the number of objects for this table
+     *
+     * @return int
+     */
+    public function count_data($condition = null)
+    {
+        return DataManager::count(CourseType::class, new DataClassCountParameters($condition));
+    }
+
+    /**
      * Retrieves the objects for this table
      *
      * @param Condition $condition
@@ -40,22 +50,15 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
     {
         if ($order_property == null)
         {
-            $order_property = new OrderBy(
-                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER));
+            $order_property = array(
+                new OrderBy(
+                    new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
+                )
+            );
         }
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
         return DataManager::retrieves(CourseType::class, $parameters);
-    }
-
-    /**
-     * Counts the number of objects for this table
-     *
-     * @return int
-     */
-    public function count_data($condition = null)
-    {
-        return DataManager::count(CourseType::class, new DataClassCountParameters($condition));
     }
 }

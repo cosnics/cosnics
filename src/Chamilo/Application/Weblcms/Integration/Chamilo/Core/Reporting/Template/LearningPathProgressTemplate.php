@@ -44,37 +44,32 @@ class LearningPathProgressTemplate extends ReportingTemplate
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($this->course_id)
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+            ), new StaticConditionVariable($this->course_id)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_TOOL
-            ),
-            new StaticConditionVariable(
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
+            ), new StaticConditionVariable(
                 ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class)
             )
         );
 
         $condition = new AndCondition($conditions);
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_MODIFIED_DATE
+        $order_by = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                )
             )
         );
         $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
-            $condition,
-            $order_by
+            $condition, $order_by
         );
-        foreach($publications as $publication)
+        foreach ($publications as $publication)
         {
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class,
-                $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
             $this->th_titles[] = $content_object->get_title();
         }

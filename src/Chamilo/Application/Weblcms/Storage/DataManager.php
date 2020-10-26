@@ -237,12 +237,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function create_courses_array($courses)
     {
-        if (!is_array($courses))
-        {
-            $courses = array($courses);
-        }
-
         $courses_with_ids = array();
+
         foreach ($courses as $course)
         {
             $courses_with_ids[$course->get_id()] = $course;
@@ -864,9 +860,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_ACCESS_DATE
+        $order_by = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_ACCESS_DATE
+                )
             )
         );
 
@@ -1795,9 +1793,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         $condition = new AndCondition($conditions);
-        $object_table_order = new OrderBy(
-            new PropertyConditionVariable(CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT),
-            $order_direction
+        $object_table_order = array(
+            new OrderBy(
+                new PropertyConditionVariable(CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT),
+                $order_direction
+            )
         );
 
         return self::retrieve(

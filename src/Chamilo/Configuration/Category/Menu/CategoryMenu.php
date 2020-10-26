@@ -121,10 +121,10 @@ class CategoryMenu extends HtmlMenu
         );
 
         $objects = $this->category_manager->retrieve_categories(
-            $condition, null, null, new OrderBy(
+            $condition, null, null, array(new OrderBy(
                 new PropertyConditionVariable(
                     $category_class_name::class_name(), $category_class_name::PROPERTY_DISPLAY_ORDER
-                )
+                ))
             )
         );
 

@@ -62,7 +62,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $publicationsById = [];
         $assignmentPublicationsById = [];
 
-        foreach($publication_resultset as $publication)
+        foreach ($publication_resultset as $publication)
         {
             $publicationsById[$publication[DataClass::PROPERTY_ID]] = $publication;
         }
@@ -381,9 +381,11 @@ abstract class AssignmentReportingManager extends ToolBlock
         );
 
         $condition = new AndCondition($conditions);
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+        $order_by = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                )
             )
         );
 

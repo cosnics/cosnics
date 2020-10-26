@@ -11,12 +11,12 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -31,43 +31,65 @@ class AssessmentScoresTemplate extends ReportingTemplate
     public function __construct($parent)
     {
         parent::__construct($parent);
-        
+
         $this->init_parameters();
-        
+
         $this->add_breadcrumbs();
-        
+
         // Calculate number of assessments
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($this->course_id));
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+            ), new StaticConditionVariable($this->course_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable(Assessment::class));
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
+            ), new StaticConditionVariable(Assessment::class)
+        );
         $condition = new AndCondition($conditions);
-        
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
-        
+
+        $order_by = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                )
+            )
+        );
+
         $publications = DataManager::retrieve_content_object_publications(
-            $condition, 
-            $order_by);
-        
+            $condition, $order_by
+        );
+
         $this->size = $publications->count();
-        
+
         foreach ($publications as $publication)
         {
             $this->th_titles[] = $publication->get_content_object()->get_title();
         }
-        
+
         $this->add_reporting_block(new AssessmentUserScoresBlock($this, true));
         $this->add_reporting_block(new AssessmentOverviewBlock($this));
+    }
+
+    /**
+     * Adds the breadcrumbs to the breadcrumbtrail
+     */
+    protected function add_breadcrumbs()
+    {
+        $trail = BreadcrumbTrail::getInstance();
+
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(
+                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4),
+                    array(Manager::PARAM_TEMPLATE_ID)
+                ), Translation::get('LastAccessToToolsBlock')
+            )
+        );
+
+        $trail->add(new Breadcrumb($this->get_url(), Translation::get('AssessmentScores')));
     }
 
     private function init_parameters()
@@ -82,22 +104,5 @@ class AssessmentScoresTemplate extends ReportingTemplate
         {
             $this->set_parameter('sel', $sel);
         }
-    }
-
-    /**
-     * Adds the breadcrumbs to the breadcrumbtrail
-     */
-    protected function add_breadcrumbs()
-    {
-        $trail = BreadcrumbTrail::getInstance();
-        
-        $trail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4), 
-                    array(Manager::PARAM_TEMPLATE_ID)),
-                Translation::get('LastAccessToToolsBlock')));
-        
-        $trail->add(new Breadcrumb($this->get_url(), Translation::get('AssessmentScores')));
     }
 }

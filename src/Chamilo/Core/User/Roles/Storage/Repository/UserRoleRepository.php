@@ -25,12 +25,39 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 {
 
     /**
+     * Returns a list of roles for a user
+     *
+     * @param int $userId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
+     * @throws \Exception
+     */
+    public function findRolesForUser($userId)
+    {
+        $joins = new Joins();
+        $joins->add(
+            new Join(
+                RoleRelation::class, new EqualityCondition(
+                    new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
+                    new PropertyConditionVariable(Role::class, Role::PROPERTY_ID)
+                )
+            )
+        );
+
+        return DataManager::retrieves(
+            Role::class,
+            new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, array(), $joins)
+        );
+    }
+
+    /**
      * Returns a user role relation for a given role id and user id
      *
      * @param int $roleId
      * @param int $userId
      *
-     * @return Role
+     * @return \Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation
+     * @throws \Exception
      */
     public function findUserRoleRelationByRoleAndUser($roleId, $userId)
     {
@@ -45,61 +72,29 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
     }
 
     /**
-     * Returns a list of roles for a user
-     *
-     * @param int $userId
-     *
-     * @return Role[]
-     */
-    public function findRolesForUser($userId)
-    {
-        $joins = new Joins();
-        $joins->add(
-            new Join(
-                RoleRelation::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
-                    new PropertyConditionVariable(Role::class, Role::PROPERTY_ID))));
-
-        return DataManager::retrieves(
-            Role::class,
-            new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, array(), $joins));
-    }
-
-    /**
      * Returns a list of users by a given role
      *
      * @param int $roleId
      *
-     * @return User[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Exception
      */
     public function findUsersForRole($roleId)
     {
         $joins = new Joins();
         $joins->add(
             new Join(
-                User::class,
-                new EqualityCondition(
+                User::class, new EqualityCondition(
                     new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+                )
+            )
+        );
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
             User::class,
-            new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, array(), $joins));
-    }
-
-    /**
-     * Builds a condition for the role relation with the property user id
-     *
-     * @param int $userId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionForUser($userId)
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
-            new StaticConditionVariable($userId));
+            new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, array(), $joins)
+        );
     }
 
     /**
@@ -113,6 +108,22 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
     {
         return new EqualityCondition(
             new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
-            new StaticConditionVariable($roleId));
+            new StaticConditionVariable($roleId)
+        );
+    }
+
+    /**
+     * Builds a condition for the role relation with the property user id
+     *
+     * @param int $userId
+     *
+     * @return EqualityCondition
+     */
+    protected function getConditionForUser($userId)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
     }
 }

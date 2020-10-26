@@ -30,7 +30,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
                 $condition,
                 1,
                 null,
-                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))->current();
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))))->current();
 
         $menu_item = new TreeMenuItem();
         $menu_item->set_title($group->get_name());
@@ -63,7 +63,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
                 $condition,
                 null,
                 null,
-                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))));
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))));
 
         foreach($groups as $group)
         {

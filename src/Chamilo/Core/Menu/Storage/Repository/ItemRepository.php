@@ -38,6 +38,24 @@ class ItemRepository
     }
 
     /**
+     *
+     * @param integer $parentIdentifier
+     *
+     * @return integer
+     */
+    public function countItemsByParentIdentifier(int $parentIdentifier)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getDataClassRepository()->count(
+            Item::class, new DataClassCountParameters($condition)
+        );
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return boolean
@@ -105,17 +123,11 @@ class ItemRepository
     }
 
     /**
-     * @param integer[] $identifiers
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
      */
-    public function findItemsByIdentifiers(array $identifiers)
+    public function findItemTitles()
     {
-        $condition = new InCondition(
-            new PropertyConditionVariable(Item::class, Item::PROPERTY_ID), $identifiers
-        );
-
-        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(ItemTitle::class, new DataClassRetrievesParameters());
     }
 
     /**
@@ -150,11 +162,17 @@ class ItemRepository
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @param integer[] $identifiers
+     *
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
-    public function findItemTitles()
+    public function findItemsByIdentifiers(array $identifiers)
     {
-        return $this->getDataClassRepository()->retrieves(ItemTitle::class, new DataClassRetrievesParameters());
+        $condition = new InCondition(
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_ID), $identifiers
+        );
+
+        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -179,24 +197,6 @@ class ItemRepository
 
         return $this->getDataClassRepository()->retrieves(
             Item::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
-        );
-    }
-
-    /**
-     *
-     * @param integer $parentIdentifier
-     *
-     * @return integer
-     */
-    public function countItemsByParentIdentifier(int $parentIdentifier)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        return $this->getDataClassRepository()->count(
-            Item::class, new DataClassCountParameters($condition)
         );
     }
 

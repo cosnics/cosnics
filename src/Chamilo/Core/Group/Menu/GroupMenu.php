@@ -80,7 +80,7 @@ class GroupMenu extends HtmlMenu
             $group = DataManager::retrieves(
                 Group::class, new DataClassRetrievesParameters(
                     $condition, 1, null,
-                    new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
+                    array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
                 )
             )->current();
             $this->current_category = $group;
@@ -146,7 +146,7 @@ class GroupMenu extends HtmlMenu
         $group = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, 1, null,
-                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         )->current();
         if (!$include_root)
@@ -199,7 +199,7 @@ class GroupMenu extends HtmlMenu
         $groups = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         );
 

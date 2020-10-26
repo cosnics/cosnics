@@ -62,7 +62,7 @@ class AnnouncementComponent extends Manager
 
         $course_settings_controller = CourseSettingsController::getInstance();
         $unique_publications = array();
-        foreach($user_courses as $course)
+        foreach ($user_courses as $course)
         {
             $this->courses[$course->get_id()] = $course;
 
@@ -72,28 +72,25 @@ class AnnouncementComponent extends Manager
             {
                 $condition = $this->get_publication_conditions($course, $tool);
                 $course_module_id = WeblcmsDataManager::retrieve_course_tool_by_name($tool)->get_id();
-                $location = WeblcmsRights::getInstance()
-                    ->get_weblcms_location_by_identifier_from_courses_subtree(
-                        WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id,
-                        $course->get_id()
+                $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
+                        WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
                     );
 
                 $entities = array();
-                $entities[CourseGroupEntity::ENTITY_TYPE] =
-                    CourseGroupEntity::getInstance(
-                        $course->get_id()
-                    );
-                $entities[CourseUserEntity::ENTITY_TYPE] =
-                    CourseUserEntity::getInstance();
-                $entities[CoursePlatformGroupEntity::ENTITY_TYPE] =
-                    CoursePlatformGroupEntity::getInstance();
+                $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance(
+                    $course->get_id()
+                );
+                $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
+                $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance();
 
                 $publications =
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                        $location, $entities, $condition, new OrderBy(
-                            new PropertyConditionVariable(
-                                ContentObjectPublication::class,
-                                ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                        $location, $entities, $condition, array(
+                            new OrderBy(
+                                new PropertyConditionVariable(
+                                    ContentObjectPublication::class,
+                                    ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                                )
                             )
                         )
                     );
@@ -129,10 +126,8 @@ class AnnouncementComponent extends Manager
     {
         $id = $publication[ContentObjectPublication::PROPERTY_ID];
 
-        $parameters[Manager::PARAM_CONTEXT] =
-            Manager::context();
-        $parameters[Manager::PARAM_ACTION] =
-            Manager::ACTION_VIEW_COURSE;
+        $parameters[Manager::PARAM_CONTEXT] = Manager::context();
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
         $parameters[Manager::PARAM_TOOL] = self::TOOL_ANNOUNCEMENT;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
@@ -156,8 +151,7 @@ class AnnouncementComponent extends Manager
         $conditions[] = WeblcmsDataManager::get_publications_condition($course, $this->get_user(), $tool, $type);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_PUBLICATION_DATE
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLICATION_DATE
             ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($last_visit_date)
         );
 

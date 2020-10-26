@@ -239,7 +239,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieves(
             Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
@@ -259,7 +259,7 @@ class CourseRepository implements CourseRepositoryInterface
             ), new StaticConditionVariable($courseTypeId)
         );
 
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieves(
             Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
@@ -289,7 +289,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesForUser(User $user)
     {
-        $orderBy = new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieve_all_courses_from_user(
             $user, null, null, null, $orderBy
@@ -410,9 +410,9 @@ class CourseRepository implements CourseRepositoryInterface
         $joins->add(
             new Join(
                 User::class, new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_TITULAR_ID),
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID)
-                ), Join::TYPE_LEFT
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_TITULAR_ID),
+                new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+            ), Join::TYPE_LEFT
             )
         );
 

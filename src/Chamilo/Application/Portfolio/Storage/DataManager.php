@@ -61,7 +61,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieves(
             RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, $order));
+            new DataClassRetrievesParameters($condition, null, null, array($order)));
     }
 
     /**

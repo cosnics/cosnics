@@ -17,12 +17,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -55,9 +55,11 @@ class LearningPathProgressUsersBlock extends ToolBlock
         );
         $condition = new AndCondition($conditions);
 
-        $order_by = new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+        $order_by = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                )
             )
         );
 
@@ -68,7 +70,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $publications = array();
         $headings = array();
         $headings[] = Translation::get('Name');
-        foreach($publication_resultset as $publication)
+        foreach ($publication_resultset as $publication)
         {
             $publications[] = $publication;
             $content_object = DataManager::retrieve_by_id(
@@ -92,8 +94,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
                 $key, Translation::get('Name'), User::fullname(
-                $user[User::PROPERTY_FIRSTNAME],
-                $user[User::PROPERTY_LASTNAME]
+                $user[User::PROPERTY_FIRSTNAME], $user[User::PROPERTY_LASTNAME]
             )
             );
 
@@ -137,16 +138,6 @@ class LearningPathProgressUsersBlock extends ToolBlock
         return $reporting_data;
     }
 
-    public function retrieve_data()
-    {
-        return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(Html::VIEW_TABLE);
-    }
-
     /**
      * Creates the TrackingService for a given Publication and Course
      *
@@ -164,11 +155,13 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
     /**
      *
-     * @return TrackingServiceBuilder | object
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
-    protected function getTrackingServiceBuilder()
+    protected function getDataClassRepository()
     {
-        return new TrackingServiceBuilder($this->getDataClassRepository());
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
     }
 
     /**
@@ -185,12 +178,20 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return TrackingServiceBuilder | object
      */
-    protected function getDataClassRepository()
+    protected function getTrackingServiceBuilder()
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return new TrackingServiceBuilder($this->getDataClassRepository());
+    }
 
-        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
+    public function get_views()
+    {
+        return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

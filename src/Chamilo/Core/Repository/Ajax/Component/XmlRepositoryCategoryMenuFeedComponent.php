@@ -24,8 +24,10 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
             new StaticConditionVariable($parent_id)
         );
         $categories_tree = DataManager::retrieve_categories(
-            $condition, null, null, new OrderBy(
-                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
+            $condition, null, null, array(
+                new OrderBy(
+                    new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
+                )
             )
         );
 
@@ -39,7 +41,7 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
     {
         $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
 
-        foreach($categories as $category)
+        foreach ($categories as $category)
         {
             $has_children = $category->has_children() ? 1 : 0;
             echo '<leaf id="' . $category->get_id() . '" classes="' . $glyph->getClassNamesString() .

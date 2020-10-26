@@ -89,10 +89,12 @@ class PublicationCategoriesTree extends GenericTree
 
         $children = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(
-                    new PropertyConditionVariable(
-                        ContentObjectPublicationCategory::class,
-                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                $condition, null, null, array(
+                    new OrderBy(
+                        new PropertyConditionVariable(
+                            ContentObjectPublicationCategory::class,
+                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                        )
                     )
                 )
             )

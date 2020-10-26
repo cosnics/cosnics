@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Renderer\CourseList\Type;
 
+use ArrayIterator;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Application\Weblcms\Service\CourseService;
@@ -150,11 +151,11 @@ class FilteredCourseListRenderer extends CourseListRenderer
                 );
             }
 
-            return new \ArrayIterator(
+            return new ArrayIterator(
                 $this->courseService->getCoursesInCourseTypeForUser($this->get_parent()->getUser(), $courseType)
             );
         }
 
-        return new \ArrayIterator($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
+        return new ArrayIterator($this->courseService->getAllCoursesForUser($this->get_parent()->getUser()));
     }
 }

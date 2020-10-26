@@ -73,7 +73,9 @@ class UserRoleService implements UserRoleServiceInterface
      */
     public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = array())
     {
+
         $userRoles = $this->getRolesForUser($user);
+        //        var_dump($user, $rolesToMatch, $userRoles);
         $userRoleIds = array();
 
         foreach ($userRoles as $userRole)
@@ -97,13 +99,13 @@ class UserRoleService implements UserRoleServiceInterface
      *
      * @param User $user
      *
-     * @return Role[]
+     * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
     public function getRolesForUser(User $user)
     {
         $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
 
-        if (empty($userRoles))
+        if ($userRoles->count() == 0)
         {
             $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
         }
@@ -121,7 +123,8 @@ class UserRoleService implements UserRoleServiceInterface
      *
      * @param string $roleName
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Exception
      */
     public function getUsersForRole($roleName)
     {

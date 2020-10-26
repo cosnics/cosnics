@@ -12,23 +12,26 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class VersionTableDataProvider extends DataClassTableDataProvider
 {
 
+    public function count_data($condition)
+    {
+        $parameters = new DataClassCountParameters($condition);
+
+        return DataManager::count_content_objects(ContentObject::class, $parameters);
+    }
+
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         if ($order_property == null)
         {
-            $order_property = new OrderBy(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID, SORT_DESC));
+            $order_property = array(
+                new OrderBy(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID, SORT_DESC)
+                )
+            );
         }
-        
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
-        return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
-    }
 
-    public function count_data($condition)
-    {
-        $parameters = new DataClassCountParameters($condition);
-        
-        return DataManager::count_content_objects(ContentObject::class, $parameters);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+
+        return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
     }
 }

@@ -18,31 +18,6 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
 {
 
     /**
-     * Gets the objects to display in the table.
-     * For now, objects are composed in the code itself from several source
-     * objects.
-     *
-     * @param $offset
-     * @param $count
-     * @param null $order_property
-     *
-     * @return mixed
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        if ($order_property == null)
-        {
-            $order_property = new OrderBy(
-                new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
-            );
-        }
-
-        return $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(
-            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
-        );
-    }
-
-    /**
      * Returns the count of the objects
      *
      * @return int
@@ -58,5 +33,32 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
     public function getDataProvider()
     {
         return $this->get_component()->getDataProvider();
+    }
+
+    /**
+     * Gets the objects to display in the table.
+     * For now, objects are composed in the code itself from several source
+     * objects.
+     *
+     * @param $offset
+     * @param $count
+     * @param null $order_property
+     *
+     * @return mixed
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        if ($order_property == null)
+        {
+            $order_property = array(
+                new OrderBy(
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
+                )
+            );
+        }
+
+        return $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(
+            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
+        );
     }
 }

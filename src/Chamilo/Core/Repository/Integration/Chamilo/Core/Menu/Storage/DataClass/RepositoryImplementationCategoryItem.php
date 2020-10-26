@@ -65,7 +65,7 @@ class RepositoryImplementationCategoryItem extends Item
             );
             $parameters = new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))
+                array(new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)))
             );
             $items = DataManager::retrieves(Item::class, $parameters);
             $this->children = $items;

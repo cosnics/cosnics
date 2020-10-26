@@ -34,7 +34,7 @@ class XmlGroupMenuFeedComponent extends Manager
         $groups_tree = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))
+                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
             )
         );
 
