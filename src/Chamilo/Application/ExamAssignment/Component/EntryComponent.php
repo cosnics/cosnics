@@ -3,7 +3,7 @@
 namespace Chamilo\Application\ExamAssignment\Component;
 
 use Chamilo\Application\ExamAssignment\Manager;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
@@ -23,6 +23,8 @@ class EntryComponent extends Manager
      */
     function run()
     {
+        $jqueryFileUploadScriptPath = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js';
+
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $publicationId = $this->getRequest()->getFromUrl(self::PARAM_CONTENT_OBJECT_PUBLICATION_ID);
@@ -36,7 +38,8 @@ class EntryComponent extends Manager
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser(), 'DETAILS' => $details
+            'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser(), 'DETAILS' => $details,
+            'JQUERY_FILE_UPLOAD_SCRIPT_PATH' => $jqueryFileUploadScriptPath
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);

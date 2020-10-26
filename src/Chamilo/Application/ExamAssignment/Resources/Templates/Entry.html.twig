@@ -37,18 +37,64 @@
                     </div>
                     <div class="current-exam-upload-section">
                         <h2 class="current-exam-main-title mod-upload">Indienen:</h2>
-                        <div class="current-exam-upload-area">
-                            Klik of sleep uw bestanden hier om ze op te laden.
-                            <i class="upload-area-icon fa fa-plus-square"></i>
+                        <div id="file-upload-container" class="current-exam-upload-area">
+                            <div id="file-upload-input" style="display: none;">
+                                <div class="form-row row ">
+                                    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                                        {{ 'FileName'|trans({}, appContext) }}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                                        <div class="element"><input name="file" type="file"></div>
+                                        <div class="form_feedback"></div>
+                                    </div>
+                                    <div class="clear">&nbsp;</div>
+                                </div>
+                            </div>
+                            <div class="element">
+                                <div id="file-upload" class="file-upload">
+                                    <div class="file-previews files" id="file-previews">
+                                        <div id="file-template" class="thumbnail">
+                                            <span class="glyphicon glyphicon-file"></span>
+                                            <h3 data-dz-name></h3>
+                                            <button data-dz-remove class="btn btn-sm btn-default delete">
+                                                <i class="glyphicon glyphicon-trash"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
+                                            </button>
+                                            <!--<strong class="error text-danger" data-dz-errormessage></strong>-->
+                                            <div>
+                                                <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                    <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body mod-file-upload dz-clickable">
+                                        <span class="upload-area-icon fa fa-upload"></span>
+                                        {{ 'DropFileHereMessage'|trans({}, appContext) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form_feedback">
+                            </div>
                         </div>
-                        <!--            <form action="/file-upload" class="dropzone">
-                                      <div class="fallback">
-                                        <input name="file" type="file" multiple />
-                                      </div>
-                                    </form>-->
+                        <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
+
+                        <script type="text/javascript">
+                            /* Prevent drag & drop outside of drop zone */
+                            window.addEventListener("dragover",function(e){
+                                e = e || event;
+                                e.preventDefault();
+                            },false);
+                            window.addEventListener("drop",function(e){
+                                e = e || event;
+                                e.preventDefault();
+                            },false);
+                            $(document).ready(function() {
+                                    $("#file-upload-container").fileUpload({autoProcessQueue: false});
+                                });
+                        </script>
 
                         <div class="current-exam-upload-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
-                        <button class="btn btn-action mod-upload">Dien examenopdracht in</button>
+                        <button class="btn btn-action mod-upload" onclick="Dropzone.forElement('#file-upload').processQueue()">Dien examenopdracht in</button>
                     </div>
                 </div>
             </div>
