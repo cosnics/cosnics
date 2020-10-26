@@ -303,7 +303,7 @@ class ContentObject extends CompositeDataClass
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, $condition);
+        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, new DataClassCountParameters($condition));
     }
 
     public function count_includers($only_version = false)
@@ -376,7 +376,7 @@ class ContentObject extends CompositeDataClass
 
         $condition = new OrCondition($conditions);
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, $condition);
+        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, new DataClassCountParameters($condition));
     }
 
     public function count_publications()

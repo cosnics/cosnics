@@ -85,7 +85,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor $parametersProcessor
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor|null $recordProcessor
      */
     public function __construct(
         Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
@@ -485,7 +485,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
-        return $this->processRecord($record);
+        //return $this->processRecord($record);
+        return $record;
     }
 
     /**
@@ -500,7 +501,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         while ($record = $statement->fetch(PDO::FETCH_ASSOC))
         {
-            $records[] = $this->processRecord($record);
+            //$records[] = $this->processRecord($record);
+            $records[] = $record;
         }
 
         return $records;

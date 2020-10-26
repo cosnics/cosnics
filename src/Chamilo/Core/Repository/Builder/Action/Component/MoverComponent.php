@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -40,12 +41,12 @@ class MoverComponent extends Manager
                 $id);
             $parent = $complex_content_object_item->get_parent();
             $max = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class,
+                ComplexContentObjectItem::class,new DataClassCountParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
-                    new StaticConditionVariable($parent)));
+                    new StaticConditionVariable($parent))));
 
             $display_order = $complex_content_object_item->get_display_order();
             $new_place = ($display_order +

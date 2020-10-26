@@ -71,7 +71,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function addContentObjectElement(AdvancedElementFinderElement $myRepositoryElement)
     {
-        $this->addContentObjectsToParentElement($myRepositoryElement, $this->retrieveContentObjects());
+        $this->addContentObjectsToParentElement($myRepositoryElement, $this->retrieveContentObjects()->getArrayCopy());
     }
 
     /**
@@ -399,7 +399,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
      */
     protected function retrieveCategories()
     {
@@ -419,7 +419,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     protected function retrieveContentObjects()
     {

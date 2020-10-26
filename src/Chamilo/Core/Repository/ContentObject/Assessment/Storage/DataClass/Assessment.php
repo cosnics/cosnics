@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -47,11 +48,11 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         if (!isset($this->question_count))
         {
             $this->question_count = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class, new EqualityCondition(
+                ComplexContentObjectItem::class, new DataClassCountParameters(new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                     ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
-                )
+                ))
             );
         }
 

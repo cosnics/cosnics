@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -188,6 +189,11 @@ class DataManager
      */
     public static function count($class, $parameters = null)
     {
+        if (!$parameters instanceof DataClassCountParameters)
+        {
+            $parameters = DataClassCountParameters::generate($parameters);
+        }
+
         return self::getDataClassRepository()->count($class, $parameters);
     }
 
@@ -376,6 +382,11 @@ class DataManager
      */
     public static function distinct($class, $parameters)
     {
+        if (!$parameters instanceof DataClassDistinctParameters)
+        {
+            $parameters = DataClassDistinctParameters::generate($parameters);
+        }
+
         return self::getDataClassRepository()->distinct($class, $parameters);
     }
 
@@ -568,6 +579,11 @@ class DataManager
      */
     public static function records($class, $parameters = null)
     {
+        if (!$parameters instanceof RecordRetrievesParameters)
+        {
+            $parameters = RecordRetrievesParameters::generate($parameters);
+        }
+
         return self::getDataClassRepository()->records($class, $parameters);
     }
 
@@ -722,6 +738,11 @@ class DataManager
      */
     public static function retrieves($class, $parameters = null)
     {
+        if (!$parameters instanceof DataClassRetrievesParameters)
+        {
+            $parameters = DataClassRetrievesParameters::generate($parameters);
+        }
+
         return self::getDataClassRepository()->retrieves($class, $parameters);
     }
 

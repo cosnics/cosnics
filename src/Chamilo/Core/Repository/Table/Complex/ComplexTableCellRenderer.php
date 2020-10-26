@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -31,7 +32,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $movedown_allowed = true;
 
         $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, $this->get_component()->get_table_condition(__CLASS__)
+            ComplexContentObjectItem::class, new DataClassCountParameters($this->get_component()->get_table_condition(__CLASS__))
         );
         if ($count == 1)
         {
@@ -197,7 +198,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     );
 
                     return DataManager::count_complex_content_object_items(
-                        ComplexContentObjectItem::class, $condition
+                        ComplexContentObjectItem::class, new DataClassCountParameters($condition)
                     );
                 }
 
