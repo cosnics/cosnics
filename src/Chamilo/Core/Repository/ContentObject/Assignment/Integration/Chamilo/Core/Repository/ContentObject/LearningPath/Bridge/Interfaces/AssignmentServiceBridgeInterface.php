@@ -54,7 +54,7 @@ interface AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType);
 

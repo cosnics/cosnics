@@ -85,7 +85,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_by
      *
-     * @return \libraries\storage\ResultSet<CourseGroup>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
      */
     public static function retrieve_course_groups_and_subgroups($group_ids, $condition = null, $offset = null, $count = null,
         $order_by = null)
@@ -196,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_property
      *
-     * @return \libraries\storage\ResultSet<\user\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
      */
     public static function retrieve_course_group_users($course_group_id, $condition = null, $offset = null, $count = null,
         $order_property = null)
@@ -239,7 +239,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param OrderBy[] $order_property
      *
-     * @return ResultSet<\user\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
      */
     public static function retrieve_course_group_users_with_subscription_time($course_group_id, $condition = null,
         $offset = null, $count = null, $order_property = null)

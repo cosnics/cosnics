@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -53,7 +52,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * @param ResultSet $publication_resultset
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $publication_resultset
      * @param int $entityType
      *
      * @return array

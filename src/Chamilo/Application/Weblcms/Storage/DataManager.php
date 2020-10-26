@@ -252,105 +252,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * Fills the $new_publications_cache cache with given courses for given user.
-     * Ideas:
-     * - In order to speed multiple calls to tool_has_new_publications(...) we use the cache $new_publications_cache.
-     * If
-     * the cache is not
-     * filled for a user and course pair yet, this function is activated automatically.
-     * - Further acceleration of the code can be achieved if this function is called with a list of courses before
-     * looping over the courses
-     * starts. Why? It is more efficient to execute large queries including several 100 courses than executing small
-     * queries for each
-     * course separately. This function fills the cache for all given courses, resulting in fast execution of
-     * subsequent
-     * calls to
-     * tool_has_new_publications.
-     * Steps:
-     * -# Retrieve all tools with new publications for all courses. @param array $courses mapping of course ID's onto
-     * course objects @see create_courses_array($courses).
-     * @see RighsUtils::
-     * filter_location_identifiers_by_granted_right(...)
-     * -# Filter out all publication whose category is not visible. @see
-     * retrieve_publication_category_parent_ids_recursive(...),
-     * retrieve_publication_category_visibility(...), and ContentObjectPublicationCategory::
-     * is_recursive_visible_on_arrays(...).
-     * -# Fill cache $new_publications_cache with the remaining publications.
-     *
-     * @see DataManager::
-     * retrieve_new_publication_icon_ids
-     * -# Filter out all publications which user has no access right to./
-    public static function fill_new_publications_cache($user, $courses)
-    {
-    $weblcms_rights = WeblcmsRights::getInstance();
-    foreach (array_keys($courses) as $course_id)
-    {
-    self::$is_cached[self::create_new_publications_cache_key($user->get_id(), $course_id)] = true;
-    }
-    $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
-    array_keys($courses),
-    $user->get_id(),
-    false,
-    null,
-    null
-    );
-    $identifiers = array();
-    $publications = array();
-    while ($publication = $tools_with_new_publications->next_result(false))
-    {
-    $course = $courses[$publication[ContentObjectPublication::PROPERTY_COURSE_ID]];
-    if ($course->is_course_admin($user))
-    {
-    $key = self::create_new_publications_cache_key(
-    $user->get_id(),
-    $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
-    );
-    self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
-    }
-    else
-    {
-    $identifiers[] = $publication[ContentObjectPublication::PROPERTY_ID];
-    $publications[$publication[ContentObjectPublication::PROPERTY_ID]] = $publication;
-    }
-    }
-    $entities = array();
-    $entities[] = CourseUserEntity::getInstance();
-    $entities[] = CourseGroupEntity::getInstance(null);
-    $entities[] = CoursePlatformGroupEntity::getInstance(null);
-    $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
-    Manager::context(),
-    $user,
-    $entities,
-    WeblcmsRights::VIEW_RIGHT,
-    $identifiers,
-    WeblcmsRights::TYPE_PUBLICATION
-    );
-    $category_ids = array();
-    foreach ($publication_ids_with_right_view as $publication_id)
-    {
-    $category_ids[] = $publications[$publication_id][ContentObjectPublication::PROPERTY_CATEGORY_ID];
-    }
-    $category_parent_ids = self::retrieve_publication_category_parent_ids_recursive($category_ids);
-    $all_category_ids = array_merge($category_ids, array_values($category_parent_ids));
-    $category_visibility = self::retrieve_publication_category_visibility($all_category_ids);
-    foreach ($publication_ids_with_right_view as $publication_id)
-    {
-    $publication = $publications[$publication_id];
-    if (ContentObjectPublicationCategory::is_recursive_visible_on_arrays(
-    $publication[ContentObjectPublication::PROPERTY_CATEGORY_ID],
-    $category_parent_ids,
-    $category_visibility
-    ))
-    {
-    $key = self::create_new_publications_cache_key(
-    $user->get_id(),
-    $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
-    );
-    self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
-    }
-    }
-    }
-    /**
      * Creates the key for the cache new_publications_cache.
      */
     private static function create_new_publications_cache_key($user_id, $course_id)
@@ -461,6 +362,109 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * Fills the $new_publications_cache cache with given courses for given user.
+     * Ideas:
+     * - In order to speed multiple calls to tool_has_new_publications(...) we use the cache $new_publications_cache.
+     * If
+     * the cache is not
+     * filled for a user and course pair yet, this function is activated automatically.
+     * - Further acceleration of the code can be achieved if this function is called with a list of courses before
+     * looping over the courses
+     * starts. Why? It is more efficient to execute large queries including several 100 courses than executing small
+     * queries for each
+     * course separately. This function fills the cache for all given courses, resulting in fast execution of
+     * subsequent
+     * calls to
+     * tool_has_new_publications.
+     * Steps:
+     * -# Retrieve all tools with new publications for all courses. @param array $courses mapping of course ID's onto
+     * course objects @see create_courses_array($courses).
+     * @see RighsUtils::
+     * filter_location_identifiers_by_granted_right(...)
+     * -# Filter out all publication whose category is not visible. @see
+     * retrieve_publication_category_parent_ids_recursive(...),
+     * retrieve_publication_category_visibility(...), and ContentObjectPublicationCategory::
+     * is_recursive_visible_on_arrays(...).
+     * -# Fill cache $new_publications_cache with the remaining publications.
+     *
+     * @see DataManager::
+     * retrieve_new_publication_icon_ids
+     * -# Filter out all publications which user has no access right to.
+     */
+    public static function fill_new_publications_cache($user, $courses)
+    {
+        $weblcms_rights = WeblcmsRights::getInstance();
+
+        foreach (array_keys($courses) as $course_id)
+        {
+            self::$is_cached[self::create_new_publications_cache_key($user->get_id(), $course_id)] = true;
+        }
+
+        $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
+            array_keys($courses), $user->get_id(), false, null, null
+        );
+
+        $identifiers = array();
+        $publications = array();
+
+        foreach ($tools_with_new_publications as $publication)
+        {
+            $course = $courses[$publication[ContentObjectPublication::PROPERTY_COURSE_ID]];
+
+            if ($course->is_course_admin($user))
+            {
+                $key = self::create_new_publications_cache_key(
+                    $user->get_id(), $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
+                );
+
+                self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
+            }
+            else
+            {
+                $identifiers[] = $publication[ContentObjectPublication::PROPERTY_ID];
+                $publications[$publication[ContentObjectPublication::PROPERTY_ID]] = $publication;
+            }
+        }
+
+        $entities = array();
+
+        $entities[] = CourseUserEntity::getInstance();
+        $entities[] = CourseGroupEntity::getInstance(null);
+        $entities[] = CoursePlatformGroupEntity::getInstance(null);
+
+        $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
+            Manager::context(), $user, $entities, WeblcmsRights::VIEW_RIGHT, $identifiers,
+            WeblcmsRights::TYPE_PUBLICATION
+        );
+
+        $category_ids = array();
+
+        foreach ($publication_ids_with_right_view as $publication_id)
+        {
+            $category_ids[] = $publications[$publication_id][ContentObjectPublication::PROPERTY_CATEGORY_ID];
+        }
+
+        $category_parent_ids = self::retrieve_publication_category_parent_ids_recursive($category_ids);
+        $all_category_ids = array_merge($category_ids, array_values($category_parent_ids));
+        $category_visibility = self::retrieve_publication_category_visibility($all_category_ids);
+
+        foreach ($publication_ids_with_right_view as $publication_id)
+        {
+            $publication = $publications[$publication_id];
+            if (ContentObjectPublicationCategory::is_recursive_visible_on_arrays(
+                $publication[ContentObjectPublication::PROPERTY_CATEGORY_ID], $category_parent_ids, $category_visibility
+            ))
+            {
+                $key = self::create_new_publications_cache_key(
+                    $user->get_id(), $publication[ContentObjectPublication::PROPERTY_COURSE_ID]
+                );
+
+                self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
+            }
+        }
+    }
+
+    /**
      * Fixes the course type user category rel course display orders for deleted courses for a given user Retrieves all
      * the coures type user category rel course objects for which the course does not exist anymore and removes them and
      * fixes the display orders
@@ -503,6 +507,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return true;
     }
+
+    /**
+     * **************************************************************************************************************
+     * ContentObjectPublication Helper Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns attributes for content object publications
@@ -558,12 +568,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $publication_attributes;
     }
-
-    /**
-     * **************************************************************************************************************
-     * ContentObjectPublication Helper Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the user identifiers for whom a publication was targetted
@@ -759,6 +763,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * New publications functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Builds the parameters to retrieve course settings with a course setting relation table.
      * Returns course settings
      * with their compliant values.
@@ -804,12 +814,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new DataClassProperties($data_class_properties), $condition, $offset, $count, $order_by, new Joins($joins)
         );
     }
-
-    /**
-     * **************************************************************************************************************
-     * New publications functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the last visit date
@@ -880,6 +884,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
     }
 
+    // PERFORMANCE-TWEAKS-START
+
     /**
      * Returns the last visit date per course (and optional for a module and / or a user)
      *
@@ -893,8 +899,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         return self::get_last_visit_date($course_id, $user_id, $module_name, null);
     }
-
-    // PERFORMANCE-TWEAKS-START
 
     /**
      * Returns the condition for my publications
@@ -1140,6 +1144,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $condition;
     }
 
+    // PERFORMANCE-TWEAKS-END
+
     /**
      * Creates a condition for the rights location locked right class with a location and right id
      *
@@ -1172,7 +1178,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return new AndCondition($conditions);
     }
 
-    // PERFORMANCE-TWEAKS-END
+    /**
+     * **************************************************************************************************************
+     * CourseModuleLastAccess Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Checks if a content object is published
@@ -1191,12 +1201,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::count(ContentObjectPublication::class, new DataClassCountParameters($condition)) >= 1;
     }
-
-    /**
-     * **************************************************************************************************************
-     * CourseModuleLastAccess Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Checks if the given user is a target user of the publication
@@ -1318,6 +1322,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * CourseTypeUserCategory Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns whether or not there is a pending request for a given user and course
      *
      * @param $user_id int
@@ -1348,12 +1358,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return (self::count(CourseRequest::class, new DataClassCountParameters($condition)) > 0);
     }
-
-    /**
-     * **************************************************************************************************************
-     * CourseTypeUserCategory Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Logs a course module last access record
@@ -1446,6 +1450,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * CourseCategory Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves content object publications joined with the repository content object table
      *
      * @param \libraries\storage\Condition $condition
@@ -1504,12 +1514,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::records(ContentObjectPublication::class, $parameters);
     }
-
-    /**
-     * **************************************************************************************************************
-     * CourseCategory Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Retrieves the content object publications with view right granted in category location
@@ -1629,6 +1633,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * Course Settings Helper Functions *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves the course settings joined with the course setting default values
      *
      * @param Condition $condition
@@ -1670,7 +1680,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * **************************************************************************************************************
-     * Course Settings Helper Functions *
+     * CourseTool Functionality *
      * **************************************************************************************************************
      */
 
@@ -1682,7 +1692,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $count int
      * @param $order_by int
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_course_settings_with_tools(
         $condition = null, $offset = null, $count = null, $order_by = null
@@ -1703,9 +1713,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins->add(
             new Join(
                 CourseTool::class, new EqualityCondition(
-                    new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID),
-                    new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID)
-                ), Join::TYPE_LEFT
+                new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID),
+                new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID)
+            ), Join::TYPE_LEFT
             )
         );
 
@@ -1716,7 +1726,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * **************************************************************************************************************
-     * CourseTool Functionality *
+     * Content Object Publication Target Entities Functionality * TODO: Check if refactoring is possible because there
+     * is some copy paste code *
      * **************************************************************************************************************
      */
 
@@ -1736,13 +1747,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieve(CourseTool::class, new DataClassRetrieveParameters($condition));
     }
-
-    /**
-     * **************************************************************************************************************
-     * Content Object Publication Target Entities Functionality * TODO: Check if refactoring is possible because there
-     * is some copy paste code *
-     * **************************************************************************************************************
-     */
 
     /**
      * Retrieves a course type user category at sort
@@ -2174,7 +2178,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $parent_ids = array();
 
-        while ($category = $categories->next_result(false))
+        foreach ($categories as $category)
         {
             $parent_ids[$category[ContentObjectPublicationCategory::PROPERTY_ID]] =
                 $category[ContentObjectPublicationCategory::PROPERTY_PARENT];
@@ -2251,7 +2255,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $categories = self::records(ContentObjectPublicationCategory::class, $parameters);
 
         $visibilities = array();
-        while ($category = $categories->next_result(false))
+        foreach ($categories as $category)
         {
             $visibilities[$category[ContentObjectPublicationCategory::PROPERTY_ID]] =
                 $category[ContentObjectPublicationCategory::PROPERTY_VISIBLE];
@@ -2288,6 +2292,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * Introduction Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves the target course groups for a given publication
      *
      * @param int $publication_id
@@ -2297,7 +2307,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \libraries\ObjectTableOrder[] $order_by
      * @param \libraries\storage\Condition $condition
      *
-     * @return \libraries\storage\ResultSet<CourseGroup>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
      */
     public static function retrieve_publication_target_course_groups(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
@@ -2353,12 +2363,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * **************************************************************************************************************
-     * Introduction Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Retrieves the target platform group ids of a publication
      *
      * @param int $publication_id
@@ -2386,6 +2390,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * RightsLocationLockedRight Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves the target platform groups for a given publication
      *
      * @param int $publication_id
@@ -2395,7 +2405,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \libraries\ObjectTableOrder[] $order_by
      * @param \libraries\storage\Condition $condition
      *
-     * @return \libraries\storage\ResultSet<\group\Group>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\group\Group>
      */
     public static function retrieve_publication_target_platform_groups(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
@@ -2455,12 +2465,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * **************************************************************************************************************
-     * RightsLocationLockedRight Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Retrieves the target user ids of a publication
      *
      * @param int $publication_id
@@ -2488,6 +2492,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * RightsLocationLockedRight Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves the target users of a publication
      *
      * @param int $publication_id
@@ -2497,7 +2507,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param OrderBy $order_by
      * @param Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_publication_target_users(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
@@ -2530,7 +2540,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * **************************************************************************************************************
-     * RightsLocationLockedRight Helper Functionality *
+     * CourseRequest Functionality *
      * **************************************************************************************************************
      */
 
@@ -2568,7 +2578,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $course->get_id(), $user->get_id(), false, $tool, $category
             );
 
-            while ($publication = $publications->next_result(false))
+            foreach ($publications as $publication)
             {
                 if ($weblcms_rights->is_allowed_in_courses_subtree(
                     WeblcmsRights::VIEW_RIGHT, $publication[ContentObjectPublication::PROPERTY_ID],
@@ -2582,12 +2592,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return false;
         }
     }
-
-    /**
-     * **************************************************************************************************************
-     * CourseRequest Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Determines if a tool has new publications since the last time the current user visited the tool.
@@ -2609,53 +2613,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             // Fill cache for given course.
             self::fill_new_publications_cache($user, self::create_courses_array($course));
             assert(self::$is_cached[$key]);
-            /*
-             * This piece of code has been optimized and replaced by fill_new_publications_cache. We keep it for a while
-             * for debugging
-             * purposes. (02-07-2015).
-             * $weblcms_rights = WeblcmsRights::getInstance();
-             * if ($course->is_course_admin($user))
-             * {
-             * $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
-             * $course->get_id(),
-             * $user->get_id(),
-             * true);
-             * while ($publication = $tools_with_new_publications->next_result(false))
-             * {
-             * self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
-             * }
-             * }
-             * else
-             * {
-             * $publications = DataManager::retrieve_new_publication_icon_ids($course->get_id(), $user->get_id());
-             * while ($publication = $publications->next_result(false))
-             * {
-             * if (! isset(
-             * self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]]) &&
-             * $weblcms_rights->is_allowed_in_courses_subtree(
-             * WeblcmsRights::VIEW_RIGHT,
-             * $publication[ContentObjectPublication::PROPERTY_ID],
-             * WeblcmsRights::TYPE_PUBLICATION,
-             * $course->get_id()))
-             * {
-             * // check if the publication is visible
-             * $visible = true;
-             * if ($publication[ContentObjectPublication::PROPERTY_CATEGORY_ID] != 0)
-             * {
-             * // categories can be made invisible
-             * $category = DataManager::retrieve_by_id(
-             * ContentObjectPublicationCategory::class,
-             * $publication[ContentObjectPublication::PROPERTY_CATEGORY_ID]);
-             * $visible = $category->is_recursive_visible();
-             * }
-             * if ($visible)
-             * {
-             * self::$new_publications_cache[$key][$publication[ContentObjectPublication::PROPERTY_TOOL]] = true;
-             * }
-             * }
-             * }
-             * }
-             */
         }
 
         return self::$new_publications_cache[$key][$tool];

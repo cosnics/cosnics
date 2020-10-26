@@ -1025,7 +1025,7 @@ class DataClassRepository
     }
 
     /**
-     * Retrieve a ResultSet of DataClass object instances from the storage layer
+     * Retrieve a DataClassIterator of DataClass object instances from the storage layer
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters

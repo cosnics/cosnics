@@ -27,7 +27,7 @@ interface GenericTreeInterface
      *
      * @param integer $nodeId
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function get_node_children($nodeId);
 

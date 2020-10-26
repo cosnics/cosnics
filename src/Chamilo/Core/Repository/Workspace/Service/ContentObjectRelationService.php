@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -87,7 +86,7 @@ class ContentObjectRelationService
      *
      * @param ContentObject $contentObject
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
@@ -206,7 +205,7 @@ class ContentObjectRelationService
      *
      * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceService $workspaceService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getWorkspacesForContentObject(WorkspaceService $workspaceService, ContentObject $contentObject)
     {
@@ -235,7 +234,7 @@ class ContentObjectRelationService
      * @param int $offset
      * @param OrderBy $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user, $limit = null, $offset = null, $orderBy = null)
@@ -265,7 +264,7 @@ class ContentObjectRelationService
      * @param ContentObject[] $contentObjects
      * @param User $user
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function countAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user)

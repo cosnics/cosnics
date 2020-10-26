@@ -204,7 +204,7 @@ class RightsLocation extends NestedTreeNode
      *
      * @param int $right_id - [OPTIONAL] default null
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Exception
      * @deprecated Use RightsService::findRightsLocationRightsEntitiesForLocationAndRight() now
      */

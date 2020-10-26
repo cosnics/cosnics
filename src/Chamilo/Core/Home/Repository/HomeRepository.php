@@ -32,7 +32,7 @@ class HomeRepository
      *
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findElementsByUserIdentifier($userIdentifier)
     {
@@ -52,7 +52,7 @@ class HomeRepository
      *
      * @param int $userIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findBlocksByUserIdentifier($userIdentifier)
     {

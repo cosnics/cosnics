@@ -122,7 +122,7 @@ class CourseUsersFeedComponent extends Manager
     /**
      * Retrieves the users from the course (direct subscribed and group subscribed)
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     private function retrieve_users()
     {

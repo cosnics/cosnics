@@ -28,7 +28,7 @@ class SubscribedUserTableDataProvider extends RecordTableDataProvider
      * @param int $count
      * @param ObjectTableOrder[] $order_property
      *
-     * @return ResultSet A set of matching users.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching users.
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

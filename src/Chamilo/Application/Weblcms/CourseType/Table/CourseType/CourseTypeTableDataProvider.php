@@ -34,7 +34,7 @@ class CourseTypeTableDataProvider extends DataClassTableDataProvider
      * @param $count int
      * @param $order_property String
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition = null, $offset = null, $count = null, $order_property = null)
     {

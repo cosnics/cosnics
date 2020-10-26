@@ -712,7 +712,7 @@ class DataManager
     }
 
     /**
-     * Retrieve a ResultSet of DataClass object instances from the storage layer
+     * Retrieve a DataClassIterator of DataClass object instances from the storage layer
      *
      * @param $class string
      * @param DataClassRetrievesParameters $parameters

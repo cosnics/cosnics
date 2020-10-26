@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -26,7 +25,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
      * @param int $count
      * @param OrderBy[] $order_property
      *
-     * @return ResultSet | DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

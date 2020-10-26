@@ -40,7 +40,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     /**
      * The attempts on the specific question
      *
-     * @var ResultSet
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     private $question_attempts;
 

@@ -429,7 +429,7 @@ abstract class AssignmentRepository
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function findTargetsForEntityType(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
@@ -980,7 +980,7 @@ abstract class AssignmentRepository
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieveEntriesForEntityTypeAndId(
         $entityType, $entityId, Condition $condition = null, $offset = null, $count = null, $orderProperty = []
@@ -1102,7 +1102,7 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntryStatistics(
         DataClassProperties $dataClassProperties = null, Condition $condition = null, Joins $joins = null,
@@ -1183,7 +1183,7 @@ abstract class AssignmentRepository
      * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntryStatisticsForEntity($entityType, $entityId, Condition $condition = null)
     {

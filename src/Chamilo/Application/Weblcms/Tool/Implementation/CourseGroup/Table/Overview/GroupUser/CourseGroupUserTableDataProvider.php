@@ -23,7 +23,7 @@ class CourseGroupUserTableDataProvider extends RecordTableDataProvider
      * @param int $count
      * @param string $order_property
      *
-     * @return \libraries\storage\ResultSet A set of matching users.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching users.
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

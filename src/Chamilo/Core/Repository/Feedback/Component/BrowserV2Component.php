@@ -17,7 +17,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 class BrowserV2Component extends Manager implements DelegateComponent
 {

@@ -22,7 +22,7 @@ class EntityTableDataProvider
      * @param int $count
      * @param null $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\Iterator\RecordIterator|\Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

@@ -76,7 +76,7 @@ class UserEntityHelper
      * @param int $count
      * @param ObjectTableOrder[] $order_property
      *
-     * @return \libraries\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {

@@ -124,7 +124,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     /**
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntitiesWithEntriesByEntityType($entityType)
     {

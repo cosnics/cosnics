@@ -22,7 +22,7 @@ class DirectSubscribedPlatformGroupTableDataProvider extends RecordTableDataProv
      * @param int $count
      * @param ObjectTableOrder[] $order_property
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

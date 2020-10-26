@@ -26,7 +26,7 @@ class SchemaTableDataProvider extends DataClassTableDataProvider
      * @param integer $offset
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

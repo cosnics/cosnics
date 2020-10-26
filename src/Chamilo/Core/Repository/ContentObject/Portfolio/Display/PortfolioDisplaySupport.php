@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface which indicates a component implements a repository\content_object\portfolio\display
@@ -130,7 +129,7 @@ interface PortfolioDisplaySupport
      *
      * @param ComplexContentObjectPathNode $node
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node);
 
@@ -144,11 +143,11 @@ interface PortfolioDisplaySupport
     public function retrieve_portfolio_feedback($feedback_id);
 
     /**
-     * Retrieve a ResultSet of Feedback objects
+     * Retrieve a DataClassIterator of Feedback objects
      *
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      *
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset);
 

@@ -64,7 +64,7 @@ class CourseSettingsController
     /**
      * Caches the course settings joined with the tools
      *
-     * @var ResultSet<CourseSetting>
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting>
      */
     private $course_settings_cache;
 

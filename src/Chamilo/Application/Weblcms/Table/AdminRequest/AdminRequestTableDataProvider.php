@@ -25,7 +25,7 @@ class AdminRequestTableDataProvider extends DataClassTableDataProvider
      * @param $offset int
      * @param $count int
      * @param $order_property string
-     * @return ResultSet A set of matching coursetypes.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching coursetypes.
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

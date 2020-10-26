@@ -96,7 +96,7 @@ abstract class Tracker extends DataClass
      * @param $offset int
      * @param $max_objects int
      * @param $order_by ObjectTableOrder
-     * @return ObjectResultSet The tracker data resultset
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator The tracker data resultset
      */
     public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null,
         $order_by = array())

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use ArrayIterator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
@@ -15,8 +16,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Exception;
 
 /**
@@ -230,7 +229,7 @@ abstract class Table
 
         $tableData = array();
 
-        if ($resultSet instanceof \ArrayIterator || is_array($resultSet))
+        if ($resultSet instanceof ArrayIterator || is_array($resultSet))
         {
             foreach ($resultSet as $result)
             {

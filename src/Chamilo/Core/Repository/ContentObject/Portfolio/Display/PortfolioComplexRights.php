@@ -39,7 +39,7 @@ interface PortfolioComplexRights
      * Get the selected entities for a given ComplexContentObjectPathNode
      * 
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function get_selected_entities(ComplexContentObjectPathNode $node);
 
@@ -66,7 +66,7 @@ interface PortfolioComplexRights
      * @param int $count
      * @param int $offset
      * @param \libraries\ObjectTableOrder[] $order_property
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $order_property);
 

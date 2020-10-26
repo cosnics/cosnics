@@ -82,7 +82,7 @@ class HomeService
     /**
      *
      * @param integer $userIdentifier
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getElementsByUserIdentifier($userIdentifier)
     {

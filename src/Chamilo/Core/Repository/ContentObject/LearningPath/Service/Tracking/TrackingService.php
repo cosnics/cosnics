@@ -584,7 +584,7 @@ class TrackingService
      * @param int $count
      * @param array $orderBy
      *
-     * @return \Chamilo\Libraries\StoDataClassIteratorDataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getTargetUsersWithLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode,
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = array())

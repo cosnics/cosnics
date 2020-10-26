@@ -135,7 +135,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
     /**
      * Retrieves all the notifications
      *
-     * @return ResultSet<Notification>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<Notification>
      */
     public function retrieve_notifications()
     {

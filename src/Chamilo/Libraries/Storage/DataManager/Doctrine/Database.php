@@ -9,7 +9,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
@@ -1042,16 +1041,14 @@ class Database
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet
+     * @return \string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
      * @throws \ReflectionException
      */
     public function retrieves($class, DataClassRetrievesParameters $parameters)
     {
-        return new DataClassResultSet(
-            $this->get_records_result($this->build_retrieves_sql($class, $parameters), $class, $parameters), $class
-        );
+        return $this->getDataClassDatabase()->retrieves($class, $parameters);
     }
 
     /**

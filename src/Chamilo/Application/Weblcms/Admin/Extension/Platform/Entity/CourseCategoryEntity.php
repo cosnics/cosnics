@@ -281,7 +281,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      * @param $count int
      * @param $order_property Array
      *
-     * @return ObjectResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {

@@ -230,7 +230,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     /**
      * Retrieves the assessment attempts
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function retrieve_assessment_attempts()
     {

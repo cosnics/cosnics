@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
-use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
+use Chamilo\Application\Calendar\Extension\Google\EventIterator;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -81,7 +81,7 @@ class CalendarService
      * @param integer $fromDate
      * @param integer $toDate
      *
-     * @return \Chamilo\Application\Calendar\Extension\Google\EventResultSet
+     * @return \Chamilo\Application\Calendar\Extension\Google\EventIterator
      */
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
@@ -91,7 +91,7 @@ class CalendarService
             $calendarIdentifier, $fromDate, $toDate
         );
 
-        return new EventResultSet(
+        return new EventIterator(
             $this->getCalendarProperties(
                 $googleCalendarEvents->getSummary(), $googleCalendarEvents->getDescription(),
                 $googleCalendarEvents->getTimeZone()

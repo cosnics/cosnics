@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface to describe the necessary functions needed from the CourseEntityRepository
@@ -161,7 +160,7 @@ interface CourseRepositoryInterface
      * 
      * @param $courseId
      * @param $status
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findUsersByStatus($courseId, $status);
 
@@ -170,7 +169,7 @@ interface CourseRepositoryInterface
      * 
      * @param $courseId
      * @param $status
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status);
 

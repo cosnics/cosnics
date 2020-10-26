@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use InvalidArgumentException;
 
@@ -91,7 +90,7 @@ class ContentObjectRelationRepository
     /**
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
@@ -102,7 +101,7 @@ class ContentObjectRelationRepository
      *
      * @param int $contentObjectId
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     // TODO: Where is this used? A content object number should be passed !
     public function findContentObjectRelationsForContentObjectById($contentObjectId)

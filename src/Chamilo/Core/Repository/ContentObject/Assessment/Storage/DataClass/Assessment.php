@@ -15,55 +15,148 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents an assessment
- * 
+ *
  * @package repository.lib.content_object.assessment
  */
 class Assessment extends ContentObject implements ComplexContentObjectSupport
 {
-    const PROPERTY_TIMES_TAKEN = 'times_taken';
     const PROPERTY_AVERAGE_SCORE = 'average_score';
-    const PROPERTY_MAXIMUM_SCORE = 'maximum_score';
     const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
-    const PROPERTY_QUESTIONS_PER_PAGE = 'questions_per_page';
+    const PROPERTY_MAXIMUM_SCORE = 'maximum_score';
     const PROPERTY_MAXIMUM_TIME = 'max_time';
+    const PROPERTY_QUESTIONS_PER_PAGE = 'questions_per_page';
     const PROPERTY_RANDOM_QUESTIONS = 'random_questions';
+    const PROPERTY_TIMES_TAKEN = 'times_taken';
 
     /**
      * The number of questions in this assessment
-     * 
+     *
      * @var int
      */
     private $question_count;
 
     /**
-     * An ObjectResultSet containing all ComplexContentObjectItem objects for individual questions.
-     * 
-     * @var ObjectResultSet
+     * An DataClassIterator containing all ComplexContentObjectItem objects for individual questions.
+     *
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     private $questions;
 
-    public static function get_type_name()
+    public function count_questions()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        if (!isset($this->question_count))
+        {
+            $this->question_count = DataManager::count_complex_content_object_items(
+                ComplexContentObjectItem::class, new EqualityCondition(
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                )
+            );
+        }
+
+        return $this->question_count;
     }
 
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_MAXIMUM_ATTEMPTS, 
-            self::PROPERTY_QUESTIONS_PER_PAGE, 
-            self::PROPERTY_MAXIMUM_TIME, 
-            self::PROPERTY_RANDOM_QUESTIONS);
+            self::PROPERTY_MAXIMUM_ATTEMPTS,
+            self::PROPERTY_QUESTIONS_PER_PAGE,
+            self::PROPERTY_MAXIMUM_TIME,
+            self::PROPERTY_RANDOM_QUESTIONS
+        );
     }
 
-    public function set_assessment_type($type)
+    public function get_allowed_types()
     {
-        $this->set_additional_property(self::PROPERTY_ASSESSMENT_TYPE, $type);
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+            self::package(), Manager::package() . '\ContentObject'
+        );
+        $types = array();
+
+        foreach ($registrations as $registration)
+        {
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 6
+            );
+            $types[] = $namespace . '\Storage\DataClass\\' .
+                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+        }
+
+        return $types;
     }
 
     public function get_maximum_attempts()
     {
         return $this->get_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS);
+    }
+
+    /**
+     * Returns the maximum score for this assessment
+     */
+    public function get_maximum_score()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($this->get_id())
+        );
+
+        $clo_questions = DataManager::retrieve_complex_content_object_items(
+            $this->get_type_name(), ComplexContentObjectItem::class, $condition
+        );
+
+        $maxscore = 0;
+
+        foreach ($clo_questions as $clo_question)
+        {
+            $maxscore += $clo_question->get_weight();
+        }
+
+        return $maxscore;
+    }
+
+    public function get_maximum_time()
+    {
+        return $this->get_additional_property(self::PROPERTY_MAXIMUM_TIME);
+    }
+
+    public function get_questions()
+    {
+        if (!isset($this->questions))
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+            );
+            $this->questions = DataManager::retrieve_complex_content_object_items(
+                ComplexContentObjectItem::class, $condition
+            );
+        }
+
+        return $this->questions;
+    }
+
+    public function get_questions_per_page()
+    {
+        return $this->get_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE);
+    }
+
+    public function get_random_questions()
+    {
+        return $this->get_additional_property(self::PROPERTY_RANDOM_QUESTIONS);
+    }
+
+    public function get_table()
+    {
+        return self::get_type_name();
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function has_unlimited_attempts()
@@ -76,19 +169,9 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         $this->set_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
     }
 
-    public function get_maximum_time()
-    {
-        return $this->get_additional_property(self::PROPERTY_MAXIMUM_TIME);
-    }
-
     public function set_maximum_time($value)
     {
         $this->set_additional_property(self::PROPERTY_MAXIMUM_TIME, $value);
-    }
-
-    public function get_questions_per_page()
-    {
-        return $this->get_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE);
     }
 
     public function set_questions_per_page($value)
@@ -96,97 +179,8 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         $this->set_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE, $value);
     }
 
-    public function get_random_questions()
-    {
-        return $this->get_additional_property(self::PROPERTY_RANDOM_QUESTIONS);
-    }
-
     public function set_random_questions($random_questions)
     {
         $this->set_additional_property(self::PROPERTY_RANDOM_QUESTIONS, $random_questions);
-    }
-
-    public function get_allowed_types()
-    {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            self::package(), 
-            Manager::package() . '\ContentObject');
-        $types = array();
-        
-        foreach ($registrations as $registration)
-        {
-            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $registration[Registration::PROPERTY_CONTEXT], 
-                6);
-            $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
-        }
-        
-        return $types;
-    }
-
-    public function get_table()
-    {
-        return self::get_type_name();
-    }
-
-    public function count_questions()
-    {
-        if (! isset($this->question_count))
-        {
-            $this->question_count = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_PARENT), 
-                    new StaticConditionVariable($this->get_id()), 
-                    ComplexContentObjectItem::get_table_name()));
-        }
-        
-        return $this->question_count;
-    }
-
-    public function get_questions()
-    {
-        if (! isset($this->questions))
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ComplexContentObjectItem::class,
-                    ComplexContentObjectItem::PROPERTY_PARENT), 
-                new StaticConditionVariable($this->get_id()), 
-                ComplexContentObjectItem::get_table_name());
-            $this->questions = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class,
-                $condition);
-        }
-        return $this->questions;
-    }
-
-    /**
-     * Returns the maximum score for this assessment
-     */
-    public function get_maximum_score()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT), 
-            new StaticConditionVariable($this->get_id()));
-        
-        $clo_questions = DataManager::retrieve_complex_content_object_items(
-            $this->get_type_name(), 
-            ComplexContentObjectItem::class,
-            $condition);
-        
-        $maxscore = 0;
-        
-        foreach($clo_questions as $clo_question)
-        {
-            $maxscore += $clo_question->get_weight();
-        }
-        
-        return $maxscore;
     }
 }

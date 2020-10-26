@@ -28,7 +28,7 @@ abstract class TableDataProvider extends TableComponent
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     abstract public function retrieve_data($condition, $offset, $count, $orderProperties = array());
 }

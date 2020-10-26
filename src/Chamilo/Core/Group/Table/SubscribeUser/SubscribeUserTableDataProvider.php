@@ -25,7 +25,7 @@ class SubscribeUserTableDataProvider extends DataClassTableDataProvider
      * @param int $offset
      * @param int $count
      * @param string $order_property
-     * @return ResultSet A set of matching learning objects.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

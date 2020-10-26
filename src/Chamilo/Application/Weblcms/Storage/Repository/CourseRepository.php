@@ -27,7 +27,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * The repository class for the Course Entity
@@ -451,7 +450,7 @@ class CourseRepository implements CourseRepositoryInterface
      * @param $courseId
      * @param $status
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {
@@ -486,7 +485,7 @@ class CourseRepository implements CourseRepositoryInterface
      * @param $courseId
      * @param $status
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {

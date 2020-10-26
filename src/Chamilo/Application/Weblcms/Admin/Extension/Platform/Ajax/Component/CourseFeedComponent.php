@@ -139,7 +139,7 @@ class CourseFeedComponent extends AjaxManager
     /**
      * Retrieves the users from the course (direct subscribed and group subscribed)
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_courses()
     {

@@ -23,7 +23,7 @@ class EntryTableDataProvider
      * @param int $count
      * @param null $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $orderProperty = null)
     {

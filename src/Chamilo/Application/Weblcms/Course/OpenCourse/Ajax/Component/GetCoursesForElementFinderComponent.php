@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Returns the courses formatted for the element finder
@@ -29,7 +28,7 @@ class GetCoursesForElementFinderComponent
     /**
      * Retrieves the courses for the current request
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function getCourses()
     {

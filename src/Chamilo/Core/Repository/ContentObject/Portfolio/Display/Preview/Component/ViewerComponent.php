@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStora
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Exception;
 
 /**
@@ -134,7 +133,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      *
      * @param ComplexContentObjectPathNode $node
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
     {

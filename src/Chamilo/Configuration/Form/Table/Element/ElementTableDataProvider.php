@@ -26,7 +26,7 @@ class ElementTableDataProvider extends DataClassTableDataProvider
      * @param int $count
      * @param ObjectTableOrder[] $order_property
      *
-     * @return \common\libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {

@@ -45,7 +45,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     /**
      * The course type list
      *
-     * @var ResultSet<CourseType>
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     protected $course_types;
 

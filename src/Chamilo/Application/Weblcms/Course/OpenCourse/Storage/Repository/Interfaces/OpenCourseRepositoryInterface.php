@@ -84,7 +84,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @param Course $course
      *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getRolesForOpenCourse(Course $course);
 

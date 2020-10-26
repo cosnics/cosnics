@@ -15,24 +15,6 @@ class InstanceTableDataProvider extends DataClassTableDataProvider
 {
 
     /**
-     * Returns the data as a resultset
-     *
-     * @param \common\libraries\storage\Condition $condition
-     * @param $condition
-     * @param int $offset
-     * @param int $count
-     * @param ObjectTableOrder[] $order_property
-     *
-     * @return \common\libraries\storage\ResultSet
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-
-        return DataManager::retrieves($this->get_component()->get_type(), $parameters);
-    }
-
-    /**
      * Counts the data
      *
      * @param \common\libraries\storage\Condition $condition
@@ -42,5 +24,23 @@ class InstanceTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return DataManager::count($this->get_component()->get_type(), new DataClassCountParameters($condition));
+    }
+
+    /**
+     * Returns the data as a resultset
+     *
+     * @param \common\libraries\storage\Condition $condition
+     * @param $condition
+     * @param int $offset
+     * @param int $count
+     * @param ObjectTableOrder[] $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+
+        return DataManager::retrieves($this->get_component()->get_type(), $parameters);
     }
 }

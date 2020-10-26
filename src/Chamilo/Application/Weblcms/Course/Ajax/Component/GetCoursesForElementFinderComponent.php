@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Returns the courses formatted for the element finder
@@ -86,7 +85,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     /**
      * Retrieves the courses for the current request
      *
-     * @return ResultSet
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     protected function getCourses()
     {

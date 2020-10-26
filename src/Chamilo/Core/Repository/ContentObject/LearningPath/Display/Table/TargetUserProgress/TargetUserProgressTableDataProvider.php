@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Targe
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -12,29 +11,6 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
  */
 class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
 {
-
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param OrderBy[] $order_property
-     *
-     * @return ResultSet | DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        $this->cleanupOrderProperty($order_property);
-
-        return $this->getTrackingService()->getTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(),
-            $this->getCurrentTreeNode(),
-            $condition,
-            $offset,
-            $count,
-            $order_property);
-    }
 
     /**
      * Counts the data
@@ -46,7 +22,26 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
     public function count_data($condition)
     {
         return $this->getTrackingService()->countTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(),
-            $condition);
+            $this->getLearningPath(), $condition
+        );
+    }
+
+    /**
+     * Returns the data as a resultset
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param OrderBy[] $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        $this->cleanupOrderProperty($order_property);
+
+        return $this->getTrackingService()->getTargetUsersWithLearningPathAttempts(
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $order_property
+        );
     }
 }

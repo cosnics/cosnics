@@ -75,7 +75,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      * @param int $count
      * @param int $offset
      *
-     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback[]|\Chamilo\Libraries\Storage\ResultSet\DataClassResultSet|mixed[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback>
      */
     public function getFeedback($count = null, $offset = null)
     {
