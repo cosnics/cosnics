@@ -41,6 +41,10 @@
                     "input": "Publication/Resources/Javascript/"
                 },
                 {
+                    "output": "Chamilo/Core/Repository/Resources/Javascript/",
+                    "input": "Resources/Javascript/"
+                },
+                {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
                     "input": [
                         "Feedback/Resources/Css/Aqua/Stylesheet.min.css",

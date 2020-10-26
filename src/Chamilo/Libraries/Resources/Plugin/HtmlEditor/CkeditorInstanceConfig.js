@@ -61,8 +61,10 @@ CKEDITOR.editorConfig = function (config) {
 
     config.contentsCss = [
         web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/Ckeditor/contents.css?t=' + CKEDITOR.timestamp,
-        web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=Stylesheet&theme=' + getTheme() + '&t=' +
-        CKEDITOR.timestamp
+        web_path + 'Chamilo/Libraries/Resources/Css/cosnics.vendor.bootstrap.min.css?t=' + CKEDITOR.timestamp,
+        web_path + 'Chamilo/Libraries/Resources/Css/cosnics.vendor.jquery.min.css?t=' + CKEDITOR.timestamp,
+        web_path + 'Chamilo/Libraries/Resources/Css/cosnics.vendor.min.css?t=' + CKEDITOR.timestamp,
+        web_path + 'Chamilo/Libraries/Resources/Css/cosnics.common.' + getTheme() + '.min.css?t=' + CKEDITOR.timestamp
     ];
 
     config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //free. Default is iframely.

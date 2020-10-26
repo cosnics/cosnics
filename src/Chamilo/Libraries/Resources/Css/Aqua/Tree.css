@@ -33,27 +33,27 @@ ul.tree-menu li div.lastExpand {
 }
 
 ul.tree-menu li div {
-    background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+    background: url(../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.last {
-    background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
+    background-image: url(../Images/Aqua/Treemenu/TreeLeafEnd.png);
 }
 
 ul.tree-menu li div.collapse {
-    background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+    background: url(../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastCollapse {
-    background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
+    background-image: url(../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
 }
 
 ul.tree-menu li div.expand {
-    background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+    background: url(../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {
-    background-image: url(../../Images/Aqua/Treemenu/TreeNodeEnd.png);
+    background-image: url(../Images/Aqua/Treemenu/TreeNodeEnd.png);
 }
 
 ul.tree-menu li div a {
