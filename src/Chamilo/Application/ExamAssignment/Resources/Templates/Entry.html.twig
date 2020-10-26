@@ -18,22 +18,27 @@
             {% else %}
             <div class="main-content mod-current-exam">
                 <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
-                <div class="current-exam-info">
+                {% set description = DETAILS.assignment.get_description() %}
+                <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
                     <ul class="current-exam-info-main">
-                        <li>Cursus: {{ DETAILS.course.get_title() }} ({{ DETAILS.course.get_visual_code() }})</li>
-                        <li>Titularis: {{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
+                        <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
+                        <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
+                        {% set start_time = DETAILS.assignment.get_start_time %}
+                        <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ start_time|date("H:i") }}</strong></li>
                     </ul>
                     <div class="current-exam-info-time">
-                        <ul class="current-exam-info-time-start">
-                            <li>
-                                <span class="sr-only">Van </span><strong class="exam-timestamp">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
-                            </li>
-                        </ul>
                         <ul class="current-exam-info-time-end">
-                            <li class="time-item"><span>Tijd tot</span> <span class="sr-only"> tot </span><strong class="exam-timestamp">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong></li>
+                            {% set end_time = DETAILS.assignment.get_end_time %}
+                            <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("Y") }} - {{ end_time|date("H:i") }}</strong></li>
                         </ul>
                     </div>
                 </div>
+                {% if description %}
+                    <div class="current-exam-info-description">
+                        <h2 class="current-exam-info-description-title">{{ 'Description'|trans({}, appContext) }}:</h2>
+                        {{ description|raw }}
+                    </div>
+                {% endif %}
                 {% if DETAILS.assignment.get_description() %}
                 <div class="alert alert-info">
                     {{ DETAILS.assignment.get_description()|raw }}
@@ -64,7 +69,6 @@
                     </div>
                 </div>
             </div>
-            {% endif %}
         </div>
     </main>
     {% endblock %}
