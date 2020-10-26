@@ -12,8 +12,10 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\StylesheetComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -241,15 +243,16 @@ class ContentObjectPublicationMailer
         $link = $this->getContentObjectPublicationUrl($contentObjectPublication);
         $course = $this->courseRepository->findCourse($contentObjectPublication->get_course_id());
 
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'Stylesheet';
-        $parameters[StylesheetComponent::PARAM_THEME] = $this->getThemePathBuilder()->getTheme();
-        $parameters[StylesheetComponent::PARAM_MODIFIED] = time();
-        $redirect = new Redirect($parameters);
+        $pathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(PathBuilder::class);
+        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
 
         $body = '<!DOCTYPE html><html lang="en"><head>';
-        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.bootstrap.min.css' .
+            '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.jquery.min.css' . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.min.css' . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.common.' .
+            $this->getThemePathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .

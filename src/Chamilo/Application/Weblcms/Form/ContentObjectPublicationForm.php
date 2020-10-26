@@ -16,7 +16,6 @@ use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Ajax\Component\StylesheetComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -25,6 +24,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -556,7 +556,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
-        foreach($cats as $cat)
+        foreach ($cats as $cat)
         {
             if ($this->is_course_admin || WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                     WeblcmsRights::ADD_RIGHT, $cat->get_id(), WeblcmsRights::TYPE_COURSE_CATEGORY,
@@ -683,15 +683,16 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $tool = $publication->get_tool();
         $link = $this->get_course_viewer_link($publication);
 
-        $parameters = array();
-        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application::PARAM_ACTION] = 'Stylesheet';
-        $parameters[StylesheetComponent::PARAM_THEME] = $this->getThemePathBuilder()->getTheme();
-        $parameters[StylesheetComponent::PARAM_MODIFIED] = time();
-        $redirect = new Redirect($parameters);
+        $pathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(PathBuilder::class);
+        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
 
         $body = '<!DOCTYPE html><html lang="en"><head>';
-        $body .= '<link rel="stylesheet" type="text/css" href="' . $redirect->getUrl() . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.bootstrap.min.css' .
+            '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.jquery.min.css' . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.min.css' . '" />';
+        $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.common.' .
+            $this->getThemePathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
@@ -736,8 +737,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self::TYPE_FILE)
             {
-                $object =
-                    \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
 
                 if ($object->is_image())
                 {
