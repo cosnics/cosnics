@@ -62,6 +62,7 @@ class ViewerComponent extends Manager implements TableSupport
                     new StaticConditionVariable(0)
                 )
             )->current();
+
             $group = $this->group;
 
             if (!$this->get_user()->is_platform_admin())
@@ -246,7 +247,7 @@ class ViewerComponent extends Manager implements TableSupport
                 User::class, new DataClassRetrievesParameters($condition)
             );
 
-            foreach($users as $user)
+            foreach ($users as $user)
             {
                 $userconditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),

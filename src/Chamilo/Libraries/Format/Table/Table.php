@@ -229,12 +229,9 @@ abstract class Table
 
         $tableData = array();
 
-        if ($resultSet instanceof ArrayIterator || is_array($resultSet))
+        foreach ($resultSet as $result)
         {
-            foreach ($resultSet as $result)
-            {
-                $this->handle_result($tableData, $result);
-            }
+            $this->handle_result($tableData, $result);
         }
 
         return $tableData;
