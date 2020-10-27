@@ -20,29 +20,17 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    // Properties
     const PROPERTY_DISPLAY_NAME = 'display_name';
-
     const PROPERTY_DISPLAY_ORDER = 'display_order';
-
     const PROPERTY_FIXED = 'fixed';
-
     const PROPERTY_NAME = 'name';
-
     const PROPERTY_SCHEMA_ID = 'schema_id';
-
     const PROPERTY_VALUE_LIMIT = 'value_limit';
-
     const PROPERTY_VALUE_TYPE = 'value_type';
 
-    // Value types
-
     const VALUE_TYPE_FREE = 1;
-
     const VALUE_TYPE_VOCABULARY_BOTH = 4;
-
     const VALUE_TYPE_VOCABULARY_PREDEFINED = 2;
-
     const VALUE_TYPE_VOCABULARY_USER = 3;
 
     /**
@@ -58,12 +46,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     private $schema;
 
     /**
-     * **************************************************************************************************************
-     * Extended functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Constructor
      *
      * @param array $default_properties
@@ -74,6 +56,12 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
+
+    /**
+     * **************************************************************************************************************
+     * Extended functionality *
+     * **************************************************************************************************************
+     */
 
     public function getGlyph()
     {
@@ -109,12 +97,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Get the default properties
      *
      * @param array $extended_property_names
@@ -135,6 +117,12 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     }
 
     /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the dependencies for this dataclass
      *
      * @return string[string]
@@ -149,11 +137,12 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
                     new PropertyConditionVariable(
                         EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE
                     ), new StaticConditionVariable(static::class)
-                ), new EqualityCondition(
-                new PropertyConditionVariable(
-                    EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID
-                ), new StaticConditionVariable($this->get_id())
-            )
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID
+                    ), new StaticConditionVariable($this->get_id())
+                )
             )
         );
 
@@ -163,10 +152,11 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
                     new PropertyConditionVariable(
                         RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE
                     ), new StaticConditionVariable(static::class)
-                ), new EqualityCondition(
-                new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
-                new StaticConditionVariable($this->get_id())
-            )
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
             )
         );
 
@@ -176,10 +166,11 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
                     new PropertyConditionVariable(
                         RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE
                     ), new StaticConditionVariable(static::class)
-                ), new EqualityCondition(
-                new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
-                new StaticConditionVariable($this->get_id())
-            )
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
             )
         );
 
@@ -295,6 +286,14 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function get_schema_id()
     {
         return $this->get_default_property(self::PROPERTY_SCHEMA_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_element';
     }
 
     /**

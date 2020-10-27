@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  *
  * @deprecated Use \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight now
  */
-class RightsLocationEntityRight extends DataClass
+abstract class RightsLocationEntityRight extends DataClass
 {
     // Keep track of the context so we know which table to call
     private $context;

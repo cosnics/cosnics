@@ -492,19 +492,8 @@ abstract class DataClass
      * Returns the table name for this dataclass
      *
      * @return string
-     * @throws \ReflectionException
      */
-    public static function get_table_name()
-    {
-        if (!isset(self::$tableNames[static::class]))
-        {
-            $data_manager = static::package() . '\Storage\DataManager';
-            self::$tableNames[static::class] = $data_manager::PREFIX .
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), true);
-        }
-
-        return self::$tableNames[static::class];
-    }
+    abstract public static function get_table_name();
 
     /**
      * Checks wether the object has errors

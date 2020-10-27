@@ -173,4 +173,13 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     {
         return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
     }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'portfolio_rights_location';
+    }
 }

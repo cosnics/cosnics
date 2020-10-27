@@ -43,4 +43,12 @@ class PeerAssessmentGroup extends SimpleTracker
         $this->set_name($parameters[self::PROPERTY_NAME]);
         $this->set_description($parameters[self::PROPERTY_DESCRIPTION]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_group';
+    }
 }

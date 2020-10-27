@@ -15,13 +15,17 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
 {
     const PROPERTY_ASSESSMENT_TYPE = 'assessment_type';
     const PROPERTY_SCALE = 'scale';
-    const TYPE_SCORES = 1;
-    const TYPE_FEEDBACK = 2;
-    const TYPE_BOTH = 3;
 
-    public static function get_type_name()
+    const TYPE_BOTH = 3;
+    const TYPE_FEEDBACK = 2;
+    const TYPE_SCORES = 1;
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        return 'repository_peer_assessment';
     }
 
     public static function get_additional_property_names()
@@ -39,9 +43,26 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
         return $this->get_additional_property(self::PROPERTY_ASSESSMENT_TYPE);
     }
 
-    public function set_assessment_type($assessment_type)
+    public function get_factor_title()
     {
-        return $this->set_additional_property(self::PROPERTY_ASSESSMENT_TYPE, $assessment_type);
+        $scale = $this->get_scale();
+
+        if ($scale == 'van_achter')
+        {
+            return Translation::get('Addition');
+        }
+
+        return Translation::get('Factor');
+    }
+
+    public function get_result_processor()
+    {
+        // return a new instance of the result processor class
+        $classname = self::package() . '\ResultProcessors\\' .
+            (string) StringUtilities::getInstance()->createString($this->get_scale())->upperCamelize() .
+            'ResultProcessor';
+
+        return new $classname();
     }
 
     public function get_scale()
@@ -49,34 +70,23 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
         return $this->get_additional_property(self::PROPERTY_SCALE);
     }
 
-    public function set_scale($scale)
-    {
-        return $this->set_additional_property(self::PROPERTY_SCALE, $scale);
-    }
-
     public function get_scale_types()
     {
         return array('dochy', 'van_achter');
     }
 
-    public function get_result_processor()
+    public static function get_type_name()
     {
-        // return a new instance of the result processor class
-        $classname = self::package() . '\ResultProcessors\\' .
-             (string) StringUtilities::getInstance()->createString($this->get_scale())->upperCamelize() .
-             'ResultProcessor';
-        return new $classname();
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
-    public function get_factor_title()
+    public function set_assessment_type($assessment_type)
     {
-        $scale = $this->get_scale();
-        
-        if ($scale == 'van_achter')
-        {
-            return Translation::get('Addition');
-        }
-        
-        return Translation::get('Factor');
+        return $this->set_additional_property(self::PROPERTY_ASSESSMENT_TYPE, $assessment_type);
+    }
+
+    public function set_scale($scale)
+    {
+        return $this->set_additional_property(self::PROPERTY_SCALE, $scale);
     }
 }

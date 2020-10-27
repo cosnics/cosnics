@@ -276,4 +276,12 @@ class Attributes extends DataClass
     {
         return $this->get_date();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_publication_attributes';
+    }
 }

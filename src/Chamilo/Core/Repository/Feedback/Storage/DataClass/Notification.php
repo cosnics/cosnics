@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @package repository\content_object\portfolio\feedback
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Notification extends DataClass
+abstract class Notification extends DataClass
 {
     
     // Properties

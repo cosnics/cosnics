@@ -27,47 +27,27 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class File extends ContentObject implements Versionable, Includeable, FileStorageSupport
 {
 
-    // Properties
     const PROPERTY_EXTENSION = 'extension';
-
     const PROPERTY_FILENAME = 'filename';
-
     const PROPERTY_FILESIZE = 'filesize';
-
     const PROPERTY_HASH = 'hash';
-
     const PROPERTY_PATH = 'path';
-
     const PROPERTY_SHOW_INLINE = 'show_inline';
-
     const PROPERTY_STORAGE_PATH = 'storage_path';
 
-    // Filetype groups
 
     const TYPE_APPLICATION = 11;
-
     const TYPE_ARCHIVE = 10;
-
     const TYPE_AUDIO = 1;
-
     const TYPE_CODE = 13;
-
     const TYPE_DATABASE = 8;
-
     const TYPE_FLASH = 12;
-
     const TYPE_IMAGE = 3;
-
     const TYPE_PDF = 4;
-
     const TYPE_PRESENTATION = 7;
-
     const TYPE_SPREADSHEET = 5;
-
     const TYPE_TEXT = 6;
-
     const TYPE_VIDEO = 2;
-
     const TYPE_WEB = 9;
 
     private $contents;
@@ -95,6 +75,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * @var boolean
      */
     private $save_as_new_version = false;
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_file';
+    }
 
     /**
      * (non-PHPdoc)

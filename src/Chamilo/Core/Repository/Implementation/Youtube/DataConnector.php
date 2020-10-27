@@ -21,12 +21,6 @@ use DateInterval;
 use Exception;
 use Google_Http_MediaFileUpload;
 use Google_Service_YouTube;
-use Google_Service_YouTube_Playlist;
-use Google_Service_YouTube_PlaylistItem;
-use Google_Service_YouTube_PlaylistItemSnippet;
-use Google_Service_YouTube_PlaylistSnippet;
-use Google_Service_YouTube_PlaylistStatus;
-use Google_Service_YouTube_ResourceId;
 use Google_Service_YouTube_Video;
 use Google_Service_YouTube_VideoSnippet;
 use Google_Service_YouTube_VideoStatus;
@@ -86,38 +80,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             return $searchResponse['pageInfo']['totalResults'];
         }
-    }
-
-    public function create_playlist(PlayList $playlist/*, $video*/)
-    {
-        $playlistSnippet = new Google_Service_YouTube_PlaylistSnippet();
-        $playlistSnippet->setTitle($playlist->get_title() . $playlist->get_date());
-        $playlistSnippet->setDescription($playlist->get_description());
-
-        $playlistStatus = new Google_Service_YouTube_PlaylistStatus();
-        $playlistStatus->setPrivacyStatus('private');
-
-        $youTubePlaylist = new Google_Service_YouTube_Playlist();
-        $youTubePlaylist->setSnippet($playlistSnippet);
-        $youTubePlaylist->setStatus($playlistStatus);
-
-        $playlistResponse = $this->youtube->playlists->insert('snippet,status', $youTubePlaylist);
-        $playlistId = $playlistResponse['id'];
-
-        $resourceId = new Google_Service_YouTube_ResourceId();
-        $resourceId->setVideoId('SZj6rAYkYOg');
-        $resourceId->setKind('youtube#video');
-
-        $playlistItemSnippet = new Google_Service_YouTube_PlaylistItemSnippet();
-        $playlistItemSnippet->setTitle('First video in the test playlist');
-        $playlistItemSnippet->setPlaylistId($playlistId);
-        $playlistItemSnippet->setResourceId($resourceId);
-
-        $playlistItem = new Google_Service_YouTube_PlaylistItem();
-        $playlistItem->setSnippet($playlistItemSnippet);
-        $playlistItemResponse = $this->youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
-
-        return $playlistItemResponse;
     }
 
     public function delete_external_repository_object($id)

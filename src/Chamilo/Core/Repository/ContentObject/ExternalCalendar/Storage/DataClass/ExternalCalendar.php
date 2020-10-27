@@ -33,43 +33,21 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     const PARAM_EVENT_ID = 'event_id';
 
     const PATH_TYPE_LOCAL = 1;
-
     const PATH_TYPE_REMOTE = 2;
 
     const PROPERTY_FILENAME = 'filename';
-
     const PROPERTY_FILESIZE = 'filesize';
-
-    // Path types
-
     const PROPERTY_HASH = 'hash';
-
     const PROPERTY_PATH = 'path';
-
-    // Cache limit
-
     const PROPERTY_PATH_TYPE = 'path_type';
-
-    // Class name
-
-    // Recurrence options
-
     const PROPERTY_STORAGE_PATH = 'storage_path';
 
     const REPEAT_END = 'end';
-
     const REPEAT_START = 'start';
-
     const REPEAT_TYPE_DAY = 'DAILY';
-
     const REPEAT_TYPE_MONTH = 'MONTHLY';
-
     const REPEAT_TYPE_NONE = 'NONE';
-
     const REPEAT_TYPE_WEEK = 'WEEKLY';
-
-    // Parameters
-
     const REPEAT_TYPE_YEAR = 'YEARLY';
 
     /**
@@ -346,6 +324,14 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     public function get_storage_path()
     {
         return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_external_calendar';
     }
 
     /**

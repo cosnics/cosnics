@@ -16,7 +16,7 @@ use Exception;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsLocation extends NestedSet
+abstract class RightsLocation extends NestedSet
 {
     const PROPERTY_IDENTIFIER = 'identifier';
     const PROPERTY_INHERIT = 'inherit';

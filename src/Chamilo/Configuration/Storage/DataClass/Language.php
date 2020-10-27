@@ -181,4 +181,12 @@ class Language extends DataClass
     {
         return $this->get_available();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'configuration_language';
+    }
 }

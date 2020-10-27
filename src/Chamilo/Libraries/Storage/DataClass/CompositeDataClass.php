@@ -10,7 +10,6 @@ namespace Chamilo\Libraries\Storage\DataClass;
 abstract class CompositeDataClass extends DataClass
 {
     const PROPERTIES_ADDITIONAL = 'additional_properties';
-
     const PROPERTY_TYPE = 'type';
 
     /**

@@ -23,4 +23,12 @@ class CourseRequest extends CommonRequest
     {
         return $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_request';
+    }
 }

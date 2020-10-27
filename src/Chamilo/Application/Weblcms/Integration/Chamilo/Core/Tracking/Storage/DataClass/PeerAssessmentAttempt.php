@@ -63,4 +63,12 @@ class PeerAssessmentAttempt extends SimpleTracker
         $this->set_hidden($parameters[self::PROPERTY_HIDDEN]);
         $this->set_weight($parameters[self::PROPERTY_WEIGHT]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_attempt';
+    }
 }

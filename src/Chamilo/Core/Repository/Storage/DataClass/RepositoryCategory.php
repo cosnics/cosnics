@@ -380,4 +380,13 @@ class RepositoryCategory extends PlatformCategory
             return $parent_ids;
         }
     }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_repository_category';
+    }
 }

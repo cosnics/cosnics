@@ -82,4 +82,12 @@ class PeerAssessmentPublicationSetting extends SimpleTracker
         $this->set_anonymous_feedback($parameters[self::PROPERTY_ANONYMOUS_FEEDBACK]);
         $this->set_enable_user_results_export($parameters[self::PROPERTY_ENABLE_USER_RESULTS_EXPORT]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_publication_setting';
+    }
 }

@@ -14,9 +14,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  */
 class ComplexHotspotQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_WEIGHT = 'weight';
     const PROPERTY_RANDOM = 'random';
     const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    const PROPERTY_WEIGHT = 'weight';
 
     /**
      *
@@ -31,18 +31,15 @@ class ComplexHotspotQuestion extends ComplexContentObjectItem implements AnswerF
      *
      * @return int
      */
-    public function get_weight()
+    public function get_default_question_weight()
     {
-        return $this->get_additional_property(self::PROPERTY_WEIGHT);
-    }
+        $reference = parent::get_ref_object();
+        if ($reference)
+        {
+            return $reference->get_default_weight();
+        }
 
-    /**
-     *
-     * @param int $value
-     */
-    public function set_weight($value)
-    {
-        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
+        return 1;
     }
 
     /**
@@ -56,15 +53,6 @@ class ComplexHotspotQuestion extends ComplexContentObjectItem implements AnswerF
 
     /**
      *
-     * @param boolean $value
-     */
-    public function set_random($value)
-    {
-        $this->set_additional_property(self::PROPERTY_RANDOM, $value);
-    }
-
-    /**
-     *
      * @return int
      */
     public function get_show_answer_feedback()
@@ -73,28 +61,20 @@ class ComplexHotspotQuestion extends ComplexContentObjectItem implements AnswerF
     }
 
     /**
-     *
-     * @param int $value
+     * @return string
      */
-    public function set_show_answer_feedback($value)
+    public static function get_table_name()
     {
-        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        return 'repository_complex_hotspot_question';
     }
-    
-    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
-    // complex question object.
+
     /**
      *
      * @return int
      */
-    public function get_default_question_weight()
+    public function get_weight()
     {
-        $reference = parent::get_ref_object();
-        if ($reference)
-        {
-            return $reference->get_default_weight();
-        }
-        return 1;
+        return $this->get_additional_property(self::PROPERTY_WEIGHT);
     }
 
     /**
@@ -107,5 +87,35 @@ class ComplexHotspotQuestion extends ComplexContentObjectItem implements AnswerF
         // complex question object.
         parent::set_parent($parent);
         $this->set_weight($this->get_default_question_weight());
+    }
+
+    /**
+     *
+     * @param boolean $value
+     */
+    public function set_random($value)
+    {
+        $this->set_additional_property(self::PROPERTY_RANDOM, $value);
+    }
+
+    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
+    // complex question object.
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_show_answer_feedback($value)
+    {
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+    }
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_weight($value)
+    {
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 }

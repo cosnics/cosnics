@@ -148,4 +148,12 @@ class Availability extends DataClass
     {
         $this->set_default_property(self::PROPERTY_COLOUR, $colour);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'calendar_availability';
+    }
 }

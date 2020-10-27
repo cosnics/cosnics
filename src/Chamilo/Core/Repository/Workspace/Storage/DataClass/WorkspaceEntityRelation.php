@@ -125,4 +125,12 @@ class WorkspaceEntityRelation extends DataClass
     {
         $this->set_default_property(self::PROPERTY_RIGHTS, $rights);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_workspace_entity_relation';
+    }
 }

@@ -14,10 +14,10 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class WorkspaceUserFavourite extends DataClass
 {
-    
+
     // Properties
-    const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_USER_ID = 'user_id';
+    const PROPERTY_WORKSPACE_ID = 'workspace_id';
 
     /**
      *
@@ -35,35 +35,11 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return string
      */
-    public function get_workspace_id()
+    public static function get_table_name()
     {
-        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
-     */
-    public function get_workspace()
-    {
-        if (! isset($this->workspace))
-        {
-            $this->workspace = DataManager::retrieve_by_id(Workspace::class, $this->get_workspace_id());
-        }
-        
-        return $this->workspace;
-    }
-
-    /**
-     *
-     * @param integer $workspace_id
-     */
-    public function set_workspace_id($workspace_id)
-    {
-        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
+        return 'repository_workspace_user_favourite';
     }
 
     /**
@@ -77,10 +53,42 @@ class WorkspaceUserFavourite extends DataClass
 
     /**
      *
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
+     */
+    public function get_workspace()
+    {
+        if (!isset($this->workspace))
+        {
+            $this->workspace = DataManager::retrieve_by_id(Workspace::class, $this->get_workspace_id());
+        }
+
+        return $this->workspace;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_workspace_id()
+    {
+        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
+    }
+
+    /**
+     *
      * @param integer $user_id
      */
     public function set_user_id($user_id)
     {
         $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+    }
+
+    /**
+     *
+     * @param integer $workspace_id
+     */
+    public function set_workspace_id($workspace_id)
+    {
+        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 }

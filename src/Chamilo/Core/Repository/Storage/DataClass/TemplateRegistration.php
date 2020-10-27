@@ -215,4 +215,12 @@ class TemplateRegistration extends DataClass
             return false;
         }
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_template_registration';
+    }
 }

@@ -147,4 +147,12 @@ class ProviderLink extends DataClass
         
         return $this->providerRegistration;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_provider_link';
+    }
 }

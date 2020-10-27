@@ -126,4 +126,12 @@ class LoginLogout extends SimpleTracker
         return parent::get_default_property_names(
             array(self::PROPERTY_TYPE, self::PROPERTY_USER_ID, self::PROPERTY_DATE, self::PROPERTY_IP));
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_user_login_logout';
+    }
 }

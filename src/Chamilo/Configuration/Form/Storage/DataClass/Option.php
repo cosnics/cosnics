@@ -12,49 +12,19 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Option extends DataClass
 {
-    const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
-    const PROPERTY_NAME = 'name';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
-    public function get_dynamic_form_element_id()
-    {
-        return $this->get_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
-    }
+    const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
 
-    public function set_dynamic_form_element_id($dynamic_form_element_id)
-    {
-        $this->set_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, $dynamic_form_element_id);
-    }
+    const PROPERTY_NAME = 'name';
 
-    public function get_name()
+    public function create()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
-    }
+        $this->set_display_order(
+            DataManager::select_next_dynamic_form_element_option_order($this->get_dynamic_form_element_id())
+        );
 
-    public function set_name($name)
-    {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
-    }
-
-    public function get_display_order()
-    {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
-    }
-
-    public function set_display_order($display_order)
-    {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
-    }
-
-    /**
-     * Get the default properties of all user course categories.
-     * 
-     * @return array The property names.
-     */
-    public static function get_default_property_names($extended_property_names = array())
-    {
-        return parent::get_default_property_names(
-            array(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, self::PROPERTY_NAME, self::PROPERTY_DISPLAY_ORDER));
+        return parent::create();
     }
 
     /**
@@ -65,10 +35,53 @@ class Option extends DataClass
         return DataManager::getInstance();
     }
 
-    public function create()
+    /**
+     * Get the default properties of all user course categories.
+     *
+     * @return array The property names.
+     */
+    public static function get_default_property_names($extended_property_names = array())
     {
-        $this->set_display_order(
-            DataManager::select_next_dynamic_form_element_option_order($this->get_dynamic_form_element_id()));
-        return parent::create();
+        return parent::get_default_property_names(
+            array(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, self::PROPERTY_NAME, self::PROPERTY_DISPLAY_ORDER)
+        );
+    }
+
+    public function get_display_order()
+    {
+        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    public function get_dynamic_form_element_id()
+    {
+        return $this->get_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
+    }
+
+    public function get_name()
+    {
+        return $this->get_default_property(self::PROPERTY_NAME);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'configuration_form_option';
+    }
+
+    public function set_display_order($display_order)
+    {
+        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+    }
+
+    public function set_dynamic_form_element_id($dynamic_form_element_id)
+    {
+        $this->set_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, $dynamic_form_element_id);
+    }
+
+    public function set_name($name)
+    {
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 }

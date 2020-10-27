@@ -199,4 +199,13 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
             return $children_ids;
         }
     }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_category';
+    }
 }

@@ -186,4 +186,12 @@ class Workspace extends DataClass implements WorkspaceInterface
     {
         return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_workspace';
+    }
 }

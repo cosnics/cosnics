@@ -48,11 +48,13 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         if (!isset($this->question_count))
         {
             $this->question_count = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassCountParameters(new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
-                ))
+                ComplexContentObjectItem::class, new DataClassCountParameters(
+                    new EqualityCondition(
+                        new PropertyConditionVariable(
+                            ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                        ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                    )
+                )
             );
         }
 
@@ -153,6 +155,14 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     public function get_table()
     {
         return self::get_type_name();
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_assessment';
     }
 
     public static function get_type_name()

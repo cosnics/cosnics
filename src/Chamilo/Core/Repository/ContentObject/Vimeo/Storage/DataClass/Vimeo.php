@@ -20,8 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Vimeo extends ContentObject implements Versionable, Includeable
 {
-    const VIMEO_PLAYER_URI = 'http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;
-    show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=ffffff&amp;fullscreen=1"';
+    const VIMEO_PLAYER_URI = 'http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=ffffff&amp;fullscreen=1"';
 
     public static function get_type_name()
     {
@@ -32,7 +31,8 @@ class Vimeo extends ContentObject implements Versionable, Includeable
     {
         $sync_data = $this->get_synchronization_data();
 
-        if(empty($sync_data)) {
+        if (empty($sync_data))
+        {
             return false;
         }
 
@@ -44,15 +44,17 @@ class Vimeo extends ContentObject implements Versionable, Includeable
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
-            new StaticConditionVariable(Manager::get_namespace('Vimeo')));
+            new StaticConditionVariable(Manager::get_namespace('Vimeo'))
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_ENABLED),
-            new StaticConditionVariable(1));
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_ENABLED), new StaticConditionVariable(1)
+        );
         $condition = new AndCondition($conditions);
 
         $external_repositories = DataManager::retrieves(
-            Instance::class,
-            new DataClassRetrievesParameters($condition));
+            Instance::class, new DataClassRetrievesParameters($condition)
+        );
+
         return $external_repositories->count() == 1;
     }
 }

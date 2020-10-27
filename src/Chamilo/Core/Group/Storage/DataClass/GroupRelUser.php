@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @package group.lib
  */
+
 /**
  *
  * @author Hans de Bisschop
@@ -22,24 +23,29 @@ class GroupRelUser extends DataClass
     const PROPERTY_GROUP_ID = 'group_id';
     const PROPERTY_USER_ID = 'user_id';
 
-    public function get_group_id()
+    public function delete()
     {
-        return $this->get_default_property(self::PROPERTY_GROUP_ID);
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($this->get_group_id())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($this->get_user_id())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return DataManager::deletes(GroupRelUser::class, $condition);
     }
 
-    public function set_group_id($group_id)
+    /**
+     * inherited
+     */
+    public function get_data_manager()
     {
-        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
-    }
-
-    public function get_user_id()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    public function set_user_id($user_id)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        return DataManager::getInstance();
     }
 
     /**
@@ -52,26 +58,31 @@ class GroupRelUser extends DataClass
         return parent::get_default_property_names(array(self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID));
     }
 
-    /**
-     * inherited
-     */
-    public function get_data_manager()
+    public function get_group_id()
     {
-        return DataManager::getInstance();
+        return $this->get_default_property(self::PROPERTY_GROUP_ID);
     }
 
-    public function delete()
+    /**
+     * @return string
+     */
+    public static function get_table_name()
     {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($this->get_group_id()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+        return 'group_group_rel_user';
+    }
 
-        $condition = new AndCondition($conditions);
+    public function get_user_id()
+    {
+        return $this->get_default_property(self::PROPERTY_USER_ID);
+    }
 
-        return DataManager::deletes(GroupRelUser::class, $condition);
+    public function set_group_id($group_id)
+    {
+        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
+    }
+
+    public function set_user_id($user_id)
+    {
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 }

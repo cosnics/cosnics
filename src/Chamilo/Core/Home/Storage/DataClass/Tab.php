@@ -16,15 +16,15 @@ class Tab extends Element
     public function canBeDeleted()
     {
         $blocks = DataManager::retrieveTabBlocks($this);
-        
-        foreach($blocks as $block)
+
+        foreach ($blocks as $block)
         {
             if ($block->getContext() == 'Chamilo\Core\Admin' || $block->getContext() == 'Chamilo\Core\User')
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

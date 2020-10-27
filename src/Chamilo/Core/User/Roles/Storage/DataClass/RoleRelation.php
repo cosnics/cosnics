@@ -71,4 +71,12 @@ class RoleRelation extends DataClass
         
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'user_role_relation';
+    }
 }

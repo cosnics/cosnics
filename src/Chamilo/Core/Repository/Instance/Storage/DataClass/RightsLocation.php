@@ -14,4 +14,13 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     {
         return DataManager::getInstance();
     }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_instance_rights_location';
+    }
 }

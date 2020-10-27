@@ -106,4 +106,12 @@ class LpiAttemptObjective extends SimpleTracker
     {
         $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_lpi_attempt_objective';
+    }
 }

@@ -79,47 +79,12 @@ class ContentObject extends CompositeDataClass
     const PROPERTY_STATE = 'state';
     const PROPERTY_TEMPLATE_REGISTRATION_ID = 'template_registration_id';
     const PROPERTY_TITLE = 'title';
-
-    /**
-     * Property name of this object
-     */
     const PROPERTY_TYPE = 'type';
 
-    /**
-     * A state constant for an autosaved object
-     *
-     * @var int
-     */
     const STATE_AUTOSAVE = 8;
-
-    /**
-     * A state constant for an object that has been backuped
-     *
-     * @var int
-     */
     const STATE_BACKUP = 16;
-
-    // Current states
-
-    /**
-     * A state constant for an inactive object
-     *
-     * @var int
-     */
     const STATE_INACTIVE = 1;
-
-    /**
-     * A state constant for a normal object
-     *
-     * @var int
-     */
     const STATE_NORMAL = 2;
-
-    /**
-     * A state constant for an object in the recycling bin
-     *
-     * @var int
-     */
     const STATE_RECYCLED = 4;
 
     /**
@@ -303,7 +268,9 @@ class ContentObject extends CompositeDataClass
             ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
         );
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, new DataClassCountParameters($condition));
+        return DataManager::count_complex_content_object_items(
+            ComplexContentObjectItem::class, new DataClassCountParameters($condition)
+        );
     }
 
     public function count_includers($only_version = false)
@@ -376,7 +343,9 @@ class ContentObject extends CompositeDataClass
 
         $condition = new OrCondition($conditions);
 
-        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class, new DataClassCountParameters($condition));
+        return DataManager::count_complex_content_object_items(
+            ComplexContentObjectItem::class, new DataClassCountParameters($condition)
+        );
     }
 
     public function count_publications()
@@ -449,7 +418,7 @@ class ContentObject extends CompositeDataClass
                     $condition = new AndCondition($conditions);
                     $parameters = new DataClassRetrievesParameters($condition);
                     $objects = DataManager::retrieve_content_objects($content_object::class_name(), $parameters);
-                    foreach($objects as $object)
+                    foreach ($objects as $object)
                     {
                         $object->set_current(ContentObject::CURRENT_OLD);
                         $object->update(false);
@@ -567,7 +536,7 @@ class ContentObject extends CompositeDataClass
             );
             $assisting_objects = DataManager::retrieve_active_content_objects($type, $condition);
 
-            foreach($assisting_objects as $assisting_object)
+            foreach ($assisting_objects as $assisting_object)
             {
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
@@ -587,7 +556,7 @@ class ContentObject extends CompositeDataClass
                 $items = DataManager::retrieve_complex_content_object_items(
                     ComplexContentObjectItem::class, $condition
                 );
-                foreach($items as $item)
+                foreach ($items as $item)
                 {
                     if (!$item->delete())
                     {
@@ -655,7 +624,7 @@ class ContentObject extends CompositeDataClass
         $condition = new OrCondition($conditions);
 
         $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
-        foreach($items as $item)
+        foreach ($items as $item)
         {
             if (!$item->delete())
             {
@@ -1039,8 +1008,7 @@ class ContentObject extends CompositeDataClass
             $parameters = new DataClassRetrievesParameters(
                 $condition, $count, $offset, $order_by, new Joins(array($join))
             );
-            $this->attachments[$type] =
-                DataManager::retrieve_content_objects(ContentObject::class, $parameters);
+            $this->attachments[$type] = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
 
         return $this->attachments[$type];
@@ -1362,8 +1330,6 @@ class ContentObject extends CompositeDataClass
         return $this->owner;
     }
 
-    // create a version
-
     public function get_owner_fullname()
     {
         $owner = $this->get_owner();
@@ -1375,6 +1341,8 @@ class ContentObject extends CompositeDataClass
 
         return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::context());
     }
+
+    // create a version
 
     /**
      * Returns the ID of this object's owner.
@@ -1471,8 +1439,6 @@ class ContentObject extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_STATE);
     }
 
-    // XXX: Keep this around? Override? Make useful?
-
     /**
      *
      * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
@@ -1496,9 +1462,19 @@ class ContentObject extends CompositeDataClass
         return $this->synchronization_data;
     }
 
+    // XXX: Keep this around? Override? Make useful?
+
     public function set_synchronization_data($external_sync)
     {
         $this->synchronization_data = $external_sync;
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_content_object';
     }
 
     public function get_template_registration()

@@ -18,6 +18,14 @@ class HotspotQuestion extends ContentObject implements Versionable
     const PROPERTY_ANSWERS = 'answers';
     const PROPERTY_IMAGE = 'image';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_hotspot_question';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

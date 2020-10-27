@@ -141,4 +141,12 @@ class PeerAssessmentAttemptStatus extends SimpleTracker
     {
         $this->set_default_property(self::PROPERTY_PROGRESS, $progress);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_attempt_status';
+    }
 }

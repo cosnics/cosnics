@@ -63,4 +63,12 @@ class UserViewRelContentObject extends DataClass
     {
         $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_TEMPLATE_ID, $content_object_template_id);
     }
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_user_view_rel_content_object';
+    }
+
 }

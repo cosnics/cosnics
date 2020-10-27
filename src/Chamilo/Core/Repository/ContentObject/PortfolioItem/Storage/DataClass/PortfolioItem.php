@@ -22,11 +22,6 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
      */
     private $reference_object;
 
-    public static function get_type_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public static function get_additional_property_names()
     {
         return array(self::PROPERTY_REFERENCE);
@@ -37,19 +32,33 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
         return $this->get_additional_property(self::PROPERTY_REFERENCE);
     }
 
+    public function get_reference_object()
+    {
+        if (!$this->reference_object instanceof Portfolio)
+        {
+            $this->reference_object = DataManager::retrieve_by_id(
+                ContentObject::class, $this->get_reference()
+            );
+        }
+
+        return $this->reference_object;
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_portfolio_item';
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+    }
+
     public function set_reference($reference)
     {
         $this->set_additional_property(self::PROPERTY_REFERENCE, $reference);
-    }
-
-    public function get_reference_object()
-    {
-        if (! $this->reference_object instanceof Portfolio)
-        {
-            $this->reference_object = DataManager::retrieve_by_id(
-                ContentObject::class,
-                $this->get_reference());
-        }
-        return $this->reference_object;
     }
 }

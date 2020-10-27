@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FeedbackAttachment extends DataClass
+abstract class FeedbackAttachment extends DataClass
 {
     const PROPERTY_FEEDBACK_ID = 'feedback_id';
     const PROPERTY_ATTACHMENT_ID = 'attachment_id';

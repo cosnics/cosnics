@@ -19,19 +19,49 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class AssessmentAttempt extends AbstractAttempt
 {
-    const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_ASSESSMENT_ID = 'assessment_id';
+    const PROPERTY_COURSE_ID = 'course_id';
 
     /**
      *
-     * @param string[] $extended_property_names
-     * @return string[]
+     * @return int
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public function get_assessment_id()
     {
-        $extended_property_names[] = self::PROPERTY_COURSE_ID;
-        $extended_property_names[] = self::PROPERTY_ASSESSMENT_ID;
-        return parent::get_default_property_names($extended_property_names);
+        return $this->get_default_property(self::PROPERTY_ASSESSMENT_ID);
+    }
+
+    public function get_average_score($publication, $user_id = null)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
+            new StaticConditionVariable($publication->get_id())
+        );
+
+        if ($user_id)
+        {
+            $conditions = array();
+            $conditions[] = $condition;
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
+                new StaticConditionVariable($user_id)
+            );
+            $condition = new AndCondition($conditions);
+        }
+
+        $trackers = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
+        $num = $trackers->count();
+
+        $total_score = 0;
+
+        foreach ($trackers as $tracker)
+        {
+            $total_score += $tracker->get_total_score();
+        }
+
+        $total_score = round($total_score / $num, 2);
+
+        return $total_score;
     }
 
     /**
@@ -45,20 +75,48 @@ class AssessmentAttempt extends AbstractAttempt
 
     /**
      *
-     * @param int $course_id
+     * @param string[] $extended_property_names
+     *
+     * @return string[]
      */
-    public function set_course_id($course_id)
+    public static function get_default_property_names($extended_property_names = array())
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $extended_property_names[] = self::PROPERTY_COURSE_ID;
+        $extended_property_names[] = self::PROPERTY_ASSESSMENT_ID;
+
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
-     *
-     * @return int
+     * @return string
      */
-    public function get_assessment_id()
+    public static function get_table_name()
     {
-        return $this->get_default_property(self::PROPERTY_ASSESSMENT_ID);
+        return 'tracking_weblcms_assessment_attempt';
+    }
+
+    // TODO: These two methods should NOT be here as they are not related to ONE assessment attempt, but a collection of
+    // attempts
+
+    public function get_times_taken($publication, $user_id = null)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
+            new StaticConditionVariable($publication->get_id())
+        );
+
+        if ($user_id)
+        {
+            $conditions = array();
+            $conditions[] = $condition;
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
+                new StaticConditionVariable($user_id)
+            );
+            $condition = new AndCondition($conditions);
+        }
+
+        return DataManager::count(self::class, new DataClassCountParameters($condition));
     }
 
     /**
@@ -69,55 +127,13 @@ class AssessmentAttempt extends AbstractAttempt
     {
         $this->set_default_property(self::PROPERTY_ASSESSMENT_ID, $assessment_id);
     }
-    
-    // TODO: These two methods should NOT be here as they are not related to ONE assessment attempt, but a collection of
-    // attempts
-    public function get_times_taken($publication, $user_id = null)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($publication->get_id()));
-        
-        if ($user_id)
-        {
-            $conditions = array();
-            $conditions[] = $condition;
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
-                new StaticConditionVariable($user_id));
-            $condition = new AndCondition($conditions);
-        }
-        
-        return DataManager::count(self::class, new DataClassCountParameters($condition));
-    }
 
-    public function get_average_score($publication, $user_id = null)
+    /**
+     *
+     * @param int $course_id
+     */
+    public function set_course_id($course_id)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($publication->get_id()));
-        
-        if ($user_id)
-        {
-            $conditions = array();
-            $conditions[] = $condition;
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
-                new StaticConditionVariable($user_id));
-            $condition = new AndCondition($conditions);
-        }
-        
-        $trackers = DataManager::retrieves(self::class, new DataClassRetrievesParameters($condition));
-        $num = $trackers->count();
-        
-        $total_score = 0;
-        
-        foreach($trackers as $tracker)
-        {
-            $total_score += $tracker->get_total_score();
-        }
-        
-        $total_score = round($total_score / $num, 2);
-        return $total_score;
+        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
     }
 }

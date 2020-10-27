@@ -123,4 +123,12 @@ class WorkspaceContentObjectRelation extends DataClass
     {
         $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_workspace_content_object_relation';
+    }
 }

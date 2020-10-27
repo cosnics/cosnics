@@ -475,4 +475,13 @@ class CourseGroup extends NestedTreeNode
 
         return false;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_group';
+    }
 }

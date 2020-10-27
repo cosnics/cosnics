@@ -31,6 +31,14 @@ class CourseUserCategory extends DataClass
     }
 
     /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_user_category';
+    }
+
+    /**
      * Returns the title of this course user category object
      *
      * @return string

@@ -42,40 +42,20 @@ use Exception;
  */
 class Course extends DataClass
 {
-    /**
-     * **************************************************************************************************************
-     * Table Properties *
-     * **************************************************************************************************************
-     */
+    const FOREIGN_PROPERTY_COURSE_TYPE = 'course_type';
+
+    const PROPERTY_CATEGORY_ID = 'category_id';
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
-    const PROPERTY_TITULAR_ID = 'titular_id';
-    const PROPERTY_VISUAL_CODE = 'visual_code';
-    const PROPERTY_SYSTEM_CODE = 'system_code';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_LAST_VISIT = 'last_visit';
-    const PROPERTY_LAST_EDIT = 'last_edit';
+    const PROPERTY_COURSE_TYPE_TITLE = 'course_type_title';
     const PROPERTY_CREATION_DATE = 'creation_date';
     const PROPERTY_EXPIRATION_DATE = 'expiration_date';
     const PROPERTY_LANGUAGE = 'language';
-    const PROPERTY_CATEGORY_ID = 'category_id';
-
-    /**
-     * **************************************************************************************************************
-     * Foreign properties *
-     * **************************************************************************************************************
-     */
-    const FOREIGN_PROPERTY_COURSE_TYPE = 'course_type';
-
-    /**
-     * **************************************************************************************************************
-     * Additional properties *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Property only used when joining with the course type table
-     */
-    const PROPERTY_COURSE_TYPE_TITLE = 'course_type_title';
+    const PROPERTY_LAST_EDIT = 'last_edit';
+    const PROPERTY_LAST_VISIT = 'last_visit';
+    const PROPERTY_SYSTEM_CODE = 'system_code';
+    const PROPERTY_TITLE = 'title';
+    const PROPERTY_TITULAR_ID = 'titular_id';
+    const PROPERTY_VISUAL_CODE = 'visual_code';
 
     /**
      * **************************************************************************************************************
@@ -125,6 +105,416 @@ class Course extends DataClass
      */
 
     /**
+     * Checks whether or not this object can change the given course management right
+     *
+     * @param int $right_id
+     *
+     * @return boolean
+     */
+    public function can_change_course_management_right($right_id)
+    {
+        $available_rights = $this->get_available_course_management_rights();
+        if (!in_array($right_id, $available_rights))
+        {
+            return false;
+        }
+
+        $course_type = $this->get_course_type();
+        if (!$course_type)
+        {
+            return true;
+        }
+
+        return !CourseManagementRights::getInstance()->is_right_locked_for_base_object($course_type, $right_id);
+    }
+
+    /**
+     * Returns whether or not a given course setting can be changed by this object
+     *
+     * @param mixed[string] CourseSetting
+     *
+     * @return boolean
+     */
+    public function can_change_course_setting($course_setting)
+    {
+        $course_type = $this->get_course_type();
+        if (!$course_type)
+        {
+            return true;
+        }
+
+        return !$course_type->is_course_setting_locked($course_setting);
+    }
+
+    /**
+     * Creates this course object
+     *
+     * @return boolean
+     */
+    public function create($automated_values = true, $create_in_batch = false)
+    {
+        if ($automated_values)
+        {
+            $now = time();
+            $this->set_last_visit($now);
+            $this->set_last_edit($now);
+            $this->set_creation_date($now);
+            $this->set_expiration_date($now);
+        }
+
+        if (!parent::create())
+        {
+            return false;
+        }
+
+        if (!$this->initialize_course_sections())
+        {
+            return false;
+        }
+
+        if (!$this->create_locations($create_in_batch))
+        {
+            return false;
+        }
+
+        if (!$this->create_root_course_group())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Creates a course setting relation for the given course setting object
+     *
+     * @param mixed[string] CourseSetting
+     * @param boolean $locked
+     *
+     * @return CourseRelCourseSetting
+     * @throws \Exception
+     *
+     */
+    public function create_course_setting_relation($course_setting, $locked)
+    {
+        $course_rel_setting = new CourseRelCourseSetting();
+        $course_rel_setting->set_course_setting_id($course_setting[CourseSetting::PROPERTY_ID]);
+        $course_rel_setting->set_course($this);
+
+        if (!$course_rel_setting->create())
+        {
+            throw new Exception(Translation::get('CouldNotCreateCourseRelCourseSetting'));
+        }
+
+        return $course_rel_setting;
+    }
+
+    /**
+     * Delegation function to create course settings from given values
+     *
+     * @param string[] $values
+     * @param boolean $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
+     *
+     * @return boolean
+     */
+    public function create_course_settings_from_values($values, $force = false)
+    {
+        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values(
+            $this, $values, CourseSettingsController::SETTING_ACTION_CREATE, $force
+        );
+    }
+
+    /**
+     * Creates the necessary locations for this dataclass Creates a location for the given course in the courses tree
+     * Creates a root location for the course subtree Set view right for everyone on root location Creates a location
+     * for each tool in the course subtree
+     *
+     * @param boolean $create_in_batch - Whether or not the left and right values should be calculated
+     *
+     * @return boolean
+     */
+    private function create_locations($create_in_batch = false)
+    {
+        // Create location in the course subtree
+        $parent_id = $this->get_parent_rights_location()->get_id();
+
+        if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
+            CourseManagementRights::TYPE_COURSE, $this->get_id(), $parent_id, 0, $create_in_batch, 0
+        ))
+        {
+            return false;
+        }
+
+        // Create course subtree root location
+        $course_subtree_root_location = CourseManagementRights::getInstance()->create_subtree_root_location(
+            $this->get_id(), CourseManagementRights::TREE_TYPE_COURSE, true
+        );
+
+        if (!$course_subtree_root_location)
+        {
+            return false;
+        }
+
+        $course_subtree_root_location_id = $course_subtree_root_location->get_id();
+
+        // Set view right for everyone on root location
+        if (!CourseManagementRights::getInstance()->invert_location_entity_right(
+            CourseManagementRights::VIEW_RIGHT, 0, 0,
+            CourseManagementRights::getInstance()->get_courses_subtree_root_id($this->get_id())
+        ))
+        {
+            return false;
+        }
+
+        // Create a location for each tool
+        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
+        foreach ($tools as $tool)
+        {
+            if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
+                CourseManagementRights::TYPE_COURSE_MODULE, $tool->get_id(), $course_subtree_root_location_id,
+                $this->get_id(), $create_in_batch
+            ))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Rights Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Creates a course group in the course with the same name as the course
+     *
+     * @return boolean
+     */
+    private function create_root_course_group()
+    {
+        $group = new CourseGroup();
+        $group->set_course_code($this->get_id());
+        $group->set_name($this->get_title());
+        $group->set_parent_id(0);
+
+        return $group->create();
+    }
+
+    /**
+     * Deletes the dependencies for this course
+     *
+     * @return boolean
+     */
+    protected function delete_dependencies()
+    {
+        parent::delete_dependencies();
+
+        $id = $this->get_id();
+
+        // Remove subtree location
+        $location = CourseManagementRights::getInstance()->get_courses_subtree_root($id);
+        if ($location)
+        {
+            if (!$location->delete())
+            {
+                return false;
+            }
+        }
+
+        // Remove location in root tree
+        $location = $this->get_rights_location();
+
+        if ($location)
+        {
+            if (!$location->delete())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the available rights for the course management
+     *
+     * @return int[string]
+     */
+    public function get_available_course_management_rights()
+    {
+        return CourseManagementRights::getInstance()->get_base_course_management_rights();
+    }
+
+    public function get_category()
+    {
+        if ($this->get_category_id())
+        {
+            return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                CourseCategory::class, $this->get_category_id()
+            );
+        }
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Course Settings Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * gets the category_id of this course object
+     *
+     * @return String $language
+     */
+    public function get_category_id()
+    {
+        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     * Retrieves the course admin groups for this course
+     *
+     * @return \group\Group[]
+     */
+    public function get_course_admin_groups()
+    {
+        if (!$this->course_admin_groups_cache)
+        {
+            $this->course_admin_groups_cache = DataManager::retrieve_groups_subscribed_as_teacher($this->get_id());
+        }
+
+        return $this->course_admin_groups_cache;
+    }
+
+    /**
+     * Retrieves the course admin users for this course
+     *
+     * @return \core\user\User[]
+     */
+    public function get_course_admin_users()
+    {
+        if (!$this->course_admin_users_cache)
+        {
+            $this->course_admin_users_cache = DataManager::retrieve_teachers_directly_subscribed_to_course(
+                $this->get_id()
+            );
+        }
+
+        return $this->course_admin_users_cache;
+    }
+
+    /**
+     * Gets the course groups of this course
+     *
+     * @return \application\weblcms\CourseGroup[]
+     */
+    public function get_course_groups($as_array = true)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        return DataManager::retrieves(
+            CourseGroup::class, new DataClassRetrievesParameters(
+                $condition, null, null, array(
+                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+                )
+            )
+        );
+    }
+
+    /**
+     * Retrieves course setting values for the given setting name and tool id
+     *
+     * @param string $setting_name
+     * @param int $tool_id
+     *
+     * @return string[]
+     */
+    public function get_course_setting($setting_name, $tool_id = 0)
+    {
+        return CourseSettingsController::getInstance()->get_course_setting($this, $setting_name, $tool_id);
+    }
+
+    /**
+     * Returns the course type of this course object (lazy loading)
+     *
+     * @return \application\weblcms\course_type\CourseType
+     */
+    public function get_course_type()
+    {
+        if ($this->get_course_type_id() == 0)
+        {
+            return null;
+        }
+
+        return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
+    }
+
+    /**
+     * Returns the course type id of this course object
+     *
+     * @return int
+     */
+    public function get_course_type_id()
+    {
+        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_ID);
+    }
+
+    /**
+     * Returns the title for the course type foreign object
+     *
+     * @return String
+     */
+    public function get_course_type_title()
+    {
+        $course_type_title = $this->get_optional_property(self::PROPERTY_COURSE_TYPE_TITLE);
+        if (!$course_type_title)
+        {
+            $course_type = $this->get_course_type();
+
+            return ($course_type ? $course_type->get_title() : Translation::get('NoCourseType'));
+        }
+
+        return $course_type_title;
+    }
+
+    /**
+     * Returns the creation date of this course object
+     *
+     * @return int
+     */
+    public function get_creation_date()
+    {
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Retrieves the default values for a given course setting
+     *
+     * @param string $setting_name
+     * @param int $tool_id
+     *
+     * @return string[]
+     */
+    public function get_default_course_setting($setting_name, $tool_id)
+    {
+        return CourseSettingsController::getInstance()->get_course_type_setting(
+            $this->get_course_type_id(), $setting_name, $tool_id
+        );
+    }
+
+    /**
      * Returns the default properties of this dataclass
      *
      * @return String[] - The property names.
@@ -147,90 +537,6 @@ class Course extends DataClass
     }
 
     /**
-     * Creates this course object
-     *
-     * @return boolean
-     */
-    public function create($automated_values = true, $create_in_batch = false)
-    {
-        if ($automated_values)
-        {
-            $now = time();
-            $this->set_last_visit($now);
-            $this->set_last_edit($now);
-            $this->set_creation_date($now);
-            $this->set_expiration_date($now);
-        }
-
-        if (! parent::create())
-        {
-            return false;
-        }
-
-        if (! $this->initialize_course_sections())
-        {
-            return false;
-        }
-
-        if (! $this->create_locations($create_in_batch))
-        {
-            return false;
-        }
-
-        if (! $this->create_root_course_group())
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Updates this course object If the name of the course changes, the name of the root chamilo course group needs to
-     * change
-     *
-     * @return boolean
-     */
-    public function update()
-    {
-        $course_group = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_course_group_root(
-            $this->get_id());
-
-        if ($course_group)
-        {
-            if ($course_group->get_name() != $this->get_title())
-            {
-                $course_group->set_name($this->get_title());
-                $course_group->update();
-            }
-        }
-
-        $old_course_type_id = $this->old_course_type_id;
-
-        if (! is_null($old_course_type_id))
-        {
-            $location = $this->get_rights_location();
-
-            if (! $location->move($this->get_parent_rights_location()->get_id()))
-            {
-                return false;
-            }
-        }
-
-        return parent::update();
-    }
-
-    /**
-     * Returns whether or not the course type has been changed for this course
-     *
-     * @return bool
-     */
-    public function isCourseTypeChanged()
-    {
-        return ! is_null($this->old_course_type_id) && $this->old_course_type_id != $this->get_course_type_id();
-    }
-
-    /**
      * Returns the dependencies for this dataclass
      *
      * @return string[string]
@@ -243,97 +549,119 @@ class Course extends DataClass
         return array(
             ContentObjectPublicationCategory::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class,
-                    ContentObjectPublicationCategory::PROPERTY_COURSE),
-                new StaticConditionVariable($id)),
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
+                ), new StaticConditionVariable($id)
+            ),
             ContentObjectPublication::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class,
-                    ContentObjectPublication::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+                ), new StaticConditionVariable($id)
+            ),
             CourseSection::class => new EqualityCondition(
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
+                new StaticConditionVariable($id)
+            ),
             CourseModuleLastAccess::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseModuleLastAccess::class,
-                    CourseModuleLastAccess::PROPERTY_COURSE_CODE),
-                new StaticConditionVariable($id)),
+                    CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_COURSE_CODE
+                ), new StaticConditionVariable($id)
+            ),
             CourseEntityRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class,
-                    CourseEntityRelation::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
+                    CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
+                ), new StaticConditionVariable($id)
+            ),
             CourseRequest::class => new EqualityCondition(
                 new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
+                new StaticConditionVariable($id)
+            ),
             CourseGroup::class => new EqualityCondition(
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
-                new StaticConditionVariable($id)),
+                new StaticConditionVariable($id)
+            ),
             CourseRelCourseSetting::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseRelCourseSetting::class,
-                    CourseRelCourseSetting::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
+                    CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_ID
+                ), new StaticConditionVariable($id)
+            ),
             CourseTypeUserCategoryRelCourse::class => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class,
-                    CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)));
-    }
-
-    /**
-     * Deletes the dependencies for this course
-     *
-     * @return boolean
-     */
-    protected function delete_dependencies()
-    {
-        parent::delete_dependencies();
-
-        $id = $this->get_id();
-
-        // Remove subtree location
-        $location = CourseManagementRights::getInstance()->get_courses_subtree_root($id);
-        if ($location)
-        {
-            if (! $location->delete())
-            {
-                return false;
-            }
-        }
-
-        // Remove location in root tree
-        $location = $this->get_rights_location();
-
-        if ($location)
-        {
-            if (! $location->delete())
-            {
-                return false;
-            }
-        }
-
-        return true;
+                    CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
+                ), new StaticConditionVariable($id)
+            )
+        );
     }
 
     /**
      * **************************************************************************************************************
-     * Rights Functionality *
+     * Delegation Functionality *
      * **************************************************************************************************************
      */
 
     /**
-     * Returns the rights location for this object
+     * Returns the expiration date of this course
      *
-     * @return RightsLocation
+     * @return int
      */
-    public function get_rights_location()
+    public function get_expiration_date()
     {
-        return CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            CourseManagementRights::TYPE_COURSE,
-            $this->get_id(),
-            0);
+        return $this->get_default_property(self::PROPERTY_EXPIRATION_DATE);
+    }
+
+    public function get_fully_qualified_name($include_self = true)
+    {
+        $names = array();
+
+        if ($include_self)
+        {
+            if ($this->get_visual_code())
+            {
+                $names[] = $this->get_title() . ' (' . $this->get_visual_code() . ')';
+            }
+            else
+            {
+                $names[] = $this->get_title();
+            }
+        }
+
+        $category = $this->get_category();
+
+        if ($category instanceof CourseCategory)
+        {
+            $names[] = $category->get_fully_qualified_name();
+        }
+
+        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+    }
+
+    /**
+     * gets the language of this course object
+     *
+     * @return String $language
+     */
+    public function get_language()
+    {
+        return $this->get_default_property(self::PROPERTY_LANGUAGE);
+    }
+
+    /**
+     * Returns the last modification date of this course
+     *
+     * @return int
+     */
+    public function get_last_edit()
+    {
+        return $this->get_default_property(self::PROPERTY_LAST_EDIT);
+    }
+
+    /**
+     * Returns the last visit date of this course
+     *
+     * @return int
+     */
+    public function get_last_visit()
+    {
+        return $this->get_default_property(self::PROPERTY_LAST_VISIT);
     }
 
     /**
@@ -344,11 +672,10 @@ class Course extends DataClass
     public function get_parent_rights_location()
     {
         $parent = CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            CourseManagementRights::TYPE_COURSE_TYPE,
-            $this->get_course_type_id(),
-            0);
+            CourseManagementRights::TYPE_COURSE_TYPE, $this->get_course_type_id(), 0
+        );
 
-        if (! $parent)
+        if (!$parent)
         {
             $parent = CourseManagementRights::get_courses_subtree_root(0);
         }
@@ -357,268 +684,161 @@ class Course extends DataClass
     }
 
     /**
-     * Returns the available rights for the course management
+     * Returns the rights location for this object
      *
-     * @return int[string]
+     * @return RightsLocation
      */
-    public function get_available_course_management_rights()
+    public function get_rights_location()
     {
-        return CourseManagementRights::getInstance()->get_base_course_management_rights();
+        return CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
+            CourseManagementRights::TYPE_COURSE, $this->get_id(), 0
+        );
     }
 
     /**
-     * Checks whether or not this object can change the given course management right
+     * Gets the subscribed groups of this course
      *
-     * @param int $right_id
-     *
-     * @return boolean
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation[]
      */
-    public function can_change_course_management_right($right_id)
+    public function get_subscribed_groups()
     {
-        $available_rights = $this->get_available_course_management_rights();
-        if (! in_array($right_id, $available_rights))
-        {
-            return false;
-        }
-
-        $course_type = $this->get_course_type();
-        if (! $course_type)
-        {
-            return true;
-        }
-
-        return ! CourseManagementRights::getInstance()->is_right_locked_for_base_object($course_type, $right_id);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Course Settings Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Retrieves course setting values for the given setting name and tool id
-     *
-     * @param string $setting_name
-     * @param int $tool_id
-     *
-     * @return string[]
-     */
-    public function get_course_setting($setting_name, $tool_id = 0)
-    {
-        return CourseSettingsController::getInstance()->get_course_setting($this, $setting_name, $tool_id);
-    }
-
-    /**
-     * Retrieves the default values for a given course setting
-     *
-     * @param string $setting_name
-     * @param int $tool_id
-     *
-     * @return string[]
-     */
-    public function get_default_course_setting($setting_name, $tool_id)
-    {
-        return CourseSettingsController::getInstance()->get_course_type_setting(
-            $this->get_course_type_id(),
-            $setting_name,
-            $tool_id);
-    }
-
-    /**
-     * Delegation function to create course settings from given values
-     *
-     * @param string[] $values
-     * @param boolean $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
-     * @return boolean
-     */
-    public function create_course_settings_from_values($values, $force = false)
-    {
-        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values(
-            $this,
-            $values,
-            CourseSettingsController::SETTING_ACTION_CREATE,
-            $force);
-    }
-
-    /**
-     * Delegation function to update course settings from given values
-     *
-     * @param string $values
-     *
-     * @return boolean
-     */
-    public function update_course_settings_from_values($values)
-    {
-        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values(
-            $this,
-            $values,
-            CourseSettingsController::SETTING_ACTION_UPDATE);
-    }
-
-    /**
-     * Creates a course setting relation for the given course setting object
-     *
-     * @param mixed[string] CourseSetting
-     * @param boolean $locked
-     *
-     * @throws \Exception
-     *
-     * @return CourseRelCourseSetting
-     */
-    public function create_course_setting_relation($course_setting, $locked)
-    {
-        $course_rel_setting = new CourseRelCourseSetting();
-        $course_rel_setting->set_course_setting_id($course_setting[CourseSetting::PROPERTY_ID]);
-        $course_rel_setting->set_course($this);
-
-        if (! $course_rel_setting->create())
-        {
-            throw new Exception(Translation::get('CouldNotCreateCourseRelCourseSetting'));
-        }
-
-        return $course_rel_setting;
-    }
-
-    /**
-     * Updates a course setting relation for the given course setting object
-     *
-     * @param mixed[string] CourseSetting
-     * @param boolean $locked
-     *
-     * @return CourseTypeRelCourseSetting
-     */
-    public function update_course_setting_relation($course_setting, $locked)
-    {
-        return $this->retrieve_course_setting_relation($course_setting);
-    }
-
-    /**
-     * Retrieves a course setting relation object for the given course setting object
-     *
-     * @param mixed[string] CourseSetting
-     * @return CourseRelCourseSetting
-     */
-    public function retrieve_course_setting_relation($course_setting)
-    {
-        $conditions = array();
-
-        $conditions[] = new EqualityCondition(
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseRelCourseSetting::class,
-                CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID),
-            new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID]));
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
 
-        $conditions[] = new EqualityCondition(
+        return DataManager::retrieves(
+            CourseEntityRelation::class, new DataClassRetrievesParameters(new AndCondition($relationConditions))
+        );
+    }
+
+    /**
+     * Gets the subscribed users of this course
+     *
+     * @return \application\weblcms\course\CourseEntityRelation[]
+     */
+    public function get_subscribed_users()
+    {
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseRelCourseSetting::class,
-                CourseRelCourseSetting::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_id()));
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+        );
 
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassRetrieveParameters($condition));
-    }
-
-    /**
-     * Returns whether or not a given course setting is locked for this object.
-     * Since courses do not support locking of
-     * course settings the course settings are never locked
-     *
-     * @param mixed[string] CourseSetting
-     * @return boolean
-     */
-    public function is_course_setting_locked($course_setting)
-    {
-        return false;
-    }
-
-    /**
-     * Returns whether or not a given course setting can be changed by this object
-     *
-     * @param mixed[string] CourseSetting
-     * @return boolean
-     */
-    public function can_change_course_setting($course_setting)
-    {
-        $course_type = $this->get_course_type();
-        if (! $course_type)
-        {
-            return true;
-        }
-
-        return ! $course_type->is_course_setting_locked($course_setting);
+        return DataManager::retrieves(
+            CourseEntityRelation::class, new DataClassRetrievesParameters(new AndCondition($relationConditions))
+        );
     }
 
     /**
      * **************************************************************************************************************
-     * Helper Functionality *
+     * Getters and Setters *
      * **************************************************************************************************************
      */
 
     /**
-     * Creates the necessary locations for this dataclass Creates a location for the given course in the courses tree
-     * Creates a root location for the course subtree Set view right for everyone on root location Creates a location
-     * for each tool in the course subtree
+     * Returns the system code of this course object
      *
-     * @param boolean $create_in_batch - Whether or not the left and right values should be calculated
+     * @return String
+     */
+    public function get_system_code()
+    {
+        return $this->get_default_property(self::PROPERTY_SYSTEM_CODE);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course';
+    }
+
+    /**
+     * Returns the title of this course object
+     *
+     * @return String
+     */
+    public function get_title()
+    {
+        return $this->get_default_property(self::PROPERTY_TITLE);
+    }
+
+    /**
+     * Returns the titular id of this course object
+     *
+     * @return int
+     */
+    public function get_titular_id()
+    {
+        return $this->get_default_property(self::PROPERTY_TITULAR_ID);
+    }
+
+    /**
+     * Returns the visual code of this course object
+     *
+     * @return String
+     */
+    public function get_visual_code()
+    {
+        return $this->get_default_property(self::PROPERTY_VISUAL_CODE);
+    }
+
+    /**
+     * Returns if this course has subscribed groups
+     *
      * @return boolean
      */
-    private function create_locations($create_in_batch = false)
+    public function has_subscribed_groups()
     {
-        // Create location in the course subtree
-        $parent_id = $this->get_parent_rights_location()->get_id();
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+        );
 
-        if (! CourseManagementRights::getInstance()->create_location_in_courses_subtree(
-            CourseManagementRights::TYPE_COURSE,
-            $this->get_id(),
-            $parent_id,
-            0,
-            $create_in_batch,
-            0))
-        {
-            return false;
-        }
+        return DataManager::count(
+                CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))
+            ) > 0;
+    }
 
-        // Create course subtree root location
-        $course_subtree_root_location = CourseManagementRights::getInstance()->create_subtree_root_location(
-            $this->get_id(),
-            CourseManagementRights::TREE_TYPE_COURSE,
-            true);
+    /**
+     * Returns if this course has subscribed users
+     *
+     * @return boolean
+     */
+    public function has_subscribed_users()
+    {
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+        );
 
-        if (! $course_subtree_root_location)
-        {
-            return false;
-        }
-
-        $course_subtree_root_location_id = $course_subtree_root_location->get_id();
-
-        // Set view right for everyone on root location
-        if (! CourseManagementRights::getInstance()->invert_location_entity_right(
-            CourseManagementRights::VIEW_RIGHT,
-            0,
-            0,
-            CourseManagementRights::getInstance()->get_courses_subtree_root_id($this->get_id())))
-        {
-            return false;
-        }
-
-        // Create a location for each tool
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
-        foreach($tools as $tool)
-        {
-            if (! CourseManagementRights::getInstance()->create_location_in_courses_subtree(
-                CourseManagementRights::TYPE_COURSE_MODULE,
-                $tool->get_id(),
-                $course_subtree_root_location_id,
-                $this->get_id(),
-                $create_in_batch))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return DataManager::count(
+                CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))
+            ) > 0;
     }
 
     /**
@@ -643,13 +863,13 @@ class Course extends DataClass
 
             $course_section->set_name(
                 Translation::getInstance()->getTranslation(
-                    $section['name'],
-                    null,
-                    \Chamilo\Application\Weblcms\Course\Manager::context()));
+                    $section['name'], null, \Chamilo\Application\Weblcms\Course\Manager::context()
+                )
+            );
 
             $course_section->set_type($section['type']);
             $course_section->set_visible(true);
-            if (! $course_section->create())
+            if (!$course_section->create())
             {
                 return false;
             }
@@ -659,24 +879,14 @@ class Course extends DataClass
     }
 
     /**
-     * Creates a course group in the course with the same name as the course
+     * Returns whether or not the course type has been changed for this course
      *
-     * @return boolean
+     * @return bool
      */
-    private function create_root_course_group()
+    public function isCourseTypeChanged()
     {
-        $group = new CourseGroup();
-        $group->set_course_code($this->get_id());
-        $group->set_name($this->get_title());
-        $group->set_parent_id(0);
-        return $group->create();
+        return !is_null($this->old_course_type_id) && $this->old_course_type_id != $this->get_course_type_id();
     }
-
-    /**
-     * **************************************************************************************************************
-     * Delegation Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Checks whether the given user is a course admin in this course
@@ -743,6 +953,20 @@ class Course extends DataClass
     }
 
     /**
+     * Returns whether or not a given course setting is locked for this object.
+     * Since courses do not support locking of
+     * course settings the course settings are never locked
+     *
+     * @param mixed[string] CourseSetting
+     *
+     * @return boolean
+     */
+    public function is_course_setting_locked($course_setting)
+    {
+        return false;
+    }
+
+    /**
      * Checks whether the current user is subscribed as course admin of the given course
      *
      * @param User $user
@@ -752,236 +976,65 @@ class Course extends DataClass
     public function is_subscribed_as_course_admin($user)
     {
         return DataManager::is_teacher_by_direct_subscription($this->get_id(), $user->get_id()) ||
-             DataManager::is_teacher_by_platform_group_subscription($this->get_id(), $user);
+            DataManager::is_teacher_by_platform_group_subscription($this->get_id(), $user);
     }
 
     /**
-     * Retrieves the course admin users for this course
+     * Retrieves a course setting relation object for the given course setting object
      *
-     * @return \core\user\User[]
+     * @param mixed[string] CourseSetting
+     *
+     * @return CourseRelCourseSetting
      */
-    public function get_course_admin_users()
+    public function retrieve_course_setting_relation($course_setting)
     {
-        if (! $this->course_admin_users_cache)
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_SETTING_ID
+            ), new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID])
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_ID
+            ), new StaticConditionVariable($this->get_id())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassRetrieveParameters($condition));
+    }
+
+    /**
+     * Sets the category_id of this course object
+     *
+     * @param int $category_id
+     */
+    public function set_category_id($category_id)
+    {
+        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category_id);
+    }
+
+    /**
+     * Sets the course type of this course object
+     *
+     * @param \application\weblcms\course_type\CourseType $course_type
+     */
+    public function set_course_type(CourseType $course_type)
+    {
+        if (!is_null($course_type))
         {
-            $this->course_admin_users_cache = DataManager::retrieve_teachers_directly_subscribed_to_course(
-                $this->get_id());
+            $old_course_type_id = $this->get_course_type_id();
+
+            if ($course_type->get_id() != $old_course_type_id)
+            {
+                $this->old_course_type_id = $old_course_type_id;
+            }
         }
-        return $this->course_admin_users_cache;
-    }
 
-    /**
-     * Retrieves the course admin groups for this course
-     *
-     * @return \group\Group[]
-     */
-    public function get_course_admin_groups()
-    {
-        if (! $this->course_admin_groups_cache)
-        {
-            $this->course_admin_groups_cache = DataManager::retrieve_groups_subscribed_as_teacher($this->get_id());
-        }
-        return $this->course_admin_groups_cache;
-    }
-
-    /**
-     * Returns if this course has subscribed users
-     *
-     * @return boolean
-     */
-    public function has_subscribed_users()
-    {
-        $relationConditions = array();
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_id()));
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class,
-                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
-
-        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
-    }
-
-    /**
-     * Gets the subscribed users of this course
-     *
-     * @return \application\weblcms\course\CourseEntityRelation[]
-     */
-    public function get_subscribed_users()
-    {
-        $relationConditions = array();
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_id()));
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class,
-                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
-
-        return DataManager::retrieves(
-            CourseEntityRelation::class,
-            new DataClassRetrievesParameters(new AndCondition($relationConditions)));
-    }
-
-    /**
-     * Returns if this course has subscribed groups
-     *
-     * @return boolean
-     */
-    public function has_subscribed_groups()
-    {
-        $relationConditions = array();
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_id()));
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class,
-                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
-
-        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))) > 0;
-    }
-
-    /**
-     * Gets the subscribed groups of this course
-     *
-     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation[]
-     */
-    public function get_subscribed_groups()
-    {
-        $relationConditions = array();
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_id()));
-        $relationConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class,
-                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP));
-
-        return DataManager::retrieves(
-            CourseEntityRelation::class,
-            new DataClassRetrievesParameters(new AndCondition($relationConditions)));
-    }
-
-    /**
-     * Gets the course groups of this course
-     *
-     * @return \application\weblcms\CourseGroup[]
-     */
-    public function get_course_groups($as_array = true)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($this->get_id()));
-        return DataManager::retrieves(
-            CourseGroup::class,
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                array(
-                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)))));
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters and Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the course type id of this course object
-     *
-     * @return int
-     */
-    public function get_course_type_id()
-    {
-        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_ID);
-    }
-
-    /**
-     * Returns the titular id of this course object
-     *
-     * @return int
-     */
-    public function get_titular_id()
-    {
-        return $this->get_default_property(self::PROPERTY_TITULAR_ID);
-    }
-
-    /**
-     * Returns the visual code of this course object
-     *
-     * @return String
-     */
-    public function get_visual_code()
-    {
-        return $this->get_default_property(self::PROPERTY_VISUAL_CODE);
-    }
-
-    /**
-     * Returns the system code of this course object
-     *
-     * @return String
-     */
-    public function get_system_code()
-    {
-        return $this->get_default_property(self::PROPERTY_SYSTEM_CODE);
-    }
-
-    /**
-     * Returns the title of this course object
-     *
-     * @return String
-     */
-    public function get_title()
-    {
-        return $this->get_default_property(self::PROPERTY_TITLE);
-    }
-
-    /**
-     * Returns the creation date of this course object
-     *
-     * @return int
-     */
-    public function get_creation_date()
-    {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
-    }
-
-    /**
-     * Returns the expiration date of this course
-     *
-     * @return int
-     */
-    public function get_expiration_date()
-    {
-        return $this->get_default_property(self::PROPERTY_EXPIRATION_DATE);
-    }
-
-    /**
-     * Returns the last modification date of this course
-     *
-     * @return int
-     */
-    public function get_last_edit()
-    {
-        return $this->get_default_property(self::PROPERTY_LAST_EDIT);
-    }
-
-    /**
-     * Returns the last visit date of this course
-     *
-     * @return int
-     */
-    public function get_last_visit()
-    {
-        return $this->get_default_property(self::PROPERTY_LAST_VISIT);
+        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
     }
 
     /**
@@ -1001,46 +1054,6 @@ class Course extends DataClass
         $this->old_course_type_id = $old_course_type_id;
 
         $this->set_default_property(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
-    }
-
-    /**
-     * Sets the titular id of this course object
-     *
-     * @param int $titular_id
-     */
-    public function set_titular_id($titular_id)
-    {
-        $this->set_default_property(self::PROPERTY_TITULAR_ID, $titular_id);
-    }
-
-    /**
-     * Sets the visual code of this course object
-     *
-     * @param String $visual_code
-     */
-    public function set_visual_code($visual_code)
-    {
-        $this->set_default_property(self::PROPERTY_VISUAL_CODE, $visual_code);
-    }
-
-    /**
-     * Sets the system code of this course object
-     *
-     * @param String $system_code
-     */
-    public function set_system_code($system_code)
-    {
-        $this->set_default_property(self::PROPERTY_SYSTEM_CODE, $system_code);
-    }
-
-    /**
-     * Sets the course title of this course object
-     *
-     * @param String $title
-     */
-    public function set_title($title)
-    {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -1064,6 +1077,16 @@ class Course extends DataClass
     }
 
     /**
+     * Sets the language of this course object
+     *
+     * @param String $language
+     */
+    public function set_language($language)
+    {
+        $this->set_default_property(self::PROPERTY_LANGUAGE, $language);
+    }
+
+    /**
      * Sets the last edit date of this course
      *
      * @param int $last_edit
@@ -1084,79 +1107,33 @@ class Course extends DataClass
     }
 
     /**
-     * Sets the language of this course object
+     * Sets the system code of this course object
      *
-     * @param String $language
+     * @param String $system_code
      */
-    public function set_language($language)
+    public function set_system_code($system_code)
     {
-        $this->set_default_property(self::PROPERTY_LANGUAGE, $language);
+        $this->set_default_property(self::PROPERTY_SYSTEM_CODE, $system_code);
     }
 
     /**
-     * gets the language of this course object
+     * Sets the course title of this course object
      *
-     * @return String $language
+     * @param String $title
      */
-    public function get_language()
+    public function set_title($title)
     {
-        return $this->get_default_property(self::PROPERTY_LANGUAGE);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
-     * Sets the category_id of this course object
+     * Sets the titular id of this course object
      *
-     * @param int $category_id
+     * @param int $titular_id
      */
-    public function set_category_id($category_id)
+    public function set_titular_id($titular_id)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category_id);
-    }
-
-    /**
-     * gets the category_id of this course object
-     *
-     * @return String $language
-     */
-    public function get_category_id()
-    {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
-    }
-
-    public function get_category()
-    {
-        if ($this->get_category_id())
-        {
-            return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                CourseCategory::class,
-                $this->get_category_id());
-        }
-    }
-
-    public function get_fully_qualified_name($include_self = true)
-    {
-        $names = array();
-
-        if ($include_self)
-        {
-            if ($this->get_visual_code())
-            {
-                $names[] = $this->get_title() . ' (' . $this->get_visual_code() . ')';
-            }
-            else
-            {
-                $names[] = $this->get_title();
-            }
-        }
-
-        $category = $this->get_category();
-
-        if ($category instanceof CourseCategory)
-        {
-            $names[] = $category->get_fully_qualified_name();
-        }
-
-        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+        $this->set_default_property(self::PROPERTY_TITULAR_ID, $titular_id);
     }
 
     /**
@@ -1166,20 +1143,13 @@ class Course extends DataClass
      */
 
     /**
-     * Returns the title for the course type foreign object
+     * Sets the visual code of this course object
      *
-     * @return String
+     * @param String $visual_code
      */
-    public function get_course_type_title()
+    public function set_visual_code($visual_code)
     {
-        $course_type_title = $this->get_optional_property(self::PROPERTY_COURSE_TYPE_TITLE);
-        if (! $course_type_title)
-        {
-            $course_type = $this->get_course_type();
-            return ($course_type ? $course_type->get_title() : Translation::get('NoCourseType'));
-        }
-
-        return $course_type_title;
+        $this->set_default_property(self::PROPERTY_VISUAL_CODE, $visual_code);
     }
 
     /**
@@ -1189,37 +1159,66 @@ class Course extends DataClass
      */
 
     /**
-     * Returns the course type of this course object (lazy loading)
+     * Updates this course object If the name of the course changes, the name of the root chamilo course group needs to
+     * change
      *
-     * @return \application\weblcms\course_type\CourseType
+     * @return boolean
      */
-    public function get_course_type()
+    public function update()
     {
-        if ($this->get_course_type_id() == 0)
+        $course_group =
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_course_group_root(
+                $this->get_id()
+            );
+
+        if ($course_group)
         {
-            return null;
-        }
-
-        return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
-    }
-
-    /**
-     * Sets the course type of this course object
-     *
-     * @param \application\weblcms\course_type\CourseType $course_type
-     */
-    public function set_course_type(CourseType $course_type)
-    {
-        if (! is_null($course_type))
-        {
-            $old_course_type_id = $this->get_course_type_id();
-
-            if ($course_type->get_id() != $old_course_type_id)
+            if ($course_group->get_name() != $this->get_title())
             {
-                $this->old_course_type_id = $old_course_type_id;
+                $course_group->set_name($this->get_title());
+                $course_group->update();
             }
         }
 
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
+        $old_course_type_id = $this->old_course_type_id;
+
+        if (!is_null($old_course_type_id))
+        {
+            $location = $this->get_rights_location();
+
+            if (!$location->move($this->get_parent_rights_location()->get_id()))
+            {
+                return false;
+            }
+        }
+
+        return parent::update();
+    }
+
+    /**
+     * Updates a course setting relation for the given course setting object
+     *
+     * @param mixed[string] CourseSetting
+     * @param boolean $locked
+     *
+     * @return CourseTypeRelCourseSetting
+     */
+    public function update_course_setting_relation($course_setting, $locked)
+    {
+        return $this->retrieve_course_setting_relation($course_setting);
+    }
+
+    /**
+     * Delegation function to update course settings from given values
+     *
+     * @param string $values
+     *
+     * @return boolean
+     */
+    public function update_course_settings_from_values($values)
+    {
+        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values(
+            $this, $values, CourseSettingsController::SETTING_ACTION_UPDATE
+        );
     }
 }

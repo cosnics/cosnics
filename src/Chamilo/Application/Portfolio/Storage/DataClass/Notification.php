@@ -32,19 +32,19 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
 
     /**
      *
-     * @param int $content_object_id
-     */
-    public function set_publication_id($publication_id)
-    {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
-    }
-
-    /**
-     *
      * @return string
      */
     public static function get_table_name()
     {
         return 'portfolio_notification';
+    }
+
+    /**
+     *
+     * @param int $content_object_id
+     */
+    public function set_publication_id($publication_id)
+    {
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 }

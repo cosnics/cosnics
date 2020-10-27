@@ -12,10 +12,34 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class CourseGroupOffice365Reference extends DataClass
 {
     const PROPERTY_COURSE_GROUP_ID = 'course_group_id';
+    const PROPERTY_LINKED = 'linked';
     const PROPERTY_OFFICE365_GROUP_ID = 'office365_group_id';
     const PROPERTY_OFFICE365_HAS_TEAM = 'office365_has_team';
     const PROPERTY_OFFICE365_PLAN_ID = 'office365_plan_id';
-    const PROPERTY_LINKED = 'linked';
+
+    /**
+     * @return int
+     */
+    public function getCourseGroupId()
+    {
+        return $this->get_default_property(self::PROPERTY_COURSE_GROUP_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOffice365GroupId()
+    {
+        return $this->get_default_property(self::PROPERTY_OFFICE365_GROUP_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOffice365PlanId()
+    {
+        return $this->get_default_property(self::PROPERTY_OFFICE365_PLAN_ID);
+    }
 
     /**
      * @param array $extended_property_names
@@ -34,11 +58,30 @@ class CourseGroupOffice365Reference extends DataClass
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCourseGroupId()
+    public static function get_table_name()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_GROUP_ID);
+        return 'weblcms_course_group_office365_reference';
+    }
+
+    /**
+     *
+     */
+    public function hasTeam(): bool
+    {
+        return !empty($this->get_default_property(self::PROPERTY_OFFICE365_HAS_TEAM));
+    }
+
+    /**
+     * Returns whether or not the reference to the office365 is still active. Used to deactivate the connection
+     * without loosing the reference information
+     *
+     * @return bool
+     */
+    public function isLinked()
+    {
+        return (bool) $this->get_default_property(self::PROPERTY_LINKED);
     }
 
     /**
@@ -54,54 +97,11 @@ class CourseGroupOffice365Reference extends DataClass
     }
 
     /**
-     * @return string
+     * @param bool $hasTeam
      */
-    public function getOffice365GroupId()
+    public function setHasTeam(bool $hasTeam)
     {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_GROUP_ID);
-    }
-
-    /**
-     * @param string $office365GroupId
-     *
-     * @return CourseGroupOffice365Reference
-     */
-    public function setOffice365GroupId($office365GroupId)
-    {
-        $this->set_default_property(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOffice365PlanId()
-    {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_PLAN_ID);
-    }
-
-    /**
-     * @param string $office365PlanId
-     *
-     * @return CourseGroupOffice365Reference
-     */
-    public function setOffice365PlanId($office365PlanId)
-    {
-        $this->set_default_property(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
-
-        return $this;
-    }
-
-    /**
-     * Returns whether or not the reference to the office365 is still active. Used to deactivate the connection
-     * without loosing the reference information
-     *
-     * @return bool
-     */
-    public function isLinked()
-    {
-        return (bool) $this->get_default_property(self::PROPERTY_LINKED);
+        $this->set_default_property(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
     }
 
     /**
@@ -120,27 +120,27 @@ class CourseGroupOffice365Reference extends DataClass
     }
 
     /**
+     * @param string $office365GroupId
      *
+     * @return CourseGroupOffice365Reference
      */
-    public function hasTeam():bool
+    public function setOffice365GroupId($office365GroupId)
     {
-        return !empty($this->get_default_property(self::PROPERTY_OFFICE365_HAS_TEAM));
+        $this->set_default_property(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
+
+        return $this;
     }
 
     /**
-     * @param bool $hasTeam
+     * @param string $office365PlanId
+     *
+     * @return CourseGroupOffice365Reference
      */
-    public function setHasTeam(bool $hasTeam)
+    public function setOffice365PlanId($office365PlanId)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
-    }
+        $this->set_default_property(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
 
-    /**
-     * @return string
-     */
-    public static function get_table_name()
-    {
-        return 'weblcms_course_group_office365_reference';
+        return $this;
     }
 
 }

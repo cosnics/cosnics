@@ -15,6 +15,14 @@ class OrderingQuestion extends ContentObject implements Versionable
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_HINT = 'hint';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_ordering_question';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

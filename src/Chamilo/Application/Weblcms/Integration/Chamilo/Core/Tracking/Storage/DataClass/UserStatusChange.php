@@ -84,5 +84,12 @@ class UserStatusChange extends SimpleTracker
     {
         $this->set_default_property(self::PROPERTY_DATE, $date);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_user_status_change';
+    }
 }
-?>

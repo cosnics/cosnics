@@ -16,6 +16,14 @@ class PhysicalLocation extends ContentObject implements Versionable
 {
     const PROPERTY_LOCATION = 'location';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_physical_location';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

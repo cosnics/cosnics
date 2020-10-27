@@ -24,6 +24,14 @@ class Hotpotatoes extends ContentObject implements Versionable
     const PROPERTY_PATH = 'path';
     const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_hotpotatoes';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

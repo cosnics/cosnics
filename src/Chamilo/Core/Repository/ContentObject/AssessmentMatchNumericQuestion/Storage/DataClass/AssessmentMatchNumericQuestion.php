@@ -12,24 +12,28 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentMatchNumericQuestion extends ContentObject implements Versionable
 {
+    const PROPERTY_HINT = 'hint';
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_TOLERANCE_TYPE = 'tolerance_type';
-    const PROPERTY_HINT = 'hint';
+
     const TOLERANCE_TYPE_ABSOLUTE = 'absolute';
     const TOLERANCE_TYPE_RELATIVE = 'relative';
 
-    public function __construct($defaultProperties = array (), $additionalProperties = null)
+    public function __construct($defaultProperties = array(), $additionalProperties = null)
     {
         parent::__construct($defaultProperties, $additionalProperties);
-        if (! isset($additionalProperties[self::PROPERTY_TOLERANCE_TYPE]))
+        if (!isset($additionalProperties[self::PROPERTY_TOLERANCE_TYPE]))
         {
             $this->set_tolerance_type(self::TOLERANCE_TYPE_ABSOLUTE);
         }
     }
 
-    public static function get_type_name()
+    public function add_option($option)
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        $options = $this->get_options();
+        $options[] = $option;
+
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public static function get_additional_property_names()
@@ -37,16 +41,74 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         return array(self::PROPERTY_TOLERANCE_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
 
-    public function add_option($option)
+    public function get_best_option()
     {
-        $options = $this->get_options();
-        $options[] = $option;
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        $best_score = 0;
+        $best_option = null;
+
+        foreach ($this->get_options() as $key => $option)
+        {
+            if ($option->get_score() >= $best_score)
+            {
+                $best_score = $option->get_score();
+                $best_option = $option;
+            }
+        }
+
+        return $best_option;
     }
 
-    public function set_options($options)
+    public function get_default_weight()
     {
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->get_maximum_score();
+    }
+
+    public function get_hint()
+    {
+        return $this->get_additional_property(self::PROPERTY_HINT);
+    }
+
+    /**
+     * Returns the names of the properties which are UI-wise filled by the integrated html editor
+     *
+     * @return multitype:string
+     */
+    public static function get_html_editors($html_editors = array())
+    {
+        return parent::get_html_editors(array(self::PROPERTY_HINT));
+    }
+
+    /**
+     * Returns the maximum weight/score a user can receive.
+     */
+    public function get_maximum_score()
+    {
+        $max = 0;
+        $options = $this->get_options();
+        foreach ($options as $option)
+        {
+            $max = max($option->get_score(), $max);
+        }
+
+        return $max;
+    }
+
+    public function get_number_of_options()
+    {
+        return count($this->get_options());
+    }
+
+    public function get_option($answer, $tolerance_type)
+    {
+        foreach ($this->get_options() as $option)
+        {
+            if ($option->matches($answer, $tolerance_type))
+            {
+                return $option;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -58,7 +120,26 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         {
             return $result;
         }
+
         return array();
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_assessment_match_numeric_question';
+    }
+
+    public function get_tolerance_type()
+    {
+        return $this->get_additional_property(self::PROPERTY_TOLERANCE_TYPE);
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -74,23 +155,15 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    public function get_number_of_options()
-    {
-        return count($this->get_options());
-    }
+    // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
 
-    public function set_tolerance_type($type)
+    public function has_hint()
     {
-        return $this->set_additional_property(self::PROPERTY_TOLERANCE_TYPE, $type);
-    }
-
-    public function get_tolerance_type()
-    {
-        return $this->get_additional_property(self::PROPERTY_TOLERANCE_TYPE);
+        return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
     }
 
     public function set_hint($hint)
@@ -98,73 +171,13 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         return $this->set_additional_property(self::PROPERTY_HINT, $hint);
     }
 
-    public function get_hint()
+    public function set_options($options)
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
     }
 
-    public function has_hint()
+    public function set_tolerance_type($type)
     {
-        return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
-    }
-
-    /**
-     * Returns the maximum weight/score a user can receive.
-     */
-    public function get_maximum_score()
-    {
-        $max = 0;
-        $options = $this->get_options();
-        foreach ($options as $option)
-        {
-            $max = max($option->get_score(), $max);
-        }
-        return $max;
-    }
-    
-    // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
-    public function get_default_weight()
-    {
-        return $this->get_maximum_score();
-    }
-
-    /**
-     * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
-     * @return multitype:string
-     */
-    public static function get_html_editors($html_editors = array())
-    {
-        return parent::get_html_editors(array(self::PROPERTY_HINT));
-    }
-
-    public function get_best_option()
-    {
-        $best_score = 0;
-        $best_option = null;
-        
-        foreach ($this->get_options() as $key => $option)
-        {
-            if ($option->get_score() >= $best_score)
-            {
-                $best_score = $option->get_score();
-                $best_option = $option;
-            }
-        }
-        
-        return $best_option;
-    }
-
-    public function get_option($answer, $tolerance_type)
-    {
-        foreach ($this->get_options() as $option)
-        {
-            if ($option->matches($answer, $tolerance_type))
-            {
-                return $option;
-            }
-        }
-        
-        return null;
+        return $this->set_additional_property(self::PROPERTY_TOLERANCE_TYPE, $type);
     }
 }

@@ -99,4 +99,12 @@ class UserView extends DataClass
                     UserViewRelContentObject::PROPERTY_USER_VIEW_ID), 
                 new StaticConditionVariable($this->get_id())));
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_user_view';
+    }
 }

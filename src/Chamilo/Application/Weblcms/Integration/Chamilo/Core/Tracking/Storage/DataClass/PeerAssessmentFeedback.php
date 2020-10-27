@@ -43,4 +43,12 @@ class PeerAssessmentFeedback extends SimpleTracker
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
         $this->set_feedback($parameters[self::PROPERTY_FEEDBACK]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_feedback';
+    }
 }

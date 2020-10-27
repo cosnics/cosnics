@@ -14,4 +14,12 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
     {
         return DataManager::getInstance();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_instance_rights_location_entity_right';
+    }
 }

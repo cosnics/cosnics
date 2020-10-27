@@ -14,8 +14,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  */
 class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_WEIGHT = 'weight';
     const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+
+    const PROPERTY_WEIGHT = 'weight';
 
     /**
      *
@@ -24,6 +25,23 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
     public static function get_additional_property_names()
     {
         return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_show_answer_feedback()
+    {
+        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_complex_assessment_rating_question';
     }
 
     /**
@@ -39,26 +57,17 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
      *
      * @param int $value
      */
-    public function set_weight($value)
+    public function set_show_answer_feedback($value)
     {
-        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_show_answer_feedback()
-    {
-        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
     }
 
     /**
      *
      * @param int $value
      */
-    public function set_show_answer_feedback($value)
+    public function set_weight($value)
     {
-        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 }

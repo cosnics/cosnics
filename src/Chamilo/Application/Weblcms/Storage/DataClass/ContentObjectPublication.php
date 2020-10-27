@@ -355,6 +355,15 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     }
 
     /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_content_object_publication';
+    }
+
+    /**
      * Gets the list of target course_groups of this publication
      *
      * @return array An array of course_group ids.
@@ -679,14 +688,14 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $success ? $places : 0;
     }
 
+    /*
+     * #@-
+     */
+
     public function render_target_entities_as_string()
     {
         return WeblcmsRights::getInstance()->render_target_entities_as_string($this->get_target_entities());
     }
-
-    /*
-     * #@-
-     */
 
     public function set_allow_collaboration($allow_collaboration)
     {

@@ -52,4 +52,12 @@ class ContentObjectInclude extends DataClass
         }
         return $this->include_object;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_content_object_include';
+    }
 }

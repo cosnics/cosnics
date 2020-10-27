@@ -10,46 +10,30 @@ namespace Chamilo\Core\Home\Storage\DataClass;
  */
 class Block extends Element
 {
-    const CONFIGURATION_VISIBILITY = 'visibility';
-    const CONFIGURATION_CONTEXT = 'context';
     const CONFIGURATION_BLOCK_TYPE = 'block_type';
+    const CONFIGURATION_CONTEXT = 'context';
+    const CONFIGURATION_VISIBILITY = 'visibility';
+
+    /**
+     *
+     * @return string
+     */
+    public function getBlockType()
+    {
+        return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
+    }
 
     /**
      *
      * @param string[] $configurationVariables
+     *
      * @return string[]
      */
     public static function getConfigurationVariables($configurationVariables = array())
     {
         return parent::getConfigurationVariables(
-            array(self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE));
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function getVisibility()
-    {
-        return $this->getSetting(self::CONFIGURATION_VISIBILITY);
-    }
-
-    /**
-     *
-     * @param boolean $visibility
-     */
-    public function setVisibility($visibility)
-    {
-        $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isVisible()
-    {
-        return $this->getVisibility();
+            array(self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE)
+        );
     }
 
     /**
@@ -63,20 +47,20 @@ class Block extends Element
 
     /**
      *
-     * @param string $context
+     * @return boolean
      */
-    public function setContext($context)
+    public function getVisibility()
     {
-        $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
+        return $this->getSetting(self::CONFIGURATION_VISIBILITY);
     }
 
     /**
      *
-     * @return string
+     * @return boolean
      */
-    public function getBlockType()
+    public function isVisible()
     {
-        return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
+        return $this->getVisibility();
     }
 
     /**
@@ -86,5 +70,23 @@ class Block extends Element
     public function setBlockType($blockType)
     {
         $this->setSetting(self::CONFIGURATION_BLOCK_TYPE, $blockType);
+    }
+
+    /**
+     *
+     * @param string $context
+     */
+    public function setContext($context)
+    {
+        $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
+    }
+
+    /**
+     *
+     * @param boolean $visibility
+     */
+    public function setVisibility($visibility)
+    {
+        $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
     }
 }

@@ -212,4 +212,12 @@ class Visit extends SimpleTracker
             $this->set_id($parameters[self::PROPERTY_ID]);
         }
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_user_visit';
+    }
 }

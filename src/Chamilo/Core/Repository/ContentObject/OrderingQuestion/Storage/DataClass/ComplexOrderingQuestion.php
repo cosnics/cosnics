@@ -14,9 +14,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  */
 class ComplexOrderingQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_WEIGHT = 'weight';
     const PROPERTY_RANDOM = 'random';
     const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    const PROPERTY_WEIGHT = 'weight';
 
     /**
      *
@@ -31,36 +31,15 @@ class ComplexOrderingQuestion extends ComplexContentObjectItem implements Answer
      *
      * @return int
      */
-    public function get_weight()
+    public function get_default_question_weight()
     {
-        return $this->get_additional_property(self::PROPERTY_WEIGHT);
-    }
+        $reference = parent::get_ref_object();
+        if ($reference)
+        {
+            return $reference->get_default_weight();
+        }
 
-    /**
-     *
-     * @param int $value
-     */
-    public function set_weight($value)
-    {
-        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_show_answer_feedback()
-    {
-        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
-    }
-
-    /**
-     *
-     * @param int $value
-     */
-    public function set_show_answer_feedback($value)
-    {
-        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        return 1;
     }
 
     /**
@@ -74,27 +53,28 @@ class ComplexOrderingQuestion extends ComplexContentObjectItem implements Answer
 
     /**
      *
-     * @param boolean $value
+     * @return int
      */
-    public function set_random($value)
+    public function get_show_answer_feedback()
     {
-        $this->set_additional_property(self::PROPERTY_RANDOM, $value);
+        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
-    
-    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
-    // complex question object.
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_complex_ordering_question';
+    }
+
     /**
      *
      * @return int
      */
-    public function get_default_question_weight()
+    public function get_weight()
     {
-        $reference = parent::get_ref_object();
-        if ($reference)
-        {
-            return $reference->get_default_weight();
-        }
-        return 1;
+        return $this->get_additional_property(self::PROPERTY_WEIGHT);
     }
 
     /**
@@ -107,5 +87,35 @@ class ComplexOrderingQuestion extends ComplexContentObjectItem implements Answer
         // complex question object.
         parent::set_parent($parent);
         $this->set_weight($this->get_default_question_weight());
+    }
+
+    /**
+     *
+     * @param boolean $value
+     */
+    public function set_random($value)
+    {
+        $this->set_additional_property(self::PROPERTY_RANDOM, $value);
+    }
+
+    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
+    // complex question object.
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_show_answer_feedback($value)
+    {
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+    }
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_weight($value)
+    {
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 }

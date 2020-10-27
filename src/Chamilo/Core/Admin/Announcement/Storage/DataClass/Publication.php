@@ -62,9 +62,14 @@ class Publication extends DataClass
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_CONTENT_OBJECT_ID, self::PROPERTY_FROM_DATE, self::PROPERTY_TO_DATE,
-                self::PROPERTY_HIDDEN, self::PROPERTY_PUBLISHER_ID, self::PROPERTY_PUBLICATION_DATE,
-                self::PROPERTY_MODIFICATION_DATE, self::PROPERTY_EMAIL_SENT
+                self::PROPERTY_CONTENT_OBJECT_ID,
+                self::PROPERTY_FROM_DATE,
+                self::PROPERTY_TO_DATE,
+                self::PROPERTY_HIDDEN,
+                self::PROPERTY_PUBLISHER_ID,
+                self::PROPERTY_PUBLICATION_DATE,
+                self::PROPERTY_MODIFICATION_DATE,
+                self::PROPERTY_EMAIL_SENT
             )
         );
     }

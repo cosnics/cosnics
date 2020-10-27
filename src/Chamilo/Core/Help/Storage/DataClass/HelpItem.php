@@ -98,4 +98,12 @@ class HelpItem extends DataClass
     {
         return $this->get_url() ? true : false;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'help_help_item';
+    }
 }

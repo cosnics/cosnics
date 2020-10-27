@@ -10,35 +10,20 @@ use Chamilo\Libraries\Translation\Translation;
 class Activity extends Tracker
 {
 
-    // Default properties
     const ACTIVITY_ADD_ITEM = 6;
-
     const ACTIVITY_CREATED = 1;
-
     const ACTIVITY_DELETED = 2;
-
     const ACTIVITY_DELETE_ITEM = 7;
-
     const ACTIVITY_MOVE_ITEM = 8;
-
-    // Activity types
-
     const ACTIVITY_RECYCLE = 4;
-
     const ACTIVITY_RESTORE = 5;
-
     const ACTIVITY_UPDATED = 3;
-
     const ACTIVITY_UPDATE_ITEM = 9;
 
     const PROPERTY_CONTENT = 'content';
-
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-
     const PROPERTY_DATE = 'date';
-
     const PROPERTY_TYPE = 'type';
-
     const PROPERTY_USER_ID = 'user_id';
 
     /**
@@ -85,10 +70,21 @@ class Activity extends Tracker
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_TYPE, self::PROPERTY_USER_ID, self::PROPERTY_DATE, self::PROPERTY_CONTENT,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_DATE,
+                self::PROPERTY_CONTENT,
                 self::PROPERTY_CONTENT_OBJECT_ID
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_repository_activity';
     }
 
     public function get_type()
@@ -141,14 +137,14 @@ class Activity extends Tracker
         $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
+    /*
+     * (non-PHPdoc) @see \tracking\Tracker::validate_parameters()
+     */
+
     public function set_date($date)
     {
         $this->set_default_property(self::PROPERTY_DATE, $date);
     }
-
-    /*
-     * (non-PHPdoc) @see \tracking\Tracker::validate_parameters()
-     */
 
     public function set_type($type)
     {

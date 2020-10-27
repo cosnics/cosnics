@@ -43,4 +43,12 @@ class QuestionAttempt extends AbstractQuestionAttempt
     {
         $this->set_default_property(self::PROPERTY_ASSESSMENT_ATTEMPT_ID, $assessment_attempt_id);
     }
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_question_attempt';
+    }
+
 }

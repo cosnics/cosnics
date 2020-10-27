@@ -17,16 +17,6 @@ class CourseGroupPublicationCategory extends DataClass
     const PROPERTY_PUBLICATION_CATEGORY_ID = 'publication_category_id';
 
     /**
-     * @return string[]
-     */
-    public static function get_default_property_names()
-    {
-        return parent::get_default_property_names(
-            [self::PROPERTY_COURSE_GROUP_ID, self::PROPERTY_PUBLICATION_CATEGORY_ID]
-        );
-    }
-
-    /**
      * @return int
      */
     public function getCourseGroupId()
@@ -40,6 +30,24 @@ class CourseGroupPublicationCategory extends DataClass
     public function getPublicationCategoryId()
     {
         return $this->get_default_property(self::PROPERTY_PUBLICATION_CATEGORY_ID);
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function get_default_property_names()
+    {
+        return parent::get_default_property_names(
+            [self::PROPERTY_COURSE_GROUP_ID, self::PROPERTY_PUBLICATION_CATEGORY_ID]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_group_publication_category';
     }
 
     /**

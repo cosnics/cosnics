@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 
 /**
  * Better storage for home elements using content objects
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ContentObjectPublication extends Publication
@@ -28,6 +28,15 @@ class ContentObjectPublication extends Publication
     public function get_element_id()
     {
         return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'home_content_object_publication';
     }
 
     /**

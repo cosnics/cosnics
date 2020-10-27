@@ -344,4 +344,12 @@ class Request extends DataClass
     {
         return $this->get_decision() == self::DECISION_GRANTED;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_quota_request';
+    }
 }

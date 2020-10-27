@@ -31,15 +31,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Group extends NestedSet
 {
     const PROPERTY_CODE = 'code';
-
     const PROPERTY_DATABASE_QUOTA = 'database_quota';
-
     const PROPERTY_DESCRIPTION = 'description';
-
     const PROPERTY_DISK_QUOTA = 'disk_quota';
-
     const PROPERTY_NAME = 'name';
-
     const PROPERTY_SORT = 'sort';
 
     /**
@@ -344,8 +339,12 @@ class Group extends NestedSet
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION, self::PROPERTY_SORT, self::PROPERTY_CODE,
-                self::PROPERTY_DISK_QUOTA, self::PROPERTY_DATABASE_QUOTA
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_SORT,
+                self::PROPERTY_CODE,
+                self::PROPERTY_DISK_QUOTA,
+                self::PROPERTY_DATABASE_QUOTA
             )
         );
     }
@@ -381,7 +380,7 @@ class Group extends NestedSet
         $parents = $this->get_parents($include_self);
         $names = array();
 
-        foreach($parents as $node)
+        foreach ($parents as $node)
         {
             $names[] = $node->get_name();
         }
@@ -458,7 +457,7 @@ class Group extends NestedSet
 
             $subgroups = array();
 
-            foreach($groups as $group)
+            foreach ($groups as $group)
             {
                 $subgroups[$group->get_id()] = $group;
             }
@@ -467,6 +466,15 @@ class Group extends NestedSet
         }
 
         return $this->subgroups[(int) $recursive];
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'group_group';
     }
 
     /**

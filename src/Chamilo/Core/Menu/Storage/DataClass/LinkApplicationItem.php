@@ -213,4 +213,12 @@ class LinkApplicationItem extends Item
     {
         return new FontAwesomeGlyph('link', array(), null, 'fas');
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'menu_link_application_item';
+    }
 }

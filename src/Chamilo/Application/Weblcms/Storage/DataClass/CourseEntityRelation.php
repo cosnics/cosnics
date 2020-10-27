@@ -7,63 +7,35 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * This class represents a relation between a weblcms course and an entity (a
  * user, a group...)
- * 
+ *
  * @package application\weblcms\course;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CourseEntityRelation extends DataClass
 {
-    /**
-     * **************************************************************************************************************
-     * Table Properties *
-     * **************************************************************************************************************
-     */
-    const PROPERTY_COURSE_ID = 'course_id';
-    const PROPERTY_STATUS = 'status';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    
-    /**
-     * Entity Types
-     */
-    const ENTITY_TYPE_USER = 1;
     const ENTITY_TYPE_GROUP = 2;
     const ENTITY_TYPE_ROLE = 3;
-    
-    /**
-     * **************************************************************************************************************
-     * Status Definitions *
-     * **************************************************************************************************************
-     */
-    const STATUS_TEACHER = 1;
-    const STATUS_STUDENT = 5;
-    
-    /**
-     * **************************************************************************************************************
-     * Foreign properties *
-     * **************************************************************************************************************
-     */
+    const ENTITY_TYPE_USER = 1;
+
     const FOREIGN_PROPERTY_COURSE = 'course';
+
+    const PROPERTY_COURSE_ID = 'course_id';
+    const PROPERTY_ENTITY_ID = 'entity_id';
+    const PROPERTY_ENTITY_TYPE = 'entity_type';
+    const PROPERTY_STATUS = 'status';
+
+    const STATUS_STUDENT = 5;
+    const STATUS_TEACHER = 1;
 
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
-    /**
-     * Returns the default properties of this dataclass
-     * 
-     * @return String[] - The property names.
-     */
-    public static function get_default_property_names($extended_property_names = array())
+
+    public function getEntityId()
     {
-        $extended_property_names[] = self::PROPERTY_COURSE_ID;
-        $extended_property_names[] = self::PROPERTY_STATUS;
-        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
-        
-        return parent::get_default_property_names($extended_property_names);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -71,56 +43,15 @@ class CourseEntityRelation extends DataClass
      * Getters and Setters *
      * **************************************************************************************************************
      */
-    
-    /**
-     * Returns the course id of this course user relation object
-     * 
-     * @return int
-     */
-    public function get_course_id()
+
+    public function getEntityType()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
-    /**
-     * Sets the course id of this course user relation object
-     * 
-     * @param $course_id int
-     */
-    public function set_course_id($course_id)
-    {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
-    }
-
-    /**
-     * Returns the status of this course user relation object
-     * 
-     * @return int
-     */
-    public function get_status()
-    {
-        return $this->get_default_property(self::PROPERTY_STATUS);
-    }
-
-    /**
-     * Sets the status of this course user relation object
-     * 
-     * @param $status int
-     */
-    public function set_status($status)
-    {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Foreign Properties Setters / Getters *
-     * **************************************************************************************************************
-     */
-    
     /**
      * Returns the course of this course user relation object
-     * 
+     *
      * @return \application\weblcms\course\Course
      */
     public function get_course()
@@ -129,18 +60,54 @@ class CourseEntityRelation extends DataClass
     }
 
     /**
-     * Sets the course of this course user relation object
-     * 
-     * @param $course \application\weblcms\course\Course
+     * Returns the course id of this course user relation object
+     *
+     * @return int
      */
-    public function set_course(Course $course)
+    public function get_course_id()
     {
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE, $course);
+        return $this->get_default_property(self::PROPERTY_COURSE_ID);
     }
 
-    public function getEntityType()
+    /**
+     * Returns the default properties of this dataclass
+     *
+     * @return String[] - The property names.
+     */
+    public static function get_default_property_names($extended_property_names = array())
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        $extended_property_names[] = self::PROPERTY_COURSE_ID;
+        $extended_property_names[] = self::PROPERTY_STATUS;
+        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
+        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
+
+        return parent::get_default_property_names($extended_property_names);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Foreign Properties Setters / Getters *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the status of this course user relation object
+     *
+     * @return int
+     */
+    public function get_status()
+    {
+        return $this->get_default_property(self::PROPERTY_STATUS);
+    }
+
+    public static function get_table_name()
+    {
+        return 'weblcms_course_entity_relation';
+    }
+
+    public function setEntityId($entityId)
+    {
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
     }
 
     public function setEntityType($entityType)
@@ -148,13 +115,33 @@ class CourseEntityRelation extends DataClass
         $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
-    public function getEntityId()
+    /**
+     * Sets the course of this course user relation object
+     *
+     * @param $course \application\weblcms\course\Course
+     */
+    public function set_course(Course $course)
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE, $course);
     }
 
-    public function setEntityId($entityId)
+    /**
+     * Sets the course id of this course user relation object
+     *
+     * @param $course_id int
+     */
+    public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
+        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+    }
+
+    /**
+     * Sets the status of this course user relation object
+     *
+     * @param $status int
+     */
+    public function set_status($status)
+    {
+        $this->set_default_property(self::PROPERTY_STATUS, $status);
     }
 }

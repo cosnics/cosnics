@@ -305,4 +305,12 @@ class Registration extends DataClass
 
         return $this->package;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'configuration_registration';
+    }
 }

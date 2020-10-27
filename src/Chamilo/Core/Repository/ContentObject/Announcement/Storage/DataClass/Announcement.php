@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  *
  * @package repository.lib.content_object.announcement
  */
+
 /**
  * This class represents an announcement
  */

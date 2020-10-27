@@ -457,4 +457,12 @@ class SynchronizationData extends DataClass
         $sync->set_state(self::STATE_ACTIVE);
         return $sync->create();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_instance_synchronization_data';
+    }
 }

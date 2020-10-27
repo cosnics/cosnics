@@ -6,13 +6,18 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Dat
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry
+class Entry extends
+    \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry
 {
     const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
-    public static function get_table_name()
+    /**
+     *
+     * @return int
+     */
+    public function getContentObjectPublicationId()
     {
-        return 'tracking_weblcms_learning_path_assignment_entry';
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
     }
 
     /**
@@ -28,13 +33,9 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Integratio
         return parent::get_default_property_names($extendedPropertyNames);
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function getContentObjectPublicationId()
+    public static function get_table_name()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
+        return 'tracking_weblcms_learning_path_assignment_entry';
     }
 
     /**

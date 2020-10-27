@@ -31,19 +31,19 @@ class Feedback extends \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\
 
     /**
      *
-     * @param int $publication_id
-     */
-    public function set_publication_id($publication_id)
-    {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
-    }
-
-    /**
-     *
      * @return string
      */
     public static function get_table_name()
     {
         return 'portfolio_feedback';
+    }
+
+    /**
+     *
+     * @param int $publication_id
+     */
+    public function set_publication_id($publication_id)
+    {
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 }

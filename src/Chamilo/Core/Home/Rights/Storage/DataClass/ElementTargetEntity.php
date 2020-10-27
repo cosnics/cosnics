@@ -5,7 +5,7 @@ namespace Chamilo\Core\Home\Rights\Storage\DataClass;
  * Defines the target entities for a home element instance.
  * When a home element instance is connected to target
  * entities it becomes limited for the target entities only when setting the default homepage
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ElementTargetEntity extends HomeTargetEntity
@@ -28,6 +28,15 @@ class ElementTargetEntity extends HomeTargetEntity
     public function get_element_id()
     {
         return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'home_element_type_target_entity';
     }
 
     /**

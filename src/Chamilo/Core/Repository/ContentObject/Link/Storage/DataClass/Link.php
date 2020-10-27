@@ -15,6 +15,14 @@ class Link extends ContentObject implements Versionable, Includeable
     const PROPERTY_URL = 'url';
     const PROPERTY_SHOW_IN_IFRAME = 'show_in_iframe';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_link';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

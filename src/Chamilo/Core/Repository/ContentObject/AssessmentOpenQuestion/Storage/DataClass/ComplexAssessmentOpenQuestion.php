@@ -14,8 +14,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  */
 class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_WEIGHT = 'weight';
     const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    const PROPERTY_WEIGHT = 'weight';
 
     /**
      *
@@ -30,18 +30,15 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
      *
      * @return int
      */
-    public function get_weight()
+    public function get_default_question_weight()
     {
-        return $this->get_additional_property(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
-    }
+        $reference = parent::get_ref_object();
+        if ($reference)
+        {
+            return $reference->get_default_weight();
+        }
 
-    /**
-     *
-     * @param int $value
-     */
-    public function set_weight($value)
-    {
-        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
+        return 1;
     }
 
     /**
@@ -54,28 +51,20 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     }
 
     /**
-     *
-     * @param int $value
+     * @return string
      */
-    public function set_show_answer_feedback($value)
+    public static function get_table_name()
     {
-        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        return 'repository_complex_assessment_open_question';
     }
-    
-    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
-    // complex question object.
+
     /**
      *
      * @return int
      */
-    public function get_default_question_weight()
+    public function get_weight()
     {
-        $reference = parent::get_ref_object();
-        if ($reference)
-        {
-            return $reference->get_default_weight();
-        }
-        return 1;
+        return $this->get_additional_property(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -88,5 +77,26 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
         // complex question object.
         parent::set_parent($parent);
         $this->set_weight($this->get_default_question_weight());
+    }
+
+    // TODO: should be moved to an additional parent layer "complex_question" which offers this implementation to EACH
+    // complex question object.
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_show_answer_feedback($value)
+    {
+        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+    }
+
+    /**
+     *
+     * @param int $value
+     */
+    public function set_weight($value)
+    {
+        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
     }
 }

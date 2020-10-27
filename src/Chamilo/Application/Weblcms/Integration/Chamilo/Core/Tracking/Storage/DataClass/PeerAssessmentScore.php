@@ -61,4 +61,12 @@ class PeerAssessmentScore extends SimpleTracker
         $this->set_indicator_id($parameters[self::PROPERTY_INDICATOR_ID]);
         $this->set_score($parameters[self::PROPERTY_SCORE]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_score';
+    }
 }

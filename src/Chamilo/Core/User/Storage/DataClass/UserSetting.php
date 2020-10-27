@@ -63,4 +63,12 @@ class UserSetting extends DataClass
     {
         $this->set_default_property(self::PROPERTY_VALUE, $value);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'user_user_setting';
+    }
 }

@@ -12,8 +12,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class CourseGroupUserRelation extends DataClass
 {
     const PROPERTY_COURSE_GROUP = 'course_group_id';
-    const PROPERTY_USER = 'user_id';
     const PROPERTY_SUBSCRIPTION_TIME = 'subscription_time';
+    const PROPERTY_USER = 'user_id';
 
     private $defaultProperties;
 
@@ -29,49 +29,16 @@ class CourseGroupUserRelation extends DataClass
     }
 
     /**
-     * Gets a default property of this course user relation object by name.
-     *
-     * @param $name string The name of the property.
+     * Creates a new subscription and adds the subscription time
      */
-    public function get_default_property($name)
+    public function create()
     {
-        return $this->defaultProperties[$name];
-    }
+        if (!$this->get_subscription_time())
+        {
+            $this->set_subscription_time(time());
+        }
 
-    /**
-     * Gets the default properties of this course user relation object.
-     *
-     * @return array An associative array containing the properties.
-     */
-    public function get_default_properties()
-    {
-        return $this->defaultProperties;
-    }
-
-    /**
-     * Sets a default property of this course user relation object by name.
-     *
-     * @param $name string The name of the property.
-     * @param $value mixed The new value for the property.
-     */
-    public function set_default_property($name, $value)
-    {
-        $this->defaultProperties[$name] = $value;
-    }
-
-    public function set_default_properties($defaultProperties)
-    {
-        $this->defaultProperties = $defaultProperties;
-    }
-
-    /**
-     * Get the default properties of all course user relations.
-     *
-     * @return array The property names.
-     */
-    public static function get_default_property_names($extended_property_names = array())
-    {
-        return array(self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER);
+        return parent::create();
     }
 
     /**
@@ -85,43 +52,38 @@ class CourseGroupUserRelation extends DataClass
     }
 
     /**
-     * Sets the course group of this course group user relation object
+     * Gets the default properties of this course user relation object.
      *
-     * @param $course int
+     * @return array An associative array containing the properties.
      */
-    public function set_course_group($course_group)
+    public function get_default_properties()
     {
-        $this->set_default_property(self::PROPERTY_COURSE_GROUP, $course_group);
+        return $this->defaultProperties;
+    }
+
+    public function set_default_properties($defaultProperties)
+    {
+        $this->defaultProperties = $defaultProperties;
     }
 
     /**
-     * Returns the user of this course user relation object
+     * Gets a default property of this course user relation object by name.
      *
-     * @return int
+     * @param $name string The name of the property.
      */
-    public function get_user()
+    public function get_default_property($name)
     {
-        return $this->get_default_property(self::PROPERTY_USER);
+        return $this->defaultProperties[$name];
     }
 
     /**
-     * Sets the user of this course user relation object
+     * Get the default properties of all course user relations.
      *
-     * @param $user int
+     * @return array The property names.
      */
-    public function set_user($user)
+    public static function get_default_property_names($extended_property_names = array())
     {
-        $this->set_default_property(self::PROPERTY_USER, $user);
-    }
-
-    /**
-     * Sets the subscription time
-     *
-     * @param int $subscription_time
-     */
-    public function set_subscription_time($subscription_time)
-    {
-        $this->set_default_property(self::PROPERTY_SUBSCRIPTION_TIME, $subscription_time);
+        return array(self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER);
     }
 
     /**
@@ -135,16 +97,21 @@ class CourseGroupUserRelation extends DataClass
     }
 
     /**
-     * Creates a new subscription and adds the subscription time
+     * @return string
      */
-    public function create()
+    public static function get_table_name()
     {
-        if (! $this->get_subscription_time())
-        {
-            $this->set_subscription_time(time());
-        }
+        return 'weblcms_course_group_user_relation';
+    }
 
-        return parent::create();
+    /**
+     * Returns the user of this course user relation object
+     *
+     * @return int
+     */
+    public function get_user()
+    {
+        return $this->get_default_property(self::PROPERTY_USER);
     }
 
     /**
@@ -156,7 +123,48 @@ class CourseGroupUserRelation extends DataClass
     public function get_user_object()
     {
         return DataManager::retrieve_by_id(
-            User::class,
-            $this->get_user());
+            User::class, $this->get_user()
+        );
+    }
+
+    /**
+     * Sets the course group of this course group user relation object
+     *
+     * @param $course int
+     */
+    public function set_course_group($course_group)
+    {
+        $this->set_default_property(self::PROPERTY_COURSE_GROUP, $course_group);
+    }
+
+    /**
+     * Sets a default property of this course user relation object by name.
+     *
+     * @param $name string The name of the property.
+     * @param $value mixed The new value for the property.
+     */
+    public function set_default_property($name, $value)
+    {
+        $this->defaultProperties[$name] = $value;
+    }
+
+    /**
+     * Sets the subscription time
+     *
+     * @param int $subscription_time
+     */
+    public function set_subscription_time($subscription_time)
+    {
+        $this->set_default_property(self::PROPERTY_SUBSCRIPTION_TIME, $subscription_time);
+    }
+
+    /**
+     * Sets the user of this course user relation object
+     *
+     * @param $user int
+     */
+    public function set_user($user)
+    {
+        $this->set_default_property(self::PROPERTY_USER, $user);
     }
 }

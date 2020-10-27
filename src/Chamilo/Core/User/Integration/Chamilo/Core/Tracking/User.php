@@ -2,8 +2,12 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking;
 
 use Chamilo\Core\Tracking\Storage\DataClass\AggregateTracker;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 
+/**
+ * @package Chamilo\Core\User\Integration\Chamilo\Core\Tracking
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 abstract class User extends AggregateTracker
 {
     const TYPE_BROWSER = 'browser';
@@ -14,6 +18,6 @@ abstract class User extends AggregateTracker
 
     public static function get_table_name()
     {
-        return DataManager::PREFIX . 'user';
+        return 'tracking_user_user';
     }
 }

@@ -136,4 +136,12 @@ class Relation extends DataClass implements EntityTranslationInterface
     {
         return $this->get_name();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_relation';
+    }
 }

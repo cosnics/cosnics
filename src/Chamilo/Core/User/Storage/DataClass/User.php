@@ -435,6 +435,14 @@ class User extends DataClass
     }
 
     /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'user_user';
+    }
+
+    /**
      * Returns the date on wich the user has last accepted the terms and conditions
      *
      * @return <integer> terms_date
@@ -597,6 +605,9 @@ class User extends DataClass
         $this->set_default_property(self::PROPERTY_FIRSTNAME, $firstname);
     }
 
+    /*
+     */
+
     /**
      * Sets the lastname of this user.
      *
@@ -606,9 +617,6 @@ class User extends DataClass
     {
         $this->set_default_property(self::PROPERTY_LASTNAME, $lastname);
     }
-
-    /*
-     */
 
     /**
      * Sets the official code for this user.

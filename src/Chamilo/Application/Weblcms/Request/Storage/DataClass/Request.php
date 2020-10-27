@@ -16,27 +16,17 @@ class Request extends DataClass
 {
 
     const DECISION_DENIED = 1;
-
     const DECISION_GRANTED = 2;
-
     const DECISION_PENDING = 0;
 
     const PROPERTY_CATEGORY_ID = 'category_id';
-
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
-
     const PROPERTY_CREATION_DATE = 'creation_date';
-
     const PROPERTY_DECISION = 'decision';
-
     const PROPERTY_DECISION_DATE = 'decision_date';
-
     const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
-
     const PROPERTY_MOTIVATION = 'motivation';
-
     const PROPERTY_NAME = 'name';
-
     const PROPERTY_SUBJECT = 'subject';
 
     /**
@@ -251,6 +241,14 @@ class Request extends DataClass
     function get_subject()
     {
         return $this->get_default_property(self::PROPERTY_SUBJECT);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_request_request';
     }
 
     /**

@@ -113,8 +113,12 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_PARENT, self::PROPERTY_TYPE, self::PROPERTY_SORT, self::PROPERTY_HIDDEN,
-                self::PROPERTY_DISPLAY, self::PROPERTY_ICON_CLASS
+                self::PROPERTY_PARENT,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_SORT,
+                self::PROPERTY_HIDDEN,
+                self::PROPERTY_DISPLAY,
+                self::PROPERTY_ICON_CLASS
             )
         );
     }
@@ -153,6 +157,14 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     public function get_sort()
     {
         return $this->getSort();
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'menu_item';
     }
 
     /**

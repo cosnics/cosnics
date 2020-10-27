@@ -120,4 +120,12 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     {
         return parent::get_html_editors(array(self::PROPERTY_LINKS));
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_wiki';
+    }
 }

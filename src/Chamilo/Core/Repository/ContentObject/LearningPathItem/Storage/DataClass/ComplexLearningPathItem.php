@@ -22,14 +22,23 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
         return $this->get_additional_property(self::PROPERTY_PREREQUISITES);
     }
 
-    public function set_prerequisites($value)
+    /**
+     * @return string
+     */
+    public static function get_table_name()
     {
-        $this->set_additional_property(self::PROPERTY_PREREQUISITES, $value);
+        return 'repository_complex_learning_path_item';
     }
 
     public function has_prerequisites()
     {
-        return ! StringUtilities::getInstance()->isNullOrEmpty(
-            $this->get_additional_property(self::PROPERTY_PREREQUISITES));
+        return !StringUtilities::getInstance()->isNullOrEmpty(
+            $this->get_additional_property(self::PROPERTY_PREREQUISITES)
+        );
+    }
+
+    public function set_prerequisites($value)
+    {
+        $this->set_additional_property(self::PROPERTY_PREREQUISITES, $value);
     }
 }

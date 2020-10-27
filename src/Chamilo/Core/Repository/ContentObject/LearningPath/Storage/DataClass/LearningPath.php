@@ -21,11 +21,9 @@ use InvalidArgumentException;
 class LearningPath extends ContentObject implements ComplexContentObjectSupport
 {
     const AUTOMATIC_NUMBERING_DIGITS = 'digits';
-
     const AUTOMATIC_NUMBERING_NONE = 'none';
 
     const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
-
     const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
 
     // Currently not implemented options
@@ -183,6 +181,14 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         }
 
         return $types;
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_learning_path';
     }
 
     /**

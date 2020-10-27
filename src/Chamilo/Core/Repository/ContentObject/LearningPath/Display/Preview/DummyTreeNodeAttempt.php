@@ -15,15 +15,6 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
 
     /**
      *
-     * @see \libraries\storage\DataClass::update()
-     */
-    public function update()
-    {
-        return true;
-    }
-
-    /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create()
@@ -36,6 +27,23 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete()
+    {
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_learning_path_preview_tree_node_attempt';
+    }
+
+    /**
+     *
+     * @see \libraries\storage\DataClass::update()
+     */
+    public function update()
     {
         return true;
     }

@@ -10,9 +10,7 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass;
 class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
 {
 
-    // Properties
     const PROPERTY_PUBLISHED = 'published';
-
     const PROPERTY_PUBLISHER = 'publisher_id';
 
     /**
@@ -50,6 +48,14 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
     }
 
     /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'calendar_personal_publication';
+    }
+
+    /**
      * @param integer $published
      */
     public function set_published($published)
@@ -63,13 +69,5 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
     public function set_publisher($publisher)
     {
         $this->set_default_property(self::PROPERTY_PUBLISHER, $publisher);
-    }
-
-    /**
-     * @return string
-     */
-    public static function get_table_name()
-    {
-        return 'calendar_personal_publication';
     }
 }

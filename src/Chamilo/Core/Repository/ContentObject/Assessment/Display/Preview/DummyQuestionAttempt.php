@@ -71,4 +71,12 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     {
         return PreviewStorage::getInstance()->delete_assessment_question_attempt($this);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_assessment_preview_question_attempt';
+    }
 }

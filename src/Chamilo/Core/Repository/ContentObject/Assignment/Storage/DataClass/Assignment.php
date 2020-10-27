@@ -17,21 +17,41 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class Assignment extends ContentObject implements AttachmentSupport
 {
-    const PROPERTY_START_TIME = 'start_time';
-    const PROPERTY_END_TIME = 'end_time';
-    const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
-    const PROPERTY_ALLOW_LATE_SUBMISSIONS = 'allow_late_submissions';
-    const PROPERTY_VISIBILTY_FEEDBACK = 'visibility_feedback';
-    const PROPERTY_AUTOMATIC_FEEDBACK_TEXT = 'automatic_feedback_text';
-    const PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS = 'automatic_feedback_co_ids';
-    const PROPERTY_SELECT_ATTACHMENT = 'select_attachment';
     const PROPERTY_ALLOWED_TYPES = 'allowed_types';
+    const PROPERTY_ALLOW_LATE_SUBMISSIONS = 'allow_late_submissions';
+    const PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS = 'automatic_feedback_co_ids';
+    const PROPERTY_AUTOMATIC_FEEDBACK_TEXT = 'automatic_feedback_text';
+    const PROPERTY_END_TIME = 'end_time';
+    const PROPERTY_SELECT_ATTACHMENT = 'select_attachment';
+    const PROPERTY_START_TIME = 'start_time';
+    const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
+    const PROPERTY_VISIBILTY_FEEDBACK = 'visibility_feedback';
+
     const VISIBILITY_FEEDBACK_AFTER_END_TIME = 0;
     const VISIBILITY_FEEDBACK_AFTER_SUBMISSION = 1;
 
-    public static function get_type_name()
+    /**
+     * @return bool
+     */
+    public function canSubmit()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        return $this->isInProgress() || ($this->hasEndTimePassed() && $this->get_allow_late_submissions());
+    }
+
+    /**
+     * @return ContentObject[]
+     */
+    public function getAutomaticFeedbackObjects()
+    {
+        $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
+        $contentObjects = DataManager::retrieves(
+            ContentObject::class, new InCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                explode(',', $automaticFeedbackContentObjectIds)
+            )
+        );
+
+        return $contentObjects;
     }
 
     public static function get_additional_property_names()
@@ -48,74 +68,9 @@ class Assignment extends ContentObject implements AttachmentSupport
         );
     }
 
-    public function get_start_time()
-    {
-        return $this->get_additional_property(self::PROPERTY_START_TIME);
-    }
-
-    public function set_start_time($start_time)
-    {
-        $this->set_additional_property(self::PROPERTY_START_TIME, $start_time);
-    }
-
-    public function get_end_time()
-    {
-        return $this->get_additional_property(self::PROPERTY_END_TIME);
-    }
-
-    public function set_end_time($end_time)
-    {
-        $this->set_additional_property(self::PROPERTY_END_TIME, $end_time);
-    }
-
-    public function get_visibility_submissions()
-    {
-        return $this->get_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS);
-    }
-
-    public function set_visibility_submissions($visibility_submissions)
-    {
-        $this->set_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS, $visibility_submissions);
-    }
-
     public function get_allow_late_submissions()
     {
         return $this->get_additional_property(self::PROPERTY_ALLOW_LATE_SUBMISSIONS);
-    }
-
-    public function set_allow_late_submissions($allow_late_submissions)
-    {
-        $this->set_additional_property(self::PROPERTY_ALLOW_LATE_SUBMISSIONS, $allow_late_submissions);
-    }
-
-    public function get_visibility_feedback()
-    {
-        return $this->get_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK);
-    }
-
-    public function set_visibility_feedback($visibility_feedback)
-    {
-        $this->set_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK, $visibility_feedback);
-    }
-
-    public function get_automatic_feedback_text()
-    {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT);
-    }
-
-    public function set_automatic_feedback_text($automatic_feedback_text)
-    {
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, $automatic_feedback_text);
-    }
-
-    public function get_automatic_feedback_co_ids()
-    {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS);
-    }
-
-    public function set_automatic_feedback_co_ids($automatic_feedback_co_ids)
-    {
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, $automatic_feedback_co_ids);
     }
 
     public function get_allowed_types()
@@ -123,29 +78,52 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $this->get_additional_property(self::PROPERTY_ALLOWED_TYPES);
     }
 
-    public function set_allowed_types($allowed_types)
+    public function get_automatic_feedback_co_ids()
     {
-        $this->set_additional_property(self::PROPERTY_ALLOWED_TYPES, $allowed_types);
+        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS);
     }
 
-    public function isAutomaticFeedbackVisible()
+    public function get_automatic_feedback_text()
     {
-        return $this->hasAutomaticFeedback() && $this->isAutomaticFeedbackCurrentlyVisible();
+        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT);
+    }
+
+    public function get_end_time()
+    {
+        return $this->get_additional_property(self::PROPERTY_END_TIME);
+    }
+
+    public function get_start_time()
+    {
+        return $this->get_additional_property(self::PROPERTY_START_TIME);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_assignment';
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+    }
+
+    public function get_visibility_feedback()
+    {
+        return $this->get_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK);
+    }
+
+    public function get_visibility_submissions()
+    {
+        return $this->get_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS);
     }
 
     public function hasAutomaticFeedback()
     {
         return !empty($this->get_automatic_feedback_text()) || !empty($this->get_automatic_feedback_co_ids());
-    }
-
-    public function isAutomaticFeedbackVisibleAfterSubmission()
-    {
-        return $this->get_visibility_feedback() == self::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-    }
-
-    public function isAutomaticFeedbackVisibleAfterEndTime()
-    {
-        return $this->get_visibility_feedback() == self::VISIBILITY_FEEDBACK_AFTER_END_TIME;
     }
 
     /**
@@ -156,12 +134,25 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $this->get_end_time() <= time();
     }
 
-    /**
-     * @return bool
-     */
-    public function isStarted()
+    protected function isAutomaticFeedbackCurrentlyVisible()
     {
-        return $this->get_start_time() <= time();
+        return $this->isAutomaticFeedbackVisibleAfterSubmission() ||
+            ($this->isAutomaticFeedbackVisibleAfterEndTime() && $this->hasEndTimePassed());
+    }
+
+    public function isAutomaticFeedbackVisible()
+    {
+        return $this->hasAutomaticFeedback() && $this->isAutomaticFeedbackCurrentlyVisible();
+    }
+
+    public function isAutomaticFeedbackVisibleAfterEndTime()
+    {
+        return $this->get_visibility_feedback() == self::VISIBILITY_FEEDBACK_AFTER_END_TIME;
+    }
+
+    public function isAutomaticFeedbackVisibleAfterSubmission()
+    {
+        return $this->get_visibility_feedback() == self::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
     }
 
     /**
@@ -173,22 +164,28 @@ class Assignment extends ContentObject implements AttachmentSupport
     }
 
     /**
+     * @param int $objectId
+     *
      * @return bool
      */
-    public function canSubmit()
+    protected function isObjectPartOfAutomaticFeedback($objectId)
     {
-        return $this->isInProgress() || ($this->hasEndTimePassed() && $this->get_allow_late_submissions());
+        $automaticFeedbackContentObjectIds = explode(',', $this->get_automatic_feedback_co_ids());
+
+        return in_array($objectId, $automaticFeedbackContentObjectIds);
     }
 
-    protected function isAutomaticFeedbackCurrentlyVisible()
+    /**
+     * @return bool
+     */
+    public function isStarted()
     {
-        return $this->isAutomaticFeedbackVisibleAfterSubmission() ||
-            ($this->isAutomaticFeedbackVisibleAfterEndTime() && $this->hasEndTimePassed());
+        return $this->get_start_time() <= time();
     }
 
     public function is_attached_to_or_included_in($object_id)
     {
-        if(parent::is_attached_to_or_included_in($object_id))
+        if (parent::is_attached_to_or_included_in($object_id))
         {
             return true;
         }
@@ -210,31 +207,43 @@ class Assignment extends ContentObject implements AttachmentSupport
         return false;
     }
 
-    /**
-     * @param int $objectId
-     *
-     * @return bool
-     */
-    protected function isObjectPartOfAutomaticFeedback($objectId)
+    public function set_allow_late_submissions($allow_late_submissions)
     {
-        $automaticFeedbackContentObjectIds = explode(',', $this->get_automatic_feedback_co_ids());
-
-        return in_array($objectId, $automaticFeedbackContentObjectIds);
+        $this->set_additional_property(self::PROPERTY_ALLOW_LATE_SUBMISSIONS, $allow_late_submissions);
     }
 
-    /**
-     * @return ContentObject[]
-     */
-    public function getAutomaticFeedbackObjects()
+    public function set_allowed_types($allowed_types)
     {
-        $automaticFeedbackContentObjectIds = $this->get_automatic_feedback_co_ids();
-        $contentObjects = DataManager::retrieves(
-            ContentObject::class, new InCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                explode(',', $automaticFeedbackContentObjectIds)
-            )
-        );
+        $this->set_additional_property(self::PROPERTY_ALLOWED_TYPES, $allowed_types);
+    }
 
-        return $contentObjects;
+    public function set_automatic_feedback_co_ids($automatic_feedback_co_ids)
+    {
+        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, $automatic_feedback_co_ids);
+    }
+
+    public function set_automatic_feedback_text($automatic_feedback_text)
+    {
+        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, $automatic_feedback_text);
+    }
+
+    public function set_end_time($end_time)
+    {
+        $this->set_additional_property(self::PROPERTY_END_TIME, $end_time);
+    }
+
+    public function set_start_time($start_time)
+    {
+        $this->set_additional_property(self::PROPERTY_START_TIME, $start_time);
+    }
+
+    public function set_visibility_feedback($visibility_feedback)
+    {
+        $this->set_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK, $visibility_feedback);
+    }
+
+    public function set_visibility_submissions($visibility_submissions)
+    {
+        $this->set_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS, $visibility_submissions);
     }
 }

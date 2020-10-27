@@ -13,6 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package repository.lib.content_object.blog
  */
+
 /**
  * This class represents an blog
  */
@@ -20,31 +21,17 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 {
     const PROPERTY_BLOG_LAYOUT = 'blog_layout';
 
-    public static function get_type_name()
+    public static function get_additional_property_names()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        return array(self::PROPERTY_BLOG_LAYOUT);
     }
 
     public function get_allowed_types()
     {
         $allowed_types = array();
         $allowed_types[] = BlogItem::class;
+
         return $allowed_types;
-    }
-
-    public function get_blog_layout()
-    {
-        return $this->get_additional_property(self::PROPERTY_BLOG_LAYOUT);
-    }
-
-    public function set_blog_layout($blog_layout)
-    {
-        return $this->set_additional_property(self::PROPERTY_BLOG_LAYOUT, $blog_layout);
-    }
-
-    public static function get_additional_property_names()
-    {
-        return array(self::PROPERTY_BLOG_LAYOUT);
     }
 
     public static function get_available_blog_layouts()
@@ -63,5 +50,28 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
         }
 
         return $blog_layouts;
+    }
+
+    public function get_blog_layout()
+    {
+        return $this->get_additional_property(self::PROPERTY_BLOG_LAYOUT);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_blog';
+    }
+
+    public static function get_type_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+    }
+
+    public function set_blog_layout($blog_layout)
+    {
+        return $this->set_additional_property(self::PROPERTY_BLOG_LAYOUT, $blog_layout);
     }
 }

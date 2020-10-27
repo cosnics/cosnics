@@ -39,4 +39,12 @@ class DummyQuestionAttempt extends TreeNodeQuestionAttempt
     {
         return true;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_learning_path_preview_question_attempt';
+    }
 }

@@ -182,4 +182,12 @@ class ItemTitle extends DataClass
     {
         $this->setTitle($title);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'menu_item_title';
+    }
 }

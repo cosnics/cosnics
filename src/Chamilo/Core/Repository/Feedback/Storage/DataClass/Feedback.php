@@ -5,7 +5,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
-class Feedback extends DataClass
+abstract class Feedback extends DataClass
 {
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_COMMENT = 'comment';

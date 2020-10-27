@@ -158,4 +158,12 @@ class ApplicationItem extends Item
             self::PROPERTY_EXTRA_PARAMETERS
         );
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'menu_application_item';
+    }
 }

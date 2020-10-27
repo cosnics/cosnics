@@ -34,6 +34,14 @@ class ComplexWikiPage extends ComplexContentObjectItem
         return $this->get_additional_property(self::PROPERTY_IS_LOCKED);
     }
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_complex_wiki_page';
+    }
+
     public function set_is_homepage($value)
     {
         $this->set_additional_property(self::PROPERTY_IS_HOMEPAGE, $value);
@@ -51,25 +59,24 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class,
-                    ComplexContentObjectItem::PROPERTY_PARENT),
-                new StaticConditionVariable($this->get_parent()),
-                ComplexContentObjectItem::get_table_name());
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                ), new StaticConditionVariable($this->get_parent()), ComplexContentObjectItem::get_table_name()
+            );
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_ID),
-                    new StaticConditionVariable($this->get_id()),
-                    ComplexContentObjectItem::get_table_name()));
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
+                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                )
+            );
 
             $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
 
             $children = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class,
-                $parameters);
+                ComplexContentObjectItem::class, $parameters
+            );
 
-            foreach($children as $child)
+            foreach ($children as $child)
             {
                 if ($child->get_is_homepage())
                 {

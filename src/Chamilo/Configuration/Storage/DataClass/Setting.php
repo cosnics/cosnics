@@ -189,4 +189,12 @@ class Setting extends DataClass
         Configuration::getInstance()->reset();
         return $success;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'configuration_setting';
+    }
 }

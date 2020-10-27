@@ -125,4 +125,12 @@ class ProviderRegistration extends DataClass
         
         return $dependencies;
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_provider_registration';
+    }
 }

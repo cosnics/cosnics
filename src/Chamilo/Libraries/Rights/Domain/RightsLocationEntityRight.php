@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsLocationEntityRight extends DataClass
+abstract class RightsLocationEntityRight extends DataClass
 {
     const PROPERTY_ENTITY_ID = 'entity_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';

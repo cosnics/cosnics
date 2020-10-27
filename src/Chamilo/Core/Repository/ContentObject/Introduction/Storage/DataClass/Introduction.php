@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  *
  * @package repository.lib.content_object.introduction
  */
+
 /**
  * An Introduction
  */

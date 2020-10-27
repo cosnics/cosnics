@@ -163,4 +163,12 @@ class MailLog extends DataClass
     {
         return DataManager::getInstance();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'configuration_mail_log';
+    }
 }

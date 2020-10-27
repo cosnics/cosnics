@@ -216,6 +216,14 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     /**
      * @return string
      */
+    public static function get_table_name()
+    {
+        return 'repository_task';
+    }
+
+    /**
+     * @return string
+     */
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

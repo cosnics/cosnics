@@ -2,10 +2,6 @@
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
-use Chamilo\Core\Metadata\Storage\DataClass\Element;
-use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
-use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -16,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class describes a metadata schema
- * 
+ *
  * @package Chamilo\Core\Metadata\Schema\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -27,27 +23,25 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Schema extends DataClass implements EntityTranslationInterface
 {
     use EntityTranslationTrait;
-    
-    /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    const PROPERTY_NAMESPACE = 'namespace';
-    const PROPERTY_NAME = 'name';
+
     const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_URL = 'url';
     const PROPERTY_FIXED = 'fixed';
+    const PROPERTY_NAME = 'name';
+    const PROPERTY_NAMESPACE = 'namespace';
+    const PROPERTY_URL = 'url';
 
     /**
-     * **************************************************************************************************************
-     * Extended functionality *
-     * **************************************************************************************************************
+     *
+     * @return string
      */
-    
+    public function getTranslationFallback()
+    {
+        return $this->get_name();
+    }
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -59,59 +53,80 @@ class Schema extends DataClass implements EntityTranslationInterface
         $extended_property_names[] = self::PROPERTY_DESCRIPTION;
         $extended_property_names[] = self::PROPERTY_URL;
         $extended_property_names[] = self::PROPERTY_FIXED;
-        
+
         return parent::get_default_property_names($extended_property_names);
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
+     * Returns the dependencies for this dataclass
+     *
+     * @return string[string]
      */
-    
-    /**
-     * Returns the namespace
-     * 
-     * @return string
-     */
-    public function get_namespace()
+    protected function get_dependencies()
     {
-        return $this->get_default_property(self::PROPERTY_NAMESPACE);
-    }
+        $dependencies = array();
 
-    /**
-     * Sets the namespace
-     * 
-     * @param string $namespace
-     */
-    public function set_namespace($namespace)
-    {
-        $this->set_default_property(self::PROPERTY_NAMESPACE, $namespace);
-    }
+        $dependencies[EntityTranslation::class] = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE
+                    ), new StaticConditionVariable(static::class)
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID
+                    ), new StaticConditionVariable($this->get_id())
+                )
+            )
+        );
 
-    /**
-     * Returns the name
-     * 
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->get_default_property(self::PROPERTY_NAME);
-    }
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE
+                    ), new StaticConditionVariable(static::class)
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
+            )
+        );
 
-    /**
-     * Sets the name
-     * 
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE
+                    ), new StaticConditionVariable(static::class)
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id())
+                )
+            )
+        );
+
+        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
+
+        $dependencies[SchemaInstance::class] = new EqualityCondition(
+            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_SCHEMA_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        $dependencies[Element::class] = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        return $dependencies;
     }
 
     /**
      * Returns the description
-     * 
+     *
      * @return string
      */
     public function get_description()
@@ -120,18 +135,36 @@ class Schema extends DataClass implements EntityTranslationInterface
     }
 
     /**
-     * Sets the description
-     * 
-     * @param string $description
+     * Returns the name
+     *
+     * @return string
      */
-    public function set_description($description)
+    public function get_name()
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        return $this->get_default_property(self::PROPERTY_NAME);
+    }
+
+    /**
+     * Returns the namespace
+     *
+     * @return string
+     */
+    public function get_namespace()
+    {
+        return $this->get_default_property(self::PROPERTY_NAMESPACE);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_schema';
     }
 
     /**
      * Returns the url
-     * 
+     *
      * @return string
      */
     public function get_url()
@@ -140,18 +173,8 @@ class Schema extends DataClass implements EntityTranslationInterface
     }
 
     /**
-     * Sets the url
-     * 
-     * @param string $url
-     */
-    public function set_url($url)
-    {
-        $this->set_default_property(self::PROPERTY_URL, $url);
-    }
-
-    /**
      * Returns whether or not this element is fixed
-     * 
+     *
      * @return string
      */
     public function is_fixed()
@@ -160,8 +183,18 @@ class Schema extends DataClass implements EntityTranslationInterface
     }
 
     /**
+     * Sets the description
+     *
+     * @param string $description
+     */
+    public function set_description($description)
+    {
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+    }
+
+    /**
      * Sets whether or not the element is fixed
-     * 
+     *
      * @param string $fixed
      */
     public function set_fixed($fixed)
@@ -170,68 +203,32 @@ class Schema extends DataClass implements EntityTranslationInterface
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     * 
-     * @return string[string]
+     * Sets the name
+     *
+     * @param string $name
      */
-    protected function get_dependencies()
+    public function set_name($name)
     {
-        $dependencies = array();
-        
-        $dependencies[EntityTranslation::class] = new AndCondition(
-            array(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        EntityTranslation::class,
-                        EntityTranslation::PROPERTY_ENTITY_TYPE), 
-                    new StaticConditionVariable(static::class)),
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        EntityTranslation::class,
-                        EntityTranslation::PROPERTY_ENTITY_ID), 
-                    new StaticConditionVariable($this->get_id()))));
-        
-        $sourceConditions = new AndCondition(
-            array(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RelationInstance::class,
-                        RelationInstance::PROPERTY_SOURCE_TYPE), 
-                    new StaticConditionVariable(static::class)),
-                new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
-                    new StaticConditionVariable($this->get_id()))));
-        
-        $targetConditions = new AndCondition(
-            array(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RelationInstance::class,
-                        RelationInstance::PROPERTY_TARGET_TYPE), 
-                    new StaticConditionVariable(static::class)),
-                new EqualityCondition(
-                    new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
-                    new StaticConditionVariable($this->get_id()))));
-        
-        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
-        
-        $dependencies[SchemaInstance::class] = new EqualityCondition(
-            new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_SCHEMA_ID),
-            new StaticConditionVariable($this->get_id()));
-        
-        $dependencies[Element::class] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID),
-            new StaticConditionVariable($this->get_id()));
-        
-        return $dependencies;
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     /**
+     * Sets the namespace
      *
-     * @return string
+     * @param string $namespace
      */
-    public function getTranslationFallback()
+    public function set_namespace($namespace)
     {
-        return $this->get_name();
+        $this->set_default_property(self::PROPERTY_NAMESPACE, $namespace);
+    }
+
+    /**
+     * Sets the url
+     *
+     * @param string $url
+     */
+    public function set_url($url)
+    {
+        $this->set_default_property(self::PROPERTY_URL, $url);
     }
 }

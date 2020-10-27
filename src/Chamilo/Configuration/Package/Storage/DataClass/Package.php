@@ -203,6 +203,14 @@ class Package extends DataClass
     /**
      * @return string
      */
+    public static function get_table_name()
+    {
+        return 'configuration_package';
+    }
+
+    /**
+     * @return string
+     */
     public function get_type()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);

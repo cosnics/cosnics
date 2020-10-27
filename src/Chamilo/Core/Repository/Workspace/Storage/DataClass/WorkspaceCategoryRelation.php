@@ -103,4 +103,12 @@ class WorkspaceCategoryRelation extends DataClass
     {
         $this->set_default_property(self::PROPERTY_CATEGORY_ID, $categoryId);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_workspace_category_relation';
+    }
 }

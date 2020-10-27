@@ -7,7 +7,7 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
 
     /**
      * Get the default properties of all feedback
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -23,5 +23,13 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
     public function set_publication_id($publication_id)
     {
         $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_feedback';
     }
 }

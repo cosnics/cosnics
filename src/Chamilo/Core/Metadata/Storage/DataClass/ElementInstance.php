@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -15,26 +14,46 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class ElementInstance extends DataClass
 {
-    /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    const PROPERTY_SCHEMA_INSTANCE_ID = 'schema_instance_id';
-    const PROPERTY_ELEMENT_ID = 'element_id';
-    const PROPERTY_VOCABULARY_ID = 'vocabulary_id';
-    const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_CREATION_DATE = 'creation_date';
+    const PROPERTY_ELEMENT_ID = 'element_id';
+    const PROPERTY_SCHEMA_INSTANCE_ID = 'schema_instance_id';
+    const PROPERTY_USER_ID = 'user_id';
+    const PROPERTY_VOCABULARY_ID = 'vocabulary_id';
 
     /**
      * **************************************************************************************************************
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
+    public function getUser()
+    {
+        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    public function getVocabulary()
+    {
+        return DataManager::retrieve_by_id(Vocabulary::class, $this->get_vocabulary_id());
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_creation_date()
+    {
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+    }
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -46,32 +65,8 @@ class ElementInstance extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_VOCABULARY_ID;
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
-        
+
         return parent::get_default_property_names($extendedPropertyNames);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     *
-     * @return integer
-     */
-    public function get_schema_instance_id()
-    {
-        return $this->get_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID);
-    }
-
-    /**
-     *
-     * @param integer
-     */
-    public function set_schema_instance_id($schemaInstanceId)
-    {
-        $this->set_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID, $schemaInstanceId);
     }
 
     /**
@@ -85,11 +80,28 @@ class ElementInstance extends DataClass
 
     /**
      *
-     * @param integer
+     * @return integer
      */
-    public function set_element_id($elementId)
+    public function get_schema_instance_id()
     {
-        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $elementId);
+        return $this->get_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_element_instance';
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function get_user_id()
+    {
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -105,23 +117,27 @@ class ElementInstance extends DataClass
      *
      * @param integer
      */
-    public function set_vocabulary_id($vocabularyId)
+    public function set_creation_date($creationDate)
     {
-        $this->set_default_property(self::PROPERTY_VOCABULARY_ID, $vocabularyId);
-    }
-
-    public function getVocabulary()
-    {
-        return DataManager::retrieve_by_id(Vocabulary::class, $this->get_vocabulary_id());
+        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 
     /**
      *
-     * @return integer
+     * @param integer
      */
-    public function get_user_id()
+    public function set_element_id($elementId)
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $elementId);
+    }
+
+    /**
+     *
+     * @param integer
+     */
+    public function set_schema_instance_id($schemaInstanceId)
+    {
+        $this->set_default_property(self::PROPERTY_SCHEMA_INSTANCE_ID, $schemaInstanceId);
     }
 
     /**
@@ -133,26 +149,12 @@ class ElementInstance extends DataClass
         $this->set_default_property(self::PROPERTY_USER_ID, $userId);
     }
 
-    public function getUser()
-    {
-        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_creation_date()
-    {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
-    }
-
     /**
      *
      * @param integer
      */
-    public function set_creation_date($creationDate)
+    public function set_vocabulary_id($vocabularyId)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
+        $this->set_default_property(self::PROPERTY_VOCABULARY_ID, $vocabularyId);
     }
 }

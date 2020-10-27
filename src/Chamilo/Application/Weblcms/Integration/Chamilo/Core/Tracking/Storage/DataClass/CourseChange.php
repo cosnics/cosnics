@@ -37,4 +37,12 @@ class CourseChange extends ChangesTracker
     {
         $this->set_default_property(self::PROPERTY_TARGET_REFERENCE_ID, $target_reference_id);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_course_change';
+    }
 }

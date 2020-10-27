@@ -8,4 +8,11 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
  */
 class Change extends ChangesTracker
 {
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_user_change';
+    }
 }

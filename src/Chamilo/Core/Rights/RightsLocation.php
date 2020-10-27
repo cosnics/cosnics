@@ -19,7 +19,7 @@ use Exception;
  *
  * @deprecated Use \Chamilo\Libraries\Rights\Domain\RightsLocation now
  */
-class RightsLocation extends NestedTreeNode
+abstract class RightsLocation extends NestedTreeNode
 {
     const PROPERTY_IDENTIFIER = 'identifier';
     const PROPERTY_INHERIT = 'inherit';

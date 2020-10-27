@@ -38,4 +38,12 @@ class PeerAssessmentGroupSubscription extends SimpleTracker
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
         $this->set_group_id($parameters[self::PROPERTY_GROUP_ID]);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_peer_assessment_group_subscription';
+    }
 }

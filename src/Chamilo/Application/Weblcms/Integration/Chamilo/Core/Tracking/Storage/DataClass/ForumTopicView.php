@@ -67,4 +67,12 @@ class ForumTopicView extends SimpleTracker
     {
         $this->set_default_property(self::PROPERTY_DATE, $date);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_weblcms_forum_topic_view';
+    }
 }

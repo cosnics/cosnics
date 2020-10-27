@@ -19,11 +19,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
-
     const PROPERTY_COURSE_USER_CATEGORY_ID = 'course_user_category_id';
-
     const PROPERTY_SORT = 'sort';
-
     const PROPERTY_USER_ID = 'user_id';
 
     public function __construct($default_properties = array(), $optional_properties = array())
@@ -162,6 +159,14 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     public function get_sort()
     {
         return $this->get_default_property(self::PROPERTY_SORT);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'weblcms_course_type_user_category';
     }
 
     public function get_user_id()

@@ -11,7 +11,7 @@ use Exception;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RecurringContentObject extends ContentObject
+abstract class RecurringContentObject extends ContentObject
 {
     const FREQUENCY_BIWEEKLY = 4;
     const FREQUENCY_DAILY = 1;

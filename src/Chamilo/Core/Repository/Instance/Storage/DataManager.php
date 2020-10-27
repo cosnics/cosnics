@@ -6,7 +6,6 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\UserQuotum;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -176,31 +175,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             SynchronizationData::PROPERTY_STATE)] = new StaticConditionVariable(SynchronizationData::STATE_ACTIVE);
         
         return self::updates(SynchronizationData::class, $properties, $condition);
-    }
-
-    /**
-     * Retrieves the user quotum by a given user and external instance
-     * 
-     * @param int $user_id
-     * @param int $instance_id
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public static function retrieve_user_quotum_by_user_and_instance($user_id, $instance_id)
-    {
-        $conditions = array();
-        
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserQuotum::class, UserQuotum::PROPERTY_USER_ID), 
-            new StaticConditionVariable($user_id));
-        
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserQuotum::class, UserQuotum::PROPERTY_EXTERNAL_REPOSITORY_ID), 
-            new StaticConditionVariable($instance_id));
-        
-        $condition = new AndCondition($conditions);
-        
-        return self::retrieve(UserQuotum::class, new DataClassRetrieveParameters($condition));
     }
 
     /**

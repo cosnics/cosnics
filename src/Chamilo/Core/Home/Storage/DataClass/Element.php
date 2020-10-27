@@ -18,136 +18,43 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
+abstract class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_PARENT_ID = 'parent_id';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_SORT = 'sort';
-    const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_CONFIGURATION = 'configuration';
+    const PROPERTY_PARENT_ID = 'parent_id';
+    const PROPERTY_SORT = 'sort';
+    const PROPERTY_TITLE = 'title';
+    const PROPERTY_TYPE = 'type';
+    const PROPERTY_USER_ID = 'user_id';
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    /**
+     * @param string[] $default_properties
+     *
+     * @throws \Exception
+     */
+    public function __construct($default_properties = array())
     {
-        parent::__construct($default_properties = $optional_properties);
+        parent::__construct($default_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public function delete()
     {
-        return parent::get_default_property_names(
-            array(
-                self::PROPERTY_TYPE,
-                self::PROPERTY_PARENT_ID,
-                self::PROPERTY_TITLE,
-                self::PROPERTY_SORT,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_CONFIGURATION));
-    }
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $childElements = DataManager::retrieves(Block::class, new DataClassRetrievesParameters($condition));
 
-    /**
-     *
-     * @param string[] $configurationVariables
-     * @return string[]
-     */
-    public static function getConfigurationVariables($configurationVariables = array())
-    {
-        return $configurationVariables;
-    }
+        foreach ($childElements as $childElement)
+        {
+            if (!$childElement->delete())
+            {
+                return false;
+            }
+        }
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->get_default_property(self::PROPERTY_TYPE);
-    }
-
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getParentId()
-    {
-        return $this->get_default_property(self::PROPERTY_PARENT_ID);
-    }
-
-    /**
-     *
-     * @param integer $parentId
-     */
-    public function setParentId($parentId)
-    {
-        $this->set_default_property(self::PROPERTY_PARENT_ID, $parentId);
-    }
-
-    public function isOnTopLevel()
-    {
-        return $this->getParentId() == 0;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->get_default_property(self::PROPERTY_TITLE);
-    }
-
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getSort()
-    {
-        return $this->get_default_property(self::PROPERTY_SORT);
-    }
-
-    /**
-     *
-     * @param integer $sort
-     */
-    public function setSort($sort)
-    {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @param integer $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        return parent::delete();
     }
 
     /**
@@ -161,45 +68,85 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
 
     /**
      *
-     * @param integer $configuration
+     * @param string[] $configurationVariables
+     *
+     * @return string[]
      */
-    public function setConfiguration($configuration)
+    public static function getConfigurationVariables($configurationVariables = array())
     {
-        $this->set_default_property(self::PROPERTY_CONFIGURATION, serialize($configuration));
+        return $configurationVariables;
     }
 
-    public function delete()
+    /**
+     *
+     * @return integer
+     */
+    public function getParentId()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_id()));
-        $childElements = DataManager::retrieves(Block::class, new DataClassRetrievesParameters($condition));
-
-        foreach($childElements as $childElement)
-        {
-            if (! $childElement->delete())
-            {
-                return false;
-            }
-        }
-
-        return parent::delete();
+        return $this->get_default_property(self::PROPERTY_PARENT_ID);
     }
 
-    public function hasChildren()
+    /**
+     *
+     * @param string $variable
+     *
+     * @return string
+     */
+    public function getSetting($variable, $defaultValue = null)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_id()));
+        $configuration = $this->getConfiguration();
 
-        $childCount = DataManager::count(Block::class, new DataClassCountParameters($condition));
-
-        return ($childCount == 0);
+        return (isset($configuration[$variable]) ? $configuration[$variable] : $defaultValue);
     }
 
-    public function get_display_order_property()
+    /**
+     *
+     * @return integer
+     */
+    public function getSort()
     {
-        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
+        return $this->get_default_property(self::PROPERTY_SORT);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->get_default_property(self::PROPERTY_TITLE);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->get_default_property(self::PROPERTY_TYPE);
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->get_default_property(self::PROPERTY_USER_ID);
+    }
+
+    public static function get_default_property_names($extended_property_names = array())
+    {
+        return parent::get_default_property_names(
+            array(
+                self::PROPERTY_TYPE,
+                self::PROPERTY_PARENT_ID,
+                self::PROPERTY_TITLE,
+                self::PROPERTY_SORT,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_CONFIGURATION
+            )
+        );
     }
 
     public function get_display_order_context_properties()
@@ -207,15 +154,74 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
         return array(new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID));
     }
 
+    public function get_display_order_property()
+    {
+        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'home_element';
+    }
+
+    /**
+     *
+     * @return string
+     * @deprecated User Element::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function hasChildren()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        $childCount = DataManager::count(Block::class, new DataClassCountParameters($condition));
+
+        return ($childCount == 0);
+    }
+
+    public function isOnTopLevel()
+    {
+        return $this->getParentId() == 0;
+    }
+
     /**
      *
      * @param string $variable
-     * @return string
      */
-    public function getSetting($variable, $defaultValue = null)
+    public function removeSetting($variable)
     {
         $configuration = $this->getConfiguration();
-        return (isset($configuration[$variable]) ? $configuration[$variable] : $defaultValue);
+        unset($configuration[$variable]);
+
+        $this->setConfiguration($configuration);
+    }
+
+    /**
+     *
+     * @param integer $configuration
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->set_default_property(self::PROPERTY_CONFIGURATION, serialize($configuration));
+    }
+
+    /**
+     *
+     * @param integer $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->set_default_property(self::PROPERTY_PARENT_ID, $parentId);
     }
 
     /**
@@ -233,13 +239,49 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
 
     /**
      *
-     * @param string $variable
+     * @param integer $sort
      */
-    public function removeSetting($variable)
+    public function setSort($sort)
     {
-        $configuration = $this->getConfiguration();
-        unset($configuration[$variable]);
+        $this->set_default_property(self::PROPERTY_SORT, $sort);
+    }
 
-        $this->setConfiguration($configuration);
+    /**
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
+    }
+
+    /**
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->set_default_property(self::PROPERTY_TYPE, $type);
+    }
+
+    /**
+     *
+     * @param integer $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+    }
+
+    /**
+     *
+     * @param string $type
+     *
+     * @throws \Exception
+     * @deprecated Use Element::setType() now
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
     }
 }

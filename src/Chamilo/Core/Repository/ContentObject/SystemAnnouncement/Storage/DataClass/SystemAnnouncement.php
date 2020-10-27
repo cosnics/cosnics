@@ -21,6 +21,14 @@ class SystemAnnouncement extends ContentObject implements Versionable
     /**
      * @return string
      */
+    public static function get_table_name()
+    {
+        return 'repository_system_announcement';
+    }
+
+    /**
+     * @return string
+     */
     public function getDefaultGlyphNamespace()
     {
         return self::package() . '\Icon\\' . $this->get_icon();

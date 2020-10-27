@@ -10,4 +10,12 @@ namespace Chamilo\Application\Calendar\Storage\DataClass;
  */
 class Visibility extends \Chamilo\Libraries\Calendar\Event\Visibility
 {
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'calendar_visibility';
+    }
 }

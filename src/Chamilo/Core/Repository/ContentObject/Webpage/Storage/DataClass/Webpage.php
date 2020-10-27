@@ -23,29 +23,17 @@ use Exception;
  */
 class Webpage extends ContentObject implements Versionable, Includeable, FileStorageSupport
 {
-
-    // Properties
     const PROPERTY_EXTENSION = 'extension';
-
     const PROPERTY_FILENAME = 'filename';
-
     const PROPERTY_FILESIZE = 'filesize';
-
     const PROPERTY_HASH = 'hash';
-
     const PROPERTY_PATH = 'path';
-
     const PROPERTY_STORAGE_PATH = 'storage_path';
 
-    // Filetype groups
-
     const TYPE_AUDIO = 'audio';
-
     const TYPE_FLASH = 'flash';
     const TYPE_FLASH_VIDEO = 'flash_video';
-
     const TYPE_IMAGE = 'image';
-
     const TYPE_VIDEO = 'video';
 
     private $contents;
@@ -427,6 +415,14 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     public function get_storage_path()
     {
         return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
+    }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_webpage';
     }
 
     /**

@@ -15,6 +15,14 @@ class RssFeed extends ContentObject implements Versionable, Includeable
     const PROPERTY_URL = 'url';
     const PROPERTY_NUMBER_OF_ENTRIES = 'number_of_entries';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_rss_feed';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

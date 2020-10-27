@@ -15,6 +15,14 @@ class Bookmark extends ContentObject implements Versionable, Includeable
     const PROPERTY_URL = 'url';
     const PROPERTY_APPLICATION = 'application';
 
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'repository_bookmark';
+    }
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);

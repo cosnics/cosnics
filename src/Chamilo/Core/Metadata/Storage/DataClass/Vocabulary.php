@@ -200,4 +200,12 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
     {
         return $this->get_value();
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'metadata_vocabulary';
+    }
 }

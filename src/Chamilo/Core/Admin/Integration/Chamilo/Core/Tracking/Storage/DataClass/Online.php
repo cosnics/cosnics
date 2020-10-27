@@ -90,4 +90,12 @@ class Online extends SimpleTracker
     {
         $this->set_default_property(self::PROPERTY_LAST_ACCESS_DATE, $last_access_date);
     }
+
+    /**
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return 'tracking_admin_online';
+    }
 }

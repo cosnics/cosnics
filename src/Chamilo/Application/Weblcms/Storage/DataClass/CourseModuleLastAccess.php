@@ -16,14 +16,41 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class CourseModuleLastAccess extends DataClass
 {
 
-    /**
-     * CourseModuleLastAccess properties
-     */
-    const PROPERTY_COURSE_CODE = 'course_id';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_MODULE_NAME = 'module_name';
-    const PROPERTY_CATEGORY_ID = 'category_id';
     const PROPERTY_ACCESS_DATE = 'access_date';
+    const PROPERTY_CATEGORY_ID = 'category_id';
+    const PROPERTY_COURSE_CODE = 'course_id';
+    const PROPERTY_MODULE_NAME = 'module_name';
+    const PROPERTY_USER_ID = 'user_id';
+
+    /**
+     * Returns the access_date of this CourseModuleLastAccess.
+     *
+     * @return the access_date.
+     */
+    public function get_access_date()
+    {
+        return $this->get_default_property(self::PROPERTY_ACCESS_DATE);
+    }
+
+    /**
+     * Returns the category_id of this CourseModuleLastAccess.
+     *
+     * @return the category_id.
+     */
+    public function get_category_id()
+    {
+        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     * Returns the course_code of this CourseModuleLastAccess.
+     *
+     * @return the course_code.
+     */
+    public function get_course_code()
+    {
+        return $this->get_default_property(self::PROPERTY_COURSE_CODE);
+    }
 
     /**
      * Get the default properties
@@ -40,47 +67,9 @@ class CourseModuleLastAccess extends DataClass
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_MODULE_NAME,
                 self::PROPERTY_CATEGORY_ID,
-                self::PROPERTY_ACCESS_DATE));
-    }
-
-    /**
-     * Returns the course_code of this CourseModuleLastAccess.
-     *
-     * @return the course_code.
-     */
-    public function get_course_code()
-    {
-        return $this->get_default_property(self::PROPERTY_COURSE_CODE);
-    }
-
-    /**
-     * Sets the course_code of this CourseModuleLastAccess.
-     *
-     * @param course_code
-     */
-    public function set_course_code($course_code)
-    {
-        $this->set_default_property(self::PROPERTY_COURSE_CODE, $course_code);
-    }
-
-    /**
-     * Returns the user_id of this CourseModuleLastAccess.
-     *
-     * @return the user_id.
-     */
-    public function get_user_id()
-    {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     * Sets the user_id of this CourseModuleLastAccess.
-     *
-     * @param user_id
-     */
-    public function set_user_id($user_id)
-    {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+                self::PROPERTY_ACCESS_DATE
+            )
+        );
     }
 
     /**
@@ -94,23 +83,31 @@ class CourseModuleLastAccess extends DataClass
     }
 
     /**
-     * Sets the module_name of this CourseModuleLastAccess.
-     *
-     * @param module_name
+     * @return string
      */
-    public function set_module_name($module_name)
+    public static function get_table_name()
     {
-        $this->set_default_property(self::PROPERTY_MODULE_NAME, $module_name);
+        return 'weblcms_course_module_last_access';
     }
 
     /**
-     * Returns the category_id of this CourseModuleLastAccess.
+     * Returns the user_id of this CourseModuleLastAccess.
      *
-     * @return the category_id.
+     * @return the user_id.
      */
-    public function get_category_id()
+    public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     * Sets the access_date of this CourseModuleLastAccess.
+     *
+     * @param access_date
+     */
+    public function set_access_date($access_date)
+    {
+        $this->set_default_property(self::PROPERTY_ACCESS_DATE, $access_date);
     }
 
     /**
@@ -124,22 +121,32 @@ class CourseModuleLastAccess extends DataClass
     }
 
     /**
-     * Returns the access_date of this CourseModuleLastAccess.
+     * Sets the course_code of this CourseModuleLastAccess.
      *
-     * @return the access_date.
+     * @param course_code
      */
-    public function get_access_date()
+    public function set_course_code($course_code)
     {
-        return $this->get_default_property(self::PROPERTY_ACCESS_DATE);
+        $this->set_default_property(self::PROPERTY_COURSE_CODE, $course_code);
     }
 
     /**
-     * Sets the access_date of this CourseModuleLastAccess.
+     * Sets the module_name of this CourseModuleLastAccess.
      *
-     * @param access_date
+     * @param module_name
      */
-    public function set_access_date($access_date)
+    public function set_module_name($module_name)
     {
-        $this->set_default_property(self::PROPERTY_ACCESS_DATE, $access_date);
+        $this->set_default_property(self::PROPERTY_MODULE_NAME, $module_name);
+    }
+
+    /**
+     * Sets the user_id of this CourseModuleLastAccess.
+     *
+     * @param user_id
+     */
+    public function set_user_id($user_id)
+    {
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 }
