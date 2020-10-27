@@ -175,12 +175,16 @@ class ExamAssignmentService
         $examCode = $examAssignmentPublication->getCode();
         $securityCode = $examAssignmentPublication->getSecurityCode();
 
-        if (!empty($examCode) && ($examCode != $code || $calculatedSecurityCode != $securityCode) )
-        {
-            return false;
+        if (empty($examCode)) {
+            return true;
         }
-
-        return true;
+        if (!empty($examCode) && ($examCode == $code)) {
+            return true;
+        }
+        if ($calculatedSecurityCode == $securityCode) {
+            return true;
+        }
+        return false;
     }
 
     /**
