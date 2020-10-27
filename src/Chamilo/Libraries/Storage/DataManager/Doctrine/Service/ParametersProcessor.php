@@ -96,7 +96,6 @@ class ParametersProcessor
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @param string $dataClassName
      *
-     * @throws \ReflectionException
      * @throws \Exception
      */
     protected function handleCompositeDataClassJoins($dataClassName, DataClassRetrieveParameters $parameters)
@@ -183,19 +182,12 @@ class ParametersProcessor
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function handleDataClassRetrieveParameters($dataClassName, DataClassRetrieveParameters $parameters)
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
-        {
-            $dataClassName = $dataClassName::parent_class_name();
-        }
+        $this->setDataClassPropertiesClassName($dataClassName, $parameters);
 
-        $parameters->setDataClassProperties(
-            new DataClassProperties(array(new PropertiesConditionVariable($dataClassName)))
-        );
         $parameters->setCount(1);
         $parameters->setOffset(0);
 
@@ -210,15 +202,11 @@ class ParametersProcessor
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function handleDataClassRetrievesParameters($dataClassName, DataClassRetrievesParameters $parameters)
     {
-        $parameters->setDataClassProperties(
-            new DataClassProperties(array(new PropertiesConditionVariable($dataClassName)))
-        );
-
+        $this->setDataClassPropertiesClassName($dataClassName, $parameters);
         $this->handleCompositeDataClassJoins($dataClassName, $parameters);
 
         return $parameters;
@@ -228,7 +216,7 @@ class ParametersProcessor
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -248,14 +236,12 @@ class ParametersProcessor
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
+     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties|null $properties
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function processDataClassProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, $dataClassName,
-        DataClassProperties $properties = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassProperties $properties = null
     )
     {
         if ($properties instanceof DataClassProperties)
@@ -273,7 +259,7 @@ class ParametersProcessor
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy|null $groupBy
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -296,7 +282,7 @@ class ParametersProcessor
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -317,7 +303,7 @@ class ParametersProcessor
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -367,8 +353,8 @@ class ParametersProcessor
     /**
      *
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param integer $count
-     * @param integer $offset
+     * @param integer|null $count
+     * @param integer|null $offset
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -436,7 +422,7 @@ class ParametersProcessor
         $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
         $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
         $this->processDataClassProperties(
-            $dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getDataClassProperties()
+            $dataClassDatabase, $queryBuilder, $parameters->getDataClassProperties()
         );
         $this->processOrderByCollection($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
         $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
@@ -444,6 +430,41 @@ class ParametersProcessor
         $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
 
         return $queryBuilder;
+    }
+
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $dataClassRetrieveParameters
+     *
+     * @throws \Exception
+     */
+    public function setDataClassPropertiesClassName(
+        $dataClassName, DataClassRetrieveParameters $dataClassRetrieveParameters
+    )
+    {
+        if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
+            get_parent_class($dataClassName) == CompositeDataClass::class)
+        {
+            $propertiesClassName = $dataClassName;
+        }
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::is_extended())
+        {
+            $propertiesClassName = $dataClassName;
+        }
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
+        {
+            $propertiesClassName = $dataClassName::parent_class_name();
+        }
+        else
+        {
+            $propertiesClassName = $dataClassName;
+        }
+
+        $dataClassRetrieveParameters->setDataClassProperties(
+            new DataClassProperties(
+                array(new PropertiesConditionVariable($propertiesClassName))
+            )
+        );
     }
 
     /**

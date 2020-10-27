@@ -801,6 +801,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {
+
         $statement = $this->getRecordsResult(
             $this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters
         );
