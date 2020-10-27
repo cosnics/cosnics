@@ -23,7 +23,6 @@
                             <li>{{ ENTRY.title }}</li>
                         {% endfor %}
                     </ul>
-
                     <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
                     {% set description = DETAILS.assignment.get_description() %}
                     <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
@@ -121,11 +120,16 @@
                                     dropzoneCallbacks.getServerResponse = function(environment, file, serverResponse) {
                                         console.log(environment, file, serverResponse);
                                     };
+                                    var publicationId = {{ DETAILS.publication.id }};
+                                    dropzoneCallbacks.sendingCallbackFunction = function (environment, file, xhrObject, formData) {
+                                        formData.append('publicationId', publicationId);
+                                    };
 
                                     var uploadUrl = '{{ UPLOAD_URL|raw }}';
-                                    $('#file-upload-container').fileUpload({autoProcessQueue: false, uploadUrl: uploadUrl, successCallbackFunction: 'getServerResponse'});
+                                    $('#file-upload-container').fileUpload({autoProcessQueue: false, uploadUrl: uploadUrl, successCallbackFunction: 'getServerResponse', sendingCallbackFunction: 'sendingCallbackFunction'});
 
                                     var uploader = Dropzone.forElement('#file-upload');
+                                    //uploader.options.params = { publicationId: publicationId };
 
                                     uploader.on('processing', function() {
                                         uploader.options.autoProcessQueue = true;
