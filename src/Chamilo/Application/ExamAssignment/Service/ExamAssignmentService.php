@@ -173,15 +173,11 @@ class ExamAssignmentService
         $examCode = $examAssignmentPublication->getCode();
         $securityCode = $examAssignmentPublication->getSecurityCode();
 
-        if (empty($examCode)) {
+        if (empty($examCode) || $examCode == $code || $calculatedSecurityCode == $securityCode)
+        {
             return true;
         }
-        if (!empty($examCode) && ($examCode == $code)) {
-            return true;
-        }
-        if ($calculatedSecurityCode == $securityCode) {
-            return true;
-        }
+
         return false;
     }
 
@@ -212,7 +208,6 @@ class ExamAssignmentService
         }
 
         return $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
-
     }
 
     /**
@@ -271,7 +266,7 @@ class ExamAssignmentService
      */
     protected function isAssignmentEndTimeWithinAcceptableBoundaries(Assignment $assignment)
     {
-        return $assignment->get_end_time() + 900 <= time();
+        return $assignment->get_end_time() + 900 >= time();
     }
 
     /**
