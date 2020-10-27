@@ -17,7 +17,7 @@
                 </div>
                 {% else %}
                 <div class="main-content mod-current-exam">
-
+                    {{ DETAILS.assignment.get_automatic_feedback() }}
                     <ul>
                         {% for ENTRY in DETAILS.entries %}
                             <li>{{ ENTRY.title }}</li>

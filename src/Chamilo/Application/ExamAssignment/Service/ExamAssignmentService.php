@@ -219,7 +219,6 @@ class ExamAssignmentService
         $details['assignment'] = $assignment;
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
-        $details['can_submit'] = count($entries) == 0 && $assignment->get_end_time() + 900 >= time();
         $details['attachments'] = $attachments;
 
         return $details;
