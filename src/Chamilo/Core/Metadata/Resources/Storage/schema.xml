@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="schema">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="namespace"
-            type="text"
-            length="10"
-            notnull="1" />
-        <property
-            name="name"
-            type="text"
-            length="255"
-            notnull="1" />
-        <property
-            name="url"
-            type="text"
-            length="255"
-            notnull="1" />
-        <property
-            name="fixed"
-            length="1"
-            type="integer"
-            notnull="1" />
-        <property
-            name="description"
-            type="text"
-            notnull="1" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="namespace"
+                  type="text"
+                  length="10"
+                  notnull="1"/>
+        <property name="name"
+                  type="text"
+                  length="255"
+                  notnull="1"/>
+        <property name="url"
+                  type="text"
+                  length="255"
+                  notnull="1"/>
+        <property name="fixed"
+                  length="1"
+                  type="integer"
+                  notnull="1"/>
+        <property name="description"
+                  type="text"
+                  notnull="1"/>
     </properties>
-    <index
-        name="namespace"
-        type="unique">
-        <indexproperty name="namespace" />
+    <index name="namespace"
+           type="unique">
+        <indexproperty name="namespace"/>
     </index>
 </object>

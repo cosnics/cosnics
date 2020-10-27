@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="workspace_category_relation">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="workspace_id"
-            type="integer"
-            notnull="1"
-            default="0" />
-        <property
-            name="category_id"
-            type="integer"
-            notnull="1"
-            default="0" />
+        <property name="id"
+                  type="integer"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="workspace_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
+        <property name="category_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
     </properties>
-    <index
-        name="relation"
-        type="unique">
-        <indexproperty name="workspace_id" />
-        <indexproperty name="category_id" />
+    <index name="relation"
+           type="unique">
+        <indexproperty name="workspace_id"/>
+        <indexproperty name="category_id"/>
     </index>
 </object>

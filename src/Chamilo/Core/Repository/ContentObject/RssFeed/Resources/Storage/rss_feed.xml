@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="rss_feed">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="url"
-            type="text"
-            length="255"
-            notnull="1" />
-        <property
-            name="number_of_entries"
-            type="integer"
-            unsigned="true"
-            notnull="1"
-            default="5" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="url"
+                  type="text"
+                  length="255"
+                  notnull="1"/>
+        <property name="number_of_entries"
+                  type="integer"
+                  unsigned="true"
+                  notnull="1"
+                  default="5"/>
     </properties>
-    <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

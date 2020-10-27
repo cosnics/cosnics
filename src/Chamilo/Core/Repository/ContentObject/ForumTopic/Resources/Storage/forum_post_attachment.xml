@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="forum_post_attachment">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="forum_post_id"
-            type="integer"
-            notnull="1"
-            default="0" />
-        <property
-            name="attachment_id"
-            type="integer"
-            notnull="1"
-            default="0" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="forum_post_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
+        <property name="attachment_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
     </properties>
 
     <index name="forum_post_id">
-        <indexproperty name="forum_post_id" />
+        <indexproperty name="forum_post_id"/>
     </index>
     <index name="attachment_id">
-        <indexproperty name="attachment_id" />
+        <indexproperty name="attachment_id"/>
     </index>
 </object>

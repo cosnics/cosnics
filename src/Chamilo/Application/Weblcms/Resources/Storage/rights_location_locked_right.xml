@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="rights_location_locked_right">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="location_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="right_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="location_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="right_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
     </properties>
     <index name="right_id">
-        <indexproperty name="right_id" />
+        <indexproperty name="right_id"/>
     </index>
     <index name="location_id">
-        <indexproperty name="location_id" />
+        <indexproperty name="location_id"/>
     </index>
 </object>

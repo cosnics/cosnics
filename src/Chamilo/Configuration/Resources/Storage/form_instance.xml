@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="form_instance">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="name"
-            type="text"
-            length="100"
-            notnull="1"
-            default="" />
-        <property
-            name="application"
-            type="text"
-            length="100"
-            notnull="1"
-            default="" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="name"
+                  type="text"
+                  length="100"
+                  notnull="1"
+                  default=""/>
+        <property name="application"
+                  type="text"
+                  length="100"
+                  notnull="1"
+                  default=""/>
     </properties>
     <index name="name">
-        <indexproperty name="name" />
-        <indexproperty name="application" />
+        <indexproperty name="name"/>
+        <indexproperty name="application"/>
     </index>
 </object>

@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="quota_request">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="user_id"
-            type="integer"
-            notnull="1" />
-        <property
-            name="quota"
-            type="integer"
-            length="1" />
-        <property
-            name="motivation"
-            type="text"
-            notnull="1" />
-        <property
-            name="creation_date"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="decision_date"
-            type="integer"
-            unsigned="1" />
-        <property
-            name="decision"
-            type="integer"
-            length="1"
-            notnull="1" />
-        <property
-            name="decision_motivation"
-            type="text" />
+        <property name="id"
+                  type="integer"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="user_id"
+                  type="integer"
+                  notnull="1"/>
+        <property name="quota"
+                  type="integer"
+                  length="1"/>
+        <property name="motivation"
+                  type="text"
+                  notnull="1"/>
+        <property name="creation_date"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="decision_date"
+                  type="integer"
+                  unsigned="1"/>
+        <property name="decision"
+                  type="integer"
+                  length="1"
+                  notnull="1"/>
+        <property name="decision_motivation"
+                  type="text"/>
     </properties>
 </object>

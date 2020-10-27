@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="assessment_matching_question">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="display"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            default="1" />
-        <property
-            name="options"
-            type="text"
-            notnull="1" />
-        <property
-            name="matches"
-            type="text"
-            notnull="1" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="display"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  default="1"/>
+        <property name="options"
+                  type="text"
+                  notnull="1"/>
+        <property name="matches"
+                  type="text"
+                  notnull="1"/>
     </properties>
-    <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

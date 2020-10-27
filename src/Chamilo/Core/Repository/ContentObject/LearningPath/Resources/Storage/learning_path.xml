@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="repository_learning_path">
     <properties>
-        <property name="id" type="integer" unsigned="1" notnull="1" />
-        <property name="automatic_numbering" type="text" notnull="1" length="15" default="none" />
-        <property name="enforce_default_traversing_order" type="boolean" notnull="1" default="0" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="automatic_numbering"
+                  type="text"
+                  notnull="1"
+                  length="15"
+                  default="none"/>
+        <property name="enforce_default_traversing_order"
+                  type="boolean"
+                  notnull="1"
+                  default="0"/>
     </properties>
-    <index name="id" type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

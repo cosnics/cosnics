@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="complex_assessment_multiple_choice_question">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="weight"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            default="1" />
-        <property
-            name="random"
-            type="boolean"
-            notnull="1"
-            default="0" />
-        <property
-            name="show_answer_feedback"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            length="1"
-            default="7" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="weight"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  default="1"/>
+        <property name="random"
+                  type="boolean"
+                  notnull="1"
+                  default="0"/>
+        <property name="show_answer_feedback"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  length="1"
+                  default="7"/>
     </properties>
-    <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

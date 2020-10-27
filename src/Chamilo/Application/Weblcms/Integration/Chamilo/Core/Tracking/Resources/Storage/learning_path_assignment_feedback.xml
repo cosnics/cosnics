@@ -1,43 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="tracking_weblcms_learning_path_assignment_feedback">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="entry_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="creation_date"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="modification_date"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="user_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="comment"
-            type="text" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="entry_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="creation_date"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="modification_date"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="user_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="comment"
+                  type="text"/>
     </properties>
     <index name="id">
-        <indexproperty name="id" />
+        <indexproperty name="id"/>
     </index>
     <index name="entry_id">
-        <indexproperty name="entry_id" />
+        <indexproperty name="entry_id"/>
     </index>
     <index name="user_id">
-        <indexproperty name="user_id" />
+        <indexproperty name="user_id"/>
     </index>
 </object>

@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="link">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="url"
-            type="text"
-            notnull="1" />
-        <property
-            name="show_in_iframe"
-            type="boolean"
-            notnull="0" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="url"
+                  type="text"
+                  notnull="1"/>
+        <property name="show_in_iframe"
+                  type="boolean"
+                  notnull="0"/>
     </properties>
-    <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

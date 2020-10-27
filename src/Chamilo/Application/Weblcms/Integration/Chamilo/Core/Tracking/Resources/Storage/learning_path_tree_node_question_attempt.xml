@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="tracking_weblcms_learning_path_tree_node_question_attempt">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="tree_node_attempt_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="question_complex_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="answer"
-            type="text" />
-        <property
-            name="feedback"
-            type="text" />
-        <property
-            name="score"
-            type="integer" />
-        <property
-            name="hint"
-            type="integer"
-            default="0" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="tree_node_attempt_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="question_complex_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="answer"
+                  type="text"/>
+        <property name="feedback"
+                  type="text"/>
+        <property name="score"
+                  type="integer"/>
+        <property name="hint"
+                  type="integer"
+                  default="0"/>
     </properties>
     <index name="tree_node_attempt_id">
-        <indexproperty name="tree_node_attempt_id" />
+        <indexproperty name="tree_node_attempt_id"/>
     </index>
     <index name="question_complex_id">
-        <indexproperty name="question_complex_id" />
+        <indexproperty name="question_complex_id"/>
     </index>
 </object>

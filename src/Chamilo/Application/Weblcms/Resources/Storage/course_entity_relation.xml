@@ -1,39 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="weblcms_course_entity_relation">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="course_id"
-            type="integer"
-            notnull="1" />
-        <property
-            name="status"
-            type="integer"
-            length="1"
-            default="5"
-            notnull="1" />
-        <property
-            name="entity_type"
-            type="integer"
-            unsigned="1"
-            default="0" />
-        <property
-            name="entity_id"
-            type="integer"
-            unsigned="1"
-            default="0" />
+        <property name="id"
+                  type="integer"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="course_id"
+                  type="integer"
+                  notnull="1"/>
+        <property name="status"
+                  type="integer"
+                  length="1"
+                  default="5"
+                  notnull="1"/>
+        <property name="entity_type"
+                  type="integer"
+                  unsigned="1"
+                  default="0"/>
+        <property name="entity_id"
+                  type="integer"
+                  unsigned="1"
+                  default="0"/>
     </properties>
     <index name="course_id">
-        <indexproperty name="course_id" />
+        <indexproperty name="course_id"/>
     </index>
     <index name="entity_type">
-        <indexproperty name="entity_type" />
+        <indexproperty name="entity_type"/>
     </index>
     <index name="entity_id">
-        <indexproperty name="entity_id" />
+        <indexproperty name="entity_id"/>
     </index>
 </object>

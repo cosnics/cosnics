@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="event">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="name"
-            type="text"
-            length="255"
-            notnull="1" />
-        <property
-            name="active"
-            type="boolean"
-            notnull="1"
-            default="1" />
-        <property
-            name="context"
-            type="text"
-            length="255"
-            notnull="1" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="name"
+                  type="text"
+                  length="255"
+                  notnull="1"/>
+        <property name="active"
+                  type="boolean"
+                  notnull="1"
+                  default="1"/>
+        <property name="context"
+                  type="text"
+                  length="255"
+                  notnull="1"/>
     </properties>
     <index name="name">
-        <indexproperty name="name" />
+        <indexproperty name="name"/>
     </index>
     <index name="active">
-        <indexproperty name="active" />
+        <indexproperty name="active"/>
     </index>
     <index name="context">
-        <indexproperty name="context" />
+        <indexproperty name="context"/>
     </index>
 </object>

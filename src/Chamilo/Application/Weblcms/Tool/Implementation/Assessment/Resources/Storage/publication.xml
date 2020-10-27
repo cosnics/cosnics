@@ -1,55 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="publication">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="publication_id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="allow_hints"
-            type="boolean"
-            notnull="1"
-            default="1" />
-        <property
-            name="show_score"
-            type="boolean"
-            notnull="1"
-            default="1" />
-        <property
-            name="show_correction"
-            type="boolean"
-            notnull="1"
-            default="1" />
-        <property
-            name="show_solution"
-            type="boolean"
-            notnull="1"
-            default="1" />
-        <property
-            name="show_answer_feedback"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            length="1"
-            default="6" />
-        <property
-            name="feedback_location"
-            type="integer"
-            unsigned="1"
-            notnull="1"
-            length="1"
-            default="3" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="publication_id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="allow_hints"
+                  type="boolean"
+                  notnull="1"
+                  default="1"/>
+        <property name="show_score"
+                  type="boolean"
+                  notnull="1"
+                  default="1"/>
+        <property name="show_correction"
+                  type="boolean"
+                  notnull="1"
+                  default="1"/>
+        <property name="show_solution"
+                  type="boolean"
+                  notnull="1"
+                  default="1"/>
+        <property name="show_answer_feedback"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  length="1"
+                  default="6"/>
+        <property name="feedback_location"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  length="1"
+                  default="3"/>
     </properties>
-    <index
-        name="publication_id"
-        type="unique">
-        <indexproperty name="publication_id" />
+    <index name="publication_id"
+           type="unique">
+        <indexproperty name="publication_id"/>
     </index>
 </object>

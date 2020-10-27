@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="assessment_select_question">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            unsigned="1"
-            notnull="1" />
-        <property
-            name="answer_type"
-            type="text"
-            notnull="1"
-            length="8"
-            fixed="1" />
-        <property
-            name="options"
-            type="text"
-            notnull="1" />
-        <property
-            name="hint"
-            type="text" />
+        <property name="id"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
+        <property name="answer_type"
+                  type="text"
+                  notnull="1"
+                  length="8"
+                  fixed="1"/>
+        <property name="options"
+                  type="text"
+                  notnull="1"/>
+        <property name="hint"
+                  type="text"/>
     </properties>
-    <index
-        name="id"
-        type="primary">
-        <indexproperty name="id" />
+    <index name="id"
+           type="primary">
+        <indexproperty name="id"/>
     </index>
 </object>

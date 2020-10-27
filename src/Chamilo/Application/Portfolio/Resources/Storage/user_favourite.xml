@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="user_favourite">
     <properties>
-        <property
-            name="id"
-            type="integer"
-            notnull="1"
-            autoincrement="true" />
-        <property
-            name="source_user_id"
-            type="integer"
-            notnull="1"
-            default="0" />
-        <property
-            name="favourite_user_id"
-            type="integer"
-            notnull="1"
-            default="0" />
+        <property name="id"
+                  type="integer"
+                  notnull="1"
+                  autoincrement="true"/>
+        <property name="source_user_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
+        <property name="favourite_user_id"
+                  type="integer"
+                  notnull="1"
+                  default="0"/>
     </properties>
-    <index
-        name="user_favourite"
-        type="unique">
-        <indexproperty name="source_user_id" />
-        <indexproperty name="favourite_user_id" />
+    <index name="user_favourite"
+           type="unique">
+        <indexproperty name="source_user_id"/>
+        <indexproperty name="favourite_user_id"/>
     </index>
 </object>
