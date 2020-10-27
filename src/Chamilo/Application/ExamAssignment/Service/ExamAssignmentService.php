@@ -197,7 +197,7 @@ class ExamAssignmentService
         $assignment = $this->contentObjectService->findById($contentObjectPublication->get_content_object_id());
         $entries = $this->assignmentService->findEntriesForContentObjectPublicationEntityTypeAndId(
             $contentObjectPublication, Entry::ENTITY_TYPE_USER, $user->getId()
-        );
+        )->getArrayCopy();
 
         $attachments = [];
 
