@@ -118,7 +118,12 @@
 
                                     initDragDrop();
 
-                                    $('#file-upload-container').fileUpload({autoProcessQueue: false});
+                                    dropzoneCallbacks.getServerResponse = function(environment, file, serverResponse) {
+                                        console.log(environment, file, serverResponse);
+                                    };
+
+                                    var uploadUrl = '{{ UPLOAD_URL|raw }}';
+                                    $('#file-upload-container').fileUpload({autoProcessQueue: false, uploadUrl: uploadUrl, successCallbackFunction: 'getServerResponse'});
 
                                     var uploader = Dropzone.forElement('#file-upload');
 
