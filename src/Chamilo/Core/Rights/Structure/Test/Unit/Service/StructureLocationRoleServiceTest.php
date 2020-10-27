@@ -250,21 +250,21 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
         $this->structureLocationRoleService->removeRoleFromStructureLocation($structureLocation, $roleName);
     }
 
-    public function testGetRolesForLocation()
-    {
-        $role = new Role();
-        $role->setId(9);
-
-        $structureLocation = new StructureLocation();
-        $structureLocation->setId(5);
-
-        $this->structureLocationRoleRepositoryMock->expects($this->once())
-            ->method('findRolesForStructureLocation')
-            ->with($structureLocation->getId())
-            ->will($this->returnValue(array($role)));
-
-        $this->assertEquals(array($role), $this->structureLocationRoleService->getRolesForLocation($structureLocation));
-    }
+//    public function testGetRolesForLocation()
+//    {
+//        $role = new Role();
+//        $role->setId(9);
+//
+//        $structureLocation = new StructureLocation();
+//        $structureLocation->setId(5);
+//
+//        $this->structureLocationRoleRepositoryMock->expects($this->once())
+//            ->method('findRolesForStructureLocation')
+//            ->with($structureLocation->getId())
+//            ->will($this->returnValue(array($role)));
+//
+//        $this->assertEquals(array($role), $this->structureLocationRoleService->getRolesForLocation($structureLocation));
+//    }
 
     public function testGetRolesForLocationByContextAndAction()
     {

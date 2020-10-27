@@ -376,6 +376,29 @@ class WorkspaceService
      * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspaceFavouritesByUserFast(User $user, $limit = null, $offset = null,
+                                                 $orderProperty = null)
+    {
+        if (is_null($orderProperty))
+        {
+            $orderProperty = array(
+                new OrderBy(new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME), SORT_ASC));
+        }
+
+        return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUserFast(
+            $user,
+            $limit,
+            $offset,
+            $orderProperty);
+    }
+
+    /**
+     *
+     * @param EntityService $entityService
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
      */
     public function countWorkspaceFavouritesByUser(EntityService $entityService, User $user)

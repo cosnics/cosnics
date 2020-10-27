@@ -38,16 +38,4 @@ interface StructureLocationServiceInterface
      * @throws \Exception
      */
     public function truncateStructureLocations();
-
-    /**
-     * Returns the structure location by a given context and action
-     * 
-     * @param string $context
-     * @param string $action
-     *
-     * @return StructureLocation
-     *
-     * @throws \Exception
-     */
-    public function getStructureLocationByContextAndAction($context, $action = null);
 }

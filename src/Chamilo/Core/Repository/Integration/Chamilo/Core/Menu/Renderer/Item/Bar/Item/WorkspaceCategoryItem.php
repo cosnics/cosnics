@@ -47,10 +47,9 @@ class WorkspaceCategoryItem extends CategoryItem
         $sub_html = array();
         
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $entityService = new EntityService();
-        $workspaces = $workspaceService->getWorkspaceFavouritesByUser(
-            $entityService, 
-            $this->getMenuRenderer()->get_user());
+        $workspaces = $workspaceService->getWorkspaceFavouritesByUserFast(
+            $this->getMenuRenderer()->get_user()
+        );
         
         $sub_html[] = '<ul class="dropdown-menu">';
         
