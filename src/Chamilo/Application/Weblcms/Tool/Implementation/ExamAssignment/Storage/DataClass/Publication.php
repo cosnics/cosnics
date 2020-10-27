@@ -38,6 +38,14 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     }
 
     /**
+     * @return string
+     */
+    public function getSecurityCode()
+    {
+        return md5($this->getPublicationId() . '-' . $this->getCode());
+    }
+
+    /**
      * @param string|null $code
      */
     public function setCode(string $code = null)

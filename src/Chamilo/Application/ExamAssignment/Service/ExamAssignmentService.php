@@ -128,10 +128,13 @@ class ExamAssignmentService
      * @param User $user
      * @param int $contentObjectPublicationId
      * @param string|null $code
+     * @param string|null $calculatedSecurityCode
      *
      * @return bool
      */
-    public function canUserViewExamAssignment(User $user, int $contentObjectPublicationId, string $code = null)
+    public function canUserViewExamAssignment(
+        User $user, int $contentObjectPublicationId, string $code = null, string $calculatedSecurityCode = null
+    )
     {
         $contentObjectPublication = $this->publicationService->getPublication($contentObjectPublicationId);
         if (!$contentObjectPublication instanceof ContentObjectPublication)
@@ -170,7 +173,9 @@ class ExamAssignmentService
         }
 
         $examCode = $examAssignmentPublication->getCode();
-        if (!empty($examCode) && $examCode != $code)
+        $securityCode = $examAssignmentPublication->getSecurityCode();
+
+        if (!empty($examCode) && ($examCode != $code || $calculatedSecurityCode != $securityCode) )
         {
             return false;
         }
@@ -205,11 +210,15 @@ class ExamAssignmentService
         {
             if ($attachment instanceof File)
             {
-                $attachments[$attachment->get_filename()] = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
-                    $attachment->getId(), $attachment->calculate_security_code()
-                );
+                $attachments[$attachment->get_filename()] =
+                    \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+                        $attachment->getId(), $attachment->calculate_security_code()
+                    );
             }
         }
+
+        $examAssignmentPublication =
+            $this->examAssignmentPublicationService->getAssignmentPublication($contentObjectPublication);
 
         $details = [];
 
@@ -220,6 +229,7 @@ class ExamAssignmentService
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
         $details['attachments'] = $attachments;
+        $details['security_code'] = $examAssignmentPublication->getSecurityCode();
 
         return $details;
     }

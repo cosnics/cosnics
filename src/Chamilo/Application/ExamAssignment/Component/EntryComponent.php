@@ -23,7 +23,8 @@ class EntryComponent extends Manager
      */
     function run()
     {
-        $jqueryFileUploadScriptPath = Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js';
+        $jqueryFileUploadScriptPath =
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js';
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
@@ -33,13 +34,20 @@ class EntryComponent extends Manager
         $allowed = $this->getExamAssignmentService()->canUserViewExamAssignment(
             $this->getUser(), $publicationId, $code
         );
-        
+
         $details = $this->getExamAssignmentService()->getExamAssignmentDetails($this->getUser(), $publicationId);
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
             'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser(), 'DETAILS' => $details,
-            'JQUERY_FILE_UPLOAD_SCRIPT_PATH' => $jqueryFileUploadScriptPath
+            'JQUERY_FILE_UPLOAD_SCRIPT_PATH' => $jqueryFileUploadScriptPath,
+            'UPLOAD_URL' => $this->get_url(
+                [
+                    self::PARAM_CONTEXT => \Chamilo\Application\ExamAssignment\Ajax\Manager::context(),
+                    self::PARAM_ACTION => \Chamilo\Application\ExamAssignment\Ajax\Manager::ACTION_UPLOAD_EXAM,
+                    \Chamilo\Application\ExamAssignment\Ajax\Manager::PARAM_SECURITY_CODE => $details['security_code']
+                ]
+            )
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
