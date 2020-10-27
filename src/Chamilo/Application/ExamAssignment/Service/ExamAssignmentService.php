@@ -4,8 +4,6 @@ namespace Chamilo\Application\ExamAssignment\Service;
 
 use Chamilo\Application\ExamAssignment\Repository\ExamAssignmentRepository;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\UserEntityService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Service\CourseService;
@@ -186,9 +184,36 @@ class ExamAssignmentService
     /**
      * @param User $user
      * @param int $contentObjectPublicationId
+     * @param string $securityCode
      *
-     * TODO: determine how long a submission can take place after the end time
-     * (for now we've hardcoded it on 15min in which the page can be refreshed after end time)
+     * @return bool
+     */
+    public function canUserSubmit(User $user, int $contentObjectPublicationId, string $securityCode)
+    {
+        if(!$this->canUserViewExamAssignment($user, $contentObjectPublicationId, null, $securityCode))
+        {
+            return false;
+        }
+
+        $contentObjectPublication = $this->publicationService->getPublication($contentObjectPublicationId);
+        if (!$contentObjectPublication instanceof ContentObjectPublication)
+        {
+            return false;
+        }
+
+        $assignment = $this->contentObjectService->findById($contentObjectPublication->get_content_object_id());
+        if (!$assignment instanceof Assignment)
+        {
+            return false;
+        }
+
+        return $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
+
+    }
+
+    /**
+     * @param User $user
+     * @param int $contentObjectPublicationId
      *
      * @return array
      */
@@ -230,8 +255,19 @@ class ExamAssignmentService
         $details['has_finished'] = count($entries) > 0;
         $details['attachments'] = $attachments;
         $details['security_code'] = $examAssignmentPublication->getSecurityCode();
+        $details['can_submit'] = $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
 
         return $details;
+    }
+
+    /**
+     * @param Assignment $assignment
+     *
+     * @return bool
+     */
+    protected function isAssignmentEndTimeWithinAcceptableBoundaries(Assignment $assignment)
+    {
+        return $assignment->get_end_time() + 900 <= time();
     }
 
     /**
