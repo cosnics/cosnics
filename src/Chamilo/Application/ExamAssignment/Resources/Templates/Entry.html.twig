@@ -9,147 +9,180 @@
         <main>
             <div class="container">
                 {% if not ALLOWED_TO_VIEW_ASSIGNMENT %}
-                <div class="main-content">
-                    <div class="alert alert-danger not-allowed-alert">
-                        Je bent niet toegelaten op deze pagina omdat je niet over de juiste rechten beschikt of omdat je geen juiste code hebt opgegeven.
-                        Gelieve contact op te nemen met de titularis van deze opdracht.
+                    <div class="main-content">
+                        <div class="alert alert-danger not-allowed-alert">
+                            Je bent niet toegelaten op deze pagina omdat je niet over de juiste rechten beschikt of omdat je geen juiste code hebt opgegeven.
+                            Gelieve contact op te nemen met de titularis van deze opdracht.
+                        </div>
                     </div>
-                </div>
                 {% else %}
-                <div class="main-content mod-current-exam">
-                    {{ DETAILS.assignment.get_automatic_feedback() }}
-                    <ul>
-                        {% for ENTRY in DETAILS.entries %}
-                            <li>{{ ENTRY.title }}</li>
-                        {% endfor %}
-                    </ul>
-                    <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
-                    {% set description = DETAILS.assignment.get_description() %}
-                    <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
-                        <ul class="current-exam-info-main">
-                            <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
-                            <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
-                            {% set start_time = DETAILS.assignment.get_start_time %}
-                            <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ start_time|date("H:i") }}</strong></li>
+                    <div class="main-content mod-current-exam">
+                        {{ DETAILS.assignment.get_automatic_feedback() }}
+                        <ul>
+                            {% for ENTRY in DETAILS.entries %}
+                                <li>{{ ENTRY.title }}</li>
+                            {% endfor %}
                         </ul>
-                        <div class="current-exam-info-time">
-                            <ul class="current-exam-info-time-end">
-                                {% set end_time = DETAILS.assignment.get_end_time %}
-                                <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("Y") }} - {{ end_time|date("H:i") }}</strong></li>
+                        <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
+                        {% set description = DETAILS.assignment.get_description() %}
+                        <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
+                            <ul class="current-exam-info-main">
+                                <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
+                                <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
+                                {% set start_time = DETAILS.assignment.get_start_time %}
+                                <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}
+                                        <span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus"
+                                                                                                          aria-hidden="true"></i> {{ start_time|date("H:i") }}</strong></li>
                             </ul>
+                            <div class="current-exam-info-time">
+                                <ul class="current-exam-info-time-end">
+                                    {% set end_time = DETAILS.assignment.get_end_time %}
+                                    <li class="time-item"><span>Tijd tot:</span><strong class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
+                                                    class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span class="dmy-separator-strong">/</span>{{ end_time|date("Y") }}
+                                            - {{ end_time|date("H:i") }}</strong></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    {% if description %}
-                        <div class="current-exam-info-description">
-                            <h2 class="current-exam-info-description-title">{{ 'Description'|trans({}, appContext) }}:</h2>
-                            {{ description|raw }}
-                        </div>
-                    {% endif %}
-                    <div class="current-exam-main">
-                        <div class="current-exam-essentials">
-                            <h2 class="current-exam-main-title mod-files">Bestanden:</h2>
-                            <ul class="current-exam-files-download">
-                                {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
-                                    <li><a href="{{ ATTACHMENT_URL }}">{{ ATTACHMENT }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="current-exam-upload-section">
-                            <h2 class="current-exam-main-title mod-upload">Indienen:</h2>
-                            <div id="file-upload-container" class="current-exam-upload-area">
-                                <div id="file-upload-input" style="display: none;">
-                                    <div class="form-row row ">
-                                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                                            {{ 'FileName'|trans({}, appContext) }}
+                        {% if description %}
+                            <div class="current-exam-info-description">
+                                <h2 class="current-exam-info-description-title">{{ 'Description'|trans({}, appContext) }}:</h2>
+                                {{ description|raw }}
+                            </div>
+                        {% endif %}
+                        <div class="current-exam-main">
+                            <div class="current-exam-essentials">
+                                <h2 class="current-exam-main-title mod-files">Bestanden:</h2>
+                                <ul class="current-exam-files-download">
+                                    {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
+                                        <li><a href="{{ ATTACHMENT_URL }}">{{ ATTACHMENT }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="current-exam-upload-section">
+                                <h2 class="current-exam-main-title mod-upload">Indienen:</h2>
+                                <div id="file-upload-container" class="current-exam-upload-area">
+                                    <div id="file-upload-input" style="display: none;">
+                                        <div class="form-row row ">
+                                            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                                                {{ 'FileName'|trans({}, appContext) }}
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                                                <div class="element"><input name="file" type="file"></div>
+                                                <div class="form_feedback"></div>
+                                            </div>
+                                            <div class="clear">&nbsp;</div>
                                         </div>
-                                        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                                            <div class="element"><input name="file" type="file"></div>
-                                            <div class="form_feedback"></div>
-                                        </div>
-                                        <div class="clear">&nbsp;</div>
                                     </div>
-                                </div>
-                                <div class="element">
-                                    <div id="file-upload" class="file-upload">
-                                        <div class="file-previews files" id="file-previews">
-                                            <div id="file-template" class="file-info-wrapper">
-                                                <div class="file-info">
-                                                    <span class="file-info-icon glyphicon glyphicon-file"></span>
-                                                    <h3 class="file-name" data-dz-name></h3>
-                                                    <button data-dz-remove class="btn btn-sm btn-default delete">
-                                                        <i class="glyphicon glyphicon-trash"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
-                                                    </button>
-                                                    <strong class="error text-danger" data-dz-errormessage></strong>
-                                                </div>
-                                                <div>
-                                                    <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                        <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                    <div class="element">
+                                        <div id="file-upload" class="file-upload">
+                                            <div class="file-previews files" id="file-previews">
+                                                <div id="file-template" class="file-info-wrapper">
+                                                    <div class="file-info">
+                                                        <span class="file-info-icon glyphicon glyphicon-file"></span>
+                                                        <h3 class="file-name" data-dz-name></h3>
+                                                        <button data-dz-remove class="btn btn-sm btn-default delete">
+                                                            <i class="glyphicon glyphicon-trash"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
+                                                        </button>
+                                                        <strong class="error text-danger" data-dz-errormessage></strong>
+                                                    </div>
+                                                    <div>
+                                                        <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                                                             aria-valuenow="0">
+                                                            <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="panel-body mod-file-upload dz-clickable">
-                                            <span class="upload-area-icon fa fa-upload"></span>
-                                            {{ 'DropFileHereMessage'|trans({}, appContext) }}
+                                            <div class="panel-body mod-file-upload dz-clickable">
+                                                <span class="upload-area-icon fa fa-upload"></span>
+                                                {{ 'DropFileHereMessage'|trans({}, appContext) }}
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="form_feedback">
+                                    </div>
                                 </div>
-                                <div class="form_feedback">
-                                </div>
+                                <div class="current-exam-upload-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
+                                <button id="btn-upload" class="btn btn-action mod-upload">Dien examenopdracht in</button>
+                                <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+
+                                        let uploadUrl = '{{ UPLOAD_URL|raw }}';
+                                        let publicationId = {{ DETAILS.publication.id }};
+
+                                        function initDragDrop() {
+                                            /* Prevent drag & drop outside of drop zone */
+                                            window.addEventListener('dragover', function (e) {
+                                                e = e || event;
+                                                e.preventDefault();
+                                            }, false);
+                                            window.addEventListener('drop', function (e) {
+                                                e = e || event;
+                                                e.preventDefault();
+                                            }, false);
+                                        }
+
+                                        initDragDrop();
+
+                                        dropzoneCallbacks.chamilo = {};
+                                        dropzoneCallbacks.chamilo.application = {};
+                                        dropzoneCallbacks.chamilo.application.exam_assignment = {
+                                            init: function(environment) {
+                                                environment.dropzone.options.parallelUploads = 1;
+
+                                                $('#btn-upload').on('click', function (evt) {
+                                                    evt.preventDefault();
+                                                    $(this).prop('disabled', true);
+
+                                                    environment.dropzone.options.autoProcessQueue = true;
+                                                    environment.dropzone.processQueue();
+
+                                                    if (environment.dropzone.files.length === 0) {
+                                                        environment.dropzone.options.autoProcessQueue = false;
+                                                        //redirect now if succes!
+                                                    }
+
+                                                })
+                                            },
+                                            getServerResponse: function (environment, file, serverResponse) {
+                                                console.log(environment, file, serverResponse);
+                                            },
+                                            processRequest: function (environment, file, xhrObject, formData) {
+                                                formData.append('publicationId', publicationId);
+                                            }
+                                        };
+
+                                        $('#file-upload-container').fileUpload({
+                                            autoProcessQueue: false,
+                                            uploadUrl: uploadUrl,
+                                            successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse',
+                                            sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
+                                            initCallbackFunction: 'chamilo.application.exam_assignment.init'
+                                        });
+
+                                        // var uploader = Dropzone.forElement('#file-upload');
+                                        // //uploader.options.params = { publicationId: publicationId };
+                                        //
+                                        // uploader.on('processing', function() {
+                                        //     uploader.options.autoProcessQueue = true;
+                                        // });
+                                        //
+                                        // uploader.on('queuecomplete', function() {
+                                        //     uploader.options.autoProcessQueue = false;
+                                        //     console.log('complete');
+                                        // });
+
+                                        // function handleUpload() {
+                                        //     uploader.processQueue();
+                                        // }
+                                        //
+                                        // $('#btn-upload').on('click', handleUpload);
+                                    });
+                                </script>
                             </div>
-                            <div class="current-exam-upload-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
-                            <button id="btn-upload" class="btn btn-action mod-upload">Dien examenopdracht in</button>
-                            <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
-                            <script type="text/javascript">
-                                $(document).ready(function() {
-
-                                    function initDragDrop() {
-                                        /* Prevent drag & drop outside of drop zone */
-                                        window.addEventListener('dragover',function(e){
-                                            e = e || event;
-                                            e.preventDefault();
-                                        },false);
-                                        window.addEventListener('drop',function(e){
-                                            e = e || event;
-                                            e.preventDefault();
-                                        },false);
-                                    }
-
-                                    initDragDrop();
-
-                                    dropzoneCallbacks.getServerResponse = function(environment, file, serverResponse) {
-                                        console.log(environment, file, serverResponse);
-                                    };
-                                    var publicationId = {{ DETAILS.publication.id }};
-                                    dropzoneCallbacks.sendingCallbackFunction = function (environment, file, xhrObject, formData) {
-                                        formData.append('publicationId', publicationId);
-                                    };
-
-                                    var uploadUrl = '{{ UPLOAD_URL|raw }}';
-                                    $('#file-upload-container').fileUpload({autoProcessQueue: false, uploadUrl: uploadUrl, successCallbackFunction: 'getServerResponse', sendingCallbackFunction: 'sendingCallbackFunction'});
-
-                                    var uploader = Dropzone.forElement('#file-upload');
-                                    //uploader.options.params = { publicationId: publicationId };
-
-                                    uploader.on('processing', function() {
-                                        uploader.options.autoProcessQueue = true;
-                                    });
-
-                                    uploader.on('queuecomplete', function() {
-                                        uploader.options.autoProcessQueue = false;
-                                        console.log('complete');
-                                    });
-
-                                    function handleUpload() {
-                                        uploader.processQueue();
-                                    }
-
-                                    $('#btn-upload').on('click', handleUpload);
-                                });
-                            </script>
                         </div>
                     </div>
-                </div>
                 {% endif %}
             </div>
         </main>
