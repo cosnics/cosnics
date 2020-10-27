@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Component;
 
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager;
-use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\DataTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -35,14 +34,11 @@ class ViewerComponent extends Manager
             case LoginTemplate::TEMPLATE_ID :
                 $class_name = LoginTemplate::class;
                 break;
-            case DataTemplate::TEMPLATE_ID :
-                $class_name = DataTemplate::class;
-                break;
             case UserTemplate::TEMPLATE_ID :
                 $class_name = UserTemplate::class;
                 break;
             default :
-                $class_name = DataTemplate::class;
+                $class_name = LoginTemplate::class;
                 break;
         }
 

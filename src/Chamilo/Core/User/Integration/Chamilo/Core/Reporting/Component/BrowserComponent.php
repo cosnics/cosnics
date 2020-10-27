@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Component;
 
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager;
-use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\DataTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
@@ -38,7 +37,6 @@ class BrowserComponent extends Manager
     {
         $data = array();
         $data[] = $this->get_data(LoginTemplate::class);
-        $data[] = $this->get_data(DataTemplate::class);
         $data[] = $this->get_data(UserTemplate::class);
         return $data;
     }

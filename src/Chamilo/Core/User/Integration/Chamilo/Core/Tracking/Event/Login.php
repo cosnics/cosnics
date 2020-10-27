@@ -2,12 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Event;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\OperatingSystem;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Referrer;
 
 /**
  *
@@ -26,12 +21,7 @@ class Login extends Event
     public function getTrackerClasses()
     {
         return array(
-            LoginLogout::class,
-            Browser::class,
-            Country::class,
-            OperatingSystem::class,
-            Provider::class,
-            Referrer::class);
+            LoginLogout::class);
     }
 
     public function getType()
