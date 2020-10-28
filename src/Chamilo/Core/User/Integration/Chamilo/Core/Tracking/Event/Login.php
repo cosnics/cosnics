@@ -21,11 +21,12 @@ class Login extends Event
     {
         return array(
             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout::class_name(), 
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser::class_name(), 
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country::class_name(), 
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\OperatingSystem::class_name(), 
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider::class_name(), 
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Referrer::class_name());
+//            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Browser::class_name(),
+//            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country::class_name(),
+//            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\OperatingSystem::class_name(),
+//            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider::class_name(),
+//            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Referrer::class_name()
+        );
     }
 
     public function getType()
