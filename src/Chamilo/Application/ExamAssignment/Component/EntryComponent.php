@@ -51,7 +51,8 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
                     \Chamilo\Application\ExamAssignment\Ajax\Manager::PARAM_SECURITY_CODE => $details['security_code']
                 ]
             ),
-            'LOGOUT_URL' => $this->getLogoutUrl()
+            'LOGOUT_URL' => $this->getLogoutUrl(),
+            'LIST_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_LIST])
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
