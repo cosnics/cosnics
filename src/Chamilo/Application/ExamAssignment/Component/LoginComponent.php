@@ -27,16 +27,13 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
      */
     function run()
     {
+        $this->getAuthenticationValidator()->validate();
+
         if ($this->getUser() instanceof User)
         {
             $this->redirect(null, false, [self::PARAM_ACTION => self::ACTION_LIST]);
 
             return null;
-        }
-
-        if($this->getRequest()->getMethod() == Request::METHOD_POST)
-        {
-            $this->getAuthenticationValidator()->validate();
         }
 
         $notAuthenticatedResponse = new NotAuthenticatedResponse();
