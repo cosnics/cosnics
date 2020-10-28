@@ -95,5 +95,7 @@
             <tag name="form.type" />
         </service>
 
+        <service id="Chamilo\Core\User\Renderer\LoginFormRenderer" autowire="true" />
+
     </services>
 </container>

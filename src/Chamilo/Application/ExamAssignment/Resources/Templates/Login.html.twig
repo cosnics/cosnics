@@ -23,6 +23,9 @@
     </style>
     <div class="login-container">
         <h1>Inloggen</h1>
+        {% if ERROR %}
+            <div class="alert alert-danger">{{ ERROR }}</div>
+        {% endif %}
         {{ LOGIN_FORM|raw }}
     </div>
 {% endblock %}

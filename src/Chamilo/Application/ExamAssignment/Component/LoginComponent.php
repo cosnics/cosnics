@@ -3,8 +3,10 @@
 namespace Chamilo\Application\ExamAssignment\Component;
 
 use Chamilo\Application\ExamAssignment\Manager;
+use Chamilo\Core\User\Renderer\LoginFormRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -24,10 +26,18 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
     function run()
     {
-        $this->getAuthenticationValidator()->validate();
+        try
+        {
+            $this->getAuthenticationValidator()->validate();
+        }
+        catch(AuthenticationException $ex)
+        {
+            $error = $ex->getErrorMessage();
+        }
 
         if ($this->getUser() instanceof User)
         {
@@ -36,16 +46,24 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
             return null;
         }
 
-        $notAuthenticatedResponse = new NotAuthenticatedResponse();
-
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         return $this->getTwig()->render(
             Manager::context() . ':Login.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-                'LOGIN_FORM' => $notAuthenticatedResponse->displayLoginForm()
+                'LOGIN_FORM' => $this->getLoginFormRenderer()->renderLoginForm(),
+                'ERROR' => $error
             ]
         );
     }
+
+    /**
+     * @return LoginFormRenderer
+     */
+    protected function getLoginFormRenderer()
+    {
+        return $this->getService(LoginFormRenderer::class);
+    }
+
 }

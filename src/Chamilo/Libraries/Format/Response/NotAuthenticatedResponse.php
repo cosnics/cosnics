@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Response;
 
+use Chamilo\Core\User\Renderer\LoginFormRenderer;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -16,6 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class NotAuthenticatedResponse extends Response
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * Constructor
@@ -59,55 +62,7 @@ class NotAuthenticatedResponse extends Response
      */
     public function displayLoginForm()
     {
-        $translator = Translation::getInstance();
-        $redirect = new Redirect();
-
-        $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
-
-        $form->get_renderer()->setElementTemplate('{element}');
-
-        $form->setRequiredNote(null);
-
-        $form->addElement('html', '<div class="form-group">');
-        $form->addElement('html', '<div class="input-group">');
-
-        $form->addElement(
-            'html',
-            '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>');
-
-        $form->addElement(
-            'text',
-            'login',
-            Translation::get('UserName'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
-
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '</div>');
-
-        $form->addElement('html', '<div class="form-group">');
-        $form->addElement('html', '<div class="input-group">');
-
-        $form->addElement(
-            'html',
-            '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>');
-
-        $form->addElement(
-            'password',
-            'password',
-            Translation::get('Pass'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
-
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '</div>');
-
-        $form->addElement('html', '<div class="form-group text-right">');
-        $form->addElement('style_submit_button', 'submitAuth', Translation::get('Login'), null, null, 'log-in');
-        $form->addElement('html', '</div>');
-
-        $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
-
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
-
-        return $form->toHtml();
+        $this->initializeContainer();
+        return $this->getService(LoginFormRenderer::class)->renderLoginForm();
     }
 }
