@@ -5,6 +5,7 @@ namespace Chamilo\Application\ExamAssignment\Component;
 use Chamilo\Application\ExamAssignment\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
@@ -39,6 +40,7 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
         );
 
         $details = $this->getExamAssignmentService()->getExamAssignmentDetails($this->getUser(), $publicationId);
+        $redirect = new Redirect();
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
@@ -51,7 +53,9 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
                     \Chamilo\Application\ExamAssignment\Ajax\Manager::PARAM_SECURITY_CODE => $details['security_code']
                 ]
             ),
-            'LOGOUT_URL' => $this->getLogoutUrl()
+            'LOGOUT_URL' => $this->getLogoutUrl(),
+            'LIST_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_LIST]),
+            'CURRENT_URL' => $redirect->getCurrentUrl()
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);

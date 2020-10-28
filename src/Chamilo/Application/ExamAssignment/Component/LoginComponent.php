@@ -7,10 +7,7 @@ use Chamilo\Core\User\Renderer\LoginFormRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Structure\Page;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class LoginComponent
