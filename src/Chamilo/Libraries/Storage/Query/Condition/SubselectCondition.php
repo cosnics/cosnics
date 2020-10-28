@@ -50,13 +50,6 @@ class SubselectCondition extends Condition
     private $condition;
 
     /**
-     * An optional DataManager used in case subselect refers to a different context
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\DataManager
-     */
-    private $data_manager;
-
-    /**
      * Constructor
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $name
@@ -64,10 +57,9 @@ class SubselectCondition extends Condition
      * @param string $storageUnitValue
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param $storageUnitName string
-     * @param \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
      */
     public function __construct(
-        $name, $value, $storageUnitValue, $condition = null, $storageUnitName = null, $data_manager = null
+        $name, $value, $storageUnitValue, $condition = null, $storageUnitName = null
     )
     {
         $this->name = $name;
@@ -75,7 +67,6 @@ class SubselectCondition extends Condition
         $this->storage_unit_value = $storageUnitValue;
         $this->storage_unit_name = $storageUnitName;
         $this->condition = $condition;
-        $this->data_manager = $data_manager;
     }
 
     /**
@@ -92,7 +83,6 @@ class SubselectCondition extends Condition
             $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
         $hashParts[] = $this->get_storage_unit_value();
         $hashParts[] = $this->get_storage_unit_name();
-        $hashParts[] = ($this->get_data_manager() ? get_class($this->get_data_manager()) : null);
 
         if ($this->get_condition() instanceof Condition)
         {
@@ -113,15 +103,6 @@ class SubselectCondition extends Condition
     public function get_condition()
     {
         return $this->condition;
-    }
-
-    /**
-     * Gets the optional DataManager used in case subselect refers to a different context
-     * @return \Chamilo\Libraries\Storage\DataManager\DataManager
-     */
-    public function get_data_manager()
-    {
-        return $this->data_manager;
     }
 
     /**

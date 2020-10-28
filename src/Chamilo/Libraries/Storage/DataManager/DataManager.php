@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -25,18 +24,6 @@ use Exception;
 class DataManager
 {
     use ClassContext;
-
-    const ALTER_STORAGE_UNIT_ADD = 1;
-    const ALTER_STORAGE_UNIT_ADD_INDEX = 7;
-    const ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY = 5;
-    const ALTER_STORAGE_UNIT_ADD_UNIQUE = 8;
-    const ALTER_STORAGE_UNIT_CHANGE = 2;
-    const ALTER_STORAGE_UNIT_DROP = 3;
-    const ALTER_STORAGE_UNIT_DROP_INDEX = 6;
-    const ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY = 4;
-
-    const TYPE_DOCTRINE = 'Doctrine';
-    const TYPE_MDB2 = 'Mdb2';
 
     /**
      * Instance of this class for the singleton pattern
@@ -105,6 +92,7 @@ class DataManager
      *
      * @return int
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public static function count($class, $parameters = null)
     {
@@ -241,7 +229,7 @@ class DataManager
      */
     public static function getDataClassRepository()
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+        return self::getService(
             'Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository'
         );
     }
@@ -255,25 +243,25 @@ class DataManager
      */
     public static function getInstance()
     {
-        $type = static::get_type();
-
-        if (!isset(self::$instance[$type]))
+        if (!isset(self::$instance))
         {
-            $class = '\Chamilo\Libraries\Storage\DataManager\\' . $type . '\Database';
-            self::$instance[$type] = new $class();
+            self::$instance = new Database();
         }
 
-        return self::$instance[$type];
+        return self::$instance;
     }
 
     /**
-     * Set the instance of the DataManager
+     * @param string $serviceName
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\DataManager $instance
+     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository|\Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository
+     * @throws \Exception
      */
-    public static function set_instance($instance)
+    public static function getService($serviceName)
     {
-        self::$instance[ClassnameUtilities::getInstance()->getNamespaceFromObject($instance)] = $instance;
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**
@@ -282,7 +270,7 @@ class DataManager
      */
     public static function getStorageUnitRepository()
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+        return self::getService(
             'Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository'
         );
     }
@@ -298,16 +286,6 @@ class DataManager
     public static function get_alias($storage_unit_name)
     {
         return self::getDataClassRepository()->getAlias($storage_unit_name);
-    }
-
-    /**
-     * Gets the type of DataManager to be instantiated, by default configured in the main Chamilo configuration file
-     *
-     * @return string
-     */
-    public static function get_type()
-    {
-        return Database::STORAGE_TYPE;
     }
 
     /**
@@ -343,41 +321,6 @@ class DataManager
     public static function optimize_storage_unit($name)
     {
         return self::getStorageUnitRepository()->optimize($name);
-    }
-
-    /**
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public static function package()
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
-    }
-
-    /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param mixed[] $record
-     *
-     * @return mixed[]
-     */
-    public static function process_record($record)
-    {
-        foreach ($record as &$field)
-        {
-            if (is_resource($field))
-            {
-                $data = '';
-                while (!feof($field))
-                {
-                    $data .= fread($field, 1024);
-                }
-                $field = $data;
-            }
-        }
-
-        return $record;
     }
 
     /**

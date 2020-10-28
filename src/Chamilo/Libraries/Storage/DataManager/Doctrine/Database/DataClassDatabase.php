@@ -107,7 +107,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return string
-     * @throws \ReflectionException
      */
     protected function buildBasicRecordsSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -130,7 +129,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
     {
@@ -150,7 +149,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -167,7 +166,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return integer
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
      */
     public function count($dataClassName, DataClassCountParameters $parameters)
     {
@@ -205,7 +203,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return integer[]|false
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
     {
@@ -247,7 +244,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param boolean $autoAssignIdentifier
      *
      * @return boolean
-     * @throws \ReflectionException
      */
     public function create(DataClass $dataClass, $autoAssignIdentifier = true)
     {
@@ -321,7 +317,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return boolean
      * @throws \Doctrine\DBAL\DBALException
@@ -358,7 +354,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]|false
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
@@ -422,7 +417,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $columnName
-     * @param string $storageUnitAlias
+     * @param string|null $storageUnitAlias
      *
      * @return string
      */
@@ -446,7 +441,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
      */
     protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -675,7 +669,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string $dataClassName
      *
      * @return string
-     * @throws \ReflectionException
      */
     protected function prepareTableName($dataClassName)
     {
@@ -721,7 +714,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $value
-     * @param string $type
+     * @param string|null $type
      *
      * @return string
      */
@@ -738,7 +731,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
      */
     public function record($dataClassName, RecordRetrieveParameters $parameters)
     {
@@ -760,7 +752,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters)
     {
@@ -779,7 +771,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -797,7 +789,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {

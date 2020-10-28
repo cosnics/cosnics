@@ -226,11 +226,6 @@ class RightsUtil
 
                 $condition = new OrCondition($or_conditions);
 
-                // if ($to_string)
-                // {
-                // $condition = DataManager :: translateCondition($condition);
-                // }
-
                 $this->entities_condition_cache[$user_id][$entitiesHash][(int) $to_string] = $condition;
             }
 
