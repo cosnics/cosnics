@@ -5,7 +5,6 @@ namespace Chamilo\Application\ExamAssignment\Component;
 use Chamilo\Application\ExamAssignment\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
@@ -22,6 +21,7 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     function run()
     {
@@ -34,13 +34,13 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
 
         $publicationId = $this->getRequest()->getFromUrl(self::PARAM_CONTENT_OBJECT_PUBLICATION_ID);
         $code = $this->getRequest()->getFromPost(self::PARAM_CODE);
+        $securityCode = $this->getRequest()->getFromUrl(self::PARAM_SECURITY_CODE);
 
         $allowed = $this->getExamAssignmentService()->canUserViewExamAssignment(
-            $this->getUser(), $publicationId, $code
+            $this->getUser(), $publicationId, $code, $securityCode
         );
 
         $details = $this->getExamAssignmentService()->getExamAssignmentDetails($this->getUser(), $publicationId);
-        $redirect = new Redirect();
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
@@ -55,7 +55,12 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
             ),
             'LOGOUT_URL' => $this->getLogoutUrl(),
             'LIST_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_LIST]),
-            'CURRENT_URL' => $redirect->getCurrentUrl()
+            'CURRENT_URL' => $this->get_url(
+                [
+                    self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => $publicationId,
+                    self::PARAM_SECURITY_CODE => $details['security_code']
+                ]
+            )
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);

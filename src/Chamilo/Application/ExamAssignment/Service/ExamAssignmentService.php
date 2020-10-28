@@ -171,7 +171,7 @@ class ExamAssignmentService
         }
 
         $examCode = $examAssignmentPublication->getCode();
-        $securityCode = $examAssignmentPublication->getSecurityCode();
+        $securityCode = $examAssignmentPublication->getSecurityCode($user);
 
         if (empty($examCode) || $examCode == $code || $calculatedSecurityCode == $securityCode)
         {
@@ -215,6 +215,7 @@ class ExamAssignmentService
      * @param int $contentObjectPublicationId
      *
      * @return array
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function getExamAssignmentDetails(User $user, int $contentObjectPublicationId)
     {
@@ -253,7 +254,7 @@ class ExamAssignmentService
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
         $details['attachments'] = $attachments;
-        $details['security_code'] = $examAssignmentPublication->getSecurityCode();
+        $details['security_code'] = $examAssignmentPublication->getSecurityCode($user);
         $details['can_submit'] = $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
 
         return $details;

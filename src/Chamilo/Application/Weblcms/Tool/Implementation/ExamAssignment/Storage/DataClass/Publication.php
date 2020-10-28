@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -38,11 +39,13 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     }
 
     /**
+     * @param User $user
+     *
      * @return string
      */
-    public function getSecurityCode()
+    public function getSecurityCode(User $user)
     {
-        return md5($this->getPublicationId() . '-' . $this->getCode());
+        return md5($this->getPublicationId() . '-' . $this->getCode() . '-' . $user->getId());
     }
 
     /**

@@ -23,6 +23,7 @@ abstract class Manager extends Application
 
     const PARAM_CONTENT_OBJECT_PUBLICATION_ID = 'publicationId';
     const PARAM_CODE = 'exam_code';
+    const PARAM_SECURITY_CODE = 'securityCode';
 
     const DEFAULT_ACTION = self::ACTION_LOGIN;
 
