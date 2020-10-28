@@ -17,7 +17,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -287,14 +287,14 @@ class ConditionFilterRenderer extends FilterRenderer
         if ($filter_data->has_date(FilterData::FILTER_CREATION_DATE))
         {
             $creation_date_conditions = array();
-            $creation_date_conditions[] = new InequalityCondition(
+            $creation_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CREATION_DATE),
-                InequalityCondition::GREATER_THAN_OR_EQUAL,
+                ComparisonCondition::GREATER_THAN_OR_EQUAL,
                 new StaticConditionVariable(strtotime($filter_data->get_creation_date(FilterData::FILTER_FROM_DATE)))
             );
-            $creation_date_conditions[] = new InequalityCondition(
+            $creation_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CREATION_DATE),
-                InequalityCondition::LESS_THAN_OR_EQUAL,
+                ComparisonCondition::LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable(strtotime($filter_data->get_creation_date(FilterData::FILTER_TO_DATE)))
             );
             $conditions[] = new AndCondition($creation_date_conditions);
@@ -303,18 +303,18 @@ class ConditionFilterRenderer extends FilterRenderer
         {
             if ($filter_data->get_creation_date(FilterData::FILTER_FROM_DATE))
             {
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CREATION_DATE),
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
                         strtotime($filter_data->get_creation_date(FilterData::FILTER_FROM_DATE))
                     )
                 );
             }
             elseif ($filter_data->get_creation_date(FilterData::FILTER_TO_DATE))
             {
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CREATION_DATE),
-                    InequalityCondition::LESS_THAN_OR_EQUAL,
+                    ComparisonCondition::LESS_THAN_OR_EQUAL,
                     new StaticConditionVariable(strtotime($filter_data->get_creation_date(FilterData::FILTER_TO_DATE)))
                 );
             }
@@ -324,15 +324,15 @@ class ConditionFilterRenderer extends FilterRenderer
         if ($filter_data->has_date(FilterData::FILTER_MODIFICATION_DATE))
         {
             $modification_date_conditions = array();
-            $modification_date_conditions[] = new InequalityCondition(
+            $modification_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE),
-                InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
+                ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
                     strtotime($filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))
                 )
             );
-            $modification_date_conditions[] = new InequalityCondition(
+            $modification_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE),
-                InequalityCondition::LESS_THAN_OR_EQUAL,
+                ComparisonCondition::LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable(strtotime($filter_data->get_modification_date(FilterData::FILTER_TO_DATE)))
             );
             $conditions[] = new AndCondition($modification_date_conditions);
@@ -341,20 +341,20 @@ class ConditionFilterRenderer extends FilterRenderer
         {
             if ($filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))
             {
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(
                         ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE
-                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
+                    ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(
                         strtotime($filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))
                     )
                 );
             }
             elseif ($filter_data->get_modification_date(FilterData::FILTER_TO_DATE))
             {
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(
                         ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE
-                    ), InequalityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(
+                    ), ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(
                         strtotime($filter_data->get_modification_date(FilterData::FILTER_TO_DATE))
                     )
                 );

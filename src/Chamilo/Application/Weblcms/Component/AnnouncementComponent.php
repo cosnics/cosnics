@@ -17,7 +17,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -149,10 +149,10 @@ class AnnouncementComponent extends Manager
         $conditions = array();
 
         $conditions[] = WeblcmsDataManager::get_publications_condition($course, $this->get_user(), $tool, $type);
-        $conditions[] = new InequalityCondition(
+        $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLICATION_DATE
-            ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($last_visit_date)
+            ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($last_visit_date)
         );
 
         return new AndCondition($conditions);

@@ -26,7 +26,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -1036,13 +1036,13 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         {
             $and_conditions = array();
 
-            $and_conditions[] = new InequalityCondition(
-                $left_value_variable, InequalityCondition::GREATER_THAN_OR_EQUAL,
+            $and_conditions[] = new ComparisonCondition(
+                $left_value_variable, ComparisonCondition::GREATER_THAN_OR_EQUAL,
                 new StaticConditionVariable($direct_subscribed_group[Group::PROPERTY_LEFT_VALUE])
             );
 
-            $and_conditions[] = new InequalityCondition(
-                $right_value_variable, InequalityCondition::LESS_THAN_OR_EQUAL,
+            $and_conditions[] = new ComparisonCondition(
+                $right_value_variable, ComparisonCondition::LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable($direct_subscribed_group[Group::PROPERTY_RIGHT_VALUE])
             );
 

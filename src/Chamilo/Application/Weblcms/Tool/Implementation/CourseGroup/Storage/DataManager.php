@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -106,14 +106,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $and_conditions = array();
 
-            $and_conditions[] = new InequalityCondition(
+            $and_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_LEFT_VALUE),
-                InequalityCondition::GREATER_THAN_OR_EQUAL,
+                ComparisonCondition::GREATER_THAN_OR_EQUAL,
                 new StaticConditionVariable($group->get_left_value()));
 
-            $and_conditions[] = new InequalityCondition(
+            $and_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_RIGHT_VALUE),
-                InequalityCondition::LESS_THAN_OR_EQUAL,
+                ComparisonCondition::LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable($group->get_right_value()));
 
             $and_conditions[] = new EqualityCondition(
@@ -134,9 +134,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $group_conditions[] = new OrCondition($direct_group_conditions);
 
-            $group_conditions[] = new InequalityCondition(
+            $group_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
-                InequalityCondition::GREATER_THAN,
+                ComparisonCondition::GREATER_THAN,
                 new StaticConditionVariable(0));
 
             $group_condition = new AndCondition($group_conditions);

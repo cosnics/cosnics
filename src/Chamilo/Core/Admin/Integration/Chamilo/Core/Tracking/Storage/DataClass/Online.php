@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -63,7 +63,7 @@ class Online extends SimpleTracker
      */
     public function empty_tracker_before_date($date)
     {
-        $condition = new InequalityCondition(
+        $condition = new ComparisonCondition(
             new PropertyConditionVariable(self::class, self::PROPERTY_LAST_ACCESS_DATE),
             InEqualityCondition::LESS_THAN_OR_EQUAL, 
             new StaticConditionVariable($date));

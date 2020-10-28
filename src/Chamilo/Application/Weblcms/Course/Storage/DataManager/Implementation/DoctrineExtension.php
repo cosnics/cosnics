@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -61,15 +61,15 @@ class DoctrineExtension
             {
                 $and_conditions = array();
 
-                $and_conditions[] = new InequalityCondition(
+                $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    InequalityCondition::GREATER_THAN_OR_EQUAL,
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL,
                     new StaticConditionVariable($group[Group::PROPERTY_LEFT_VALUE])
                 );
 
-                $and_conditions[] = new InequalityCondition(
+                $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    InequalityCondition::LESS_THAN_OR_EQUAL,
+                    ComparisonCondition::LESS_THAN_OR_EQUAL,
                     new StaticConditionVariable($group[Group::PROPERTY_RIGHT_VALUE])
                 );
 
@@ -227,15 +227,15 @@ class DoctrineExtension
             {
                 $and_conditions = array();
 
-                $and_conditions[] = new InequalityCondition(
+                $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    InequalityCondition::GREATER_THAN_OR_EQUAL,
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL,
                     new StaticConditionVariable($group[Group::PROPERTY_LEFT_VALUE])
                 );
 
-                $and_conditions[] = new InequalityCondition(
+                $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    InequalityCondition::LESS_THAN_OR_EQUAL,
+                    ComparisonCondition::LESS_THAN_OR_EQUAL,
                     new StaticConditionVariable($group[Group::PROPERTY_RIGHT_VALUE])
                 );
 

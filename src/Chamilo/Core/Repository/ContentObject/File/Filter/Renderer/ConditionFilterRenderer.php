@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -46,19 +46,19 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             if ($compare == ComparisonCondition::EQUAL)
             {
                 $equality_conditions = array();
-                $equality_conditions[] = new InequalityCondition(
+                $equality_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL,
                     new StaticConditionVariable($filesize_bytes * 0.9));
-                $equality_conditions[] = new InequalityCondition(
+                $equality_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
-                    InequalityCondition::LESS_THAN_OR_EQUAL, 
+                    ComparisonCondition::LESS_THAN_OR_EQUAL,
                     new StaticConditionVariable($filesize_bytes * 1.1));
                 $conditions[] = new AndCondition($equality_conditions);
             }
             else
             {
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
                     $compare, 
                     new StaticConditionVariable($filesize_bytes));

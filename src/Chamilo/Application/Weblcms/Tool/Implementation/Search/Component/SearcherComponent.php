@@ -16,7 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -276,14 +276,14 @@ class SearcherComponent extends Manager
             
             $between_conditions = array();
             
-            $between_conditions[] = new InequalityCondition(
+            $between_conditions[] = new ComparisonCondition(
                 $from_date_variables, 
-                InequalityCondition::LESS_THAN_OR_EQUAL, 
+                ComparisonCondition::LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable(time()));
             
-            $between_conditions[] = new InequalityCondition(
+            $between_conditions[] = new ComparisonCondition(
                 $to_date_variable, 
-                InequalityCondition::GREATER_THAN_OR_EQUAL, 
+                ComparisonCondition::GREATER_THAN_OR_EQUAL,
                 new StaticConditionVariable(time()));
             
             $between_condition = new AndCondition($between_conditions);

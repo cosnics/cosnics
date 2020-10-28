@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -98,7 +98,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
             time());
 
         $parameters = new DataClassDistinctParameters(
-            new InequalityCondition(
+            new ComparisonCondition(
                 new PropertyConditionVariable(Online::class, Online::PROPERTY_LAST_ACCESS_DATE),
                 InEqualityCondition::GREATER_THAN,
                 new StaticConditionVariable($pastTime)),

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -93,13 +93,13 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $parameters = new DataClassRetrievesParameters($this->get_current_user_recycle_bin_conditions());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         $count = 0;
-        foreach($trashed_objects as $object)
+        foreach ($trashed_objects as $object)
         {
             $object->delete();
             $count ++;
         }
 
-        DataClassCountCache::truncate(ContentObject::class);
+        $this->getDataClassRepositoryCache()->truncate(ContentObject::class);
 
         return $count;
     }
@@ -125,6 +125,14 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    public function getDataClassRepositoryCache()
+    {
+        return $this->getService(DataClassRepositoryCache::class);
     }
 
     /*

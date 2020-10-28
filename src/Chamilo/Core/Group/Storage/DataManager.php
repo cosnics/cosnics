@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -166,15 +166,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                         $treeConditions[] = new AndCondition(
                             array(
-                                new InequalityCondition(
+                                new ComparisonCondition(
                                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                                    InequalityCondition::LESS_THAN_OR_EQUAL,
+                                    ComparisonCondition::LESS_THAN_OR_EQUAL,
                                     new StaticConditionVariable($descendent[Group::PROPERTY_LEFT_VALUE])
                                 ),
 
-                                new InequalityCondition(
+                                new ComparisonCondition(
                                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                                    InequalityCondition::GREATER_THAN_OR_EQUAL,
+                                    ComparisonCondition::GREATER_THAN_OR_EQUAL,
                                     new StaticConditionVariable($descendent[Group::PROPERTY_RIGHT_VALUE])
                                 )
                             )
@@ -377,15 +377,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 $or_conditions[] = new AndCondition(
                     array(
-                        new InequalityCondition(
+                        new ComparisonCondition(
                             new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                            InequalityCondition::GREATER_THAN_OR_EQUAL,
+                            ComparisonCondition::GREATER_THAN_OR_EQUAL,
                             new StaticConditionVariable($ancestor[Group::PROPERTY_LEFT_VALUE])
                         ),
 
-                        new InequalityCondition(
+                        new ComparisonCondition(
                             new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                            InequalityCondition::LESS_THAN_OR_EQUAL,
+                            ComparisonCondition::LESS_THAN_OR_EQUAL,
                             new StaticConditionVariable($ancestor[Group::PROPERTY_RIGHT_VALUE])
                         )
                     )

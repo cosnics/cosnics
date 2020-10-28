@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -127,26 +127,26 @@ class BrowserComponent extends Manager
         {
             case self::FILTER_TODAY :
                 $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                    ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
             case self::FILTER_THIS_WEEK :
                 $time = strtotime('Next Monday', strtotime('-1 Week', time()));
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                    ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
             case self::FILTER_THIS_MONTH :
                 $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-                    ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                    ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
                 );
                 break;
         }

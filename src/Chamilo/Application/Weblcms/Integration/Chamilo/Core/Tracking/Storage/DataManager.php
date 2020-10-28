@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -192,7 +192,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_courses_with_last_access_after_time($timestamp)
     {
         return self::count_courses_with_last_access_against_time(
-            $timestamp, InequalityCondition::GREATER_THAN_OR_EQUAL
+            $timestamp, ComparisonCondition::GREATER_THAN_OR_EQUAL
         );
     }
 
@@ -205,7 +205,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_courses_with_last_access_before_time($timestamp)
     {
-        return self::count_courses_with_last_access_against_time($timestamp, InequalityCondition::LESS_THAN_OR_EQUAL);
+        return self::count_courses_with_last_access_against_time($timestamp, ComparisonCondition::LESS_THAN_OR_EQUAL);
     }
 
     /**
@@ -369,7 +369,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_courses_with_last_access_against_time($timestamp, $operator)
     {
-        $having = new InequalityCondition(
+        $having = new ComparisonCondition(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MAX,
                 new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_LAST_ACCESS_DATE)

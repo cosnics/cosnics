@@ -47,7 +47,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -1120,11 +1120,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $between_conditions = array();
 
-            $between_conditions[] = new InequalityCondition(
+            $between_conditions[] = new ComparisonCondition(
                 $from_date_variable, InEqualityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
             );
 
-            $between_conditions[] = new InequalityCondition(
+            $between_conditions[] = new ComparisonCondition(
                 $to_date_variable, InEqualityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
             );
 
@@ -2038,16 +2038,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $conditions_publication_period = array();
 
-        $conditions_publication_period[] = new InequalityCondition(
+        $conditions_publication_period[] = new ComparisonCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_FROM_DATE
-            ), InequalityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
+            ), ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
         );
 
-        $conditions_publication_period[] = new InequalityCondition(
+        $conditions_publication_period[] = new ComparisonCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TO_DATE
-            ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
+            ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
         );
 
         $condition_publication_period = new AndCondition($conditions_publication_period);
@@ -2070,10 +2070,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $modified_conditions = array();
 
-        $modified_conditions[] = new InequalityCondition(
+        $modified_conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-            ), InequalityCondition::GREATER_THAN_OR_EQUAL, new PropertyConditionVariable(
+            ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new PropertyConditionVariable(
                 CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_ACCESS_DATE
             )
         );
@@ -2338,9 +2338,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
                 new StaticConditionVariable($course_id)
             );
-            $conditions[] = new InequalityCondition(
+            $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
-                InequalityCondition::GREATER_THAN, new StaticConditionVariable(0)
+                ComparisonCondition::GREATER_THAN, new StaticConditionVariable(0)
             );
 
             if ($condition)

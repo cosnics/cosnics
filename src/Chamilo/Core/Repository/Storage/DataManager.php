@@ -35,7 +35,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -617,11 +617,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function determine_doubles_in_repository($condition = null)
     {
-        $having = new InequalityCondition(
+        $having = new ComparisonCondition(
             new FunctionConditionVariable(
                 FunctionConditionVariable::COUNT,
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
-            ), InequalityCondition::GREATER_THAN, new StaticConditionVariable(1)
+            ), ComparisonCondition::GREATER_THAN, new StaticConditionVariable(1)
         );
 
         $conditions = array();
@@ -654,9 +654,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     private static function fix_category_display_order($category)
     {
         $conditions = array();
-        $conditions[] = new InequalityCondition(
+        $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER),
-            InequalityCondition::GREATER_THAN, new StaticConditionVariable($category->get_display_order())
+            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($category->get_display_order())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),

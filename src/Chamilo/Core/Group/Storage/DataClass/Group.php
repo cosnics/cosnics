@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -143,13 +143,13 @@ class Group extends NestedSet
                 $joins = new Joins(array($join));
 
                 $conditions = array();
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
                 );
-                $conditions[] = new InequalityCondition(
+                $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    InequalityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($this->get_right_value())
+                    ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($this->get_right_value())
                 );
                 $condition = new AndCondition($conditions);
 
@@ -266,13 +266,13 @@ class Group extends NestedSet
             if ($recursive)
             {
                 $childrenCondition = array();
-                $childrenCondition[] = new InequalityCondition(
+                $childrenCondition[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
+                    ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
                 );
-                $childrenCondition[] = new InequalityCondition(
+                $childrenCondition[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
+                    ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
                 );
                 $childrenCondition = new AndCondition($childrenCondition);
             }
@@ -435,13 +435,13 @@ class Group extends NestedSet
             if ($recursive)
             {
                 $children_conditions = array();
-                $children_conditions[] = new InequalityCondition(
+                $children_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    InequalityCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
+                    ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
                 );
-                $children_conditions[] = new InequalityCondition(
+                $children_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    InequalityCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
+                    ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
                 );
                 $children_condition = new AndCondition($children_conditions);
             }

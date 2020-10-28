@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -340,8 +340,8 @@ class Calculator
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
-        $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), InequalityCondition::GREATER_THAN,
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), ComparisonCondition::GREATER_THAN,
             new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);
@@ -368,8 +368,8 @@ class Calculator
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
-        $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), InequalityCondition::GREATER_THAN,
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), ComparisonCondition::GREATER_THAN,
             new StaticConditionVariable(0)
         );
         $condition = new AndCondition($conditions);

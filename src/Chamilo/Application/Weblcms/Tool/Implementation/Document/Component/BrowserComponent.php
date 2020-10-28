@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -142,10 +142,10 @@ class BrowserComponent extends Manager
 
         if ($filter)
         {
-            $conditions[] = new InequalityCondition(
+            $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-                ), InequalityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
             );
         }
 
