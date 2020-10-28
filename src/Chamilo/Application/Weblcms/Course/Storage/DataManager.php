@@ -88,7 +88,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $succes = true;
 
-        foreach($course_setting_relations as $course_setting_relation)
+        foreach ($course_setting_relations as $course_setting_relation)
         {
             $course_setting_id = $course_setting_relation->get_course_setting_id();
             $course_setting = $course_settings_controller->get_course_setting_by_id($course_setting_id);
@@ -128,7 +128,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function count_all_course_users($course_id, $condition = null)
     {
-        $extension = new DoctrineExtension(self::getInstance());
+        $extension = new DoctrineExtension();
 
         return $extension->count_all_course_users($course_id, $condition);
     }
@@ -374,7 +374,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         );
 
         $courses = self::retrieves(Course::class, new DataClassRetrievesParameters($condition));
-        foreach($courses as $course)
+        foreach ($courses as $course)
         {
             if (!$course->delete())
             {
@@ -615,9 +615,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $joins->add(
             new Join(
                 CourseType::class, new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
-                    new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID)
-                ), Join::TYPE_LEFT
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
+                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID)
+            ), Join::TYPE_LEFT
             )
         );
 
@@ -952,7 +952,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $course_id, $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $extension = new DoctrineExtension(self::getInstance());
+        $extension = new DoctrineExtension();
 
         return $extension->retrieve_all_course_users($course_id, $condition, $offset, $count, $order_property);
     }
@@ -1032,7 +1032,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             return new DataClassIterator(Group::class, array());
         }
 
-        foreach($direct_subscribed_groups as $direct_subscribed_group)
+        foreach ($direct_subscribed_groups as $direct_subscribed_group)
         {
             $and_conditions = array();
 
@@ -1740,7 +1740,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             CourseTool::class, new DataClassRetrievesParameters($tools_condition)
         );
 
-        foreach($tools as $tool)
+        foreach ($tools as $tool)
         {
             if (!$tool_name || $tool_name == $tool->get_name())
             {

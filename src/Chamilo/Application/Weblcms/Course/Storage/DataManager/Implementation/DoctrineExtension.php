@@ -4,30 +4,23 @@ namespace Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Doctrine\DBAL\Query\QueryBuilder;
-use PDO;
-use PDOException;
 
 /**
  * Doctrine implementation of the datamanager
@@ -36,24 +29,8 @@ use PDOException;
  */
 class DoctrineExtension
 {
-    const PARAM_COUNT = 'count';
-    const PARAM_SUBSCRIPTION_STATUS = 'record_subscription_status';
-    const PARAM_SUBSCRIPTION_TYPE = 'record_subscription_type';
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Database
-     */
-    private $database;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database $database
-     */
-    public function __construct(Database $database)
-    {
-        $this->database = $database;
-    }
+    const PARAM_SUBSCRIPTION_STATUS = 'subscription_status';
+    const PARAM_SUBSCRIPTION_TYPE = 'subscription_type';
 
     /**
      * **************************************************************************************************************
@@ -62,29 +39,169 @@ class DoctrineExtension
      */
 
     /**
-     * Builds the basic sql for the "all course users" funtions
+     * Builds the sql for the users subscribed through (sub) platform groups
      *
-     * @param DataClassProperties $properties
      * @param int $course_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return string
+     * @return integer[]
      */
-    protected function build_basic_sql_all_course_users($properties, $course_id, $condition)
+    protected function countSubscribedGroupUsers($course_id, $condition)
     {
-        $query_builder = $this->database->get_connection()->createQueryBuilder();
-        $query_builder = $this->process_data_class_properties($query_builder, User::class, $properties);
+        $direct_groups_with_tree_values = self::retrieve_direct_subscribed_groups_with_tree_values($course_id);
 
-        $sql = $query_builder->getSQL();
+        if ($direct_groups_with_tree_values->count() > 0)
+        {
+            $properties = new DataClassProperties();
 
-        $sql_subscribed_users = $this->build_sql_for_subscribed_users($course_id, $condition);
-        $sql_subscribed_groups = $this->build_sql_for_subscribed_group_users($course_id, $condition);
+            $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
 
-        $sql .= ' FROM (' . ($sql_subscribed_groups ? $sql_subscribed_users . ' UNION ' . $sql_subscribed_groups :
-                $sql_subscribed_users) . ') AS ' .
-            \Chamilo\Core\User\Storage\DataManager::getInstance()->get_alias(User::get_table_name()) . ' ';
+            $direct_group_conditions = array();
+            foreach ($direct_groups_with_tree_values as $group)
+            {
+                $and_conditions = array();
 
-        return $sql;
+                $and_conditions[] = new InequalityCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                    InequalityCondition::GREATER_THAN_OR_EQUAL,
+                    new StaticConditionVariable($group[Group::PROPERTY_LEFT_VALUE])
+                );
+
+                $and_conditions[] = new InequalityCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                    InequalityCondition::LESS_THAN_OR_EQUAL,
+                    new StaticConditionVariable($group[Group::PROPERTY_RIGHT_VALUE])
+                );
+
+                $direct_group_condition = new AndCondition($and_conditions);
+                $direct_group_conditions[] = $direct_group_condition;
+            }
+
+            $joins = new Joins();
+
+            $joins->add(
+                new Join(
+                    GroupRelUser::class, new EqualityCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
+                    )
+                )
+            );
+
+            $joins->add(
+                new Join(
+                    User::class, new EqualityCondition(
+                        new PropertyConditionVariable(User::class, User::PROPERTY_ID),
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)
+                    )
+                )
+            );
+
+            $conditions = array();
+
+            $conditions[] = new OrCondition($direct_group_conditions);
+
+            if (isset($condition))
+            {
+                $conditions[] = $condition;
+            }
+
+            $condition = new AndCondition($conditions);
+
+            $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+
+            return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
+        }
+    }
+
+    /**
+     * @param $course_id
+     * @param $condition
+     *
+     * @return integer[]
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
+     */
+    protected function countSubscribedUsers($course_id, $condition)
+    {
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                User::class, new EqualityCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID), new PropertyConditionVariable(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                    )
+                )
+            )
+        );
+
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+        );
+
+        if (isset($condition))
+        {
+            $conditions[] = $condition;
+        }
+
+        $condition = new AndCondition($conditions);
+
+        $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+
+        return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
+    }
+
+    /**
+     * Counts all course users of a given course with status and subscription type
+     *
+     * @param int $course_id
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     *
+     */
+    public function count_all_course_users($course_id, $condition = null)
+    {
+        $subscribedUsers = $this->countSubscribedUsers($course_id, $condition);
+        $subscribedGroupUsers = $this->countSubscribedGroupUsers($course_id, $condition);
+
+        return count(array_unique(array_merge($subscribedUsers, $subscribedGroupUsers)));
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase
+     * @throws \Exception
+     */
+    protected function getDataClassDatabase()
+    {
+        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase');
+    }
+
+    /**
+     * @param $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService($serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**
@@ -93,9 +210,9 @@ class DoctrineExtension
      * @param int $course_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return string
+     * @return string[][]
      */
-    protected function build_sql_for_subscribed_group_users($course_id, $condition)
+    protected function getSubscribedGroupUsers($course_id, $condition)
     {
         $direct_groups_with_tree_values = self::retrieve_direct_subscribed_groups_with_tree_values($course_id);
 
@@ -166,11 +283,9 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
+            $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
 
-            return DataManager::getInstance()->build_records_sql(
-                Group::class, $parameters
-            );
+            return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
         }
     }
 
@@ -180,9 +295,9 @@ class DoctrineExtension
      * @param int $course_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return string
+     * @return string[][]
      */
-    protected function build_sql_for_subscribed_users($course_id, $condition)
+    protected function getSubscribedUsers($course_id, $condition)
     {
         $properties = $this->get_user_properties_for_select();
 
@@ -225,53 +340,9 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
+        $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
 
-        return $this->database->build_records_sql(CourseEntityRelation::class, $parameters);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * All Course Users Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Counts all course users of a given course with status and subscription type
-     *
-     * @param int $course_id
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     *
-     */
-    public function count_all_course_users($course_id, $condition = null)
-    {
-        $properties = new DataClassProperties();
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::COUNT, new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME)
-            ), self::PARAM_COUNT
-            )
-        );
-
-        $sql = $this->build_basic_sql_all_course_users($properties, $course_id, $condition);
-
-        try
-        {
-            $result = $this->database->get_connection()->query($sql);
-            $row = $result->fetch(PDO::FETCH_ASSOC);
-
-            return $row[self::PARAM_COUNT];
-        }
-        catch (PDOException $exception)
-        {
-            $this->database->error_handling($exception);
-            throw new DataClassNoResultException(User::class, null);
-        }
+        return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
     }
 
     /**
@@ -296,205 +367,60 @@ class DoctrineExtension
     }
 
     /**
-     * Processes the dataclass properties
-     *
-     * @param QueryBuilder $query_builder
-     * @param string $class
-     * @param DataClassProperties $properties
-     *
-     * @return QueryBuilder
-     */
-    public function process_data_class_properties($query_builder, $class, $properties)
-    {
-        if ($properties instanceof DataClassProperties)
-        {
-            foreach ($properties->get() as $condition_variable)
-            {
-                $query_builder->addSelect(ConditionVariableTranslator::render($condition_variable));
-            }
-        }
-        else
-        {
-            $query_builder->addSelect($this->database->get_alias($class::get_table_name()) . '.*');
-        }
-
-        return $query_builder;
-    }
-
-    /**
-     * Processes the group by
-     *
-     * @param QueryBuilder $query_builder
-     * @param GroupBy $group_by
-     *
-     * @return QueryBuilder
-     */
-    public function process_group_by($query_builder, $group_by)
-    {
-        if ($group_by instanceof GroupBy)
-        {
-            foreach ($group_by->get() as $group_by_variable)
-            {
-                $query_builder->addGroupBy(ConditionVariableTranslator::render($group_by_variable));
-            }
-        }
-
-        return $query_builder;
-    }
-
-    /**
-     * Processes query limit values
-     *
-     * @param QueryBuilder $query_builder
-     * @param int $count
-     * @param int $offset
-     *
-     * @return QueryBuilder
-     */
-    public function process_limit($query_builder, $count = null, $offset = null)
-    {
-        if (intval($count) > 0)
-        {
-            $query_builder->setMaxResults(intval($count));
-        }
-
-        if (intval($offset) > 0)
-        {
-            $query_builder->setFirstResult(intval($offset));
-        }
-
-        return $query_builder;
-    }
-
-    /**
-     * Processes the order by
-     *
-     * @param QueryBuilder $query_builder
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
-     *
-     * @return QueryBuilder
-     */
-    public function process_order_by($query_builder, $class, $order_by)
-    {
-        if (is_null($order_by))
-        {
-            $order_by = array();
-        }
-        elseif (!is_array($order_by))
-        {
-            $order_by = array($order_by);
-        }
-
-        foreach ($order_by as $order)
-        {
-            $query_builder->addOrderBy(
-                ConditionVariableTranslator::render($order->get_property()),
-                ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC')
-            );
-        }
-
-        return $query_builder;
-    }
-
-    /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param mixed[] $record
-     *
-     * @return mixed[]
-     */
-    public static function process_record($record)
-    {
-        foreach ($record as &$field)
-        {
-            if (is_resource($field))
-            {
-                $data = '';
-                while (!feof($field))
-                {
-                    $data .= fread($field, 1024);
-                }
-                $field = $data;
-            }
-        }
-
-        return $record;
-    }
-
-    /**
      * Retrieves all course users of a given course with status and subscription type
      *
      * @param int $course_id
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int|null $offset
+     * @param int|null $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[]|null $orderProperties
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function retrieve_all_course_users(
-        $course_id, $condition = null, $offset = null, $count = null, $order_property = null
+        $course_id, $condition = null, $offset = null, $count = null, $orderProperties = null
     )
     {
-        $properties = $this->get_user_properties_for_select();
+        $subscribedUsers = $this->getSubscribedUsers($course_id, $condition);
+        $subscribedGroupUsers = $this->getSubscribedGroupUsers($course_id, $condition);
 
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::MIN, new StaticConditionVariable(self::PARAM_SUBSCRIPTION_STATUS, false),
-                'subscription_status'
-            )
-        );
+        $users = array();
 
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::SUM, new StaticConditionVariable(self::PARAM_SUBSCRIPTION_TYPE, false),
-                'subscription_type'
-            )
-        );
-
-        $sql = $this->build_basic_sql_all_course_users($properties, $course_id, $condition);
-
-        $query_builder = $this->database->get_connection()->createQueryBuilder();
-
-        $group_by = new GroupBy();
-
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_STATUS));
-        $group_by->add(new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE));
-
-        $query_builder = $this->process_group_by($query_builder, $group_by);
-        $query_builder = $this->process_order_by($query_builder, User::class, $order_property);
-        $query_builder = $this->process_limit($query_builder, $count, $offset);
-
-        $sql .= substr($query_builder->getSQL(), 7);
-
-        try
+        foreach ($subscribedUsers as $subscribedUser)
         {
-            $statement = $this->database->get_connection()->query($sql);
+            $users[$subscribedUser[User::PROPERTY_ID]] = $subscribedUser;
+        }
 
-            $records = array();
-
-            while ($record = $statement->fetch(PDO::FETCH_ASSOC))
+        foreach ($subscribedGroupUsers as $subscribedGroupUser)
+        {
+            if (array_key_exists($subscribedGroupUser[User::PROPERTY_ID], $users))
             {
-                $records[] = self:: process_record($record);
-            }
+                $existingUser = $users[User::PROPERTY_ID];
 
-            return new DataClassIterator(User::class, $records);
+                if ($existingUser[User::PROPERTY_STATUS] > $subscribedGroupUser[User::PROPERTY_STATUS])
+                {
+                    $users[$subscribedGroupUser[User::PROPERTY_ID]] = $subscribedGroupUser;
+                }
+            }
+            else
+            {
+                $users[$subscribedGroupUser[User::PROPERTY_ID]] = $subscribedGroupUser;
+            }
         }
-        catch (PDOException $exception)
-        {
-            $this->database->error_handling($exception);
-            throw new DataClassNoResultException(User::class, null);
+
+        usort(
+            $users, function ($user1, $user2) use ($orderProperties) {
+
+            $orderProperty = $orderProperties[0];
+
+            return strcmp(
+                $user1[$orderProperty->getConditionVariable()->get_property()],
+                $user2[$orderProperty->getConditionVariable()->get_property()]
+            );
         }
+        );
+
+        return new DataClassIterator(User::class, array_slice($users, $offset, $count));
     }
 
     /**
@@ -542,7 +468,8 @@ class DoctrineExtension
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
         return new DataClassIterator(
-            CourseEntityRelation::class, $this->database->records(CourseEntityRelation::class, $parameters)
+            CourseEntityRelation::class,
+            $this->getDataClassDatabase()->records(CourseEntityRelation::class, $parameters)
         );
     }
 }

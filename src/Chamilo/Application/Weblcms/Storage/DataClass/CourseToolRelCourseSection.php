@@ -39,7 +39,7 @@ class CourseToolRelCourseSection extends DataClass
      */
     public static function get_table_name()
     {
-        return 'weblcms_course_tool_course_rel_section';
+        return 'weblcms_course_tool_rel_course_section';
     }
 
     /**

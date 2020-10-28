@@ -11,16 +11,17 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Table column model for an all course user browser table.
- * 
+ *
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
-class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel implements 
-    TableColumnModelActionsColumnSupport
+class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel
+    implements TableColumnModelActionsColumnSupport
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 1;
+
     const SUBSCRIPTION_STATUS = 'subscription_status';
     const SUBSCRIPTION_TYPE = 'subscription_type';
-    const DEFAULT_ORDER_COLUMN_INDEX = 1;
 
     /**
      * Initializes the columns for the table
@@ -34,7 +35,7 @@ class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel im
 
         $showEmail = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'show_email_addresses'));
 
-        if($showEmail)
+        if ($showEmail)
         {
             $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
         }

@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
-use PDO;
 use PDOException;
 
 /**
@@ -145,32 +144,6 @@ class Database
         $query_builder =
             $this->process_data_class_properties($query_builder, $class, $parameters->getDataClassProperties());
         $query_builder = $this->process_group_by($query_builder, $parameters->getGroupBy());
-
-        return $this->build_basic_records_sql($query_builder, $class, $parameters);
-    }
-
-    /**
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function build_retrieves_sql($class, DataClassRetrievesParameters $parameters)
-    {
-        $query_builder = $this->connection->createQueryBuilder();
-
-        $select = $this->get_alias($this->prepare_table_name($class)) . '.*';
-
-        if ($parameters->getDistinct())
-        {
-            $select = 'DISTINCT ' . $select;
-        }
-
-        $query_builder->addSelect($select);
-
-        $this->process_composite_data_class_joins($query_builder, $class, $parameters);
 
         return $this->build_basic_records_sql($query_builder, $class, $parameters);
     }
@@ -351,68 +324,6 @@ class Database
     }
 
     /**
-     *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
-     */
-    private function fetch_record($query_builder, $class, $parameters)
-    {
-        $query_builder->from($this->prepare_table_name($class), $this->get_alias($this->prepare_table_name($class)));
-
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-        $query_builder = $this->process_order_by($query_builder, $class, $parameters->getOrderBy());
-
-        $query_builder->setFirstResult(0);
-        $query_builder->setMaxResults(1);
-
-        $sqlQuery = $query_builder->getSQL();
-
-        $statement = $this->get_connection()->query($sqlQuery);
-
-        if (!$statement instanceof PDOException)
-        {
-            $record = $statement->fetch(PDO::FETCH_ASSOC);
-        }
-        else
-        {
-            $this->error_handling($statement);
-            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
-        }
-
-        if ($record instanceof PDOException)
-        {
-            $this->error_handling($record);
-            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
-        }
-
-        if (is_null($record) || !is_array($record) || empty($record))
-        {
-            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
-        }
-
-        foreach ($record as &$field)
-        {
-            if (is_resource($field))
-            {
-                $data = '';
-                while (!feof($field))
-                {
-                    $data .= fread($field, 1024);
-                }
-                $field = $data;
-            }
-        }
-
-        return $record;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase
      * @throws \Exception
      */
@@ -522,93 +433,6 @@ class Database
     public static function package()
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
-    }
-
-    /**
-     *
-     * @param string[] $attributes
-     *
-     * @return string[]
-     */
-    public static function parse_storage_unit_attributes($attributes)
-    {
-        $options = array();
-
-        foreach ($attributes as $attribute => $value)
-        {
-            switch ($attribute)
-            {
-                case 'length' :
-                    $options[$attribute] = (is_numeric($value) ? (int) $value : null);
-                    break;
-                case 'fixed' :
-                    if ($attributes['type'] != 'string')
-                    {
-                        $options[$attribute] = $value == 1;
-                    }
-                    break;
-                case 'unsigned' :
-                case 'notnull' :
-                    $options[$attribute] = $value == 1;
-                    break;
-                case 'default' :
-                    $options[$attribute] = (!is_numeric($value) && empty($value) ? null : $value);
-                    break;
-                case 'autoincrement' :
-                    $options[$attribute] = $value == 'true';
-                    break;
-            }
-        }
-
-        if (!isset($options['notnull']))
-        {
-            $options['notnull'] = false;
-        }
-
-        return $options;
-    }
-
-    /**
-     *
-     * @param string[] $attributes
-     *
-     * @return string
-     */
-    public static function parse_storage_unit_property_type($attributes)
-    {
-        switch ($attributes['type'])
-        {
-            case 'text' :
-                if ($attributes['length'] && $attributes['length'] <= 255)
-                {
-                    return 'string';
-                }
-                else
-                {
-                    return $attributes['type'];
-                }
-                break;
-            case 'integer' :
-                if (is_null($attributes['length']))
-                {
-                    return 'integer';
-                }
-                elseif ($attributes['length'] <= 2)
-                {
-                    return 'smallint';
-                }
-                elseif ($attributes['length'] <= 9)
-                {
-                    return 'integer';
-                }
-                else
-                {
-                    return 'bigint';
-                }
-            default :
-                return $attributes['type'];
-                break;
-        }
     }
 
     /**
@@ -862,7 +686,7 @@ class Database
     /**
      *
      * @param string $value
-     * @param string $type
+     * @param string|null $type
      *
      * @return string
      */
@@ -876,7 +700,7 @@ class Database
     /**
      *
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters|null $parameters
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -929,111 +753,6 @@ class Database
     public function retrieve($class, $parameters = null)
     {
         return $this->getDataClassDatabase()->retrieve($class, $parameters);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $object
-     *
-     * @return string[]|boolean
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \ReflectionException
-     */
-    public function retrieve_composite_data_class_additional_properties(CompositeDataClass $object)
-    {
-        if (!$object->is_extended())
-        {
-            return array();
-        }
-        $array = $object->get_additional_property_names();
-
-        if (count($array) == 0)
-        {
-            $array = array("*");
-        }
-
-        $query =
-            'SELECT ' . implode(',', $array) . ' FROM ' . $object::get_table_name() . ' WHERE ' . $object::PROPERTY_ID .
-            '=' . $this->quote($object->getId());
-
-        $statement = $this->get_connection()->query($query);
-
-        if (!$statement instanceof PDOException)
-        {
-            $distinct_elements = array();
-            $record = $statement->fetch(PDO::FETCH_ASSOC);
-
-            $additional_properties = array();
-
-            if (is_array($record))
-            {
-                $properties = $object->get_additional_property_names();
-
-                if (count($properties) > 0)
-                {
-                    foreach ($properties as $prop)
-                    {
-                        if (is_resource($record[$prop]))
-                        {
-                            $data = '';
-                            while (!feof($record[$prop]))
-                            {
-                                $data .= fread($record[$prop], 1024);
-                            }
-                            $record[$prop] = $data;
-                        }
-                        $additional_properties[$prop] = $record[$prop];
-                    }
-                }
-            }
-
-            return $additional_properties;
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @param string $class
-     * @param string $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function retrieve_maximum_value($class, $property, $condition = null)
-    {
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->addSelect(
-            'MAX(' . self::escape_column_name($property, $this->get_alias($class::get_table_name())) . ') AS ' .
-            self::ALIAS_MAX_SORT
-        );
-        $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
-
-        if (isset($condition))
-        {
-            $query_builder->where(ConditionTranslator::render($condition));
-        }
-
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (!$statement instanceof PDOException)
-        {
-            $record = $statement->fetch(PDO::FETCH_NUM);
-
-            return (int) $record[0];
-        }
-        else
-        {
-            $this->error_handling($statement);
-
-            return false;
-        }
     }
 
     /**
