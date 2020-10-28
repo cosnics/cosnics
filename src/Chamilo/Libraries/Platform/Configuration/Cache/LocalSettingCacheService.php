@@ -52,7 +52,7 @@ class LocalSettingCacheService extends DoctrineArrayCacheService implements User
                 new DataClassRetrieveParameters($condition));
             $localSettings[$setting->get_application()][$setting->get_variable()] = $userSetting->get_value();
         }
-var_dump($localSettings);
+
         return $this->getCacheProvider()->save($identifier, $localSettings);
     }
 

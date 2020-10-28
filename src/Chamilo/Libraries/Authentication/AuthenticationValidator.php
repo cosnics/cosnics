@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -102,7 +103,6 @@ class AuthenticationValidator
             }
         }
 
-
         if (!$user instanceof User)
         {
             return false;
@@ -187,8 +187,9 @@ class AuthenticationValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string|null $redirectToUrlAfterLogout
      */
-    public function logout(User $user)
+    public function logout(User $user, string $redirectToUrlAfterLogout = null)
     {
         foreach($this->authentications as $authentication)
         {
@@ -196,6 +197,37 @@ class AuthenticationValidator
             {
                 $authentication->logout($user);
             }
+        }
+
+        $this->trackLogout($user);
+        $this->sessionUtilities->clear();
+        $this->redirectAfterLogout($redirectToUrlAfterLogout);
+
+        exit();
+    }
+
+    /**
+     * @param User $user
+     */
+    protected function trackLogout(User $user)
+    {
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
+    }
+
+    /**
+     * @param string|null $redirectToUrlAfterLogout
+     */
+    protected function redirectAfterLogout(string $redirectToUrlAfterLogout = null)
+    {
+        if(!empty($redirectToUrlAfterLogout))
+        {
+            $response = new RedirectResponse($redirectToUrlAfterLogout);
+            $response->send();
+        }
+        else
+        {
+            $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+            $redirect->toUrl();
         }
     }
 

@@ -386,7 +386,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="header-title">HOGENT Examination Tool</div>
-                <div class="user">{{ USER.get_fullname() }} <button class="btn btn-logout">{{ 'LogOut'|trans({}, appContext) }}</button></div>
+                {% if USER %}<div class="user">{{ USER.get_fullname() }} <a class="btn btn-logout" href="{{ LOGOUT_URL }}">{{ 'LogOut'|trans({}, appContext) }}</a></div>{% endif %}
             </div>
         </div>
     </header>

@@ -1,0 +1,28 @@
+{% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
+
+{% set appContext = 'Chamilo\\Application\\ExamAssignment' %}
+{% block main %}
+    <style>
+        .login-container {
+            width: 400px;
+            margin: 5em auto 0;
+            border: 1px solid #dddddd;
+            padding: 2em;
+        }
+
+        .login-container h1 {
+            margin-top: 0;
+            margin-bottom: 1em;
+            text-align: center;
+            color: #406e8e;
+        }
+
+        .login-container .btn {
+            width: 100%;
+        }
+    </style>
+    <div class="login-container">
+        <h1>Inloggen</h1>
+        {{ LOGIN_FORM|raw }}
+    </div>
+{% endblock %}
