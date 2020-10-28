@@ -30,8 +30,7 @@
                                 <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
                                 <li>{{ DETAILS.titular.get_firstname() }}&nbsp;{{ DETAILS.titular.get_lastname() }}</li>
                                 {% set start_time = DETAILS.assignment.get_start_time %}
-                                <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}
-                                        <span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus"
+                                <li><span>Aanvang:</span> <strong class="exam-timestamp">{{ start_time|date("d") }}<span class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} <i class="datetime-separator fa fa-minus"
                                                                                                           aria-hidden="true"></i> {{ start_time|date("H:i") }}</strong></li>
                             </ul>
                             <div class="current-exam-info-time">
@@ -79,11 +78,13 @@
                                                 <div id="file-template" class="file-info-wrapper">
                                                     <div class="file-info">
                                                         <span class="file-info-icon glyphicon glyphicon-file"></span>
-                                                        <h3 class="file-name" data-dz-name></h3>
+                                                        <div class="file-name-wrap" style="display:flex;flex-direction:column;">
+                                                            <h3 class="file-name" data-dz-name></h3>
+                                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                                        </div>
                                                         <button data-dz-remove class="btn btn-sm btn-default delete">
                                                             <i class="glyphicon glyphicon-trash"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
                                                         </button>
-                                                        <strong class="error text-danger" data-dz-errormessage></strong>
                                                     </div>
                                                     <div>
                                                         <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
@@ -131,22 +132,52 @@
                                             init: function(environment) {
                                                 environment.dropzone.options.parallelUploads = 1;
 
+                                                environment.dropzone.on('processing', function () {
+                                                    $('#btn-upload').prop('disabled', true);
+                                                    console.log('processing');
+                                                    environment.dropzone.options.autoProcessQueue = true;
+                                                });
+
+                                                /*environment.dropzone.on('error', function() {
+                                                    console.log('dropzone error');
+                                                    console.log(arguments);
+                                                });*/
+
+                                                environment.dropzone.on('queuecomplete', function() {
+                                                    environment.dropzone.options.autoProcessQueue = false;
+                                                    if (environment.dropzone.files.length > 0 &&
+                                                        environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
+                                                        console.log('redirect');
+                                                        // redirect
+                                                    } else {
+                                                        $.each(environment.dropzone.files, function(_, file) {
+                                                            $(file.previewElement).find('.progress-bar')[0].style.width = '0%';                                                                                                                      });
+                                                        $('#btn-upload').prop('disabled', false);
+                                                        console.log('still errors, cannot redirect');
+                                                    }
+                                                });
+
                                                 $('#btn-upload').on('click', function (evt) {
                                                     evt.preventDefault();
-                                                    $(this).prop('disabled', true);
-
-                                                    environment.dropzone.options.autoProcessQueue = true;
+                                                    $.each(environment.dropzone.files, function(_, file) {
+                                                        if (file.status === Dropzone.ERROR) {
+                                                            file.status = Dropzone.QUEUED;
+                                                            $($(file.previewElement).find('.error.text-danger')[0]).text('');
+                                                            $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                        }
+                                                    });
                                                     environment.dropzone.processQueue();
-
-                                                    if (environment.dropzone.files.length === 0) {
-                                                        environment.dropzone.options.autoProcessQueue = false;
-                                                        //redirect now if succes!
-                                                    }
-
                                                 })
                                             },
                                             getServerResponse: function (environment, file, serverResponse) {
-                                                console.log(environment, file, serverResponse);
+                                                console.log({environment, file, serverResponse});
+                                                if (file.status === Dropzone.SUCCESS) {
+                                                    $(file.previewElement).find('.btn.delete').remove();
+                                                    $(file.previewElement).find('.file-name-wrap')
+                                                        .after('<div class="file-uploaded">' + 'Opgeladen' +'</div>');
+                                                } else {
+                                                    console.log('STATUS is' + file.status);
+                                                }
                                             },
                                             processRequest: function (environment, file, xhrObject, formData) {
                                                 formData.append('publicationId', publicationId);
