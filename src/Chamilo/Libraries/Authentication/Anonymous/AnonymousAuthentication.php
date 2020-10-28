@@ -98,8 +98,6 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
 
     public function logout(User $user)
     {
-        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
-        Session::destroy();
     }
 
     /**
