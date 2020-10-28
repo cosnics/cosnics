@@ -3,6 +3,7 @@
 namespace Chamilo\Application\ExamAssignment\Component;
 
 use Chamilo\Application\ExamAssignment\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Page;
  * @author - Sven Vanpoucke - Hogeschool Gent
  * @author - Stefan Gabriëls - Hogeschool Gent
  */
-class EntryComponent extends Manager
+class EntryComponent extends Manager implements NoAuthenticationSupport
 {
     /**
      * @return string
@@ -23,6 +24,8 @@ class EntryComponent extends Manager
      */
     function run()
     {
+        $this->redirectToLoginIfNotAuthenticated();
+
         $jqueryFileUploadScriptPath =
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js';
 
@@ -47,7 +50,8 @@ class EntryComponent extends Manager
                     self::PARAM_ACTION => \Chamilo\Application\ExamAssignment\Ajax\Manager::ACTION_UPLOAD_EXAM,
                     \Chamilo\Application\ExamAssignment\Ajax\Manager::PARAM_SECURITY_CODE => $details['security_code']
                 ]
-            )
+            ),
+            'LOGOUT_URL' => $this->getLogoutUrl()
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);

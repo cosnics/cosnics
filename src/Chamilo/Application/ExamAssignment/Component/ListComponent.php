@@ -4,6 +4,7 @@ namespace Chamilo\Application\ExamAssignment\Component;
 
 use Chamilo\Application\ExamAssignment\Manager;
 use Chamilo\Application\ExamAssignment\Service\ExamAssignmentService;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Page;
  * @author - Sven Vanpoucke - Hogeschool Gent
  * @author - Stefan Gabriëls - Hogeschool Gent
  */
-class ListComponent extends Manager
+class ListComponent extends Manager implements NoAuthenticationSupport
 {
     /**
      * @return string
@@ -23,6 +24,8 @@ class ListComponent extends Manager
      */
     function run()
     {
+        $this->redirectToLoginIfNotAuthenticated();
+
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $exams = $this->getExamAssignmentService()->getCurrentExamAssignmentsForUser($this->getUser());
@@ -37,7 +40,8 @@ class ListComponent extends Manager
                         self::PARAM_ACTION => self::ACTION_ENTRY,
                         self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => '__EXAM_ID__'
                     ]
-                )
+                ),
+                'LOGOUT_URL' => $this->getLogoutUrl()
             ]
         );
     }
