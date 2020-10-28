@@ -200,10 +200,6 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         }
         else
         {
-            Event::trigger(
-                'Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user)
-            );
-
             if (!$this->hasBeenInitialized)
             {
                 $this->initializeClient();

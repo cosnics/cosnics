@@ -125,12 +125,6 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
      */
     public function logout(User $user)
     {
-        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
-        Session::destroy();
-
-        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
-        $redirect->toUrl();
-        exit();
     }
 
 //    /**
