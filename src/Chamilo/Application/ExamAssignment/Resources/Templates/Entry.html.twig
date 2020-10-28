@@ -151,7 +151,7 @@
                                                     if (environment.dropzone.files.length > 0 &&
                                                         environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
                                                         console.log('redirect');
-                                                        window.location.href = '{{ CURRENT_URL }}';
+                                                        window.location.href = '{{ CURRENT_URL|raw }}';
                                                         // redirect
                                                     } else {
                                                         $.each(environment.dropzone.files, function(_, file) {
