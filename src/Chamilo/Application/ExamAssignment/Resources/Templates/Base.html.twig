@@ -339,10 +339,46 @@
         .btn.delete {
             margin-left: auto;
         }
+        .file-name-wrap {
+            display: flex;
+            flex-direction: column;
+        }
         .file-name {
             color: #666;
             font-size: 1.3rem;
             margin: 0 5px;
+        }
+        .file-uploaded {
+            color: #496e65;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-left: auto;
+            padding: 6px 0 6px 5px;
+        }
+        .file-uploaded::before {
+            color: #1daf8b;
+            content: '\f00c';
+            font-family: FontAwesome;
+            font-size: 14px;
+            margin-right: 3px;
+        }
+        .file-info-wrapper.dz-error .progress {
+            display: none;
+        }
+        .file-info-wrapper.dz-error .btn.delete {
+            align-self: center;
+        }
+        .error.text-danger {
+            margin-left: 5px;
+        }
+        .file-info-wrapper.dz-error .error.text-danger {
+            margin-top: 2px;
+        }
+        .file-info-wrapper.dz-error .error.text-danger::before {
+            content: '\f06a';
+            font-family: FontAwesome;
+            font-size: 14px;
+            margin-right: 3px;
         }
     </style>
     {% block header %}
