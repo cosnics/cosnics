@@ -97,7 +97,6 @@ class RecurrenceCalculator
             $vEvent->add('RRULE', $vObjectRecurrenceRules->format($recurrenceRules));
             $vEvent->add('EVENTID', $key);
             $vEvent->add('UID', uniqid());
-            break;
         }
 
         $fromDateTime = new DateTime();
