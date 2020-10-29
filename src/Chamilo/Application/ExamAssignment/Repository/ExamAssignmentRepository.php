@@ -4,6 +4,7 @@ namespace Chamilo\Application\ExamAssignment\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -120,6 +121,18 @@ class ExamAssignmentRepository
 
         $joins->add(
             new Join(
+                Publication::class,
+                new EqualityCondition(
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+                    new PropertyConditionVariable(
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ID
+                    )
+                )
+            )
+        );
+
+        $joins->add(
+            new Join(
                 User::class,
                 new EqualityCondition(
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_TITULAR_ID),
@@ -146,6 +159,7 @@ class ExamAssignmentRepository
         $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CODE));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 

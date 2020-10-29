@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\ExamAssignment\Service;
 
+use Chamilo\Application\ExamAssignment\Domain\AssignmentViewStatus;
 use Chamilo\Application\ExamAssignment\Repository\ExamAssignmentRepository;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
@@ -128,16 +129,16 @@ class ExamAssignmentService
      * @param string|null $code
      * @param string|null $calculatedSecurityCode
      *
-     * @return bool
+     * @return AssignmentViewStatus
      */
-    public function canUserViewExamAssignment(
+    public function getAssignmentViewStatusForUser(
         User $user, int $contentObjectPublicationId, string $code = null, string $calculatedSecurityCode = null
     )
     {
         $contentObjectPublication = $this->publicationService->getPublication($contentObjectPublicationId);
         if (!$contentObjectPublication instanceof ContentObjectPublication)
         {
-            return false;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_CORRUPT_DATA);
         }
 
         if (
@@ -146,20 +147,20 @@ class ExamAssignmentService
         )
         )
         {
-            return false;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_NO_RIGHTS);
         }
 
         $assignment = $this->contentObjectService->findById($contentObjectPublication->get_content_object_id());
         if (!$assignment instanceof Assignment)
         {
-            return false;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_CORRUPT_DATA);
         }
 
         $now = time();
 
         if ($assignment->get_start_time() > $now || ($assignment->get_end_time() + (8 * 3600)) < $now)
         {
-            return false;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_ASSIGNMENT_NOT_IN_PROGRESS);
         }
 
         $examAssignmentPublication =
@@ -167,7 +168,7 @@ class ExamAssignmentService
 
         if (!$examAssignmentPublication instanceof Publication)
         {
-            return false;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_CORRUPT_DATA);
         }
 
         $examCode = $examAssignmentPublication->getCode();
@@ -175,10 +176,26 @@ class ExamAssignmentService
 
         if (empty($examCode) || $examCode == $code || $calculatedSecurityCode == $securityCode)
         {
-            return true;
+            return new AssignmentViewStatus(AssignmentViewStatus::STATUS_ALLOWED);
         }
 
-        return false;
+        return new AssignmentViewStatus(AssignmentViewStatus::STATUS_WRONG_CODE);
+    }
+
+    /**
+     * @param User $user
+     * @param int $contentObjectPublicationId
+     * @param string|null $code
+     * @param string|null $calculatedSecurityCode
+     *
+     * @return bool
+     */
+    public function canUserViewExamAssignment(
+        User $user, int $contentObjectPublicationId, string $code = null, string $calculatedSecurityCode = null
+    )
+    {
+        return $this->getAssignmentViewStatusForUser($user, $contentObjectPublicationId, $code, $calculatedSecurityCode)
+            ->isAllowed();
     }
 
     /**
@@ -190,7 +207,7 @@ class ExamAssignmentService
      */
     public function canUserSubmit(User $user, int $contentObjectPublicationId, string $securityCode)
     {
-        if(!$this->canUserViewExamAssignment($user, $contentObjectPublicationId, null, $securityCode))
+        if (!$this->canUserViewExamAssignment($user, $contentObjectPublicationId, null, $securityCode))
         {
             return false;
         }

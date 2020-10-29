@@ -5,14 +5,27 @@
             .not-allowed-alert {
                 margin-top: 5em;
             }
+
+            .error-strong {
+                color: #406e8e;
+            }
         </style>
         <main>
             <div class="container">
                 {% if not ALLOWED_TO_VIEW_ASSIGNMENT %}
                     <div class="main-content">
                         <div class="alert alert-danger not-allowed-alert">
-                            Je bent niet toegelaten op deze pagina omdat je niet over de juiste rechten beschikt of omdat je geen juiste code hebt opgegeven.
-                            Gelieve contact op te nemen met de titularis van deze opdracht.
+                            {% if ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_WRONG_CODE')  %}
+                                Je hebt een <strong class="error-strong">foutieve code</strong> ingevuld. Ga naar de vorige pagina en probeer opnieuw!
+                            {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_NO_RIGHTS') %}
+                                Je beschikt niet over de juiste rechten om deze opdracht te bekijken. Gelieve contact op te nemen met de titularis van deze opdracht.
+                            {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_ASSIGNMENT_NOT_IN_PROGRESS') %}
+                                De opdracht is momenteel niet actief. De opdracht is actief vanaf
+                                <strong class="error-strong">{{ DETAILS.assignment.get_start_time|date("d/m/Y - H:i") }}</strong> en loopt tot
+                                <strong class="error-strong">{{ DETAILS.assignment.get_end_time|date("d/m/Y - H:i") }}</strong>.
+                            {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_CORRUPT_DATA') %}
+                                Er is een onbekende fout opgetreden. Probeer het later opnieuw. Indien deze fout zich blijft voor doen neem je contact op met de beheerder van het platform.
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\ExamAssignment\Component;
 
+use Chamilo\Application\ExamAssignment\Domain\AssignmentViewStatus;
 use Chamilo\Application\ExamAssignment\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
@@ -36,7 +37,7 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
         $code = $this->getRequest()->getFromPost(self::PARAM_CODE);
         $securityCode = $this->getRequest()->getFromUrl(self::PARAM_SECURITY_CODE);
 
-        $allowed = $this->getExamAssignmentService()->canUserViewExamAssignment(
+        $assignmentViewStatus = $this->getExamAssignmentService()->getAssignmentViewStatusForUser(
             $this->getUser(), $publicationId, $code, $securityCode
         );
 
@@ -44,7 +45,9 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'ALLOWED_TO_VIEW_ASSIGNMENT' => $allowed, 'USER' => $this->getUser(), 'DETAILS' => $details,
+            'ALLOWED_TO_VIEW_ASSIGNMENT' => $assignmentViewStatus->isAllowed(),
+            'ASSIGNMENT_VIEW_STATUS' => $assignmentViewStatus->getStatus(),
+            'USER' => $this->getUser(), 'DETAILS' => $details,
             'JQUERY_FILE_UPLOAD_SCRIPT_PATH' => $jqueryFileUploadScriptPath,
             'UPLOAD_URL' => $this->get_url(
                 [
