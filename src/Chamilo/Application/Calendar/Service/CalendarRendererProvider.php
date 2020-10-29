@@ -40,6 +40,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     private $visibilityContext;
 
     /**
+     * @var bool[]
+     */
+    protected $sourceVisibleCache;
+
+    /**
      *
      * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
@@ -112,10 +117,19 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $userIdentifier = $this->getViewingUser()->getId();
         }
 
-        $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
-            $source,
-            $userIdentifier);
-        return ! $visibility instanceof Visibility;
+        $cacheKey = md5($source . '-' . $userIdentifier);
+
+        if(!array_key_exists($cacheKey, $this->sourceVisibleCache))
+        {
+            $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
+                $source,
+                $userIdentifier
+            );
+
+            $this->sourceVisibleCache[$cacheKey] = !$visibility instanceof Visibility;
+        }
+
+        return $this->sourceVisibleCache[$cacheKey];
     }
 
     /**
