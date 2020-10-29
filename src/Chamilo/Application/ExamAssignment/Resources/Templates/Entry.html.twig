@@ -178,7 +178,17 @@
                                                             $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
                                                         }
                                                     });
-                                                    environment.dropzone.processQueue();
+                                                    if (environment.dropzone.getQueuedFiles().length === 0) {
+                                                        if (environment.dropzone.files.length > 0 &&
+                                                            environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
+                                                            console.log('redirect');
+                                                            window.location.href = '{{ CURRENT_URL|raw }}';
+                                                        } else {
+                                                            // Either no files to upload or file(s) having a status other than 'success' or 'queued'?
+                                                        }
+                                                    } else {
+                                                        environment.dropzone.processQueue();
+                                                    }
                                                 })
                                             },
                                             getServerResponse: function (environment, file, serverResponse) {
