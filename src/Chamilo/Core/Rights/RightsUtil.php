@@ -5,9 +5,9 @@ use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -48,19 +49,66 @@ class RightsUtil
     /*
      * Use get_instance to make use of caching
      */
-    public static function getInstance()
+
+    private $location_ids_cache;
+
+    /*
+     * DONE
+     */
+
+    public function count_location_overview_with_rights_granted(
+        $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
+        $tree_identifier = null
+    )
     {
-        if (!isset(self::$instance))
+        $user_id = $user_id ? $user_id : Session::get_user_id();
+        $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
+
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+        $context_location_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+
+        foreach ($right_ids as $right_id)
         {
-            self::$instance = new self();
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $context_location_entity_right::class_name(), $context_location_entity_right::PROPERTY_RIGHT_ID
+                ), new StaticConditionVariable($right_id)
+            );
+        }
+        foreach ($retrieve_types as $retrieve_type)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE),
+                new StaticConditionVariable($retrieve_type)
+            );
+        }
+        if (!is_null($tree_type))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TREE_TYPE),
+                new StaticConditionVariable($tree_type)
+            );
+        }
+        if (!is_null($tree_identifier))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    $context_location::class_name(), $context_location::PROPERTY_TREE_IDENTIFIER
+                ), new StaticConditionVariable($tree_identifier)
+            );
+        }
+        if (!is_null($conditions))
+        {
+            $condition = new AndCondition($conditions);
         }
 
-        return self::$instance;
+        return DataManager::count_location_overview_with_rights_granted($context, $condition, $entities_condition);
     }
 
     /*
      * DONE
      */
+
     public function create_location(
         $context, $type = self :: TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0,
         $tree_identifier = 0, $tree_type = self :: TREE_TYPE_ROOT, $return_location = false, $create_in_batch = false
@@ -97,88 +145,145 @@ class RightsUtil
     /*
      * DONE
      */
-    public function is_allowed_on_location($right, $context, $user_id, $entities, $location)
-    {
-        $rights_array = DataManager::retrieve_granted_rights_array(
-            $location, $this->get_entities_condition($context, $user_id, $entities)
-        );
 
-        return in_array($right, $rights_array);
-    }
-
-    /*
-     * DONE
+    /**
+     * Helper function to create a rights location entity right
+     *
+     * @param String $context
+     * @param int $right
+     * @param int $entity_id
+     * @param int $entity_type
+     * @param int $location_id
+     *
+     * @return boolean
      */
-    public function is_allowed(
-        $right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
-        $tree_type = self :: TREE_TYPE_ROOT
-    )
+    private function create_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
-        // //todo: make inherit optional check
-        $user_id = $user_id ? $user_id : Session::get_user_id();
+        $location_entity_right = new $context_class();
+        $location_entity_right->set_context($context);
+        $location_entity_right->set_location_id($location_id);
+        $location_entity_right->set_right_id($right);
+        $location_entity_right->set_entity_id($entity_id);
+        $location_entity_right->set_entity_type($entity_type);
 
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class, (int) $user_id
-        );
-
-        if ($user->is_platform_admin())
-        {
-            return true;
-        }
-
-        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
-
-        if (!$location)
-        {
-            // todo: refactor to translation
-            throw new RightsLocationNotFoundException(
-                Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
-                ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type
-            );
-        }
-
-        // if ($this->get_locked_parent($location))
-        // {
-        // $location = $this->get_locked_parent($location);
-        // }
-
-        return $this->is_allowed_on_location($right, $context, $user_id, $entities, $location);
+        return $location_entity_right->create();
     }
 
     /*
      * DONE - No longer used
      */
-    public function get_locked_parent($location)
+
+    public function create_subtree_root_location($context, $tree_identifier, $tree_type, $return_location = false)
     {
-        if ($this->locked_parent_cache[$location->get_id()] == - 1)
-        {
-            return false;
-        }
-        else
-        {
-            if (!isset($this->locked_parent_cache[$location->get_id()]))
-            {
-                $locked_parent = $location->get_locked_parent();
-                if (!$locked_parent)
-                {
-                    $this->locked_parent_cache[$location->get_id()] = - 1;
-
-                    return false;
-                }
-                else
-                {
-                    $this->locked_parent_cache[$location->get_id()] = $locked_parent;
-                }
-            }
-        }
-
-        return $this->locked_parent_cache[$location->get_id()];
+        return $this->create_location(
+            $context, self::TYPE_ROOT, 0, 0, 0, 0, $tree_identifier, $tree_type, $return_location
+        );
     }
 
     /*
      * DONE
      */
+
+    /**
+     * Helper function to delete all the location entity right records for a given entity on a given location
+     *
+     * @param RightsLocation $location
+     * @param int $entity_id
+     * @param int $entity_type
+     */
+    public function delete_location_entity_right_for_entity($location, $entity_id, $entity_type)
+    {
+        return DataManager::delete_rights_location_entity_rights($location, $entity_type, $entity_id);
+    }
+
+    /*
+     * DONE
+     */
+
+    /**
+     * Filters given identifiers and returns those which the given user has access rights to.
+     * Why this function?: This function is an accelerated version of is_allowed(...) when called many times after each
+     * other. The number
+     * of database queries is minimized by processing identifiers all at once.
+     * Steps:
+     * -# Retrieve all locations belonging to any of the identifiers.
+     * -# Retrieve all parent location recursively of all locations found in step 1. Store them in a simple array
+     * mapping child onto parent location ID's.
+     * -# Concatenate all locations ID's of step 1 and all parent ID's of step 2 into an array.
+     * -# Remove those location ID's which user has not access right to.
+     * -# Loop over all locations retrieved in step 1: recursively visit all parent locations using the array created in
+     * step 2, and check
+     * is user has access to any of them. If yes, add the corresponding identifier to the result array.
+     * -# Return collected identifiers.
+     *
+     * @return array of identifiers.
+     */
+    public function filter_location_identifiers_by_granted_right($context, $user, $entities, $right, $identifiers, $type
+    )
+    {
+        if ($user->is_platform_admin())
+        {
+            return $identifiers;
+        }
+
+        $location_ids = DataManager::retrieve_location_ids_by_identifiers($context, $identifiers, $type);
+        $location_parent_ids = $this->get_location_parent_ids_recursive($context, $location_ids);
+
+        $all_location_ids = array_merge(array_values($location_ids), array_values($location_parent_ids));
+        $entities_condition = $this->get_entities_condition($context, $user->get_id(), $entities);
+        $all_location_ids_with_granted_right = DataManager::filter_location_identifiers_by_granted_right(
+            $context, $right, $entities_condition, $all_location_ids
+        );
+
+        $identifiers_with_granted_right = array();
+
+        foreach ($identifiers as $identifier)
+        {
+            if ($this->has_right_recursive(
+                $location_ids[$identifier], $location_parent_ids, $all_location_ids_with_granted_right
+            ))
+            {
+                $identifiers_with_granted_right[] = $identifier;
+            }
+        }
+
+        return $identifiers_with_granted_right;
+    }
+
+    /*
+     * DONE
+     */
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /*
+     * DONE
+     */
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance))
+        {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    /*
+     * DONE
+     */
+
     private function get_entities_condition($context, $user_id, $entities, $to_string = false)
     {
         if (!empty($entities))
@@ -233,14 +338,61 @@ class RightsUtil
         }
     }
 
-    /*
-     * DONE
-     */
-    private $location_ids_cache;
+    // PERFORMANCE-TWEAKS-START
 
     /*
      * DONE
      */
+
+    public function get_entity_item_condition($context, $type, $id, $location_id)
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+
+        if (is_null($this->entity_item_condition_cache[$context][$location_id][$id][$type]))
+        {
+            $conditions = array();
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable($type)
+            );
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_ID),
+                new StaticConditionVariable($id)
+            );
+            $condition = new AndCondition($conditions);
+            $this->entity_item_condition_cache[$context][$location_id][$id][$type] = $condition;
+        }
+
+        return $this->entity_item_condition_cache[$context][$location_id][$id][$type];
+    }
+
+    /*
+     * DONE
+     */
+
+    public function get_granted_rights_for_rights_entity_item($context, $entity_type, $entity_id, $location)
+    {
+        if (!is_null($this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type]))
+        {
+            $rights_array =
+                $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type];
+        }
+        else
+        {
+            $rights_array = DataManager::retrieve_granted_rights_array(
+                $location, $this->get_entity_item_condition($context, $entity_type, $entity_id, $location->get_id())
+            );
+            $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type] =
+                $rights_array;
+        }
+
+        return $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type];
+    }
+
+    /*
+     * DONE
+     */
+
     public function get_identifiers_with_right_granted(
         $right_id, $context, $parent_location, $retrieve_type, $user_id, $entities
     )
@@ -278,10 +430,44 @@ class RightsUtil
 
         return $this->location_ids_cache[$user_id][$right_id][$parent_location->get_id()];
     }
+    // PERFORMANCE-TWEAKS-END
 
     /*
      * DONE
      */
+
+    public function get_location_by_identifier(
+        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
+    )
+    {
+        return DataManager::retrieve_rights_location_by_identifier(
+            $context, $type, $identifier, $tree_identifier, $tree_type
+        );
+    }
+
+    /*
+     * DONE
+     */
+
+    public function get_location_id_by_identifier(
+        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
+    )
+    {
+        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
+        if ($location)
+        {
+            return $location->get_id();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /*
+     * DONE - No longer used?
+     */
+
     public function get_location_overview_with_rights_granted(
         $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
         $tree_identifier = null
@@ -333,7 +519,7 @@ class RightsUtil
         );
 
         $overview = array();
-        foreach($locations as $location)
+        foreach ($locations as $location)
         {
             $overview[$location[$context_location::PROPERTY_TYPE]][] =
                 $location[$context_location::PROPERTY_IDENTIFIER];
@@ -345,145 +531,7 @@ class RightsUtil
     /*
      * DONE
      */
-    public function count_location_overview_with_rights_granted(
-        $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
-        $tree_identifier = null
-    )
-    {
-        $user_id = $user_id ? $user_id : Session::get_user_id();
-        $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
 
-        $context_location = ($context . '\Storage\DataClass\RightsLocation');
-        $context_location_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-
-        foreach ($right_ids as $right_id)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $context_location_entity_right::class_name(), $context_location_entity_right::PROPERTY_RIGHT_ID
-                ), new StaticConditionVariable($right_id)
-            );
-        }
-        foreach ($retrieve_types as $retrieve_type)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE),
-                new StaticConditionVariable($retrieve_type)
-            );
-        }
-        if (!is_null($tree_type))
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TREE_TYPE),
-                new StaticConditionVariable($tree_type)
-            );
-        }
-        if (!is_null($tree_identifier))
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $context_location::class_name(), $context_location::PROPERTY_TREE_IDENTIFIER
-                ), new StaticConditionVariable($tree_identifier)
-            );
-        }
-        if (!is_null($conditions))
-        {
-            $condition = new AndCondition($conditions);
-        }
-
-        return DataManager::count_location_overview_with_rights_granted($context, $condition, $entities_condition);
-    }
-
-    // PERFORMANCE-TWEAKS-START
-
-    /*
-     * DONE
-     */
-    /**
-     * Filters given identifiers and returns those which the given user has access rights to.
-     * Why this function?: This function is an accelerated version of is_allowed(...) when called many times after each
-     * other. The number
-     * of database queries is minimized by processing identifiers all at once.
-     * Steps:
-     * -# Retrieve all locations belonging to any of the identifiers.
-     * -# Retrieve all parent location recursively of all locations found in step 1. Store them in a simple array
-     * mapping child onto parent location ID's.
-     * -# Concatenate all locations ID's of step 1 and all parent ID's of step 2 into an array.
-     * -# Remove those location ID's which user has not access right to.
-     * -# Loop over all locations retrieved in step 1: recursively visit all parent locations using the array created in
-     * step 2, and check
-     * is user has access to any of them. If yes, add the corresponding identifier to the result array.
-     * -# Return collected identifiers.
-     *
-     * @return array of identifiers.
-     */
-    public function filter_location_identifiers_by_granted_right($context, $user, $entities, $right, $identifiers, $type
-    )
-    {
-        if ($user->is_platform_admin())
-        {
-            return $identifiers;
-        }
-
-        $location_ids = DataManager::retrieve_location_ids_by_identifiers($context, $identifiers, $type);
-        $location_parent_ids = $this->get_location_parent_ids_recursive($context, $location_ids);
-
-        $all_location_ids = array_merge(array_values($location_ids), array_values($location_parent_ids));
-        $entities_condition = $this->get_entities_condition($context, $user->get_id(), $entities);
-        $all_location_ids_with_granted_right = DataManager::filter_location_identifiers_by_granted_right(
-            $context, $right, $entities_condition, $all_location_ids
-        );
-
-        $identifiers_with_granted_right = array();
-
-        foreach ($identifiers as $identifier)
-        {
-            if ($this->has_right_recursive(
-                $location_ids[$identifier], $location_parent_ids, $all_location_ids_with_granted_right
-            ))
-            {
-                $identifiers_with_granted_right[] = $identifier;
-            }
-        }
-
-        return $identifiers_with_granted_right;
-    }
-
-    /*
-     * DONE
-     */
-    /**
-     * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
-     *
-     * @param int $location_id                       location we check whether user has access rigth to.
-     * @param array $location_parent_ids             mapping of child location ID's onto parent location ID's. @see
-     *                                               get_location_parent_ids_recursive(...)
-     * @param array $location_ids_with_granted_right All location ID's which user has access rigth to. Keys: location
-     *                                               ID's Values: True.
-     *
-     * @see DataManager :: filter_location_identifiers_by_granted_right.
-     * @return boolean
-     */
-    private function has_right_recursive($location_id, $location_parent_ids, $location_ids_with_granted_right)
-    {
-        if (isset($location_ids_with_granted_right[$location_id]))
-        {
-            return true;
-        }
-
-        if (!isset($location_parent_ids[$location_id]))
-        {
-            return false;
-        }
-
-        return $this->has_right_recursive(
-            $location_parent_ids[$location_id], $location_parent_ids, $location_ids_with_granted_right
-        );
-    }
-
-    /*
-     * DONE
-     */
     /**
      * Returns an array mapping child location ID's onto parent location ID's.
      * Idea: Retrieve the child-parent relation of location with as few queries as possible and store them in the
@@ -539,52 +587,42 @@ class RightsUtil
 
         return $all_location_parent_ids;
     }
-    // PERFORMANCE-TWEAKS-END
 
     /*
      * DONE
      */
-    /**
-     *
-     * @param integer $right_id
-     * @param string $context
-     * @param integer $identifier
-     * @param integer $type
-     * @param integer $tree_identifier
-     * @param integer $tree_type
-     *
-     * @throws Exception
-     * @return \Chamilo\Core\Rights\Storage\<array>
-     */
-    public function get_target_entities(
-        $right_id, $context, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
-        $tree_type = self::TREE_TYPE_ROOT
-    )
-    {
-        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
 
-        if (!$location)
+    public function get_locked_parent($location)
+    {
+        if ($this->locked_parent_cache[$location->get_id()] == - 1)
         {
-            Throw new RightsLocationNotFoundException(
-                Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
-                ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type
-            );
+            return false;
+        }
+        else
+        {
+            if (!isset($this->locked_parent_cache[$location->get_id()]))
+            {
+                $locked_parent = $location->get_locked_parent();
+                if (!$locked_parent)
+                {
+                    $this->locked_parent_cache[$location->get_id()] = - 1;
+
+                    return false;
+                }
+                else
+                {
+                    $this->locked_parent_cache[$location->get_id()] = $locked_parent;
+                }
+            }
         }
 
-        return $this->get_target_entities_for_location($right_id, $context, $location);
+        return $this->locked_parent_cache[$location->get_id()];
     }
 
     /*
      * DONE
      */
-    public function get_target_entities_for_location($right_id, $context, $location)
-    {
-        return DataManager::retrieve_target_entities_array($right_id, $context, $location);
-    }
 
-    /*
-     * DONE - No longer used?
-     */
     public function get_rights_for_location_and_entity($context, $location_id, $entity_id, $entity_type)
     {
         $conditions = array();
@@ -609,7 +647,7 @@ class RightsUtil
         $right_ids = array();
 
         $location_entity_rights = DataManager::retrieve_rights_location_rights($context, $condition);
-        foreach($location_entity_rights as $location_entity_right)
+        foreach ($location_entity_rights as $location_entity_right)
         {
             $right_ids[] = $location_entity_right->get_right_id();
         }
@@ -620,62 +658,26 @@ class RightsUtil
     /*
      * DONE
      */
-    public function get_location_by_identifier(
-        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
-    )
+
+    public function get_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
-        return DataManager::retrieve_rights_location_by_identifier(
-            $context, $type, $identifier, $tree_identifier, $tree_type
-        );
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+
+        $location_entity_right = new $context_class();
+        $location_entity_right->set_context($context);
+        $location_entity_right->set_location_id($location_id);
+        $location_entity_right->set_right_id($right);
+        $location_entity_right->set_entity_id($entity_id);
+        $location_entity_right->set_entity_type($entity_type);
+        $location_entity_right->create();
+
+        return $location_entity_right;
     }
 
     /*
      * DONE
      */
-    public function get_location_id_by_identifier(
-        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
-    )
-    {
-        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
-        if ($location)
-        {
-            return $location->get_id();
-        }
-        else
-        {
-            return 0;
-        }
-    }
 
-    /*
-     * DONE
-     */
-    public function create_subtree_root_location($context, $tree_identifier, $tree_type, $return_location = false)
-    {
-        return $this->create_location(
-            $context, self::TYPE_ROOT, 0, 0, 0, 0, $tree_identifier, $tree_type, $return_location
-        );
-    }
-
-    /*
-     * DONE
-     */
-    public function get_root_id($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
-    {
-        $root = $this->get_root($context, $tree_type, $tree_identifier);
-        if ($root)
-        {
-            return $root->get_id();
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /*
-     * DONE
-     */
     public function get_root($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $class = $context . '\Storage\DataClass\RightsLocation';
@@ -712,6 +714,96 @@ class RightsUtil
     /*
      * DONE
      */
+
+    public function get_root_id($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
+    {
+        $root = $this->get_root($context, $tree_type, $tree_identifier);
+        if ($root)
+        {
+            return $root->get_id();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param integer $right_id
+     * @param string $context
+     * @param integer $identifier
+     * @param integer $type
+     * @param integer $tree_identifier
+     * @param integer $tree_type
+     *
+     * @return \Chamilo\Core\Rights\Storage\<array>
+     * @throws Exception
+     */
+    public function get_target_entities(
+        $right_id, $context, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT
+    )
+    {
+        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
+
+        if (!$location)
+        {
+            throw new RightsLocationNotFoundException(
+                Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
+                ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type
+            );
+        }
+
+        return $this->get_target_entities_for_location($right_id, $context, $location);
+    }
+
+    /*
+     * DONE
+     */
+
+    public function get_target_entities_for_location($right_id, $context, $location)
+    {
+        return DataManager::retrieve_target_entities_array($right_id, $context, $location);
+    }
+
+    /*
+     * DONE
+     */
+
+    /**
+     * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
+     *
+     * @param int $location_id location we check whether user has access rigth to.
+     * @param array $location_parent_ids mapping of child location ID's onto parent location ID's. @see
+     *                                               get_location_parent_ids_recursive(...)
+     * @param array $location_ids_with_granted_right All location ID's which user has access rigth to. Keys: location
+     *                                               ID's Values: True.
+     *
+     * @return boolean
+     * @see DataManager :: filter_location_identifiers_by_granted_right.
+     */
+    private function has_right_recursive($location_id, $location_parent_ids, $location_ids_with_granted_right)
+    {
+        if (isset($location_ids_with_granted_right[$location_id]))
+        {
+            return true;
+        }
+
+        if (!isset($location_parent_ids[$location_id]))
+        {
+            return false;
+        }
+
+        return $this->has_right_recursive(
+            $location_parent_ids[$location_id], $location_parent_ids, $location_ids_with_granted_right
+        );
+    }
+
+    /*
+     * DONE
+     */
+
     public function invert_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
         if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
@@ -727,7 +819,7 @@ class RightsUtil
             else
             {
                 $class = $context . '\Storage\DataClass\RightsLocationEntityRight';
-                DataClassCache::truncate($class);
+                $this->getDataClassRepositoryCache()->truncate($class);
 
                 return $this->create_rights_location_entity_right(
                     $context, $right, $entity_id, $entity_type, $location_id
@@ -738,138 +830,54 @@ class RightsUtil
         {
             return false;
         }
-    }
-
-    /*
-     * DONE
-     */
-    /**
-     * Enables a right for a specific entity on a specific location
-     *
-     * @param String $context
-     * @param int $right
-     * @param int $entity_id
-     * @param int $entity_type
-     * @param int $location_id
-     *
-     * @return boolean
-     */
-    public function set_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
-    {
-        if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
-        {
-            $location_entity_right = DataManager::retrieve_rights_location_entity_right(
-                $context, $right, $entity_id, $entity_type, $location_id
-            );
-
-            if ($location_entity_right)
-            {
-                return true;
-            }
-            else
-            {
-                return $this->create_rights_location_entity_right(
-                    $context, $right, $entity_id, $entity_type, $location_id
-                );
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /*
-     * DONE
-     */
-    public function unset_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
-    {
-        if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
-        {
-            $location_entity_right = DataManager::retrieve_rights_location_entity_right(
-                $context, $right, $entity_id, $entity_type, $location_id
-            );
-
-            if ($location_entity_right)
-            {
-                return $location_entity_right->delete();
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /*
-     * DONE
-     */
-    /**
-     * Helper function to create a rights location entity right
-     *
-     * @param String $context
-     * @param int $right
-     * @param int $entity_id
-     * @param int $entity_type
-     * @param int $location_id
-     *
-     * @return boolean
-     */
-    private function create_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-
-        $location_entity_right = new $context_class();
-        $location_entity_right->set_context($context);
-        $location_entity_right->set_location_id($location_id);
-        $location_entity_right->set_right_id($right);
-        $location_entity_right->set_entity_id($entity_id);
-        $location_entity_right->set_entity_type($entity_type);
-
-        return $location_entity_right->create();
     }
 
     /*
      * DONE - No longer used
      */
-    public function get_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
+
+    public function is_allowed(
+        $right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self :: TREE_TYPE_ROOT
+    )
     {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
-        $location_entity_right = new $context_class();
-        $location_entity_right->set_context($context);
-        $location_entity_right->set_location_id($location_id);
-        $location_entity_right->set_right_id($right);
-        $location_entity_right->set_entity_id($entity_id);
-        $location_entity_right->set_entity_type($entity_type);
-        $location_entity_right->create();
+        // //todo: make inherit optional check
+        $user_id = $user_id ? $user_id : Session::get_user_id();
 
-        return $location_entity_right;
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            User::class, (int) $user_id
+        );
+
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
+
+        if (!$location)
+        {
+            // todo: refactor to translation
+            throw new RightsLocationNotFoundException(
+                Translation::get('NoLocationFound') . $context . ';type=' . $type . ';identifier=' . $identifier .
+                ';tree_id=' . $tree_identifier . ';tree_type=' . $tree_type
+            );
+        }
+
+        // if ($this->get_locked_parent($location))
+        // {
+        // $location = $this->get_locked_parent($location);
+        // }
+
+        return $this->is_allowed_on_location($right, $context, $user_id, $entities, $location);
     }
 
 
     /*
      * DONE
      */
-    /**
-     * Helper function to delete all the location entity right records for a given entity on a given location
-     *
-     * @param RightsLocation $location
-     * @param int $entity_id
-     * @param int $entity_type
-     */
-    public function delete_location_entity_right_for_entity($location, $entity_id, $entity_type)
-    {
-        return DataManager::delete_rights_location_entity_rights($location, $entity_type, $entity_id);
-    }
 
-    /*
-     * DONE
-     */
     /**
      * check the right for a specific entity type and id Caches other rights for future reference
      */
@@ -892,53 +900,7 @@ class RightsUtil
     /*
      * DONE
      */
-    public function get_granted_rights_for_rights_entity_item($context, $entity_type, $entity_id, $location)
-    {
-        if (!is_null($this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type]))
-        {
-            $rights_array =
-                $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type];
-        }
-        else
-        {
-            $rights_array = DataManager::retrieve_granted_rights_array(
-                $location, $this->get_entity_item_condition($context, $entity_type, $entity_id, $location->get_id())
-            );
-            $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type] =
-                $rights_array;
-        }
 
-        return $this->rights_cache_specific_entity[$context][$location->get_id()][$entity_id][$entity_type];
-    }
-
-    /*
-     * DONE
-     */
-    public function get_entity_item_condition($context, $type, $id, $location_id)
-    {
-        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
-
-        if (is_null($this->entity_item_condition_cache[$context][$location_id][$id][$type]))
-        {
-            $conditions = array();
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
-                new StaticConditionVariable($type)
-            );
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_ID),
-                new StaticConditionVariable($id)
-            );
-            $condition = new AndCondition($conditions);
-            $this->entity_item_condition_cache[$context][$location_id][$id][$type] = $condition;
-        }
-
-        return $this->entity_item_condition_cache[$context][$location_id][$id][$type];
-    }
-
-    /*
-     * todo: add caching
-     */
     public function is_allowed_for_rights_entity_item_no_inherit(
         $context, $entity_type, $entity_id, $right_id, $location_id
     )
@@ -977,6 +939,23 @@ class RightsUtil
         }
     }
 
+    /*
+     * DONE
+     */
+
+    public function is_allowed_on_location($right, $context, $user_id, $entities, $location)
+    {
+        $rights_array = DataManager::retrieve_granted_rights_array(
+            $location, $this->get_entities_condition($context, $user_id, $entities)
+        );
+
+        return in_array($right, $rights_array);
+    }
+
+    /*
+     * DONE
+     */
+
     /**
      *
      * @return string
@@ -984,5 +963,68 @@ class RightsUtil
     public static function package()
     {
         return static::context();
+    }
+
+    /*
+     * todo: add caching
+     */
+
+    /**
+     * Enables a right for a specific entity on a specific location
+     *
+     * @param String $context
+     * @param int $right
+     * @param int $entity_id
+     * @param int $entity_type
+     * @param int $location_id
+     *
+     * @return boolean
+     */
+    public function set_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
+    {
+        if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
+        {
+            $location_entity_right = DataManager::retrieve_rights_location_entity_right(
+                $context, $right, $entity_id, $entity_type, $location_id
+            );
+
+            if ($location_entity_right)
+            {
+                return true;
+            }
+            else
+            {
+                return $this->create_rights_location_entity_right(
+                    $context, $right, $entity_id, $entity_type, $location_id
+                );
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function unset_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
+    {
+        if (!is_null($entity_id) && !is_null($entity_type) && !empty($right) && !empty($location_id))
+        {
+            $location_entity_right = DataManager::retrieve_rights_location_entity_right(
+                $context, $right, $entity_id, $entity_type, $location_id
+            );
+
+            if ($location_entity_right)
+            {
+                return $location_entity_right->delete();
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }

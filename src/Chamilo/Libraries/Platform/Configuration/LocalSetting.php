@@ -9,7 +9,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -183,6 +183,16 @@ class LocalSetting
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
      * Returns the instance of this class.
      *
      * @return \Chamilo\Libraries\Platform\Configuration\LocalSetting The instance.
@@ -245,12 +255,25 @@ class LocalSetting
     }
 
     /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    /**
      * Resets the local settings cache for the current instance
      */
     public function resetCache()
     {
         $this->getLocalSettingCacheService()->clearForIdentifier($this->currentUserIdentifier);
-        DataClassCache::truncate(UserSetting::class);
+        $this->getDataClassRepositoryCache()->truncate(UserSetting::class);
         $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->currentUserIdentifier);
     }
 }

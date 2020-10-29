@@ -4,13 +4,14 @@ namespace Chamilo\Core\User\Roles\Service;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Exception;
 
 /**
  * Manages roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class RoleService implements RoleServiceInterface
@@ -24,7 +25,7 @@ class RoleService implements RoleServiceInterface
 
     /**
      * RoleService constructor.
-     * 
+     *
      * @param RoleRepositoryInterface $roleRepository
      */
     public function __construct(RoleRepositoryInterface $roleRepository)
@@ -33,8 +34,20 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
+     * Counts the roles
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countRoles(Condition $condition = null)
+    {
+        return $this->roleRepository->countRoles($condition);
+    }
+
+    /**
      * Creates a role by a given name
-     * 
+     *
      * @param string $roleName
      *
      * @return Role
@@ -45,25 +58,25 @@ class RoleService implements RoleServiceInterface
     {
         $role = new Role();
         $role->setRole($roleName);
-        
-        if (! $this->roleRepository->create($role))
+
+        if (!$this->roleRepository->create($role))
         {
             throw new Exception('The role with name ' . $roleName . ' could not be created');
         }
-        
+
         return $role;
     }
 
     /**
      * Deletes a given role
-     * 
+     *
      * @param Role $role
      *
      * @throws \Exception
      */
     public function deleteRole(Role $role)
     {
-        if (! $this->roleRepository->delete($role))
+        if (!$this->roleRepository->delete($role))
         {
             $roleName = $role->getRole();
             throw new Exception('The role with name ' . $roleName . ' could not be deleted');
@@ -71,28 +84,18 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns a role by a given name
-     * 
-     * @param string $roleName
-     *
-     * @return Role
-     *
-     * @throws \Exception
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    public function getRoleByName($roleName)
+    protected function getDataClassRepositoryCache()
     {
-        $role = $this->roleRepository->findRoleByName($roleName);
-        if (! $role instanceof Role)
-        {
-            throw new Exception('Role not found by given name ' . $roleName);
-        }
-        
-        return $role;
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
     }
 
     /**
      * Either retrieves or creates a new role by a given name
-     * 
+     *
      * @param string $roleName
      *
      * @return Role
@@ -106,15 +109,35 @@ class RoleService implements RoleServiceInterface
         catch (Exception $ex)
         {
             $role = $this->createRoleByName($roleName);
-            DataClassCache::truncate(Role::class);
-            
+            $this->getDataClassRepositoryCache()->truncate(Role::class);
+
             return $role;
         }
     }
 
     /**
+     * Returns a role by a given name
+     *
+     * @param string $roleName
+     *
+     * @return Role
+     *
+     * @throws \Exception
+     */
+    public function getRoleByName($roleName)
+    {
+        $role = $this->roleRepository->findRoleByName($roleName);
+        if (!$role instanceof Role)
+        {
+            throw new Exception('Role not found by given name ' . $roleName);
+        }
+
+        return $role;
+    }
+
+    /**
      * Retrieves the roles
-     * 
+     *
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -128,14 +151,15 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Counts the roles
-     * 
-     * @param Condition $condition
+     * @param string $serviceName
      *
-     * @return int
+     * @return object
+     * @throws \Exception
      */
-    public function countRoles(Condition $condition = null)
+    protected function getService(string $serviceName)
     {
-        return $this->roleRepository->countRoles($condition);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 }

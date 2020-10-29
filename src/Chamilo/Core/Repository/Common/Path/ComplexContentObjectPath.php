@@ -8,13 +8,14 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -55,117 +56,99 @@ abstract class ComplexContentObjectPath
 
     /**
      *
-     * @return ComplexContentObjectPathNode[]
-     */
-    public function get_nodes()
-    {
-        return $this->nodes;
-    }
-
-    /**
-     *
      * @param int $parent_id
      * @param int $previous_id
      * @param ComplexContentObjectItem $complex_content_object_item
      * @param ContentObject $content_object
      * @param multitype:mixed $propeties
+     *
      * @return int
      */
-    private function add($parent_id, $previous_sibling_node_id, ComplexContentObjectItem $complex_content_object_item, 
-        ContentObject $content_object)
+    private function add(
+        $parent_id, $previous_sibling_node_id, ComplexContentObjectItem $complex_content_object_item,
+        ContentObject $content_object
+    )
     {
         $properties = $this->get_properties($parent_id, $complex_content_object_item, $content_object);
-        
+
         $node_id = $this->get_next_id();
         $node = ComplexContentObjectPathNode::factory(
-            self::context(), 
-            $this, 
-            $node_id, 
-            $parent_id, 
-            $previous_sibling_node_id, 
-            null, 
-            $complex_content_object_item, 
-            $content_object, 
-            $properties);
-        
+            self::context(), $this, $node_id, $parent_id, $previous_sibling_node_id, null, $complex_content_object_item,
+            $content_object, $properties
+        );
+
         $this->nodes[$node_id] = $node;
-        
+
         return $node;
     }
 
     /**
      *
-     * @return int
+     * @param int $parent_id
+     * @param ContentObject $root_content_object
      */
-    public function get_next_id()
+    private function add_items(ComplexContentObjectPathNode $parent_node, ContentObject $root_content_object)
     {
-        return count($this->nodes) + 1;
-    }
-
-    /**
-     *
-     * @param int $node_id
-     * @throws Exception
-     * @return ComplexContentObjectPathNode
-     */
-    public function get_node($node_id)
-    {
-        if (! isset($this->nodes[$node_id]))
+        if ($root_content_object instanceof ComplexContentObjectSupport)
         {
-            throw new Exception(Translation::get('NodeDoesntExist'));
-        }
-        return $this->nodes[$node_id];
-    }
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                ), new StaticConditionVariable($root_content_object->get_id())
+            );
+            $order = new OrderBy(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                ), SORT_ASC
+            );
+            $parameters = new DataClassRetrievesParameters($condition, null, null, array($order));
 
-    /**
-     *
-     * @param int $node_id
-     * @param boolean $include_self
-     * @return array<ComplexContentObjectPathNode>
-     */
-    public function get_parents_by_id($node_id, $include_self = false, $reverse = false)
-    {
-        if (! isset($this->parents[$node_id][$include_self][$reverse]))
-        {
-            $this->parents[$node_id][$include_self][$reverse] = ComplexContentObjectPathNode::get_node_parents(
-                $this->get_node($node_id), 
-                $include_self, 
-                $reverse);
-        }
-        
-        return $this->parents[$node_id][$include_self][$reverse];
-    }
+            $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
+                ComplexContentObjectItem::class, $parameters
+            );
 
-    /**
-     *
-     * @param int $node_id
-     */
-    public function get_children_by_id($node_id)
-    {
-        if (! isset($this->children[$node_id]))
-        {
-            $this->children[$node_id] = ComplexContentObjectPathNode::get_node_children($this->get_node($node_id));
-        }
-        
-        return $this->children[$node_id];
-    }
+            $previous_sibling_node = null;
 
-    /**
-     *
-     * @throws Exception
-     * @return ComplexContentObjectPathNode
-     */
-    public function get_root()
-    {
-        foreach ($this->nodes as $node)
-        {
-            if ($node->is_root())
+            foreach ($complex_content_object_items as $complex_content_object_item)
             {
-                return $node;
+
+                $content_object = $complex_content_object_item->get_ref_object();
+
+                if ($content_object instanceof HelperContentObjectSupport)
+                {
+                    $content_object = DataManager::retrieve_by_id(
+                        ContentObject::class, $content_object->get_reference()
+                    );
+                }
+
+                if ($content_object instanceof ComplexContentObjectSupport)
+                {
+                    $node = $this->add(
+                        $parent_node->get_id(), $previous_sibling_node ? $previous_sibling_node->get_id() : null,
+                        $complex_content_object_item, $content_object
+                    );
+
+                    if ($content_object instanceof ComplexContentObjectDisclosure)
+                    {
+                        $this->add_items($node, $content_object);
+                    }
+                }
+                elseif ($root_content_object instanceof ComplexContentObjectDisclosure)
+                {
+                    $node = $this->add(
+                        $parent_node->get_id(), $previous_sibling_node ? $previous_sibling_node->get_id() : null,
+                        $complex_content_object_item, $content_object
+                    );
+                }
+
+                if ($previous_sibling_node instanceof ComplexContentObjectPathNode)
+                {
+                    $previous_sibling_node->set_next_sibling_id($node->get_id());
+                }
+
+                $previous_sibling_node = $node;
             }
         }
-        
-        throw new Exception(Translation::get('NoRootNode'));
     }
 
     /**
@@ -179,7 +162,109 @@ abstract class ComplexContentObjectPath
 
     /**
      *
+     * @param string $type
+     * @param ContentObject $content_object
+     *
+     * @return ComplexContentObjectPath
+     */
+    public static function factory($type, ContentObject $content_object)
+    {
+        $class = $content_object->package() . '\ComplexContentObjectPath';
+
+        return new $class($content_object);
+    }
+
+    /**
+     * Follow a route through the ComplexContentObjectPath based on a set a sequential content object ids
+     *
+     * @param multitype:int $content_object_ids
+     *
+     * @return ComplexContentObjectPathNode
+     */
+    public function follow_path_by_content_object_ids($content_object_ids)
+    {
+        $root_content_object_id = array_shift($content_object_ids);
+        $root_node = $this->get_root();
+
+        if ($root_content_object_id != $root_node->get_content_object()->get_id())
+        {
+            throw new Exception('RootsNoLongerMatching');
+        }
+
+        foreach ($content_object_ids as $content_object_id)
+        {
+            $children = $root_node->get_children();
+            $child_found = false;
+
+            foreach ($children as $child_node)
+            {
+                if ($child_node->get_content_object()->get_id() == $content_object_id)
+                {
+                    $root_node = $child_node;
+                    $child_found = true;
+                    continue;
+                }
+            }
+
+            if (!$child_found)
+            {
+                throw new Exception('NoMatchingPathFound');
+            }
+        }
+
+        return $root_node;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    /**
+     *
+     * @param int $node_id
+     */
+    public function get_children_by_id($node_id)
+    {
+        if (!isset($this->children[$node_id]))
+        {
+            $this->children[$node_id] = ComplexContentObjectPathNode::get_node_children($this->get_node($node_id));
+        }
+
+        return $this->children[$node_id];
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_next_id()
+    {
+        return count($this->nodes) + 1;
+    }
+
+    /**
+     *
      * @param int $id
+     *
      * @return NULL ComplexContentObjectPathNode
      */
     public function get_next_node_by_id($id)
@@ -196,7 +281,53 @@ abstract class ComplexContentObjectPath
 
     /**
      *
+     * @param int $node_id
+     *
+     * @return ComplexContentObjectPathNode
+     * @throws Exception
+     */
+    public function get_node($node_id)
+    {
+        if (!isset($this->nodes[$node_id]))
+        {
+            throw new Exception(Translation::get('NodeDoesntExist'));
+        }
+
+        return $this->nodes[$node_id];
+    }
+
+    /**
+     *
+     * @return ComplexContentObjectPathNode[]
+     */
+    public function get_nodes()
+    {
+        return $this->nodes;
+    }
+
+    /**
+     *
+     * @param int $node_id
+     * @param boolean $include_self
+     *
+     * @return array<ComplexContentObjectPathNode>
+     */
+    public function get_parents_by_id($node_id, $include_self = false, $reverse = false)
+    {
+        if (!isset($this->parents[$node_id][$include_self][$reverse]))
+        {
+            $this->parents[$node_id][$include_self][$reverse] = ComplexContentObjectPathNode::get_node_parents(
+                $this->get_node($node_id), $include_self, $reverse
+            );
+        }
+
+        return $this->parents[$node_id][$include_self][$reverse];
+    }
+
+    /**
+     *
      * @param int $id
+     *
      * @return NULL ComplexContentObjectPathNode
      */
     public function get_previous_node_by_id($id)
@@ -209,6 +340,37 @@ abstract class ComplexContentObjectPath
         {
             return $this->get_node($id - 1);
         }
+    }
+
+    /**
+     *
+     * @param int $parent_id
+     * @param ComplexContentObjectItem $complex_content_object_item
+     * @param ContentObject $content_object
+     *
+     * @return multitype:mixed
+     */
+    public function get_properties($parent_id, $complex_content_object_item, $content_object)
+    {
+        return array();
+    }
+
+    /**
+     *
+     * @return ComplexContentObjectPathNode
+     * @throws Exception
+     */
+    public function get_root()
+    {
+        foreach ($this->nodes as $node)
+        {
+            if ($node->is_root())
+            {
+                return $node;
+            }
+        }
+
+        throw new Exception(Translation::get('NoRootNode'));
     }
 
     /**
@@ -228,155 +390,6 @@ abstract class ComplexContentObjectPath
         $this->add_items($root_node, $content_object);
     }
 
-    public function reset()
-    {
-        $root = $this->get_root()->get_content_object();
-        
-        $this->nodes = array();
-        $this->children = array();
-        $this->parents = array();
-        
-        DataClassCache::truncate(ComplexContentObjectItem::class);
-        
-        $this->initialize($root);
-    }
-
-    /**
-     *
-     * @param int $parent_id
-     * @param ContentObject $root_content_object
-     */
-    private function add_items(ComplexContentObjectPathNode $parent_node, ContentObject $root_content_object)
-    {
-        if ($root_content_object instanceof ComplexContentObjectSupport)
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ComplexContentObjectItem::class,
-                    ComplexContentObjectItem::PROPERTY_PARENT), 
-                new StaticConditionVariable($root_content_object->get_id()));
-            $order = new OrderBy(
-                new PropertyConditionVariable(
-                    ComplexContentObjectItem::class,
-                    ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER), 
-                SORT_ASC);
-            $parameters = new DataClassRetrievesParameters($condition, null, null, array($order));
-            
-            $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class,
-                $parameters);
-            
-            $previous_sibling_node = null;
-            
-            foreach($complex_content_object_items as $complex_content_object_item)
-            {
-                
-                $content_object = $complex_content_object_item->get_ref_object();
-                
-                if ($content_object instanceof HelperContentObjectSupport)
-                {
-                    $content_object = DataManager::retrieve_by_id(
-                        ContentObject::class,
-                        $content_object->get_reference());
-                }
-                
-                if ($content_object instanceof ComplexContentObjectSupport)
-                {
-                    $node = $this->add(
-                        $parent_node->get_id(), 
-                        $previous_sibling_node ? $previous_sibling_node->get_id() : null, 
-                        $complex_content_object_item, 
-                        $content_object);
-                    
-                    if ($content_object instanceof ComplexContentObjectDisclosure)
-                    {
-                        $this->add_items($node, $content_object);
-                    }
-                }
-                elseif ($root_content_object instanceof ComplexContentObjectDisclosure)
-                {
-                    $node = $this->add(
-                        $parent_node->get_id(), 
-                        $previous_sibling_node ? $previous_sibling_node->get_id() : null, 
-                        $complex_content_object_item, 
-                        $content_object);
-                }
-                
-                if ($previous_sibling_node instanceof ComplexContentObjectPathNode)
-                {
-                    $previous_sibling_node->set_next_sibling_id($node->get_id());
-                }
-                
-                $previous_sibling_node = $node;
-            }
-        }
-    }
-
-    /**
-     *
-     * @param int $parent_id
-     * @param ComplexContentObjectItem $complex_content_object_item
-     * @param ContentObject $content_object
-     * @return multitype:mixed
-     */
-    public function get_properties($parent_id, $complex_content_object_item, $content_object)
-    {
-        return array();
-    }
-
-    /**
-     * Follow a route through the ComplexContentObjectPath based on a set a sequential content object ids
-     * 
-     * @param multitype:int $content_object_ids
-     * @return ComplexContentObjectPathNode
-     */
-    public function follow_path_by_content_object_ids($content_object_ids)
-    {
-        $root_content_object_id = array_shift($content_object_ids);
-        $root_node = $this->get_root();
-        
-        if ($root_content_object_id != $root_node->get_content_object()->get_id())
-        {
-            throw new Exception('RootsNoLongerMatching');
-        }
-        
-        foreach ($content_object_ids as $content_object_id)
-        {
-            $children = $root_node->get_children();
-            $child_found = false;
-            
-            foreach ($children as $child_node)
-            {
-                if ($child_node->get_content_object()->get_id() == $content_object_id)
-                {
-                    $root_node = $child_node;
-                    $child_found = true;
-                    continue;
-                }
-            }
-            
-            if (! $child_found)
-            {
-                throw new Exception('NoMatchingPathFound');
-            }
-        }
-        
-        return $root_node;
-    }
-
-    /**
-     *
-     * @param string $type
-     * @param ContentObject $content_object
-     *
-     * @return ComplexContentObjectPath
-     */
-    public static function factory($type, ContentObject $content_object)
-    {
-        $class = $content_object->package() . '\ComplexContentObjectPath';
-        return new $class($content_object);
-    }
-
     /**
      *
      * @return string
@@ -384,5 +397,18 @@ abstract class ComplexContentObjectPath
     public static function package()
     {
         return static::context();
+    }
+
+    public function reset()
+    {
+        $root = $this->get_root()->get_content_object();
+
+        $this->nodes = array();
+        $this->children = array();
+        $this->parents = array();
+
+        $this->getDataClassRepositoryCache()->truncate(ComplexContentObjectItem::class);
+
+        $this->initialize($root);
     }
 }

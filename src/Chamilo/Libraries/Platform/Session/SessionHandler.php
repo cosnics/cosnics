@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -127,6 +128,29 @@ class SessionHandler implements SessionHandlerInterface
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    /**
      *
      * @param string $save_path
      * @param string $name
@@ -150,7 +174,7 @@ class SessionHandler implements SessionHandlerInterface
      */
     public function read($session_id)
     {
-        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
+        $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
         $session = DataManager::retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session::class,
             new DataClassRetrieveParameters($this->getCondition($session_id))
@@ -184,7 +208,7 @@ class SessionHandler implements SessionHandlerInterface
     {
         $data = base64_encode($data);
 
-        DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
+        $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
 
         $session = DataManager::retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session::class,

@@ -27,7 +27,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -482,7 +482,7 @@ class ContentObject extends CompositeDataClass
                         return false;
                     }
 
-                    DataClassCache::reset();
+                    $this->getDataClassRepositoryCache()->reset();
                     $count = DataManager::count_content_object_versions($content_object);
 
                     if ($count > 0)
@@ -745,6 +745,16 @@ class ContentObject extends CompositeDataClass
         {
             return false;
         }
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
     }
 
     /**

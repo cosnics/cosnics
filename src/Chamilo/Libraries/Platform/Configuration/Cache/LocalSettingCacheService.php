@@ -6,7 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -33,7 +34,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
      */
     public function clearForIdentifier($identifier)
     {
-        DataClassCache::truncate(UserSetting::class);
+        $this->getDataClassRepositoryCache()->truncate(UserSetting::class);
 
         return parent::clearForIdentifier($identifier);
     }
@@ -45,6 +46,16 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
     public function getCachePathNamespace()
     {
         return 'Chamilo\Libraries\Platform\Configuration';
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            DataClassRepositoryCache::class
+        );
     }
 
     /**
@@ -89,7 +100,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
             UserSetting::class, new DataClassRetrievesParameters($condition)
         );
 
-        foreach($userSettings as $userSetting)
+        foreach ($userSettings as $userSetting)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),

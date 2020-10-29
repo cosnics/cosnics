@@ -9,7 +9,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -25,6 +25,24 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 {
 
     /**
+     * Clears the cache for the CourseEntityRelation class
+     */
+    public function clearCourseEntityRelationCache()
+    {
+        $this->getDataClassRepositoryCache()->truncate(CourseEntityRelation::class);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
      *
      * @return \Chamilo\Core\User\Service\UserService
      */
@@ -34,30 +52,6 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
         $container = $containerBuilder->createContainer();
 
         return $container->get(UserService::class);
-    }
-
-    /**
-     * Retrieves a user by a username
-     *
-     * @param string $username
-     *
-     * @return User
-     */
-    public function retrieveUserByUsername($username)
-    {
-        return $this->getUserService()->findUserByUsername($username);
-    }
-
-    /**
-     * Retrieves a group by a code
-     *
-     * @param string $groupCode
-     *
-     * @return Group
-     */
-    public function retrieveGroupByCode($groupCode)
-    {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_group_by_code($groupCode);
     }
 
     /**
@@ -81,7 +75,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      * @param int $entityId
      * @param int $courseId
      *
-     * @return CourseEntityRelation
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation
      */
     public function retrieveCourseEntityRelationByEntityAndCourse($entityType, $entityId, $courseId)
     {
@@ -111,10 +105,26 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
     }
 
     /**
-     * Clears the cache for the CourseEntityRelation class
+     * Retrieves a group by a code
+     *
+     * @param string $groupCode
+     *
+     * @return Group
      */
-    public function clearCourseEntityRelationCache()
+    public function retrieveGroupByCode($groupCode)
     {
-        DataClassCache::truncate(CourseEntityRelation::class);
+        return \Chamilo\Core\Group\Storage\DataManager::retrieve_group_by_code($groupCode);
+    }
+
+    /**
+     * Retrieves a user by a username
+     *
+     * @param string $username
+     *
+     * @return User
+     */
+    public function retrieveUserByUsername($username)
+    {
+        return $this->getUserService()->findUserByUsername($username);
     }
 }

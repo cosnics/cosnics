@@ -6,7 +6,7 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -59,13 +59,34 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
      * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
      */
     protected function getRightsService()
     {
-        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(RightsService::class);
+    }
 
-        return $dependencyInjectionContainer->get(RightsService::class);
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     public function update_settings()
@@ -87,7 +108,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $settings[] = array('Chamilo\Core\Admin', 'administrator_email', $values['admin_email']);
         $settings[] = array('Chamilo\Core\Admin', 'administrator_telephone', $values['admin_phone']);
 
-        DataClassCache::truncate(Setting::class);
+        $this->getDataClassRepositoryCache()->truncate(Setting::class);
 
         foreach ($settings as $setting)
         {

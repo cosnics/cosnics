@@ -12,13 +12,14 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -27,10 +28,13 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class ContentObjectCopier
 {
-    const TYPE_ERROR = 1;
-    const TYPE_WARNING = 2;
     const TYPE_CONFIRM = 3;
+
+    const TYPE_ERROR = 1;
+
     const TYPE_NORMAL = 4;
+
+    const TYPE_WARNING = 2;
 
     private $messages;
 
@@ -86,8 +90,10 @@ class ContentObjectCopier
      * @param integer $targetUserIdentifier
      * @param integer $targetCategory
      */
-    public function __construct(User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace,
-        $sourceUserIdentifier, WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0)
+    public function __construct(
+        User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace, $sourceUserIdentifier,
+        WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0
+    )
     {
         $this->currentUser = $currentUser;
         $this->contentObjectIdentifiers = $contentObjectIdentifiers;
@@ -104,23 +110,22 @@ class ContentObjectCopier
      */
     public function run()
     {
-        if (! $this->contentObjectIdentifiers)
+        if (!$this->contentObjectIdentifiers)
         {
             $this->add_message(Translation::get('NoObjectSelected'), self::TYPE_ERROR);
 
             return false;
         }
 
-        if (! is_array($this->contentObjectIdentifiers))
+        if (!is_array($this->contentObjectIdentifiers))
         {
             $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
 
         $exportParameters = new ExportParameters(
-            $this->sourceWorkspace,
-            $this->sourceUserIdentifier,
-            ContentObjectExport::FORMAT_CPO,
-            $this->contentObjectIdentifiers);
+            $this->sourceWorkspace, $this->sourceUserIdentifier, ContentObjectExport::FORMAT_CPO,
+            $this->contentObjectIdentifiers
+        );
 
         $exporter = ContentObjectExportController::factory($exportParameters);
 
@@ -134,15 +139,13 @@ class ContentObjectCopier
         $file = FileProperties::from_path($newPath);
 
         $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            User::class,
-            $this->targetUserIdentifier);
+            User::class, $this->targetUserIdentifier
+        );
 
         $parameters = ImportParameters::factory(
-            ContentObjectImport::FORMAT_CPO,
-            $this->targetUserIdentifier,
-            $this->targetWorkspace,
-            $this->targetCategory,
-            $file);
+            ContentObjectImport::FORMAT_CPO, $this->targetUserIdentifier, $this->targetWorkspace, $this->targetCategory,
+            $file
+        );
         $controller = ContentObjectImportController::factory($parameters);
         $contentObjectIdentifiers = $controller->run();
 
@@ -166,7 +169,7 @@ class ContentObjectCopier
      */
     public function add_message($message, $type)
     {
-        if (! isset($this->messages[$type]))
+        if (!isset($this->messages[$type]))
         {
             $this->messages[$type] = array();
         }
@@ -175,13 +178,64 @@ class ContentObjectCopier
     }
 
     /**
-     * Checks wether the object has messages
+     * Changes the title of the duplicated content objects by adding a copy value to show which object is the copied
+     * one.
      *
-     * @return boolean
+     * @param array $contentObjectIdentifiers
      */
-    public function has_messages($type)
+    protected function changeContentObjectNames($contentObjectIdentifiers = array())
     {
-        return count($this->get_messages($type)) > 0;
+        if (empty($contentObjectIdentifiers))
+        {
+            return;
+        }
+
+        $this->getDataClassRepositoryCache()->reset();
+
+        $condition = new InCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $contentObjectIdentifiers
+        );
+
+        $parameters = new DataClassRetrievesParameters($condition);
+
+        $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
+
+        foreach ($content_objects as $content_object)
+        {
+            $content_object->set_title($content_object->get_title() . ' (' . Translation::get('Copy') . ')');
+            $content_object->update();
+        }
+    }
+
+    /**
+     * Clears the errors
+     */
+    public function clear_messages($type)
+    {
+        unset($this->messages[$type]);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(
+            DataClassRepositoryCache::class
+        );
+    }
+
+    /**
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws \Exception
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**
@@ -199,14 +253,6 @@ class ContentObjectCopier
         {
             return $this->messages;
         }
-    }
-
-    /**
-     * Clears the errors
-     */
-    public function clear_messages($type)
-    {
-        unset($this->messages[$type]);
     }
 
     /**
@@ -231,32 +277,12 @@ class ContentObjectCopier
     }
 
     /**
-     * Changes the title of the duplicated content objects by adding a copy value to show which object is the copied
-     * one.
+     * Checks wether the object has messages
      *
-     * @param array $contentObjectIdentifiers
+     * @return boolean
      */
-    protected function changeContentObjectNames($contentObjectIdentifiers = array())
+    public function has_messages($type)
     {
-        if (empty($contentObjectIdentifiers))
-        {
-            return;
-        }
-
-        DataClassCache::reset();
-
-        $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            $contentObjectIdentifiers);
-
-        $parameters = new DataClassRetrievesParameters($condition);
-
-        $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
-
-        foreach($content_objects as $content_object)
-        {
-            $content_object->set_title($content_object->get_title() . ' (' . Translation::get('Copy') . ')');
-            $content_object->update();
-        }
+        return count($this->get_messages($type)) > 0;
     }
 }
