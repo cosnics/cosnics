@@ -192,33 +192,42 @@
                                                         }
                                                     });
 
-                                                    $('#btn-upload').on('click', function (evt) {
-                                                        evt.preventDefault();
-                                                        $.each(environment.dropzone.files, function (_, file) {
-                                                            if (file.status === Dropzone.ERROR) {
-                                                                file.status = Dropzone.QUEUED;
-                                                                $($(file.previewElement).find('.error.text-danger')[0]).text('');
-                                                                $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
-                                                            }
-                                                        });
+                                                $('#btn-upload').on('click', function (evt) {
+                                                    evt.preventDefault();
+                                                    $.each(environment.dropzone.files, function(_, file) {
+                                                        if (file.status === Dropzone.ERROR) {
+                                                            file.status = Dropzone.QUEUED;
+                                                            $($(file.previewElement).find('.error.text-danger')[0]).text('');
+                                                            $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                        }
+                                                    });
+                                                    if (environment.dropzone.getQueuedFiles().length === 0) {
+                                                        if (environment.dropzone.files.length > 0 &&
+                                                            environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
+                                                            console.log('redirect');
+                                                            window.location.href = '{{ CURRENT_URL|raw }}';
+                                                        } else {
+                                                            // Either no files to upload or file(s) having a status other than 'success' or 'queued'?
+                                                        }
+                                                    } else {
                                                         environment.dropzone.processQueue();
-                                                    })
-                                                },
-                                                getServerResponse: function (environment, file, serverResponse) {
-                                                    console.log({environment, file, serverResponse});
-                                                    if (file.status === Dropzone.SUCCESS) {
-                                                        $(file.previewElement).find('.btn.delete').remove();
-                                                        $(file.previewElement).find('.file-name-wrap')
-                                                            .after('<div class="file-uploaded">' + 'Opgeladen' + '</div>');
                                                     }
-                                                    else {
-                                                        console.log('STATUS is' + file.status);
-                                                    }
-                                                },
-                                                processRequest: function (environment, file, xhrObject, formData) {
-                                                    formData.append('publicationId', publicationId);
+                                                })
+                                            },
+                                            getServerResponse: function (environment, file, serverResponse) {
+                                                console.log({environment, file, serverResponse});
+                                                if (file.status === Dropzone.SUCCESS) {
+                                                    $(file.previewElement).find('.btn.delete').remove();
+                                                    $(file.previewElement).find('.file-name-wrap')
+                                                        .after('<div class="file-uploaded">' + 'Opgeladen' +'</div>');
+                                                } else {
+                                                    console.log('STATUS is' + file.status);
                                                 }
-                                            };
+                                            },
+                                            processRequest: function (environment, file, xhrObject, formData) {
+                                                formData.append('publicationId', publicationId);
+                                            }
+                                        };
 
                                             $('#file-upload-container').fileUpload({
                                                 autoProcessQueue: false,
