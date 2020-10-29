@@ -20,12 +20,12 @@
                         {% if DETAILS.has_finished %}
                         <div class="alert alert-success">
                             <h4>We hebben je inzending goed ontvangen. We hebben in totaal&nbsp;{{ DETAILS.entries|length }}&nbsp;bestand(en) ontvangen van jou.</h4>
-                            <ol style="margin-top: 1em; margin-bottom: 0;">
-                                {% for ENTRY in DETAILS.entries %}
-                                    <li>{{ ENTRY.description }}</li>
-                                {% endfor %}
-                            </ol>
                         </div>
+                        <ol style="margin-top: 1em; margin-bottom: 0;">
+                            {% for ENTRY in DETAILS.entries %}
+                                <li>{{ ENTRY.description }}</li>
+                            {% endfor %}
+                        </ol>
                         {% endif %}
 
                         {% if not DETAILS.has_finished and not DETAILS.can_submit %}
@@ -161,6 +161,7 @@
                                             dropzoneCallbacks.chamilo = {};
                                             dropzoneCallbacks.chamilo.application = {};
                                             dropzoneCallbacks.chamilo.application.exam_assignment = {
+                                                isSubmitting: false,
                                                 init: function (environment) {
                                                     environment.dropzone.options.parallelUploads = 1;
 
@@ -176,18 +177,23 @@
                                                     });*/
 
                                                     environment.dropzone.on('queuecomplete', function () {
-                                                        environment.dropzone.options.autoProcessQueue = false;
-                                                        if (environment.dropzone.files.length > 0 &&
-                                                            environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
-                                                            console.log('redirect');
-                                                            window.location.href = '{{ CURRENT_URL|raw }}';
-                                                            // redirect
+                                                        /**
+                                                         * The queuecomplete is also called when a file is selected but never accepted (e.g. a movie file)
+                                                         * We only want to handle the queue complete when we click the submit button
+                                                         */
+                                                        if(!dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting) {
+                                                            console.log(environment.dropzone.getQueuedFiles());
+                                                            return;
                                                         }
-                                                        else {
+
+                                                        environment.dropzone.options.autoProcessQueue = false;
+
+                                                        if (!dropzoneCallbacks.chamilo.application.exam_assignment.redirectAfterSubmit(environment)) {
                                                             $.each(environment.dropzone.files, function (_, file) {
                                                                 $(file.previewElement).find('.progress-bar')[0].style.width = '0%';
                                                             });
                                                             $('#btn-upload').prop('disabled', false);
+                                                            dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting = false;
                                                             console.log('still errors, cannot redirect');
                                                         }
                                                     });
@@ -195,24 +201,50 @@
                                                 $('#btn-upload').on('click', function (evt) {
                                                     evt.preventDefault();
                                                     $.each(environment.dropzone.files, function(_, file) {
-                                                        if (file.status === Dropzone.ERROR) {
+                                                        if (file.status === Dropzone.ERROR && file.accepted) {
                                                             file.status = Dropzone.QUEUED;
                                                             $($(file.previewElement).find('.error.text-danger')[0]).text('');
                                                             $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
                                                         }
                                                     });
-                                                    if (environment.dropzone.getQueuedFiles().length === 0) {
-                                                        if (environment.dropzone.files.length > 0 &&
-                                                            environment.dropzone.files.length === environment.dropzone.getFilesWithStatus(Dropzone.SUCCESS).length) {
-                                                            console.log('redirect');
-                                                            window.location.href = '{{ CURRENT_URL|raw }}';
-                                                        } else {
-                                                            // Either no files to upload or file(s) having a status other than 'success' or 'queued'?
-                                                        }
+
+                                                    dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting = true;
+
+                                                    /**
+                                                     * If you remove an error file or if there is still an unaccepted file, the queuecomplete
+                                                     * event is not triggered so we need to redirect manually if the queue is complete. This
+                                                     * is only necessary when the button is clicked again and there are no files being processed anymore.
+                                                     * e.g. two file were chosen, one file was successful and one had an error and has been removed.
+                                                     */
+
+                                                    if(environment.dropzone.getQueuedFiles().length === 0) {
+                                                        dropzoneCallbacks.chamilo.application.exam_assignment.redirectAfterSubmit(environment);
                                                     } else {
                                                         environment.dropzone.processQueue();
                                                     }
                                                 })
+                                            },
+                                            redirectAfterSubmit: function(environment) {
+                                                let canRedirect = true;
+
+                                                /**
+                                                 * Files that are never accepted like move files come in the error state but can be ignored for the redirect because
+                                                 * they will never be uploaded and should not intervene with the upload of other files
+                                                 */
+                                                $.each(environment.dropzone.files, function(_, file) {
+                                                    if(file.accepted && file.status === Dropzone.ERROR) {
+                                                        canRedirect = false;
+                                                        return false;
+                                                    }
+                                                });
+
+                                                if (canRedirect) {
+                                                    console.log('redirect');
+                                                    window.location.href = '{{ CURRENT_URL|raw }}';
+                                                    return true;
+                                                }
+
+                                                return false;
                                             },
                                             getServerResponse: function (environment, file, serverResponse) {
                                                 console.log({environment, file, serverResponse});
@@ -226,6 +258,12 @@
                                             },
                                             processRequest: function (environment, file, xhrObject, formData) {
                                                 formData.append('publicationId', publicationId);
+                                            },
+                                            acceptFile: function(environment, file, done) {
+                                                if(file.type.indexOf('video/') !== -1) {
+                                                    done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
+                                                }
+                                                else { done(); }
                                             }
                                         };
 
@@ -234,7 +272,8 @@
                                                 uploadUrl: uploadUrl,
                                                 successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse',
                                                 sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
-                                                initCallbackFunction: 'chamilo.application.exam_assignment.init'
+                                                initCallbackFunction: 'chamilo.application.exam_assignment.init',
+                                                acceptCallbackFunction: 'chamilo.application.exam_assignment.acceptFile'
                                             });
 
                                             // var uploader = Dropzone.forElement('#file-upload');

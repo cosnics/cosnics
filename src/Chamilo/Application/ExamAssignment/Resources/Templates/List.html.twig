@@ -24,7 +24,7 @@
                         </div>
                         <div class="exam-form">
                             <form action="{{ ENTRY_URL|replace({'__EXAM_ID__': EXAM.publication_id}) }}" method="post">
-                                <input type="text" class="exam-code form-control" name="exam_code" autocomplete="off" placeholder="{{ 'FiveNumberCode'|trans({}, appContext) }}" />
+                                <input type="text" class="exam-code form-control" name="exam_code" required="required" minlength="5" maxlength="5" autocomplete="off" placeholder="{{ 'FiveNumberCode'|trans({}, appContext) }}" />
                                 <button class="btn btn-action mod-access">{{ 'Start'|trans({}, appContext) }}</button>
                             </form>
                         </div>
