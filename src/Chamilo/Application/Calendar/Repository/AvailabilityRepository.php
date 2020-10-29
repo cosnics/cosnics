@@ -120,7 +120,7 @@ class AvailabilityRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
-     * @return \Chamilo\Application\Calendar\Extension\Google\Storage\DataClass\Availability
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
     public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType,
         $calendarIdentifier)

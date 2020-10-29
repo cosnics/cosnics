@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -374,6 +374,14 @@ class SorterComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    protected function getDataClassRepositoryCache()
+    {
+        return $this->getService(DataClassRepositoryCache::class);
+    }
+
     public function get_course_actions($course_type_user_category = array(), $course = null, $offset = 1, $count = 1)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
@@ -633,7 +641,7 @@ class SorterComponent extends Manager
                     $this->get_user_id()
                 );
 
-                DataClassCache::truncate(CourseTypeUserOrder::class);
+                $this->getDataClassRepositoryCache()->truncate(CourseTypeUserOrder::class);
 
                 $selected_course_type_user_order =
                     \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_user_order_for_course_type(
