@@ -326,6 +326,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function isSourceVisible($source, $userIdentifier = null)
     {
+        if (is_null($userIdentifier))
+        {
+            $userIdentifier = $this->getViewingUser()->getId();
+        }
+
         return !array_key_exists($source, $this->getVisibilities($userIdentifier));
     }
 
