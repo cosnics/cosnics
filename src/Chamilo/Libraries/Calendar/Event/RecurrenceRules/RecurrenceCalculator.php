@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 use Chamilo\Libraries\Calendar\Event\Event;
+use DateTime;
 use Sabre\VObject;
 
 /**
@@ -14,9 +15,9 @@ class RecurrenceCalculator
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\Event
+     * @var \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    private $event;
+    private $events;
 
     /**
      *
@@ -32,51 +33,97 @@ class RecurrenceCalculator
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function __construct(Event $event, $startTime, $endTime)
+    public function __construct(array $events, $startTime, $endTime)
     {
-        $this->event = $event;
+        $this->events = $events;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getEvent()
+    public function expandEvents()
     {
-        return $this->event;
-    }
+        $vCalendar = new VObject\Component\VCalendar();
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
+        $events = $this->getEvents();
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartTime()
-    {
-        return $this->startTime;
-    }
+        $expandedEvents = array();
+        $recurringEvents = array();
 
-    /**
-     *
-     * @param integer $startTime
-     */
-    public function setStartTime($startTime)
-    {
-        $this->startTime = $startTime;
+        foreach ($events as $key => $event)
+        {
+            if (!$event->getRecurrenceRules()->hasRecurrence())
+            {
+                $expandedEvents[] = $event;
+            }
+            else
+            {
+                $recurringEvents[$key] = $event;
+            }
+        }
+
+        if (count($expandedEvents) == count($events))
+        {
+            return $expandedEvents;
+        }
+
+        foreach ($recurringEvents as $key => $event)
+        {
+            $recurrenceRules = $event->getRecurrenceRules();
+
+            $startDateTime = new DateTime();
+            $startDateTime->setTimestamp($event->getStartDate());
+
+            $endDateTime = new DateTime();
+            $endDateTime->setTimestamp($event->getEndDate());
+
+            $vEvent = $vCalendar->add('VEVENT');
+
+            $vEvent->add('SUMMARY', $event->getTitle());
+            $vEvent->add('DTSTART', $startDateTime);
+            $vEvent->add('DTEND', $endDateTime);
+
+            $vObjectRecurrenceRules = new VObjectRecurrenceRulesFormatter();
+            $recurrenceRules = $event->getRecurrenceRules();
+
+            $vEvent->add('RRULE', $vObjectRecurrenceRules->format($recurrenceRules));
+            $vEvent->add('EVENTID', $key);
+            $vEvent->add('UID', uniqid());
+            break;
+        }
+
+        $fromDateTime = new DateTime();
+        $fromDateTime->setTimestamp($this->getStartTime());
+
+        $toDateTime = new DateTime();
+        $toDateTime->setTimestamp($this->getEndTime());
+
+        $vCalendar = $vCalendar->expand($fromDateTime, $toDateTime);
+        $calculatedEvents = $vCalendar->VEVENT;
+
+        foreach ($calculatedEvents as $calculatedEvent)
+        {
+            $repeatEvent = clone $recurringEvents[$calculatedEvent->EVENTID->getValue()];
+
+            $repeatEvent->setRecurrenceRules(new RecurrenceRules());
+            $repeatEvent->setStartDate($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
+            $repeatEvent->setEndDate($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
+
+            if ($this->isVisible($repeatEvent, $this->getStartTime(), $this->getEndTime()))
+            {
+                $expandedEvents[] = $repeatEvent;
+            }
+        }
+
+        return $expandedEvents;
     }
 
     /**
@@ -103,62 +150,25 @@ class RecurrenceCalculator
      */
     public function getEvents()
     {
-        $event = $this->getEvent();
-        $recurrenceRules = $event->getRecurrenceRules();
+        return $this->events;
+    }
 
-        if ($recurrenceRules->hasRecurrence())
-        {
-            $vCalendar = new VObject\Component\VCalendar();
+    /**
+     *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
 
-            $startDateTime = new \DateTime();
-            $startDateTime->setTimestamp($event->getStartDate());
-
-            $endDateTime = new \DateTime();
-            $endDateTime->setTimestamp($event->getEndDate());
-
-            $vEvent = $vCalendar->add('VEVENT');
-
-            $vEvent->add('SUMMARY', $event->getTitle());
-            $vEvent->add('DESCRIPTION', $event->getContent());
-            $vEvent->add('DTSTART', $startDateTime);
-            $vEvent->add('DTEND', $endDateTime);
-
-            $vObjectRecurrenceRules = new VObjectRecurrenceRulesFormatter();
-
-            $vEvent->add('RRULE', $vObjectRecurrenceRules->format(($event->getRecurrenceRules())));
-            $vEvent->add('UID', uniqid());
-
-            $fromDateTime = new \DateTime();
-            $fromDateTime->setTimestamp($this->getStartTime());
-
-            $toDateTime = new \DateTime();
-            $toDateTime->setTimestamp($this->getEndTime());
-
-            $vCalendar->expand($fromDateTime, $toDateTime);
-            $calculatedEvents = $vCalendar->VEVENT;
-
-            $events = array();
-
-            foreach ($calculatedEvents as $calculatedEvent)
-            {
-                $repeatEvent = clone $event;
-
-                $repeatEvent->setRecurrenceRules(new RecurrenceRules());
-                $repeatEvent->setStartDate($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
-                $repeatEvent->setEndDate($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
-
-                $events[] = $repeatEvent;
-            }
-        }
-        else
-        {
-            if ($this->isVisible($event, $this->getStartTime(), $this->getEndTime()))
-            {
-                $events[] = $event;
-            }
-        }
-
-        return $events;
+    /**
+     *
+     * @param integer $startTime
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
     }
 
     /**
@@ -166,12 +176,22 @@ class RecurrenceCalculator
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @param integer $fromTime
      * @param integer $endTime
+     *
      * @return boolean
      */
     private function isVisible(Event $event, $fromTime, $endTime)
     {
         return ($event->getStartDate() >= $fromTime && $event->getStartDate() <= $endTime) ||
-             ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
-             ($event->getStartDate() < $fromTime && $event->getEndDate() > $endTime);
+            ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
+            ($event->getStartDate() < $fromTime && $event->getEndDate() > $endTime);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
+     */
+    public function setEvent($events)
+    {
+        $this->events = $events;
     }
 }
