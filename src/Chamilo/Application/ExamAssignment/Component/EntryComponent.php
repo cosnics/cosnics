@@ -60,7 +60,8 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
                     self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => $publicationId,
                     self::PARAM_SECURITY_CODE => $details['security_code']
                 ]
-            )
+            ),
+            'RETRY_MODE' => $this->getRequest()->getFromUrl(self::PARAM_RETRY) == 1
         ];
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
