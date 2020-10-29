@@ -22,6 +22,7 @@ use Symfony\Component\Translation\Translator;
  */
 class PublicationForm extends ContentObjectPublicationForm
 {
+    const PROPERTY_USE_CODE = 'use_code';
     /**
      * @var \Symfony\Component\Translation\Translator
      */
@@ -115,10 +116,44 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::context()));
 
-        $this->add_textfield(
-            Publication::PROPERTY_CODE, $this->translator->trans('Code', [], Manager::context()), false,
-            ['type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5]
+        $group = [];
+
+        $group[] = $this->createElement(
+            'radio', self::PROPERTY_USE_CODE, '', $this->translator->trans('NoCode', [], Manager::context()), 0,
+            array('id' => 'no_code')
         );
+
+        $group[] = $this->createElement(
+            'radio', self::PROPERTY_USE_CODE, '', $this->translator->trans('UseCode', [], Manager::context()), 1,
+            array('id' => 'use_code')
+        );
+
+        $group[] = $this->create_textfield(
+            Publication::PROPERTY_CODE, $this->translator->trans('AccessCode', [], Manager::context()),
+            ['type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5,
+                'id' => 'access_code', 'required' => 'required']
+        );
+
+        $this->addGroup($group, null, Translation::get('AccessCode'), '', false);
+
+        $javascript = [];
+        $javascript[] = '<script type="text/javascript">';
+        $javascript[] = '$(document).ready(function() {';
+        $javascript[] = '   $("#use_code").on("click", function() {';
+        $javascript[] = '       $("#access_code").show();';
+        $javascript[] = '       $("#access_code").attr("required", "required");';
+        $javascript[] = '   });';
+        $javascript[] = '   $("#no_code").on("click", function() {';
+        $javascript[] = '       $("#access_code").hide();';
+        $javascript[] = '       $("#access_code").removeAttr("required");';
+        $javascript[] = '   });';
+        $javascript[] = '   if($("#no_code").attr("checked") == "checked") {';
+        $javascript[] = '      $("#access_code").hide();';
+        $javascript[] = '   };';
+        $javascript[] = '});';
+        $javascript[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $javascript));
     }
 
     /**
@@ -186,7 +221,14 @@ class PublicationForm extends ContentObjectPublicationForm
             $publication =
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-            $publication->setCode($exportValues[Publication::PROPERTY_CODE]);
+            if ($exportValues[self::PROPERTY_USE_CODE] == 1)
+            {
+                $publication->setCode($exportValues[Publication::PROPERTY_CODE]);
+            }
+            else
+            {
+                $publication->setCode(null);
+            }
 
             return $publication->update();
         }
@@ -204,6 +246,12 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication =
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-        $this->setDefaults([Publication::PROPERTY_CODE => $publication->getCode()]);
+        $code = $publication->getCode();
+        if (!empty($code))
+        {
+            $defaults = [Publication::PROPERTY_CODE => $publication->getCode(), self::PROPERTY_USE_CODE => 1];
+        }
+
+        $this->setDefaults($defaults);
     }
 }

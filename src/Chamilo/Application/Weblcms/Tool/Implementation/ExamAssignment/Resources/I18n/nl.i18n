@@ -202,4 +202,6 @@ AssignmentEntries = "Inzendingen van opdrachten ({COURSE_CODE})"
 DownloadEntriesSelectedAssignments = "Download inzendingen van geselecteerde opdrachten"
 DownloadEntriesSelectedAssignmentsByEntities = "Download inzendingen (gesorteerd per gebruiker / groep)"
 AssignmentChangesWarning = "De ingezonden opdrachten worden opgeslagen in de repository van de student. Studenten kunnen deze inzendingen niet meer aanpassen. Je kan als lesgever één of meerdere inzendingen downloaden via de opdrachtentool wanneer je dit wenst."
-
+AccessCode = "Toegangscode"
+NoCode = "Geen code gebruiken"
+UseCode = "De volgende code gebruiken:"
