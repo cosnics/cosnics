@@ -40,9 +40,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     private $visibilityContext;
 
     /**
-     * @var bool[]
+     * @var \Chamilo\Application\Calendar\Storage\DataClass\Visibility[]
      */
-    protected $sourceVisibleCache;
+    private $visibilities;
 
     /**
      *
@@ -117,19 +117,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $userIdentifier = $this->getViewingUser()->getId();
         }
 
-        $cacheKey = md5($source . '-' . $userIdentifier);
-
-        if(!array_key_exists($cacheKey, $this->sourceVisibleCache))
-        {
-            $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
-                $source,
-                $userIdentifier
-            );
-
-            $this->sourceVisibleCache[$cacheKey] = !$visibility instanceof Visibility;
-        }
-
-        return $this->sourceVisibleCache[$cacheKey];
+        return !array_key_exists($source, $this->getVisibilities($userIdentifier));
     }
 
     /**
@@ -277,6 +265,25 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         }
 
         return $sources;
+    }
+
+    public function getVisibilities($userIdentifier)
+    {
+        if (!isset($this->visibilities))
+        {
+            $visibilities = $this->getCalendarRendererProviderRepository()->findVisibilitiesByUserIdentifier(
+                $userIdentifier
+            );
+
+            $this->visibilities = array();
+
+            foreach ($visibilities as $visibility)
+            {
+                $this->visibilities[$visibility->getSource()] = $visibility;
+            }
+        }
+
+        return $this->visibilities;
     }
 
     public function getSourceNames($requestedSourceType)
