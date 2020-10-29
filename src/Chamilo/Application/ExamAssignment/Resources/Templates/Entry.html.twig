@@ -7,6 +7,20 @@
             }
         </style>
         <main>
+            {% if ALLOWED_TO_VIEW_ASSIGNMENT and DETAILS.entries %}
+            <div class="feedback-wrap">
+                <div class="container">
+                    <div class="main-content mod-feedback">
+                        {{ DETAILS.assignment.get_automatic_feedback() }}
+                        <ul class="entries">
+                            {% for ENTRY in DETAILS.entries %}
+                                <li>{{ ENTRY.description }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             <div class="container">
                 {% if not ALLOWED_TO_VIEW_ASSIGNMENT %}
                     <div class="main-content">
@@ -19,13 +33,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <div class="main-content mod-current-exam">
-                        {{ DETAILS.assignment.get_automatic_feedback() }}
-                        <ul>
-                            {% for ENTRY in DETAILS.entries %}
-                                <li>{{ ENTRY.title }}</li>
-                            {% endfor %}
-                        </ul>
+                    <div class="main-content {% if DETAILS.entries %}mod-current-exam-extra{% else %}mod-current-exam{% endif %}">
                         <h1 class="current-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
                         {% set description = DETAILS.assignment.get_description() %}
                         <div class="current-exam-info{% if not description %} mod-no-description{% endif %}">
