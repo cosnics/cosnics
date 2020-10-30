@@ -22,7 +22,7 @@ class LogoutComponent extends Manager implements NoAuthenticationSupport
     {
         if(!$this->getUser() instanceof User)
         {
-            $this->redirect([self::PARAM_ACTION => self::ACTION_LOGIN]);
+            $this->redirect(null, false, [self::PARAM_ACTION => self::ACTION_LOGIN]);
             return;
         }
 
