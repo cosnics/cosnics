@@ -29,9 +29,9 @@ class UploadExamComponent extends Manager
                 throw new \RuntimeException('Could not find the uploaded file');
             }
 
-            if (substr($uploadedFile->getClientOriginalName(), 0,1) == 'i') {
+            /*if (substr($uploadedFile->getClientOriginalName(), 0,1) == 'F') {
                 throw new \RuntimeException('File name cannot start with an F.');
-            }
+            }*/
 
             $ipAddress = $this->getIpAddress();
 

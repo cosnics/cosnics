@@ -105,16 +105,11 @@
                                 <div class="current-exam-upload-section">
                                     <h2 class="current-exam-main-title mod-upload">Indienen:</h2>
                                     <div id="file-upload-container" class="current-exam-upload-area">
-                                        <div id="file-upload-input" style="display: none;">
-                                            <div class="form-row row ">
-                                                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
-                                                    {{ 'FileName'|trans({}, appContext) }}
-                                                </div>
-                                                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
-                                                    <div class="element"><input name="file" type="file"></div>
-                                                    <div class="form_feedback"></div>
-                                                </div>
-                                                <div class="clear">&nbsp;</div>
+                                        <!-- This is supposed to be the fallback but it doesn't seem to work -->
+                                        <div id="file-upload-input" class="file-upload-input" style="display: none">
+                                            <div>
+                                                <div class="element"><input name="file" type="file"></div>
+                                                <div class="form_feedback"></div>
                                             </div>
                                         </div>
                                         <div class="element">
@@ -154,8 +149,8 @@
                                     <script type="text/javascript">
                                         $(document).ready(function () {
 
-                                            let uploadUrl = '{{ UPLOAD_URL|raw }}';
-                                            let publicationId = {{ DETAILS.publication.id }};
+                                            const uploadUrl = '{{ UPLOAD_URL|raw }}';
+                                            const publicationId = {{ DETAILS.publication.id }};
 
                                             function initDragDrop() {
                                                 /* Prevent drag & drop outside of drop zone */
@@ -173,139 +168,123 @@
 
                                             dropzoneCallbacks.chamilo = {};
                                             dropzoneCallbacks.chamilo.application = {};
-                                            dropzoneCallbacks.chamilo.application.exam_assignment = {
+                                            dropzoneCallbacks.chamilo.application.exam_assignment = exam_assignment = {
                                                 isSubmitting: false,
-                                                init: function (environment) {
-                                                    environment.dropzone.options.parallelUploads = 1;
 
-                                                    environment.dropzone.on('processing', function () {
+                                                init: function (environment) {
+                                                    const dropzone = environment.dropzone;
+
+                                                    dropzone.options.parallelUploads = 1;
+
+                                                    dropzone.on('processing', function () {
                                                         $('#btn-upload').prop('disabled', true);
-                                                        console.log('processing');
-                                                        environment.dropzone.options.autoProcessQueue = true;
+                                                        console.log('Processing queue...');
+                                                        dropzone.options.autoProcessQueue = true;
                                                     });
 
-                                                    /*environment.dropzone.on('error', function() {
-                                                        console.log('dropzone error');
-                                                        console.log(arguments);
-                                                    });*/
-
-                                                    environment.dropzone.on('queuecomplete', function () {
+                                                    dropzone.on('queuecomplete', function () {
                                                         /**
-                                                         * The queuecomplete is also called when a file is selected but never accepted (e.g. a movie file)
-                                                         * We only want to handle the queue complete when we click the submit button
+                                                         * The queuecomplete is also called when a file is selected but never accepted (e.g. a movie file).
+                                                         * We only want to handle the queue complete when we click the submit button.
                                                          */
-                                                        if(!dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting) {
-                                                            console.log(environment.dropzone.getQueuedFiles());
+                                                        if (!exam_assignment.isSubmitting) {
+                                                            console.log(dropzone.getQueuedFiles());
                                                             return;
                                                         }
 
-                                                        environment.dropzone.options.autoProcessQueue = false;
+                                                        dropzone.options.autoProcessQueue = false;
 
-                                                        if (!dropzoneCallbacks.chamilo.application.exam_assignment.redirectAfterSubmit(environment)) {
-                                                            $.each(environment.dropzone.files, function (_, file) {
-                                                                $(file.previewElement).find('.progress-bar')[0].style.width = '0%';
+                                                        console.log('Trying to redirect...');
+
+                                                        // Either a redirect happens or some error took place that still needs correcting.
+                                                        if (!exam_assignment.redirectAfterSubmit(environment)) {
+                                                            $.each(dropzone.files, function (_, file) {
+                                                                $(file.previewElement).find('.progress-bar').css('width', '0%');
                                                             });
                                                             $('#btn-upload').prop('disabled', false);
-                                                            dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting = false;
-                                                            console.log('still errors, cannot redirect');
+                                                            exam_assignment.isSubmitting = false;
+                                                            console.log('Warning: Cannot redirect, still errors present.');
                                                         }
                                                     });
 
-                                                $('#btn-upload').on('click', function (evt) {
-                                                    evt.preventDefault();
-                                                    $.each(environment.dropzone.files, function(_, file) {
-                                                        if (file.status === Dropzone.ERROR && file.accepted) {
-                                                            file.status = Dropzone.QUEUED;
-                                                            $($(file.previewElement).find('.error.text-danger')[0]).text('');
-                                                            $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                    $('#btn-upload').on('click', function (evt) {
+                                                        evt.preventDefault();
+
+                                                        // Clear any messages on errors (except movie files) and put them back in the queue.
+                                                        $.each(dropzone.files, function (_, file) {
+                                                            if (file.status === Dropzone.ERROR && file.accepted) {
+                                                                file.status = Dropzone.QUEUED;
+                                                                $(file.previewElement).find('.error.text-danger').text('');
+                                                                $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                            }
+                                                        });
+
+                                                        exam_assignment.isSubmitting = true;
+
+                                                        /**
+                                                         * If you remove an error file or if there is still an unaccepted file, the queuecomplete
+                                                         * event is not triggered so we need to redirect manually if the queue is complete. This
+                                                         * is only necessary when the button is clicked again and there are no files being processed anymore.
+                                                         * e.g. two file were chosen, one file was successful and one had an error and has been removed.
+                                                         */
+
+                                                        if (dropzone.getQueuedFiles().length === 0) {
+                                                            exam_assignment.redirectAfterSubmit(environment);
+                                                        } else {
+                                                            dropzone.processQueue();
                                                         }
                                                     });
+                                                },
 
-                                                    dropzoneCallbacks.chamilo.application.exam_assignment.isSubmitting = true;
+                                                acceptFile: function (environment, file, done) {
+                                                    if (file.type.indexOf('video/') !== -1) {
+                                                        done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
+                                                    } else {
+                                                        done();
+                                                    }
+                                                },
+
+                                                processRequest: function (environment, file, xhrObject, formData) {
+                                                    formData.append('publicationId', publicationId);
+                                                },
+
+                                                getServerResponse: function (environment, file) {
+                                                    if (file.status === Dropzone.SUCCESS) {
+                                                        $(file.previewElement).find('.btn.delete').remove();
+                                                        $(file.previewElement).find('.file-name-wrap')
+                                                            .after('<div class="file-uploaded">' + 'Ontvangen' +'</div>');
+                                                    }
+                                                },
+
+                                                redirectAfterSubmit: function (environment) {
+                                                    let canRedirect = true;
 
                                                     /**
-                                                     * If you remove an error file or if there is still an unaccepted file, the queuecomplete
-                                                     * event is not triggered so we need to redirect manually if the queue is complete. This
-                                                     * is only necessary when the button is clicked again and there are no files being processed anymore.
-                                                     * e.g. two file were chosen, one file was successful and one had an error and has been removed.
+                                                     * Files that are never accepted like move files come in the error state but can be ignored for the redirect because
+                                                     * they will never be uploaded and should not intervene with the upload of other files
                                                      */
+                                                    $.each(environment.dropzone.files, function (_, file) {
+                                                        if (file.accepted && file.status === Dropzone.ERROR) {
+                                                            canRedirect = false;
+                                                        }
+                                                    });
 
-                                                    if(environment.dropzone.getQueuedFiles().length === 0) {
-                                                        dropzoneCallbacks.chamilo.application.exam_assignment.redirectAfterSubmit(environment);
-                                                    } else {
-                                                        environment.dropzone.processQueue();
+                                                    if (canRedirect) {
+                                                        window.location.href = '{{ CURRENT_URL|raw }}';
                                                     }
-                                                })
-                                            },
-                                            redirectAfterSubmit: function(environment) {
-                                                let canRedirect = true;
 
-                                                /**
-                                                 * Files that are never accepted like move files come in the error state but can be ignored for the redirect because
-                                                 * they will never be uploaded and should not intervene with the upload of other files
-                                                 */
-                                                $.each(environment.dropzone.files, function(_, file) {
-                                                    if(file.accepted && file.status === Dropzone.ERROR) {
-                                                        canRedirect = false;
-                                                        return false;
-                                                    }
-                                                });
-
-                                                if (canRedirect) {
-                                                    console.log('redirect');
-                                                    window.location.href = '{{ CURRENT_URL|raw }}';
-                                                    return true;
+                                                    return canRedirect;
                                                 }
-
-                                                return false;
-                                            },
-                                            getServerResponse: function (environment, file, serverResponse) {
-                                                console.log({environment, file, serverResponse});
-                                                if (file.status === Dropzone.SUCCESS) {
-                                                    $(file.previewElement).find('.btn.delete').remove();
-                                                    $(file.previewElement).find('.file-name-wrap')
-                                                        .after('<div class="file-uploaded">' + 'Opgeladen' +'</div>');
-                                                } else {
-                                                    console.log('STATUS is' + file.status);
-                                                }
-                                            },
-                                            processRequest: function (environment, file, xhrObject, formData) {
-                                                formData.append('publicationId', publicationId);
-                                            },
-                                            acceptFile: function(environment, file, done) {
-                                                if(file.type.indexOf('video/') !== -1) {
-                                                    done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
-                                                }
-                                                else { done(); }
-                                            }
-                                        };
+                                            };
 
                                             $('#file-upload-container').fileUpload({
                                                 autoProcessQueue: false,
                                                 uploadUrl: uploadUrl,
-                                                successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse',
-                                                sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
                                                 initCallbackFunction: 'chamilo.application.exam_assignment.init',
-                                                acceptCallbackFunction: 'chamilo.application.exam_assignment.acceptFile'
+                                                acceptCallbackFunction: 'chamilo.application.exam_assignment.acceptFile',
+                                                sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
+                                                successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse'
                                             });
-
-                                            // var uploader = Dropzone.forElement('#file-upload');
-                                            // //uploader.options.params = { publicationId: publicationId };
-                                            //
-                                            // uploader.on('processing', function() {
-                                            //     uploader.options.autoProcessQueue = true;
-                                            // });
-                                            //
-                                            // uploader.on('queuecomplete', function() {
-                                            //     uploader.options.autoProcessQueue = false;
-                                            //     console.log('complete');
-                                            // });
-
-                                            // function handleUpload() {
-                                            //     uploader.processQueue();
-                                            // }
-                                            //
-                                            // $('#btn-upload').on('click', handleUpload);
                                         });
                                     </script>
                                 </div>
