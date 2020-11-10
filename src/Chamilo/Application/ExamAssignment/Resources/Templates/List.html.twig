@@ -16,9 +16,9 @@
                             </div>
                             <div class="exam-metadata-time">
                                 <div class="exam-time">
-                                    <span class="sr-only">{{ 'From'|trans({}, appContext) }} </span><strong class="exam-timestamp mod-list">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.start_time|date("H:i") }}</strong>
+                                    <span class="sr-only">{{ 'From'|trans({}, appContext) }} </span><time datetime="{{ EXAM.start_time|date("c") }}" class="exam-timestamp mod-list">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} &ndash; {{ ' ' ~ EXAM.start_time|date("H:i") }}</time>
                                     <i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow-last fa fa-caret-right" aria-hidden="true"></i>
-                                    <span class="sr-only"> {{ 'Until'|trans({}, appContext) }} </span><strong class="exam-timestamp mod-list">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} <i class="datetime-separator fa fa-minus" aria-hidden="true"></i> {{ EXAM.end_time|date("H:i") }}</strong>
+                                    <span class="sr-only"> {{ 'Until'|trans({}, appContext) }} </span><time datetime="{{ EXAM.end_time|date("c") }}" class="exam-timestamp mod-list">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} &ndash; {{ ' ' ~ EXAM.end_time|date("H:i") }}</time>
                                 </div>
                             </div>
                         </div>

@@ -66,6 +66,10 @@
             outline: 5px auto -webkit-focus-ring-color;
             outline-offset: -2px;
         }
+        .btn-action.mod-add-extra {
+            font-size: 13px;
+            padding: 2px 6px;
+        }
         .btn-logout {
             background-color: #337ab7;
             border: 1px solid;
@@ -134,7 +138,7 @@
             color: #666;
         }
         .main-content.mod-entry {
-            max-width: 900px;
+            max-width: 720px;
         }
         .main-content.mod-current-exam {
             color: #333;
@@ -151,6 +155,9 @@
         .alert .container {
             color: inherit;
         }
+        .alert.mod-current-exam {
+            margin-bottom: 0;
+        }
         .main-content.mod-feedback {
             font-size: 1.8rem;
         }
@@ -165,59 +172,34 @@
             align-items: baseline;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
         .current-exam-info.mod-no-description {
             margin-bottom: 60px;
         }
         .current-exam-info-main {
             color: #696969;
-            flex: 2;
             list-style: none;
             margin: 0;
             padding: 5px;
         }
         .current-exam-info-time {
-            align-items: baseline;
-            display: flex;
-            flex: 3;
-            justify-content: space-between;
-        }
-        .current-exam-info-time-start {
-            list-style: none;
-            margin: 0;
-            padding: 5px;
-        }
-        .current-exam-info-time-end {
-            display: flex;
-            justify-content: space-between;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            width: fit-content;
-        }
-        .time-item {
             align-items: flex-start;
             display: flex;
             flex-direction: column;
-            padding-left: 5px;
+            margin-left: 5px;
         }
         .time {
             font-size: 2.4rem;
             line-height: 2.2rem;
         }
         .current-exam-info-description {
-            border-bottom: 1px dotted lightgrey;
             margin-bottom: 10px;
             margin-left: 5px;
             padding: 5px 5px 5px 0;
         }
-        .current-exam-info-description-title {
-            color: #507177;
-            color: #415e62;
-            font-size: 1.4rem;
-            font-weight: 500;
-            margin-top: 10px;
+        .current-exam-info-description p:last-of-type {
+            margin-bottom: 5px;
         }
         .current-exam-main {
             display: flex;
@@ -228,15 +210,19 @@
             font-size: 1.6rem;
             margin: 0;
         }
-        .current-exam-essentials {
-            border-radius: 5px;
-            flex: 2;
-            margin-bottom: 20px;
-            max-width: 50%;
-            padding: 5px;
+        .current-exam-main-title.mod-assignment {
+            padding: 0 5px 10px 0;
         }
-        .current-exam-main-title.mod-files {
-            padding: 0px 5px 5px 0;
+        .current-exam-main-title.mod-files-received {
+            color: #31708f;
+            padding: 0 5px 5px 5px;
+        }
+        .current-exam-main-title.mod-auto-feedback {
+            color: #31708f;
+            padding: 0 5px 5px 0;
+        }
+        .current-exam-main-title.mod-upload {
+            padding: 5px;
         }
         .current-exam-files-download {
             list-style: none;
@@ -245,9 +231,6 @@
         }
         .current-exam-upload-section {
             flex: 3;
-        }
-        .current-exam-main-title.mod-upload {
-            padding: 5px;
         }
         .current-exam-upload-area {
             margin-bottom: 14px;
@@ -316,16 +299,17 @@
             color: #aaa;
             display: block;
             font-size: 10rem;
-            margin-right: 8px;
+            margin-right: 10px;
             width: 10rem;
         }
 
         .panel-body.mod-file-upload {
             align-items: center;
-            color: #777;
+            color: #888;
             display: flex;
-            font-size: 1.7rem;
-            justify-content: space-between;
+            font-size: 2rem;
+            justify-content: center;
+            padding: 10px;
             text-align: left;
         }
 
@@ -410,6 +394,38 @@
             list-style: none;
             margin: 0;
             padding: 0 5px;
+        }
+        .main-feedback-wrap {
+            background: #eaf5e6;
+            border-bottom: 1px solid #d6e9c6;
+        }
+        .main-feedback {
+            align-items: baseline;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0 10px 0;
+        }
+        .main-files-received {
+            color: #696969;
+            flex: 1;
+            margin-right: 10px;
+        }
+        .files-received-list {
+            margin-bottom: 5px;
+            margin-left: 19px;
+            padding:0;
+        }
+        .current-exam-title-add-extra {
+            border-bottom: 1px dotted lightgrey;
+            color: #31708f;
+            display: inline-block;
+            font-size: 2.2rem;
+            font-weight:600;
+            margin: 15px 0 5px 5px;
+            padding: 5px 0;
+        }
+        .u-col {
+            flex: 1;
         }
     </style>
     {% block header %}
