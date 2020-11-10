@@ -177,7 +177,7 @@
                                 </div>
                             </div>
                             <div class="current-exam-upload-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
-                            <button id="btn-upload" class="btn btn-action mod-upload">Laad bestanden op</button>
+                            <button id="btn-upload" class="btn btn-action mod-upload" disabled>Laad bestanden op</button>
                             <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
                             <script type="text/javascript">
                                 $(document).ready(function () {
@@ -211,6 +211,7 @@
 
                                             dropzone.on('processing', function () {
                                                 $('#btn-upload').prop('disabled', true);
+                                                $('#btn-upload').prepend('<i class="upload-spinner fa fa-spinner fa-spin"></i>');
                                                 console.log('Processing queue...');
                                                 dropzone.options.autoProcessQueue = true;
                                             });
@@ -235,6 +236,7 @@
                                                         $(file.previewElement).find('.progress-bar').css('width', '0%');
                                                     });
                                                     $('#btn-upload').prop('disabled', false);
+                                                    $('.upload-spinner').remove();
                                                     exam_assignment.isSubmitting = false;
                                                     console.log('Warning: Cannot redirect, still errors present.');
                                                 }
@@ -274,7 +276,7 @@
                                                 done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
                                             } else {
                                                 done();
-                                                //$('#btn-upload').prop('disabled', false);
+                                                $('#btn-upload').prop('disabled', false);
                                             }
                                         },
 
