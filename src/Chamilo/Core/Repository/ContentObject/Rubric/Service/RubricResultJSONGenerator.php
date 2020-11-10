@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Domain\TreeNodeResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
@@ -43,12 +44,20 @@ class RubricResultJSONGenerator
      *
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
+     * @param User $targetUser
+     *
+     * @return array
      */
-    public function generateRubricResultsJSON(RubricData $rubricData, ContextIdentifier $contextIdentifier)
+    public function generateRubricResultsJSON(
+        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser
+    )
     {
         $jsonResults = [];
 
-        $rubricResults = $this->rubricResultService->getRubricResultsForContext($rubricData, $contextIdentifier);
+        $rubricResults = $this->rubricResultService->getRubricResultsForContext(
+            $rubricData, $contextIdentifier, $targetUser
+        );
+
         foreach ($rubricResults as $rubricResult)
         {
             if (!array_key_exists($rubricResult->getResultId(), $jsonResults))
@@ -65,7 +74,8 @@ class RubricResultJSONGenerator
 
             $jsonResult = $jsonResults[$rubricResult->getResultId()];
 
-            $levelId = $rubricResult->getSelectedChoice() instanceof Choice ? $rubricResult->getSelectedChoice()->getLevel()->getId() : null;
+            $levelId = $rubricResult->getSelectedChoice() instanceof Choice ?
+                $rubricResult->getSelectedChoice()->getLevel()->getId() : null;
 
             $treeNodeResultJsonModel = new TreeNodeResultJSONModel(
                 $rubricResult->getTreeNode()->getId(),

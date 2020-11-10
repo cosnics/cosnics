@@ -184,12 +184,15 @@ class RubricResultService
     /**
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
+     * @param User $targetUser
      *
      * @return RubricResult[]
      */
-    public function getRubricResultsForContext(RubricData $rubricData, ContextIdentifier $contextIdentifier)
+    public function getRubricResultsForContext(
+        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser
+    )
     {
-        return $this->rubricResultRepository->getRubricResultsForContext($rubricData, $contextIdentifier);
+        return $this->rubricResultRepository->getRubricResultsForContext($rubricData, $contextIdentifier, $targetUser);
     }
 
     /**
