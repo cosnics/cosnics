@@ -8,5 +8,8 @@
         <service id="Chamilo\Application\ExamAssignment\Service\ExamUploaderService" autowire="true" />
         <service id="Chamilo\Application\ExamAssignment\Repository\ExamAssignmentRepository" autowire="true" />
 
+        <service id="Chamilo\Application\ExamAssignment\Service\Kernel\RequestValidator" autowire="true" />
+        <service id="Chamilo\Application\ExamAssignment\Service\Kernel\NotAllowedResponseGenerator" autowire="true" />
+
     </services>
 </container>
