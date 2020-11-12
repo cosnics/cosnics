@@ -19,7 +19,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 50px;
+            min-height: 60px;
             padding: 5px 0;
         }
         @media (min-width: 500px) {
@@ -70,19 +70,19 @@
             color: #48738a;
         }
         .exam-timestamp {
-            background-color: #fcfcfc;
             /*color: #406e8e;*/
             color: #507177;
             font-size: 1.35rem;
             font-weight: 500;
         }
         .exam-timestamp.mod-list {
+            background-color: #fcfcfc;
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 2px 5px;
         }
         .exam-timestamp.mod-strong {
-            font-size: 2.3rem;
+            font-size: 2.1rem;
             margin-top: -2px;
             padding: 2px 5px 2px 0;
         }
@@ -94,8 +94,14 @@
         .dmy-separator-strong {
             margin: 0 1px;
         }
-        .u-col {
-            flex: 1;
+        .u-flex-parent {
+            display: flex;
+        }
+        .u-flex-3 {
+            flex: 3;
+        }
+        .u-flex-2 {
+            flex: 2;
         }
     </style>
     {% block header %}

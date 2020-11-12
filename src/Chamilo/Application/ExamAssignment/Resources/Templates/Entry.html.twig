@@ -46,16 +46,19 @@
                 margin: 15px 0 5px 5px;
                 padding: 5px 0;
             }
+            .exam-main-title {
+                border-bottom: 1px dotted #d4dcdd;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+            }
             .heading-exam-title {
                 color: #507177;
                 font-size: 2rem;
                 margin-bottom: 0;
-                margin-left: 5px;
-                padding-bottom: 0;
             }
             .heading-main {
                 color: #47666b;
-                font-size: 1.6rem;
+                font-size: 1.75rem;
                 margin: 0;
             }
             .heading-main.mod-assignment {
@@ -63,20 +66,22 @@
             }
             .heading-main.mod-files-received {
                 color: #31708f;
-                padding: 0 5px 5px 5px;
+                padding: 0 5px 5px 0;
             }
             .heading-main.mod-auto-feedback {
                 color: #31708f;
                 padding: 0 5px 5px 0;
             }
             .heading-main.mod-upload {
-                padding: 5px;
+                padding: 5px 5px 5px 0;
             }
             .alert .container {
                 color: inherit;
             }
             .alert.mod-feedback {
                 margin-bottom: 0;
+                padding-left: 0;
+                padding-right: 0;
             }
             .error-strong {
                 color: #945351;
@@ -89,55 +94,36 @@
                 border-bottom: 1px solid #d6e9c6;
             }
             .main-feedback {
-                align-items: baseline;
-                display: flex;
-                justify-content: space-between;
                 padding: 15px 0 10px 0;
             }
             .main-files-received {
                 color: #696969;
-                flex: 1;
-                margin-right: 10px;
             }
             .files-received-list {
                 margin-bottom: 5px;
-                margin-left: 19px;
-                padding:0;
-            }
-            .exam {
-                max-width: 720px;
+                padding: 0 0 0 15px;
             }
             .exam-main {
                 color: #333;
                 margin-bottom: 50px;
             }
             .exam-main.mod-default {
-                margin-top: 60px;
-            }
-            .exam-info {
-                align-items: baseline;
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 15px;
+                margin-top: 40px;
             }
             .exam-info.mod-no-description {
                 margin-bottom: 60px;
             }
             .exam-info-metadata {
                 color: #696969;
+                line-height: 1.4;
                 list-style: none;
                 margin: 0;
                 padding: 5px;
             }
-            .exam-end-time {
-                align-items: flex-start;
-                display: flex;
-                flex-direction: column;
+            .exam-end-time > * + * {
                 margin-left: 5px;
             }
             .exam-assignment {
-                margin-bottom: 10px;
-                margin-left: 5px;
                 padding: 5px 5px 5px 0;
             }
             .exam-assignment p:last-of-type {
@@ -150,6 +136,7 @@
             }
             .files-upload-area {
                 margin-bottom: 14px;
+                max-width: 530px;
             }
             .upload-area-icon {
                 color: #aaa;
@@ -160,10 +147,11 @@
             }
             .panel-body.mod-file-upload {
                 align-items: center;
-                color: #888;
+                color: #999;
                 display: flex;
-                font-size: 2rem;
+                font-size: 2.3rem;
                 justify-content: center;
+                line-height: normal;
                 padding: 10px;
                 text-align: left;
             }
@@ -236,7 +224,46 @@
             .exam-reminder {
                 margin-bottom: 7px;
                 margin-top: 10px;
-                padding-left: 5px;
+            }
+            @media only screen and (min-width: 750px) {
+                .exam {
+                    max-width: 900px;
+                }
+                .u-flex-parent {
+                    align-items: baseline;
+                    flex-direction: row;
+                }
+                .u-flex-parent > * + * {
+                    margin-left: 20px;
+                }
+                .exam-info {
+                    flex-direction: row-reverse;
+                }
+                .exam-info > * + * {
+                    margin-left: 0;
+                }
+                .exam-info > *:first-child {
+                    margin-left: 20px;
+                }
+                .exam-assignment {
+                    margin-bottom: 20px;
+                }
+            }
+            @media only screen and (max-width: 749px) {
+                .exam {
+                    max-width: 540px;
+                }
+                .u-flex-parent {
+                    flex-direction: column;
+                }
+                .exam-info-metadata, .exam-assignment {
+                    border-bottom: 1px dotted #d4dcdd;
+                    margin-bottom: 10px;
+                    padding: 0 0 10px 0;
+                }
+                .heading-exam-title, .main-files-received {
+                    margin-top: 10px;
+                }
             }
         </style>
         <main>
@@ -272,9 +299,15 @@
                 <div{% if RETRY_MODE %} class="main-feedback-wrap"{% endif %}>
                     <div class="container">
                         <div class="main-content exam">
-                            <div class="main-feedback">
+                            <div class="main-feedback u-flex-parent">
+                                {% if alerting_autofeedback %}
+                                    <section class="u-flex-3">
+                                        <h2 class="heading-main mod-auto-feedback">Bericht van de docent:</h2>
+                                        {{ DETAILS.assignment.get_automatic_feedback_text()|raw }}
+                                    </section>
+                                {% endif %}
                                 {% if alerting_entries %}
-                                    <section class="main-files-received">
+                                    <section class="main-files-received u-flex-2">
                                         <h2 class="heading-main mod-files-received">{% if RETRY_MODE %}Reeds ontvangen bestanden:{% else %}Ontvangen bestanden:{% endif %}</h2>
                                         <ol class="files-received-list">
                                             {% for ENTRY in DETAILS.entries %}
@@ -284,12 +317,6 @@
                                         {% if alerting_add_extra_entries %}
                                             <a class="btn btn-action mod-add-extra u-btn-focus" href="{{ CURRENT_URL }}&retry=1">Voeg extra bestanden toe aan je inzending</a>
                                         {% endif %}
-                                    </section>
-                                {% endif %}
-                                {% if alerting_autofeedback %}
-                                    <section class="u-col">
-                                        <h2 class="heading-main mod-auto-feedback">Bericht van de docent:</h2>
-                                        {{ DETAILS.assignment.get_automatic_feedback_text()|raw }}
                                     </section>
                                 {% endif %}
                             </div>
@@ -322,230 +349,235 @@
             <div class="container">
                 <div class="main-content exam exam-main {% if not RETRY_MODE %} mod-default{% endif %}">
                     {% if DETAILS.can_submit and (not DETAILS.has_finished or RETRY_MODE) %}
-                        {% if RETRY_MODE %}<h1 class="heading-add-extra">Voeg extra bestanden toe aan je inzending.</h1>{% endif %}
-                        <section>
-                            <h1 class="heading-exam-title">{{ DETAILS.assignment.get_title() }}</h1>
-                            {% set description = DETAILS.assignment.get_description() %}
-                            <div class="exam-info{% if not description %} mod-no-description{% endif %}">
-                                <ul class="exam-info-metadata">
-                                    <li>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</li>
-                                    <li>{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</li>
-                                    {% set start_time = DETAILS.assignment.get_start_time %}
-                                    <li><span>Aanvang:</span> <time datetime="{{ start_time|date("c") }}" class="exam-timestamp">{{ start_time|date("d") }}<span
-                                                    class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} &ndash; {{ ' ' ~ start_time|date("H:i") }}</time></li>
-                                </ul>
+                        <!--{% if RETRY_MODE %}<h1 class="heading-add-extra">Voeg extra bestanden toe aan je inzending.</h1>{% endif %}-->
+                        <div>
+                            <div class="exam-main-title u-flex-parent">
+                                <h1 class="heading-exam-title u-flex-3">{{ DETAILS.assignment.get_title() }}</h1>
                                 {% set end_time = DETAILS.assignment.get_end_time %}
-                                <div class="exam-end-time"><span>Tijd tot:</span><time datetime="{{ end_time|date("c") }}" class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
+                                <div class="exam-end-time u-flex-2"><span>Tijd tot:</span><time datetime="{{ end_time|date("c") }}" class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
                                                 class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span
                                                 class="dmy-separator-strong">/</span>{{ end_time|date("Y") }}
                                         &ndash; {{ ' ' ~ end_time|date("H:i") }}</time></div>
                             </div>
-                        </section>
-                        <section class="exam-assignment">
-                            <h2 class="heading-main mod-assignment">Opgave:</h2>
-                            {% if description %}{{ description|raw }}{% endif %}
-                            <ul class="exam-attachments">
-                                {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
-                                    <li><a href="{{ ATTACHMENT_URL }}"><i class="fa fa-download" aria-hidden="true"></i>{{ ' ' ~ ATTACHMENT }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </section>
-                        <section>
-                            <h2 class="heading-main mod-upload">{% if RETRY_MODE %}Voeg extra bestanden toe aan je inzending:{% else%}Indienen:{% endif %}</h2>
-                            <div id="file-upload-container" class="files-upload-area">
-                                <!-- This is supposed to be the fallback but it doesn't seem to work -->
-                                <div id="file-upload-input" class="file-upload-input" style="display: none">
-                                    <div>
-                                        <div class="element"><input name="file" type="file"></div>
-                                        <div class="form_feedback"></div>
-                                    </div>
+                            {% set description = DETAILS.assignment.get_description() %}
+                            <div class="exam-info u-flex-parent{% if not description %} mod-no-description{% endif %}">
+                                <section class="exam-info-metadata u-flex-2">
+                                    <div>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</div>
+                                    <div>{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</div>
+                                    {% set start_time = DETAILS.assignment.get_start_time %}
+                                    <div><span>Aanvang:</span> <time datetime="{{ start_time|date("c") }}" class="exam-timestamp">{{ start_time|date("d") }}<span
+                                                    class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} &ndash; {{ ' ' ~ start_time|date("H:i") }}</time></div>
+                                </section>
+                                <div class="u-flex-3">
+                                    <section class="exam-assignment">
+                                        <h2 class="heading-main mod-assignment">Opgave en bijlagen:</h2>
+                                        {% if description %}{{ description|raw }}{% endif %}
+                                        <ul class="exam-attachments">
+                                            {% for ATTACHMENT, ATTACHMENT_URL in DETAILS.attachments %}
+                                                <li><a href="{{ ATTACHMENT_URL }}"><i class="fa fa-download" aria-hidden="true"></i>{{ ' ' ~ ATTACHMENT }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </section>
+
                                 </div>
-                                <div class="element">
-                                    <div id="file-upload" class="file-upload">
-                                        <div class="file-previews files" id="file-previews">
-                                            <div id="file-template" class="file-info-wrapper">
-                                                <div class="file-info">
-                                                    <span class="file-info-icon glyphicon glyphicon-file"></span>
-                                                    <div class="file-name-wrap">
-                                                        <span class="file-name" data-dz-name></span>
-                                                        <strong class="error text-danger" data-dz-errormessage></strong>
+                            </div>
+                            <section>
+                                <h2 class="heading-main mod-upload">{% if RETRY_MODE %}Voeg extra bestanden toe aan je inzending:{% else%}Indienen:{% endif %}</h2>
+                                <div id="file-upload-container" class="files-upload-area">
+                                    <!-- This is supposed to be the fallback but it doesn't seem to work -->
+                                    <div id="file-upload-input" class="file-upload-input" style="display: none">
+                                        <div>
+                                            <div class="element"><input name="file" type="file"></div>
+                                            <div class="form_feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="element">
+                                        <div id="file-upload" class="file-upload">
+                                            <div class="file-previews files" id="file-previews">
+                                                <div id="file-template" class="file-info-wrapper">
+                                                    <div class="file-info">
+                                                        <span class="file-info-icon glyphicon glyphicon-file"></span>
+                                                        <div class="file-name-wrap">
+                                                            <span class="file-name" data-dz-name></span>
+                                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                                        </div>
+                                                        <button data-dz-remove class="btn btn-sm btn-default mod-delete">
+                                                            <i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
+                                                        </button>
                                                     </div>
-                                                    <button data-dz-remove class="btn btn-sm btn-default mod-delete">
-                                                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <span>{{ 'Delete'|trans({}, appContext) }}</span>
-                                                    </button>
-                                                </div>
-                                                <div>
-                                                    <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                                                         aria-valuenow="0">
-                                                        <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                                    <div>
+                                                        <div class="progress mod-file progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                                                             aria-valuenow="0">
+                                                            <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="panel-body mod-file-upload dz-clickable">
-                                            <i class="upload-area-icon fa fa-upload" aria-hidden="true"></i>
-                                            {{ 'DropFileHereMessage'|trans({}, appContext) }}
+                                            <div class="panel-body mod-file-upload dz-clickable">
+                                                <i class="upload-area-icon fa fa-upload" aria-hidden="true"></i>
+                                                {{ 'DropFileHereMessage'|trans({}, appContext) }}
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="form_feedback">
+                                    </div>
                                 </div>
-                                <div class="form_feedback">
-                                </div>
-                            </div>
-                            <div class="exam-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
-                            <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>Laad bestanden op</button>
-                            <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
-                            <script type="text/javascript">
-                                $(document).ready(function () {
+                                <div class="exam-reminder">Let op! Kijk goed na of je niets vergeten bent.</div>
+                                <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>Laad bestanden op</button>
+                                <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
 
-                                    const uploadUrl = '{{ UPLOAD_URL|raw }}';
-                                    const publicationId = {{ DETAILS.publication.id }};
+                                        const uploadUrl = '{{ UPLOAD_URL|raw }}';
+                                        const publicationId = {{ DETAILS.publication.id }};
 
-                                    function initDragDrop() {
-                                        /* Prevent drag & drop outside of drop zone */
-                                        window.addEventListener('dragover', function (e) {
-                                            e = e || event;
-                                            e.preventDefault();
-                                        }, false);
-                                        window.addEventListener('drop', function (e) {
-                                            e = e || event;
-                                            e.preventDefault();
-                                        }, false);
-                                    }
+                                        function initDragDrop() {
+                                            /* Prevent drag & drop outside of drop zone */
+                                            window.addEventListener('dragover', function (e) {
+                                                e = e || event;
+                                                e.preventDefault();
+                                            }, false);
+                                            window.addEventListener('drop', function (e) {
+                                                e = e || event;
+                                                e.preventDefault();
+                                            }, false);
+                                        }
 
-                                    initDragDrop();
+                                        initDragDrop();
 
-                                    dropzoneCallbacks.chamilo = {};
-                                    dropzoneCallbacks.chamilo.application = {};
-                                    dropzoneCallbacks.chamilo.application.exam_assignment = exam_assignment = {
-                                        isSubmitting: false,
+                                        dropzoneCallbacks.chamilo = {};
+                                        dropzoneCallbacks.chamilo.application = {};
+                                        dropzoneCallbacks.chamilo.application.exam_assignment = exam_assignment = {
+                                            isSubmitting: false,
 
-                                        init: function (environment) {
-                                            const dropzone = environment.dropzone;
+                                            init: function (environment) {
+                                                const dropzone = environment.dropzone;
 
-                                            dropzone.options.parallelUploads = 1;
+                                                dropzone.options.parallelUploads = 1;
 
-                                            dropzone.on('processing', function () {
-                                                $('#btn-upload').prop('disabled', true);
-                                                $('#btn-upload').prepend('<i class="upload-spinner fa fa-spinner fa-spin"></i>');
-                                                console.log('Processing queue...');
-                                                dropzone.options.autoProcessQueue = true;
-                                            });
+                                                dropzone.on('processing', function () {
+                                                    $('#btn-upload').prop('disabled', true);
+                                                    $('#btn-upload').prepend('<i class="upload-spinner fa fa-spinner fa-spin"></i>');
+                                                    console.log('Processing queue...');
+                                                    dropzone.options.autoProcessQueue = true;
+                                                });
 
-                                            dropzone.on('queuecomplete', function () {
-                                                /**
-                                                 * The queuecomplete is also called when a file is selected but never accepted (e.g. a movie file).
-                                                 * We only want to handle the queue complete when we click the submit button.
-                                                 */
-                                                if (!exam_assignment.isSubmitting) {
-                                                    console.log(dropzone.getQueuedFiles());
-                                                    return;
-                                                }
+                                                dropzone.on('queuecomplete', function () {
+                                                    /**
+                                                     * The queuecomplete is also called when a file is selected but never accepted (e.g. a movie file).
+                                                     * We only want to handle the queue complete when we click the submit button.
+                                                     */
+                                                    if (!exam_assignment.isSubmitting) {
+                                                        console.log(dropzone.getQueuedFiles());
+                                                        return;
+                                                    }
 
-                                                dropzone.options.autoProcessQueue = false;
+                                                    dropzone.options.autoProcessQueue = false;
 
-                                                console.log('Trying to redirect...');
+                                                    console.log('Trying to redirect...');
 
-                                                // Either a redirect happens or some error took place that still needs correcting.
-                                                if (!exam_assignment.redirectAfterSubmit(environment)) {
-                                                    $.each(dropzone.files, function (_, file) {
-                                                        $(file.previewElement).find('.progress-bar').css('width', '0%');
-                                                    });
-                                                    $('#btn-upload').prop('disabled', false);
-                                                    $('.upload-spinner').remove();
-                                                    exam_assignment.isSubmitting = false;
-                                                    console.log('Warning: Cannot redirect, still errors present.');
-                                                }
-                                            });
-
-                                            $('#btn-upload').on('click', function (evt) {
-                                                evt.preventDefault();
-
-                                                // Clear any messages on errors (except movie files) and put them back in the queue.
-                                                $.each(dropzone.files, function (_, file) {
-                                                    if (file.status === Dropzone.ERROR && file.accepted) {
-                                                        file.status = Dropzone.QUEUED;
-                                                        $(file.previewElement).find('.error.text-danger').text('');
-                                                        $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                    // Either a redirect happens or some error took place that still needs correcting.
+                                                    if (!exam_assignment.redirectAfterSubmit(environment)) {
+                                                        $.each(dropzone.files, function (_, file) {
+                                                            $(file.previewElement).find('.progress-bar').css('width', '0%');
+                                                        });
+                                                        $('#btn-upload').prop('disabled', false);
+                                                        $('.upload-spinner').remove();
+                                                        exam_assignment.isSubmitting = false;
+                                                        console.log('Warning: Cannot redirect, still errors present.');
                                                     }
                                                 });
 
-                                                exam_assignment.isSubmitting = true;
+                                                $('#btn-upload').on('click', function (evt) {
+                                                    evt.preventDefault();
+
+                                                    // Clear any messages on errors (except movie files) and put them back in the queue.
+                                                    $.each(dropzone.files, function (_, file) {
+                                                        if (file.status === Dropzone.ERROR && file.accepted) {
+                                                            file.status = Dropzone.QUEUED;
+                                                            $(file.previewElement).find('.error.text-danger').text('');
+                                                            $(file.previewElement).removeClass('dz-processing').removeClass('dz-error').removeClass('dz-complete');
+                                                        }
+                                                    });
+
+                                                    exam_assignment.isSubmitting = true;
+
+                                                    /**
+                                                     * If you remove an error file or if there is still an unaccepted file, the queuecomplete
+                                                     * event is not triggered so we need to redirect manually if the queue is complete. This
+                                                     * is only necessary when the button is clicked again and there are no files being processed anymore.
+                                                     * e.g. two file were chosen, one file was successful and one had an error and has been removed.
+                                                     */
+
+                                                    if (dropzone.getQueuedFiles().length === 0) {
+                                                        exam_assignment.redirectAfterSubmit(environment);
+                                                    } else {
+                                                        dropzone.processQueue();
+                                                    }
+                                                });
+                                            },
+
+                                            acceptFile: function (environment, file, done) {
+                                                if (file.type.indexOf('video/') !== -1) {
+                                                    done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
+                                                } else {
+                                                    done();
+                                                    $('#btn-upload').prop('disabled', false);
+                                                }
+                                            },
+
+                                            removeFile: function (environment) {
+                                                /*if (environment.dropzone.getQueuedFiles().length === 0) {
+                                                    $('#btn-upload').prop('disabled', true);
+                                                }*/
+                                            },
+
+                                            processRequest: function (environment, file, xhrObject, formData) {
+                                                formData.append('publicationId', publicationId);
+                                            },
+
+                                            getServerResponse: function (environment, file) {
+                                                if (file.status === Dropzone.SUCCESS) {
+                                                    $(file.previewElement).find('.btn.mod-delete').remove();
+                                                    $(file.previewElement).find('.file-name-wrap')
+                                                        .after('<div class="file-uploaded">' + 'Ontvangen' +'</div>');
+                                                }
+                                            },
+
+                                            redirectAfterSubmit: function (environment) {
+                                                let canRedirect = true;
 
                                                 /**
-                                                 * If you remove an error file or if there is still an unaccepted file, the queuecomplete
-                                                 * event is not triggered so we need to redirect manually if the queue is complete. This
-                                                 * is only necessary when the button is clicked again and there are no files being processed anymore.
-                                                 * e.g. two file were chosen, one file was successful and one had an error and has been removed.
+                                                 * Files that are never accepted like move files come in the error state but can be ignored for the redirect because
+                                                 * they will never be uploaded and should not intervene with the upload of other files
                                                  */
+                                                $.each(environment.dropzone.files, function (_, file) {
+                                                    if (file.accepted && file.status === Dropzone.ERROR) {
+                                                        canRedirect = false;
+                                                    }
+                                                });
 
-                                                if (dropzone.getQueuedFiles().length === 0) {
-                                                    exam_assignment.redirectAfterSubmit(environment);
-                                                } else {
-                                                    dropzone.processQueue();
+                                                if (canRedirect) {
+                                                    window.location.href = '{{ CURRENT_URL|raw }}';
                                                 }
-                                            });
-                                        },
 
-                                        acceptFile: function (environment, file, done) {
-                                            if (file.type.indexOf('video/') !== -1) {
-                                                done('Video bestanden zijn niet toegelaten. Dit bestand zal niet mee worden opgeladen bij het indienen van de opdracht.');
-                                            } else {
-                                                done();
-                                                $('#btn-upload').prop('disabled', false);
+                                                return canRedirect;
                                             }
-                                        },
+                                        };
 
-                                        removeFile: function (environment) {
-                                            /*if (environment.dropzone.getQueuedFiles().length === 0) {
-                                                $('#btn-upload').prop('disabled', true);
-                                            }*/
-                                        },
-
-                                        processRequest: function (environment, file, xhrObject, formData) {
-                                            formData.append('publicationId', publicationId);
-                                        },
-
-                                        getServerResponse: function (environment, file) {
-                                            if (file.status === Dropzone.SUCCESS) {
-                                                $(file.previewElement).find('.btn.delete').remove();
-                                                $(file.previewElement).find('.file-name-wrap')
-                                                    .after('<div class="file-uploaded">' + 'Ontvangen' +'</div>');
-                                            }
-                                        },
-
-                                        redirectAfterSubmit: function (environment) {
-                                            let canRedirect = true;
-
-                                            /**
-                                             * Files that are never accepted like move files come in the error state but can be ignored for the redirect because
-                                             * they will never be uploaded and should not intervene with the upload of other files
-                                             */
-                                            $.each(environment.dropzone.files, function (_, file) {
-                                                if (file.accepted && file.status === Dropzone.ERROR) {
-                                                    canRedirect = false;
-                                                }
-                                            });
-
-                                            if (canRedirect) {
-                                                window.location.href = '{{ CURRENT_URL|raw }}';
-                                            }
-
-                                            return canRedirect;
-                                        }
-                                    };
-
-                                    $('#file-upload-container').fileUpload({
-                                        autoProcessQueue: false,
-                                        uploadUrl: uploadUrl,
-                                        initCallbackFunction: 'chamilo.application.exam_assignment.init',
-                                        acceptCallbackFunction: 'chamilo.application.exam_assignment.acceptFile',
-                                        removedfileCallbackFunction: 'chamilo.application.exam_assignment.removeFile',
-                                        sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
-                                        successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse'
+                                        $('#file-upload-container').fileUpload({
+                                            autoProcessQueue: false,
+                                            uploadUrl: uploadUrl,
+                                            initCallbackFunction: 'chamilo.application.exam_assignment.init',
+                                            acceptCallbackFunction: 'chamilo.application.exam_assignment.acceptFile',
+                                            removedfileCallbackFunction: 'chamilo.application.exam_assignment.removeFile',
+                                            sendingCallbackFunction: 'chamilo.application.exam_assignment.processRequest',
+                                            successCallbackFunction: 'chamilo.application.exam_assignment.getServerResponse'
+                                        });
                                     });
-                                });
-                            </script>
-                        </section>
+                                </script>
+                            </section>
+                        </div>
                     {% endif %}
                 </div>
             </div>
