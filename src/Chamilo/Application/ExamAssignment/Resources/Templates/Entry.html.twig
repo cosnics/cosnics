@@ -37,15 +37,6 @@
             .file-info-wrapper.dz-error .btn-default.mod-delete {
                 align-self: center;
             }
-            .heading-add-extra {
-                border-bottom: 1px dotted lightgrey;
-                color: #31708f;
-                display: inline-block;
-                font-size: 2.2rem;
-                font-weight: 600;
-                margin: 15px 0 5px 5px;
-                padding: 5px 0;
-            }
             .exam-main-title {
                 border-bottom: 1px dotted #d4dcdd;
                 margin-bottom: 10px;
@@ -350,10 +341,12 @@
                     <div class="exam-main-title u-flex-parent">
                         <h1 class="heading-exam-title u-flex-3">{{ DETAILS.assignment.get_title() }}</h1>
                         {% set end_time = DETAILS.assignment.get_end_time %}
-                        <div class="exam-end-time u-flex-2"><span>{{ 'TimeUntil'|trans({}, appContext) }}:</span><time datetime="{{ end_time|date("c") }}" class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
-                                        class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span
-                                        class="dmy-separator-strong">/</span>{{ end_time|date("Y") }}
-                                &ndash; {{ ' ' ~ end_time|date("H:i") }}</time></div>
+                        <div class="exam-end-time u-flex-2">
+                            <span>{{ 'TimeUntil'|trans({}, appContext) }}:</span><time datetime="{{ end_time|date("c") }}"
+                                class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
+                                class="dmy-separator-strong">/</span>{{ end_time|date("m") }}<span
+                                class="dmy-separator-strong">/</span>{{ end_time|date("Y") ~ ' ' }}&ndash;{{ ' ' ~ end_time|date("H:i") }}</time>
+                        </div>
                     </div>
                     {% set description = DETAILS.assignment.get_description() %}
                     <div class="exam-info u-flex-parent{% if not description %} mod-no-description{% endif %}">
@@ -361,8 +354,11 @@
                             <div>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</div>
                             <div>{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</div>
                             {% set start_time = DETAILS.assignment.get_start_time %}
-                            <div><span>{{ 'StartingTime'|trans({}, appContext) }}:</span> <time datetime="{{ start_time|date("c") }}" class="exam-timestamp">{{ start_time|date("d") }}<span
-                                            class="dmy-separator">/</span>{{ start_time|date("m") }}<span class="dmy-separator">/</span>{{ start_time|date("Y") }} &ndash; {{ ' ' ~ start_time|date("H:i") }}</time></div>
+                            <div>
+                                <span>{{ 'StartingTime'|trans({}, appContext) }}:</span>
+                                <time datetime="{{ start_time|date("c") }}" class="exam-timestamp">{{ start_time|date("d") }}<span
+                                    class="dmy-separator">/</span>{{ start_time|date("m") }}<span
+                                    class="dmy-separator">/</span>{{ start_time|date("Y") ~ ' ' }}&ndash;{{ ' ' ~ start_time|date("H:i") }}</time></div>
                         </section>
                         <section class="exam-assignment u-flex-3">
                             <h2 class="heading-main mod-assignment">{{ 'AssignmentAttachments'|trans({}, appContext) }}:</h2>
@@ -520,9 +516,7 @@
                                     },
 
                                     removeFile: function (environment) {
-                                        /*if (environment.dropzone.getQueuedFiles().length === 0) {
-                                            $('#btn-upload').prop('disabled', true);
-                                        }*/
+
                                     },
 
                                     processRequest: function (environment, file, xhrObject, formData) {
