@@ -191,6 +191,9 @@ class AuthenticationValidator
      */
     public function logout(User $user, string $redirectToUrlAfterLogout = null)
     {
+        $this->trackLogout($user);
+        $this->sessionUtilities->clear();
+
         foreach($this->authentications as $authentication)
         {
             if($authentication->getAuthenticationType() == $user->getAuthenticationSource())
@@ -199,8 +202,6 @@ class AuthenticationValidator
             }
         }
 
-        $this->trackLogout($user);
-        $this->sessionUtilities->clear();
         $this->redirectAfterLogout($redirectToUrlAfterLogout);
 
         exit();

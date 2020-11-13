@@ -2,6 +2,7 @@
 namespace Chamilo\Application\ExamAssignment\DependencyInjection;
 
 use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\ExamAssignmentEventListenerCompilerPass;
+use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\RequestValidatorCompilerPass;
 use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\UserConverterCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
 {
 
     /**
@@ -55,5 +56,13 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function getAlias()
     {
         return 'chamilo.application.exam_assignments';
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new RequestValidatorCompilerPass());
     }
 }

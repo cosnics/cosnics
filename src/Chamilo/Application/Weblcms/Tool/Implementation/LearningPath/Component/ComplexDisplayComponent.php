@@ -200,6 +200,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismResultServiceBridge $entryPlagiarismResultServiceBridge */
         $entryPlagiarismResultServiceBridge = $this->getService(EntryPlagiarismResultServiceBridge::class);
+        $entryPlagiarismResultServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
     }
 

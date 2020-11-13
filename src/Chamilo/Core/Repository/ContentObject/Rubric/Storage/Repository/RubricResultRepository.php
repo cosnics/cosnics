@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResult;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 
@@ -43,15 +44,18 @@ class RubricResultRepository extends CommonEntityRepository
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
      * @param \Chamilo\Libraries\Architecture\ContextIdentifier $contextIdentifier
+     * @param User $targetUser
      *
      * @return RubricResult[]
      */
-    public function getRubricResultsForContext(RubricData $rubricData, ContextIdentifier $contextIdentifier)
+    public function getRubricResultsForContext(
+        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser
+    )
     {
         return $this->findBy(
             [
                 'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
-                'contextId' => $contextIdentifier->getContextId()
+                'contextId' => $contextIdentifier->getContextId(), 'targetUserId' => $targetUser->getId()
             ],
             ['time' => 'ASC', 'resultId' => 'ASC']
         );
