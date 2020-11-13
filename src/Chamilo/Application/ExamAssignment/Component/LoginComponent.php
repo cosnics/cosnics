@@ -49,7 +49,7 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
             Manager::context() . ':Login.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-                'HEADER_ENTITY' => 'exam.hogent.be',
+                'HEADER_ENTITY' => $this->getBrandTitle(),
                 'LOGIN_FORM' => $this->getLoginFormRenderer()->renderLoginForm(),
                 'ERROR' => $error
             ]

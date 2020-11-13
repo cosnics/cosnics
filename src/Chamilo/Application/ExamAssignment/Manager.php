@@ -76,4 +76,12 @@ abstract class Manager extends Application
     {
         return $this->getService(ExamAssignmentService::class);
     }
+
+    /**
+     * @return string|string[]|null
+     */
+    protected function getBrandTitle()
+    {
+        return $this->getConfigurationConsulter()->getSetting([Manager::context(), 'brand_title']);
+    }
 }

@@ -45,7 +45,7 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'HEADER_ENTITY' => 'exam.hogent.be',
+            'HEADER_ENTITY' => $this->getBrandTitle(),
             'ALLOWED_TO_VIEW_ASSIGNMENT' => $assignmentViewStatus->isAllowed(),
             'ASSIGNMENT_VIEW_STATUS' => $assignmentViewStatus->getStatus(),
             'USER' => $this->getUser(), 'DETAILS' => $details,

@@ -34,7 +34,7 @@ class ListComponent extends Manager implements NoAuthenticationSupport
             Manager::context() . ':List.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'USER' => $this->getUser(),
-                'HEADER_ENTITY' => 'exam.hogent.be',
+                'HEADER_ENTITY' => $this->getBrandTitle(),
                 'EXAMS' => $exams,
                 'ENTRY_URL' => $this->get_url(
                     [

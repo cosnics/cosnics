@@ -27,3 +27,4 @@ StatusMessageWrongCode = "Je hebt een <strong class=\"error-strong\">foutieve co
 StatusMessageNoRights = "Je beschikt niet over de juiste rechten om deze opdracht te bekijken. Gelieve contact op te nemen met de titularis van deze opdracht."
 StatusMessageAssignmentNotInProgress = "De opdracht is momenteel niet actief.<br>De opdracht is actief vanaf <strong class=\"error-strong\">{ASSIGNMENT_FROM}</strong> en loopt tot <strong class=\"error-strong\">{ASSIGNMENT_UNTIL}</strong>."
 StatusMessageCorruptData = "Er is een onbekende fout opgetreden. Probeer het later opnieuw. Indien deze fout zich blijft voordoen neem je contact op met de beheerder van het platform."
+BrandTitle = "Titel voor header"
