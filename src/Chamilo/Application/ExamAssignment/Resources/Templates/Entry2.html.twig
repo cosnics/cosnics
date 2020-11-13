@@ -38,33 +38,32 @@
                 align-self: center;
             }
             .exam-main-title {
-                border-bottom: 1px dotted #d4dcdd;
-                margin-bottom: 10px;
-                padding-bottom: 10px;
+                margin-bottom: 5px;
+                margin-top: 20px;
             }
             .heading-exam-title {
                 color: #507177;
                 font-size: 2rem;
                 margin-bottom: 0;
             }
+            .heading-feedback {
+                color: #31708f;
+                font-size: 1.55rem;
+                margin: 0;
+                padding: 0 5px 5px 0;
+            }
             .heading-main {
                 color: #47666b;
-                font-size: 1.75rem;
+                font-size: 2.2rem;
+                font-variant: all-small-caps;
+                font-weight: 500;
                 margin: 0;
             }
             .heading-main.mod-assignment {
-                padding: 0 5px 10px 0;
-            }
-            .heading-main.mod-files-received {
-                color: #31708f;
-                padding: 0 5px 5px 0;
-            }
-            .heading-main.mod-auto-feedback {
-                color: #31708f;
                 padding: 0 5px 5px 0;
             }
             .heading-main.mod-upload {
-                padding: 5px 5px 5px 0;
+                padding: 5px 5px 0 0;
             }
             .alert .container {
                 color: inherit;
@@ -108,8 +107,15 @@
                 color: #696969;
                 line-height: 1.4;
                 list-style: none;
-                margin: 0;
-                padding: 5px;
+                margin: 0 0 40px 0;
+            }
+            .exam-course {
+                border-right: 1px solid #91a5a9;
+                margin-right: 2px;
+                padding-right: 7px;
+            }
+            .exam-titular {
+                font-weight: 500;
             }
             .exam-end-time > * + * {
                 margin-left: 5px;
@@ -219,7 +225,7 @@
             }
             @media only screen and (min-width: 750px) {
                 .exam {
-                    max-width: 900px;
+                    max-width: 680px;
                 }
                 .u-flex-parent {
                     align-items: baseline;
@@ -234,11 +240,8 @@
                 .exam-info > * + * {
                     margin-left: 0;
                 }
-                .exam-info > *:first-child {
-                    margin-left: 20px;
-                }
                 .exam-assignment {
-                    margin-bottom: 20px;
+                    margin-bottom: 30px;
                 }
             }
             @media only screen and (max-width: 749px) {
@@ -249,8 +252,7 @@
                     flex-direction: column;
                 }
                 .exam-info-metadata, .exam-assignment {
-                    border-bottom: 1px dotted #d4dcdd;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                     padding: 0 0 10px 0;
                 }
                 .heading-exam-title, .main-files-received {
@@ -294,13 +296,13 @@
                             <div class="main-feedback u-flex-parent">
                                 {% if alerting_autofeedback %}
                                     <section class="u-flex-3">
-                                        <h2 class="heading-main mod-auto-feedback">{{ 'MessageFromTeacher'|trans({}, appContext) }}:</h2>
+                                        <h2 class="heading-feedback">{{ 'MessageFromTeacher'|trans({}, appContext) }}:</h2>
                                         {{ DETAILS.assignment.get_automatic_feedback_text()|raw }}
                                     </section>
                                 {% endif %}
                                 {% if alerting_entries %}
                                     <section class="main-files-received u-flex-2">
-                                        <h2 class="heading-main mod-files-received">{% if RETRY_MODE %}{{ 'AlreadyReceivedFiles'|trans({}, appContext) }}:{% else %}{{ 'ReceivedFiles'|trans({}, appContext) }}:{% endif %}</h2>
+                                        <h2 class="heading-feedback">{% if RETRY_MODE %}{{ 'AlreadyReceivedFiles'|trans({}, appContext) }}:{% else %}{{ 'ReceivedFiles'|trans({}, appContext) }}:{% endif %}</h2>
                                         <ol class="files-received-list">
                                             {% for ENTRY in DETAILS.entries %}
                                                 <li>{{ ENTRY.description }}</li>
@@ -350,10 +352,10 @@
                         </div>
                     </div>
                     {% set description = DETAILS.assignment.get_description() %}
-                    <div class="exam-info u-flex-parent{% if not description %} mod-no-description{% endif %}">
-                        <section class="exam-info-metadata u-flex-2">
-                            <div>{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</div>
-                            <div>{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</div>
+                    <div class="exam-info{% if not description %} mod-no-description{% endif %}">
+                        <section class="exam-info-metadata">
+                            <span class="exam-course">{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</span>
+                            <span class="exam-titular">{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</span>
                             {% set start_time = DETAILS.assignment.get_start_time %}
                             <div>
                                 <span>{{ 'StartingTime'|trans({}, appContext) }}:</span>
@@ -361,7 +363,7 @@
                                     class="dmy-separator">/</span>{{ start_time|date("m") }}<span
                                     class="dmy-separator">/</span>{{ start_time|date("Y") ~ ' ' }}&ndash;{{ ' ' ~ start_time|date("H:i") }}</time></div>
                         </section>
-                        <section class="exam-assignment u-flex-3">
+                        <section class="exam-assignment">
                             <h2 class="heading-main mod-assignment">{{ 'AssignmentAttachments'|trans({}, appContext) }}:</h2>
                             {% if description %}{{ description|raw }}{% endif %}
                             <ul class="exam-attachments">

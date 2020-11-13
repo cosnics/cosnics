@@ -70,7 +70,7 @@ class EntryComponent extends Manager implements NoAuthenticationSupport
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-        return $this->getTwig()->render(Manager::context() . ':Entry.html.twig', $parameters);
+        return $this->getTwig()->render(Manager::context() . ':Entry2.html.twig', $parameters);
     }
 
 }
