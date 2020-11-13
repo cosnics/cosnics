@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\ExamAssignment">
+    <settings>
+        <category name="name">
+            <setting name="name" field="text" default="" />
+        </category>
+    </settings>
+</package>
