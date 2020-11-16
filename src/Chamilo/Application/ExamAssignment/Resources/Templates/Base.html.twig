@@ -30,6 +30,10 @@
         .header-title {
             font-size: 2rem;
         }
+        .header-title a {
+            color: inherit;
+            text-decoration: none;
+        }
         .user {
             align-items: baseline;
             display: flex;
@@ -107,7 +111,7 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="header-title">{{ HEADER_ENTITY }}</div>
+                <div class="header-title"><a href="{{ LIST_URL }}">{{ HEADER_ENTITY }}</a></div>
                 {% if USER %}<div class="user">{{ USER.get_fullname() }} <a class="btn btn-logout u-btn-focus" href="{{ LOGOUT_URL }}">{{ 'LogOut'|trans({}, appContext) }}</a></div>{% endif %}
             </div>
         </div>

@@ -13,6 +13,10 @@
                 margin-top: 80px;
                 max-width: 720px;
             }
+            .no-exams {
+                color: #707070;
+                font-size: 2.4rem;
+            }
             .exam-list {
                 list-style: none;
                 margin: 0;
@@ -77,6 +81,9 @@
         <div class="container">
             <div class="main-content exams-overview">
                 <h1 class="sr-only">{{ 'Exams'|trans({}, appContext) }}</h1>
+                {% if EXAMS is empty %}
+                <h2 class="no-exams">{{ 'NoExamsCurrentlyAvailable'|trans({}, appContext) }} </h2>
+                {% else %}
                 <ul class="exam-list">
                     {% for EXAM in EXAMS %}
                     <li class="exam-list-item">
@@ -103,6 +110,7 @@
                     </li>
                     {% endfor %}
                 </ul>
+                {% endif %}
             </div>
         </div>
     </main>
