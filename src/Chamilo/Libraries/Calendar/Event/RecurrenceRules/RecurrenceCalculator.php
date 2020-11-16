@@ -77,8 +77,6 @@ class RecurrenceCalculator
 
         foreach ($recurringEvents as $key => $event)
         {
-            $recurrenceRules = $event->getRecurrenceRules();
-
             $startDateTime = new DateTime();
             $startDateTime->setTimestamp($event->getStartDate());
 
