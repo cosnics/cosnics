@@ -72,7 +72,13 @@ class RequestValidator
      */
     protected function isActionAllowed(string $context, string $action = null)
     {
-        if($context == strtolower(Manager::context()))
+        $allowedContexts = [
+            strtolower('Chamilo\\Libraries\\Ajax'),
+            strtolower(Manager::context()),
+            strtolower(\Chamilo\Application\ExamAssignment\Ajax\Manager::context())
+        ];
+
+        if(in_array($context, $allowedContexts))
         {
             return true;
         }
