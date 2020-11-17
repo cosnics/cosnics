@@ -35,7 +35,7 @@ class ReportRenderer
     protected $userService;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twigRenderer;
 
@@ -44,10 +44,10 @@ class ReportRenderer
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager $requestManager
      * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Twig_Environment $twigRenderer
+     * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
-        RequestManager $requestManager, UserService $userService, \Twig_Environment $twigRenderer
+        RequestManager $requestManager, UserService $userService, \Twig\Environment $twigRenderer
     )
     {
         $this->requestManager = $requestManager;

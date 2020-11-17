@@ -51,7 +51,7 @@ class PlagiarismExtension implements ExtensionInterface
     protected $bridgeManager;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -66,14 +66,14 @@ class PlagiarismExtension implements ExtensionInterface
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      * @param \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
         \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker,
         EulaService $eulaService,
-        \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig_Environment $twig,
+        \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig\Environment $twig,
         ExceptionLoggerInterface $exceptionLogger,
         UserService $userService
     )

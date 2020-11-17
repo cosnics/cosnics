@@ -49,12 +49,12 @@ class SymfonyFormFactoryBuilder
     /**
      * Builds the FormFactory
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      *
      * @return \Symfony\Component\Form\FormFactoryInterface
      */
-    public function buildFormFactory(\Twig_Environment $twig, ValidatorInterface $validator)
+    public function buildFormFactory(\Twig\Environment $twig, ValidatorInterface $validator)
     {
         $chamiloFormTemplatesPath = __DIR__ . '/../../Resources/Templates/Form';
 
@@ -72,11 +72,11 @@ class SymfonyFormFactoryBuilder
     /**
      * Adds the twig loaders that are necessary for the form templates
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param string $chamiloFormTemplatesPath
      * @throws \InvalidArgumentException
      */
-    protected function createTwigLoader(\Twig_Environment $twig, $chamiloFormTemplatesPath)
+    protected function createTwigLoader(\Twig\Environment $twig, $chamiloFormTemplatesPath)
     {
         $vendorTwigBridgeDir = Path::getInstance()->getBasePath() . '../vendor/symfony/twig-bridge/';
 
@@ -95,10 +95,10 @@ class SymfonyFormFactoryBuilder
     /**
      * Adds the twig extension for the forms
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param string $chamiloFormTemplatesPath
      */
-    protected function createTwigExtension(\Twig_Environment $twig, $chamiloFormTemplatesPath)
+    protected function createTwigExtension(\Twig\Environment $twig, $chamiloFormTemplatesPath)
     {
         $chamilo_files = Filesystem::get_directory_content($chamiloFormTemplatesPath, Filesystem::LIST_FILES, false);
         $twig_rendering_files = array_merge(array('form_div_layout.html.twig'), $chamilo_files);

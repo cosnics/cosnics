@@ -30,7 +30,7 @@ class UserInviteService
     protected $userService;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -64,7 +64,7 @@ class UserInviteService
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserInviteRepository $userInviteRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Chamilo\Libraries\Mail\Mailer\MailerInterface $mailer
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
@@ -73,7 +73,7 @@ class UserInviteService
      */
     public function __construct(
         \Chamilo\Core\User\Storage\Repository\UserInviteRepository $userInviteRepository,
-        \Chamilo\Core\User\Service\UserService $userService, \Twig_Environment $twig,
+        \Chamilo\Core\User\Service\UserService $userService, \Twig\Environment $twig,
         \Chamilo\Libraries\Mail\Mailer\MailerInterface $mailer, \Symfony\Component\Translation\Translator $translator,
         \Chamilo\Libraries\File\PathBuilder $pathBuilder,
         \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter,

@@ -37,7 +37,7 @@ class ReportExporter
     protected $themeUtilities;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twigRenderer;
 
@@ -48,11 +48,11 @@ class ReportExporter
      * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository $contentObjectRepository
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
-     * @param \Twig_Environment $twigRenderer
+     * @param \Twig\Environment $twigRenderer
      */
     public function __construct(
         ReportRenderer $reportRenderer, ContentObjectRepository $contentObjectRepository,
-        ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities, \Twig_Environment $twigRenderer
+        ConfigurablePathBuilder $configurablePathBuilder, Theme $themeUtilities, \Twig\Environment $twigRenderer
     )
     {
         $this->reportRenderer = $reportRenderer;

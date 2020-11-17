@@ -24,7 +24,7 @@ class TwigEnvironmentFactory
      *
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
-     * @return \Twig_Environment
+     * @return \Twig\Environment
      */
     public function createEnvironment(TranslatorInterface $translator = null, UrlGenerator $generator = null)
     {
@@ -35,7 +35,7 @@ class TwigEnvironmentFactory
             'auto_reload' => true,
             'cache' => Path::getInstance()->getCachePath() . 'templates/');
 
-        $twig = new \Twig_Environment($loader, $options);
+        $twig = new \Twig\Environment($loader, $options);
 
         $this->addTwigExtensions($translator, $generator, $twig);
 
@@ -47,7 +47,7 @@ class TwigEnvironmentFactory
      *
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
     protected function addTwigExtensions(TranslatorInterface $translator, UrlGenerator $generator, $twig)
     {

@@ -19,16 +19,16 @@ class TwigCacheService extends FileBasedCacheService
 
     /**
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
     /**
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
      */
-    public function __construct(\Twig_Environment $twig, FormFactoryInterface $formFactory)
+    public function __construct(\Twig\Environment $twig, FormFactoryInterface $formFactory)
     {
         $this->twig = $twig;
     }
