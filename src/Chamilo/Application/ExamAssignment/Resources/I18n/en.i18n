@@ -28,3 +28,4 @@ StatusMessageNoRights = "You do not have the correct rights to view this assignm
 StatusMessageAssignmentNotInProgress = "The assignment is currently inactive.<br>The assignment is active from <strong class=\"error-strong\">{ASSIGNMENT_FROM}</strong> and lasts until <strong class=\"error-strong\">{ASSIGNMENT_UNTIL}</strong>."
 StatusMessageCorruptData = "An unknown error has occurred. Try again later. If the error persists please contact the platform administrator."
 BrandTitle = "Brand title"
+NoExamsCurrentlyAvailable = "Currently there are no assignments listed."
