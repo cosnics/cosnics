@@ -181,7 +181,6 @@ class CourseTeamService
     /**
      * @param Course $course
      *
-     * @throws AzureUserNotExistsException
      * @throws CourseTeamNotExistsException
      * @throws GraphException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
@@ -198,7 +197,11 @@ class CourseTeamService
         $students = $this->courseService->getStudentsFromCourse($course);
         foreach ($students as $student)
         {
-            $this->teamService->addMember($student, $team);
+            try
+            {
+                $this->teamService->addMember($student, $team);
+            }
+            catch(AzureUserNotExistsException $ex) {}
         }
     }
 
@@ -221,7 +224,11 @@ class CourseTeamService
         $teachers = $this->courseService->getTeachersFromCourse($course);
         foreach ($teachers as $teacher)
         {
-            $this->teamService->addOwner($teacher, $team);
+            try
+            {
+                $this->teamService->addOwner($teacher, $team);
+            }
+            catch(AzureUserNotExistsException $ex) {}
         }
     }
 
