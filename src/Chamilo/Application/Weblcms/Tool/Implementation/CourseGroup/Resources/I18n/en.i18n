@@ -140,3 +140,5 @@ UserNotSubscribedInCourse = "User not subscribed to this course"
 CourseGroupNotFound = "Course group not found"
 UnknownError = "Unknown error, try again"
 ReturnToCourseGroup = "Return to course group"
+
+RandomChange = "By selecting this option users will be equally and randomly subscribed in the created group(s) until the maximum number of group users has been reached."
