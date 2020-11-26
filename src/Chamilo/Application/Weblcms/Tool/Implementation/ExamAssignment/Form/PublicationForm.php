@@ -92,9 +92,7 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
         parent::build_basic_create_form();
-        $this->removeElement('qf_group_1');
-        $this->removeElement('from_date');
-        $this->removeElement('to_date');
+        $this->hideVisibility();
         $this->addAssignmentProperties();
     }
 
@@ -108,10 +106,16 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
         parent::build_basic_update_form();
+        $this->hideVisibility();
+        $this->addAssignmentProperties();
+    }
+
+    protected function hideVisibility()
+    {
         $this->removeElement('qf_group_1');
         $this->removeElement('from_date');
         $this->removeElement('to_date');
-        $this->addAssignmentProperties();
+        $this->removeElement('hidden');
     }
 
     /**
