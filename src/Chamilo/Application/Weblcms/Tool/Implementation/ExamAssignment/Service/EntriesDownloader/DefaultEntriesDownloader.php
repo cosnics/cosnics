@@ -43,7 +43,7 @@ class DefaultEntriesDownloader extends EntriesDownloader
             );
 
             $archiveFile = new ArchiveFile();
-            $archiveFile->setName($file->get_filename());
+            $archiveFile->setName($this->createFileName($entry, $file));
             $archiveFile->setOriginalPath($file->get_full_path());
 
             $entityFolder->addItem($archiveFile);

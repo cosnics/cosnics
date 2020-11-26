@@ -92,6 +92,9 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
         parent::build_basic_create_form();
+        $this->removeElement('qf_group_1');
+        $this->removeElement('from_date');
+        $this->removeElement('to_date');
         $this->addAssignmentProperties();
     }
 
@@ -105,6 +108,9 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
         parent::build_basic_update_form();
+        $this->removeElement('qf_group_1');
+        $this->removeElement('from_date');
+        $this->removeElement('to_date');
         $this->addAssignmentProperties();
     }
 
@@ -130,8 +136,10 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->create_textfield(
             Publication::PROPERTY_CODE, $this->translator->trans('AccessCode', [], Manager::context()),
-            ['type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5,
-                'id' => 'access_code', 'required' => 'required']
+            [
+                'type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5,
+                'id' => 'access_code'
+            ]
         );
 
         $this->addGroup($group, null, Translation::get('AccessCode'), '', false);
