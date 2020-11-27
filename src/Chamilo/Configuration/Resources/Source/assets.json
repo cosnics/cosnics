@@ -3,7 +3,8 @@
   "css": [
     {
       "input": [
-        "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.css"
+        "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.css",
+        "{{ NodeModulesPath }}/vue-select/dist/vue-select.css"
       ],
       "output": {
         "path": "Resources/Css/Aqua",

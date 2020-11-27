@@ -1,0 +1,173 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\ExamAssignment' %}
+{{ HEADER|raw }}
+<style type="text/css">
+    .u-align-right {
+        text-align: right;
+    }
+    .b-table td.mod-valign-middle {
+        vertical-align: middle;
+    }
+    #app {
+        margin-bottom: 30px;
+        max-width: 30em;
+    }
+    #app ::placeholder {
+        color: #999;
+        font-style: oblique;
+    }
+    .app-table-container {
+        margin-bottom: 30px;
+    }
+    .tbl-extra-time {
+        width: 110px;
+    }
+    .tbl-btn-remove {
+        text-align: center;
+        width: 50px;
+    }
+    .extra-time-container {
+        background: #f5f5f5;
+        border: 1px solid #cdcdcd;
+        border-radius: 4px;
+        border-top: none;
+        padding: 9px;
+    }
+    .extra-time-input-container {
+        margin-bottom: 10px;
+    }
+    label[for="extra-time"] {
+        font-weight: normal;
+    }
+    .form-control.mod-extra-time {
+        display: inline-block;
+        height: initial;
+        line-height: initial;
+        margin: 0 5px;
+        text-align: center;
+        width: 5em;
+    }
+    .btn.mod-save {
+        margin-right: 5px;
+    }
+    .btn.mod-delete {
+        padding: 2px 4px;
+    }
+</style>
+<div id="app">
+    <div class="app-table-container">
+        <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields">
+            <template v-slot:cell(fullname)="data">
+                ${ data.item.firstname } ${ data.item.lastname|uppercase }
+            </template>
+            <template v-slot:cell(remove)="data">
+                <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
+            </template>
+        </b-table>
+    </div>
+    <div>
+        <v-select label="fullname" :value="selectedUser" @input="setSelected" :options="users" placeholder="{{ 'FindAStudent'|trans({}, appContext) }}"></v-select>
+        <div v-if="selectedUser" class="extra-time-container">
+            <div class="extra-time-input-container">
+                <label for="extra-time">{{ 'ExtraTime'|trans({}, appContext) }}</label>
+                <input id="extra-time" type="number" v-model="extraTime" min="0" @keyup.enter="applyExtraTime" oninput="validity.valid||(value='');" class="form-control mod-extra-time" /> {{ 'Minutes'|trans({}, appContext) }}
+            </div>
+            <div>
+                <button class="btn btn-sm btn-primary mod-save" @click="applyExtraTime">{{ 'Save'|trans({}, appContext) }}</button>
+                <button class="btn btn-sm btn-default" @click="selectedUser = null">{{ 'Cancel'|trans({}, appContext) }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    Vue.component('v-select', VueSelect.VueSelect);
+
+    var users = JSON.parse('{{ USERS|json_encode|raw }}');
+    for (var i = 0; i < users.length; i += 1) {
+        users[i].fullname = users[i].firstname + ' ' + users[i].lastname.toUpperCase();
+    }
+    var overtimeUsers = JSON.parse('{{ USERS_EXTRA_TIME|json_encode|raw }}');
+
+    Vue.filter('uppercase', function (value) {
+        return value.toUpperCase();
+    });
+
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            users: users,
+            overtimeUsers: overtimeUsers,
+            extraTime: 0,
+            selectedUser: null,
+            fields: [
+                {
+                    key: 'fullname',
+                    label: '{{ 'UserEntity'|trans({}, appContext) }}',
+                    sortable: true,
+                    tdClass: 'mod-valign-middle'
+                },
+                {
+                    key: 'extra_time',
+                    label: '{{ 'MinutesExtra'|trans({}, appContext) }}',
+                    thClass: 'tbl-extra-time u-align-right',
+                    tdClass: 'u-align-right mod-valign-middle'
+                },
+                {
+                    key: 'remove',
+                    label: '',
+                    thClass: 'tbl-btn-remove',
+                    tdClass: 'tbl-btn-remove'
+                }
+            ]
+        },
+        methods: {
+            findOvertimeUser(user) {
+                for (var i = 0; i < this.overtimeUsers.length; i += 1) {
+                    if (this.overtimeUsers[i].user_id === user.id) {
+                        return this.overtimeUsers[i];
+                    }
+                }
+            },
+            setSelected(user) {
+                this.selectedUser = user;
+                var overtimeUser = this.findOvertimeUser(user);
+                if (overtimeUser) {
+                    this.extraTime = overtimeUser.extra_time;
+                } else {
+                    this.extraTime = 0;
+                }
+            },
+            reset() {
+                this.selectedUser = null;
+                this.extraTime = 0;
+            },
+            applyExtraTime() {
+                var overtimeUser = this.findOvertimeUser(this.selectedUser);
+                if (parseInt(this.extraTime) === 0) {
+                    if (overtimeUser) {
+                        var index = this.overtimeUsers.indexOf(overtimeUser);
+                        this.overtimeUsers.splice(index, 1);
+                    }
+                } else {
+                    if (!overtimeUser) {
+                        overtimeUser = {
+                            id: -1,
+                            user_id: this.selectedUser.id,
+                            firstname: this.selectedUser.firstname,
+                            lastname: this.selectedUser.lastname
+                        }
+                        this.overtimeUsers.push(overtimeUser);
+                    }
+                    overtimeUser.extra_time = parseInt(this.extraTime);
+                }
+                this.reset();
+            },
+            deleteExtraTime(overtimeUser) {
+                var index = this.overtimeUsers.indexOf(overtimeUser);
+                this.overtimeUsers.splice(index, 1);
+                this.reset();
+            }
+        }
+    });
+</script>
+{{ FOOTER|raw }}

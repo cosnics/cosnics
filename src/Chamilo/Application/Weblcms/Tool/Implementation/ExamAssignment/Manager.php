@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\UserOvertimeService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\AssignmentEntitiesTemplate;
@@ -163,6 +164,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function getAssignmentService()
     {
         return $this->getService(AssignmentService::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\UserOvertimeService
+     */
+    public function getUserOvertimeService()
+    {
+        return $this->getService(UserOvertimeService::class);
     }
 
     /**
