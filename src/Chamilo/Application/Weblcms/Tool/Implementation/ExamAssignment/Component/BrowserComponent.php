@@ -23,6 +23,22 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BrowserComponent extends Manager
 {
+    /**
+     * @param null $pageTitle
+     *
+     * @return string|null
+     */
+    public function render_header($pageTitle = null)
+    {
+        $html = [];
+        $html[] = parent::render_header($pageTitle);
+
+        $html[] = '<div class="alert alert-info">';
+        $html[] = $this->getTranslator()->trans('ExamAssignmentDifferences', [], Manager::context());
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
