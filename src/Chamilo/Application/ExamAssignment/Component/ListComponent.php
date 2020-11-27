@@ -3,6 +3,7 @@
 namespace Chamilo\Application\ExamAssignment\Component;
 
 use Chamilo\Application\ExamAssignment\Manager;
+use Chamilo\Application\ExamAssignment\Service\Decorator\ExamRendererDecoratorManager;
 use Chamilo\Application\ExamAssignment\Service\ExamAssignmentService;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -42,8 +43,17 @@ class ListComponent extends Manager implements NoAuthenticationSupport
                         self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => '__EXAM_ID__'
                     ]
                 ),
-                'LOGOUT_URL' => $this->getLogoutUrl()
+                'LOGOUT_URL' => $this->getLogoutUrl(),
+                'BELOW_LIST_RENDITION' => $this->getExamRendererDecoratorManager()->renderBelowExamList()
             ]
         );
+    }
+
+    /**
+     * @return ExamRendererDecoratorManager
+     */
+    protected function getExamRendererDecoratorManager()
+    {
+        return $this->getService(ExamRendererDecoratorManager::class);
     }
 }

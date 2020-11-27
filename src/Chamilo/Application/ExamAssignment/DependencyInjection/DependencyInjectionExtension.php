@@ -2,6 +2,7 @@
 namespace Chamilo\Application\ExamAssignment\DependencyInjection;
 
 use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\ExamAssignmentEventListenerCompilerPass;
+use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\ExamRendererDecoratorCompilerPass;
 use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\RequestValidatorCompilerPass;
 use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\UserConverterCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -64,5 +65,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new RequestValidatorCompilerPass());
+        $container->addCompilerPass(new ExamRendererDecoratorCompilerPass());
     }
 }

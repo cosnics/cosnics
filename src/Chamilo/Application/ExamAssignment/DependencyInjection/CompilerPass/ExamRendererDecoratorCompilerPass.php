@@ -2,8 +2,8 @@
 
 namespace Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass;
 
-use Chamilo\Application\ExamAssignment\Service\Kernel\RequestValidator;
-use Chamilo\Application\ExamAssignment\Service\Kernel\RequestValidatorExtensionInterface;
+use Chamilo\Application\ExamAssignment\Service\Decorator\ExamRendererDecoratorInterface;
+use Chamilo\Application\ExamAssignment\Service\Decorator\ExamRendererDecoratorManager;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\TaggedServicesCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class RequestValidatorCompilerPass extends TaggedServicesCompilerPass
+class ExamRendererDecoratorCompilerPass extends TaggedServicesCompilerPass
 {
 
     /**
@@ -25,8 +25,8 @@ class RequestValidatorCompilerPass extends TaggedServicesCompilerPass
     public function process(ContainerBuilder $container)
     {
         $this->addTaggedServicesToService(
-            $container, RequestValidator::class, RequestValidatorExtensionInterface::class,
-            'addRequestValidatorExtension'
+            $container, ExamRendererDecoratorManager::class, ExamRendererDecoratorInterface::class,
+            'addExamRendererDecorator'
         );
     }
 }
