@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  *
@@ -12,4 +13,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Manager;
  */
 class ToggleVisibilityComponent extends Manager
 {
+    public function run()
+    {
+        throw new NotAllowedException();
+    }
 }

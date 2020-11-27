@@ -210,6 +210,12 @@ class CourseGroupForm extends FormValidator
     public function build_options_form_create($counter = '')
     {
         $this->addElement('html', '<div id="parent_group_random">');
+
+        $this->addElement(
+            'html',
+            '<div class="alert alert-info">' . Translation::getInstance()->getTranslation('RandomChange') . '</div>'
+        );
+
         $this->addElement(
             'checkbox',
             CourseGroup::PROPERTY_RANDOM_REG,
@@ -1027,7 +1033,7 @@ class CourseGroupForm extends FormValidator
         }
         if (sizeof($groups) > 0)
         {
-            $randomizer = new SubscriptionRandomizer($this->courseGroupDecoratorsManager);
+            $groupsWithRandomSubscriptions = [];
 
             foreach ($groups as $course_group)
             {
@@ -1039,8 +1045,7 @@ class CourseGroupForm extends FormValidator
 
                         if (isset($values, $values[CourseGroup::PROPERTY_RANDOM_REG]))
                         {
-                            $randomizer->subscribeRandomUsersInCourseGroup($course_group, $parent_group);
-                            DataManager::clear_course_group_users_cache();
+                            $groupsWithRandomSubscriptions[] = $course_group;
                         }
                     }
                     else
@@ -1061,6 +1066,9 @@ class CourseGroupForm extends FormValidator
                     );
                 }
             }
+
+            $randomizer = new SubscriptionRandomizer($this->courseGroupDecoratorsManager);
+            $randomizer->subscribeRandomUsersInCourseGroups($groupsWithRandomSubscriptions, $parent_group);
         }
 
         return !$this->course_group->has_errors();

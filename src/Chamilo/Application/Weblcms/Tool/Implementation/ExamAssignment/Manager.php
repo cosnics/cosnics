@@ -91,6 +91,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function add_content_object_publication_actions($toolbar, $publication)
     {
+        $toolbar->deleteItem(4);
+
         $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('BrowseSubmitters'),

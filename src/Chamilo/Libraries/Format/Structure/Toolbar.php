@@ -107,6 +107,16 @@ class Toolbar
     }
 
     /**
+     * @param int $index - 0 to count
+     */
+    public function deleteItem($index)
+    {
+        $items = $this->items;
+        array_splice($items, $index, 1);
+        $this->items = $items;
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
      */

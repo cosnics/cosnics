@@ -5,7 +5,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
@@ -208,5 +210,20 @@ abstract class EntriesDownloader
         }
 
         return $this->entityAssignmentsFoldersCache[$cacheKey];
+    }
+
+    /**
+     * @param Entry $entry
+     * @param File $file
+     *
+     * @return string|null
+     */
+    protected function createFileName(Entry $entry, File $file)
+    {
+        return str_replace(
+            '.' . $file->get_extension(), '--'
+            . date('d-m-Y--H-i', $entry->getSubmitted()) . '.' . $file->get_extension(),
+            $file->get_filename()
+        );
     }
 }
