@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_exam_assignment_user_overtime">
+    <properties>
+        <property
+                name="id"
+                type="integer"
+                unsigned="1"
+                notnull="1"
+                autoincrement="true" />
+        <property
+                name="publication_id"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+        <property
+                name="user_id"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+        <property
+                name="extra_time"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+    </properties>
+    <index
+            name="publication_id"
+            type="unique">
+        <indexproperty name="publication_id" />
+    </index>
+</object>
