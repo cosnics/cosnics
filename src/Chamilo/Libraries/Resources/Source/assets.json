@@ -8,7 +8,8 @@
         "{{ NodeModulesPath }}/vue-resource/dist/vue-resource.min.js",
         "{{ NodeModulesPath }}/vuejs-dialog/dist/vuejs-dialog.min.js",
         "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.js",
-        "{{ NodeModulesPath }}/vue-i18n/dist/vue-i18n.min.js"
+        "{{ NodeModulesPath }}/vue-i18n/dist/vue-i18n.min.js",
+        "{{ NodeModulesPath }}/vue-select/dist/vue-select.js"
       ],
       "output": {
         "path": "Resources/Javascript",
