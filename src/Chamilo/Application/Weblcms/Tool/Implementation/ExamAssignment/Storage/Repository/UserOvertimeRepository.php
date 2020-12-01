@@ -67,4 +67,31 @@ class UserOvertimeRepository
 
         return $this->dataClassRepository->records(UserOvertime::class, $parameters);
     }
+
+    /**
+     * @param UserOvertime $userOvertime
+     * @return bool
+     */
+    public function addUserOvertimeData(UserOvertime $userOvertime)
+    {
+        return $this->dataClassRepository->create($userOvertime);
+    }
+
+    /**
+     * @param UserOvertime $userOvertime
+     * @return bool
+     */
+    public function updateUserOvertimeData(UserOvertime $userOvertime)
+    {
+        return $this->dataClassRepository->update($userOvertime);
+    }
+
+    /**
+     * @param UserOvertime $overtime
+     * @return bool
+     */
+    public function deleteUserOvertimeData(UserOvertime $overtime)
+    {
+        return $this->dataClassRepository->delete($overtime);
+    }
 }

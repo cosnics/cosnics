@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\UserOvertimeService;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\CourseSettingsController;
@@ -49,6 +50,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     // Properties
     const PROPERTY_NUMBER_OF_SUBMISSIONS = 'NumberOfSubmissions';
+
+    const ACTION_AJAX = 'Ajax';
 
     /**
      * Constructor.
@@ -199,4 +202,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
     }
+
+
+    /**
+     * @param string $ajaxAction
+     *
+     * @param array $parameters
+     *
+     * @return string
+     */
+    public function getAjaxUrl(string $ajaxAction, $parameters = [])
+    {
+        $parameters[self::PARAM_ACTION] = self::ACTION_AJAX;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::PARAM_ACTION] = $ajaxAction;
+
+        return $this->get_url($parameters);
+    }
+
 }
