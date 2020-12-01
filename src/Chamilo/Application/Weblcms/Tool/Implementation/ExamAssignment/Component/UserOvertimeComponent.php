@@ -43,7 +43,7 @@ class UserOvertimeComponent extends Manager
             'USERS_OVERTIME' => $usersExtraTime,
             'LIST_USERS_AJAX_URL' => $this->getAjaxUrl(
                 \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_LIST_USERS,
-                [self::PARAM_PUBLICATION_ID => $pid]
+                [self::PARAM_PUBLICATION_ID => $publication->getId()]
             ),
             'ADD_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
                 \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_ADD_USER_OVERTIME
