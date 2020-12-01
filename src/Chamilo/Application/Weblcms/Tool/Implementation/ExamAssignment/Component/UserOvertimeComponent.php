@@ -39,7 +39,7 @@ class UserOvertimeComponent extends Manager
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-            'PUBLICATION_ID' => $pid,
+            'PUBLICATION_ID' => $publication->getId(),
             'USERS_OVERTIME' => $usersExtraTime,
             'LIST_USERS_AJAX_URL' => $this->getAjaxUrl(
                 \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_LIST_USERS,
