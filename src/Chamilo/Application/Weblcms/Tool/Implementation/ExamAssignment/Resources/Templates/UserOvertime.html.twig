@@ -66,28 +66,16 @@
     .fa.mod-delete {
         color: #666;
     }
-    .pagination-container {
-        display: flex;
-        justify-content: flex-end;
-    }
-    .pagination.mod-overtime {
-        margin: 10px 0 0;
-    }
 </style>
 <div id="app">
     <div class="app-table-container">
         <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
-                 :per-page="pagination.perPage" :current-page="pagination.currentPage"
                  show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
             <template v-slot:cell(fullname)="data">${ data.value }</template>
             <template v-slot:cell(remove)="data">
                 <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)" title="{{ 'Remove'|trans({}, appContext) }}"><i class="fa fa-times mod-delete" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
             </template>
         </b-table>
-        <div class="pagination-container" v-if="pagination.total > pagination.perPage">
-            <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                          aria-controls="data-table" class="mod-overtime"></b-pagination>
-        </div>
     </div>
     <div class="user-search-container">
         <v-select label="fullname" :value="selectedUser" @input="setSelected" :options="users" placeholder="{{ 'FindAStudent'|trans({}, appContext) }}">
@@ -161,15 +149,9 @@
                     thClass: 'tbl-btn-remove tbl-no-sort',
                     tdClass: 'tbl-btn-remove'
                 }
-            ],
-            pagination: {
-                currentPage: 1,
-                perPage: 10,
-                total: 0
-            }
+            ]
         },
         mounted: function () {
-            this.calculatePagination();
             $.get(listUsersUrl, (function (data) {
                 var users = data.users;
                 for (var i = 0; i < users.length; i += 1) {
@@ -181,9 +163,6 @@
             });
         },
         methods: {
-            calculatePagination: function () {
-                this.pagination.total = this.overtimeUsers.length;
-            },
             findOvertimeUser(user) {
                 if (!user) { return; }
                 for (var i = 0; i < this.overtimeUsers.length; i += 1) {
@@ -220,7 +199,6 @@
             performAjaxCall(url, options) {
                 $.post(url, options, (function (data) {
                     this.overtimeUsers = data.usersOvertime;
-                    this.calculatePagination();
                 }).bind(this)).fail(function (xhr) {
                     console.log(xhr.responseJSON.error);
                 });
