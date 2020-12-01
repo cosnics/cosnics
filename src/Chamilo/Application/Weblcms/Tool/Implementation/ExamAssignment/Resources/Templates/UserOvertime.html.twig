@@ -27,7 +27,7 @@
     }
     .tbl-extra-time {
         color: #555;
-        width: 110px;
+        width: 130px;
     }
     .tbl-btn-remove {
         text-align: center;
@@ -66,12 +66,18 @@
     .fa.mod-delete {
         color: #666;
     }
+    .fa.mod-margin {
+        margin-left: 3px;
+    }
 </style>
 <div id="app">
     <div class="app-table-container">
         <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
                  show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
             <template v-slot:cell(fullname)="data">${ data.value }</template>
+            <template #head(extra_time)="data">
+                ${ data.label }<i class="fa fa-info-circle mod-margin" title="{{ 'MinutesAddedToBufferTime'|trans({}, appContext) }}"></i>
+            </template>
             <template v-slot:cell(remove)="data">
                 <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)" title="{{ 'Remove'|trans({}, appContext) }}"><i class="fa fa-times mod-delete" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
             </template>
@@ -140,7 +146,8 @@
                 {
                     key: 'extra_time',
                     label: '{{ 'MinutesExtra'|trans({}, appContext) }}',
-                    thClass: 'tbl-extra-time tbl-no-sort u-align-right',
+                    sortable: true,
+                    thClass: 'tbl-extra-time u-align-right',
                     tdClass: 'u-align-right mod-valign-middle'
                 },
                 {
