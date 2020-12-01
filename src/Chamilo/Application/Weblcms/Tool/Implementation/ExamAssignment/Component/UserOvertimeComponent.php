@@ -19,15 +19,22 @@ class UserOvertimeComponent extends Manager
         return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
+
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url(),
+                $this->getPublication()->getContentObject()->get_title()
+            )
+        );
+
+    }
+
     public function run() {
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) : Request::post(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class_name(),
-            $pid);
-
+        $publication = $this->getPublication();
         $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
 
         $parameters = [
@@ -49,6 +56,20 @@ class UserOvertimeComponent extends Manager
             )
         ];
         return $this->getTwig()->render(Manager::context() . ':UserOvertime.html.twig', $parameters);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|ContentObjectPublication
+     */
+    protected function getPublication()
+    {
+        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) : Request::post(
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
+            $pid);
     }
 
 }
