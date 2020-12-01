@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\UserOvertime;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository\UserOvertimeRepository;
+use Chamilo\Application\Weblcms\Service\PublicationService;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service
@@ -20,13 +21,38 @@ class UserOvertimeService
     protected $userOvertimeRepository;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Service\PublicationService
+     */
+    protected $publicationService;
+
+    /**
      * UserOvertimeService constructor.
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository\UserOvertimeRepository $userOvertimeRepository
+     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
      */
-    public function __construct(UserOvertimeRepository $userOvertimeRepository)
+    public function __construct(UserOvertimeRepository $userOvertimeRepository, PublicationService $publicationService)
     {
         $this->userOvertimeRepository = $userOvertimeRepository;
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @return array
+     */
+    public function getUsersByPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
+            $contentObjectPublication->getId());
+        $users = [];
+        $targetUsers = $this->publicationService->getTargetUsersForPublication($publication);
+        foreach ($targetUsers as $user)
+        {
+            $users[] = ['id' => (int) $user->get_id(), 'firstname' => $user->get_firstname(), 'lastname' => $user->get_lastname(), 'email' => $user->get_email()];
+        }
+        return $users;
     }
 
     /**

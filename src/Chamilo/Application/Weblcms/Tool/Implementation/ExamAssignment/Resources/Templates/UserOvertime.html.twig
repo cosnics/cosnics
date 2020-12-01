@@ -8,15 +8,22 @@
         vertical-align: middle;
     }
     #app {
+        display: flex;
+        flex-wrap: wrap-reverse;
         margin-bottom: 30px;
-        max-width: 30em;
     }
     #app ::placeholder {
         color: #999;
         font-style: oblique;
     }
     .app-table-container {
+        margin-right: 25px;
+        max-width: fit-content;
+    }
+    .user-search-container {
+        min-width: 30em;
         margin-bottom: 30px;
+        max-width: 30em;
     }
     .tbl-extra-time {
         color: #555;
@@ -72,9 +79,7 @@
         <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
                  :per-page="pagination.perPage" :current-page="pagination.currentPage"
                  show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
-            <template v-slot:cell(fullname)="data">
-                ${ data.value }
-            </template>
+            <template v-slot:cell(fullname)="data">${ data.value }</template>
             <template v-slot:cell(remove)="data">
                 <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)" title="{{ 'Remove'|trans({}, appContext) }}"><i class="fa fa-times mod-delete" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
             </template>
@@ -84,8 +89,12 @@
                           aria-controls="data-table" class="mod-overtime"></b-pagination>
         </div>
     </div>
-    <div>
+    <div class="user-search-container">
         <v-select label="fullname" :value="selectedUser" @input="setSelected" :options="users" placeholder="{{ 'FindAStudent'|trans({}, appContext) }}">
+            <template v-slot:option="option">
+                <div><strong>${ option.lastname }</strong>, ${ option.firstname }</div>
+                <div style="margin-left: 15px; font-style: oblique;">${ option.email }</div>
+            </template>
             <div slot="no-options">{{ 'NoMatchingOptions'|trans({}, appContext) }}</div>
         </v-select>
         <div v-if="selectedUser" class="extra-time-container">
@@ -105,14 +114,11 @@
 
     var publicationId = {{ PUBLICATION_ID }};
 
+    var listUsersUrl = '{{ LIST_USERS_AJAX_URL|raw }}';
     var addUserOvertimeUrl = '{{ ADD_USER_OVERTIME_AJAX_URL|raw }}';
     var updateUserOvertimeUrl = '{{ UPDATE_USER_OVERTIME_AJAX_URL|raw }}';
     var deleteUserOvertimeUrl = '{{ DELETE_USER_OVERTIME_AJAX_URL|raw }}';
 
-    var users = JSON.parse('{{ USERS|json_encode|raw }}');
-    for (var i = 0; i < users.length; i += 1) {
-        users[i].fullname = fullname(users[i]);
-    }
     var overtimeUsers = JSON.parse('{{ USERS_OVERTIME|json_encode|raw }}');
 
     function fullname(user) {
@@ -123,7 +129,7 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: {
-            users: users,
+            users: [],
             overtimeUsers: overtimeUsers,
             extraTime: 0,
             selectedUser: null,
@@ -137,6 +143,11 @@
                     formatter: function (value, key, item) {
                         return fullname(item);
                     }
+                },
+                {
+                    key: 'email',
+                    sortable: true,
+                    tdClass: 'mod-valign-middle'
                 },
                 {
                     key: 'extra_time',
@@ -159,6 +170,15 @@
         },
         mounted: function () {
             this.calculatePagination();
+            $.get(listUsersUrl, (function (data) {
+                var users = data.users;
+                for (var i = 0; i < users.length; i += 1) {
+                    users[i].fullname = fullname(users[i]);
+                }
+                this.users = users;
+            }).bind(this)).fail(function (xhr) {
+                console.log(xhr.responseJSON.error);
+            });
         },
         methods: {
             calculatePagination: function () {

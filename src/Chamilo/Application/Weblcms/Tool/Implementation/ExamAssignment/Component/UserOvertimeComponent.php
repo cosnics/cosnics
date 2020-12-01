@@ -14,6 +14,10 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class UserOvertimeComponent extends Manager
 {
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+    }
 
     public function run() {
         $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
@@ -24,19 +28,16 @@ class UserOvertimeComponent extends Manager
             ContentObjectPublication::class_name(),
             $pid);
 
-        $users = [];
         $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
-        $content_object = $publication->get_content_object();
-
-        BreadcrumbTrail::getInstance()->add(
-            new Breadcrumb(
-                $this->get_url(),
-                Translation::get('ToolContentObjectUpdateComponent', array('TITLE' => $content_object->get_title()))));
 
         $parameters = [
             'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
             'PUBLICATION_ID' => $pid,
-            'USERS' => $users, 'USERS_OVERTIME' => $usersExtraTime,
+            'USERS_OVERTIME' => $usersExtraTime,
+            'LIST_USERS_AJAX_URL' => $this->getAjaxUrl(
+                \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_LIST_USERS,
+                [self::PARAM_PUBLICATION_ID => $pid]
+            ),
             'ADD_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
                 \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_ADD_USER_OVERTIME
             ),
@@ -49,4 +50,5 @@ class UserOvertimeComponent extends Manager
         ];
         return $this->getTwig()->render(Manager::context() . ':UserOvertime.html.twig', $parameters);
     }
+
 }

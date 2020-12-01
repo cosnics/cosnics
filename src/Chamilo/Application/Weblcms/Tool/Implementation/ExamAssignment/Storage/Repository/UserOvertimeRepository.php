@@ -61,6 +61,7 @@ class UserOvertimeRepository
         $properties->add(new PropertyConditionVariable(UserOvertime::class, UserOvertime::PROPERTY_USER_ID));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL));
         $properties->add(new PropertyConditionVariable(UserOvertime::class, UserOvertime::PROPERTY_EXTRA_TIME));
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);

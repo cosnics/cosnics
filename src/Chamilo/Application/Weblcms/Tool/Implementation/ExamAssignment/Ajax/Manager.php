@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends AjaxManager
 {
     const PARAM_ACTION = 'AjaxAction';
+    const ACTION_LIST_USERS = 'ListUsers';
     const ACTION_ADD_USER_OVERTIME = 'AddUserOvertime';
     const ACTION_UPDATE_USER_OVERTIME = 'UpdateUserOvertime';
     const ACTION_DELETE_USER_OVERTIME = 'DeleteUserOvertime';
