@@ -19,11 +19,15 @@
         margin-bottom: 30px;
     }
     .tbl-extra-time {
+        color: #555;
         width: 110px;
     }
     .tbl-btn-remove {
         text-align: center;
         width: 50px;
+    }
+    .tbl-no-sort {
+        pointer-events: none
     }
     .extra-time-container {
         background: #f5f5f5;
@@ -52,20 +56,38 @@
     .btn.mod-delete {
         padding: 2px 4px;
     }
+    .fa.mod-delete {
+        color: #666;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .pagination.mod-overtime {
+        margin: 10px 0 0;
+    }
 </style>
 <div id="app">
     <div class="app-table-container">
-        <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields">
+        <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
+                 :per-page="pagination.perPage" :current-page="pagination.currentPage"
+                 show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
             <template v-slot:cell(fullname)="data">
-                ${ data.item.firstname } ${ data.item.lastname|uppercase }
+                ${ data.value }
             </template>
             <template v-slot:cell(remove)="data">
-                <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
+                <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)" title="{{ 'Remove'|trans({}, appContext) }}"><i class="fa fa-times mod-delete" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
             </template>
         </b-table>
+        <div class="pagination-container" v-if="pagination.total > pagination.perPage">
+            <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                          aria-controls="data-table" class="mod-overtime"></b-pagination>
+        </div>
     </div>
     <div>
-        <v-select label="fullname" :value="selectedUser" @input="setSelected" :options="users" placeholder="{{ 'FindAStudent'|trans({}, appContext) }}"></v-select>
+        <v-select label="fullname" :value="selectedUser" @input="setSelected" :options="users" placeholder="{{ 'FindAStudent'|trans({}, appContext) }}">
+            <div slot="no-options">{{ 'NoMatchingOptions'|trans({}, appContext) }}</div>
+        </v-select>
         <div v-if="selectedUser" class="extra-time-container">
             <div class="extra-time-input-container">
                 <label for="extra-time">{{ 'ExtraTime'|trans({}, appContext) }}</label>
@@ -81,15 +103,21 @@
 <script type="text/javascript">
     Vue.component('v-select', VueSelect.VueSelect);
 
+    var publicationId = {{ PUBLICATION_ID }};
+
+    var addUserOvertimeUrl = '{{ ADD_USER_OVERTIME_AJAX_URL|raw }}';
+    var updateUserOvertimeUrl = '{{ UPDATE_USER_OVERTIME_AJAX_URL|raw }}';
+    var deleteUserOvertimeUrl = '{{ DELETE_USER_OVERTIME_AJAX_URL|raw }}';
+
     var users = JSON.parse('{{ USERS|json_encode|raw }}');
     for (var i = 0; i < users.length; i += 1) {
-        users[i].fullname = users[i].firstname + ' ' + users[i].lastname.toUpperCase();
+        users[i].fullname = fullname(users[i]);
     }
-    var overtimeUsers = JSON.parse('{{ USERS_EXTRA_TIME|json_encode|raw }}');
+    var overtimeUsers = JSON.parse('{{ USERS_OVERTIME|json_encode|raw }}');
 
-    Vue.filter('uppercase', function (value) {
-        return value.toUpperCase();
-    });
+    function fullname(user) {
+        return user.lastname.toUpperCase() + ', ' + user.firstname;
+    }
 
     new Vue({
         el: '#app',
@@ -104,24 +132,40 @@
                     key: 'fullname',
                     label: '{{ 'UserEntity'|trans({}, appContext) }}',
                     sortable: true,
-                    tdClass: 'mod-valign-middle'
+                    sortByFormatted: true,
+                    tdClass: 'mod-valign-middle',
+                    formatter: function (value, key, item) {
+                        return fullname(item);
+                    }
                 },
                 {
                     key: 'extra_time',
                     label: '{{ 'MinutesExtra'|trans({}, appContext) }}',
-                    thClass: 'tbl-extra-time u-align-right',
+                    thClass: 'tbl-extra-time tbl-no-sort u-align-right',
                     tdClass: 'u-align-right mod-valign-middle'
                 },
                 {
                     key: 'remove',
                     label: '',
-                    thClass: 'tbl-btn-remove',
+                    thClass: 'tbl-btn-remove tbl-no-sort',
                     tdClass: 'tbl-btn-remove'
                 }
-            ]
+            ],
+            pagination: {
+                currentPage: 1,
+                perPage: 10,
+                total: 0
+            }
+        },
+        mounted: function () {
+            this.calculatePagination();
         },
         methods: {
+            calculatePagination: function () {
+                this.pagination.total = this.overtimeUsers.length;
+            },
             findOvertimeUser(user) {
+                if (!user) { return; }
                 for (var i = 0; i < this.overtimeUsers.length; i += 1) {
                     if (this.overtimeUsers[i].user_id === user.id) {
                         return this.overtimeUsers[i];
@@ -137,35 +181,30 @@
                     this.extraTime = 0;
                 }
             },
-            reset() {
-                this.selectedUser = null;
-                this.extraTime = 0;
-            },
             applyExtraTime() {
                 var overtimeUser = this.findOvertimeUser(this.selectedUser);
-                if (parseInt(this.extraTime) === 0) {
-                    if (overtimeUser) {
-                        var index = this.overtimeUsers.indexOf(overtimeUser);
-                        this.overtimeUsers.splice(index, 1);
-                    }
+                var extraTime = parseInt(this.extraTime);
+                if (extraTime === 0) {
+                    this.deleteExtraTime(overtimeUser);
                 } else {
                     if (!overtimeUser) {
-                        overtimeUser = {
-                            id: -1,
-                            user_id: this.selectedUser.id,
-                            firstname: this.selectedUser.firstname,
-                            lastname: this.selectedUser.lastname
-                        }
-                        this.overtimeUsers.push(overtimeUser);
+                        this.performAjaxCall(addUserOvertimeUrl, { 'publication_id': publicationId, 'user_id': this.selectedUser.id, 'extra_time': extraTime });
+                    } else {
+                        this.performAjaxCall(updateUserOvertimeUrl, { 'publication_id': publicationId, 'user_overtime_id': overtimeUser.id, 'extra_time': extraTime });
                     }
-                    overtimeUser.extra_time = parseInt(this.extraTime);
                 }
-                this.reset();
             },
             deleteExtraTime(overtimeUser) {
-                var index = this.overtimeUsers.indexOf(overtimeUser);
-                this.overtimeUsers.splice(index, 1);
-                this.reset();
+                this.performAjaxCall(deleteUserOvertimeUrl, { 'publication_id': publicationId, 'user_overtime_id': overtimeUser.id });
+            },
+            performAjaxCall(url, options) {
+                $.post(url, options, (function (data) {
+                    this.overtimeUsers = data.usersOvertime;
+                    this.calculatePagination();
+                }).bind(this)).fail(function (xhr) {
+                    console.log(xhr.responseJSON.error);
+                });
+                this.setSelected(null);
             }
         }
     });

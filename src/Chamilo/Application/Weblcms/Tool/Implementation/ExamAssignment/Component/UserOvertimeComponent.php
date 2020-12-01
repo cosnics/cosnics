@@ -34,7 +34,18 @@ class UserOvertimeComponent extends Manager
                 Translation::get('ToolContentObjectUpdateComponent', array('TITLE' => $content_object->get_title()))));
 
         $parameters = [
-            'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'USERS' => $users, 'USERS_EXTRA_TIME' => $usersExtraTime
+            'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
+            'PUBLICATION_ID' => $pid,
+            'USERS' => $users, 'USERS_OVERTIME' => $usersExtraTime,
+            'ADD_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
+                \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_ADD_USER_OVERTIME
+            ),
+            'UPDATE_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
+                \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_UPDATE_USER_OVERTIME
+            ),
+            'DELETE_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
+            \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_DELETE_USER_OVERTIME
+            )
         ];
         return $this->getTwig()->render(Manager::context() . ':UserOvertime.html.twig', $parameters);
     }

@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\UserOvertime;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository\UserOvertimeRepository;
 
@@ -48,5 +49,44 @@ class UserOvertimeService
             $items[] = $item;
         }
         return $items;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int $userId
+     * @param int $extraTime
+     * @return UserOvertime
+     */
+    public function addUserOvertimeData(ContentObjectPublication $contentObjectPublication, int $userId, int $extraTime)
+    {
+        $userOvertime = new UserOvertime();
+        $userOvertime->setPublicationId($contentObjectPublication->get_id());
+        $userOvertime->setUserId($userId);
+        $userOvertime->setExtraTime($extraTime);
+        $this->userOvertimeRepository->addUserOvertimeData($userOvertime);
+        return $userOvertime;
+    }
+
+    /**
+     * @param int $userOvertimeId
+     * @param int $extraTime
+     * @return UserOvertime
+     */
+    public function updateUserOvertimeData(int $userOvertimeId, int $extraTime)
+    {
+        $userOvertime = DataManager::retrieve_by_id(UserOvertime::class_name(), $userOvertimeId);
+        $userOvertime->setExtraTime($extraTime);
+        $this->userOvertimeRepository->updateUserOvertimeData($userOvertime);
+        return $userOvertime;
+    }
+
+    /**
+     * @param int $userOvertimeId
+     * @return bool
+     */
+    public function deleteUserOvertimeData(int $userOvertimeId)
+    {
+        $userOvertime = DataManager::retrieve_by_id(UserOvertime::class_name(), $userOvertimeId);
+        return $this->userOvertimeRepository->deleteUserOvertimeData($userOvertime);
     }
 }
