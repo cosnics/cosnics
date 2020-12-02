@@ -71,6 +71,14 @@
     }
 </style>
 <div id="app">
+    <div v-if="notification" class="notifications">
+        <div class="alert alert-dismissible" :class="'alert-' + notificationType" role="alert">
+            <button type="button" class="close" aria-label="{{ 'Close'|trans({}, appContext) }}" @click="notification = null">
+                <span aria-hidden="true">×</span>
+            </button>
+            ${ notification }
+        </div>
+    </div>
     <div class="app-table-container">
         <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
                  show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
@@ -121,6 +129,8 @@
         el: '#app',
         delimiters: ['${', '}'],
         data: {
+            notification: null,
+            notificationType: 'info',
             users: [],
             overtimeUsers: overtimeUsers,
             extraTime: 0,
@@ -202,10 +212,14 @@
                 this.performAjaxCall(deleteUserOvertimeUrl, { 'user_overtime_id': overtimeUser.id });
             },
             performAjaxCall(url, options) {
+                this.notification = null;
                 $.post(url, options, (function (data) {
                     this.overtimeUsers = data.usersOvertime;
+                    this.notification = '{{ 'TableUpdateSuccess'|trans({}, appContext) }}';
+                    this.notificationType = 'info';
                 }).bind(this)).fail(function (xhr) {
-                    console.log(xhr.responseJSON.error);
+                    this.notification = xhr.responseJSON.error;
+                    this.notificationType = 'danger';
                 });
                 this.setSelected(null);
             }
