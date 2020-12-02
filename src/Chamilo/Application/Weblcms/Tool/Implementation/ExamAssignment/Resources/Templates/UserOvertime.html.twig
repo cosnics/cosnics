@@ -106,8 +106,6 @@
 <script type="text/javascript">
     Vue.component('v-select', VueSelect.VueSelect);
 
-    var publicationId = {{ PUBLICATION_ID }};
-
     var listUsersUrl = '{{ LIST_USERS_AJAX_URL|raw }}';
     var addUserOvertimeUrl = '{{ ADD_USER_OVERTIME_AJAX_URL|raw }}';
     var updateUserOvertimeUrl = '{{ UPDATE_USER_OVERTIME_AJAX_URL|raw }}';
@@ -194,14 +192,14 @@
                     this.deleteExtraTime(overtimeUser);
                 } else {
                     if (!overtimeUser) {
-                        this.performAjaxCall(addUserOvertimeUrl, { 'publication_id': publicationId, 'user_id': this.selectedUser.id, 'extra_time': extraTime });
+                        this.performAjaxCall(addUserOvertimeUrl, { 'user_id': this.selectedUser.id, 'extra_time': extraTime });
                     } else {
-                        this.performAjaxCall(updateUserOvertimeUrl, { 'publication_id': publicationId, 'user_overtime_id': overtimeUser.id, 'extra_time': extraTime });
+                        this.performAjaxCall(updateUserOvertimeUrl, { 'user_overtime_id': overtimeUser.id, 'extra_time': extraTime });
                     }
                 }
             },
             deleteExtraTime(overtimeUser) {
-                this.performAjaxCall(deleteUserOvertimeUrl, { 'publication_id': publicationId, 'user_overtime_id': overtimeUser.id });
+                this.performAjaxCall(deleteUserOvertimeUrl, { 'user_overtime_id': overtimeUser.id });
             },
             performAjaxCall(url, options) {
                 $.post(url, options, (function (data) {
