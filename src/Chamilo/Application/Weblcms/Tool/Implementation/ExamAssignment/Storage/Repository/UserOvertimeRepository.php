@@ -6,6 +6,8 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\UserOvertime;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -67,6 +69,27 @@ class UserOvertimeRepository
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 
         return $this->dataClassRepository->records(UserOvertime::class, $parameters);
+    }
+
+    /**
+     * @param int $publicationId
+     * @param int $userId
+     * @return mixed
+     */
+    public function getUserOvertimeDataForPublicationAndUser(int $publicationId, int $userId)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserOvertime::class, UserOvertime::PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($publicationId)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserOvertime::class, UserOvertime::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(UserOvertime::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**

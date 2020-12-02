@@ -72,6 +72,14 @@ class UserOvertime extends DataClass
     }
 
     /**
+     * @return int
+     */
+    public function getExtraSeconds()
+    {
+        return $this->getExtraTime() * 60;
+    }
+
+    /**
      * @param int $extraTime
      */
     public function setExtraTime(int $extraTime)

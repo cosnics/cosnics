@@ -328,7 +328,7 @@
                             {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_NO_RIGHTS') %}
                                 {{ 'StatusMessageNoRights'|trans({}, appContext)|raw }}
                             {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_ASSIGNMENT_NOT_IN_PROGRESS') %}
-                                {{ 'StatusMessageAssignmentNotInProgress'|trans({'{ASSIGNMENT_FROM}': DETAILS.assignment.get_start_time|date("d/m/Y - H:i"), '{ASSIGNMENT_UNTIL}': DETAILS.assignment.get_end_time|date("d/m/Y - H:i")}, appContext)|raw }}
+                                {{ 'StatusMessageAssignmentNotInProgress'|trans({'{ASSIGNMENT_FROM}': DETAILS.start_time|date("d/m/Y - H:i"), '{ASSIGNMENT_UNTIL}': DETAILS.end_time|date("d/m/Y - H:i")}, appContext)|raw }}
                             {% elseif ASSIGNMENT_VIEW_STATUS == constant('Chamilo\\Application\\ExamAssignment\\Domain\\AssignmentViewStatus::STATUS_CORRUPT_DATA') %}
                                 {{ 'StatusMessageCorruptData'|trans({}, appContext)|raw }}
                             {% endif %}
@@ -343,7 +343,7 @@
                     {% if DETAILS.can_submit and (not DETAILS.has_finished or RETRY_MODE) %}
                     <div class="exam-main-title u-flex-parent">
                         <h1 class="heading-exam-title u-flex-3">{{ DETAILS.assignment.get_title() }}</h1>
-                        {% set end_time = DETAILS.assignment.get_end_time %}
+                        {% set end_time = DETAILS.end_time %}
                         <div class="exam-end-time u-flex-2">
                             <span>{{ 'TimeUntil'|trans({}, appContext) }}:</span><time datetime="{{ end_time|date("c") }}"
                                 class="exam-timestamp mod-strong">{{ end_time|date("d") }}<span
@@ -356,7 +356,7 @@
                         <section class="exam-info-metadata">
                             <span class="exam-course">{{ DETAILS.course.get_title() }} (<span class="course-visual-code">{{ DETAILS.course.get_visual_code() }}</span>)</span>
                             <span class="exam-titular">{{ DETAILS.titular.get_firstname() ~ ' ' ~ DETAILS.titular.get_lastname() }}</span>
-                            {% set start_time = DETAILS.assignment.get_start_time %}
+                            {% set start_time = DETAILS.start_time %}
                             <div>
                                 <span>{{ 'StartingTime'|trans({}, appContext) }}:</span>
                                 <time datetime="{{ start_time|date("c") }}" class="exam-timestamp">{{ start_time|date("d") }}<span

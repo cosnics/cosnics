@@ -11,7 +11,9 @@ use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\AssignmentPublicationService;
+use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\UserOvertimeService;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication;
+use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\UserOvertime;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
@@ -65,6 +67,11 @@ class ExamAssignmentService
     protected $assignmentService;
 
     /**
+     * @var UserOvertimeService
+     */
+    protected $userOvertimeService;
+
+    /**
      * ExamAssignmentService constructor.
      *
      * @param ExamAssignmentRepository $examAssignmentRepository
@@ -75,12 +82,13 @@ class ExamAssignmentService
      * @param AssignmentPublicationService $examAssignmentPublicationService
      * @param AssignmentService $assignmentService
      * @param UserService $userService
+     * @param UserOvertimeService $userOvertimeService
      */
     public function __construct(
         ExamAssignmentRepository $examAssignmentRepository, CourseService $courseService,
         PublicationService $publicationService, ContentObjectService $contentObjectService,
         WeblcmsRights $weblcmsRights, AssignmentPublicationService $examAssignmentPublicationService,
-        AssignmentService $assignmentService, UserService $userService
+        AssignmentService $assignmentService, UserService $userService, UserOvertimeService $userOvertimeService
     )
     {
         $this->examAssignmentRepository = $examAssignmentRepository;
@@ -91,6 +99,7 @@ class ExamAssignmentService
         $this->examAssignmentPublicationService = $examAssignmentPublicationService;
         $this->assignmentService = $assignmentService;
         $this->userService = $userService;
+        $this->userOvertimeService = $userOvertimeService;
     }
 
     /**
@@ -116,6 +125,10 @@ class ExamAssignmentService
         {
             if ($this->userHasRightsOnPublication($user, $possibleExam['publication_id'], $possibleExam['course_id']))
             {
+                $userOvertimeData = $this->userOvertimeService->getUserOvertimeData($possibleExam['publication_id'], $user->getId());
+                $extraSeconds = $userOvertimeData ? $userOvertimeData->getExtraSeconds() : 0;
+                $possibleExam['end_time'] = (string) ($possibleExam['end_time'] + $extraSeconds);
+
                 $userExams[] = $possibleExam;
             }
         }
@@ -141,11 +154,7 @@ class ExamAssignmentService
             return new AssignmentViewStatus(AssignmentViewStatus::STATUS_CORRUPT_DATA);
         }
 
-        if (
-        !$this->userHasRightsOnPublication(
-            $user, $contentObjectPublicationId, $contentObjectPublication->get_course_id()
-        )
-        )
+        if (!$this->userHasRightsOnPublication($user, $contentObjectPublicationId, $contentObjectPublication->get_course_id()))
         {
             return new AssignmentViewStatus(AssignmentViewStatus::STATUS_NO_RIGHTS);
         }
@@ -158,7 +167,10 @@ class ExamAssignmentService
 
         $now = time();
 
-        if ($assignment->get_start_time() > $now || ($assignment->get_end_time() + (8 * 3600)) < $now)
+        $userOvertimeData = $this->userOvertimeService->getUserOvertimeData($contentObjectPublication->getId(), $user->getId());
+        $extraSeconds = $userOvertimeData ? $userOvertimeData->getExtraSeconds() : 0;
+
+        if ($assignment->get_start_time() > $now || ($assignment->get_end_time() + $extraSeconds + (8 * 3600)) < $now)
         {
             return new AssignmentViewStatus(AssignmentViewStatus::STATUS_ASSIGNMENT_NOT_IN_PROGRESS);
         }
@@ -224,7 +236,10 @@ class ExamAssignmentService
             return false;
         }
 
-        return $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
+        $userOvertimeData = $this->userOvertimeService->getUserOvertimeData($contentObjectPublicationId, $user->getId());
+        $extraSeconds = $userOvertimeData ? $userOvertimeData->getExtraSeconds() : 0;
+
+        return $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment, $extraSeconds);
     }
 
     /**
@@ -268,23 +283,30 @@ class ExamAssignmentService
         $details['course'] = $course;
         $details['titular'] = $titular;
         $details['assignment'] = $assignment;
+        $details['start_time'] = $assignment->get_start_time();
+
+        $userOvertimeData = $this->userOvertimeService->getUserOvertimeData($contentObjectPublication->getId(), $user->getId());
+        $extraSeconds = $userOvertimeData ? $userOvertimeData->getExtraSeconds() : 0;
+        $details['end_time'] = (string) ($assignment->get_end_time() + $extraSeconds);
+
         $details['entries'] = $entries;
         $details['has_finished'] = count($entries) > 0;
         $details['attachments'] = $attachments;
         $details['security_code'] = $examAssignmentPublication->getSecurityCode($user);
-        $details['can_submit'] = $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment);
+        $details['can_submit'] = $this->isAssignmentEndTimeWithinAcceptableBoundaries($assignment, $extraSeconds);
 
         return $details;
     }
 
     /**
      * @param Assignment $assignment
+     * @param int $userExtraSeconds
      *
      * @return bool
      */
-    protected function isAssignmentEndTimeWithinAcceptableBoundaries(Assignment $assignment)
+    protected function isAssignmentEndTimeWithinAcceptableBoundaries(Assignment $assignment, int $userExtraSeconds)
     {
-        return $assignment->get_end_time() + 900 >= time();
+        return $assignment->get_end_time() + $userExtraSeconds + 900 >= time();
     }
 
     /**

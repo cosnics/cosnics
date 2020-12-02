@@ -40,6 +40,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     IntroductionTextSupportInterface
 {
     const ACTION_DISPLAY = 'Display';
+    const ACTION_USER_OVERTIME = 'UserOvertime';
 
     // Parameters
     const PARAM_SUBMISSION = 'submission';
@@ -111,19 +112,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             ), 0
         );
 
+
         $toolbar->insert_item(
             new ToolbarItem(
-                Translation::get('Reporting'),
-                Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                Translation::get('UserOvertime'),
+                Theme::getInstance()->getCommonImagePath('Action/Config'),
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                     )
                 ),
-                ToolbarItem::DISPLAY_ICON, false, null, '_blank'
+                ToolbarItem::DISPLAY_ICON
             ),
             2
         );

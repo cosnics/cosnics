@@ -78,6 +78,16 @@ class UserOvertimeService
     }
 
     /**
+     * @param int $contentObjectPublicationId
+     * @param int $userId
+     * @return mixed
+     */
+    public function getUserOvertimeData(int $contentObjectPublicationId, int $userId)
+    {
+        return $this->userOvertimeRepository->getUserOvertimeDataForPublicationAndUser($contentObjectPublicationId, $userId);
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param int $userId
      * @param int $extraTime
