@@ -45,4 +45,12 @@ abstract class Manager extends AjaxManager
     {
         return $this->getService(UserOvertimeService::class);
     }
+
+    /**
+     * @return \Chamilo\Libraries\Architecture\Application\Application|AjaxComponent
+     */
+    public function getAjaxComponent()
+    {
+        return $this->get_application();
+    }
 }

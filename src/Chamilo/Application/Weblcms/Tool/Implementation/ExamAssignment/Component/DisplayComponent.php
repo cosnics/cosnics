@@ -123,36 +123,6 @@ class DisplayComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    protected function getContentObjectPublication()
-    {
-        $contentObjectPublicationId =
-            $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
-
-        $contentObjectPublicationTranslation =
-            $this->getTranslator()->trans('ContentObjectPublication', [], Manager::context());
-
-        if (empty($contentObjectPublicationId))
-        {
-            throw new NoObjectSelectedException($contentObjectPublicationTranslation);
-        }
-
-        $contentObjectPublication =
-            DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $contentObjectPublicationId);
-
-        if (!$contentObjectPublication instanceof ContentObjectPublication)
-        {
-            throw new ObjectNotExistException($contentObjectPublicationTranslation, $contentObjectPublicationId);
-        }
-
-        return $contentObjectPublication;
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory
      */
     public function getApplicationFactory()

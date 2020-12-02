@@ -17,7 +17,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repos
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -219,4 +221,41 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $this->get_url($parameters);
     }
 
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getContentObjectPublication()
+    {
+        $contentObjectPublicationId =
+            $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+
+        $contentObjectPublicationTranslation =
+            $this->getTranslator()->trans('ContentObjectPublication', [], Manager::context());
+
+        if (empty($contentObjectPublicationId))
+        {
+            throw new NoObjectSelectedException($contentObjectPublicationTranslation);
+        }
+
+        $contentObjectPublication = $this->getPublicationService()->getPublication($contentObjectPublicationId);
+
+        if (!$contentObjectPublication instanceof ContentObjectPublication)
+        {
+            throw new ObjectNotExistException($contentObjectPublicationTranslation, $contentObjectPublicationId);
+        }
+
+        return $contentObjectPublication;
+    }
+
+    /**
+     * @return PublicationService
+     */
+    protected function getPublicationService()
+    {
+        return $this->getService(PublicationService::class);
+    }
 }

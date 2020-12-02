@@ -20,11 +20,10 @@ class DeleteUserOvertimeComponent extends Manager
     {
         try
         {
-            $publicationId = json_decode($this->getRequest()->getFromPost(self::PARAM_PUBLICATION_ID));
-            $userOvertimeId = json_decode($this->getRequest()->getFromPost(self::PARAM_USER_OVERTIME_ID));
+            $userOvertimeId = $this->getRequest()->getFromPost(self::PARAM_USER_OVERTIME_ID);
             $this->getUserOvertimeService()->deleteUserOvertimeData((int) $userOvertimeId);
 
-            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publicationId);
+            $publication = $this->getAjaxComponent()->getContentObjectPublication();
             $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
             return new JsonResponse(['usersOvertime' => $usersExtraTime]);
         }

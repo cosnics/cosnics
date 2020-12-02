@@ -20,12 +20,10 @@ class AddUserOvertimeComponent extends Manager
     {
         try
         {
-            $publicationId = json_decode($this->getRequest()->getFromPost(self::PARAM_PUBLICATION_ID));
-            $userId = json_decode($this->getRequest()->getFromPost(self::PARAM_USER_ID));
-            $extraTime = json_decode($this->getRequest()->getFromPost(self::PARAM_EXTRA_TIME));
-
-            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $publicationId);
-
+            $userId = $this->getRequest()->getFromPost(self::PARAM_USER_ID);
+            $extraTime = $this->getRequest()->getFromPost(self::PARAM_EXTRA_TIME);
+            $publication = $this->getAjaxComponent()->getContentObjectPublication();
+            
             $this->getUserOvertimeService()->addUserOvertimeData($publication, (int) $userId, (int) $extraTime);
 
             $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);

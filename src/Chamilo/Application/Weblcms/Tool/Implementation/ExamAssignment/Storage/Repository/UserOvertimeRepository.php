@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -15,10 +16,10 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
-* @package Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository
-*
-* @author Stefan Gabriëls - Hogeschool Gent
-*/
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository
+ *
+ * @author Stefan Gabriëls - Hogeschool Gent
+ */
 class UserOvertimeRepository
 {
     /**
@@ -38,9 +39,11 @@ class UserOvertimeRepository
 
     /**
      * @param int $publicationId
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function getUserOvertimeDataByPublication(int $publicationId) {
+    public function getUserOvertimeDataByPublication(int $publicationId)
+    {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(UserOvertime::class, UserOvertime::PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($publicationId)
@@ -74,6 +77,7 @@ class UserOvertimeRepository
     /**
      * @param int $publicationId
      * @param int $userId
+     *
      * @return mixed
      */
     public function getUserOvertimeDataForPublicationAndUser(int $publicationId, int $userId)
@@ -89,11 +93,14 @@ class UserOvertimeRepository
         );
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(UserOvertime::class_name(), new DataClassRetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(
+            UserOvertime::class_name(), new DataClassRetrieveParameters($condition)
+        );
     }
 
     /**
      * @param UserOvertime $userOvertime
+     *
      * @return bool
      */
     public function addUserOvertimeData(UserOvertime $userOvertime)
@@ -103,6 +110,7 @@ class UserOvertimeRepository
 
     /**
      * @param UserOvertime $userOvertime
+     *
      * @return bool
      */
     public function updateUserOvertimeData(UserOvertime $userOvertime)
@@ -112,10 +120,21 @@ class UserOvertimeRepository
 
     /**
      * @param UserOvertime $overtime
+     *
      * @return bool
      */
     public function deleteUserOvertimeData(UserOvertime $overtime)
     {
         return $this->dataClassRepository->delete($overtime);
+    }
+
+    /**
+     * @param int $userOvertimeId
+     *
+     * @return UserOvertime|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function findUserOvertimeById(int $userOvertimeId)
+    {
+        return $this->dataClassRepository->retrieveById(UserOvertime::class, $userOvertimeId);
     }
 }

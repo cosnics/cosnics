@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -20,8 +18,7 @@ class ListUsersComponent extends Manager
     {
         try
         {
-            $pid = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
-            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class_name(), $pid);
+            $publication = $this->getAjaxComponent()->getContentObjectPublication();
             $users = $this->getUserOvertimeService()->getUsersByPublication($publication);
             return new JsonResponse(['users' => $users]);
         }
