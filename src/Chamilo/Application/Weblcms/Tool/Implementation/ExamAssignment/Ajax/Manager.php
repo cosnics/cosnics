@@ -19,11 +19,16 @@ abstract class Manager extends AjaxManager
     const ACTION_ADD_USER_OVERTIME = 'AddUserOvertime';
     const ACTION_UPDATE_USER_OVERTIME = 'UpdateUserOvertime';
     const ACTION_DELETE_USER_OVERTIME = 'DeleteUserOvertime';
+    const ACTION_SET_MULTIPLE_USERS_OVERTIME = 'SetMultipleUsersOvertime';
 
     const PARAM_PUBLICATION_ID = 'publication_id';
     const PARAM_USER_ID = 'user_id';
     const PARAM_EXTRA_TIME = 'extra_time';
     const PARAM_USER_OVERTIME_ID = 'user_overtime_id';
+    const PARAM_DB_ACTIONS = 'db_actions';
+    const PARAM_DB_ACTION_TYPE = 'db_action_type';
+
+    const PARAM_RESULTS = 'results';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

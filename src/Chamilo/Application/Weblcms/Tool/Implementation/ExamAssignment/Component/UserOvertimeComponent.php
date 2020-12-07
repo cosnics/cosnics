@@ -66,6 +66,9 @@ class UserOvertimeComponent extends Manager
             ),
             'DELETE_USER_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
             \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_DELETE_USER_OVERTIME
+            ),
+            'SET_MULTIPLE_USERS_OVERTIME_AJAX_URL' => $this->getAjaxUrl(
+                \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Ajax\Manager::ACTION_SET_MULTIPLE_USERS_OVERTIME
             )
         ];
         return $this->getTwig()->render(Manager::context() . ':UserOvertime.html.twig', $parameters);

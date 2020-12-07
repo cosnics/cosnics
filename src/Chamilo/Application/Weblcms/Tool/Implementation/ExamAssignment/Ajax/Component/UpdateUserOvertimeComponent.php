@@ -23,17 +23,17 @@ class UpdateUserOvertimeComponent extends Manager
             $userOvertimeId = $this->getRequest()->getFromPost(self::PARAM_USER_OVERTIME_ID);
             $extraTime = $this->getRequest()->getFromPost(self::PARAM_EXTRA_TIME);
 
-            $this->getUserOvertimeService()->updateUserOvertimeData($userOvertimeId, $extraTime);
+            $this->getUserOvertimeService()->updateUserOvertimeData((int) $userOvertimeId, (int) $extraTime);
 
             $publication = $this->getAjaxComponent()->getContentObjectPublication();
             $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
 
-            return new JsonResponse(['usersOvertime' => $usersExtraTime]);
+            return new JsonResponse([self::PARAM_RESULTS => $usersExtraTime]);
         }
         catch(\Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex);
-            return new JsonResponse(['error' => $ex->getMessage()], 500);
+            return new JsonResponse([self::PARAM_ERROR_MESSAGE => $ex->getMessage()], 500);
         }
     }
 }
