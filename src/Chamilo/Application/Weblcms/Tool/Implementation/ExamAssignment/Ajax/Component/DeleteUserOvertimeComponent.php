@@ -25,12 +25,12 @@ class DeleteUserOvertimeComponent extends Manager
 
             $publication = $this->getAjaxComponent()->getContentObjectPublication();
             $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
-            return new JsonResponse(['usersOvertime' => $usersExtraTime]);
+            return new JsonResponse([self::PARAM_RESULTS => $usersExtraTime]);
         }
         catch(\Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex);
-            return new JsonResponse(['error' => $ex->getMessage()], 500);
+            return new JsonResponse([self::PARAM_ERROR_MESSAGE => $ex->getMessage()], 500);
         }
     }
 }

@@ -20,12 +20,12 @@ class ListUsersComponent extends Manager
         {
             $publication = $this->getAjaxComponent()->getContentObjectPublication();
             $users = $this->getUserOvertimeService()->getUsersByPublication($publication);
-            return new JsonResponse(['users' => $users]);
+            return new JsonResponse([self::PARAM_RESULTS => $users]);
         }
         catch(\Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex);
-            return new JsonResponse(['error' => $ex->getMessage()], 500);
+            return new JsonResponse([self::PARAM_ERROR_MESSAGE => $ex->getMessage()], 500);
         }
     }
 }
