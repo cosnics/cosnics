@@ -86,9 +86,11 @@ class EntryFormHandler extends FormHandler
 
         foreach ($this->parameters->getTargetUsers() as $targetUser)
         {
+            $currentTime = new \DateTime();
+
             $totalScore = $this->rubricResultService->storeRubricResults(
                 $this->parameters->getUser(), $targetUser, $this->parameters->getRubricData(),
-                $this->parameters->getContextIdentifier(), $resultJSONModels
+                $this->parameters->getContextIdentifier(), $resultJSONModels, $currentTime
             );
         }
 

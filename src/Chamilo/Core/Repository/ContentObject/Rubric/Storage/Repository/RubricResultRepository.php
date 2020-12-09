@@ -49,16 +49,20 @@ class RubricResultRepository extends CommonEntityRepository
      * @return RubricResult[]
      */
     public function getRubricResultsForContext(
-        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser
+        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser = null
     )
     {
-        return $this->findBy(
-            [
-                'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
-                'contextId' => $contextIdentifier->getContextId(), 'targetUserId' => $targetUser->getId()
-            ],
-            ['time' => 'ASC', 'resultId' => 'ASC']
-        );
+        $conditions = [
+            'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
+            'contextId' => $contextIdentifier->getContextId()
+        ];
+
+        if($targetUser instanceof User)
+        {
+            $conditions['targetUserId'] = $targetUser->getId();
+        }
+
+        return $this->findBy($conditions, ['time' => 'ASC', 'resultId' => 'ASC']);
     }
 
     /**

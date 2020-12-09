@@ -14,7 +14,7 @@ CREATE TABLE `weblcms_exam_assignment_user_overtime` (
 `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 `publication_id` int(10) UNSIGNED NOT NULL,
 `user_id` int(10) UNSIGNED NOT NULL,
-`extra_time` int(10) UNSIGNED NOT NULL,
+`extra_time` int(10) UNSIGNED NOT NULL,zijn dat
 PRIMARY KEY (`id`),
 INDEX (`publication_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

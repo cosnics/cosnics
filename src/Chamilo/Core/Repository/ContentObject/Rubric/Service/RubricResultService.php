@@ -44,14 +44,16 @@ class RubricResultService
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
      * @param TreeNodeResultJSONModel[] $treeNodeResultJSONModels
+     * @param \DateTime|null $resultTime
      *
      * @return int
      * @throws \Doctrine\ORM\ORMException
-     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function storeRubricResults(
         User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
-        array $treeNodeResultJSONModels
+        array $treeNodeResultJSONModels, \DateTime $resultTime = null
     )
     {
         $uniqueAttemptId = UUID::v4();
@@ -64,7 +66,7 @@ class RubricResultService
 
         $totalScore = $this->calculateAndStoreScoreForTreeNode(
             $user, $targetUser, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
-            $treeNodeResultJSONModelsById
+            $treeNodeResultJSONModelsById, $resultTime
         );
 
         $this->rubricResultRepository->flush();
@@ -80,13 +82,15 @@ class RubricResultService
      * @param TreeNode $treeNode
      * @param string $uniqueAttemptId
      * @param TreeNodeResultJSONModel[] $treeNodeResultJSONModelsById
+     * @param \DateTime|null $resultTime
      *
      * @return int
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
      */
     protected function calculateAndStoreScoreForTreeNode(
         User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
-        string $uniqueAttemptId, array $treeNodeResultJSONModelsById
+        string $uniqueAttemptId, array $treeNodeResultJSONModelsById, \DateTime $resultTime = null
     )
     {
         $treeNodeResultJSONModel = $treeNodeResultJSONModelsById[$treeNode->getId()];
@@ -118,7 +122,7 @@ class RubricResultService
 
             $this->createRubricResult(
                 $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $calculatedScore,
-                $treeNodeResultJSONModel->getComment(), $choice
+                $treeNodeResultJSONModel->getComment(), $choice, $resultTime
             );
 
             return $calculatedScore;
@@ -137,7 +141,8 @@ class RubricResultService
             $treeNodeResultJSONModel->getComment() : null;
 
         $this->createRubricResult(
-            $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore, $comment
+            $user, $targetUser, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $totalScore, $comment,
+            null, $resultTime
         );
 
         return $totalScore;
@@ -153,16 +158,24 @@ class RubricResultService
      * @param float $score
      * @param string|null $comment
      * @param Choice|null $choice
+     * @param \DateTime|null $resultTime
      *
      * @return RubricResult
      *
-     * @throws \Exception
+     * @throws \Doctrine\ORM\ORMException
      */
     protected function createRubricResult(
         User $user, User $targetUser, RubricData $rubricData, ContextIdentifier $contextIdentifier,
-        string $uniqueAttemptId, TreeNode $treeNode, float $score, string $comment = null, Choice $choice = null
+        string $uniqueAttemptId, TreeNode $treeNode, float $score, string $comment = null, Choice $choice = null,
+        \DateTime $resultTime = null
     )
     {
+        if(empty($resultTime))
+        {
+            $resultTime = new \DateTime();
+
+        }
+
         $rubricResult = new RubricResult();
 
         $rubricResult->setRubricData($rubricData)
@@ -174,7 +187,7 @@ class RubricResultService
             ->setScore($score)
             ->setTargetUserId($targetUser->getId())
             ->setComment($comment)
-            ->setTime(new \DateTime());
+            ->setTime($resultTime);
 
         $this->rubricResultRepository->saveRubricResult($rubricResult, false);
 
@@ -189,7 +202,7 @@ class RubricResultService
      * @return RubricResult[]
      */
     public function getRubricResultsForContext(
-        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser
+        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser = null
     )
     {
         return $this->rubricResultRepository->getRubricResultsForContext($rubricData, $contextIdentifier, $targetUser);
