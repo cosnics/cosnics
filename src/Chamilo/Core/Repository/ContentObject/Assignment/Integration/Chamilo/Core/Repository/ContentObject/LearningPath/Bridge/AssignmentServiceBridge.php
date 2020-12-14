@@ -238,7 +238,10 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function isDateAfterAssignmentEndTime($date)
     {
-        return $this->learningPathAssignmentServiceBridge->isDateAfterAssignmentEndTime($date);
+        /** @var Assignment $assignment */
+        $assignment = $this->treeNode->getContentObject();
+
+        return $assignment->get_end_time() < $date;
     }
 
     /**

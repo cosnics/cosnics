@@ -87,3 +87,4 @@ SelfEvaluationChanged = "Zelfevaluatie aangepast (opgelet, dit heeft geen invloe
 SelfEvaluationNotChanged = "Zelfevaluatie niet aangepast"
 ConfirmRemoveRubric = "Ben je zeker dat je de rubric van deze opdracht wil verwijderen?"
 ReturnToAssignment = "Terug naar opdracht"
+LateSubmission = "Laattijdige inzending"

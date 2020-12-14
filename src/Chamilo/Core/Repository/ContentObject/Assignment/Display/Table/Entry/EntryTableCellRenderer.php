@@ -190,7 +190,8 @@ class EntryTableCellRenderer extends RecordTableCellRenderer implements TableCel
 
         if ($this->getEntryTableParameters()->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime($date))
         {
-            return '<span style="color:red">' . $formatted_date . '</span>';
+            return $formatted_date . '<br /><div class="badge" style="background-color: red;">' .
+                Translation::getInstance()->getTranslation('LateSubmission') . '</div>';
         }
 
         return $formatted_date;

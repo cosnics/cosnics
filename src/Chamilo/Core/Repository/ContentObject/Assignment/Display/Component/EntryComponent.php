@@ -202,26 +202,30 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $extensionManager = $this->getExtensionManager();
         $titleExtension =
-            $extensionManager->extendEntryViewerTitle($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
+            $extensionManager->extendEntryViewerTitle(
+                $this, $this->getAssignment(), $this->getEntry(), $this->getUser()
+            );
 
         $partsExtension =
-            $extensionManager->extendEntryViewerParts($this, $this->getAssignment(), $this->getEntry(), $this->getUser());
+            $extensionManager->extendEntryViewerParts(
+                $this, $this->getAssignment(), $this->getEntry(), $this->getUser()
+            );
 
         $rubricView = null;
         $hasRubric = $canUseRubricEvaluation = false;
 
-        if($this->supportsRubrics())
+        if ($this->supportsRubrics())
         {
             $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
 
             $canUseRubricEvaluation = $this->canUseRubricEvaluation();
 
-            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
+            if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
             {
                 $rubricView = $this->runRubricComponent('Entry');
             }
 
-            if($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
+            if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
             {
                 $rubricView = $this->runRubricComponent('Result');
             }
@@ -277,7 +281,10 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'RUBRIC_VIEW' => $rubricView,
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
-            'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation
+            'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
+            'IS_LATE_ASSIGNMENT' => $this->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime(
+                $this->getEntry()->getSubmitted()
+            )
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -934,7 +941,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     protected function canUseRubricEvaluation()
     {
-        if($this->getAssignmentServiceBridge()->canEditAssignment())
+        if ($this->getAssignmentServiceBridge()->canEditAssignment())
         {
             return true;
         }
