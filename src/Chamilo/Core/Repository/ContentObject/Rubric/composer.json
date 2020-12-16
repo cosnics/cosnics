@@ -1,7 +1,7 @@
 {
     "name": "cosnics/core-repository-content-object-rubric",
     "version": "1.0.0",
-    "rubric": "Core Repository ContentObject Rubric",
+    "description": "Core Repository ContentObject Rubric",
     "keywords": [
         "Core",
         "Repository",
