@@ -29,3 +29,5 @@ StatusMessageAssignmentNotInProgress = "The assignment is currently inactive.<br
 StatusMessageCorruptData = "An unknown error has occurred. Try again later. If the error persists please contact the platform administrator."
 BrandTitle = "Brand title"
 NoExamsCurrentlyAvailable = "Currently there are no assignments listed."
+PrivacyRules = "privacy rules"
+ButtonClickPrivacy = "By clicking the button below, you implicitly agree to the"
