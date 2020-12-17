@@ -6,7 +6,7 @@
                 font-size: 1.3rem;
                 padding: 2px 6px;
             }
-            .btn-action.mod-upload {
+            .btn-action.mod-upload, .btn-action.mod-accept {
                 font-size: 1.5rem;
                 line-height: 1.5;
             }
@@ -64,6 +64,9 @@
             }
             .heading-main.mod-upload {
                 padding: 5px 5px 0 0;
+            }
+            .heading-main.mod-privacy-rules {
+                margin-bottom: 5px;
             }
             .alert .container {
                 color: inherit;
@@ -219,9 +222,50 @@
                 font-size: 14px;
                 margin-right: 3px;
             }
-            .exam-reminder {
+            /*.exam-reminder {
                 margin-bottom: 7px;
                 margin-top: 10px;
+            }*/
+            .exam-important {
+                background-color: hsla(183, 40%, 60%, 0.1);
+                border: 1px solid #eee;
+                border-radius: 3px;
+                border-left: 5px solid #009c7c;
+                margin-bottom: 12px;
+                margin-left: -5px;
+                max-width: fit-content;
+                padding: 7px 10px;
+            }
+            .exam-important .fa {
+                color: #009c7c;
+                font-size: 1.8rem;
+                margin-right: 5px;
+            }
+            .modal-overlay {
+                background-color: rgba(0, 0, 0, .4);
+                display: none;
+                height: 100%;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 50;
+            }
+            .modal.mod-privacy-rules {
+                margin: 80px auto 20px auto;
+                max-height: 400px;
+                overflow: visible;
+            }
+            .modal-overlay.is-visible, .modal.is-visible {
+                display: block;
+            }
+            .privacy-rules {
+                background-color: white;
+                border-radius: 4px;
+                box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.25);
+                max-height: 100%;
+                overflow: auto;
+                padding: 7px 15px 15px;
             }
             @media only screen and (min-width: 750px) {
                 .exam {
@@ -414,11 +458,27 @@
                             <div class="form_feedback">
                             </div>
                         </div>
-                        <div class="exam-reminder">{{ 'CheckForget'|trans({}, appContext) }}</div>
+                        <!--<p>{{ 'CheckForget'|trans({}, appContext) }}</p>-->
+                        <p class="exam-important"><i class="fa fa-info-circle"></i> Wanneer je op onderstaande knop klikt ga je impliciet akkoord met de <strong><a id="privacy-rules-link" href="#">privacyregels</a></strong>.</p>
                         <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>{{ 'UploadFiles'|trans({}, appContext) }}</button>
                         <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
                         <script type="text/javascript">
                             $(document).ready(function () {
+
+                                var modalOverlay = $('#modal-overlay');
+                                var modal = $('#privacy-rules-modal');
+
+                                $('#privacy-rules-link').on('click', function (evt) {
+                                    evt.preventDefault();
+                                    modalOverlay.addClass('is-visible');
+                                    modal.addClass('is-visible');
+                                });
+
+                                $('#btn-accept-privacy-rules').on('click', function (evt) {
+                                    evt.preventDefault();
+                                    modalOverlay.removeClass('is-visible');
+                                    modal.removeClass('is-visible');
+                                });
 
                                 const uploadUrl = '{{ UPLOAD_URL|raw }}';
                                 const publicationId = {{ DETAILS.publication.id }};
@@ -571,5 +631,20 @@
                 </div>
             </div>
             {% endif %}
+            <div id="modal-overlay" class="modal-overlay"></div>
+            <div id="privacy-rules-modal" class="modal mod-privacy-rules exam">
+                <div class="privacy-rules">
+                    <h2 class="heading-main mod-privacy">Privacy rules</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Lacus viverra vitae congue eu consequat ac. Ut sem nulla pharetra diam. Ut ornare lectus sit amet est placerat.
+                        Cursus risus at ultrices mi tempus. Integer malesuada nunc vel risus commodo.</p><p>Eros donec ac odio tempor orci dapibus ultrices in.
+                        Vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur. Viverra nam libero justo laoreet sit.
+                        Aliquam ultrices sagittis orci a. Tincidunt augue interdum velit euismod in pellentesque massa. Arcu ac tortor dignissim convallis
+                        aenean et tortor.</p><p>Ut faucibus pulvinar elementum integer enim neque volutpat ac tincidunt. Volutpat commodo sed egestas egestas.
+                        Aliquam etiam erat velit scelerisque. In mollis nunc sed id semper risus. Leo integer malesuada nunc vel risus. A cras semper auctor
+                        neque vitae.</p>
+                    <button id="btn-accept-privacy-rules" class="btn btn-action mod-accept u-btn-focus">Gelezen</button>
+                </div>
+            </div>
         </main>
     {% endblock %}
