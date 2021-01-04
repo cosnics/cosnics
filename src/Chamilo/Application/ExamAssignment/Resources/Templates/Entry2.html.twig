@@ -55,9 +55,9 @@
             .heading-main {
                 color: #47666b;
                 font-size: 2.2rem;
-                font-variant: all-small-caps;
+                /*font-variant: all-small-caps;*/
                 font-weight: 500;
-                margin: 0;
+                margin: 10px 0;
             }
             .heading-main.mod-assignment {
                 padding: 0 5px 5px 0;
@@ -266,6 +266,12 @@
                 max-height: 100%;
                 overflow: auto;
                 padding: 7px 15px 15px;
+            }
+            .privacy-rules > ul {
+                padding-left: 25px;
+            }
+            .privacy-rules .btn-wrap {
+                text-align: right;
             }
             @media only screen and (min-width: 750px) {
                 .exam {
@@ -634,16 +640,27 @@
             <div id="modal-overlay" class="modal-overlay"></div>
             <div id="privacy-rules-modal" class="modal mod-privacy-rules exam">
                 <div class="privacy-rules">
-                    <h2 class="heading-main mod-privacy">{{ 'PrivacyRules'|trans({}, appContext) }}</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Lacus viverra vitae congue eu consequat ac. Ut sem nulla pharetra diam. Ut ornare lectus sit amet est placerat.
-                        Cursus risus at ultrices mi tempus. Integer malesuada nunc vel risus commodo.</p><p>Eros donec ac odio tempor orci dapibus ultrices in.
-                        Vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur. Viverra nam libero justo laoreet sit.
-                        Aliquam ultrices sagittis orci a. Tincidunt augue interdum velit euismod in pellentesque massa. Arcu ac tortor dignissim convallis
-                        aenean et tortor.</p><p>Ut faucibus pulvinar elementum integer enim neque volutpat ac tincidunt. Volutpat commodo sed egestas egestas.
-                        Aliquam etiam erat velit scelerisque. In mollis nunc sed id semper risus. Leo integer malesuada nunc vel risus. A cras semper auctor
-                        neque vitae.</p>
-                    <button id="btn-accept-privacy-rules" class="btn btn-action mod-accept u-btn-focus">Gelezen</button>
+                    <h2 class="heading-main mod-privacy">Privacy statement exam.hogent.be</h2>
+                    <p>Door de applicatie exam.hogent.be te gebruiken worden onderstaande gegevens bewaard
+                       gedurende 3 maanden:</p>
+                    <ul>
+                        <li>Gegevens over jouw toestel: mac-adres, besturingssysteem, naam en versie
+                            van jouw anti-virus software</li>
+                        <li>Gegevens over jouw verbinding: IP-adres, tijdstippen van activiteiten op de
+                            website (aanmelden, pagina inladen, verversen, bestanden opladen,…)</li>
+                    </ul>
+                    <p>Wanneer de applicatie exam.hogent.be gebruikt wordt <strong>via een laptoplokaal</strong>
+                       op HOGENT, worden onderstaande gegevens eveneens gedurende 3 maanden bewaard:</p>
+                    <ul>
+                        <li>Aanmeldgegevens op Eduroam met jouw account op de dag van het examen</li>
+                        <li>Aanmeldgegevens op HOGENT-applicaties (bvb Chamilo) met jouw account op de dag
+                            van het examen</li>
+                        <li>Draadloze signalen (Wifi, 3G, Bluetooth,…) afkomstig van een toestel in het laptoplokaal</li>
+                    </ul>
+                    <p>HOGENT zal in geen enkel geval bestanden vanop toestellen lezen, aanpassen of bewaren.</p>
+                    <div class="btn-wrap">
+                        <button id="btn-accept-privacy-rules" class="btn btn-action mod-accept u-btn-focus">Gelezen</button>
+                    </div>
                 </div>
             </div>
         </main>
