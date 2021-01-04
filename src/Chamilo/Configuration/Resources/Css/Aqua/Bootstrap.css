@@ -345,6 +345,28 @@ body h3#page-title {
 	margin-right: 5px;
 }
 
+.table .btn-action-toolbar
+{
+	margin-bottom: 0;
+	width: max-content;
+}
+
+.table .btn-action-toolbar .btn
+{
+	padding: 0 3px;
+}
+
+#repository_table td:last-child
+{
+	white-space: nowrap;
+	width: 1px;
+}
+
+.btn.dropdown-toggle .caret
+{
+	margin-left: 3px;
+}
+
 /********
  * FORM *
  ********/
