@@ -249,15 +249,6 @@ abstract class ContentObjectRenderer implements TableSupport
         
         if ($canUseContentObject)
         {
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('share-square-o'),
-                    $this->get_repository_browser()->get_publish_content_object_url($content_object),
-                    Button::DISPLAY_ICON,
-                    false,
-                    'btn-link'));
-
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
