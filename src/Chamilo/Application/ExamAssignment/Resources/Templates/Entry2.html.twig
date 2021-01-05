@@ -6,7 +6,7 @@
                 font-size: 1.3rem;
                 padding: 2px 6px;
             }
-            .btn-action.mod-upload {
+            .btn-action.mod-upload, .btn-action.mod-accept {
                 font-size: 1.5rem;
                 line-height: 1.5;
             }
@@ -55,15 +55,18 @@
             .heading-main {
                 color: #47666b;
                 font-size: 2.2rem;
-                font-variant: all-small-caps;
+                /*font-variant: all-small-caps;*/
                 font-weight: 500;
-                margin: 0;
+                margin: 10px 0;
             }
             .heading-main.mod-assignment {
                 padding: 0 5px 5px 0;
             }
             .heading-main.mod-upload {
                 padding: 5px 5px 0 0;
+            }
+            .heading-main.mod-privacy-rules {
+                margin-bottom: 5px;
             }
             .alert .container {
                 color: inherit;
@@ -219,9 +222,56 @@
                 font-size: 14px;
                 margin-right: 3px;
             }
-            .exam-reminder {
+            /*.exam-reminder {
                 margin-bottom: 7px;
                 margin-top: 10px;
+            }*/
+            .exam-important {
+                background-color: hsla(183, 40%, 60%, 0.1);
+                border: 1px solid #eee;
+                border-radius: 3px;
+                border-left: 5px solid #009c7c;
+                margin-bottom: 12px;
+                margin-left: -5px;
+                max-width: fit-content;
+                padding: 7px 10px;
+            }
+            .exam-important .fa {
+                color: #009c7c;
+                font-size: 1.8rem;
+                margin-right: 5px;
+            }
+            .modal-overlay {
+                background-color: rgba(0, 0, 0, .4);
+                display: none;
+                height: 100%;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 50;
+            }
+            .modal.mod-privacy-rules {
+                margin: 80px auto 20px auto;
+                max-height: 400px;
+                overflow: visible;
+            }
+            .modal-overlay.is-visible, .modal.is-visible {
+                display: block;
+            }
+            .privacy-rules {
+                background-color: white;
+                border-radius: 4px;
+                box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.25);
+                max-height: 100%;
+                overflow: auto;
+                padding: 7px 15px 15px;
+            }
+            .privacy-rules > ul {
+                padding-left: 25px;
+            }
+            .privacy-rules .btn-wrap {
+                text-align: right;
             }
             @media only screen and (min-width: 750px) {
                 .exam {
@@ -414,11 +464,27 @@
                             <div class="form_feedback">
                             </div>
                         </div>
-                        <div class="exam-reminder">{{ 'CheckForget'|trans({}, appContext) }}</div>
+                        <!--<p>{{ 'CheckForget'|trans({}, appContext) }}</p>-->
+                        <p class="exam-important"><i class="fa fa-info-circle"></i> {{ 'ButtonClickPrivacy'|trans({}, appContext) }} <strong><a id="privacy-rules-link" href="#">{{ 'PrivacyRules'|trans({}, appContext) }}</a></strong>.</p>
                         <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>{{ 'UploadFiles'|trans({}, appContext) }}</button>
                         <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
                         <script type="text/javascript">
                             $(document).ready(function () {
+
+                                var modalOverlay = $('#modal-overlay');
+                                var modal = $('#privacy-rules-modal');
+
+                                $('#privacy-rules-link').on('click', function (evt) {
+                                    evt.preventDefault();
+                                    modalOverlay.addClass('is-visible');
+                                    modal.addClass('is-visible');
+                                });
+
+                                $('#btn-accept-privacy-rules').on('click', function (evt) {
+                                    evt.preventDefault();
+                                    modalOverlay.removeClass('is-visible');
+                                    modal.removeClass('is-visible');
+                                });
 
                                 const uploadUrl = '{{ UPLOAD_URL|raw }}';
                                 const publicationId = {{ DETAILS.publication.id }};
@@ -571,5 +637,33 @@
                 </div>
             </div>
             {% endif %}
+            <div id="modal-overlay" class="modal-overlay"></div>
+            <div id="privacy-rules-modal" class="modal mod-privacy-rules exam">
+                <div class="privacy-rules">
+                    <h2 class="heading-main mod-privacy">Privacy statement exam.hogent.be</h2>
+                    <p>Om te vermijden dat er tijdens een examen fraude wordt gepleegd, worden bepaalde gegevens
+                        bewaard gedurende beperkte periode.</p>
+                    <p>Door de applicatie exam.hogent.be te gebruiken worden onderstaande gegevens bewaard
+                       gedurende 3 maanden:</p>
+                    <ul>
+                        <li>Gegevens over jouw toestel: mac-adres, besturingssysteem, naam en versie
+                            van jouw anti-virus software</li>
+                        <li>Gegevens over jouw verbinding: IP-adres, tijdstippen van activiteiten op de
+                            website (aanmelden, pagina inladen, verversen, bestanden opladen,…)</li>
+                    </ul>
+                    <p>Wanneer de applicatie exam.hogent.be gebruikt wordt <span style="background-color: #b1e18e;padding: 0 2px">via een laptoplokaal</span>
+                       op HOGENT, worden onderstaande gegevens eveneens gedurende 3 maanden bewaard:</p>
+                    <ul>
+                        <li>Aanmeldgegevens op Eduroam met jouw account op de dag van het examen</li>
+                        <li>Aanmeldgegevens op HOGENT-applicaties (bvb Chamilo) met jouw account op de dag
+                            van het examen</li>
+                        <li>Draadloze signalen (Wifi, 3G, Bluetooth,…) afkomstig van een toestel in het laptoplokaal</li>
+                    </ul>
+                    <p>HOGENT zal in geen enkel geval bestanden vanop toestellen lezen, aanpassen of bewaren.</p>
+                    <div class="btn-wrap">
+                        <button id="btn-accept-privacy-rules" class="btn btn-action mod-accept u-btn-focus">Gelezen</button>
+                    </div>
+                </div>
+            </div>
         </main>
     {% endblock %}
