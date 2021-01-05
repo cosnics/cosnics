@@ -14,6 +14,13 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -1193,6 +1200,393 @@ abstract class ContentObjectPublicationListRenderer
             );
         }
 
+        if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))
+        {
+            // $content_object_publication_actions =
+            $this->get_tool_browser()->get_parent()->add_content_object_publication_actions($toolbar, $publication);
+        }
+
+        return $toolbar;
+    }
+
+    public function get_publication_actions_dropdown($publication, $show_move = true, $ascending = true, $rendererParameters = []
+    )
+    {
+        $has_edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication);
+
+        $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
+        $publication_type = $this->get_publication_type();
+
+        $content_object = $this->get_content_object_from_publication($publication);
+
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+        $dropdownButton = new DropdownButton(
+            Translation::get('Actions'),
+            new FontAwesomeGlyph('cog'),
+            Button::DISPLAY_ICON,
+            'btn-link');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right');
+
+        // quick-win: (re)send mail after publication
+        // currently only mail button for announcements; this outer check can be removed, but then all
+        // tools must have a <ToolName>PublicationMailerComponent class
+        // (see: application/weblcms/tool/announcement/php/lib/component/publication_mailer.class.php)
+        if ($has_edit_right &&
+            $publication[ContentObjectPublicationCategory::PROPERTY_TOOL] == self::TOOL_TYPE_ANNOUNCEMENT)
+        {
+
+            if (!$publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] &&
+                !$publication[ContentObjectPublication::PROPERTY_HIDDEN])
+                // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
+                // TYPE))
+            {
+                $email_url = $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MAIL_PUBLICATION
+                    )
+                );
+
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('SendByEMail'),
+                        Theme::getInstance()->getCommonImagePath('Action/Email'),
+                        $email_url,
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        true
+                    )
+                );
+            }
+        }
+
+        $details_url = $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
+            )
+        );
+
+        $dropdownButton->addSubButton(
+            new SubButton(
+                Translation::get('Details', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getCommonImagePath('Action/Details'),
+                $details_url,
+                SubButton::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        if ($content_object instanceof ComplexContentObjectSupport)
+        {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('DisplayComplex'),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_complex_display_url($publication_id),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+        $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
+
+        $publicationObject = new ContentObjectPublication($publication);
+        $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
+        $canEditPublicationContentObject = $has_edit_right && $publicationObject->get_allow_collaboration();
+
+//        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+//            $this->get_user(), $publicationObject,
+//            $this->tool_browser->get_application()->get_course()
+//        );
+
+        if ($canEditContentObject || $canEditPublicationContentObject)
+        {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Edit'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            if ($content_object instanceof ComplexContentObjectSupport)
+            {
+                if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/Build'),
+                            $this->get_complex_builder_url($publication_id),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/Preview'),
+                            $this->get_complex_display_url($publication_id),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+                else
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/BuildPreview'),
+                            $this->get_complex_display_url($publication_id),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+            }
+        }
+
+        if ($has_edit_right)
+        {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            // quick-win: correct implementation of moving up and down.
+            // Move publications up and down with the arrow buttons.
+            // assuming this methods gets called only once per row in the table:
+            // update the row counter;
+            //
+            // The meaning of up and down depends on whether the list is sorted in ascending
+            // or descending order, this is determined with the $ascending parameter for this method
+            // (ugly parameter passing, but not less ugly than the $show_mvoe already present)
+            // When the $ascending parameter is omitted, this code works just as before.
+            //
+            // TODO: refactor this code out of this method as much as possible.
+            $first_row = $publication[ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX] == 1;
+            $last_row =
+                $publication[ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX] == $this->get_publication_count();
+
+            $true_up = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP;
+            $true_down = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN;
+
+            if ($show_move)
+            {
+                if (!$first_row)
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/Up'),
+                            $this->get_url(
+                                array_merge(
+                                    $rendererParameters,
+                                    array(
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_up,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                                    )
+                                )
+                            ),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+                else
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/UpNa'),
+                            null,
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+
+                if (!$last_row)
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/Down'),
+                            $this->get_url(
+                                array_merge(
+                                    $rendererParameters,
+                                    array(
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => $true_down,
+                                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                                    )
+                                )
+                            ),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+                else
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/DownNa'),
+                            null,
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+            }
+
+            $visibility_url = $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $publication_type
+                )
+            );
+
+            // New functionality in old code
+
+            if ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] == 0 &&
+                $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
+            {
+                $variable = 'PeriodForever';
+                $visibility_image = 'Action/Period';
+            }
+            else
+            {
+                if (time() < $publication[ContentObjectPublication::PROPERTY_FROM_DATE])
+                {
+                    $variable = 'PeriodBefore';
+                    $visibility_image = 'Action/PeriodBefore';
+                }
+                elseif (time() > $publication[ContentObjectPublication::PROPERTY_TO_DATE])
+                {
+                    $variable = 'PeriodAfter';
+                    $visibility_image = 'Action/PeriodAfter';
+                }
+                else
+                {
+                    $variable = 'PeriodCurrent';
+                    $visibility_image = 'Action/Period';
+                }
+            }
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get($variable, null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath($visibility_image),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
+            {
+                $visibility_image = 'Action/Invisible';
+                $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
+            }
+            else
+            {
+                $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::context());
+                $visibility_image = 'Action/Visible';
+            }
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    $visibilityTranslation,
+                    Theme::getInstance()->getCommonImagePath($visibility_image),
+                    $visibility_url,
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+
+            // Move the publication
+            if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
+                $this->get_tool_browser()->hasCategories())
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('MoveToCategory', null, Manager::context()),
+                        Theme::getInstance()->getCommonImagePath('Action/Move'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                            )
+                        ),
+                        SubButton::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
+        }
+
+        $course = $this->get_tool_browser()->get_course();
+        if ($course->is_course_admin($this->get_user()) || $this->get_user()->is_platform_admin())
+        {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Rights'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+        if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
+        {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    SubButton::DISPLAY_ICON_AND_LABEL,
+                    Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms')
+                )
+            );
+        }
+
+        $buttonGroup->addButton($dropdownButton);
+        $buttonToolBar->addItem($buttonGroup);
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolbarRenderer->render();
+
+        // todo
         if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))
         {
             // $content_object_publication_actions =
