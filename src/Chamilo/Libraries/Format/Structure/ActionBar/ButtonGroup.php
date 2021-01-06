@@ -90,6 +90,23 @@ class ButtonGroup extends AbstractButtonToolBarItem
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
+     * @param int $index
+     */
+    public function insertButton($button, int $index)
+    {
+        array_splice($this->buttons, $index, 0, array($button));
+    }
+
+    /**
+     * @param int $index
+     */
+    public function removeButton(int $index)
+    {
+        array_splice($this->buttons, $index, 1);
+    }
+
+    /**
      * Returns whether or not the button group has buttons
      *
      * @return boolean

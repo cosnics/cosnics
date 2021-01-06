@@ -24,6 +24,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -89,7 +90,55 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
+     * Adds extra actions to the toolbar and dropdown in different components
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     * @param array $publication
+     */
+    public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
+    {
+        $dropdownButton->removeSubButton(0);
+
+        $buttonGroup->insertButton(
+            new Button(
+                Translation::get('BrowseSubmitters'),
+                new FontAwesomeGlyph('list-alt'),
+                //Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON,
+                false,
+                'btn-link'
+            ), 0
+        );
+
+        $dropdownButton->insertSubButton(
+            new SubButton(
+                Translation::get('UserOvertime'),
+                Theme::getInstance()->getCommonImagePath('Action/Config'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL
+            ),
+            1
+        );
+
+    }
+
+
+        /**
      * Adds extra actions to the toolbar in different components
+     *
+     * TODO: remove
      *
      * @param $toolbar Toolbar
      * @param $publication Publication

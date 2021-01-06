@@ -154,14 +154,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     $this->get_repository_browser()->get_content_object_editing_url($content_object),
                     Button::DISPLAY_ICON,
                     false,
-                    'btn-link'));
-
-            $dropdownButton->addSubButton(
-                new SubButton(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Edit'),
-                    $this->get_repository_browser()->get_content_object_editing_url($content_object),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    'btn-link'
+                )
+            );
         }
         
         if ($canCopyContentObject)
@@ -171,7 +166,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     Translation::get('Duplicate'),
                     Theme::getInstance()->getCommonImagePath('Action/Copy'),
                     $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
@@ -184,7 +181,9 @@ abstract class ContentObjectRenderer implements TableSupport
                         Theme::getInstance()->getCommonImagePath('Action/RecycleBin'),
                         $url,
                         SubButton::DISPLAY_ICON_AND_LABEL,
-                        true));
+                        true
+                    )
+                );
             }
             else
             {
@@ -193,7 +192,9 @@ abstract class ContentObjectRenderer implements TableSupport
                         Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
                         Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'),
                         null,
-                        SubButton::DISPLAY_ICON_AND_LABEL));
+                        SubButton::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
         }
         
@@ -204,7 +205,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Move'),
                     $this->get_repository_browser()->get_content_object_moving_url($content_object),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
@@ -218,7 +221,9 @@ abstract class ContentObjectRenderer implements TableSupport
                             Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                             Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                             \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE)),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         elseif ($canDeleteContentObject)
         {
@@ -234,7 +239,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     Theme::getInstance()->getCommonImagePath('Action/Unshare'),
                     $url,
                     SubButton::DISPLAY_ICON_AND_LABEL,
-                    true));
+                    true
+                )
+            );
         }
         
         if ($canCopyContentObject)
@@ -244,7 +251,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Export'),
                     $this->get_repository_browser()->get_content_object_exporting_url($content_object),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         if ($canUseContentObject)
@@ -254,7 +263,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_repository_browser()->get_publish_content_object_url($content_object),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         // $actions[] = new ToolbarItem(
@@ -264,8 +275,7 @@ abstract class ContentObjectRenderer implements TableSupport
         // ToolbarItem :: DISPLAY_ICON);
         
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
-        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-        
+
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
@@ -277,59 +287,65 @@ abstract class ContentObjectRenderer implements TableSupport
                             Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
                             Theme::getInstance()->getCommonImagePath('Action/Build'),
                             $this->get_repository_browser()->get_browse_complex_content_object_url($content_object),
-                            SubButton::DISPLAY_ICON_AND_LABEL));
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
-                
-                // todo: onclick
-                $dropdownButton->addSubButton(
-                    new SubButton(
+
+                $buttonGroup->addButton(
+                    new Button(
                         Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Preview'),
+                        new FontAwesomeGlyph('caret-square-o-right'),
                         $preview_url,
-                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        Button::DISPLAY_ICON,
                         false,
-                        null,
-                        '_blank'));
+                        'btn-link',
+                        '_blank'
+                    )
+                );
             }
             elseif ($canEditContentObject)
             {
-                // todo: onclick
-                $dropdownButton->addSubButton(
-                    new SubButton(
+                $buttonGroup->addButton(
+                    new Button(
                         Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/BuildPreview'),
+                        new FontAwesomeGlyph('desktop'),
                         $preview_url,
-                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        Button::DISPLAY_ICON,
                         false,
-                        null,
-                        '_blank'));
+                        'btn-link',
+                        '_blank'
+                    )
+                );
             }
             else
             {
-                // todo: onclick
-                $dropdownButton->addSubButton(
-                    new SubButton(
+                $buttonGroup->addButton(
+                    new Button(
                         Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/Preview'),
+                        new FontAwesomeGlyph('caret-square-o-right'),
                         $preview_url,
-                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        Button::DISPLAY_ICON,
                         false,
-                        null,
-                        '_blank'));
+                        'btn-link',
+                        '_blank'
+                    )
+                );
             }
         }
         else
         {
-            // todo: onclick
-            $dropdownButton->addSubButton(
-                new SubButton(
+            $buttonGroup->addButton(
+                new Button(
                     Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Preview'),
+                    new FontAwesomeGlyph('caret-square-o-right'),
                     $preview_url,
-                    SubButton::DISPLAY_ICON_AND_LABEL,
+                    Button::DISPLAY_ICON,
                     false,
-                    null,
-                    '_blank'));
+                    'btn-link',
+                    '_blank'
+                )
+            );
         }
         
         if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
@@ -341,7 +357,9 @@ abstract class ContentObjectRenderer implements TableSupport
                     $this->get_repository_browser()->get_document_downloader_url(
                         $content_object->get_id(),
                         $content_object->calculate_security_code()),
-                    SubButton::DISPLAY_ICON_AND_LABEL));
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
 
         $buttonGroup->addButton($dropdownButton);
