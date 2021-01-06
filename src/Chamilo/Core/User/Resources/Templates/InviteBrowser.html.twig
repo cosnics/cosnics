@@ -54,6 +54,16 @@
     input.form-control[type="date"] {
         line-height: normal;
     }
+
+    .invite-browser-container .actions-column,
+    .invite-browser-container .status-column {
+        width: 50px;
+        text-align: center;
+    }
+
+    .invite-browser-container table td {
+        vertical-align: middle !important;
+    }
 </style>
 
 <div class="invite-browser-container">
@@ -136,6 +146,9 @@
                     <span class="fa fa-calendar-times-o" title="{{ 'InviteNotValid'|trans({}, appContext) }}"></span>
                 </span>
             </template>
+            <template v-slot:cell(actions)="data">
+                <a class="btn btn-sm btn-default" :href="getExtendInviteUrl(data.item)" title="{{ 'UserInviteExtenderComponent'|trans({}, appContext) }}"><span class="fa fa-send"></span></a>
+            </template>
         </b-table>
     </div>
 </div>
@@ -156,7 +169,13 @@
             },
             {
                 key: 'status',
-                'label': '{{ 'Status'|trans({}, appContext) }}'
+                'label': '{{ 'Status'|trans({}, appContext) }}',
+                'class': 'status-column'
+            },
+            {
+                key: 'actions',
+                'label': '',
+                'class': 'actions-column'
             }
         ];
 
@@ -169,6 +188,11 @@
                         filterText: null,
                         invites: invites,
                         fields: fields
+                    },
+                    methods: {
+                        getExtendInviteUrl: function(userInvite) {
+                            return '{{ EXTEND_USER_INVITE_URL|raw }}'.replace('__USER_INVITE_ID__', userInvite.id);
+                        }
                     }
                 });
             });

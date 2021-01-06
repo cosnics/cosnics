@@ -98,14 +98,16 @@ class UserInviteService
      * @param \Chamilo\Core\User\Storage\DataClass\User $invitedByUser
      * @param string $userEmail
      *
-     * @param string $personalMessage
      * @param \DateTime $expirationDate
+     *
+     * @param string|null $personalMessage
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws UserAlreadyExistsException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Exception
      */
     public function inviteUser(
         User $invitedByUser, string $userEmail, \DateTime $expirationDate, string $personalMessage = null
@@ -125,7 +127,40 @@ class UserInviteService
     }
 
     /**
-     * @param string $securityKey
+     * @param User $invitedByUser
+     * @param UserInvite $userInvite
+     *
+     * @return UserInvite
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function extendUserInvite(User $invitedByUser, UserInvite $userInvite)
+    {
+        $currentDate = new \DateTime();
+        $validUntil = $currentDate->add(new \DateInterval('P7D'));
+
+        $userInvite->setValidUntil($validUntil);
+        $userInvite->setStatus(UserInvite::STATUS_INVITED);
+
+        if (!$this->userInviteRepository->updateUserInvite($userInvite))
+        {
+            throw new \InvalidArgumentException('Could not extend the user invite with id ' . $userInvite->getId());
+        }
+
+        $invitedUser = $this->userService->findUserByIdentifier($userInvite->getUserId());
+        if(!$invitedUser instanceof User)
+        {
+            throw new \RuntimeException(sprintf('Invited user with id %s not found', $userInvite->getUserId()));
+        }
+
+        $this->sendInvitationEmail($invitedByUser, $invitedUser, $userInvite);
+
+        return $userInvite;
+    }
+
+    /**
+     * @param string|null $securityKey
      *
      * @return UserInvite
      * @throws \Exception
@@ -144,6 +179,16 @@ class UserInviteService
         }
 
         return null;
+    }
+
+    /**
+     * @param int $userInviteId
+     *
+     * @return UserInvite
+     */
+    public function getUserInviteById(int $userInviteId)
+    {
+        return $this->userInviteRepository->getUserInviteById($userInviteId);
     }
 
     /**
@@ -345,12 +390,12 @@ class UserInviteService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $invitedByUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $invitedUser
-     * @param \Chamilo\Core\User\Storage\DataClass\UserInvite $userInvite
-     * @param string $personalMessage
+     * @param UserInvite|null $userInvite
+     * @param string|null $personalMessage
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function sendInvitationEmail(
         User $invitedByUser, User $invitedUser, UserInvite $userInvite = null, string $personalMessage = null

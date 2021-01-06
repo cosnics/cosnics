@@ -3,6 +3,7 @@ namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Service\PasswordSecurity;
+use Chamilo\Core\User\Service\UserInviteService;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
@@ -63,6 +64,7 @@ abstract class Manager extends Application
 
     const ACTION_INVITE = 'Invite';
     const ACTION_ACCEPT_INVITE = 'AcceptInvite';
+    const ACTION_EXTEND_INVITE = 'UserInviteExtender';
 
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
@@ -228,5 +230,23 @@ abstract class Manager extends Application
     public function getPasswordSecurity()
     {
         return $this->getService(PasswordSecurity::class);
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function areInvitesAllowed()
+    {
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1 &&
+            $this->getUser()->is_teacher();
+    }
+
+    /**
+     * @return UserInviteService
+     */
+    protected function getInviteService()
+    {
+        return $this->getService(UserInviteService::class);
     }
 }
