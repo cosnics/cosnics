@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -158,9 +159,29 @@ abstract class ContentObjectRenderer implements TableSupport
                 )
             );
         }
-        
+
+        $useSubButtonDivider = false;
+
+        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
+        {
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Download', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_repository_browser()->get_document_downloader_url(
+                        $content_object->get_id(),
+                        $content_object->calculate_security_code()),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
         if ($canCopyContentObject)
         {
+            $useSubButtonDivider = true;
+
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Duplicate'),
@@ -171,35 +192,10 @@ abstract class ContentObjectRenderer implements TableSupport
             );
         }
         
-        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
-            {
-                $dropdownButton->addSubButton(
-                    new SubButton(
-                        Translation::get('Remove', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/RecycleBin'),
-                        $url,
-                        SubButton::DISPLAY_ICON_AND_LABEL,
-                        true
-                    )
-                );
-            }
-            else
-            {
-                $dropdownButton->addSubButton(
-                    new SubButton(
-                        Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
-                        Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'),
-                        null,
-                        SubButton::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-        }
-        
         if ($canEditContentObject && DataManager::workspace_has_categories($this->get_repository_browser()->getWorkspace()))
         {
+            $useSubButtonDivider = true;
+
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
@@ -209,9 +205,17 @@ abstract class ContentObjectRenderer implements TableSupport
                 )
             );
         }
+
+        if ($useSubButtonDivider)
+        {
+            $dropdownButton->addSubButton(new SubButtonDivider());
+            $useSubButtonDivider = false;
+        }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
+            $useSubButtonDivider = true;
+
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Share', null, Utilities::COMMON_LIBRARIES),
@@ -227,6 +231,8 @@ abstract class ContentObjectRenderer implements TableSupport
         }
         elseif ($canDeleteContentObject)
         {
+            $useSubButtonDivider = true;
+
             $url = $this->get_repository_browser()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
@@ -246,6 +252,8 @@ abstract class ContentObjectRenderer implements TableSupport
         
         if ($canCopyContentObject)
         {
+            $useSubButtonDivider = true;
+
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
@@ -258,6 +266,8 @@ abstract class ContentObjectRenderer implements TableSupport
         
         if ($canUseContentObject)
         {
+            $useSubButtonDivider = true;
+
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
@@ -282,6 +292,8 @@ abstract class ContentObjectRenderer implements TableSupport
             {
                 if ($canEditContentObject)
                 {
+                    $useSubButtonDivider = true;
+
                     $dropdownButton->addSubButton(
                         new SubButton(
                             Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
@@ -309,7 +321,8 @@ abstract class ContentObjectRenderer implements TableSupport
                 $buttonGroup->addButton(
                     new Button(
                         Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('desktop'),
+                        //new FontAwesomeGlyph('desktop'),
+                        Theme::getInstance()->getCommonImagePath('Action/BuildPreview'),
                         $preview_url,
                         Button::DISPLAY_ICON,
                         false,
@@ -347,19 +360,37 @@ abstract class ContentObjectRenderer implements TableSupport
                 )
             );
         }
-        
-        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
+
+        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $dropdownButton->addSubButton(
-                new SubButton(
-                    Translation::get('Download', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Download'),
-                    $this->get_repository_browser()->get_document_downloader_url(
-                        $content_object->get_id(),
-                        $content_object->calculate_security_code()),
-                    SubButton::DISPLAY_ICON_AND_LABEL
-                )
-            );
+            if ($useSubButtonDivider)
+            {
+                $dropdownButton->addSubButton(new SubButtonDivider());
+            }
+
+            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('Remove', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                        $url,
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        true
+                    )
+                );
+            }
+            else
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa'),
+                        null,
+                        SubButton::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
         }
 
         $buttonGroup->addButton($dropdownButton);
