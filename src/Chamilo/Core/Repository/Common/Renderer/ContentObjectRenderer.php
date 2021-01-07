@@ -126,7 +126,7 @@ abstract class ContentObjectRenderer implements TableSupport
     public function get_content_object_actions(ContentObject $content_object)
     {
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
+        $buttonGroup = new ButtonGroup(array(), ['mod-static']);
 
         $user = $this->get_user();
         $workspace = $this->get_repository_browser()->getWorkspace();
@@ -143,7 +143,7 @@ abstract class ContentObjectRenderer implements TableSupport
             new FontAwesomeGlyph('cog'),
             Button::DISPLAY_ICON,
             'btn-link');
-        $dropdownButton->setDropdownClasses('dropdown-menu-right');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
 
         if ($canEditContentObject)
         {
