@@ -1221,13 +1221,13 @@ abstract class ContentObjectPublicationListRenderer
         $content_object = $this->get_content_object_from_publication($publication);
 
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
+        $buttonGroup = new ButtonGroup(array(), ['mod-static']);
         $dropdownButton = new DropdownButton(
             Translation::get('Actions'),
             new FontAwesomeGlyph('cog'),
             Button::DISPLAY_ICON,
             'btn-link');
-        $dropdownButton->setDropdownClasses('dropdown-menu-right');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
 
         // quick-win: (re)send mail after publication
         // currently only mail button for announcements; this outer check can be removed, but then all
