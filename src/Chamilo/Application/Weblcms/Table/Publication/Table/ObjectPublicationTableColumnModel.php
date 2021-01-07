@@ -83,7 +83,7 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      */
     protected function addActionsColumn()
     {
-        $this->add_column(new ActionsTableColumn('publication_table_actions_column'));
+        $this->add_column(new ActionsTableColumn('publication_table_actions_column', 'column_fit'));
     }
 
     /**

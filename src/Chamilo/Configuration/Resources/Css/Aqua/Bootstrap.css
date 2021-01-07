@@ -366,12 +366,6 @@ body h3#page-title {
 	padding: 0 3px;
 }
 
-#repository_table td:last-child
-{
-	white-space: nowrap;
-	width: 1px;
-}
-
 .btn.dropdown-toggle .caret
 {
 	margin-left: 3px;

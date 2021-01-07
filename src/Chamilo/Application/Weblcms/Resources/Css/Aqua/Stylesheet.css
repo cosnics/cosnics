@@ -407,6 +407,11 @@ div.user_category_description {
 	margin-top: 10px;
 }
 
+td.column_fit, #repository_table td:last-child {
+	white-space: nowrap;
+	width: 1px;
+}
+
 td.publication_table_actions_column {
 	min-width: 150px;
 	max-width: 220px;
