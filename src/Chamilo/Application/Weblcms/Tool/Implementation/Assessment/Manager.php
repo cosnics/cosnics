@@ -116,6 +116,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 ), 4
             );
+        } else {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('ViewAttempts'),
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'ManageAttempts'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                            self::PARAM_ASSESSMENT => $publication_id)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
 
     }
