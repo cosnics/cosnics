@@ -122,4 +122,28 @@ class GroupService
     {
         return $this->groupRepository->findDirectChildrenFromGroup($group);
     }
+
+    /**
+     * @param string $name
+     * @param string $code
+     * @param int $parentGroupId
+     *
+     * @return Group
+     */
+    public function createGroup(string $name, string $code, int $parentGroupId = 0)
+    {
+        $group = new Group();
+        $group->set_name($name);
+        $group->set_code($code);
+        $group->set_parent_id($parentGroupId);
+
+        if(!$this->groupRepository->create($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not create a group with name %s and code %s', $name, $code)
+            );
+        }
+
+        return $group;
+    }
 }
