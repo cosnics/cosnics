@@ -19,7 +19,7 @@ use Chamilo\Application\Lti\Service\Security\OAuthSecurity;
 class LaunchGenerator
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twigRenderer;
 
@@ -31,10 +31,10 @@ class LaunchGenerator
     /**
      * LaunchGenerator constructor.
      *
-     * @param \Twig_Environment $twigRenderer
+     * @param \Twig\Environment $twigRenderer
      * @param \Chamilo\Application\Lti\Service\Security\OAuthSecurity $oauthSecurity
      */
-    public function __construct(\Twig_Environment $twigRenderer, OAuthSecurity $oauthSecurity)
+    public function __construct(\Twig\Environment $twigRenderer, OAuthSecurity $oauthSecurity)
     {
         $this->twigRenderer = $twigRenderer;
         $this->oauthSecurity = $oauthSecurity;

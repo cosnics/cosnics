@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 abstract class MessageHandler
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -31,12 +31,12 @@ abstract class MessageHandler
     /**
      * MessageHandler constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Application\Lti\Service\Outcome\IntegrationLocator $integrationLocator
      */
     public function __construct(
-        \Twig_Environment $twig, ExceptionLoggerInterface $exceptionLogger, IntegrationLocator $integrationLocator
+        \Twig\Environment $twig, ExceptionLoggerInterface $exceptionLogger, IntegrationLocator $integrationLocator
     )
     {
         $this->twig = $twig;

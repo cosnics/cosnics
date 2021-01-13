@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class OutcomeWebservice
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -50,7 +50,7 @@ class OutcomeWebservice
     /**
      * OutcomeWebservice constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Application\Lti\Service\ProviderService $providerService
      * @param \Chamilo\Application\Lti\Service\Security\OAuthSecurity $oauthSecurity
@@ -58,7 +58,7 @@ class OutcomeWebservice
      * @param \Chamilo\Application\Lti\Service\Outcome\MessageParser $messageParser
      */
     public function __construct(
-        \Twig_Environment $twig,
+        \Twig\Environment $twig,
         \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger,
         ProviderService $providerService, OAuthSecurity $oauthSecurity,
         MessageHandlerBuilder $messageHandlerBuilder, MessageParser $messageParser
